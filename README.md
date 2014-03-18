@@ -1,5 +1,7 @@
 # UKA på Blindern sitt billettsystem
 
+**Dette er et uferdig prosjekt!**
+
 UKA på Blinderns egenlagde billettsystem er i dag en integrert del av systemet
 som kjører nettsidene til UKA. Dette systemet kan variere fra gang
 til gang, og dette prosjektet har som mål å flytte billettsystemet
@@ -34,3 +36,8 @@ Billettsystemet ble pusset litt på og gjenbrukt for UKA på Blindern 2013.
 
 Per nå mangler billettsystemet en del gode verktøy, slik at mye må gjøres direkte i databasen.
 Dette vil forhåpentligvis være mye bedre når vi går inn i UKA på Blindern 2015!
+
+
+## Utvikling av det nye systemet
+* Utvikles oppå rammeverket Laravel
+* Utgangspunkt tas i det gamle systemet (som ikke er offentlig tilgjengelig)
