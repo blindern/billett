@@ -2,8 +2,7 @@
 
 **This is an incomplete project!**
 
-More documentation
-[Documentation (norwegian)](docs/README.md)
+More documentation: [Documentation (norwegian)](docs/index.md)
 
 ## Setup
 
