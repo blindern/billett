@@ -3,7 +3,7 @@
 	"description": "Billettsystemet til UKA på Blindern",
 	"keywords": ["blindernuka", "billett"],
 	"require": {
-		"laravel/framework": "4.1.*"
+		"laravel/framework": "4.2.*"
 	},
 	"autoload": {
 		"classmap": [
