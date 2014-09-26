@@ -15,6 +15,16 @@ More documentation: [Documentation (norwegian)](docs/index.md)
 * ```composer install```
 
 ### Configuration
+Create the file ```/.env.php```:
+```php
+<?php
+return array(
+	'BILLETT_KEY' => 'REPLACE',
+	'BILLETT_MYSQL_PASS' => 'REPLACE'
+);
+?>
+```
+
 * TODO
 
 ### Upgrading
