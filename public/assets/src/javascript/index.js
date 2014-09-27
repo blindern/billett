@@ -9,6 +9,11 @@ angular.module('billett.index', ['ngRoute', 'billett.helper.page'])
 	});
 }])
 
-.controller('IndexController', function(Page) {
-	Page.setTitle('UKA på Blindern');
+.controller('IndexController', function(Page, $http, $scope) {
+	Page.setTitle('Kommende arrangementer');
+
+	$http.get('api/events/get_upcoming').success(function(ret) {
+		console.log("got data", ret);
+		$scope.upcoming = ret;
+	});
 });

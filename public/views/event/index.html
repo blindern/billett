@@ -1,0 +1,6 @@
+<p>Arrangement: {{data.title}}</p>
+<ul ng-if="data.ticketgroups.length > 0">
+	<li ng-repeat="ticketgroup in data.ticketgroups">
+		{{ticketgroup.title}} ({{ticketgroup.price}} + {{ticketgroup.fee}})
+	</li>
+</ul>

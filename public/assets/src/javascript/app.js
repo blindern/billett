@@ -3,7 +3,10 @@
 var module = angular.module('billett', [
 	'ngRoute',
 	'billett.helper.page',
-	'billett.index'
+	'billett.index',
+    'billett.admin',
+    'billett.info',
+    'billett.event'
 ]);
 
 module.config(['$routeProvider', function($routeProvider) {
