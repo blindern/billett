@@ -16,8 +16,8 @@ The events itself.
 * int id
 * int group_id (reference to event group)
 * optional string alias (address used in url)
-* bool published
-* bool selling (is the event in sales mode?)
+* bool is_published
+* bool is_selling (is the event in sales mode?)
 * datetime time_start
 * datetime time_end
 * string title
@@ -35,14 +35,14 @@ The events itself.
 A reservation or actual order.
 * int id
 * string order_text_id (longer unique identificator)
+* bool is_locked (lock if payments are being processed, disallow modifications to ticket collection)
 * bool is_valid (if the order has been processed successfully)
-* int status (the state of the order, TODO: define this)
 * datetime time (when the order was created/completed)
-* string ip (ip of the client)
-* string browser (browser of the client)
-* string name (name of the buyer)
-* string email (email of the buyer)
-* string phone (phonenumber of the buyer)
+* optional string ip (ip of the client)
+* optional string browser (browser of the client)
+* optional string name (name of the buyer)
+* optional string email (email of the buyer)
+* optional string phone (phonenumber of the buyer)
 * optional string recruiter (name of person that recruited this order)
 
 ### PaymentGroup
@@ -59,10 +59,10 @@ Link between payment methods and orders.
 * int group_id (reference to payment group)
 * datetime time (when the payment happened)
 * string type (payment type, e.g. web, cash, card, other)
-* decimal(10,2) amount (the amount paid, negative will mean a refund)
-* optional decimal(10,2) fee (additional fee paid)
-* int transaction_id (used by web payment)
-* string data (additional data if applicable in json)
+* decimal(7,2) amount (the amount paid, negative will mean a refund)
+* optional decimal(7,2) fee (additional fee paid)
+* optional int transaction_id (used by web payment)
+* optional string data (additional data if applicable in json)
 
 ### TicketGroup
 Ticket groups. All tickets belongs to a ticket group, which is also a price group.
@@ -72,8 +72,8 @@ Ticket groups. All tickets belongs to a ticket group, which is also a price grou
 * bool is_published (available on web page if active)
 * string title (price group title)
 * optional string ticket_text (additional plain text on the ticket)
-* decimal(10,2) price
-* optional decimal(10,2) fee (ticket fee)
+* decimal(7,2) price
+* optional decimal(7,2) fee (ticket fee)
 * int limit (max number of tickets for this group, 0 = unlimited)
 
 ### Ticket
