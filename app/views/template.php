@@ -27,7 +27,34 @@ $user = Auth::check() ? Auth::user() : null;
 	<![endif]-->
 </head>
 <body>
-	<h1 ng-bind="title">UKA på Blindern</h1>
-	<div ng-view></div>
+
+	<div class="container">
+		<header class="header" ng-controller="HeaderController">
+			<ul class="nav nav-pills pull-right">
+				<li ng-class="{ active: isActive('/') }"><a href="/">Arrangementer</a></li>
+				<li ng-class="{ active: isActive('/salgsbetingelser') }"><a href="salgsbetingelser">Salgsbetingelser</a></li>
+				<li ng-class="{ active: isActive('/om') }"><a href="om">Om billettsystemet</a></li>
+				<li ng-class="{ active: isActive('/kontakt') }"><a href="kontakt">Kontakt</a></li>
+			</ul>
+			<h3 class="text-muted"><a href="http://blindernuka.no">UKA på Blindern</a></h3>
+		</header>
+
+		<div class="page-header">
+			<h1 ng-bind="title">Billettsystem</h1>
+		</div>
+
+		<div ng-view class="main-view"></div>
+
+		<footer class="footer">
+			<p>
+				<span>2014</span>
+				<span><a href="http://blindernka.no">UKA på Blindern</a></span>
+				<span><a href="http://foreningenbs.no">Foreningen Blindern Studenterhjem</a></span>
+			</p>
+		</footer>
+
+	</div>
+
+
 </body>
 </html>
