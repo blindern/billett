@@ -39,10 +39,6 @@ $user = Auth::check() ? Auth::user() : null;
 			<h3 class="text-muted"><a href="http://blindernuka.no">UKA på Blindern</a></h3>
 		</header>
 
-		<div class="page-header">
-			<h1 ng-bind="title">Billettsystem</h1>
-		</div>
-
 		<div ng-view class="main-view"></div>
 
 		<footer class="footer">
