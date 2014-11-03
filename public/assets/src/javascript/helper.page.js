@@ -15,8 +15,13 @@ controller('HeaderController', function($scope, $location) {
 		if ($location.path() == path)
 			return true;
 
-		if (prefixpath && $location.path().substring(0, prefixpath.length) == prefixpath)
-			return true;
+		if (arguments.length > 1) {
+			for (var i = 1; i < arguments.length; i++) {
+				var p = arguments[i];
+				if ($location.path().substring(0, p.length) == p)
+					return true;
+			}
+		}
 
 		return false;
 	};

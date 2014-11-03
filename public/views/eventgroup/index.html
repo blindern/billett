@@ -1,0 +1,26 @@
+<div class="page-header">
+	<h1>{{group.title}}</h1>
+</div>
+
+<p><a href="/">&laquo; Tilbake</a></p>
+
+<h2>Arrangementliste</h2>
+
+<div ng-show="group.events.length == 0">
+	<p>Ingen arrangementer eksisterer.</p>
+</div>
+
+<div ng-show="group.events.length > 0">
+	<div class="event" ng-repeat="event in group.events">
+		<dl class="dl-horizontal">
+			<dt>Arrangement</dt>
+			<dd><a ng-href="event/{{event.alias || 'id-'+event.id}}">{{event.title}}</a></dd>
+			<dt>Tid</dt>
+			<dd>{{event.time_start|formatdate:'dddd Do MMM YYYY HH:mm:ss'}}</dd>
+			<dt>Publisert</dt>
+			<dd>{{event.is_published}}</dd>
+			<dt>Salgsmodus</dt>
+			<dd>{{event.is_selling}}</dd>
+		</dl>
+	</div>
+</div>

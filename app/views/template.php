@@ -31,7 +31,7 @@ $user = Auth::check() ? Auth::user() : null;
 	<div class="container">
 		<header class="header" ng-controller="HeaderController">
 			<ul class="nav nav-pills pull-right">
-				<li ng-class="{ active: isActive('/') }"><a href="/">Arrangementer</a></li>
+				<li ng-class="{ active: isActive('/', '/eventgroup/', '/event/') }"><a href="/">Arrangementer</a></li>
 				<li ng-class="{ active: isActive('/salgsbetingelser') }"><a href="salgsbetingelser">Salgsbetingelser</a></li>
 				<li ng-class="{ active: isActive('/om') }"><a href="om">Om billettsystemet</a></li>
 				<li ng-class="{ active: isActive('/kontakt') }"><a href="kontakt">Kontakt</a></li>

@@ -10,10 +10,14 @@ angular.module('billett.index', ['ngRoute', 'billett.helper.page'])
 }])
 
 .controller('IndexController', function(Page, $http, $scope) {
-	Page.setTitle('Kommende arrangementer');
+	Page.setTitle('Arrangementer');
 
-	$http.get('api/events/get_upcoming').success(function(ret) {
+	$http.get('api/event/get_upcoming').success(function(ret) {
 		console.log("got data", ret);
 		$scope.upcoming = ret;
+	});
+
+	$http.get('api/eventgroup').success(function(ret) {
+		$scope.eventgroups = ret;
 	});
 });
