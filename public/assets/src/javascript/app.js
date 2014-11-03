@@ -1,5 +1,7 @@
 'use strict';
 
+moment.locale('nb');
+
 var module = angular.module('billett', [
 	'ngRoute',
 	'billett.helper.page',
