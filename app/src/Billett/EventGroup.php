@@ -5,6 +5,6 @@ class EventGroup extends \Eloquent {
 
 	public function events()
 	{
-		return $this->hasMany('\\Blindern\\UKA\\Billett\\Event');
+		return $this->hasMany('\\Blindern\\UKA\\Billett\\Event', 'group_id');
 	}
 }

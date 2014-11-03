@@ -17,4 +17,23 @@ class Ticket extends \Eloquent {
 	{
 		return $this->belongsTo('\\Blindern\\UKA\\Billett\\TicketGroup', 'ticketgroup_id');
 	}
+
+	/**
+	 * Generate a unique ticket key used for barcode
+	 *
+	 * @return string ticket key
+	 */
+	public static function generateKey()
+	{
+		// keys consists of 6 numbers zeropadded
+        do
+        {
+            $key = str_pad(rand(1, 999999), 6, "0", STR_PAD_LEFT);
+            
+            // check if it exists
+            $ticket = Ticket::where('key', $key)->first();
+        } while ($ticket); // if we have ticket we failed; retry
+        
+        return $key;
+	}
 }
