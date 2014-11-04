@@ -1,7 +1,15 @@
 <?php namespace Blindern\UKA\Billett;
 
 class TicketGroup extends \Eloquent {
-	protected $table = 'ticketgroups';
+    protected $table = 'ticketgroups';
+
+    public function getPriceAttribute($val) {
+        return (float) $val;
+    }
+
+    public function getFeeAttribute($val) {
+        return (float) $val;
+    }
 
 	public function tickets()
 	{
