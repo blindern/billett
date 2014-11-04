@@ -18,6 +18,9 @@ class BillettSeeder extends Seeder {
 		$ev->time_start = time()+86400*13;
 		$ev->time_end = time()+84600*13+3600*2;
 		$ev->title = "Blindernrevyen";
+		$ev->max_sales = 100;
+		$ev->is_published = 1;
+		$ev->is_selling = 1;
 		$ev->save();
 
 		$this->addTicketGroups($ev);
@@ -28,6 +31,9 @@ class BillettSeeder extends Seeder {
 		$ev->time_start = time()+86400*14;
 		$ev->time_end = time()+84600*14+3600*2;
 		$ev->title = "Blindernrevyen";
+		$ev->max_sales = 100;
+		$ev->is_published = 1;
+		$ev->is_selling = 0;
 		$ev->save();
 
 		$this->addTicketGroups($ev);
@@ -38,6 +44,9 @@ class BillettSeeder extends Seeder {
 		$ev->time_start = time()+86400*15;
 		$ev->time_end = time()+84600*15+3600*2;
 		$ev->title = "Konsert 1";
+		$ev->max_sales = 20;
+		$ev->is_published = 1;
+		$ev->is_selling = 1;
 		$ev->save();
 
 		$this->addTicketGroups($ev);
