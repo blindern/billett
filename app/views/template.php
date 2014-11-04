@@ -29,14 +29,14 @@ $user = Auth::check() ? Auth::user() : null;
 <body>
 
 	<div class="container">
-		<header class="header" ng-controller="HeaderController">
-			<ul class="nav nav-pills pull-right">
+		<header class="header navbar" ng-controller="HeaderController">
+			<h3 class="navbar-left"><a href="http://blindernuka.no" class="text-muted">UKA på Blindern</a></h3>
+			<ul class="nav nav-pills navbar-right">
 				<li ng-class="{ active: isActive('/', '/eventgroup/', '/event/') }"><a href="/">Arrangementer</a></li>
 				<li ng-class="{ active: isActive('/salgsbetingelser') }"><a href="salgsbetingelser">Salgsbetingelser</a></li>
 				<li ng-class="{ active: isActive('/om') }"><a href="om">Om billettsystemet</a></li>
 				<li ng-class="{ active: isActive('/kontakt') }"><a href="kontakt">Kontakt</a></li>
 			</ul>
-			<h3 class="text-muted"><a href="http://blindernuka.no">UKA på Blindern</a></h3>
 		</header>
 
 		<div ng-view class="main-view"></div>
