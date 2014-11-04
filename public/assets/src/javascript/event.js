@@ -9,7 +9,7 @@ var mod = angular.module('billett.event', ['ngRoute', 'billett.helper.page'])
 	});
 }])
 
-.controller('EventController', function(Page, $http, $scope, $location, $routeParams) {
+.controller('EventController', function(Page, EventReservation, $http, $scope, $location, $routeParams) {
 	Page.setTitle('Arrangement');
 
 	$http.get('api/event/'+encodeURIComponent($routeParams['id'])).success(function(ret) {
@@ -21,14 +21,6 @@ var mod = angular.module('billett.event', ['ngRoute', 'billett.helper.page'])
 
 		Page.setTitle(ret.title);
 		$scope.event = ret;
-
-		// TODO: the server should process this
-		// if the event has started/is finished
-		$scope.event_expired = false;
-
-		// TODO: the server should process this
-		// if the time limit for ticket sales is reached
-		$scope.event_timeout = false;
 
 		// FIXME: remove this debug line
 		$scope.event.is_selling = 1;
@@ -53,33 +45,89 @@ var mod = angular.module('billett.event', ['ngRoute', 'billett.helper.page'])
 		}
 
 		// create reservation
+		// attach it to root scope so it will be available if user switch page
 		$http.post('/api/event/'+$scope.event.id+'/createreservation', {
 			'ticketgroups': groups
 		}).success(function(ret) {
 			$scope.reservation = ret;
+			EventReservation.setReservation(ret);
 		});
 	};
 
+	// check for reservation
+	EventReservation.restoreReservation(function() {
+		$scope.reservation = EventReservation.data;
+	});
+
 	// place order submit
-	$scope.placeorder = function() {
+	$scope.placeOrder = function() {
+		console.log("hm");
+
 		// save fields
 		$http.patch('/api/order/'+$scope.reservation.id, {
 			'name': $scope.reservation.name,
 			'email': $scope.reservation.email,
 			'phone': $scope.reservation.phone
 		}).success(function() {
-			// TODO: place order
-			console.log("TODO: place order");
+			$http.post('/api/order/'+$scope.reservation.id+'/place').success(function(ret) {
+				$scope.checkout = ret;
+			});
 		});
 	};
 
 	// abort order
-	$scope.abortorder = function() {
-		$http.delete('/api/order/'+$scope.reservation.id).success(function() {
+	$scope.abortOrder = function() {
+		EventReservation.abortReservation().success(function() {
 			$scope.reservation = null;
 		});
 	};
 });
+
+mod.service('EventReservation', function($http) {
+	this.data = null; // the reservation
+	
+	var deleteReservation = function() {
+		this.data = null;
+		sessionStorage.removeItem('pendingReservation');
+	};
+
+	this.setReservation = function(reservation) {
+		this.data = reservation;
+		if (typeof(Storage) !== 'undefined') {
+			sessionStorage.pendingReservation = JSON.stringify(reservation);
+		}
+	};
+
+	this.restoreReservation = function(callback) {
+		if (typeof(Storage) !== 'undefined' && sessionStorage.pendingReservation) {
+			var res = JSON.parse(sessionStorage.pendingReservation);
+			var self = this;
+
+			// check if still valid
+			$http.get('/api/order/'+res.id).success(function(ret) {
+				// TODO: check if valid reservation
+				self.data = ret;
+				callback();
+			}).error(function() {
+				deleteReservation();
+			});
+		}
+	};
+
+	this.getEvent = function() {
+		if (!this.data) return null;
+		return this.data.tickets[0].event;
+	};
+
+	this.abortReservation = function() {
+		return $http.delete('/api/order/'+this.data.id).success(function() {
+			deleteReservation();
+		});
+	};
+
+
+
+})
 
 mod.filter('range', function() {
 	return function(count) {
