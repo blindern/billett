@@ -36,31 +36,35 @@ class EventController extends Controller {
             return Response::json('not found', 404);
         }
 
-        $groups = Input::get('ticketgroups');
-        if (!is_array($groups)) {
-            return Response::json('error', 400);
+        if ($event->is_timeout) {
+        	return Response::json('too late to make reservation', 403);
         }
 
-        $allgroups = $event->ticketGroups()->get();
-        $groups_to_add = array();
-        $count = 0;
-        
+        $groups = Input::get('ticketgroups');
+        if (!is_array($groups)) {
+            return Response::json('error in ticketgroups', 400);
+        }
+
         // check the groups
-        foreach ($allgroups as $group) {
+        $groups_to_add = array();
+        foreach ($event->ticketGroups as $group) {
             if (isset($groups[$group->id])) {
-                if (!$group->is_published || !is_numeric($groups[$group->id])) continue;
-                if ($group->limit && $groups[$group->id] > $group->limit) continue;
-                $groups_to_add[] = array($group, $groups[$group->id]);
-                $count += $groups[$group->id];
+                $val = $groups[$group->id];
+
+                if (!$group->is_published || !is_numeric($val)) continue;
+
+                $groups_to_add[] = array($group, $val);
                 unset($groups[$group->id]);
             }
         }
         if (count($groups) > 0) {
-        	var_dump($groups);die;
-            return Response::json('error', 400);
+        	return Response::json('error in ticketgroups', 400);
         }
 
-        // TODO: check count
+        // check count
+        if (!$event->checkIsAvailable($groups_to_add)) {
+            return Response::json('tickets not available', 400);
+        }
 
         // create a new reservation
         $order = Order::createReservation($groups_to_add);

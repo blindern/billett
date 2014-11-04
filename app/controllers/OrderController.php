@@ -8,11 +8,17 @@ class OrderController extends \Controller {
      */
     public function show($id) {
         $order = Order::find($id);
-        if (!$order->isOwnerOfReservation) {
+        if (!$order || !$order->isOwnerOfReservation()) {
             return \Response::json('not found', 404);
         }
 
-        $order->load('tickets');
+        if ($order->isReservation()) {
+            if (!$order->renew()) {
+                return \Response::json('reservation expired', 404);
+            }
+        }
+
+        $order->load('tickets.ticketGroup', 'tickets.event');
         $order->load('payments');
 
         return $order;
@@ -23,14 +29,13 @@ class OrderController extends \Controller {
      */
     public function update($id) {
         $order = Order::find($id);
-        if (!$order->isOwnerOfReservation()) {
+        if (!$order || !$order->isOwnerOfReservation()) {
             return \Response::json('not found', 404);
         }
 
         if (!$order->isReservation()) {
             return \Response::json('not a reservation', 400);
         }
-
 
         $validator = \Validator::make(Input::all(), array(
             'name' => 'required|min:3',
@@ -55,15 +60,42 @@ class OrderController extends \Controller {
      */
     public function destroy($id) {
         $order = Order::find($id);
-        if (!$order->isOwnerOfReservation()) {
+        if (!$order || !$order->isOwnerOfReservation()) {
             return \Response::json('not found', 404);
         }
-        
+
         if (!$order->isReservation()) {
             return \Response::json('not a reservation', 400);
         }
 
         $order->deleteReservation();
         return Response::json(array('result' => 'deleted'));
+    }
+
+    /**
+     * Place a order (send it to payment)
+     */
+    public function placeOrder($id) {
+        $order = Order::find($id);
+        if (!$order || !$order->isOwnerOfReservation()) {
+            return \Response::json('not found', 404);
+        }
+
+        if (!$order->isReservation()) {
+            return \Response::json('not a reservation', 400);
+        }
+
+        if (!$order->placeOrder()) {
+            return \Response::json('invalid state', 400);
+        }
+
+        // TODO: generate (redirect to) payment form
+        return array(
+            'url' => 'TODO',
+            'fields' => array(
+                'test1' => 'value1',
+                'test2' => 'value2'
+            )
+        );
     }
 }

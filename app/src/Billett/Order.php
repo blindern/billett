@@ -20,13 +20,13 @@ class Order extends \Eloquent {
     {
         $order = new static();
 
-       $order->time = time();
+        $order->time = time();
         $order->ip = $_SERVER['REMOTE_ADDR'];
         $order->browser = $_SERVER['HTTP_USER_AGENT'];
         $order->save();
         $order->generateOrderTextId();
-        
-         // store in session so we know which orders belong to this user
+
+        // store in session so we know which orders belong to this user
         $orders = \Session::get('billett_reservations', array());
         $orders[] = $order->id;
         \Session::put('billett_reservations', $orders);
@@ -38,9 +38,7 @@ class Order extends \Eloquent {
                 $ticket->event()->associate($group[0]->event);
                 $ticket->ticketGroup()->associate($group[0]);
                 $ticket->order()->associate($order);
-
-                // TODO: do we need expire field?
-                //$ticket->expire = time() + EXPIRE_INCOMPLETE_RESERVATION;
+                $ticket->expire = time() + static::EXPIRE_INCOMPLETE_RESERVATION;
                 $ticket->save();
             }
         }
@@ -75,6 +73,25 @@ class Order extends \Eloquent {
     public function isReservation()
     {
         return !$this->isCompleted();
+    }
+
+    /**
+     * Check if reservation has expired
+     */
+    public function hasExpired()
+    {
+        if (!$this->isReservation()) return false;
+        return time() > $this->time + $this->getExpireDelay();
+    }
+
+    /**
+     * Get count of seconds for the expiration
+     */
+    public function getExpireDelay()
+    {
+        return ($this->isReservationLocked()
+                ? static::EXPIRE_LOCKED_RESERVATION
+                : static::EXPIRE_INCOMPLETE_RESERVATION);
     }
 
     /**
@@ -139,7 +156,7 @@ class Order extends \Eloquent {
         }
 
         // TODO: some transaction stuff here?
-        
+
         foreach ($this->tickets()->get() as $ticket) {
             $ticket->delete();
         }
@@ -164,4 +181,56 @@ class Order extends \Eloquent {
         $this->save();
     }
 
+    /**
+     * Try to mark reservation as in pay mode
+     */
+    public function placeOrder()
+    {
+        if ($this->isCompleted()) return false;
+        if (empty($this->name) || empty($this->email) || empty($this->phone)) return false;
+
+        if (!$this->isReservationLocked()) {
+            $this->is_locked = true;
+            $this->save();
+        }
+
+        $this->renew();
+
+        return true;
+    }
+
+    /**
+     * Update time for reservation
+     *
+     * Will check if still valid
+     */
+    public function renew()
+    {
+        if ($this->hasExpired()) {
+            // check if the tickets are available
+            $groups = array();
+            $event = null;
+            foreach ($this->tickets()->with('ticketGroup', 'event')->get() as $ticket) {
+                if (!isset($groups[$ticket->ticketGroup->id])) {
+                    $groups[$ticket->ticketGroup->id] = array($ticket->ticketGroup, 0);
+                }
+                $groups[$ticket->ticketGroup->id][1]++;
+                if (!$event) $event = $ticket->event;
+            }
+
+            if (!$event->checkIsAvailable($groups)) {
+                return false;
+            }
+        }
+
+        foreach ($this->tickets as $ticket) {
+            $ticket->expire = time() + $this->getExpireDelay();
+            $ticket->save();
+        }
+
+        $this->time = time();
+        $this->save();
+
+        return true;
+    }
 }

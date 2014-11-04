@@ -4,7 +4,7 @@ Route::resource('/api/eventgroup', 'EventGroupController', array(
 	'only' => array('index', 'show')
 ));
 
-Route::post('/api/order/{id}/update', 'OrderController@updateReservation');
+Route::post('/api/order/{id}/place', 'OrderController@placeOrder');
 Route::resource('/api/order', 'OrderController', array(
     'only' => array('show', 'update', 'destroy')
 ));
