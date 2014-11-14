@@ -51,6 +51,8 @@ var mod = angular.module('billett.event', ['ngRoute', 'billett.helper.page'])
 		}).success(function(ret) {
 			$scope.reservation = ret;
 			EventReservation.setReservation(ret);
+		}).error(function(ret) {
+			alert("Ukjent feil oppsto.");
 		});
 	};
 
@@ -61,8 +63,6 @@ var mod = angular.module('billett.event', ['ngRoute', 'billett.helper.page'])
 
 	// place order submit
 	$scope.placeOrder = function() {
-		console.log("hm");
-
 		// save fields
 		$http.patch('/api/order/'+$scope.reservation.id, {
 			'name': $scope.reservation.name,
@@ -71,7 +71,12 @@ var mod = angular.module('billett.event', ['ngRoute', 'billett.helper.page'])
 		}).success(function() {
 			$http.post('/api/order/'+$scope.reservation.id+'/place').success(function(ret) {
 				$scope.checkout = ret;
+			}).error(function(ret) {
+				alert("Ukjent feil oppsto: "+ret);
 			});
+		}).error(function(ret) {
+			if (ret == "data validation failed") alert("Ugyldig verdi i skjemaet!");
+			else alert("Ukjent feil oppsto: "+ret);
 		});
 	};
 
