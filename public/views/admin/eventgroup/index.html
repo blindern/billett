@@ -1,1 +1,49 @@
-Event group
+<div class="page-header">
+    <h1>{{group.title}}</h1>
+</div>
+
+<p><a href="a">&laquo; Tilbake</a></p>
+
+<h2>
+    Arrangementliste
+    <a href="a/eventgroup/{{group.id}}/new_event" class="btn btn-default">Nytt arrangement</a>
+</h2>
+
+TODO: Filter på arrangementer med billettsalg og uten
+
+<div ng-show="group.events.length == 0">
+    <p>Ingen arrangementer eksisterer.</p>
+</div>
+
+<div ng-show="group.events.length > 0">
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Aften</th>
+                <th>Tittel</th>
+                <th>Varighet</th>
+                <th>Solgte</th>
+                <th>Tilgjengelige</th>
+                <th>Omsatt</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="event in group.events">
+                <td>{{event.time_start|formatdate:'dddd'}}</td><!-- fixme: 2am should count at the day before -->
+                <td><a ng-href="a/event/{{event.id}}">{{event.title}}</a></td>
+                <td>
+                    {{event.time_start|formatdate:'YYYY-MM-DD HH:mm'}}
+                    <span ng-show="event.time_end && event.time_end != event.time_start">
+                        -
+                        {{event.time_end|formatdate:'HH:mm'}}
+                    </span>
+                </td>
+                <td>TODO</td>
+                <td>TODO</td>
+                <td>TODO</td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>

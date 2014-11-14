@@ -18,7 +18,10 @@ angular.module('billett.admin', [
 
 }).
 
-controller('AdminIndexController', function(Page) {
+controller('AdminIndexController', function(Page, $http, $scope) {
 	Page.setTitle('Administration');
 
+    $http.get('api/eventgroup').success(function(ret) {
+        $scope.eventgroups = ret;
+    });
 });

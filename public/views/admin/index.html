@@ -1,2 +1,13 @@
-<p>Administration</p>
-<a href="a/event/1">testevent</a>
+<div class="page-header">
+    <h1>Administrasjon</h1>
+</div>
+
+<h2>
+    Arrangementgrupper
+    <a href="a/eventgroup/new" class="btn btn-default">Ny gruppe</a>
+</h2>
+<ul>
+    <li ng-repeat="group in eventgroups">
+        <a ng-href="a/eventgroup/{{group.id}}">{{group.title}}</a>
+    </li>
+</ul>
