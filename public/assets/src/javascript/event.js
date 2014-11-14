@@ -90,7 +90,7 @@ var mod = angular.module('billett.event', ['ngRoute', 'billett.helper.page'])
 
 mod.service('EventReservation', function($http) {
 	this.data = null; // the reservation
-	
+
 	var deleteReservation = function() {
 		this.data = null;
 		sessionStorage.removeItem('pendingReservation');
