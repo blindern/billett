@@ -22,7 +22,6 @@ var js_files = [
 ];
 
 gulp.task('styles', function() {
-    // todo sourcemap?
     return gulp.src('public/assets/src/stylesheets/frontend.scss')
         .pipe(sourcemaps.init())
         .pipe(sass({ style: isProd ? 'compressed' : 'expanded'}))
