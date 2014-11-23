@@ -22,6 +22,7 @@ class CreateTicketgroupsTable extends Migration {
 
 			$table->boolean('is_active');
 			$table->boolean('is_published');
+			$table->boolean('is_normal')->default(true);
 			$table->string('title');
 			$table->string('ticket_text')->nullable();
 			$table->decimal('price', 7, 3);

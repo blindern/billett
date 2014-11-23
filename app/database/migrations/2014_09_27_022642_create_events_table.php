@@ -24,11 +24,12 @@ class CreateEventsTable extends Migration {
 			$table->boolean('is_published')->default(false);
 			$table->boolean('is_selling')->default(false);
 			$table->integer('time_start')->unsigned(); // use unix timestamp
-			$table->integer('time_end')->unsigned(); // use unix timestamp
+			$table->integer('time_end')->unsigned()->nullable(); // use unix timestamp
 			$table->string('title');
 			$table->string('location', 100)->nullable();
 			$table->mediumInteger('max_each_person')->unsigned()->default(5);
 			$table->mediumInteger('max_sales')->unsigned();
+			$table->mediumInteger('max_normal_sales')->unsigned()->nullable();
 			$table->text('description')->nullable();
 			$table->text('description_short')->nullable();
 			$table->string('ticket_text')->nullable();

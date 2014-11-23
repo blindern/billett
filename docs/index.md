@@ -19,11 +19,12 @@ The events itself.
 * bool is_published
 * bool is_selling (is the event in sales mode?)
 * datetime time_start
-* datetime time_end
+* optional datetime time_end
 * string title
 * optional string location
 * int max_each_person (limit number of tickets for each person)
 * int max_sales (limit of total tickets that can be sold)
+* optional int max_normal_sales (limit of normal tickets that can be sold, admin can sell tickets not counting here)
 * optional string description (HTML-text for description)
 * optional string description_short (description for meta tag)
 * optional string ticket_text (plain text on the ticket itself)
@@ -70,6 +71,7 @@ Ticket groups. All tickets belongs to a ticket group, which is also a price grou
 * int event_id
 * bool is_active (available to use)
 * bool is_published (available on web page if active)
+* bool is_normal (default = true) (should tickets with this group count in max_normal_sales for event?)
 * string title (price group title)
 * optional string ticket_text (additional plain text on the ticket)
 * decimal(7,2) price
