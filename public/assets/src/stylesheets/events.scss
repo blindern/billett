@@ -9,3 +9,10 @@ h1 .eventgroup a {
     color: #888;
     font-size: 60%;
 }
+
+.table-tbody-spacing > tbody:before {
+    line-height: 10px;
+    content: '-';
+    visibility: hidden;
+    display: block;
+}

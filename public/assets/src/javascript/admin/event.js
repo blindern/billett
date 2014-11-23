@@ -23,19 +23,61 @@ angular.module('billett.admin.event', [
     });
 })
 
-.controller('AdminEventController', function(Page, $routeParams) {
-    // TODO
+.controller('AdminEventController', function(Page, $routeParams, AdminEvent, $location, $scope) {
+    Page.setTitle("Arrangement");
+
+    AdminEvent.get({id:$routeParams['id']}, function(ret) {
+        $scope.event = ret;
+    }, function(err) {
+        $location.path('/a');
+    });
 })
 
-.controller('AdminEventNewController', function(Page, $routeParams, $scope, $http) {
+.controller('AdminEventNewController', function(Page, $routeParams, $scope, AdminEventGroup, AdminEvent, $location) {
+    Page.setTitle('Nytt arrangement');
     $scope.eventgroup_id = $routeParams['id'];
+    $scope.event = {
+        max_sales: 100,
+        max_each_person: 10
+    };
 
-    /*$http.get('api/eventgroup/'+encodeURIComponent($routeParams['id'])).success(function(ret) {
-        Page.setTitle(ret.title);
+    AdminEventGroup.get({id:$routeParams['id']}, function(ret) {
         $scope.group = ret;
-    });*/
+    }, function(err) {
+        $location.path('/a');
+    });
+
+    $scope.updateTime = function(which) {
+        $scope.event[which == 'start' ? 'time_start' : 'time_end'] =
+                moment(
+                    $scope[which == 'start' ? 'time_start_text' : 'time_end_text'],
+                    'DD.MM.YYYY HH:mm'
+                ).unix();
+    };
+
+    $scope.addEvent = function() {
+        if (isNaN($scope.event.time_start)) return;
+
+        var e = new AdminEvent($scope.event);
+        e.group_id = $scope.eventgroup_id;
+        e.$save(function(res) {
+            $location.path('/a/event/'+res.id);
+        }, function(err) {
+            alert(err.data);
+        });
+    };
 })
 
 .controller('AdminCheckinController', function(Page, $routeParams) {
     // TODO
-});
+})
+
+.factory('AdminEvent', function($resource) {
+    var r = $resource('api/event/:id', {
+        'id': '@id'
+    }, {
+
+    });
+
+    return r;
+})

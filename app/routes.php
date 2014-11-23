@@ -12,7 +12,7 @@ Route::resource('/api/order', 'OrderController', array(
 Route::post('/api/event/{id}/createreservation', 'EventController@createReservation');
 Route::get('/api/event/get_upcoming', 'EventController@getUpcoming');
 Route::resource('/api/event', 'EventController', array(
-	'only' => array('show')
+	'only' => array('show', 'store', 'update', 'destroy')
 ));
 
 

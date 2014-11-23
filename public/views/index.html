@@ -11,7 +11,7 @@
 </p>
 
 <div ng-if="upcoming && upcoming.length > 0">
-	<p ng-repeat="ev in upcoming">Arrangement: <a ng-href="event/{{ev.alias || 'id-'+ev.id}}">{{ev.title}}</a></p>
+	<p ng-repeat="ev in upcoming">Arrangement: <a ng-href="event/{{ev.alias || ev.id}}">{{ev.title}}</a></p>
 </div>
 
 

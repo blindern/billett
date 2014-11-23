@@ -2,6 +2,7 @@
 
 angular.module('billett.admin.eventgroup', [
     'ngRoute',
+    'ngResource',
     'billett.helper.page'
 ])
 
@@ -21,11 +22,30 @@ angular.module('billett.admin.eventgroup', [
     Page.setTitle('Ny arrangementgruppe');
 })
 
-.controller('AdminEventGroupController', function(Page, $routeParams, $http, $scope) {
+.controller('AdminEventGroupController', function(Page, $routeParams, $http, $scope, AdminEventGroup) {
     Page.setTitle('Arrangementgruppe');
 
-    $http.get('api/eventgroup/'+encodeURIComponent($routeParams['id'])).success(function(ret) {
+    AdminEventGroup.get({id:$routeParams['id']}, function(ret) {
         Page.setTitle(ret.title);
+
+        var r = {};
+        angular.forEach(ret.events, function(item) {
+            var k = moment.unix(item.time_start).format('YYYY-MM-DD');
+            r[k] = r[k] || [];
+            r[k].push(item);
+        });
+
         $scope.group = ret;
+        $scope.days = r;
     });
+})
+
+.factory('AdminEventGroup', function($resource) {
+    var r = $resource('api/eventgroup/:id', {
+        'id': '@id'
+    }, {
+
+    });
+
+    return r;
 });

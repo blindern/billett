@@ -1,6 +1,7 @@
 <?php
 
 use Blindern\UKA\Billett\Event;
+use Blindern\UKA\Billett\EventGroup;
 use Blindern\UKA\Billett\Order;
 
 class EventController extends Controller {
@@ -70,5 +71,66 @@ class EventController extends Controller {
         $order = Order::createReservation($groups_to_add);
         $order->load('tickets.ticketGroup', 'tickets.event');
         return $order;
+    }
+
+    /**
+     * Create new event
+     */
+    public function store()
+    {
+        // TODO: auth requirements
+
+        $validator = \Validator::make(Input::all(), array(
+            'group_id' => 'required|integer',
+            'title' => 'required',
+            'time_start' => 'required|integer',
+            'time_end' => 'integer',
+            'location' => '',
+            'max_sales' => 'required|integer',
+            'max_normal_sales' => 'integer',
+            'max_each_person' => 'required|integer'
+        ));
+
+        if ($validator->fails()) {
+            return \Response::json('data validation failed', 400);
+        }
+
+        $group = EventGroup::find(Input::get('group_id'));
+        if (!$group) {
+            return Response::json('group id not found', 404);
+        }
+
+        $event = new Event;
+        $event->title = Input::get('title');
+        $event->time_start = Input::get('time_start');
+        $event->time_end = Input::get('time_end');
+        $event->location = Input::get('location');
+        $event->max_sales = Input::get('max_sales');
+        $event->max_normal_sales = Input::get('max_normal_sales');
+        $event->max_each_person = Input::get('max_each_person');
+
+        $group->events()->save($event);
+
+        return $event;
+    }
+
+    /**
+     * Update event
+     */
+    public function update($id)
+    {
+        // TODO: auth requirements
+
+        // TODO: https://github.com/blindernuka/billett/issues/18
+    }
+
+    /**
+     * Delete event
+     */
+    public function destroy($id)
+    {
+        // TODO: auth requirements
+
+        // TODO: https://github.com/blindernuka/billett/issues/21
     }
 }

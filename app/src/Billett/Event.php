@@ -87,7 +87,7 @@ class Event extends \Eloquent {
 			$total['used'] += $row->count_used;
 		}
 		$total['free'] = max(0, $this->max_sales - ($total['valid'] + $total['pending']));
-		
+
 		// create ticket group list
 		$groups = array();
 		foreach ($this->ticketGroups as $group) {

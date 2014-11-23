@@ -1,3 +1,71 @@
-nytt arrangement
+<div class="page-header">
+    <h1>{{group.title}}</h1>
+</div>
 
-<p><a ng-href="a/eventgroup/{{eventgroup_id}}">tilbake</a></p>
+<p><a ng-href="a/eventgroup/{{eventgroup_id}}">&laquo; Tilbake</a></p>
+
+<h2>Nytt arrangement</h2>
+
+<p>Når arrangementet er opprettet kan man opprette billettgrupper, redigere informasjonen og publisere arrangementet.</p>
+
+<form ng-submit="addEvent()" class="form-horizontal" autocomplete="off">
+    <div class="form-group">
+        <label for="title" class="col-sm-3 control-label">Tittel</label>
+        <div class="col-sm-8">
+            <input type="text" class="form-control" ng-model="event.title" id="title" placeholder="" required autofocus>
+        </div>
+    </div>
+    <!--
+    <div class="form-group">
+        <label for="alias" class="col-sm-3 control-label">Alias</label>
+        <div class="col-sm-8">
+            <input type="text" class="form-control" ng-model="event.alias" id="alias" placeholder="(valgfritt)">
+        </div>
+    </div>
+    -->
+    <div class="form-group">
+        <label for="start" class="col-sm-3 control-label">Varighet</label>
+        <div class="col-sm-4">
+            <input type="datetime" class="form-control" ng-model="time_start_text" ng-change="updateTime('start')" id="start" placeholder="Start (DD.MM.YYYY HH:MM)" required>
+            <span class="help-block">{{event.time_start|formatdate:'DD.MM.YYYY HH:mm'}}</span>
+        </div>
+        <div class="col-sm-4">
+            <input type="datetime" class="form-control" ng-model="time_end_text" ng-change="updateTime('end')" id="end" placeholder="Slutt (DD.MM.YYYY HH:MM)">
+            <span class="help-block">{{event.time_end|formatdate:'DD.MM.YYYY HH:mm'}}</span>
+            <span class="help-block">Valgfritt</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="location" class="col-sm-3 control-label">Sted</label>
+        <div class="col-sm-8">
+            <input type="text" class="form-control" ng-model="event.location" id="location" placeholder="(valgfritt)">
+        </div>
+    </div>
+
+    <h3>Billettbegrensninger</h3>
+    <div class="form-group">
+        <label for="max_sales" class="col-sm-3 control-label">Totalbegrensning</label>
+        <div class="col-sm-3">
+            <input type="number" class="form-control" ng-model="event.max_sales" id="max_sales" placeholder="" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="max_normal_sales" class="col-sm-3 control-label">Normale billetter</label>
+        <div class="col-sm-3">
+            <input type="number" class="form-control" ng-model="event.max_normal_sales" id="max_normal_sales" placeholder="(valgfritt)">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="max_each_person" class="col-sm-3 control-label">Per person</label>
+        <div class="col-sm-3">
+            <input type="number" class="form-control" ng-model="event.max_each_person" id="max_each_person" placeholder="" required>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <div class="col-sm-8 col-sm-offset-3">
+            <input type="submit" value="Opprett" class="btn btn-primary">
+        </div>
+    </div>
+</form>

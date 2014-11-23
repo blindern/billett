@@ -14,7 +14,7 @@
 	<div class="event" ng-repeat="event in group.events">
 		<dl class="dl-horizontal">
 			<dt>Arrangement</dt>
-			<dd><a ng-href="event/{{event.alias || 'id-'+event.id}}">{{event.title}}</a></dd>
+			<dd><a ng-href="event/{{event.alias || event.id}}">{{event.title}}</a></dd>
 			<dt>Tid</dt>
 			<dd>{{event.time_start|formatdate:'dddd Do MMM YYYY HH:mm:ss'}}</dd>
 			<dt>Publisert</dt>
