@@ -22,10 +22,14 @@ class EventController extends Controller {
             return Response::json('not found', 404);
         }
 
+        // TODO: auth requirement for showing hidden data
+        $show_all = true;
+
         $ev->load('eventgroup');
-        $ev->load(array('ticketgroups' => function($query)
+        $ev->load(array('ticketGroups' => function($query) use ($show_all)
         {
-            $query->where('is_published', 1);
+            if ($show_all) $query->get();
+            else $query->where('is_published', 1);
         }));
 
         return $ev;

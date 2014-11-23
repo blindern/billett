@@ -5,7 +5,8 @@ use \Blindern\UKA\Billett\EventGroup;
 class Event extends \Eloquent {
 	protected $table = 'events';
 	protected $appends = array('is_timeout', 'is_old', 'ticket_count');
-	protected $hidden = array('ticket_count');
+	// TODO: ticket_count should probably be hidden
+	//protected $hidden = array('ticket_count');
 
 	/**
 	 * When the online selling freezes (how many seconds before event start)
