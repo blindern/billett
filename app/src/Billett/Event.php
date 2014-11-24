@@ -18,7 +18,7 @@ class Event extends \Eloquent {
 		return $this->belongsTo('\\Blindern\\UKA\\Billett\\EventGroup', 'group_id');
 	}
 
-	public function ticketGroups()
+	public function ticketgroups()
 	{
 		return $this->hasMany('\\Blindern\\UKA\\Billett\\TicketGroup');
 	}

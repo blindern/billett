@@ -26,7 +26,7 @@ class EventController extends Controller {
         $show_all = true;
 
         $ev->load('eventgroup');
-        $ev->load(array('ticketGroups' => function($query) use ($show_all)
+        $ev->load(array('ticketgroups' => function($query) use ($show_all)
         {
             if ($show_all) $query->get();
             else $query->where('is_published', 1);
@@ -52,7 +52,7 @@ class EventController extends Controller {
 
         // check the groups
         $groups_to_add = array();
-        foreach ($event->ticketGroups as $group) {
+        foreach ($event->ticketgroups as $group) {
             if (isset($groups[$group->id])) {
                 $val = $groups[$group->id];
 
@@ -73,7 +73,7 @@ class EventController extends Controller {
 
         // create a new reservation
         $order = Order::createReservation($groups_to_add);
-        $order->load('tickets.ticketGroup', 'tickets.event');
+        $order->load('tickets.ticketgroup', 'tickets.event');
         return $order;
     }
 
