@@ -24,6 +24,7 @@ class EventController extends Controller {
 
         // TODO: auth requirement for showing hidden data
         $show_all = true;
+        if ($show_all && Input::has('simple')) $show_all = false;
 
         $ev->load('eventgroup');
         $ev->load(array('ticketgroups' => function($query) use ($show_all)
