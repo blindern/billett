@@ -115,11 +115,10 @@ class TicketGroupController extends Controller {
 
         $g = TicketGroup::findOrFail($id);
         if ($g->has_tickets) {
-            return Response::json('ticketgroup cannot be deleted', 400);
+            return Response::json('ticketgroup cannot be deleted - there are tickets in the system', 400);
         }
 
         $g->delete();
-
         return 'deleted';
     }
 }

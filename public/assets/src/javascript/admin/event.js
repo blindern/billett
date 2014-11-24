@@ -31,6 +31,15 @@ angular.module('billett.admin.event', [
     }, function(err) {
         $location.path('/a');
     });
+
+    $scope.deleteEvent = function() {
+        var group = $scope.event.eventgroup.id;
+        $scope.event.$delete(function() {
+            $location.path('/a/eventgroup/'+group);
+        }, function(err) {
+            alert(err);
+        });
+    };
 })
 
 .controller('AdminEventNewController', function(Page, $routeParams, $scope, AdminEventGroup, AdminEvent, $location) {

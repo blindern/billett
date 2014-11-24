@@ -4,7 +4,7 @@ use \Blindern\UKA\Billett\EventGroup;
 
 class Event extends \Eloquent {
 	protected $table = 'events';
-	protected $appends = array('is_timeout', 'is_old', 'ticket_count');
+	protected $appends = array('is_timeout', 'is_old', 'ticket_count', 'has_tickets');
 	// TODO: ticket_count should probably be hidden
 	//protected $hidden = array('ticket_count');
 
@@ -135,5 +135,20 @@ class Event extends \Eloquent {
     		return false;
 
     	return true;
+    }
+
+    /**
+     * Check if there are tickets for this event
+     *
+     * Mainly used to determine wheter the event can be deleted or not
+     */
+    public function getHasTicketsAttribute()
+    {
+        // revoked tickets are counted as positive match
+        $res = $this->tickets()->where(function($query) {
+            $query->whereNull('expire')->orWhere('expire', '>=', time());
+        })->first();
+
+        return (bool) $res;
     }
 }

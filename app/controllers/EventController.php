@@ -135,6 +135,12 @@ class EventController extends Controller {
     {
         // TODO: auth requirements
 
-        // TODO: https://github.com/blindernuka/billett/issues/21
+        $e = Event::findOrFail($id);
+        if ($e->has_tickets) {
+            return Response::json('event cannot be deleted - there are tickets in the system', 400);
+        }
+
+        $e->delete();
+        return 'deleted';
     }
 }
