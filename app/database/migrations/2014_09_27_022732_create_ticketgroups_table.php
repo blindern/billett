@@ -20,7 +20,7 @@ class CreateTicketgroupsTable extends Migration {
 			$table->integer('event_id')->unsigned();
 			$table->foreign('event_id')->references('id')->on('events');
 
-			$table->boolean('is_active');
+			$table->boolean('is_active')->default(true);
 			$table->boolean('is_published');
 			$table->boolean('is_normal')->default(true);
 			$table->string('title');
