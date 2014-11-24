@@ -64,7 +64,9 @@ class Event extends \Eloquent {
 				COUNT(IF(t.is_valid = 0 AND t.is_revoked = 0 AND t.expire > ?, 1, NULL)) count_pending,
 				COUNT(IF(t.is_valid = 0 AND t.is_revoked = 0 AND t.expire <= ?, 1, NULL)) count_expired,
 				COUNT(IF(t.is_valid != 0 AND t.is_revoked != 0, 1, NULL)) count_revoked,
-				COUNT(IF(t.is_revoked = 0 AND t.used IS NOT NULL, 1, NULL)) count_used
+				COUNT(IF(t.is_revoked = 0 AND t.used IS NOT NULL, 1, NULL)) count_used,
+				SUM(IF(t.is_valid != 0 AND t.is_revoked = 0, g.price, 0)) sum_price,
+				SUM(IF(t.is_valid != 0 AND t.is_revoked = 0, g.fee, 0)) sum_fee
 			FROM ticketgroups g JOIN tickets t ON g.id = t.ticketgroup_id
 			WHERE g.event_id = ?
 			GROUP BY g.id', array(time(), time(), $this->id));
@@ -77,7 +79,9 @@ class Event extends \Eloquent {
 			'expired' => 0,
 			'revoked' => 0,
 			'used' => 0,
-			'free' => 0
+			'free' => 0,
+			'sum_price' => 0,
+			'sum_fee' => 0
 		);
 		foreach ($q as $row) {
 			$r[$row->id] = (array)$row;
@@ -86,6 +90,8 @@ class Event extends \Eloquent {
 			$total['expired'] += $row->count_expired;
 			$total['revoked'] += $row->count_revoked;
 			$total['used'] += $row->count_used;
+			$total['sum_price'] += $row->sum_price;
+			$total['sum_fee'] += $row->sum_fee;
 		}
 		$total['free'] = max(0, $this->max_sales - ($total['valid'] + $total['pending']));
 
@@ -98,7 +104,9 @@ class Event extends \Eloquent {
 				'pending' => $g ? $g['count_pending'] : 0,
 				'expired' => $g ? $g['count_expired'] : 0,
 				'revoked' => $g ? $g['count_revoked'] : 0,
-				'used' => $g ? $g['count_used'] : 0
+				'used' => $g ? $g['count_used'] : 0,
+				'sum_price' => $g ? $g['sum_price'] : 0,
+				'sum_fee' => $g ? $g['sum_fee'] : 0
 			);
 			$a['free'] = $group->limit == 0 ? $total['free'] : min($total['free'], $group->limit - ($a['valid'] + $a['pending']));
 			$groups[$group->id] = $a;
