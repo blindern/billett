@@ -21,9 +21,6 @@ var mod = angular.module('billett.event', ['ngRoute', 'billett.helper.page'])
 
 		Page.setTitle(ret.title);
 		$scope.event = ret;
-
-		// FIXME: remove this debug line
-		$scope.event.is_selling = 1;
 	});
 
 	// buy form submit
