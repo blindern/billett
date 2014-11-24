@@ -51,7 +51,7 @@ body {
 
 /* Customize container */
 @media (min-width: 768px) {
-  .container {
+  .container.noadmin {
     max-width: 730px;
   }
 }

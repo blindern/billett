@@ -28,6 +28,13 @@ mod.controller('HeaderController', function($scope, $location) {
 	};
 });
 
+// global page
+mod.controller('PageController', function($scope, $location) {
+	$scope.isAdminPage = function() {
+		return $location.path().substring(0, 3) == '/a/';
+	};
+});
+
 // helper directive to mark a form input with has-error class
 // usage: <div form-input-check="form-name,input-name">
 mod.directive('formInputCheck', function() {
