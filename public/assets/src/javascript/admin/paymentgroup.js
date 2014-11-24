@@ -8,10 +8,10 @@ angular.module('billett.admin.paymentgroup', [
 .config(function($routeProvider) {
     $routeProvider.when('/a/paymentgroup/:id', {
         templateUrl: 'views/admin/paymentgroup/index.html',
-        controller: 'AdminPaymentGroupController'
+        controller: 'AdminPaymentgroupController'
     });
 })
 
-.controller('AdminPaymentGroupController', function(Page, $routeParams) {
+.controller('AdminPaymentgroupController', function(Page, $routeParams) {
     // TODO
 });

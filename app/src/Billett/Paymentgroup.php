@@ -1,6 +1,6 @@
 <?php namespace Blindern\UKA\Billett;
 
-class PaymentGroup extends \Eloquent {
+class Paymentgroup extends \Eloquent {
 	protected $table = 'paymentgroups';
 
 	public function payments()

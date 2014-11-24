@@ -8,8 +8,8 @@ class Payment extends \Eloquent {
 		return $this->belongsTo('\\Blindern\\UKA\\Billett\\Order', 'order_id');
 	}
 
-	public function paymentGroup()
+	public function paymentgroup()
 	{
-		return $this->belongsTo('\\Blindern\\UKA\\Billett\\PaymentGroup', 'group_id');
+		return $this->belongsTo('\\Blindern\\UKA\\Billett\\Paymentgroup', 'group_id');
 	}
 }
