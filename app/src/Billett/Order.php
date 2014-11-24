@@ -14,7 +14,7 @@ class Order extends \Eloquent {
     /**
      * Create reservation
      *
-     * @param array(array(TicketGroup, int ticket-count), ...)
+     * @param array(array(Ticketgroup, int ticket-count), ...)
      */
     public static function createReservation($grouplist)
     {
@@ -36,7 +36,7 @@ class Order extends \Eloquent {
             for ($i = 0; $i < $group[1]; $i++) {
                 $ticket = new Ticket;
                 $ticket->event()->associate($group[0]->event);
-                $ticket->ticketGroup()->associate($group[0]);
+                $ticket->ticketgroup()->associate($group[0]);
                 $ticket->order()->associate($order);
                 $ticket->expire = time() + static::EXPIRE_INCOMPLETE_RESERVATION;
                 $ticket->save();
@@ -130,11 +130,11 @@ class Order extends \Eloquent {
      */
     public function getTotalAmount()
     {
-        $tickets = $this->tickets()->with('ticketGroup')->get();
+        $tickets = $this->tickets()->with('ticketgroup')->get();
 
         $amount = 0;
         foreach ($tickets as $ticket) {
-            $amount += $ticket->ticketGroup->price + $ticket->ticketGroup->fee;
+            $amount += $ticket->ticketgroup->price + $ticket->ticketgroup->fee;
         }
 
         return $amount;
@@ -210,11 +210,11 @@ class Order extends \Eloquent {
             // check if the tickets are available
             $groups = array();
             $event = null;
-            foreach ($this->tickets()->with('ticketGroup', 'event')->get() as $ticket) {
-                if (!isset($groups[$ticket->ticketGroup->id])) {
-                    $groups[$ticket->ticketGroup->id] = array($ticket->ticketGroup, 0);
+            foreach ($this->tickets()->with('ticketgroup', 'event')->get() as $ticket) {
+                if (!isset($groups[$ticket->ticketgroup->id])) {
+                    $groups[$ticket->ticketgroup->id] = array($ticket->ticketgroup, 0);
                 }
-                $groups[$ticket->ticketGroup->id][1]++;
+                $groups[$ticket->ticketgroup->id][1]++;
                 if (!$event) $event = $ticket->event;
             }
 

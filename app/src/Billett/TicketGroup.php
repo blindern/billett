@@ -1,6 +1,6 @@
 <?php namespace Blindern\UKA\Billett;
 
-class TicketGroup extends \Eloquent {
+class Ticketgroup extends \Eloquent {
     protected $table = 'ticketgroups';
 
     public function getPriceAttribute($val) {

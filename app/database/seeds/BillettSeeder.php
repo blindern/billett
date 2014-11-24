@@ -2,7 +2,7 @@
 
 use \Blindern\UKA\Billett\EventGroup;
 use \Blindern\UKA\Billett\Event;
-use \Blindern\UKA\Billett\TicketGroup;
+use \Blindern\UKA\Billett\Ticketgroup;
 
 class BillettSeeder extends Seeder {
 	public function run()
@@ -23,7 +23,7 @@ class BillettSeeder extends Seeder {
 		$ev->is_selling = 1;
 		$ev->save();
 
-		$this->addTicketGroups($ev);
+		$this->addTicketgroups($ev);
 
 		$ev = new Event;
 		$ev->eventgroup()->associate($eg);
@@ -36,7 +36,7 @@ class BillettSeeder extends Seeder {
 		$ev->is_selling = 0;
 		$ev->save();
 
-		$this->addTicketGroups($ev);
+		$this->addTicketgroups($ev);
 
 		$ev = new Event;
 		$ev->eventgroup()->associate($eg);
@@ -49,12 +49,12 @@ class BillettSeeder extends Seeder {
 		$ev->is_selling = 1;
 		$ev->save();
 
-		$this->addTicketGroups($ev);
+		$this->addTicketgroups($ev);
 	}
 
-	public function addTicketGroups(Event $ev)
+	public function addTicketgroups(Event $ev)
 	{
-		$tg = new TicketGroup;
+		$tg = new Ticketgroup;
 		$tg->event()->associate($ev);
 		$tg->is_active = true;
 		$tg->is_published = true;
@@ -63,7 +63,7 @@ class BillettSeeder extends Seeder {
 		$tg->fee = 4;
 		$tg->save();
 
-		$tg = new TicketGroup;
+		$tg = new Ticketgroup;
 		$tg->event()->associate($ev);
 		$tg->is_active = true;
 		$tg->is_published = true;
@@ -72,7 +72,7 @@ class BillettSeeder extends Seeder {
 		$tg->fee = 5;
 		$tg->save();
 
-		$tg = new TicketGroup;
+		$tg = new Ticketgroup;
 		$tg->event()->associate($ev);
 		$tg->is_active = true;
 		$tg->is_published = false;
@@ -81,7 +81,7 @@ class BillettSeeder extends Seeder {
 		$tg->fee = 0;
 		$tg->save();
 
-		$tg = new TicketGroup;
+		$tg = new Ticketgroup;
 		$tg->event()->associate($ev);
 		$tg->is_active = true;
 		$tg->is_published = false;

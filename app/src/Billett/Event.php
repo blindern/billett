@@ -20,7 +20,7 @@ class Event extends \Eloquent {
 
 	public function ticketgroups()
 	{
-		return $this->hasMany('\\Blindern\\UKA\\Billett\\TicketGroup');
+		return $this->hasMany('\\Blindern\\UKA\\Billett\\Ticketgroup');
 	}
 
 	public function tickets()
@@ -97,7 +97,7 @@ class Event extends \Eloquent {
 
 		// create ticket group list
 		$groups = array();
-		foreach ($this->ticketGroups as $group) {
+		foreach ($this->ticketgroups as $group) {
 			$g = isset($r[$group->id]) ? $r[$group->id] : null;
 			$a = array(
 				'valid' => $g ? $g['count_valid'] : 0,

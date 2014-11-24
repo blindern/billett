@@ -13,9 +13,9 @@ class Ticket extends \Eloquent {
 		return $this->belongsTo('\\Blindern\\UKA\\Billett\\Order', 'order_id');
 	}
 
-	public function ticketGroup()
+	public function ticketgroup()
 	{
-		return $this->belongsTo('\\Blindern\\UKA\\Billett\\TicketGroup', 'ticketgroup_id');
+		return $this->belongsTo('\\Blindern\\UKA\\Billett\\Ticketgroup', 'ticketgroup_id');
 	}
 
 	/**
@@ -29,11 +29,11 @@ class Ticket extends \Eloquent {
         do
         {
             $key = str_pad(rand(1, 999999), 6, "0", STR_PAD_LEFT);
-            
+
             // check if it exists
             $ticket = Ticket::where('key', $key)->first();
         } while ($ticket); // if we have ticket we failed; retry
-        
+
         return $key;
 	}
 }

@@ -9,22 +9,22 @@ angular.module('billett.admin.ticketgroup', [
 .config(function($routeProvider) {
     $routeProvider.when('/a/event/:id/ticketgroup/new', {
         templateUrl: 'views/admin/ticketgroup/new.html',
-        controller: 'AdminTicketGroupNewController'
+        controller: 'AdminTicketgroupNewController'
     })
     .when('/a/event/:event_id/ticketgroup/:ticketgroup_id', {
         templateUrl: 'views/admin/ticketgroup/index.html',
-        controller: 'AdminTicketGroupController'
+        controller: 'AdminTicketgroupController'
     });
 })
 
-.controller('AdminTicketGroupController', function(Page, $routeParams,
-        AdminTicketGroup, $scope, $location) {
+.controller('AdminTicketgroupController', function(Page, $routeParams,
+        AdminTicketgroup, $scope, $location) {
     Page.setTitle('Billettgruppe');
 
     $scope.event_id = $routeParams['event_id'];
     $scope.ticketgroup_id = $routeParams['ticketgroup_id'];
 
-    AdminTicketGroup.get({id:$scope.ticketgroup_id}, function(ret) {
+    AdminTicketgroup.get({id:$scope.ticketgroup_id}, function(ret) {
         if (ret.event.id != $scope.event_id) {
             $location.path('/a');
             return;
@@ -39,22 +39,22 @@ angular.module('billett.admin.ticketgroup', [
         $location.path('/a/event/'+$scope.event_id);
     });
 
-    $scope.updateTicketGroup = function() {
+    $scope.updateTicketgroup = function() {
         $scope.ticketgroup.$save(function(ret) {
             $location.path('/a/event/'+$scope.event_id);
         });
     };
 
-    $scope.deleteTicketGroup = function() {
+    $scope.deleteTicketgroup = function() {
         // TODO: no delete on valid/reserved tickets
-        AdminTicketGroup.delete({id: $scope.ticketgroup_id}, function(res) {
+        AdminTicketgroup.delete({id: $scope.ticketgroup_id}, function(res) {
             $location.path('/a/event/'+$scope.event_id);
         });
     };
 })
 
-.controller('AdminTicketGroupNewController', function(Page, $routeParams,
-        AdminTicketGroup, AdminEvent, $scope, $location) {
+.controller('AdminTicketgroupNewController', function(Page, $routeParams,
+        AdminTicketgroup, AdminEvent, $scope, $location) {
     Page.setTitle('Ny billettgruppe');
 
     $scope.event_id = $routeParams['id'];
@@ -69,8 +69,8 @@ angular.module('billett.admin.ticketgroup', [
         $location.path('/a');
     });
 
-    $scope.addTicketGroup = function() {
-        var g = new AdminTicketGroup($scope.ticketgroup);
+    $scope.addTicketgroup = function() {
+        var g = new AdminTicketgroup($scope.ticketgroup);
         g.event_id = $scope.event_id;
         g.$save(function(res) {
             $location.path('/a/event/'+g.event_id);
@@ -80,7 +80,7 @@ angular.module('billett.admin.ticketgroup', [
     };
 })
 
-.factory('AdminTicketGroup', function($resource) {
+.factory('AdminTicketgroup', function($resource) {
     var r = $resource('api/ticketgroup/:id', {
         'id': '@id'
     }, {

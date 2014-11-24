@@ -8,7 +8,11 @@
 
 <h3>Billettgruppe</h3>
 
-<form ng-submit="updateTicketGroup()" class="form-horizontal" autocomplete="off">
+<p ng-show="ticketgroup.has_tickets">
+    Billettgruppen har enten reserverte eller tilknyttede billetter. Derfor er en del av feltene utilgjengelig for endringer.
+</p>
+
+<form ng-submit="updateTicketgroup()" class="form-horizontal" autocomplete="off">
     <div class="form-group">
         <label for="title" class="col-sm-3 control-label">Tittel</label>
         <div class="col-sm-7">
@@ -69,7 +73,7 @@
     <div class="form-group">
         <div class="col-sm-8 col-sm-offset-3">
             <button type="submit" class="btn btn-success">Oppdater</button>
-            <button type="button" class="btn btn-danger" ng-click="deleteTicketGroup()">Slett</button>
+            <button type="button" class="btn btn-danger" ng-click="deleteTicketgroup()">Slett</button>
         </div>
     </div>
 </form>

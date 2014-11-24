@@ -108,7 +108,7 @@
                             <label class="text-right col-sm-4">Valgte billetter</label>
                             <div class="col-sm-8">
                                 <div ng-repeat="ticket in reservation.tickets">
-                                    {{ticket.ticket_group.title}} ({{ticket.ticket_group.price+ticket.ticket_group.fee|price}}) #{{ticket.id}}
+                                    {{ticket.ticketgroup.title}} ({{ticket.ticketgroup.price+ticket.ticketgroup.fee|price}}) #{{ticket.id}}
                                 </div>
                             </div>
                         </div>

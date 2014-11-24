@@ -1,23 +1,27 @@
 <?php
 
 use Blindern\UKA\Billett\Event;
-use Blindern\UKA\Billett\TicketGroup;
+use Blindern\UKA\Billett\Ticketgroup;
 
-class TicketGroupController extends Controller {
+class TicketgroupController extends Controller {
     public function index()
     {
         // TODO: auth requirements
-        return TicketGroup::with('event')->paginate();
+        return Ticketgroup::with('event')->paginate();
     }
 
     public function show($id)
     {
-        $g = TicketGroup::findOrFail($id);
+        $g = Ticketgroup::findOrFail($id);
 
         // TODO: auth requirement for showing hidden data
         $show_all = true;
         if (!$show_all && !$g->is_published) {
             App::abort(404);
+        }
+
+        if ($show_all) {
+            $g->has_tickets = $g->has_tickets;
         }
 
         $g->load('event', 'event.eventgroup');
@@ -50,7 +54,7 @@ class TicketGroupController extends Controller {
             return Response::json('event not found', 404);
         }
 
-        $g = new TicketGroup;
+        $g = new Ticketgroup;
         $g->title = Input::get('title');
         $g->is_normal = Input::get('is_normal');
         $g->ticket_text = Input::get('ticket_text');
@@ -59,7 +63,7 @@ class TicketGroupController extends Controller {
         $g->limit = Input::get('limit');
         if (empty($g->limit)) $g->limit = null;
 
-        $event->ticketGroups()->save($g);
+        $event->ticketgroups()->save($g);
         return $g;
     }
 
@@ -70,7 +74,7 @@ class TicketGroupController extends Controller {
     {
         // TODO: auth requirements
 
-        $g = TicketGroup::findOrFail($id);
+        $g = Ticketgroup::findOrFail($id);
 
         $locked_fields = array(
             'title' => 'required',
@@ -113,7 +117,7 @@ class TicketGroupController extends Controller {
     {
         // TODO: auth requirements
 
-        $g = TicketGroup::findOrFail($id);
+        $g = Ticketgroup::findOrFail($id);
         if ($g->has_tickets) {
             return Response::json('ticketgroup cannot be deleted - there are tickets in the system', 400);
         }

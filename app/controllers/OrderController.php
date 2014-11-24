@@ -18,7 +18,7 @@ class OrderController extends \Controller {
             }
         }
 
-        $order->load('tickets.ticketGroup', 'tickets.event');
+        $order->load('tickets.ticketgroup', 'tickets.event');
         $order->load('payments');
 
         return $order;

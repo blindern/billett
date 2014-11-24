@@ -46,11 +46,11 @@
     <a href="a/event/{{event.id}}/ticketgroup/new" class="btn btn-default pull-right">Ny</a>
 </h3>
 
-<p ng-show="event.ticket_groups.length == 0">
+<p ng-show="event.ticketgroups.length == 0">
     Ingen billettgrupper eksisterer.
 </p>
 
-<div ng-show="event.ticket_groups.length > 0">
+<div ng-show="event.ticketgroups.length > 0" class="table-responsive">
     <table class="table table-striped">
         <thead>
             <tr>
@@ -65,7 +65,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="g in event.ticket_groups">
+            <tr ng-repeat="g in event.ticketgroups">
                 <td>{{g.id}}</td>
                 <td><a href="a/event/{{event.id}}/ticketgroup/{{g.id}}">{{g.title}}</a></td>
                 <td>{{g.price|price}}</td>

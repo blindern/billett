@@ -65,7 +65,7 @@ Link between payment methods and orders.
 * optional int transaction_id (used by web payment)
 * optional string data (additional data if applicable in json)
 
-### TicketGroup
+### Ticketgroup
 Ticket groups. All tickets belongs to a ticket group, which is also a price group.
 * int id
 * int event_id
