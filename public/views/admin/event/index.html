@@ -6,7 +6,78 @@
 
 <h2>{{event.title}}</h2>
 
+<dl class="dl-horizontal">
+    <dt>Start</dt>
+    <dd>{{event.time_start|formatdate:'DD.MM.YYYY HH:mm'}}</dd>
+    <dt>Slutt</dt>
+    <dd>{{event.time_end|formatdate:'DD.MM.YYYY HH:mm'}}</dd>
+    <dt>Alias</dt>
+    <dd>{{event.alias}}</dd>
+    <dt>Publisert?</dt>
+    <dd>{{event.is_published ? 'Ja' : 'Nei'}}</dd>
+    <dt>Nettsalg aktivert?</dt>
+    <dd>{{event.is_selling ? 'Ja' : 'Nei'}}</dd>
+    <dt>Sted</dt>
+    <dd>{{event.location}}</dd>
+    <dt>Maks per person</dt>
+    <dd>{{event.max_each_person}}</dd>
+    <dt>Maks antall salg</dt>
+    <dd>{{event.max_sales}}</dd>
+    <dt>Maks normale salg</dt>
+    <dd>{{event.max_normal_sales}}</dd>
+    <dt>Beskrivelse</dt>
+    <dd>{{event.description}}</dd>
+    <dt>Kort beskrivelse</dt>
+    <dd>{{event.description_short}}</dd>
+    <dt>Billett-tekst</dt>
+    <dd>{{event.ticket_text}}</dd>
+    <dt>Lenke</dt>
+    <dd>{{event.link}}</dd>
+    <dt>Aldersbegrensning</dt>
+    <dd>{{event.age_restriction}}</dd>
+    <dt>Timeout?</dt>
+    <dd>{{event.is_timeout ? 'Ja' : 'Nei'}}</dd>
+    <dt>Starttid passert?</dt>
+    <dd>{{event.is_old ? 'Ja' : 'Nei'}}</dd>
+</dl>
 
+<h3>
+    Billettgrupper
+    <a href="a/event/{{event.id}}/ticketgroup/new" class="btn btn-default pull-right">Ny</a>
+</h3>
+
+<p ng-show="event.ticket_groups.length == 0">
+    Ingen billettgrupper eksisterer.
+</p>
+
+<div ng-show="event.ticket_groups.length > 0">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tittel</th>
+                <th>Pris</th>
+                <th>+ Avgift</th>
+                <th>Aktiv?</th>
+                <th>Publisert?</th>
+                <th>Normal?</th>
+                <th>TODO: salgsstatus</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="g in event.ticket_groups">
+                <td>{{g.id}}</td>
+                <td><a href="a/event/{{event.id}}/ticketgroup/{{g.id}}">{{g.title}}</a></td>
+                <td>{{g.price|price}}</td>
+                <td>{{g.fee|price}}</td>
+                <td>{{g.is_active ? 'Ja' : 'Nei'}}</td>
+                <td>{{g.is_published ? 'Ja' : 'Nei'}}</td>
+                <td>{{g.is_normal ? 'Ja' : 'Nei'}}</td>
+                <td>...</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 
 

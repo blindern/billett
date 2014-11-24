@@ -80,4 +80,4 @@ angular.module('billett.admin.event', [
     });
 
     return r;
-})
+});

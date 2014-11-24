@@ -15,6 +15,10 @@ Route::resource('/api/event', 'EventController', array(
 	'only' => array('show', 'store', 'update', 'destroy')
 ));
 
+Route::resource('/api/ticketgroup', 'TicketGroupController', array(
+    'only' => array('index', 'show', 'store', 'update', 'destroy')
+));
+
 
 // payment (callback)
 Route::post('/payment', 'PaymentController@callback');

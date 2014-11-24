@@ -6,9 +6,11 @@
 
 <h2>{{event.title}}</h2>
 
-<h3>Billettgruppe</h3>
+<h3>Ny billettgruppe</h3>
 
-<form ng-submit="updateTicketGroup()" class="form-horizontal" autocomplete="off">
+<p>Nye billettgrupper kan brukes i billettluke med en gang. Dersom billettgruppen skal være tilgjengelig på nettsiden må dette aktiveres etter billettgruppen er opprettet.</p>
+
+<form ng-submit="addTicketGroup()" class="form-horizontal" autocomplete="off">
     <div class="form-group">
         <label for="title" class="col-sm-3 control-label">Tittel</label>
         <div class="col-sm-7">
@@ -23,7 +25,6 @@
         </div>
     </div>
 
-    <!-- TODO: price locked on non-expired tickets -->
     <div class="form-group">
         <label for="price" class="col-sm-3 control-label">Priser</label>
         <div class="col-sm-3">
@@ -35,26 +36,11 @@
         </div>
     </div>
 
+
     <div class="form-group">
         <label for="max_sales" class="col-sm-3 control-label">Antall billetter</label>
         <div class="col-sm-3">
             <input type="number" class="form-control" ng-model="ticketgroup.limit" id="max_sales" placeholder="(valgfritt)">
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-sm-offset-3 col-sm-9">
-            <label>
-                <input type="checkbox" ng-model="ticketgroup.is_active"> Aktiv for salg?
-            </label>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-sm-offset-3 col-sm-9">
-            <label>
-                <input type="checkbox" ng-model="ticketgroup.is_published"> Tilgjengelig for kjøp på nettside?
-            </label>
         </div>
     </div>
 
@@ -68,8 +54,10 @@
 
     <div class="form-group">
         <div class="col-sm-8 col-sm-offset-3">
-            <button type="submit" class="btn btn-success">Oppdater</button>
-            <button type="button" class="btn btn-danger" ng-click="deleteTicketGroup()">Slett</button>
+            <input type="submit" value="Opprett" class="btn btn-primary">
         </div>
     </div>
 </form>
+
+<p><b>NB!</b> Billettgrupper kan i liten grad redigeres når det blir tilegnet billetter til dem. Dette inkluderer pris. Ved behov må man opprette nye billettgrupper så de gamle bevares.</p>
+
