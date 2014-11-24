@@ -40,6 +40,11 @@ gulp.task('scripts', function() {
         .pipe(gulp.dest('public/assets/javascript'));
 });
 
+gulp.task('fonts', function() {
+    return gulp.src('./bower_components/bootstrap-sass-official/assets/fonts/**')
+        .pipe(gulp.dest('./public/assets/fonts'));
+});
+
 gulp.task('watch', function() {
     gulp.watch('public/assets/src/stylesheets/**/*.scss', ['styles']);
     gulp.watch(js_files, ['scripts']);
