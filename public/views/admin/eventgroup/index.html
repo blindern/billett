@@ -26,6 +26,8 @@ TODO: Filter på arrangementer med billettsalg og uten
                 <th>Solgte</th>
                 <th>Tilgjengelige</th>
                 <th>Omsatt</th>
+                <th>Pub?</th>
+                <th>Salg?</th>
             </tr>
         </thead>
         <tbody ng-repeat="(day, events) in days">
@@ -39,9 +41,11 @@ TODO: Filter på arrangementer med billettsalg og uten
                         {{event.time_end|formatdate:'HH:mm'}}
                     </span>
                 </td>
-                <td>TODO</td>
-                <td>TODO</td>
-                <td>TODO</td>
+                <td>{{event.ticket_count.totals.valid}}</td>
+                <td>{{event.ticket_count.totals.free}}</td>
+                <td>{{event.ticket_count.totals.sum_price+event.ticket_count.totals.sum_fee|price}}</td>
+                <td class="eventgroup-event-action" ng-click="eventTogglePublish(event)"><i class="glyphicon" ng-class="event.is_published ? 'glyphicon-ok' : 'glyphicon-remove'"></i></td>
+                <td class="eventgroup-event-action" ng-click="eventToggleSelling(event)"><i class="glyphicon glyphicon-usd" ng-class="{'event-not-selling': !event.is_selling}"></i></td>
             </tr>
         </tbody>
     </table>

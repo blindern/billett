@@ -126,6 +126,19 @@ class EventController extends Controller {
         // TODO: auth requirements
 
         // TODO: https://github.com/blindernuka/billett/issues/18
+
+        $e = Event::findOrFail($id);
+
+        if (Input::has('is_published')) {
+            $e->is_published = (bool) Input::get('is_published');
+        }
+
+        if (Input::has('is_selling')) {
+            $e->is_selling = (bool) Input::get('is_selling');
+        }
+
+        $e->save();
+        return $e;
     }
 
     /**

@@ -22,7 +22,7 @@ angular.module('billett.admin.eventgroup', [
     Page.setTitle('Ny arrangementgruppe');
 })
 
-.controller('AdminEventGroupController', function(Page, $routeParams, $http, $scope, AdminEventGroup) {
+.controller('AdminEventGroupController', function(Page, $routeParams, $http, $scope, AdminEventGroup, AdminEvent) {
     Page.setTitle('Arrangementgruppe');
 
     AdminEventGroup.get({id:$routeParams['id']}, function(ret) {
@@ -38,6 +38,18 @@ angular.module('billett.admin.eventgroup', [
         $scope.group = ret;
         $scope.days = r;
     });
+
+    $scope.eventTogglePublish = function(event) {
+        new AdminEvent(event).setPublish(!event.is_published).success(function(ret) {
+            event.is_published = ret.is_published;
+        });
+    };
+
+    $scope.eventToggleSelling = function(event) {
+        new AdminEvent(event).setSelling(!event.is_selling).success(function(ret) {
+            event.is_selling = ret.is_selling;
+        });
+    };
 })
 
 .factory('AdminEventGroup', function($resource) {

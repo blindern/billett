@@ -81,12 +81,24 @@ angular.module('billett.admin.event', [
     // TODO
 })
 
-.factory('AdminEvent', function($resource) {
+.factory('AdminEvent', function($resource, $http) {
     var r = $resource('api/event/:id', {
         'id': '@id'
     }, {
 
     });
+
+    r.prototype.setPublish = function(state) {
+        return $http.patch('api/event/'+this.id, {
+            'is_published': state
+        });
+    };
+
+    r.prototype.setSelling = function(state) {
+        return $http.patch('api/event/'+this.id, {
+            'is_selling': state
+        });
+    };
 
     return r;
 });
