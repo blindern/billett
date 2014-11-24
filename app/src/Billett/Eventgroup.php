@@ -1,6 +1,6 @@
 <?php namespace Blindern\UKA\Billett;
 
-class EventGroup extends \Eloquent {
+class Eventgroup extends \Eloquent {
 	protected $table = 'eventgroups';
 
 	public function events()

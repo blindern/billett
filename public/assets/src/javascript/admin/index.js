@@ -18,10 +18,10 @@ angular.module('billett.admin', [
 
 }).
 
-controller('AdminIndexController', function(Page, $http, $scope, AdminEventGroup) {
+controller('AdminIndexController', function(Page, $http, $scope, AdminEventgroup) {
 	Page.setTitle('Administration');
 
-    AdminEventGroup.query(function(ret) {
+    AdminEventgroup.query(function(ret) {
         $scope.eventgroups = ret;
     });
 });

@@ -1,6 +1,6 @@
 <?php
 
-Route::resource('/api/eventgroup', 'EventGroupController', array(
+Route::resource('/api/eventgroup', 'EventgroupController', array(
 	'only' => array('index', 'show')
 ));
 

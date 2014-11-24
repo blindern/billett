@@ -5,11 +5,11 @@ angular.module('billett.eventgroup', ['ngRoute', 'billett.helper.page'])
 .config(['$routeProvider', function($routeProvider) {
 	$routeProvider.when('/eventgroup/:id', {
 		templateUrl: 'views/eventgroup/index.html',
-		controller: 'EventGroupController'
+		controller: 'EventgroupController'
 	});
 }])
 
-.controller('EventGroupController', function(Page, $http, $scope, $routeParams) {
+.controller('EventgroupController', function(Page, $http, $scope, $routeParams) {
 	Page.setTitle('Arrangementgruppe');
 
 	$http.get('api/eventgroup/'+encodeURIComponent($routeParams['id'])).success(function(ret) {

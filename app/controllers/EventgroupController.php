@@ -1,15 +1,15 @@
 <?php
 
-use Blindern\UKA\Billett\EventGroup;
+use Blindern\UKA\Billett\Eventgroup;
 
-class EventGroupController extends Controller {
+class EventgroupController extends Controller {
 	public function index() {
-		return EventGroup::orderBy('sort_value')->get();
+		return Eventgroup::orderBy('sort_value')->get();
 	}
 
 	public function show($id) {
 		// TODO: not all fields should be returned to the client
-		$group = EventGroup::with('events')->find($id);
+		$group = Eventgroup::with('events')->find($id);
 		if (!$group) {
 			return Response::json('not found', 404);
 		}

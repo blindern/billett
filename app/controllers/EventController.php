@@ -1,7 +1,7 @@
 <?php
 
 use Blindern\UKA\Billett\Event;
-use Blindern\UKA\Billett\EventGroup;
+use Blindern\UKA\Billett\Eventgroup;
 use Blindern\UKA\Billett\Order;
 
 class EventController extends Controller {
@@ -100,7 +100,7 @@ class EventController extends Controller {
             return \Response::json('data validation failed', 400);
         }
 
-        $group = EventGroup::find(Input::get('group_id'));
+        $group = Eventgroup::find(Input::get('group_id'));
         if (!$group) {
             return Response::json('group id not found', 404);
         }

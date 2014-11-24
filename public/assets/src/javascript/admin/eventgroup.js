@@ -10,22 +10,22 @@ angular.module('billett.admin.eventgroup', [
     $routeProvider
         .when('/a/eventgroup/new', {
             templateUrl: 'views/admin/eventgroup/new.html',
-            controller: 'AdminEventGroupNewController'
+            controller: 'AdminEventgroupNewController'
         })
         .when('/a/eventgroup/:id', {
             templateUrl: 'views/admin/eventgroup/index.html',
-            controller: 'AdminEventGroupController'
+            controller: 'AdminEventgroupController'
         });
 })
 
-.controller('AdminEventGroupNewController', function(Page, $routeParams) {
+.controller('AdminEventgroupNewController', function(Page, $routeParams) {
     Page.setTitle('Ny arrangementgruppe');
 })
 
-.controller('AdminEventGroupController', function(Page, $routeParams, $http, $scope, AdminEventGroup, AdminEvent) {
+.controller('AdminEventgroupController', function(Page, $routeParams, $http, $scope, AdminEventgroup, AdminEvent) {
     Page.setTitle('Arrangementgruppe');
 
-    AdminEventGroup.get({id:$routeParams['id']}, function(ret) {
+    AdminEventgroup.get({id:$routeParams['id']}, function(ret) {
         Page.setTitle(ret.title);
 
         var r = {};
@@ -52,7 +52,7 @@ angular.module('billett.admin.eventgroup', [
     };
 })
 
-.factory('AdminEventGroup', function($resource) {
+.factory('AdminEventgroup', function($resource) {
     var r = $resource('api/eventgroup/:id', {
         'id': '@id'
     }, {

@@ -4,7 +4,7 @@
 
 ## Data attributes/model
 
-### EventGroup
+### Eventgroup
 Grouping of events.
 * int id
 * bool is_active (allow modifications)

@@ -1,13 +1,13 @@
 <?php
 
-use \Blindern\UKA\Billett\EventGroup;
+use \Blindern\UKA\Billett\Eventgroup;
 use \Blindern\UKA\Billett\Event;
 use \Blindern\UKA\Billett\Ticketgroup;
 
 class BillettSeeder extends Seeder {
 	public function run()
 	{
-		$eg = new EventGroup;
+		$eg = new Eventgroup;
 		$eg->title = 'UKA på Blindern 2015';
 		$eg->sort_value = '2015-1-uka';
 		$eg->save();

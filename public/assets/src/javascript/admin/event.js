@@ -42,7 +42,7 @@ angular.module('billett.admin.event', [
     };
 })
 
-.controller('AdminEventNewController', function(Page, $routeParams, $scope, AdminEventGroup, AdminEvent, $location) {
+.controller('AdminEventNewController', function(Page, $routeParams, $scope, AdminEventgroup, AdminEvent, $location) {
     Page.setTitle('Nytt arrangement');
     $scope.eventgroup_id = $routeParams['id'];
     $scope.event = {
@@ -50,7 +50,7 @@ angular.module('billett.admin.event', [
         max_each_person: 10
     };
 
-    AdminEventGroup.get({id:$routeParams['id']}, function(ret) {
+    AdminEventgroup.get({id:$routeParams['id']}, function(ret) {
         $scope.group = ret;
     }, function(err) {
         $location.path('/a');

@@ -1,6 +1,6 @@
 <?php namespace Blindern\UKA\Billett;
 
-use \Blindern\UKA\Billett\EventGroup;
+use \Blindern\UKA\Billett\Eventgroup;
 
 class Event extends \Eloquent {
 	protected $table = 'events';
@@ -13,9 +13,9 @@ class Event extends \Eloquent {
 	 */
 	const SELL_TIMEOUT = 3600;
 
-	public function eventGroup()
+	public function eventgroup()
 	{
-		return $this->belongsTo('\\Blindern\\UKA\\Billett\\EventGroup', 'group_id');
+		return $this->belongsTo('\\Blindern\\UKA\\Billett\\Eventgroup', 'group_id');
 	}
 
 	public function ticketgroups()
