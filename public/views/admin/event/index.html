@@ -6,40 +6,50 @@
 
 <h2>{{event.title}}</h2>
 
-<dl class="dl-horizontal">
-    <dt>Start</dt>
-    <dd>{{event.time_start|formatdate:'DD.MM.YYYY HH:mm'}}</dd>
-    <dt>Slutt</dt>
-    <dd>{{event.time_end|formatdate:'DD.MM.YYYY HH:mm'}}</dd>
-    <dt>Alias</dt>
-    <dd>{{event.alias}}</dd>
-    <dt>Publisert?</dt>
-    <dd>{{event.is_published ? 'Ja' : 'Nei'}}</dd>
-    <dt>Nettsalg aktivert?</dt>
-    <dd>{{event.is_selling ? 'Ja' : 'Nei'}}</dd>
-    <dt>Sted</dt>
-    <dd>{{event.location}}</dd>
-    <dt>Maks per person</dt>
-    <dd>{{event.max_each_person}}</dd>
-    <dt>Maks antall salg</dt>
-    <dd>{{event.max_sales}}</dd>
-    <dt>Maks normale salg</dt>
-    <dd>{{event.max_normal_sales}}</dd>
-    <dt>Beskrivelse</dt>
-    <dd>{{event.description}}</dd>
-    <dt>Kort beskrivelse</dt>
-    <dd>{{event.description_short}}</dd>
-    <dt>Billett-tekst</dt>
-    <dd>{{event.ticket_text}}</dd>
-    <dt>Lenke</dt>
-    <dd>{{event.link}}</dd>
-    <dt>Aldersbegrensning</dt>
-    <dd>{{event.age_restriction}}</dd>
-    <dt>Timeout?</dt>
-    <dd>{{event.is_timeout ? 'Ja' : 'Nei'}}</dd>
-    <dt>Starttid passert?</dt>
-    <dd>{{event.is_old ? 'Ja' : 'Nei'}}</dd>
-</dl>
+<div class="row">
+    <div class="col-md-6">
+
+        <dl class="dl-horizontal">
+            <dt>Start</dt>
+            <dd>{{event.time_start|formatdate:'DD.MM.YYYY HH:mm'}}</dd>
+            <dt>Slutt</dt>
+            <dd>{{event.time_end|formatdate:'DD.MM.YYYY HH:mm'}}</dd>
+            <dt>Alias</dt>
+            <dd>{{event.alias}}</dd>
+            <dt>Publisert?</dt>
+            <dd>{{event.is_published ? 'Ja' : 'Nei'}}</dd>
+            <dt>Nettsalg aktivert?</dt>
+            <dd>{{event.is_selling ? 'Ja' : 'Nei'}}</dd>
+            <dt>Sted</dt>
+            <dd>{{event.location}}</dd>
+            <dt>Maks per person</dt>
+            <dd>{{event.max_each_person}}</dd>
+            <dt>Maks antall salg</dt>
+            <dd>{{event.max_sales}}</dd>
+            <dt>Maks normale salg</dt>
+            <dd>{{event.max_normal_sales}}</dd>
+            <dt>Beskrivelse</dt>
+            <dd>{{event.description}}</dd>
+            <dt>Kort beskrivelse</dt>
+            <dd>{{event.description_short}}</dd>
+            <dt>Billett-tekst</dt>
+            <dd>{{event.ticket_text}}</dd>
+            <dt>Lenke</dt>
+            <dd>{{event.link}}</dd>
+            <dt>Aldersbegrensning</dt>
+            <dd>{{event.age_restriction}}</dd>
+            <dt>Timeout?</dt>
+            <dd>{{event.is_timeout ? 'Ja' : 'Nei'}}</dd>
+            <dt>Starttid passert?</dt>
+            <dd>{{event.is_old ? 'Ja' : 'Nei'}}</dd>
+        </dl>
+
+    </div>
+
+    <div class="col-md-6 text-right">
+        TODO: Arrangementbilde
+    </div>
+</div>
 
 <h3>
     Billettgrupper
@@ -61,7 +71,9 @@
                 <th>Aktiv?</th>
                 <th>Publisert?</th>
                 <th>Normal?</th>
-                <th>TODO: salgsstatus</th>
+                <th>Reservert</th>
+                <th>Solgt</th>
+                <th>Omsetning</th>
             </tr>
         </thead>
         <tbody>
@@ -73,19 +85,43 @@
                 <td>{{g.is_active ? 'Ja' : 'Nei'}}</td>
                 <td>{{g.is_published ? 'Ja' : 'Nei'}}</td>
                 <td>{{g.is_normal ? 'Ja' : 'Nei'}}</td>
-                <td>...</td>
+                <td>
+                    {{event.ticket_count.groups[g.id].pending}}
+                </td>
+                <td>
+                    {{event.ticket_count.groups[g.id].valid}}
+                    <span ng-show="g.limit">
+                        / {{g.limit}}
+                    </span>
+                </td>
+                <td>
+                    {{event.ticket_count.groups[g.id].sum_price|price}}
+                    +
+                    {{event.ticket_count.groups[g.id].sum_fee|price}}
+                </td>
+            </tr>
+        </tbody>
+        <tbody>
+            <tr>
+                <th colspan="7">&nbsp;</th>
+                <th>
+                    {{event.ticket_count.totals.pending}}
+                </th>
+                <th>
+                    {{event.ticket_count.totals.valid}}
+                    / {{event.max_sales}}
+                </th>
+                <th>
+                    {{event.ticket_count.totals.sum_price|price}}
+                    +
+                    {{event.ticket_count.totals.sum_fee|price}}
+                </th>
             </tr>
         </tbody>
     </table>
 </div>
 
 <p ng-show="!event.has_tickets">
-    <a href class="btn btn-danger" ng-click="deleteEvent()">Slett</a>
+    <a href class="btn btn-danger" ng-click="deleteEvent()">Slett arrangement</a>
 </p>
-
-
-TODO: Publisere/avpublisere
-
-
-TODO: Arrangementbilde
 
