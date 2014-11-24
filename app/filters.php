@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 /*
 |--------------------------------------------------------------------------
 | Application & Route Filters
@@ -20,6 +22,17 @@ App::before(function($request)
 App::after(function($request, $response)
 {
 	//
+});
+
+// handle findOrFail-calls
+App::error(function(ModelNotFoundException $e)
+{
+	return Response::json('not found', 404);
+});
+
+App::missing(function($exception)
+{
+    return Response::json('not found', 404);
 });
 
 /*
