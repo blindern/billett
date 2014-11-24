@@ -1,7 +1,6 @@
 <?php
 
 use Blindern\UKA\Billett\Event;
-use Blindern\UKA\Billett\EventGroup;
 use Blindern\UKA\Billett\TicketGroup;
 
 class TicketGroupController extends Controller {
@@ -27,7 +26,6 @@ class TicketGroupController extends Controller {
 
     /**
      * Create new ticket group
-     * # FIXES #32
      */
     public function store()
     {
@@ -71,28 +69,35 @@ class TicketGroupController extends Controller {
     public function update($id)
     {
         // TODO: auth requirements
-        // TODO: some fields should be locked when valid/reserved tickets
 
         $g = TicketGroup::findOrFail($id);
 
-        $validator = \Validator::make(Input::all(), array(
+        $locked_fields = array(
             'title' => 'required',
+            'ticket_text' => '',
+            'price' => 'required|integer',
+            'fee' => 'integer'
+        );
+        $other_fields = array(
             'is_active' => '',
             'is_published' => '',
             'is_normal' => '',
-            'ticket_text' => '',
-            'price' => 'required|integer',
-            'fee' => 'integer',
             'limit' => 'integer'
-        ));
+        );
 
-        $g->title = Input::get('title');
+        $fields = $g->has_tickets ? $other_fields : array_merge($other_fields, $locked_fields);
+        $validator = \Validator::make(Input::all(), $fields);
+
+        if (!$g->has_tickets) {
+            $g->title = Input::get('title');
+            $g->ticket_text = Input::get('ticket_text');
+            $g->price = Input::get('price');
+            $g->fee = Input::get('fee');
+        }
+
         $g->is_active = Input::get('is_active');
         $g->is_published = Input::get('is_published');
         $g->is_normal = Input::get('is_normal');
-        $g->ticket_text = Input::get('ticket_text');
-        $g->price = Input::get('price');
-        $g->fee = Input::get('fee');
         $g->limit = Input::get('limit');
         if (empty($g->limit)) $g->limit = null;
 
@@ -107,12 +112,14 @@ class TicketGroupController extends Controller {
     public function destroy($id)
     {
         // TODO: auth requirements
-        // TODO: deny destroy of ticketgroups with valid tickets
 
         $g = TicketGroup::findOrFail($id);
+        if ($g->has_tickets) {
+            return Response::json('ticketgroup cannot be deleted', 400);
+        }
+
         $g->delete();
 
         return 'deleted';
-        // TODO: https://github.com/blindernuka/billett/issues/21
     }
 }
