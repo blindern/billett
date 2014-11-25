@@ -21,6 +21,7 @@ The events itself.
 * datetime time_start
 * optional datetime time_end
 * string title
+* optional string category
 * optional string location
 * int max_each_person (limit number of tickets for each person)
 * int max_sales (limit of total tickets that can be sold)

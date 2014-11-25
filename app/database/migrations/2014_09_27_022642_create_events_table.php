@@ -27,6 +27,7 @@ class CreateEventsTable extends Migration {
 			$table->integer('time_end')->unsigned()->nullable(); // use unix timestamp
 			$table->string('title');
 			$table->string('location', 100)->nullable();
+			$table->string('category', 100)->nullable();
 			$table->mediumInteger('max_each_person')->unsigned()->default(5);
 			$table->mediumInteger('max_sales')->unsigned();
 			$table->mediumInteger('max_normal_sales')->unsigned()->nullable();

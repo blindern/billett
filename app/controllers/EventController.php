@@ -90,6 +90,7 @@ class EventController extends Controller {
             'title' => 'required',
             'time_start' => 'required|integer',
             'time_end' => 'integer',
+            'category' => '',
             'location' => '',
             'max_sales' => 'required|integer',
             'max_normal_sales' => 'integer',
@@ -109,6 +110,7 @@ class EventController extends Controller {
         $event->title = Input::get('title');
         $event->time_start = Input::get('time_start');
         $event->time_end = Input::get('time_end');
+        $event->category = Input::get('category');
         $event->location = Input::get('location');
         $event->max_sales = Input::get('max_sales');
         $event->max_normal_sales = Input::get('max_normal_sales');
