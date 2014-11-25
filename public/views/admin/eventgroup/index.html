@@ -9,13 +9,22 @@
     <a href="a/eventgroup/{{group.id}}/new_event" class="pull-right btn btn-default">Nytt arrangement</a>
 </h2>
 
-TODO: Filter på arrangementer med billettsalg og uten
 
 <div ng-show="group.events.length == 0">
     <p>Ingen arrangementer eksisterer.</p>
 </div>
 
 <div ng-show="group.events.length > 0">
+    <div class="form-inline">
+        <select class="form-control" ng-model="filter_sale" ng-change="applyFilter()">
+            <option value="">Vis alle salgsmodus</option>
+            <option value="1">Kun med billettgrupper</option>
+            <option value="0">Kun uten billettgrupper</option>
+        </select>
+        <select class="form-control" ng-model="filter_category" ng-change="applyFilter()" ng-options="event.category as event.category for event in group.events|unique:'category'">
+            <option value="">Vis alle kategorier</option>
+        </select>
+    </div>
 
     <table class="table table-striped table-tbody-spacing">
         <thead>

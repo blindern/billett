@@ -3,7 +3,8 @@
 angular.module('billett.admin.eventgroup', [
     'ngRoute',
     'ngResource',
-    'billett.helper.page'
+    'billett.helper.page',
+    'ui.unique'
 ])
 
 .config(function($routeProvider) {
@@ -28,16 +29,27 @@ angular.module('billett.admin.eventgroup', [
     AdminEventgroup.get({id:$routeParams['id']}, function(ret) {
         Page.setTitle(ret.title);
 
+        $scope.group = ret;
+        $scope.applyFilter();
+    });
+
+    $scope.filter_sale = "";
+    $scope.filter_category = null;
+    $scope.applyFilter = function() {
         var r = {};
-        angular.forEach(ret.events, function(item) {
+        angular.forEach($scope.group.events, function(item) {
+            if ($scope.filter_sale !== "" && $scope.filter_sale != !!item.ticketgroups.length)
+                return;
+            if ($scope.filter_category !== null && $scope.filter_category != item.category)
+                return;
+
             var k = moment.unix(item.time_start).format('YYYY-MM-DD');
             r[k] = r[k] || [];
             r[k].push(item);
         });
 
-        $scope.group = ret;
         $scope.days = r;
-    });
+    };
 
     $scope.eventTogglePublish = function(event) {
         new AdminEvent(event).setPublish(!event.is_published).success(function(ret) {
