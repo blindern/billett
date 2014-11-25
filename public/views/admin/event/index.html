@@ -2,9 +2,15 @@
     <h1>{{event.eventgroup.title}}</h1>
 </div>
 
-<p><a href="a/eventgroup/{{event.eventgroup.id}}">&laquo; Tilbake</a></p>
+<p><a ng-href="a/eventgroup/{{event.eventgroup.id}}">&laquo; Tilbake</a></p>
 
-<h2>{{event.title}}</h2>
+<h2>
+    {{event.title}}
+    <span class="pull-right">
+        <a ng-href="a/event/{{event.id}}/edit" ng-show="!event.has_tickets" class="btn btn-primary">Rediger</a>
+        <a href ng-show="!event.has_tickets" class="btn btn-danger" ng-click="deleteEvent()">Slett arrangement</a>
+    </span>
+</h2>
 
 <div class="row">
     <div class="col-md-6">
@@ -120,8 +126,4 @@
         </tbody>
     </table>
 </div>
-
-<p ng-show="!event.has_tickets">
-    <a href class="btn btn-danger" ng-click="deleteEvent()">Slett arrangement</a>
-</p>
 

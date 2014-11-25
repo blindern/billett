@@ -33,7 +33,10 @@ TODO: Filter på arrangementer med billettsalg og uten
         <tbody ng-repeat="(day, events) in days">
             <tr ng-repeat="event in events">
                 <td>{{event.time_start|formatdate:'dddd'}}</td><!-- fixme: 6 am should count at the day before -->
-                <td><a ng-href="a/event/{{event.id}}">{{event.title}}</a></td>
+                <td>
+                    <span ng-show="event.category">{{event.category}}: </span>
+                    <a ng-href="a/event/{{event.id}}">{{event.title}}</a>
+                </td>
                 <td>
                     {{event.time_start|formatdate:'YYYY-MM-DD HH:mm'}}
                     <span ng-show="event.time_end && event.time_end != event.time_start">

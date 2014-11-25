@@ -132,12 +132,56 @@ class EventController extends Controller {
 
         $e = Event::findOrFail($id);
 
+        // TODO: fix validation checks (required e.a.)
+        $validator = \Validator::make(Input::all(), array(
+            'group_id' => 'integer',
+            'title' => '',
+            'alias' => '',
+            'time_start' => 'integer',
+            'time_end' => 'integer',
+            'category' => '',
+            'location' => '',
+            'max_sales' => 'integer',
+            'max_normal_sales' => 'integer',
+            'max_each_person' => 'integer'
+        ));
+
+        if ($validator->fails()) {
+            return \Response::json('data validation failed', 400);
+        }
+
+        $list = array(
+            'title',
+            'time_start',
+            'time_end',
+            'category',
+            'location',
+            'max_sales',
+            'max_normal_sales',
+            'max_each_person'
+        );
+
+        // can only edit alias when not published
+        if (!$e->is_published) {
+            $list[] = 'alias';
+        }
+
+        foreach ($list as $field) {
+            if (Input::has($field) && Input::get($field) != $e->{$field}) {
+                $e->{$field} = Input::get($field);
+            }
+        }
+
         if (Input::has('is_published')) {
             $e->is_published = (bool) Input::get('is_published');
         }
 
         if (Input::has('is_selling')) {
             $e->is_selling = (bool) Input::get('is_selling');
+        }
+
+        if (Input::has('group_id') && Input::get('group_id') != $e->group_id) {
+            // TODO: validate and change group
         }
 
         $e->save();

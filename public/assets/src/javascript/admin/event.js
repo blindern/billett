@@ -11,6 +11,11 @@ angular.module('billett.admin.event', [
         controller: 'AdminEventController'
     }).
 
+    when('/a/event/:id/edit', {
+        templateUrl: 'views/admin/event/edit.html',
+        controller: 'AdminEventEditController'
+    }).
+
     when('/a/eventgroup/:id/new_event', {
         templateUrl: 'views/admin/event/new.html',
         controller: 'AdminEventNewController'
@@ -38,6 +43,42 @@ angular.module('billett.admin.event', [
             $location.path('/a/eventgroup/'+group);
         }, function(err) {
             alert(err);
+        });
+    };
+})
+
+.controller('AdminEventEditController', function(Page, $routeParams, $scope, AdminEvent, $location) {
+    Page.setTitle('Arrangement');
+
+    AdminEvent.get({id:$routeParams['id']}, function(ret) {
+        $scope.event = ret;
+
+        var parseTime = function(t) {
+            if (!t) return;
+            return moment.unix(t).format('DD.MM.YYYY HH:mm');
+        };
+
+        $scope.time_start_text = parseTime($scope.event.time_start);
+        $scope.time_end_text = parseTime($scope.event.time_end);
+    }, function(err) {
+        $location.path('/a');
+    });
+
+    $scope.updateTime = function(which) {
+        $scope.event[which == 'start' ? 'time_start' : 'time_end'] =
+                moment(
+                    $scope[which == 'start' ? 'time_start_text' : 'time_end_text'],
+                    'DD.MM.YYYY HH:mm'
+                ).unix();
+    };
+
+    $scope.saveEvent = function() {
+        if (isNaN($scope.event.time_start)) return;
+
+        $scope.event.$save(function(res) {
+            $location.path('/a/event/'+res.id);
+        }, function(err) {
+            alert(err.data);
         });
     };
 })
@@ -85,7 +126,7 @@ angular.module('billett.admin.event', [
     var r = $resource('api/event/:id', {
         'id': '@id'
     }, {
-
+        save: { method: 'PUT' }
     });
 
     r.prototype.setPublish = function(state) {
