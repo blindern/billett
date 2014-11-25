@@ -12,6 +12,8 @@ $user = Auth::check() ? Auth::user() : null;
 	<meta name="author" content="">
 	<base href="/">
 
+	<link rel="icon" type="image/x-icon" href="favicon.ico">
+
 	<title ng-bind="title">UKA på Blindern</title>
 
 	<link href="assets/stylesheets/frontend.css" rel="stylesheet">
