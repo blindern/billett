@@ -21,3 +21,6 @@ Thumbs.db
 /public/assets/stylesheets/frontend.css.map
 /public/assets/fonts/
 
+# IDEA-project-files
+.idea/
+*.iml
