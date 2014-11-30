@@ -24,6 +24,15 @@ Route::resource('/api/ticketgroup', 'TicketgroupController', array(
 Route::post('/payment', 'PaymentController@callback');
 
 
+Route::get('/pdf', function() {
+    $ticket = Blindern\UKA\Billett\Ticket::findOrFail(\Input::get('id'));
+    return Response::make($ticket->getPdfData(), 200, array(
+        'Content-Type' => 'application/pdf',
+        'Content-Disposition' => 'inline; filename="'.$ticket->getPdfName().'"'
+    ));
+});
+
+
 // catch-all route
 // TODO: this should probably be changed due to search engines not getting 404
 Route::get('/api/{slug?}', function()

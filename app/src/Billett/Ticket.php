@@ -1,5 +1,7 @@
 <?php namespace Blindern\UKA\Billett;
 
+use Blindern\UKA\Billett\Helpers\PdfTicket;
+
 class Ticket extends \Eloquent {
 	protected $table = 'tickets';
 
@@ -17,6 +19,17 @@ class Ticket extends \Eloquent {
 	{
 		return $this->belongsTo('\\Blindern\\UKA\\Billett\\Ticketgroup', 'ticketgroup_id');
 	}
+
+    public function getKeyAttribute($key)
+    {
+        if ($key == "") {
+            $key = $this->generateKey();
+            $this->key = $key;
+            $this->save();
+        }
+
+        return $key;
+    }
 
 	/**
 	 * Generate a unique ticket key used for barcode
@@ -36,4 +49,33 @@ class Ticket extends \Eloquent {
 
         return $key;
 	}
+
+    /**
+     * Get (generate if neeed) PDF data
+     *
+     * @param bool Regenerate PDF?
+     * @return binary
+     */
+    public function getPdfData($regenerate = false)
+    {
+        if (!$this->pdf || $regenerate)
+        {
+            $p = new PdfTicket($this);
+            $this->pdf = $p->getPdfData();
+            $this->save();
+        }
+
+        return $this->pdf;
+    }
+
+    /**
+     * Get name for PDF-file
+     *
+     * @return string
+     */
+    public function getPdfName()
+    {
+        $n = str_pad($this->id, 4, '0', STR_PAD_LEFT);
+        return 'billett_blindernuka_'.$n.'.pdf';
+    }
 }
