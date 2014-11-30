@@ -143,7 +143,12 @@ class EventController extends Controller {
             'location' => '',
             'max_sales' => 'integer',
             'max_normal_sales' => 'integer',
-            'max_each_person' => 'integer'
+            'max_each_person' => 'integer',
+            'description' => '',
+            'description_short' => '',
+            'ticket_text' => '',
+            'link' => '',
+            'age_restriction' => 'integer'
         ));
 
         if ($validator->fails()) {
@@ -158,7 +163,12 @@ class EventController extends Controller {
             'location',
             'max_sales',
             'max_normal_sales',
-            'max_each_person'
+            'max_each_person',
+            'description',
+            'description_short',
+            'ticket_text',
+            'link',
+            'age_restriction'
         );
 
         // can only edit alias when not published
