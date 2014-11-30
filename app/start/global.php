@@ -79,3 +79,7 @@ App::down(function()
 */
 
 require app_path().'/filters.php';
+
+function format_nok($num) {
+    return 'NOK '.number_format($num, 0, ",", " ");
+}

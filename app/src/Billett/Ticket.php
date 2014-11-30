@@ -78,4 +78,14 @@ class Ticket extends \Eloquent {
         $n = str_pad($this->id, 4, '0', STR_PAD_LEFT);
         return 'billett_blindernuka_'.$n.'.pdf';
     }
+
+    /**
+     * Get the ticket number (zero-padded ID)
+     *
+     * @return string
+     */
+    public function getNumber()
+    {
+        return str_pad($this->id, 4, '0', STR_PAD_LEFT);
+    }
 }

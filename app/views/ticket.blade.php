@@ -7,7 +7,7 @@ $price = $ticket->ticketgroup->price + $ticket->ticketgroup->fee;
 
 $order_time = Carbon::createFromTimeStamp($ticket->order->time);
 
-$ticketid = "#".str_pad($ticket->id, 4, '0', STR_PAD_LEFT);
+$ticketid = "#".$ticket->getNumber();
 
 $format_nok = function($num) {
   return "kr ".number_format($num, 0, ",", " ");
@@ -33,7 +33,7 @@ if (substr($orderid, -5) == '-TEST') {
 <html>
   <head>
     <title>
-      Billett UKA på Blindern 2015
+      Billett UKA på Blindern
       <!--
       ".($ticket->event ? ": ".$ticket->event->data['p_title'] : "")
       -->
@@ -267,7 +267,7 @@ if (substr($orderid, -5) == '-TEST') {
       <p class="date">
         <span class="type">Tid:</span>
         <span class="value">
-          {{{$start->format('j/n-Y H:m')}}}
+          {{{$start->format('j/n-Y H:i')}}}
         </span>
       </p>
 

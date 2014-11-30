@@ -1,5 +1,7 @@
 <?php namespace Blindern\UKA\Billett;
 
+use \Carbon\Carbon;
+
 class Order extends \Eloquent {
     /**
      * How long a incomplete reservation is valid
@@ -64,7 +66,18 @@ class Order extends \Eloquent {
      */
     public function sendEmail()
     {
-        // TODO
+        \Mail::send(array('text' => 'billett.email_order'), array('order' => $this), function($message)
+        {
+            $ticket = $this->tickets->first();
+            $ticketinfo = $ticket ? " - ".$ticket->event->title." (".Carbon::createFromTimeStamp($ticket->event->time_start)->format('d.m.Y').")" : '';
+
+            $message->to($this->email, $this->name);
+            $message->subject('Billett'.(count($this->tickets) == 1 ? '' : 'er').' UKA på Blindern #'.$this->order_text_id.$ticketinfo);
+
+            foreach ($this->tickets as $ticket) {
+                $message->attachData($ticket->getPdfData(), $ticket->getPdfName(), array('mime' => 'application/pdf'));
+            }
+        });
     }
 
     /**

@@ -32,6 +32,12 @@ Route::get('/pdf', function() {
     ));
 });
 
+Route::get('/email', function() {
+    $order = Blindern\UKA\Billett\Order::findOrFail(\Input::get('id'));
+    $order->sendEmail();
+    var_dump($order->name);
+    die;
+});
 
 // catch-all route
 // TODO: this should probably be changed due to search engines not getting 404
