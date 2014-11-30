@@ -75,7 +75,7 @@ angular.module('billett.admin.event', [
     $scope.saveEvent = function() {
         if (isNaN($scope.event.time_start)) return;
 
-        $scope.event.$save(function(res) {
+        $scope.event.$update(function(res) {
             $location.path('/a/event/'+res.id);
         }, function(err) {
             alert(err.data);
@@ -126,7 +126,7 @@ angular.module('billett.admin.event', [
     var r = $resource('api/event/:id', {
         'id': '@id'
     }, {
-        save: { method: 'PUT' }
+        update: { method: 'PUT' }
     });
 
     r.prototype.setPublish = function(state) {

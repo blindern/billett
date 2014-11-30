@@ -40,7 +40,7 @@ angular.module('billett.admin.ticketgroup', [
     });
 
     $scope.updateTicketgroup = function() {
-        $scope.ticketgroup.$save(function(ret) {
+        $scope.ticketgroup.$update(function(ret) {
             $location.path('/a/event/'+$scope.event_id);
         });
     };
@@ -84,7 +84,7 @@ angular.module('billett.admin.ticketgroup', [
     var r = $resource('api/ticketgroup/:id', {
         'id': '@id'
     }, {
-        save: { method: 'PUT' }
+        update: { method: 'PUT' }
     });
 
     return r;
