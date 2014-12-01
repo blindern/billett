@@ -2,6 +2,7 @@
 
 class Payment extends \Eloquent {
 	protected $table = 'payments';
+	protected $hidden = array('data');
 
 	public function order()
 	{

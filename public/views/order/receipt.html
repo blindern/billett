@@ -1,0 +1,47 @@
+<div class="page-header">
+    <h1 ng-show="payment.status == 'ACCEPTED'">Kvittering</h1>
+    <h1 ng-show="payment.status != 'ACCEPTED'">Ordrebekreftelse</h1>
+</div>
+
+<div ng-show="payment.status == 'ACCEPTED'">
+    <p>Din bestilling har blitt <b>vellykket gjennomført</b>. Du vil motta billett og kvittering på e-posten.</p>
+</div>
+<div ng-show="payment.status != 'ACCEPTED'">
+    <p>Din ordre er registrert og du vil motta e-post så fort betalingen blir registrert.</p>
+</div>
+
+<h2>Ordreinformasjon</h2>
+<dl class="dl-horizontal">
+    <dt>Navn</dt>
+    <dd>{{order.name}}</dd>
+    <dt>E-post</dt>
+    <dd>{{order.email}}</dd>
+    <dt>Telefon</dt>
+    <dd>{{order.phone}}</dd>
+</dl>
+<dl class="dl-horizontal">
+    <!--<dt>Kortnummer</dt>
+    <dd>po_cardnomask</dd>-->
+    <dt>Transaksjonsnummer</dt>
+    <dd>{{payment->transaction_id}}</dd>
+    <dt>Ordrenummer</dt>
+    <dd>{{order->order_text_id}}</dd>
+    <dt>Kjøpstidspunkt</dt>
+    <dd>{{order->time|formatdate:'dddd D. MMMM YYYY HH:mm:ss'</dd>
+</dl>
+<dl class="dl-horizontal">
+    <dt>Merverdiavgift</dt>
+    <dd>{{0|price}}</dd>
+    <dt>Totalbeløp</dt>
+    <dd>{{payment->amount|price}}<span ng-show="payment.status == 'ACCEPTED'"> har blitt belastet ditt kort</span></dd>
+</dl>
+
+<h3>Billettspesifikasjon</h3>
+<ul>
+    <li ng-repeat="ticket in order.tickets">
+        {{ticket.event.time_start|formatdate:'DD.MM.YYYY HH:mm'}}: {{ticket.event.title}}: {{ticket.ticketgroup.title}} ({{ticket.ticketgroup.price|price}}<!--
+        --><span ng-show="ticket.ticketgroup.fee"> + {{ticket.ticketgroup.fee|price}} billettgebyr</span>) (#{{ticket.number}})
+    </li>
+</ul>
+
+<p>Vi håper du får en flott opplevelse på UKA på Blindern 2013!</p>

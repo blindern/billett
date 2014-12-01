@@ -9,7 +9,7 @@ var mod = angular.module('billett.event', ['ngRoute', 'billett.helper.page'])
 	});
 }])
 
-.controller('EventController', function(Page, EventReservation, $http, $scope, $location, $routeParams) {
+.controller('EventController', function(Page, EventReservation, $http, $scope, $location, $routeParams, $sce) {
 	Page.setTitle('Arrangement');
 
 	$http.get('api/event/'+encodeURIComponent($routeParams['id'])+'?simple=1').success(function(ret) {
@@ -68,6 +68,7 @@ var mod = angular.module('billett.event', ['ngRoute', 'billett.helper.page'])
 		}).success(function() {
 			$http.post('/api/order/'+$scope.reservation.id+'/place').success(function(ret) {
 				$scope.checkout = ret;
+				$scope.checkout_url = $sce.trustAsResourceUrl(ret.url);
 			}).error(function(ret) {
 				alert("Ukjent feil oppsto: "+ret);
 			});

@@ -2,8 +2,6 @@
 /vendor
 composer.phar
 composer.lock
-.env.local.php
-.env.php
 .DS_Store
 Thumbs.db
 
@@ -24,3 +22,9 @@ Thumbs.db
 # IDEA-project-files
 .idea/
 *.iml
+
+# protected files
+.env.local.php
+.env.php
+/app/config/local/dibs.php
+

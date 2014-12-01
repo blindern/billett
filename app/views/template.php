@@ -1,6 +1,7 @@
 <?php
 
 $user = Auth::check() ? Auth::user() : null;
+if (!isset($response_data)) $response_data = null;
 
 ?>
 <!doctype html>
@@ -21,6 +22,7 @@ $user = Auth::check() ? Auth::user() : null;
 
 	<script type="text/javascript">
 	var logged_in = <?php echo json_encode((bool) $user); ?>;
+	var response_data = <?php echo json_encode($response_data); ?>;
 	</script>
 
 	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->

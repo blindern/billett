@@ -27,7 +27,8 @@ class CreatePaymentsTable extends Migration {
 			$table->string('type', 20);
 			$table->decimal('amount', 7, 2);
 			$table->decimal('fee', 7, 2)->nullable();
-			$table->integer('transaction_id')->nullable();
+			$table->string('transaction_id', 100)->nullable();
+			$table->string('status', 100)->nullable();
 			$table->text('data')->nullable();
 		});
 	}

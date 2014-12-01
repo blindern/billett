@@ -63,7 +63,8 @@ Link between payment methods and orders.
 * string type (payment type, e.g. web, cash, card, other)
 * decimal(7,2) amount (the amount paid, negative will mean a refund)
 * optional decimal(7,2) fee (additional fee paid)
-* optional int transaction_id (used by web payment)
+* optional string transaction_id (used by web payment)
+* optional string status (used by web payment)
 * optional string data (additional data if applicable in json)
 
 ### Ticketgroup

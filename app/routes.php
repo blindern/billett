@@ -21,7 +21,9 @@ Route::resource('/api/ticketgroup', 'TicketgroupController', array(
 
 
 // payment (callback)
-Route::post('/payment', 'PaymentController@callback');
+Route::post('/dibs/cancel', 'DibsController@cancel');
+Route::post('/dibs/callback', 'DibsController@callback');
+Route::post('/dibs/accept', 'DibsController@accept');
 
 
 Route::get('/pdf', function() {

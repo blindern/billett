@@ -9,7 +9,8 @@ var module = angular.module('billett', [
     'billett.admin',
     'billett.info',
     'billett.event',
-    'billett.eventgroup'
+    'billett.eventgroup',
+    'billett.order'
 ]);
 
 module.config(['$routeProvider', function($routeProvider) {
@@ -59,3 +60,12 @@ module.directive('autoFocus', function($timeout) {
         }
     };
 });
+
+module.service('ResponseData', function() {
+    this.get = function(name) {
+        if (window.response_data && name in window.response_data) {
+            return window.response_data[name];
+        }
+    };
+});
+

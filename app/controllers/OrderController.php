@@ -1,6 +1,7 @@
 <?php
 
 use Blindern\UKA\Billett\Order;
+use Blindern\UKA\Billett\Helpers\DibsPaymentModule;
 
 class OrderController extends \Controller {
     /**
@@ -89,13 +90,12 @@ class OrderController extends \Controller {
             return \Response::json('invalid state', 400);
         }
 
+        $dibs = new DibsPaymentModule;
+
         // TODO: generate (redirect to) payment form
         return array(
-            'url' => 'TODO',
-            'fields' => array(
-                'test1' => 'value1',
-                'test2' => 'value2'
-            )
+            'url' => $dibs->getCheckoutUrl(),
+            'fields' => $dibs->generateCheckoutFields($order)
         );
     }
 }
