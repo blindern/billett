@@ -18,6 +18,7 @@ var js_files = [
     "./bower_components/angular-animate/angular-animate.js",
     "./bower_components/angular-resource/angular-resource.js",
     "./bower_components/angular-ui-utils/ui-utils.js",
+    "./bower_components/angular-file-upload/angular-file-upload.js",
     "./bower_components/moment/moment.js",
     "./bower_components/moment/locale/nb.js",
     "./public/assets/src/javascript/**/*.js"

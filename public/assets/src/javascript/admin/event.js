@@ -2,7 +2,8 @@
 
 angular.module('billett.admin.event', [
     'ngRoute',
-    'billett.helper.page'
+    'billett.helper.page',
+    'angularFileUpload'
 ])
 
 .config(function($routeProvider) {
@@ -28,7 +29,7 @@ angular.module('billett.admin.event', [
     });
 })
 
-.controller('AdminEventController', function(Page, $routeParams, AdminEvent, $location, $scope) {
+.controller('AdminEventController', function(Page, $routeParams, AdminEvent, $location, $scope, FileUploader) {
     Page.setTitle("Arrangement");
 
     AdminEvent.get({id:$routeParams['id']}, function(ret) {
@@ -44,6 +45,23 @@ angular.module('billett.admin.event', [
         }, function(err) {
             alert(err);
         });
+    };
+
+    // uploading of image
+    $scope.uploader = new FileUploader({
+        url: 'event/'+$routeParams['id']+'/image',
+        removeAfterUpload: true
+    });
+    $scope.uploader.onAfterAddingFile = function(fileItem) {
+        $scope.uploadprogress = true;
+        fileItem.onSuccess = function(res) {
+            $scope.uploadprogress = null;
+            $scope.image_version = (new Date()).getTime();
+        };
+        fileItem.onError = function() {
+            alert("Ukjent feil ved opplasting!");
+        };
+        fileItem.upload();
     };
 })
 

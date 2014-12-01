@@ -5,12 +5,17 @@
     </h1>
 </div>
 
-<!-- TODO: thumb (p_image_src) -->
+<div class="event-page">
+
 <!-- TODO: category (p_category) -->
 <!-- TODO: ics-link -->
 
 <div class="row">
     <div class="col-sm-5">
+
+        <div class="event-image">
+            <img ng-src="event/{{event.id}}/image" alt="">
+        </div>
 
         <dl>
             <dt>Tidspunkt</dt>
@@ -20,10 +25,10 @@
             <dt ng-show="event.location">Sted</dt>
             <dd ng-show="event.location">{{event.location}}</dd>
             <dt ng-show="event.age_restriction">Aldersgrense</dt>
-            <dd ng-show="event.age_restriction"><b>{{event.age_restriction}} år</b></dd>
+            <dd ng-show="event.age_restriction">{{event.age_restriction}} år</dd>
         </dl>
 
-        <div ng-show="event.description" ng-bind="event.description"></div>
+        <div ng-show="event.description" ng-bind="event.description" class="event-description"></div>
 
     </div>
 
@@ -170,3 +175,5 @@
 </div>
 
 <!-- TODO: visa/mastercard logoer -->
+
+</div>

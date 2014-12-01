@@ -7,6 +7,7 @@ class Event extends \Eloquent {
 	protected $appends = array('is_timeout', 'is_old', 'ticket_count', 'has_tickets');
 	// TODO: ticket_count should probably be hidden
 	//protected $hidden = array('ticket_count');
+    protected $hidden = array('image');
 
 	/**
 	 * When the online selling freezes (how many seconds before event start)

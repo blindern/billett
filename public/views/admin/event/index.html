@@ -2,12 +2,14 @@
     <h1>{{event.eventgroup.title}}</h1>
 </div>
 
+<div class="admin-event">
+
 <p><a ng-href="a/eventgroup/{{event.eventgroup.id}}">&laquo; Tilbake</a></p>
 
 <h2>
     {{event.title}}
     <span class="pull-right">
-        <a ng-href="a/event/{{event.id}}/edit" ng-show="!event.has_tickets" class="btn btn-primary">Rediger</a>
+        <a ng-href="a/event/{{event.id}}/edit" class="btn btn-primary">Rediger</a>
         <a href ng-show="!event.has_tickets" class="btn btn-danger" ng-click="deleteEvent()">Slett arrangement</a>
     </span>
 </h2>
@@ -54,8 +56,12 @@
 
     </div>
 
-    <div class="col-md-6 text-right">
-        TODO: Arrangementbilde
+    <div class="col-md-6">
+        <div class="event-image" nv-file-drop="" nv-file-over="" uploader="uploader">
+            <span class="upload-tip">Dra et bilde over her for å laste opp nytt bilde!</span>
+            <img ng-src="event/{{event.id}}/image?v={{image_version||''}}" alt="" ng-show="!uploadprogress">
+            <span ng-show="uploadprogress">Laster opp nytt bilde...</span>
+        </div>
     </div>
 </div>
 
@@ -129,3 +135,4 @@
     </table>
 </div>
 
+</div>

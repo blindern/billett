@@ -20,6 +20,10 @@ Route::resource('/api/ticketgroup', 'TicketgroupController', array(
 ));
 
 
+Route::get('/event/{id}/image', 'EventController@image');
+Route::post('/event/{id}/image', 'EventController@uploadImage');
+
+
 // payment (callback)
 Route::post('/dibs/cancel', 'DibsController@cancel');
 Route::post('/dibs/callback', 'DibsController@callback');

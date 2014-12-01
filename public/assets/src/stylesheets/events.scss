@@ -24,3 +24,40 @@ h1 .eventgroup a {
 .eventgroup-event-action {
     cursor: pointer;
 }
+
+.event-page {
+    .event-image {
+        margin: 0 0 1em;
+    }
+    .event-description {
+        margin: 1em 0;
+    }
+}
+
+.admin-event {
+    .event-image {
+        margin-top: 1em;
+        position: relative;
+        .upload-tip {
+            position: absolute;
+            background: #EEE;
+            padding: 3px;
+            display: none;
+            left: 0;
+        }
+        &:hover .upload-tip {
+            display: block;
+        }
+        &.nv-file-over {
+            outline: 3px dotted #333;
+        }
+
+        @media (min-width: $screen-md-min) {
+            .upload-tip {
+                right: 0;
+                left: auto;
+            }
+            text-align: right;
+        }
+    }
+}

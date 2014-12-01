@@ -122,6 +122,7 @@ return array(
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Dinesh\Barcode\BarcodeServiceProvider',
+		'Intervention\Image\ImageServiceProvider'
 
 	),
 
@@ -191,6 +192,7 @@ return array(
 		'View'              => 'Illuminate\Support\Facades\View',
 		'DNS1D'             => 'Dinesh\Barcode\Facades\DNS1DFacade',
         'DNS2D'             => 'Dinesh\Barcode\Facades\DNS2DFacade',
+        'Image'             => 'Intervention\Image\Facades\Image'
 
 	),
 

@@ -213,4 +213,43 @@ class EventController extends Controller {
         $e->delete();
         return 'deleted';
     }
+
+    /**
+     * Image upload
+     */
+    public function uploadImage($id) {
+        $event = Event::findOrFail($id);
+
+        if (!\Input::hasFile('file')) {
+            App::abort(400, 'Missing image');
+        }
+
+        try {
+            $event->image = \Image::make(\Input::file('file'))->resize(275, null, function($constraint) {
+                $constraint->aspectRatio();
+            })->encode('jpg', 75);
+            $event->save();
+
+            return 'ok';
+        } catch (\Intervention\Image\Exception\NotReadableException $e) {
+            App::abort(400, 'Could not read image');
+        }
+    }
+
+    /**
+     * Get event image
+     */
+    public function image($id) {
+        $event = Event::findOrFail($id);
+
+        $img = $event->image;
+        if (!$img) {
+            $img = file_get_contents(app_path().'/assets/images/event_no_image.jpg');
+        }
+
+        // image should be jpeg
+        return Response::make($img, 200, array(
+            'Content-Type' => 'image/jpeg',
+            'Content-Length' => strlen($img)));
+    }
 }
