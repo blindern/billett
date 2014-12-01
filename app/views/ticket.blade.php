@@ -25,8 +25,8 @@ if (substr($orderid, -5) == '-TEST') {
   $is_test = true;
 }
 
-//$ticket->event->ticket_text = '';
-//$ticket->ticketgroup->ticket_text = '';
+$days = array('man', 'tir', 'ons', 'tor', 'fre', 'lør', 'søn');
+$months = array('jan', 'feb', 'mar', 'apr', 'mai', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'des');
 
 ?>
 <!DOCTYPE html>
@@ -34,13 +34,7 @@ if (substr($orderid, -5) == '-TEST') {
   <head>
     <title>
       Billett UKA på Blindern
-      <!--
-      ".($ticket->event ? ": ".$ticket->event->data['p_title'] : "")
-      -->
     </title>
-    <!--
-    $this->SetAuthor("UKA på Blindern 2013", true);
-    -->
     <style type="text/css">
     html, body {
       margin: 0;
@@ -165,6 +159,10 @@ if (substr($orderid, -5) == '-TEST') {
     .date .type {
       width: 10mm;
     }
+    .date .time {
+      text-decoration: underline;
+      font-weight: bold;
+    }
 
     /*
      * section: ticket-text-event
@@ -267,7 +265,9 @@ if (substr($orderid, -5) == '-TEST') {
       <p class="date">
         <span class="type">Tid:</span>
         <span class="value">
-          {{{$start->format('j/n-Y H:i')}}}
+          <?=$days[$start->format('N')-1];?> {{{$start->format('j. ')}}} <?=$months[$start->format('n')-1];?> {{{$start->format('Y')}}}
+          kl.
+          <span class="time">{{{$start->format('H:i')}}}</span>
         </span>
       </p>
 
