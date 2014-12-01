@@ -25,12 +25,132 @@ h1 .eventgroup a {
     cursor: pointer;
 }
 
+.eventgroup-page {
+    .events-table {
+        tbody {
+            &::before {
+                line-height: 20px;
+                content: '-';
+                visibility: hidden;
+                display: block;
+            }
+            tr:nth-child(even) {
+                td,
+                th {
+                    background-color: $table-bg-accent;
+                }
+            }
+            th {
+                font-weight: normal;
+                color: #444;
+                background: transparent !important;
+                border-top: none;
+                border-bottom-width: 2px;
+            }
+            tr:nth-child(2) td {
+                border-top-width: 2px !important;
+            }
+            tr:nth-child(1),
+            tr:nth-child(2),
+            tr:nth-child(4) {
+                white-space: nowrap;
+            }
+        }
+    }
+}
+
 .event-page {
     .event-image {
         margin: 0 0 1em;
     }
     .event-description {
         margin: 1em 0;
+    }
+}
+
+.admin-eventgroup {
+    table > tbody::before {
+        line-height: 20px;
+        content: '-';
+        visibility: hidden;
+        display: block;
+    }
+    table tbody th {
+        font-weight: normal;
+        color: #444;
+        background: transparent !important;
+        border-top: none;
+        border-bottom-width: 2px;
+    }
+    table tbody > tr:nth-child(2) td {
+        border-top-width: 2px !important;
+    }
+    table {
+        > tbody > tr:nth-child(even) {
+            > td,
+            > th {
+                background-color: $table-bg-accent;
+            }
+        }
+    }
+    table th:nth-child(5), table td:nth-child(5),
+    table th:nth-child(6), table td:nth-child(6),
+    table th:nth-child(7), table td:nth-child(7) {
+        text-align: right;
+    }
+    table th:nth-child(8), table td:nth-child(8),
+    table th:nth-child(9), table td:nth-child(9) {
+        text-align: center;
+    }
+    table td:nth-child(8),
+    table td:nth-child(9) {
+        background-color: hsl(120,100%,90%) !important;
+    }
+    /*table td:nth-child(8) {
+
+    }*/
+    table tr.event-not-published {
+        td {
+            opacity: 0.5;
+        }
+        td:nth-child(8),
+        td:nth-child(9) {
+            opacity: 1;
+        }
+        td:nth-child(8) {
+            background-color: hsl(0,100%,90%) !important;
+        }
+    }
+    table tr.event-no-selling {
+        td:nth-child(9) {
+            background-color: hsl(0,100%,90%) !important;
+        }
+    }
+
+    .edit-link-container {
+        position: relative;
+
+        .edit-link-wrap {
+            position: absolute;
+            left: 0;
+            display: none;
+            .edit-link {
+                position: absolute;
+                right: 0;
+                top: -4px;
+                background-color: $btn-primary-bg;
+                a {
+                    color: $btn-primary-color;
+                    display: block;
+                    padding: 4px;
+                }
+            }
+        }
+        &:hover {
+            .edit-link-wrap {
+                display: block;
+            }
+        }
     }
 }
 

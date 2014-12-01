@@ -43,7 +43,7 @@ angular.module('billett.admin.eventgroup', [
             if ($scope.filter_category !== null && $scope.filter_category != item.category)
                 return;
 
-            var k = moment.unix(item.time_start).format('YYYY-MM-DD');
+            var k = moment.unix(item.time_start-3600*6).format('YYYY-MM-DD');
             r[k] = r[k] || [];
             r[k].push(item);
         });

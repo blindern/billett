@@ -37,67 +37,69 @@
 
     <div class="col-sm-7">
 
-        <div class="panel panel-default" ng-show="!event.is_selling">
-            <div class="panel-body">
-                Billetter for dette arrangementet er for øyeblikket ikke tilgjengelig.
-            </div>
-        </div>
-
-        <div ng-show="event.is_selling">
-            <div class="panel panel-default" ng-show="event.ticketgroups.length == 0">
+        <div ng-show="!reservation">
+            <div ng-show="event.web_selling_status == 'unknown'" class="panel panel-default">
                 <div class="panel-body">
-                    Arrangementet har ingen tilgjengelige nettbilletter.
+                    Informasjon om billetter for dette arrangementet er for øyeblikket ikke tilgjengelig.
                 </div>
             </div>
 
-            <!-- TODO: check if sold out -->
-
-            <div ng-show="event.ticketgroups.length > 0">
-
-                <div class="panel panel-default" ng-show="event.is_old">
-                    <div class="panel-body">
-                        Billettsalg for arrangementet er avsluttet.
-                    </div>
+            <div ng-show="event.web_selling_status == 'old'" class="panel panel-default">
+                <div class="panel-body">
+                    Billettsalg for arrangementet er avsluttet.
                 </div>
-                <div class="panel panel-default" ng-show="!event.is_old && event.is_timeout">
-                    <div class="panel-body">
-                        Nettsalget for dette arrangementet har avsluttet. Evt. resterende billetter selges i døra.
-                    </div>
+            </div>
+
+            <div ng-show="event.web_selling_status == 'no_web_tickets'" class="panel panel-default">
+                <div class="panel-body">
+                    Dette arrangementet selges ikke på nett eller har foreløpig ingen tilgjengelige billetter.
                 </div>
+            </div>
 
-                <div ng-show="!event.is_old && !event.is_timeout && !reservation">
-                    <form class="form-horizontal panel panel-default">
-                        <div class="panel-heading">Kjøp billetter</div>
-                        <div class="panel-body">
+            <div ng-show="event.web_selling_status == 'timeout'" class="panel panel-default">
+                <div class="panel-body">
+                    Nettsalget for dette arrangementet har avsluttet. Evt. tilgjengelige billetter selges i døra.
+                </div>
+            </div>
 
-                            <p>Ved kjøp av billetter får du tilsendt en elektronisk billett i PDF-format på
-                                e-post som printes ut eller tas med på mobiltelefon til arrangementet.
-                                <a href="om">Informasjon om billetter</a></p>
+            <div ng-show="event.web_selling_status == 'sold_out'" class="panel panel-default">
+                <div class="panel-body">
+                    Arrangementet er dessverre utsolgt. Sjekk tilbake senere for se å om det kanskje blir gjort nye billetter tilgjengelig.
+                </div>
+            </div>
 
-                            <div class="form-group" ng-repeat="ticketgroup in event.ticketgroups">
-                                <div class="col-sm-5">
-                                    <label class="control-label">{{ticketgroup.title}}</label>
-                                </div>
-                                <div class="col-sm-3 control-label">
-                                    <p><span class="visible-xs-inline">Pris:</span> {{ticketgroup.price+ticketgroup.fee|price:true}}</p>
-                                </div>
-                                <div class="col-sm-4">
-                                    <select ng-model="ticketgroup.order_count" class="form-control" ng-init="ticketgroup.order_count=0">
-                                        <option ng-repeat="i in (ticketgroup.limit||10)+1|range" value="{{i}}">{{i}} stk</option>
-                                    </select>
-                                </div>
+            <div ng-show="event.web_selling_status == 'sale'">
+                <form class="form-horizontal panel panel-default">
+                    <div class="panel-heading">Kjøp billetter</div>
+                    <div class="panel-body">
+
+                        <p>Ved kjøp av billetter får du tilsendt en elektronisk billett i PDF-format på
+                            e-post som printes ut eller tas med på mobiltelefon til arrangementet.
+                            <a href="om">Informasjon om billetter</a></p>
+
+                        <div class="form-group" ng-repeat="ticketgroup in event.ticketgroups">
+                            <div class="col-sm-5">
+                                <label class="control-label">{{ticketgroup.title}}</label>
                             </div>
-
-                            <p class="text-center"><input type="submit" ng-click="proceed()" class="btn btn-primary" value="Gå videre"></p>
-                            <div class="text-center text-muted">Billettprisene inkluderer evt. mva og billettgebyr.</div>
+                            <div class="col-sm-3 control-label">
+                                <p><span class="visible-xs-inline">Pris:</span> {{ticketgroup.price+ticketgroup.fee|price:true}}</p>
+                            </div>
+                            <div class="col-sm-4">
+                                <select ng-model="ticketgroup.order_count" class="form-control" ng-init="ticketgroup.order_count=0">
+                                    <option ng-repeat="i in (ticketgroup.limit||10)+1|range" value="{{i}}">{{i}} stk</option>
+                                </select>
+                            </div>
                         </div>
-                    </form>
-                    <p class="text-center">
-                        <a href="http://www.dibs.no/">
-                            <img src="https://cdn.dibspayment.com/logo/checkout/combo/horiz/DIBS_checkout_kombo_horizontal_02.png" alt="DIBS - Payments made easy" width="300"/>
-                        </a>
-                    </p>
-                </div>
+
+                        <p class="text-center"><input type="submit" ng-click="proceed()" class="btn btn-primary" value="Gå videre"></p>
+                        <div class="text-center text-muted">Billettprisene inkluderer evt. mva og billettgebyr.</div>
+                    </div>
+                </form>
+                <p class="text-center">
+                    <a href="http://www.dibs.no/">
+                        <img src="https://cdn.dibspayment.com/logo/checkout/combo/horiz/DIBS_checkout_kombo_horizontal_02.png" alt="DIBS - Payments made easy" width="300"/>
+                    </a>
+                </p>
             </div>
         </div>
 

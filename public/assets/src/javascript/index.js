@@ -13,7 +13,6 @@ angular.module('billett.index', ['ngRoute', 'billett.helper.page'])
 	Page.setTitle('Arrangementer');
 
 	$http.get('api/event/get_upcoming').success(function(ret) {
-		console.log("got data", ret);
 		$scope.upcoming = ret;
 	});
 

@@ -7,7 +7,10 @@ use Blindern\UKA\Billett\Order;
 class EventController extends Controller {
     public function getUpcoming()
     {
-        return Event::with('eventgroup')->get();
+        return Event::with('eventgroup')
+            ->where('is_published', true)
+            ->where('time_start', '>', time())
+            ->orderBy('time_start')->limit(6)->get();
     }
 
     public function show($id_or_alias)
@@ -30,7 +33,7 @@ class EventController extends Controller {
         $ev->load(array('ticketgroups' => function($query) use ($show_all)
         {
             if ($show_all) $query->get();
-            else $query->where('is_published', 1);
+            else $query->where('is_published', true)->where('is_active', true);
         }));
 
         return $ev;
@@ -57,7 +60,7 @@ class EventController extends Controller {
             if (isset($groups[$group->id])) {
                 $val = $groups[$group->id];
 
-                if (!$group->is_published || !is_numeric($val)) continue;
+                if (!$group->is_published || !$group->is_active || !is_numeric($val)) continue;
 
                 $groups_to_add[] = array($group, $val);
                 unset($groups[$group->id]);

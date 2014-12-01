@@ -9,11 +9,11 @@ class EventgroupController extends Controller {
 
 	public function show($id) {
 		// TODO: not all fields should be returned to the client
-		$group = Eventgroup::with('events')->find($id);
-		if (!$group) {
-			return Response::json('not found', 404);
-		}
+		return Eventgroup::with(array('events' => function($q) {
+			$q->orderBy('time_start');
 
-		return $group;
+			// TODO: auth requirement
+			if (!\Input::has('admin')) $q->where('is_published', true);
+		}))->findOrFail($id);
 	}
 }

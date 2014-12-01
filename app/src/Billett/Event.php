@@ -4,7 +4,7 @@ use \Blindern\UKA\Billett\Eventgroup;
 
 class Event extends \Eloquent {
 	protected $table = 'events';
-	protected $appends = array('is_timeout', 'is_old', 'ticket_count', 'has_tickets');
+	protected $appends = array('is_timeout', 'is_old', 'ticket_count', 'has_tickets', 'web_selling_status');
 	// TODO: ticket_count should probably be hidden
 	//protected $hidden = array('ticket_count');
     protected $hidden = array('image');
@@ -159,5 +159,44 @@ class Event extends \Eloquent {
         })->first();
 
         return (bool) $res;
+    }
+
+    /**
+     * Get selling status for the event
+     *
+     * This is used for web tickets only
+     */
+    public function getWebSellingStatusAttribute()
+    {
+        if (!$this->is_selling)
+            return 'unknown';
+
+        if ($this->max_sales == 0)
+            return 'no_tickets';
+
+        if ($this->is_old)
+            return 'old';
+
+        // TODO: optimize this (!)
+        $groups = 0;
+        foreach ($this->ticketgroups as $g) {
+            if (!$g->is_active || !$g->is_published) continue;
+            $groups++;
+        }
+
+        if ($groups == 0)
+            return 'no_web_tickets';
+
+        if ($this->is_timeout)
+            return 'timeout';
+
+        // TODO: check if sold out
+        // * total sales reached (event.max_sales - sold - reserved)
+        // * or total normal sales reached (event.max_normal_sales - sold(normal) - reserved(normal))
+        // * or total sales for all ticketgroups for web reached forall(ticketgroup.limit - sold - reserved)
+        // if (...)
+        //     return 'sold_out';
+
+        return 'sale';
     }
 }

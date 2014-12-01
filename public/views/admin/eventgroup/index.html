@@ -2,6 +2,8 @@
     <h1>{{group.title}}</h1>
 </div>
 
+<div class="admin-eventgroup">
+
 <p><a href="a">&laquo; Tilbake</a></p>
 
 <h2>
@@ -26,40 +28,52 @@
         </select>
     </div>
 
-    <table class="table table-striped table-tbody-spacing">
+    <table class="table table-condensed">
         <thead>
             <tr>
-                <th>Aften</th>
-                <th>Tittel</th>
                 <th>Varighet</th>
-                <th>Solgte</th>
-                <th>Tilgjengelige</th>
+                <th>Kategori</th>
+                <th>Sted</th>
+                <th>Tittel</th>
+                <th>Salg</th>
+                <th>Tilg.</th>
                 <th>Omsatt</th>
-                <th>Pub?</th>
-                <th>Salg?</th>
+                <th>Pub</th>
+                <th>Billett-<br>info</th>
             </tr>
         </thead>
         <tbody ng-repeat="(day, events) in days">
-            <tr ng-repeat="event in events">
-                <td>{{event.time_start|formatdate:'dddd'}}</td><!-- fixme: 6 am should count at the day before -->
+            <tr>
+                <th colspan="9">{{events[0].time_start-21600|formatdate:'dddd D. MMMM YYYY'}}</th>
+            </tr>
+            <tr ng-repeat="event in events" ng-class="{ 'event-not-published': !event.is_published, 'event-no-selling': !event.is_selling }">
                 <td>
-                    <span ng-show="event.category">{{event.category}}: </span>
-                    <a ng-href="a/event/{{event.id}}">{{event.title}}</a>
-                </td>
-                <td>
-                    {{event.time_start|formatdate:'YYYY-MM-DD HH:mm'}}
+                    <b>{{event.time_start|formatdate:'HH:mm'}}</b>
                     <span ng-show="event.time_end && event.time_end != event.time_start">
                         -
                         {{event.time_end|formatdate:'HH:mm'}}
                     </span>
                 </td>
-                <td>{{event.ticket_count.totals.valid}}</td>
-                <td>{{event.ticket_count.totals.free}}</td>
-                <td>{{event.ticket_count.totals.sum_price+event.ticket_count.totals.sum_fee|price}}</td>
+                <td>{{event.category}}</td>
+                <td>{{event.location}}</td>
+                <td class="edit-link-container">
+                    <div class="edit-link-wrap">
+                        <span class="edit-link">
+                            <a ng-href="a/event/{{event.id}}/edit">Rediger</a>
+                            <a ng-href="event/{{event.id}}">Forhåndsvis</a>
+                        </span>
+                    </div>
+                    <a ng-href="a/event/{{event.id}}">{{event.title}}</a>
+                </td>
+                <td>{{event.max_sales == 0 && event.ticket_count.totals.valid == 0 ? '' : event.ticket_count.totals.valid}}</td>
+                <td>{{event.max_sales == 0 ? '' : event.ticket_count.totals.free}}</td>
+                <td>{{event.max_sales == 0 && event.ticket_count.totals.valid == 0 ? '' : (event.ticket_count.totals.sum_price+event.ticket_count.totals.sum_fee|price)}}</td>
                 <td class="eventgroup-event-action" ng-click="eventTogglePublish(event)"><i class="glyphicon" ng-class="event.is_published ? 'glyphicon-ok' : 'glyphicon-remove'"></i></td>
-                <td class="eventgroup-event-action" ng-click="eventToggleSelling(event)"><i class="glyphicon glyphicon-usd" ng-class="{'event-not-selling': !event.is_selling}"></i></td>
+                <td class="eventgroup-event-action" ng-click="eventToggleSelling(event)"><i class="glyphicon" ng-class="{'event-not-selling': !event.is_selling, 'glyphicon-bullhorn': event.is_selling, 'glyphicon-question-sign': !event.is_selling}"></i></td>
             </tr>
         </tbody>
     </table>
+
+</div>
 
 </div>

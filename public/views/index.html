@@ -11,7 +11,31 @@
 </p>
 
 <div ng-if="upcoming && upcoming.length > 0">
-	<p ng-repeat="ev in upcoming">Arrangement: <a ng-href="event/{{ev.alias || ev.id}}">{{ev.title}}</a></p>
+     <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Tid</th>
+                <!--<th>Sted</th>-->
+                <th>Tittel</th>
+                <th>Billetter</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="event in upcoming">
+                <td>
+                    {{event.time_start-21600|formatdate:'DD.MM.YY'}}
+                    <b>{{event.time_start|formatdate:'HH:mm'}}</b>
+                </td>
+                <!--<td>{{event.location}}</td>-->
+                <td>
+                    <span ng-show="event.category">{{event.category}}: </span>
+                    <a ng-href="event/{{event.alias||event.id}}">{{event.title}}</a>
+                </td>
+
+                <td>{{event.web_selling_status}}</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
 

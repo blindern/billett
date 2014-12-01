@@ -14,7 +14,15 @@ angular.module('billett.eventgroup', ['ngRoute', 'billett.helper.page'])
 
 	$http.get('api/eventgroup/'+encodeURIComponent($routeParams['id'])).success(function(ret) {
 		Page.setTitle(ret.title);
-		console.log("got eventgroup data", ret);
 		$scope.group = ret;
+
+        var r = {};
+        angular.forEach($scope.group.events, function(item) {
+            var k = moment.unix(item.time_start-3600*6).format('YYYY-MM-DD');
+            r[k] = r[k] || [];
+            r[k].push(item);
+        });
+
+        $scope.days = r;
 	});
 });

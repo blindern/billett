@@ -65,7 +65,7 @@ angular.module('billett.admin.event', [
     };
 })
 
-.controller('AdminEventEditController', function(Page, $routeParams, $scope, AdminEvent, $location) {
+.controller('AdminEventEditController', function(Page, $routeParams, $scope, AdminEvent, $location, $window) {
     Page.setTitle('Arrangement');
 
     AdminEvent.get({id:$routeParams['id']}, function(ret) {
@@ -94,7 +94,8 @@ angular.module('billett.admin.event', [
         if (isNaN($scope.event.time_start)) return;
 
         $scope.event.$update(function(res) {
-            $location.path('/a/event/'+res.id);
+            $window.history.back();
+            //$location.path('/a/event/'+res.id);
         }, function(err) {
             alert(err.data);
         });
@@ -105,7 +106,7 @@ angular.module('billett.admin.event', [
     Page.setTitle('Nytt arrangement');
     $scope.eventgroup_id = $routeParams['id'];
     $scope.event = {
-        max_sales: 100,
+        max_sales: 0,
         max_each_person: 10
     };
 
