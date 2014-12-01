@@ -29,7 +29,12 @@ module.filter('formatdate', function() {
 });
 
 module.filter('price', function() {
-    return function(amount, decimals) {
+    return function(amount, decimals, in_nok) {
+        if (typeof decimals == 'boolean') {
+            in_nok = decimals;
+            decimals = 0;
+        }
+
         var formatNumber = function(number, decimals)
         {
             number = number.toFixed(decimals) + '';
@@ -44,7 +49,7 @@ module.filter('price', function() {
         }
 
         if (typeof(decimals) != "number") decimals = 0;
-        return 'kr ' + formatNumber(parseFloat(amount), decimals);
+        return (in_nok ? 'NOK ' : 'kr ') + formatNumber(parseFloat(amount), decimals);
     };
 });
 

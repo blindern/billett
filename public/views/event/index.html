@@ -37,8 +37,6 @@
 
     <div class="col-sm-7">
 
-        <div ng-show="event.description" ng-bind-html="event.description"></div>
-
         <div class="panel panel-default" ng-show="!event.is_selling">
             <div class="panel-body">
                 Billetter for dette arrangementet er for øyeblikket ikke tilgjengelig.
@@ -81,7 +79,7 @@
                                     <label class="control-label">{{ticketgroup.title}}</label>
                                 </div>
                                 <div class="col-sm-3 control-label">
-                                    <p><span class="visible-xs-inline">Pris:</span> {{ticketgroup.price+ticketgroup.fee|price}}</p>
+                                    <p><span class="visible-xs-inline">Pris:</span> {{ticketgroup.price+ticketgroup.fee|price:true}}</p>
                                 </div>
                                 <div class="col-sm-4">
                                     <select ng-model="ticketgroup.order_count" class="form-control" ng-init="ticketgroup.order_count=0">
@@ -94,6 +92,11 @@
                             <div class="text-center text-muted">Billettprisene inkluderer evt. mva og billettgebyr.</div>
                         </div>
                     </form>
+                    <p class="text-center">
+                        <a href="http://www.dibs.no/">
+                            <img src="https://cdn.dibspayment.com/logo/checkout/combo/horiz/DIBS_checkout_kombo_horizontal_02.png" alt="DIBS - Payments made easy" width="300"/>
+                        </a>
+                    </p>
                 </div>
             </div>
         </div>
@@ -106,21 +109,22 @@
                 </div>
             </div>
             <div class="panel panel-info" ng-show="reservation.tickets[0].event.id == event.id">
-                <div class="panel-heading">Kjøpsinformasjon</div>
+                <div class="panel-heading">Kjøp billetter</div>
                 <div class="panel-body">
+                    <p>Du har nå reservert billetter. For å ikke risikere og miste reservasjonen må du fullføre eller oppdatere skjemaet innen 10 minutter.</p>
                     <form class="form-horizontal" ng-submit="!form.$valid || placeOrder()" name="form">
                         <div class="form-group">
                             <label class="text-right col-sm-4">Valgte billetter</label>
                             <div class="col-sm-8">
                                 <div ng-repeat="ticket in reservation.tickets">
-                                    {{ticket.ticketgroup.title}} ({{ticket.ticketgroup.price+ticket.ticketgroup.fee|price}}) #{{ticket.id}}
+                                    {{ticket.ticketgroup.title}} ({{ticket.ticketgroup.price+ticket.ticketgroup.fee|price:true}}) #{{ticket.id}}
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="text-right col-sm-4">Totalt beløp</label>
+                            <label class="text-right col-sm-4">Totalt å betale</label>
                             <div class="col-sm-8">
-                                {{reservation.total_amount|price}}
+                                {{reservation.total_amount|price:true}}
                             </div>
                         </div>
                         <div class="form-group" form-input-check="form,username">
@@ -158,6 +162,11 @@
                     </form>
                 </div>
             </div>
+            <p class="text-center">
+                <a href="http://www.dibs.no/">
+                    <img src="https://cdn.dibspayment.com/logo/checkout/combo/horiz/DIBS_checkout_kombo_horizontal_02.png" alt="DIBS - Payments made easy" width="300"/>
+                </a>
+            </p>
         </div>
 
         <div ng-show="checkout">

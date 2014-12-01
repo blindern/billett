@@ -31,16 +31,16 @@
 </dl>
 <dl class="dl-horizontal">
     <dt>Merverdiavgift</dt>
-    <dd>{{0|price}}</dd>
+    <dd>{{0|price:true}}</dd>
     <dt>Totalbeløp</dt>
-    <dd>{{payment.amount|price}}<span ng-show="payment.status == 'ACCEPTED'"> har blitt belastet ditt kort</span></dd>
+    <dd>{{payment.amount|price:true}}<span ng-show="payment.status == 'ACCEPTED'"> har blitt belastet ditt kort</span></dd>
 </dl>
 
 <h3>Billettspesifikasjon</h3>
 <ul>
     <li ng-repeat="ticket in order.tickets">
-        {{ticket.event.time_start|formatdate:'DD.MM.YYYY HH:mm'}}: {{ticket.event.title}}: {{ticket.ticketgroup.title}} ({{ticket.ticketgroup.price|price}}<!--
-        --><span ng-show="ticket.ticketgroup.fee"> + {{ticket.ticketgroup.fee|price}} billettgebyr</span>) (#{{ticket.number}})
+        {{ticket.event.time_start|formatdate:'DD.MM.YYYY HH:mm'}}: {{ticket.event.title}}: {{ticket.ticketgroup.title}} ({{ticket.ticketgroup.price|price:true}}<!--
+        --><span ng-show="ticket.ticketgroup.fee"> + {{ticket.ticketgroup.fee|price:true}} billettgebyr</span>) (#{{ticket.number}})
     </li>
 </ul>
 

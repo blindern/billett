@@ -3,6 +3,8 @@
 use \Carbon\Carbon;
 $order_time = Carbon::createFromTimeStamp($order->time)->format('d.m.Y H:i:s');
 
+$payment = $order->payments()->where('status', 'ACCEPTED')->first();
+
 ?>
 Hei,
 
@@ -32,8 +34,10 @@ E-post: <?=$order->email;?>
 Telefon: <?=$order->phone;?>
 
 
-Kortnummer: TODO:po_cardnomask
-Transaksjonsnummer: TODO:po_transact
+<?php if ($payment): ?>
+Transaksjonsnummer: <?=$payment->transaction_id;?>
+<?php endif; ?>
+
 Ordrenummer: <?=$order->order_text_id;?>
 
 Kjøpstidspunkt: <?=$order_time;?>
@@ -64,6 +68,7 @@ SPØRSMÅL/PROBLEMER:
 -------------------
 Se vår nettside eller ta kontakt:
 http://blindernuka.no/
+billett@blindernuka.no
 
 
 Vi håper du får en flott opplevelse på UKA på Blindern!
