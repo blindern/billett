@@ -3,6 +3,7 @@
 Route::resource('/api/eventgroup', 'EventgroupController', array(
 	'only' => array('index', 'show')
 ));
+Route::get('/api/eventgroup/{id}/simple', 'EventgroupController@simpleList');
 
 Route::post('/api/order/{id}/place', 'OrderController@placeOrder');
 Route::post('/api/order/{id}/force', 'OrderController@forceOrder');
