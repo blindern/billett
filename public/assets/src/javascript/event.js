@@ -68,6 +68,7 @@ var mod = angular.module('billett.event', ['ngRoute', 'billett.helper.page'])
 			$http.post('/api/order/'+$scope.reservation.id+'/place').success(function(ret) {
 				$scope.checkout = ret;
 				$scope.checkout_url = $sce.trustAsResourceUrl(ret.url);
+				setTimeout(function() { $('#checkoutForm').submit(); }, 0);
 			}).error(function(ret) {
 				alert("Ukjent feil oppsto: "+ret);
 			});

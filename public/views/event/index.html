@@ -163,7 +163,7 @@
         <div ng-show="checkout">
             <div class="panel panel-info">
                 <div class="panel-body">
-                    <form action="{{checkout.url}}" method="post">
+                    <form action="{{checkout_url}}" method="post" id="checkoutForm">
                         <input type="hidden" name="{{key}}" ng-value="value" ng-repeat="(key, value) in checkout.fields">
                         <p>Du blir nå automatisk videresendt til betalingsskjemaet. Hvis du ikke blir videresendt innen 5 sekunder trykk på knappen nedenfor.</p>
                         <input type="submit" value="Gå til betalingsskjema">
