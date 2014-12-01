@@ -48,6 +48,19 @@ class Order extends \Eloquent {
         return $order;
     }
 
+    /**
+     * Find order by text id or fail
+     */
+    public static function findByTextIdOrFail($text_id)
+    {
+        if (empty($text_id))
+        {
+            throw new \ModelNotFoundException('Missing text id');
+        }
+
+        return static::where('order_text_id', $text_id)->firstOrFail();
+    }
+
 	protected $table = 'orders';
     protected $appends = array('total_amount');
 
@@ -219,21 +232,8 @@ class Order extends \Eloquent {
      */
     public function renew()
     {
-        if ($this->hasExpired()) {
-            // check if the tickets are available
-            $groups = array();
-            $event = null;
-            foreach ($this->tickets()->with('ticketgroup', 'event')->get() as $ticket) {
-                if (!isset($groups[$ticket->ticketgroup->id])) {
-                    $groups[$ticket->ticketgroup->id] = array($ticket->ticketgroup, 0);
-                }
-                $groups[$ticket->ticketgroup->id][1]++;
-                if (!$event) $event = $ticket->event;
-            }
-
-            if (!$event->checkIsAvailable($groups)) {
-                return false;
-            }
+        if (!$this->canRenew()) {
+            return false;
         }
 
         foreach ($this->tickets as $ticket) {
@@ -246,4 +246,53 @@ class Order extends \Eloquent {
 
         return true;
     }
+
+    /**
+     * Check if we can renew the order
+     *
+     * @return boolean
+     */
+    public function canRenew()
+    {
+        if (!$this->isReservation()) throw new \Exception("The order is not a reservation");
+
+        if (!$this->hasExpired()) return true;
+
+        // check if the tickets are available
+        $groups = array();
+        $event = null;
+        foreach ($this->tickets()->with('ticketgroup', 'event')->get() as $ticket) {
+            if (!isset($groups[$ticket->ticketgroup->id])) {
+                $groups[$ticket->ticketgroup->id] = array($ticket->ticketgroup, 0);
+            }
+            $groups[$ticket->ticketgroup->id][1]++;
+            if (!$event) $event = $ticket->event;
+        }
+
+        if (!$event->checkIsAvailable($groups)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Mark order as complete
+     */
+    public function markComplete()
+    {
+        if ($this->isCompleted()) throw new \Exception("The order is already marked complete");
+
+        if (!$this->canRenew()) return false;
+
+        foreach ($this->tickets as $ticket) {
+            $ticket->setValid();
+            $ticket->save();
+        }
+
+        $this->time = time();
+        $this->is_valid = true;
+        $this->save();
+    }
+
 }

@@ -50,7 +50,7 @@ foreach ($order->tickets as $ticket) {
 
     if ($ticket->ticketgroup->fee) echo ' + '.format_nok($ticket->ticketgroup->fee).' billettgebyr';
 
-    echo ') (#'.$ticket->getNumber().')
+    echo ') (#'.$ticket->number.')
 ';
 }
 ?>

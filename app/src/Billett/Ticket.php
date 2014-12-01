@@ -4,6 +4,7 @@ use Blindern\UKA\Billett\Helpers\PdfTicket;
 
 class Ticket extends \Eloquent {
 	protected $table = 'tickets';
+    protected $appends = array('number');
 
 	public function event()
 	{
@@ -84,8 +85,17 @@ class Ticket extends \Eloquent {
      *
      * @return string
      */
-    public function getNumber()
+    public function getNumberAttribute()
     {
         return str_pad($this->id, 4, '0', STR_PAD_LEFT);
+    }
+
+    /**
+     * Set ticket valid
+     */
+    public function setValid()
+    {
+        $this->is_valid = true;
+        $this->time = time();
     }
 }

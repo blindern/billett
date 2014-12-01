@@ -7,7 +7,7 @@ $price = $ticket->ticketgroup->price + $ticket->ticketgroup->fee;
 
 $order_time = Carbon::createFromTimeStamp($ticket->order->time);
 
-$ticketid = "#".$ticket->getNumber();
+$ticketid = "#".$ticket->number;
 
 $format_nok = function($num) {
   return "kr ".number_format($num, 0, ",", " ");
