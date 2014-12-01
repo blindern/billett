@@ -8,7 +8,8 @@ class OrderController extends \Controller {
      * We only grant access to orders we own
      */
     public function show($id) {
-        $order = Order::find($id);
+        $class = ModelHelper::getModelPath('Order');
+        $order = $class::find($id);
         if (!$order || !$order->isOwnerOfReservation()) {
             return \Response::json('not found', 404);
         }
@@ -29,7 +30,8 @@ class OrderController extends \Controller {
      * Update fields of reservation
      */
     public function update($id) {
-        $order = Order::find($id);
+        $class = ModelHelper::getModelPath('Order');
+        $order = $class::find($id);
         if (!$order || !$order->isOwnerOfReservation()) {
             return \Response::json('not found', 404);
         }

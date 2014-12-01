@@ -87,16 +87,19 @@ class DibsPaymentModule {
      * - Payment with status = ACCEPTED
      *   - having invalid/valid order status depending if the tickets was made valid or not
      * - Payment with status = PENDING
+     *
      * @return Payment
      */
-    public function processFeedback($order, $data)
+    public function processFeedback(&$order, $data)
     {
         // make sure the order is locked when we process it here
-        return \DB::transaction(function() use ($order, $data) {
+        return \DB::transaction(function() use (&$order, $data) {
             \DB::table('orders')->where('id', $order->id)->lockForUpdate()->get();
 
             // fetch the order again to make sure we have fresh values
-            $order = Order::findOrFail($order->id);
+            // we overwrite the order that is sent to the method because the variable is referenced
+            $class = ModelHelper::getModelPath('Order');
+            $order = $class::findOrFail($order->id);
 
             // special callback for declined
             if ($data['status'] == 'DECLINED') {

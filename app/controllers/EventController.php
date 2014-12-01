@@ -1,13 +1,15 @@
 <?php
 
 use Blindern\UKA\Billett\Event;
+use Blindern\UKA\Billett\EventGuest;
 use Blindern\UKA\Billett\Eventgroup;
 use Blindern\UKA\Billett\Order;
+use Blindern\UKA\Billett\Helpers\ModelHelper;
 
 class EventController extends Controller {
     public function getUpcoming()
     {
-        return Event::with('eventgroup')
+        return EventGuest::with('eventgroup')
             ->where('is_published', true)
             ->where('time_start', '>', time())
             ->orderBy('time_start')->limit(6)->get();
@@ -15,19 +17,12 @@ class EventController extends Controller {
 
     public function show($id_or_alias)
     {
-        $ev = Event::find($id_or_alias);
-        if (!$ev)
-        {
-            $ev = Event::where('alias', $id_or_alias)->first();
-        }
-
-        if (!$ev) {
-            return Response::json('not found', 404);
-        }
+        $class = ModelHelper::getModelPath('Event');
+        $ev = $class::findByAliasOrFail($id_or_alias);
 
         // TODO: auth requirement for showing hidden data
-        $show_all = true;
-        if ($show_all && Input::has('simple')) $show_all = false;
+        $show_all = false;
+        if (\Input::has('admin')) $show_all = true;
 
         $ev->load('eventgroup');
         $ev->load(array('ticketgroups' => function($query) use ($show_all)
@@ -40,10 +35,8 @@ class EventController extends Controller {
     }
 
     public function createReservation($id) {
-        $event = Event::find($id);
-        if (!$event) {
-            return Response::json('not found', 404);
-        }
+        $class = ModelHelper::getModelPath('Event');
+        $event = $class::findOrFail($id);
 
         if ($event->is_timeout) {
         	return Response::json('too late to make reservation', 403);
@@ -76,7 +69,9 @@ class EventController extends Controller {
         }
 
         // create a new reservation
-        $order = Order::createReservation($groups_to_add);
+        $class = ModelHelper::getModelPath('Order');
+        $order = $class::createReservation($groups_to_add);
+
         $order->load('tickets.ticketgroup', 'tickets.event');
         return $order;
     }

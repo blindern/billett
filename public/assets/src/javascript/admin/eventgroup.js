@@ -66,7 +66,8 @@ angular.module('billett.admin.eventgroup', [
 
 .factory('AdminEventgroup', function($resource) {
     var r = $resource('api/eventgroup/:id', {
-        'id': '@id'
+        'id': '@id',
+        'admin': 1
     }, {
         update: { method: 'PUT' }
     });

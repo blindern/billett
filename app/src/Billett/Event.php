@@ -1,8 +1,32 @@
 <?php namespace Blindern\UKA\Billett;
 
 use \Blindern\UKA\Billett\Eventgroup;
+use \Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Event extends \Eloquent {
+    /**
+     * Get a model by its ID or alias and fail if not found
+     *
+     * @param string id or alias
+     * @return static|null
+     */
+    public static function findByAliasOrFail($id_or_alias)
+    {
+        $ev = static::find($id_or_alias);
+        if (!$ev)
+        {
+            $ev = static::where('alias', $id_or_alias)->first();
+        }
+
+        if (!$ev)
+        {
+            throw (new ModelNotFoundException)->setModel(get_called_class());
+        }
+
+        return $ev;
+    }
+
+    protected $model_suffix = '';
 	protected $table = 'events';
 	protected $appends = array('is_timeout', 'is_old', 'ticket_count', 'has_tickets', 'web_selling_status');
 	// TODO: ticket_count should probably be hidden
@@ -16,17 +40,17 @@ class Event extends \Eloquent {
 
 	public function eventgroup()
 	{
-		return $this->belongsTo('\\Blindern\\UKA\\Billett\\Eventgroup', 'group_id');
+		return $this->belongsTo('\\Blindern\\UKA\\Billett\\Eventgroup'.$this->model_suffix, 'group_id');
 	}
 
 	public function ticketgroups()
 	{
-		return $this->hasMany('\\Blindern\\UKA\\Billett\\Ticketgroup');
+		return $this->hasMany('\\Blindern\\UKA\\Billett\\Ticketgroup'.$this->model_suffix);
 	}
 
 	public function tickets()
 	{
-		return $this->hasMany('\\Blindern\\UKA\\Billett\\Ticket');
+		return $this->hasMany('\\Blindern\\UKA\\Billett\\Ticket'.$this->model_suffix);
 	}
 
 	/**

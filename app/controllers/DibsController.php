@@ -1,6 +1,7 @@
 <?php
 
 use Blindern\UKA\Billett\Helpers\DibsPaymentModule;
+use Blindern\UKA\Billett\Helpers\ModelHelper;
 use Blindern\UKA\Billett\Order;
 use Blindern\UKA\Billett\Payment;
 
@@ -63,7 +64,9 @@ class DibsController extends Controller {
     private function getOrderAndValidate()
     {
         $this->dibs = new DibsPaymentModule;
-        $order = Order::findByTextIdOrFail(\Input::get('orderId'));
+
+        $class = ModelHelper::getModelPath('Order');
+        $order = $class::findByTextIdOrFail(\Input::get('orderId'));
 
         if (!\Input::has('MAC'))
         {

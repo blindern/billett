@@ -9,17 +9,17 @@ class Ticket extends \Eloquent {
 
 	public function event()
 	{
-		return $this->belongsTo('\\Blindern\\UKA\\Billett\\Event', 'event_id');
+		return $this->belongsTo('\\Blindern\\UKA\\Billett\\Event'.$this->model_suffix, 'event_id');
 	}
 
 	public function order()
 	{
-		return $this->belongsTo('\\Blindern\\UKA\\Billett\\Order', 'order_id');
+		return $this->belongsTo('\\Blindern\\UKA\\Billett\\Order'.$this->model_suffix, 'order_id');
 	}
 
 	public function ticketgroup()
 	{
-		return $this->belongsTo('\\Blindern\\UKA\\Billett\\Ticketgroup', 'ticketgroup_id');
+		return $this->belongsTo('\\Blindern\\UKA\\Billett\\Ticketgroup'.$this->model_suffix, 'ticketgroup_id');
 	}
 
     public function getKeyAttribute($key)

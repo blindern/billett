@@ -1,15 +1,17 @@
 <?php
 
 use Blindern\UKA\Billett\Eventgroup;
+use Blindern\UKA\Billett\Helpers\ModelHelper;
 
 class EventgroupController extends Controller {
 	public function index() {
-		return Eventgroup::orderBy('sort_value')->get();
+		$class = ModelHelper::getModelPath('Eventgroup');
+		return $class::orderBy('sort_value')->get();
 	}
 
 	public function show($id) {
-		// TODO: not all fields should be returned to the client
-		return Eventgroup::with(array('events' => function($q) {
+		$class = ModelHelper::getModelPath('Eventgroup');
+		return $class::with(array('events' => function($q) {
 			$q->orderBy('time_start');
 
 			// TODO: auth requirement

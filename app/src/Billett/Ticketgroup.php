@@ -1,6 +1,7 @@
 <?php namespace Blindern\UKA\Billett;
 
 class Ticketgroup extends \Eloquent {
+    protected $model_suffix = '';
     protected $table = 'ticketgroups';
 
     public function getPriceAttribute($val) {
@@ -13,12 +14,12 @@ class Ticketgroup extends \Eloquent {
 
 	public function tickets()
 	{
-		return $this->hasMany('\\Blindern\\UKA\\Billett\\Ticket', 'ticketgroup_id');
+		return $this->hasMany('\\Blindern\\UKA\\Billett\\Ticket'.$this->model_suffix, 'ticketgroup_id');
 	}
 
 	public function event()
 	{
-		return $this->belongsTo('\\Blindern\\UKA\\Billett\\Event', 'event_id');
+		return $this->belongsTo('\\Blindern\\UKA\\Billett\\Event'.$this->model_suffix, 'event_id');
 	}
 
     /**

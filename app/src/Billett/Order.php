@@ -62,17 +62,18 @@ class Order extends \Eloquent {
         return static::where('order_text_id', $text_id)->firstOrFail();
     }
 
-	protected $table = 'orders';
+	protected $model_suffix = '';
+    protected $table = 'orders';
     protected $appends = array('total_amount');
 
 	public function tickets()
 	{
-		return $this->hasMany('\\Blindern\\UKA\\Billett\\Ticket');
+		return $this->hasMany('\\Blindern\\UKA\\Billett\\Ticket'.$this->model_suffix);
 	}
 
 	public function payments()
 	{
-		return $this->hasMany('\\Blindern\\UKA\\Billett\\Payment');
+		return $this->hasMany('\\Blindern\\UKA\\Billett\\Payment'.$this->model_suffix);
 	}
 
     /**
