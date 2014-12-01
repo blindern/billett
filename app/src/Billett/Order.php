@@ -1,6 +1,7 @@
 <?php namespace Blindern\UKA\Billett;
 
 use \Carbon\Carbon;
+use \iio\libmergepdf\Merger;
 
 class Order extends \Eloquent {
     /**
@@ -87,9 +88,12 @@ class Order extends \Eloquent {
             $message->to($this->email, $this->name);
             $message->subject('Billett'.(count($this->tickets) == 1 ? '' : 'er').' UKA på Blindern #'.$this->order_text_id.$ticketinfo);
 
+            $merger = new Merger();
             foreach ($this->tickets as $ticket) {
-                $message->attachData($ticket->getPdfData(), $ticket->getPdfName(), array('mime' => 'application/pdf'));
+                $merger->addRaw($ticket->getPdfData());
             }
+
+            $message->attachData($merger->merge(), 'billetter_'.$this->order_text_id.'.pdf', array('mime' => 'application/pdf'));
         });
     }
 

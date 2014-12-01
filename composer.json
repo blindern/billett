@@ -6,7 +6,8 @@
 		"laravel/framework": "4.2.*",
 		"dompdf/dompdf" : "0.6.*",
 		"dinesh/barcode": "dev-master",
-		"intervention/image": "~2.0"
+		"intervention/image": "~2.0",
+		"iio/libmergepdf": "~2.4"
 	},
 	"autoload": {
 		"classmap": [
