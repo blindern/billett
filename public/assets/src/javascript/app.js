@@ -67,5 +67,9 @@ module.service('ResponseData', function() {
             return window.response_data[name];
         }
     };
+    this.set = function(name, value) {
+        if (!window.response_data) window.response_data = {};
+        window.response_data[name] = value;
+    };
 });
 

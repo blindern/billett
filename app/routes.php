@@ -5,6 +5,7 @@ Route::resource('/api/eventgroup', 'EventgroupController', array(
 ));
 
 Route::post('/api/order/{id}/place', 'OrderController@placeOrder');
+Route::post('/api/order/{id}/force', 'OrderController@forceOrder');
 Route::resource('/api/order', 'OrderController', array(
     'only' => array('show', 'update', 'destroy')
 ));

@@ -9,7 +9,7 @@ var mod = angular.module('billett.event', ['ngRoute', 'billett.helper.page'])
 	});
 }])
 
-.controller('EventController', function(Page, EventReservation, $http, $scope, $location, $routeParams, $sce) {
+.controller('EventController', function(Page, EventReservation, $http, $scope, $location, $routeParams, $sce, ResponseData) {
 	Page.setTitle('Arrangement');
 
 	$http.get('api/event/'+encodeURIComponent($routeParams['id'])+'?simple=1').success(function(ret) {
@@ -42,7 +42,6 @@ var mod = angular.module('billett.event', ['ngRoute', 'billett.helper.page'])
 		}
 
 		// create reservation
-		// attach it to root scope so it will be available if user switch page
 		$http.post('/api/event/'+$scope.event.id+'/createreservation', {
 			'ticketgroups': groups
 		}).success(function(ret) {
@@ -78,6 +77,28 @@ var mod = angular.module('billett.event', ['ngRoute', 'billett.helper.page'])
 		});
 	};
 
+	// force order (admin testing)
+	$scope.forceOrder = function() {
+		// save fields
+		$http.patch('/api/order/'+$scope.reservation.id, {
+			'name': $scope.reservation.name,
+			'email': $scope.reservation.email,
+			'phone': $scope.reservation.phone
+		}).success(function() {
+			$http.post('/api/order/'+$scope.reservation.id+'/force').success(function(ret) {
+				angular.forEach(ret, function(val, name) {
+					ResponseData.set(name, val);
+				});
+				$location.path('/dibs/accept');
+			}).error(function(ret) {
+				alert("Ukjent feil oppsto: "+ret);
+			});
+		}).error(function(ret) {
+			if (ret == "data validation failed") alert("Ugyldig verdi i skjemaet!");
+			else alert("Ukjent feil oppsto: "+ret);
+		});
+	}
+
 	// abort order
 	$scope.abortOrder = function() {
 		EventReservation.abortReservation().success(function() {
@@ -108,7 +129,8 @@ mod.service('EventReservation', function($http) {
 
 			// check if still valid
 			$http.get('/api/order/'+res.id).success(function(ret) {
-				// TODO: check if valid reservation
+				if (ret.is_valid) return;
+
 				self.data = ret;
 				callback();
 			}).error(function() {

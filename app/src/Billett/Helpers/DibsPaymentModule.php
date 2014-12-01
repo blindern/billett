@@ -1,6 +1,7 @@
 <?php namespace Blindern\UKA\Billett\Helpers;
 
 use \Blindern\UKA\Billett\Order;
+use \Blindern\UKA\Billett\Payment;
 
 class DibsPaymentModule {
     /**
@@ -91,8 +92,8 @@ class DibsPaymentModule {
     public function processFeedback($order, $data)
     {
         // make sure the order is locked when we process it here
-        return DB::transaction(function() use ($order, $data) {
-            DB::table('order')->where('id', $order->id)->lockForUpdate()->get();
+        return \DB::transaction(function() use ($order, $data) {
+            \DB::table('orders')->where('id', $order->id)->lockForUpdate()->get();
 
             // fetch the order again to make sure we have fresh values
             $order = Order::findOrFail($order->id);
@@ -115,7 +116,7 @@ class DibsPaymentModule {
 
             // status can now only be ACCEPTED and PENDING, and transaction_id will be supplied
             // make sure we have a record for the transaction
-            $payment = $order->payments()->where('transaction_id', $data['transaction_id'])->first();
+            $payment = $order->payments()->where('transaction_id', $data['transaction'])->first();
             if ($payment && $payment->status == 'ACCEPTED') {
                 return $payment;
             }
@@ -124,12 +125,12 @@ class DibsPaymentModule {
                 $payment = new Payment;
                 $payment->order()->associate($order);
                 $payment->type = 'web';
-                $payment->transaction_id = $data['transaction_id'];
+                $payment->transaction_id = $data['transaction'];
             }
             $payment->time = time();
             $payment->amount = $data['status'] == 'ACCEPTED' ? $data['amount'] : 0;
             $payment->status = $data['status'];
-            $payment->data = json_encode(array('server' => $_SERVER, 'post' => $_POST));
+            $payment->data = json_encode(array('server' => $_SERVER, 'data' => $data));
             $payment->save();
 
             $order->time = time();

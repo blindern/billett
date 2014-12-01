@@ -98,4 +98,44 @@ class OrderController extends \Controller {
             'fields' => $dibs->generateCheckoutFields($order)
         );
     }
+
+    /**
+     * Pretend the payment succeeds
+     */
+    public function forceOrder($id) {
+        if (!\Config::get('dibs.test')) {
+            throw new \Exception("Only available in test mode");
+        }
+
+        $order = Order::find($id);
+        if (!$order || !$order->isOwnerOfReservation()) {
+            return \Response::json('not found', 404);
+        }
+
+        if (!$order->isReservation()) {
+            return \Response::json('not a reservation', 400);
+        }
+
+        if (!$order->placeOrder()) {
+            return \Response::json('invalid state', 400);
+        }
+
+        $data = array(
+            'status' => 'ACCEPTED',
+            'transaction' => 123,
+            'amount' => $order->total_amount,
+        );
+
+        $dibs = new DibsPaymentModule;
+        $payment = $dibs->processFeedback($order, $data);
+
+        $order->load('tickets.ticketgroup', 'tickets.event');
+        unset($payment->order);
+        return array(
+            'order_receipt' => array(
+                'order' => $order,
+                'payment' => $payment
+            )
+        );
+    }
 }

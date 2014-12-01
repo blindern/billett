@@ -293,6 +293,8 @@ class Order extends \Eloquent {
         $this->time = time();
         $this->is_valid = true;
         $this->save();
+
+        return true;
     }
 
 }

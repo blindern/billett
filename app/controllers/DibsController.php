@@ -48,6 +48,8 @@ class DibsController extends Controller {
 
         if ($by_callback) die;
 
+        $order->load('tickets.ticketgroup', 'tickets.event');
+        unset($payment->order);
         return View::make('template', array(
             'response_data' => array(
                 'order_receipt' => array(

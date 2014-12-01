@@ -5,6 +5,7 @@ use Blindern\UKA\Billett\Helpers\PdfTicket;
 class Ticket extends \Eloquent {
 	protected $table = 'tickets';
     protected $appends = array('number');
+    protected $hidden = array('pdf');
 
 	public function event()
 	{

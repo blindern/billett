@@ -58,7 +58,7 @@ Payments that are not on web must belong to a Paymentgroup for accounting purpos
 Link between payment methods and orders.
 * int id
 * int order_id (reference to order)
-* int group_id (reference to payment group)
+* optional int group_id (reference to payment group)
 * datetime time (when the payment happened)
 * string type (payment type, e.g. web, cash, card, other)
 * decimal(7,2) amount (the amount paid, negative will mean a refund)

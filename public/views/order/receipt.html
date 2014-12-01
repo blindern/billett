@@ -4,7 +4,7 @@
 </div>
 
 <div ng-show="payment.status == 'ACCEPTED'">
-    <p>Din bestilling har blitt <b>vellykket gjennomført</b>. Du vil motta billett og kvittering på e-posten.</p>
+    <p>Din bestilling har blitt <b>vellykket gjennomført</b>. Du vil motta billett og kvittering på e-post.</p>
 </div>
 <div ng-show="payment.status != 'ACCEPTED'">
     <p>Din ordre er registrert og du vil motta e-post så fort betalingen blir registrert.</p>
@@ -23,17 +23,17 @@
     <!--<dt>Kortnummer</dt>
     <dd>po_cardnomask</dd>-->
     <dt>Transaksjonsnummer</dt>
-    <dd>{{payment->transaction_id}}</dd>
+    <dd>{{payment.transaction_id}}</dd>
     <dt>Ordrenummer</dt>
-    <dd>{{order->order_text_id}}</dd>
+    <dd>{{order.order_text_id}}</dd>
     <dt>Kjøpstidspunkt</dt>
-    <dd>{{order->time|formatdate:'dddd D. MMMM YYYY HH:mm:ss'</dd>
+    <dd>{{order.time|formatdate:'dddd D. MMMM YYYY HH:mm:ss'}}</dd>
 </dl>
 <dl class="dl-horizontal">
     <dt>Merverdiavgift</dt>
     <dd>{{0|price}}</dd>
     <dt>Totalbeløp</dt>
-    <dd>{{payment->amount|price}}<span ng-show="payment.status == 'ACCEPTED'"> har blitt belastet ditt kort</span></dd>
+    <dd>{{payment.amount|price}}<span ng-show="payment.status == 'ACCEPTED'"> har blitt belastet ditt kort</span></dd>
 </dl>
 
 <h3>Billettspesifikasjon</h3>
@@ -44,4 +44,4 @@
     </li>
 </ul>
 
-<p>Vi håper du får en flott opplevelse på UKA på Blindern 2013!</p>
+<p>Vi håper du får en flott opplevelse på UKA på Blindern!</p>

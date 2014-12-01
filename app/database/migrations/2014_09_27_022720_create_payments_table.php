@@ -21,7 +21,7 @@ class CreatePaymentsTable extends Migration {
 			$table->foreign('order_id')->references('id')->on('orders');
 
 			$table->integer('group_id')->unsigned();
-			$table->foreign('group_id')->references('id')->on('paymentgroups');
+			$table->foreign('group_id')->nullable()->references('id')->on('paymentgroups');
 
 			$table->integer('time')->unsigned(); // unix timestamp
 			$table->string('type', 20);
