@@ -52,6 +52,11 @@ gulp.task('watch', function() {
     gulp.watch(js_files, ['scripts']);
 });
 
+gulp.task('production', function() {
+    isProd = true;
+    gulp.start('styles', 'scripts', 'fonts');
+});
+
 gulp.task('default', function() {
     gulp.start('styles', 'scripts');
 });
