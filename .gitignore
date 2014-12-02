@@ -24,7 +24,7 @@ Thumbs.db
 *.iml
 
 # protected files
-.env.local.php
+.env.*.php
 .env.php
-/app/config/local/dibs.php
+/app/config/*/dibs.php
 
