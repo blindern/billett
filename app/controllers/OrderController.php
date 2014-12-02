@@ -2,6 +2,7 @@
 
 use Blindern\UKA\Billett\Order;
 use Blindern\UKA\Billett\Helpers\DibsPaymentModule;
+use Blindern\UKA\Billett\Helpers\ModelHelper;
 
 class OrderController extends \Controller {
     /**

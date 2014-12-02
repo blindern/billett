@@ -34,10 +34,18 @@
                 <td>{{event.location}}</td>
                 <td>
                 	<span ng-show="event.category">{{event.category}}: </span>
-                    <a ng-href="event/{{event.alias||event.id}}">{{event.title}}</a>
+                    <a ng-show="event.web_selling_status == 'sale'" ng-href="event/{{event.alias||event.id}}">{{event.title}}</a>
+                    <span ng-show="event.web_selling_status != 'sale'">{{event.title}}</span>
                 </td>
-
-                <td>{{event.web_selling_status}}</td>
+                <td>
+                    <span ng-show="event.web_selling_status == 'unknown'">Ikke tilgjengelig</span>
+                    <span ng-show="event.web_selling_status == 'no_tickets'"></span>
+                    <span ng-show="event.web_selling_status == 'old'"></span>
+                    <span ng-show="event.web_selling_status == 'no_web_tickets'"></span>
+                    <span ng-show="event.web_selling_status == 'timeout'">I døra</span>
+                    <span ng-show="event.web_selling_status == 'sold_out'">Utsolgt</span>
+                    <span ng-show="event.web_selling_status == 'sale'">Tilgjengelig</span>
+                </td>
             </tr>
         </tbody>
     </table>

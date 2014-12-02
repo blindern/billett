@@ -45,12 +45,12 @@ class Event extends \Eloquent {
 
 	public function ticketgroups()
 	{
-		return $this->hasMany('\\Blindern\\UKA\\Billett\\Ticketgroup'.$this->model_suffix);
+		return $this->hasMany('\\Blindern\\UKA\\Billett\\Ticketgroup'.$this->model_suffix, 'event_id');
 	}
 
 	public function tickets()
 	{
-		return $this->hasMany('\\Blindern\\UKA\\Billett\\Ticket'.$this->model_suffix);
+		return $this->hasMany('\\Blindern\\UKA\\Billett\\Ticket'.$this->model_suffix, 'event_id');
 	}
 
 	/**

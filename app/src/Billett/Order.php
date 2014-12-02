@@ -68,12 +68,12 @@ class Order extends \Eloquent {
 
 	public function tickets()
 	{
-		return $this->hasMany('\\Blindern\\UKA\\Billett\\Ticket'.$this->model_suffix);
+		return $this->hasMany('\\Blindern\\UKA\\Billett\\Ticket'.$this->model_suffix, 'order_id');
 	}
 
 	public function payments()
 	{
-		return $this->hasMany('\\Blindern\\UKA\\Billett\\Payment'.$this->model_suffix);
+		return $this->hasMany('\\Blindern\\UKA\\Billett\\Payment'.$this->model_suffix, 'order_id');
 	}
 
     /**
