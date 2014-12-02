@@ -27,6 +27,7 @@ $app = new Illuminate\Foundation\Application;
 $env = $app->detectEnvironment(array(
 
 	'local' => array('athene.foreningenbs.no'),
+    'hsw' => array('serask.hsw.no')
 
 ));
 
