@@ -14,4 +14,10 @@
     RewriteRule ^ index.php [L]
 
     AddDefaultCharset UTF-8
+
+    Allow from 127.0.0.1
+    Allow from 83.143.83.33
+    Allow from 37.191.
+    Deny from all
+    Order deny,allow
 </IfModule>
