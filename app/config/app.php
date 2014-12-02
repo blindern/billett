@@ -196,4 +196,7 @@ return array(
 
 	),
 
+	// development server?
+	'dev' => false,
+
 );

@@ -3,6 +3,8 @@
 $user = Auth::check() ? Auth::user() : null;
 if (!isset($response_data)) $response_data = null;
 
+$is_dev = (bool)\Config::get('app.dev');
+
 ?>
 <!doctype html>
 <html lang="nb" ng-app="billett" ng-controller="PageController">
@@ -23,6 +25,7 @@ if (!isset($response_data)) $response_data = null;
 	<script type="text/javascript">
 	var logged_in = <?php echo json_encode((bool) $user); ?>;
 	var response_data = <?php echo json_encode($response_data); ?>;
+	var is_dev = <?php echo json_encode($is_dev); ?>;
 	</script>
 
 	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -30,16 +33,18 @@ if (!isset($response_data)) $response_data = null;
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
 </head>
-<body>
+<body ng-class="{'dev-page': isDevPage}">
+	<?php if ($is_dev): ?>
+	<div class="dev-page-bar">NB! Du er nå på utviklersia! Endringene her blir ikke oppdatert på blindernuka.no.</div>
+	<?php endif; ?>
 
 	<div class="container" ng-class="{noadmin:!isAdminPage()}">
 		<header class="header navbar" ng-controller="HeaderController">
 			<h3 class="navbar-left"><a href="http://blindernuka.no" class="text-muted">UKA på Blindern</a></h3>
 			<ul class="nav nav-pills navbar-right">
-				<li ng-class="{ active: isActive('/', '/eventgroup/', '/event/') }"><a href="/">Arrangementer</a></li>
+				<li ng-class="{ active: isActive('/', '/eventgroup/', '/event/') }"><a href=".">Arrangementer</a></li>
 				<li ng-class="{ active: isActive('/salgsbetingelser') }"><a href="salgsbetingelser">Salgsbetingelser</a></li>
-				<li ng-class="{ active: isActive('/om') }"><a href="om">Om billettsystemet</a></li>
-				<li ng-class="{ active: isActive('/kontakt') }"><a href="kontakt">Kontakt</a></li>
+				<li ng-class="{ active: isActive('/hjelp') }"><a href="hjelp">Hjelp</a></li>
 			</ul>
 		</header>
 

@@ -33,6 +33,7 @@ mod.controller('PageController', function($scope, $location) {
 	$scope.isAdminPage = function() {
 		return $location.path().substring(0, 3) == '/a/';
 	};
+	$scope.isDevPage = !!window.is_dev;
 });
 
 // helper directive to mark a form input with has-error class

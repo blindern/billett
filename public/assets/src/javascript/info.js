@@ -7,13 +7,9 @@ angular.module('billett.info', ['ngRoute', 'billett.helper.page'])
 		templateUrl: 'views/salgsbetingelser.html',
 		controller: 'SalgsBetController'
 	}).
-	when('/om', {
-		templateUrl: 'views/om.html',
-		controller: 'OmController'
-	}).
-	when('/kontakt', {
-		templateUrl: 'views/kontakt.html',
-		controller: 'KontaktController'
+	when('/hjelp', {
+		templateUrl: 'views/hjelp.html',
+		controller: 'HjelpController'
 	});
 }])
 
@@ -21,10 +17,6 @@ angular.module('billett.info', ['ngRoute', 'billett.helper.page'])
 	Page.setTitle('Salgsbetingelser');
 })
 
-.controller('OmController', function(Page, $http, $scope) {
-	Page.setTitle('Om billettsystemet');
-})
-
-.controller('KontaktController', function(Page, $http, $scope) {
-	Page.setTitle('Kontakt');
+.controller('HjelpController', function(Page, $http, $scope) {
+	Page.setTitle('Hjelp');
 });

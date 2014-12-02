@@ -15,8 +15,8 @@
         <thead>
             <tr>
                 <th>Tid</th>
-                <!--<th>Sted</th>-->
                 <th>Tittel</th>
+                <th>Sted</th>
                 <th>Billetter</th>
             </tr>
         </thead>
@@ -26,11 +26,11 @@
                     {{event.time_start-21600|formatdate:'DD.MM.YY'}}
                     <b>{{event.time_start|formatdate:'HH:mm'}}</b>
                 </td>
-                <!--<td>{{event.location}}</td>-->
                 <td>
                     <span ng-show="event.category">{{event.category}}: </span>
                     <a ng-href="event/{{event.alias||event.id}}">{{event.title}}</a>
                 </td>
+                <td>{{event.location}}</td>
 
                 <td>{{event.web_selling_status}}</td>
             </tr>

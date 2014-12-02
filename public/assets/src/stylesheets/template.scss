@@ -82,3 +82,21 @@ body {
     margin-bottom: 30px;
   }
 }
+
+
+/* development page */
+.dev-page {
+  margin-top: 30px;
+  .dev-page-bar {
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    width: 100%;
+    padding: 5px;
+
+    opacity: 0.8;
+    background: #333;
+    color: #FFF;
+    text-align: center;
+  }
+}

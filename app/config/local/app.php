@@ -15,4 +15,7 @@ return array(
 
 	'debug' => true,
 
+	// development server?
+	'dev' => true,
+
 );
