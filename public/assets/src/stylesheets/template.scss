@@ -6,46 +6,58 @@ body {
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
-.marketing,
-.footer {
-  padding-right: 15px;
-  padding-left: 15px;
+footer {
+  /*padding-right: 15px;
+  padding-left: 15px;*/
 }
 
 /* Custom page header */
 .header {
+  padding-bottom: 10px;
   border-bottom: 1px solid #e5e5e5;
 }
 /* Make the masthead heading the same height as the navigation */
 .header h3 {
-  padding-bottom: 19px;
+  padding-bottom: 9px;
   margin-top: 0;
   margin-bottom: 0;
   line-height: 40px;
 }
+.header li {
+  margin-bottom: 9px;
+}
 
 /* Custom page footer */
-.footer {
+footer {
   margin-top: 20px;
   padding-top: 19px;
   color: #777;
   border-top: 1px solid #e5e5e5;
   text-align: center;
 
-  span {
-  	margin-right: 19px;
+  ul {
+    list-style: none;
   }
-  span:after {
-  	display: inline;
-  	padding-left: 19px;
-  	content: '|';
-  	color: #e5e5e5;
+  li {
+    margin: 0 19px 5px 0;
+    padding: 0;
   }
-  span:last-child {
+  li:last-child {
   	margin-right: 0;
   	&:after {
   		display: none;
   	}
+  }
+  @media (min-width: 600px) {
+    li {
+      display: inline;
+    }
+    li:after {
+      display: inline;
+      padding-left: 19px;
+      content: '|';
+      color: #e5e5e5;
+    }
   }
 }
 
@@ -70,13 +82,6 @@ body {
 
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
-  /* Remove the padding we set earlier */
-  .header,
-  .marketing,
-  .footer {
-    padding-right: 0;
-    padding-left: 0;
-  }
   /* Space out the masthead */
   .header {
     margin-bottom: 30px;
@@ -98,5 +103,15 @@ body {
     background: #333;
     color: #FFF;
     text-align: center;
+
+    span {
+      display: none;
+    }
+
+    @media screen and (min-width: 600px) {
+      span {
+        display: inline;
+      }
+    }
   }
 }

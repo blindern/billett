@@ -35,7 +35,7 @@ $is_dev = (bool)\Config::get('app.dev');
 </head>
 <body ng-class="{'dev-page': isDevPage}">
 	<?php if ($is_dev): ?>
-	<div class="dev-page-bar">NB! Du er nå på utviklersia! Endringene her blir ikke oppdatert på blindernuka.no.</div>
+	<div class="dev-page-bar">NB! Du er nå på utviklersia! <span>Endringene her blir ikke oppdatert på blindernuka.no.</span></div>
 	<?php endif; ?>
 
 	<div class="container" ng-class="{noadmin:!isAdminPage()}">
@@ -50,12 +50,12 @@ $is_dev = (bool)\Config::get('app.dev');
 
 		<div ng-view class="main-view"></div>
 
-		<footer class="footer">
-			<p>
-				<span>2014</span>
-				<span><a href="http://blindernka.no">UKA på Blindern</a></span>
-				<span><a href="http://foreningenbs.no">Foreningen Blindern Studenterhjem</a></span>
-			</p>
+		<footer>
+			<ul>
+				<li>2014</li>
+				<li><a href="http://blindernka.no">UKA på Blindern</a></li>
+				<li><a href="http://foreningenbs.no">Foreningen Blindern Studenterhjem</a></li>
+			</ul>
 		</footer>
 
 	</div>
