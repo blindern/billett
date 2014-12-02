@@ -21,6 +21,7 @@ class CreateEventsTable extends Migration {
 			$table->foreign('group_id')->references('id')->on('eventgroups');
 
 			$table->string('alias', 100)->nullable();
+			$table->boolean('is_admin_hidden')->default(false);
 			$table->boolean('is_published')->default(false);
 			$table->boolean('is_selling')->default(false);
 			$table->integer('time_start')->unsigned(); // use unix timestamp

@@ -16,6 +16,7 @@ The events itself.
 * int id
 * int group_id (reference to event group)
 * optional string alias (address used in url)
+* bool is_admin_hidden (hide from default view in admin)
 * bool is_published
 * bool is_selling (is the event in sales mode?)
 * datetime time_start

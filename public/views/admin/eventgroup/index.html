@@ -26,6 +26,11 @@
         <select class="form-control" ng-model="filter_category" ng-change="applyFilter()" ng-options="event.category as event.category for event in group.events|unique:'category'">
             <option value="">Vis alle kategorier</option>
         </select>
+        <select class="form-control" ng-model="filter_hidden" ng-change="applyFilter()">
+            <option value="0">Ikke vis skjulte oppføringer</option>
+            <option value="1">Vis kun sjulte oppføringer</option>
+            <option value="">Vis alle oppføringer</option>
+        </select>
     </div>
 
     <table class="table table-condensed">

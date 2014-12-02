@@ -180,6 +180,10 @@ class EventController extends Controller {
             }
         }
 
+        if (Input::has('is_admin_hidden')) {
+            $e->is_admin_hidden = (bool) Input::get('is_admin_hidden');
+        }
+
         if (Input::has('is_published')) {
             $e->is_published = (bool) Input::get('is_published');
         }
