@@ -131,7 +131,7 @@ class DibsPaymentModule {
                 $payment->transaction_id = $data['transaction'];
             }
             $payment->time = time();
-            $payment->amount = $data['status'] == 'ACCEPTED' ? $data['amount'] : 0;
+            $payment->amount = $data['status'] == 'ACCEPTED' ? $data['amount']/100.0 : 0;
             $payment->status = $data['status'];
             $payment->data = json_encode(array('server' => $_SERVER, 'data' => $data));
             $payment->save();
