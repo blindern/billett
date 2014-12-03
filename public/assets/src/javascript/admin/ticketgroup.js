@@ -69,7 +69,7 @@ angular.module('billett.admin.ticketgroup', [
     AdminEvent.get({id:$routeParams['id']}, function(ret) {
         $scope.event = ret;
     }, function(err) {
-        $location.path('/a');
+        $location.path('/a/event/'+$scope.event_id);
     });
 
     $scope.addTicketgroup = function() {

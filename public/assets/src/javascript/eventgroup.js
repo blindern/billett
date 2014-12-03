@@ -24,5 +24,7 @@ angular.module('billett.eventgroup', ['ngRoute', 'billett.helper.page'])
         });
 
         $scope.days = r;
-	});
+	}).error(function() {
+        $location.path('/');
+    });
 });

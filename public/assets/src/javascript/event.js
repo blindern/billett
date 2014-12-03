@@ -21,6 +21,8 @@ var mod = angular.module('billett.event', ['ngRoute', 'billett.helper.page'])
 
 		Page.setTitle(ret.title);
 		$scope.event = ret;
+	}).error(function() {
+		$location.path('/');
 	});
 
 	// buy form submit

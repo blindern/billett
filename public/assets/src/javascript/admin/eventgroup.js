@@ -26,7 +26,7 @@ angular.module('billett.admin.eventgroup', [
     Page.setTitle('Ny arrangementgruppe');
 })
 
-.controller('AdminEventgroupController', function(Page, $routeParams, $http, $scope, AdminEventgroup, AdminEvent) {
+.controller('AdminEventgroupController', function(Page, $routeParams, $http, $scope, AdminEventgroup, AdminEvent, $location) {
     Page.setTitle('Arrangementgruppe');
 
     AdminEventgroup.get({id:$routeParams['id']}, function(ret) {
@@ -34,6 +34,8 @@ angular.module('billett.admin.eventgroup', [
 
         $scope.group = ret;
         $scope.applyFilter();
+    }, function() {
+        $location.path('/a');
     });
 
     $scope.filter_sale = "";
