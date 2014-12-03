@@ -24,6 +24,7 @@ $is_dev = (bool)\Config::get('app.dev');
 
 	<script type="text/javascript">
 	var logged_in = <?php echo json_encode((bool) $user); ?>;
+	var user = <?php echo json_encode($user); ?>;
 	var response_data = <?php echo json_encode($response_data); ?>;
 	var is_dev = <?php echo json_encode($is_dev); ?>;
 	</script>
@@ -55,6 +56,15 @@ $is_dev = (bool)\Config::get('app.dev');
 				<li>2014</li>
 				<li><a href="http://blindernka.no">UKA på Blindern</a></li>
 				<li><a href="http://foreningenbs.no">Foreningen Blindern Studenterhjem</a></li>
+				<li>
+					<a href="a">Administrasjon</a>
+					<?php if (Auth::check()): ?>
+						<br>
+						<?=htmlspecialchars(Auth::user()->username);?>
+						<br>
+						<a href="logout">[logg ut]</a>
+					<?php endif; ?>
+				</li>
 			</ul>
 		</footer>
 

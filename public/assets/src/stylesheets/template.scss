@@ -41,6 +41,7 @@ footer {
   li {
     margin: 0 19px 5px 0;
     padding: 0;
+    vertical-align: middle;
   }
   li:last-child {
   	margin-right: 0;
@@ -50,10 +51,10 @@ footer {
   }
   @media (min-width: 600px) {
     li {
-      display: inline;
+      display: inline-block;
     }
     li:after {
-      display: inline;
+      display: inline-block;
       padding-left: 19px;
       content: '|';
       color: #e5e5e5;

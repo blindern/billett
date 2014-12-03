@@ -2,12 +2,19 @@
 	"name": "blindernuka/billett",
 	"description": "Billettsystemet til UKA på Blindern",
 	"keywords": ["blindernuka", "billett"],
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/henrist/laravel-saml"
+		}
+	],
 	"require": {
 		"laravel/framework": "4.2.*",
 		"dompdf/dompdf" : "0.6.*",
 		"dinesh/barcode": "dev-master",
 		"intervention/image": "~2.0",
-		"iio/libmergepdf": "~2.4"
+		"iio/libmergepdf": "~2.4",
+		"knight-swarm/laravel-saml": "dev-master"
 	},
 	"autoload": {
 		"classmap": [

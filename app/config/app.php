@@ -122,7 +122,8 @@ return array(
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Dinesh\Barcode\BarcodeServiceProvider',
-		'Intervention\Image\ImageServiceProvider'
+		'Intervention\Image\ImageServiceProvider',
+		'KnightSwarm\LaravelSaml\LaravelSamlServiceProvider'
 
 	),
 
@@ -192,7 +193,8 @@ return array(
 		'View'              => 'Illuminate\Support\Facades\View',
 		'DNS1D'             => 'Dinesh\Barcode\Facades\DNS1DFacade',
         'DNS2D'             => 'Dinesh\Barcode\Facades\DNS2DFacade',
-        'Image'             => 'Intervention\Image\Facades\Image'
+        'Image'             => 'Intervention\Image\Facades\Image',
+        'Saml'              => 'KnightSwarm\LaravelSaml\Facades\Saml'
 
 	),
 
