@@ -92,6 +92,10 @@ class DibsPaymentModule {
      */
     public function processFeedback(&$order, $data)
     {
+        // store log
+        $f = storage_path().'/logs/dibs_'.microtime(true).'_'.$data['status'].'_'.$_SERVER['REMOTE_ADDR'].'.txt';
+        file_put_contents($f, print_r(array('server' => $_SERVER, 'data' => $data), true));
+
         // make sure the order is locked when we process it here
         return \DB::transaction(function() use (&$order, $data) {
             \DB::table('orders')->where('id', $order->id)->lockForUpdate()->get();
