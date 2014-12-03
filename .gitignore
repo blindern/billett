@@ -28,3 +28,6 @@ Thumbs.db
 .env.php
 /app/config/*/dibs.php
 
+# SimpleSAMLphp will be symlinked in /billett/saml/
+/public/saml
+
