@@ -20,6 +20,10 @@ class EventController extends Controller {
         $class = ModelHelper::getModelPath('Event');
         $ev = $class::findByAliasOrFail($id_or_alias);
 
+        if (!$ev->is_published && !\Auth::check()) {
+            App::abort(404);
+        }
+
         $show_all = false;
         if (\Auth::check() && \Input::has('admin')) $show_all = true;
 
@@ -36,6 +40,10 @@ class EventController extends Controller {
     public function createReservation($id) {
         $class = ModelHelper::getModelPath('Event');
         $event = $class::findOrFail($id);
+
+        if (!$event->is_published && !\Auth::check()) {
+            App::abort(404);
+        }
 
         if ($event->is_timeout) {
         	return Response::json('too late to make reservation', 403);
@@ -244,6 +252,10 @@ class EventController extends Controller {
      */
     public function image($id) {
         $event = Event::findOrFail($id);
+
+        if (!$event->is_published && !\Auth::check()) {
+            App::abort(404);
+        }
 
         $img = $event->image;
         if (!$img) {

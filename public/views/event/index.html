@@ -3,6 +3,7 @@
         <span class="eventgroup"><a href="eventgroup/{{event.eventgroup.id}}">{{event.eventgroup.title}}</a></span>
         {{event.title}} <span class="eventdate-header">({{event.time_start|formatdate:'DD.MM'}})</span>
     </h1>
+    <p ng-show="!event.is_published">Dette arrangementet er ikke publisert. Du er innlogget og kan se.</p>
 </div>
 
 <div class="event-page">

@@ -7,6 +7,7 @@ class EventGuest extends Event {
     protected $visible = array(
         'id',
         'alias',
+        'is_published',
         'time_start',
         'time_end',
         'title',
