@@ -2,6 +2,7 @@
 
 angular.module('billett.admin.event', [
     'ngRoute',
+    'billett.auth',
     'billett.helper.page',
     'angularFileUpload'
 ])
@@ -9,23 +10,27 @@ angular.module('billett.admin.event', [
 .config(function($routeProvider) {
     $routeProvider.when('/a/event/:id', {
         templateUrl: 'views/admin/event/index.html',
-        controller: 'AdminEventController'
+        controller: 'AdminEventController',
+        resolve: {auth: 'AuthRequireResolver'}
     }).
 
     when('/a/event/:id/edit', {
         templateUrl: 'views/admin/event/edit.html',
-        controller: 'AdminEventEditController'
+        controller: 'AdminEventEditController',
+        resolve: {auth: 'AuthRequireResolver'}
     }).
 
     when('/a/eventgroup/:id/new_event', {
         templateUrl: 'views/admin/event/new.html',
-        controller: 'AdminEventNewController'
+        controller: 'AdminEventNewController',
+        resolve: {auth: 'AuthRequireResolver'}
     }).
 
     // checkin handling
     when('/a/event/:id/checkin', {
         templateUrl: 'views/admin/event/checkin.html',
-        controller: 'AdminCheckinController'
+        controller: 'AdminCheckinController',
+        resolve: {auth: 'AuthRequireResolver'}
     });
 })
 

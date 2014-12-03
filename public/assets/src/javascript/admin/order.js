@@ -2,13 +2,15 @@
 
 angular.module('billett.admin.order', [
     'ngRoute',
+    'billett.auth',
     'billett.helper.page'
 ])
 
 .config(function($routeProvider) {
     $routeProvider.when('/a/order/:id', {
         templateUrl: 'views/admin/order/index.html',
-        controller: 'AdminOrderController'
+        controller: 'AdminOrderController',
+        resolve: {auth: 'AuthRequireResolver'}
     });
 })
 

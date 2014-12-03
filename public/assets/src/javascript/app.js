@@ -4,6 +4,7 @@ moment.locale('nb');
 
 var module = angular.module('billett', [
 	'ngRoute',
+    'billett.auth',
 	'billett.helper.page',
 	'billett.index',
     'billett.admin',

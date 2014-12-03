@@ -2,6 +2,7 @@
 
 angular.module('billett.admin', [
 	'ngRoute',
+    'billett.auth',
 	'billett.helper.page',
     'billett.admin.event',
     'billett.admin.eventgroup',
@@ -13,7 +14,8 @@ angular.module('billett.admin', [
 .config(function($routeProvider) {
 	$routeProvider.when('/a', {
 		templateUrl: 'views/admin/index.html',
-		controller: 'AdminIndexController'
+		controller: 'AdminIndexController',
+        resolve: {auth: 'AuthRequireResolver'}
 	});
 
 }).

@@ -6,7 +6,7 @@ use Blindern\UKA\Billett\Ticketgroup;
 class TicketgroupController extends Controller {
     public function index()
     {
-        // TODO: auth requirements
+        $this->beforeFilter('auth');
         return Ticketgroup::with('event')->paginate();
     }
 
@@ -14,8 +14,7 @@ class TicketgroupController extends Controller {
     {
         $g = Ticketgroup::findOrFail($id);
 
-        // TODO: auth requirement for showing hidden data
-        $show_all = true;
+        $show_all = \Auth::check();
         if (!$show_all && !$g->is_published) {
             App::abort(404);
         }
@@ -33,7 +32,7 @@ class TicketgroupController extends Controller {
      */
     public function store()
     {
-        // TODO: auth requirements
+        $this->beforeFilter('auth');
 
         $validator = \Validator::make(Input::all(), array(
             'event_id' => 'required|integer',
@@ -72,7 +71,7 @@ class TicketgroupController extends Controller {
      */
     public function update($id)
     {
-        // TODO: auth requirements
+        $this->beforeFilter('auth');
 
         $g = Ticketgroup::findOrFail($id);
 
@@ -115,7 +114,7 @@ class TicketgroupController extends Controller {
      */
     public function destroy($id)
     {
-        // TODO: auth requirements
+        $this->beforeFilter('auth');
 
         $g = Ticketgroup::findOrFail($id);
         if ($g->has_tickets) {

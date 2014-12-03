@@ -3,17 +3,20 @@
 angular.module('billett.admin.ticketgroup', [
     'ngRoute',
     'ngResource',
+    'billett.auth',
     'billett.helper.page'
 ])
 
 .config(function($routeProvider) {
     $routeProvider.when('/a/event/:id/ticketgroup/new', {
         templateUrl: 'views/admin/ticketgroup/new.html',
-        controller: 'AdminTicketgroupNewController'
+        controller: 'AdminTicketgroupNewController',
+        resolve: 'AuthRequireResolver'
     })
     .when('/a/event/:event_id/ticketgroup/:ticketgroup_id', {
         templateUrl: 'views/admin/ticketgroup/index.html',
-        controller: 'AdminTicketgroupController'
+        controller: 'AdminTicketgroupController',
+        resolve: 'AuthRequireResolver'
     });
 })
 

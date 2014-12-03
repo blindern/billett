@@ -20,9 +20,8 @@ class EventController extends Controller {
         $class = ModelHelper::getModelPath('Event');
         $ev = $class::findByAliasOrFail($id_or_alias);
 
-        // TODO: auth requirement for showing hidden data
         $show_all = false;
-        if (\Input::has('admin')) $show_all = true;
+        if (\Auth::check() && \Input::has('admin')) $show_all = true;
 
         $ev->load('eventgroup');
         $ev->load(array('ticketgroups' => function($query) use ($show_all)
@@ -81,7 +80,7 @@ class EventController extends Controller {
      */
     public function store()
     {
-        // TODO: auth requirements
+        $this->beforeFilter('auth');
 
         $validator = \Validator::make(Input::all(), array(
             'group_id' => 'required|integer',
@@ -124,7 +123,7 @@ class EventController extends Controller {
      */
     public function update($id)
     {
-        // TODO: auth requirements
+        $this->beforeFilter('auth');
 
         // TODO: https://github.com/blindernuka/billett/issues/18
 
@@ -205,7 +204,7 @@ class EventController extends Controller {
      */
     public function destroy($id)
     {
-        // TODO: auth requirements
+        $this->beforeFilter('auth');
 
         $e = Event::findOrFail($id);
         if ($e->has_tickets) {
@@ -220,6 +219,8 @@ class EventController extends Controller {
      * Image upload
      */
     public function uploadImage($id) {
+        $this->beforeFilter('auth');
+
         $event = Event::findOrFail($id);
 
         if (!\Input::hasFile('file')) {

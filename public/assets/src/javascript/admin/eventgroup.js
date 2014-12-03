@@ -3,6 +3,7 @@
 angular.module('billett.admin.eventgroup', [
     'ngRoute',
     'ngResource',
+    'billett.auth',
     'billett.helper.page',
     'ui.unique'
 ])
@@ -11,11 +12,13 @@ angular.module('billett.admin.eventgroup', [
     $routeProvider
         .when('/a/eventgroup/new', {
             templateUrl: 'views/admin/eventgroup/new.html',
-            controller: 'AdminEventgroupNewController'
+            controller: 'AdminEventgroupNewController',
+            resolve: {auth: 'AuthRequireResolver'}
         })
         .when('/a/eventgroup/:id', {
             templateUrl: 'views/admin/eventgroup/index.html',
-            controller: 'AdminEventgroupController'
+            controller: 'AdminEventgroupController',
+            resolve: {auth: 'AuthRequireResolver'}
         });
 })
 
