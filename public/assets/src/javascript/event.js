@@ -42,7 +42,7 @@ var mod = angular.module('billett.event', ['ngRoute', 'billett.helper.page'])
 		}
 
 		// create reservation
-		$http.post('/api/event/'+$scope.event.id+'/createreservation', {
+		$http.post('api/event/'+$scope.event.id+'/createreservation', {
 			'ticketgroups': groups
 		}).success(function(ret) {
 			$scope.reservation = ret;
@@ -60,12 +60,12 @@ var mod = angular.module('billett.event', ['ngRoute', 'billett.helper.page'])
 	// place order submit
 	$scope.placeOrder = function() {
 		// save fields
-		$http.patch('/api/order/'+$scope.reservation.id, {
+		$http.patch('api/order/'+$scope.reservation.id, {
 			'name': $scope.reservation.name,
 			'email': $scope.reservation.email,
 			'phone': $scope.reservation.phone
 		}).success(function() {
-			$http.post('/api/order/'+$scope.reservation.id+'/place').success(function(ret) {
+			$http.post('api/order/'+$scope.reservation.id+'/place').success(function(ret) {
 				$scope.checkout = ret;
 				$scope.checkout_url = $sce.trustAsResourceUrl(ret.url);
 				setTimeout(function() { $('#checkoutForm').submit(); }, 0);
@@ -81,12 +81,12 @@ var mod = angular.module('billett.event', ['ngRoute', 'billett.helper.page'])
 	// force order (admin testing)
 	$scope.forceOrder = function() {
 		// save fields
-		$http.patch('/api/order/'+$scope.reservation.id, {
+		$http.patch('api/order/'+$scope.reservation.id, {
 			'name': $scope.reservation.name,
 			'email': $scope.reservation.email,
 			'phone': $scope.reservation.phone
 		}).success(function() {
-			$http.post('/api/order/'+$scope.reservation.id+'/force').success(function(ret) {
+			$http.post('api/order/'+$scope.reservation.id+'/force').success(function(ret) {
 				angular.forEach(ret, function(val, name) {
 					ResponseData.set(name, val);
 				});
@@ -129,7 +129,7 @@ mod.service('EventReservation', function($http) {
 			var self = this;
 
 			// check if still valid
-			$http.get('/api/order/'+res.id).success(function(ret) {
+			$http.get('api/order/'+res.id).success(function(ret) {
 				if (ret.is_valid) return;
 
 				self.data = ret;
@@ -146,7 +146,7 @@ mod.service('EventReservation', function($http) {
 	};
 
 	this.abortReservation = function() {
-		return $http.delete('/api/order/'+this.data.id).success(function() {
+		return $http.delete('api/order/'+this.data.id).success(function() {
 			deleteReservation();
 		});
 	};
