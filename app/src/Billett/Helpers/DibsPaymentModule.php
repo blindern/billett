@@ -97,65 +97,75 @@ class DibsPaymentModule {
         file_put_contents($f, print_r(array('server' => $_SERVER, 'data' => $data), true));
 
         // make sure the order is locked when we process it here
-        return \DB::transaction(function() use (&$order, $data) {
-            \DB::table('orders')->where('id', $order->id)->lockForUpdate()->get();
+        // in case the capture/browser locks the other user, retry a couple of times to avoid lock wait timeout
+        $i = 0;
+        while (true) {
+            $i++;
 
-            // fetch the order again to make sure we have fresh values
-            // we overwrite the order that is sent to the method because the variable is referenced
-            $class = ModelHelper::getModelPath('Order');
-            $order = $class::findOrFail($order->id);
+            try {
+                return \DB::transaction(function() use (&$order, $data) {
+                    \DB::table('orders')->where('id', $order->id)->lockForUpdate()->get();
 
-            // special callback for declined
-            if ($data['status'] == 'DECLINED') {
-                $payment = new Payment;
-                $payment->order()->associate($order);
-                $payment->type = 'web';
-                $payment->time = time();
-                $payment->amount = 0;
-                $payment->status = $data['status'];
-                $payment->data = json_encode(array('server' => $_SERVER, 'post' => $_POST));
-                $payment->save();
+                    // fetch the order again to make sure we have fresh values
+                    // we overwrite the order that is sent to the method because the variable is referenced
+                    $class = ModelHelper::getModelPath('Order');
+                    $order = $class::findOrFail($order->id);
 
-                // TODO: send email if we had PENDING status?
+                    // special callback for declined
+                    if ($data['status'] == 'DECLINED') {
+                        $payment = new Payment;
+                        $payment->order()->associate($order);
+                        $payment->type = 'web';
+                        $payment->time = time();
+                        $payment->amount = 0;
+                        $payment->status = $data['status'];
+                        $payment->data = json_encode(array('server' => $_SERVER, 'post' => $_POST));
+                        $payment->save();
 
-                return $payment;
+                        // TODO: send email if we had PENDING status?
+
+                        return $payment;
+                    }
+
+                    // status can now only be ACCEPTED and PENDING, and transaction_id will be supplied
+                    // make sure we have a record for the transaction
+                    $payment = $order->payments()->where('transaction_id', $data['transaction'])->first();
+                    if ($payment && $payment->status == 'ACCEPTED') {
+                        return $payment;
+                    }
+
+                    if (!$payment) {
+                        $payment = new Payment;
+                        $payment->order()->associate($order);
+                        $payment->type = 'web';
+                        $payment->transaction_id = $data['transaction'];
+                    }
+                    $payment->time = time();
+                    $payment->amount = $data['status'] == 'ACCEPTED' ? $data['amount']/100.0 : 0;
+                    $payment->status = $data['status'];
+                    $payment->data = json_encode(array('server' => $_SERVER, 'data' => $data));
+                    $payment->save();
+
+                    $order->time = time();
+
+                    if ($payment->status == 'ACCEPTED') {
+                        if (!$order->isReservation()) {
+                            Log::alert('Order is not a reservation but payment registered');
+                            die('Order is not a reservation but payment registered');
+                        }
+
+                        if ($order->markComplete()) {
+                            // send the receipt
+                            $order->sendEmail();
+                        }
+                    }
+
+                    $order->save();
+                    return $payment;
+                });
+            } catch (\Illuminate\Database\QueryException $e) {
+                if ($i == 5) throw $e;
             }
-
-            // status can now only be ACCEPTED and PENDING, and transaction_id will be supplied
-            // make sure we have a record for the transaction
-            $payment = $order->payments()->where('transaction_id', $data['transaction'])->first();
-            if ($payment && $payment->status == 'ACCEPTED') {
-                return $payment;
-            }
-
-            if (!$payment) {
-                $payment = new Payment;
-                $payment->order()->associate($order);
-                $payment->type = 'web';
-                $payment->transaction_id = $data['transaction'];
-            }
-            $payment->time = time();
-            $payment->amount = $data['status'] == 'ACCEPTED' ? $data['amount']/100.0 : 0;
-            $payment->status = $data['status'];
-            $payment->data = json_encode(array('server' => $_SERVER, 'data' => $data));
-            $payment->save();
-
-            $order->time = time();
-
-            if ($payment->status == 'ACCEPTED') {
-                if (!$order->isReservation()) {
-                    Log::alert('Order is not a reservation but payment registered');
-                    die('Order is not a reservation but payment registered');
-                }
-
-                if ($order->markComplete()) {
-                    // send the receipt
-                    $order->sendEmail();
-                }
-            }
-
-            $order->save();
-            return $payment;
-        });
+        }
     }
 }
