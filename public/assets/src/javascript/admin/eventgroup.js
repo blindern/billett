@@ -55,7 +55,7 @@ angular.module('billett.admin.eventgroup', [
         angular.forEach($scope.group.events, function(item) {
             if ($scope.filter_sale !== "" && $scope.filter_sale != !!item.ticketgroups.length)
                 return;
-            if ($scope.filter_category !== '-1' && $scope.filter_category != item.category)
+            if ($scope.filter_category !== '-1' && $scope.filter_category != (item.category||''))
                 return;
             if ($scope.filter_hidden != '' && $scope.filter_hidden != item.is_admin_hidden)
                 return;
