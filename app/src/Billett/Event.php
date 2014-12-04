@@ -85,7 +85,8 @@ class Event extends \Eloquent {
 		// TODO: should be cached somehow (or at least add some indexes to DB)
 		$q = \DB::select('
 			SELECT g.id,
-				COUNT(IF(t.is_valid != 0 AND t.is_revoked = 0, 1, NULL)) count_valid,
+				g.is_normal,
+                COUNT(IF(t.is_valid != 0 AND t.is_revoked = 0, 1, NULL)) count_valid,
 				COUNT(IF(t.is_valid = 0 AND t.is_revoked = 0 AND t.expire > ?, 1, NULL)) count_pending,
 				COUNT(IF(t.is_valid = 0 AND t.is_revoked = 0 AND t.expire <= ?, 1, NULL)) count_expired,
 				COUNT(IF(t.is_valid != 0 AND t.is_revoked != 0, 1, NULL)) count_revoked,
@@ -105,6 +106,7 @@ class Event extends \Eloquent {
 			'revoked' => 0,
 			'used' => 0,
 			'free' => 0,
+            'free_normal' => 0,
 			'sum_price' => 0,
 			'sum_fee' => 0
 		);
@@ -117,8 +119,13 @@ class Event extends \Eloquent {
 			$total['used'] += $row->count_used;
 			$total['sum_price'] += $row->sum_price;
 			$total['sum_fee'] += $row->sum_fee;
+
+            if ($row->is_normal || !$this->max_normal_sales) {
+                $total['free_normal'] -= $row->count_valid + $row->count_pending;
+            }
 		}
 		$total['free'] = max(0, $this->max_sales - ($total['valid'] + $total['pending']));
+        $total['free_normal'] = max(0, ($this->max_normal_sales ?: $this->max_sales) + $total['free_normal']);
 
 		// create ticket group list
 		$groups = array();
@@ -133,7 +140,8 @@ class Event extends \Eloquent {
 				'sum_price' => $g ? $g['sum_price'] : 0,
 				'sum_fee' => $g ? $g['sum_fee'] : 0
 			);
-			$a['free'] = $group->limit == 0 ? $total['free'] : min($total['free'], $group->limit - ($a['valid'] + $a['pending']));
+            $tf  = $group->is_normal ? $total['free_normal'] : $total['free'];
+			$a['free'] = $group->limit == 0 ? $tf : min($tf, $group->limit - ($a['valid'] + $a['pending']));
 			$groups[$group->id] = $a;
 		}
 
