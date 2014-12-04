@@ -155,20 +155,20 @@ class EventController extends Controller {
         }
 
         foreach ($list as $field) {
-            if (Input::has($field) && Input::get($field) != $event->{$field}) {
+            if (Input::exists($field) && Input::get($field) != $event->{$field}) {
                 $event->{$field} = Input::get($field);
             }
         }
 
-        if (Input::has('is_admin_hidden')) {
+        if (Input::exists('is_admin_hidden')) {
             $event->is_admin_hidden = (bool) Input::get('is_admin_hidden');
         }
 
-        if (Input::has('is_published')) {
+        if (Input::exists('is_published')) {
             $event->is_published = (bool) Input::get('is_published');
         }
 
-        if (Input::has('is_selling')) {
+        if (Input::exists('is_selling')) {
             $event->is_selling = (bool) Input::get('is_selling');
         }
 
