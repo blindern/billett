@@ -207,7 +207,7 @@ class Order extends \Eloquent {
         }
 
         $d = \Carbon\Carbon::createFromTimeStamp($this->time);
-        $orderid = $d->format("y").str_pad($d->format("z"), 3, "0", STR_PAD_LEFT).str_pad($this->id, 4, "0", STR_PAD_LEFT).(\Config::get('app.debug') ? '-TEST' : '');
+        $orderid = $d->format("y").str_pad($d->format("z"), 3, "0", STR_PAD_LEFT).str_pad($this->id, 4, "0", STR_PAD_LEFT).(\Config::get('dibs.test') ? '-TEST' : '');
 
         $this->order_text_id = $orderid;
         $this->save();
