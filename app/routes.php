@@ -32,7 +32,7 @@ Route::post('/dibs/callback', 'DibsController@callback');
 Route::post('/dibs/accept', 'DibsController@accept');
 
 
-Route::get('/pdf', function() {
+/*Route::get('/pdf', function() {
     $ticket = Blindern\UKA\Billett\Ticket::findOrFail(\Input::get('id'));
     return Response::make($ticket->getPdfData(), 200, array(
         'Content-Type' => 'application/pdf',
@@ -45,7 +45,7 @@ Route::get('/email', function() {
     $order->sendEmail();
     var_dump($order->name);
     die;
-});
+});*/
 
 // catch-all route
 // TODO: this should probably be changed due to search engines not getting 404

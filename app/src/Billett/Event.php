@@ -29,9 +29,7 @@ class Event extends \Eloquent {
     protected $model_suffix = '';
 	protected $table = 'events';
 	protected $appends = array('is_timeout', 'is_old', 'ticket_count', 'has_tickets', 'web_selling_status');
-	// TODO: ticket_count should probably be hidden
-	//protected $hidden = array('ticket_count');
-    protected $hidden = array('image');
+	protected $hidden = array('image');
 
 	/**
 	 * When the online selling freezes (how many seconds before event start)
