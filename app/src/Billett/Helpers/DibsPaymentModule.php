@@ -61,7 +61,7 @@ class DibsPaymentModule {
 
             $params['oiRow'.(++$i)] = sprintf('%d;%s;%d;1;0',
                     $ticket->event->id,
-                    str_replace(';', '\\;', $ticket->event->title.' ('.$date->format('Y-m-d H:i').'): '.$ticket->ticketgroup->title),
+                    str_replace('"', '', str_replace(';', '\\;', $ticket->event->title.' ('.$date->format('Y-m-d H:i').'): '.$ticket->ticketgroup->title)),
                     round(($ticket->ticketgroup->price+$ticket->ticketgroup->fee)*100));
         }
 
