@@ -97,6 +97,7 @@ class Ticket extends \Eloquent {
     public function setValid()
     {
         $this->is_valid = true;
+        $this->expire = null;
         $this->time = time();
     }
 }

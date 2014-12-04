@@ -16,6 +16,8 @@ class EventGuest extends Event {
         'description',
         'age_restriction',
         'web_selling_status',
-        'ticketgroups'
+        'ticketgroups',
+        'eventgroup',
+        'max_each_person'
     );
 }

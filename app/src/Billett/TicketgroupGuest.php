@@ -5,6 +5,7 @@ class TicketgroupGuest extends Ticketgroup {
         'id',
         'price',
         'fee',
-        'title'
+        'title',
+        'ticket_text'
     );
 }

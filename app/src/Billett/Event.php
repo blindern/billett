@@ -187,7 +187,7 @@ class Event extends \Eloquent {
     {
         // revoked tickets are counted as positive match
         $res = $this->tickets()->where(function($query) {
-            $query->whereNull('expire')->orWhere('expire', '>=', time());
+            $query->whereNull('expire')->orWhere('expire', '>=', time())->orWhere('is_valid', true)->orWhere('is_revoked', true);
         })->first();
 
         return (bool) $res;
