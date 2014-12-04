@@ -36,19 +36,26 @@ angular.module('billett.admin.eventgroup', [
 
         $scope.group = ret;
         $scope.applyFilter();
+
+        $scope.categories = [];
+        angular.forEach($scope.group.events, function(event) {
+            if ($scope.categories.indexOf(event.category||'') != -1) return;
+            $scope.categories.push(event.category||'');
+        });
+        $scope.categories.sort();
     }, function() {
         $location.path('/a');
     });
 
     $scope.filter_sale = "";
-    $scope.filter_category = 'all';
+    $scope.filter_category = '-1';
     $scope.filter_hidden = '0';
     $scope.applyFilter = function() {
         var r = {};
         angular.forEach($scope.group.events, function(item) {
             if ($scope.filter_sale !== "" && $scope.filter_sale != !!item.ticketgroups.length)
                 return;
-            if ($scope.filter_category !== 'all' && $scope.filter_category != item.category)
+            if ($scope.filter_category !== '-1' && $scope.filter_category != item.category)
                 return;
             if ($scope.filter_hidden != '' && $scope.filter_hidden != item.is_admin_hidden)
                 return;

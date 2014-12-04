@@ -23,8 +23,9 @@
             <option value="1">Kun med billettgrupper</option>
             <option value="0">Kun uten billettgrupper</option>
         </select>
-        <select class="form-control" ng-model="filter_category" ng-change="applyFilter()" ng-options="event.category as event.category for event in group.events|unique:'category'">
-            <option value="">Vis alle kategorier</option>
+        <select class="form-control" ng-model="filter_category" ng-change="applyFilter()">
+            <option value="-1">Vis alle kategorier</option>
+            <option ng-repeat="opt in categories" value="{{opt}}">{{opt||'Tom kategori'}}</option>
         </select>
         <select class="form-control" ng-model="filter_hidden" ng-change="applyFilter()">
             <option value="0">Ikke vis skjulte oppføringer</option>
