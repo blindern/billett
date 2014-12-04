@@ -24,6 +24,7 @@ $is_dev = (bool)\Config::get('app.dev');
 
 	<script type="text/javascript">
 	var logged_in = <?php echo json_encode((bool) $user); ?>;
+	var user_roles = <?php echo json_encode(\Auth::getRoles()); ?>;
 	var user = <?php echo json_encode($user); ?>;
 	var response_data = <?php echo json_encode($response_data); ?>;
 	var is_dev = <?php echo json_encode($is_dev); ?>;
@@ -50,6 +51,11 @@ $is_dev = (bool)\Config::get('app.dev');
 				<li ng-class="{ active: isActive('/hjelp') }"><a href="hjelp">Hjelp</a></li>
 			</ul>
 		</header>
+
+		<?php if (\Auth::check() && !\Auth::hasRole('billett.admin')): ?>
+		<p class="text-center"><b>NB!</b> Du er innlogget som <u><?=htmlspecialchars($user->realname);?></u> men har ikke tilgang til dette systemet. <a href="logout" target="_self">Logg ut</a></p>
+		<hr>
+		<?php endif; ?>
 
 		<div ng-show="!loading" ng-view class="main-view"></div>
 		<div ng-show="loading" class="page-loading">

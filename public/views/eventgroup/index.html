@@ -1,7 +1,7 @@
 <div class="page-header">
 	<h1>
         {{group.title}}
-        <span ng-show="AuthService.isLoggedIn()" class="pull-right">
+        <span ng-show="AuthService.hasRole('billett.admin')" class="pull-right">
             <a ng-href="a/eventgroup/{{group.id}}" class="btn btn-primary">Admin</a>
         </span>
     </h1>
@@ -38,7 +38,7 @@
                 </td>
                 <td>{{event.location}}</td>
                 <td class="edit-link-container">
-                    <div ng-show="AuthService.isLoggedIn()" class="edit-link-wrap">
+                    <div ng-show="AuthService.hasRole('billet.admin')" class="edit-link-wrap">
                         <span class="edit-link">
                             <a ng-href="a/event/{{event.id}}/edit">Rediger</a>
                             <a ng-href="a/event/{{event.id}}">Detaljert</a>

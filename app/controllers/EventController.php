@@ -20,12 +20,12 @@ class EventController extends Controller {
         $class = ModelHelper::getModelPath('Event');
         $ev = $class::findByAliasOrFail($id_or_alias);
 
-        if (!$ev->is_published && !\Auth::check()) {
+        if (!$ev->is_published && !\Auth::hasRole('billett.admin')) {
             App::abort(404);
         }
 
         $show_all = false;
-        if (\Auth::check() && \Input::has('admin')) $show_all = true;
+        if (\Auth::hasRole('billett.admin') && \Input::has('admin')) $show_all = true;
 
         $ev->load('eventgroup');
         $ev->load(array('ticketgroups' => function($query) use ($show_all)
@@ -41,7 +41,7 @@ class EventController extends Controller {
         $class = ModelHelper::getModelPath('Event');
         $event = $class::findOrFail($id);
 
-        if (!$event->is_published && !\Auth::check()) {
+        if (!$event->is_published && !\Auth::hasRole('billett.admin')) {
             App::abort(404);
         }
 
@@ -251,7 +251,7 @@ class EventController extends Controller {
     public function image($id) {
         $event = Event::findOrFail($id);
 
-        if (!$event->is_published && !\Auth::check()) {
+        if (!$event->is_published && !\Auth::hasRole('billett.admin')) {
             App::abort(404);
         }
 

@@ -11,7 +11,7 @@ class OrderController extends \Controller {
     public function show($id) {
         $class = ModelHelper::getModelPath('Order');
         $order = $class::find($id);
-        if (!$order || (!$order->isOwnerOfReservation() && !\Auth::check())) {
+        if (!$order || (!$order->isOwnerOfReservation() && !\Auth::hasRole('billett.admin'))) {
             return \Response::json('not found', 404);
         }
 
@@ -33,7 +33,7 @@ class OrderController extends \Controller {
     public function update($id) {
         $class = ModelHelper::getModelPath('Order');
         $order = $class::find($id);
-        if (!$order || (!$order->isOwnerOfReservation() && !\Auth::check())) {
+        if (!$order || (!$order->isOwnerOfReservation() && !\Auth::hasRole('billett.admin'))) {
             return \Response::json('not found', 404);
         }
 
@@ -64,7 +64,7 @@ class OrderController extends \Controller {
      */
     public function destroy($id) {
         $order = Order::find($id);
-        if (!$order || (!$order->isOwnerOfReservation() || !\Auth::check())) {
+        if (!$order || (!$order->isOwnerOfReservation() || !\Auth::hasRole('billett.admin'))) {
             return \Response::json('not found', 404);
         }
 
@@ -81,7 +81,7 @@ class OrderController extends \Controller {
      */
     public function placeOrder($id) {
         $order = Order::find($id);
-        if (!$order || (!$order->isOwnerOfReservation() || !\Auth::check())) {
+        if (!$order || (!$order->isOwnerOfReservation() || !\Auth::hasRole('billett.admin'))) {
             return \Response::json('not found', 404);
         }
 

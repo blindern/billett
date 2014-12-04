@@ -14,7 +14,7 @@ class TicketgroupController extends Controller {
     {
         $g = Ticketgroup::findOrFail($id);
 
-        $show_all = \Auth::check();
+        $show_all = \Auth::hasRole('billett.admin');
         if (!$show_all && !$g->is_published) {
             App::abort(404);
         }

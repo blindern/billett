@@ -7,7 +7,7 @@
         </span>
         {{event.title}}
         <span class="eventdate-header">({{event.time_start|formatdate:'DD.MM'}})</span>
-        <span ng-show="AuthService.isLoggedIn()" class="pull-right">
+        <span ng-show="AuthService.hasRole('billett.admin')" class="pull-right">
             <a ng-href="a/event/{{event.id}}" class="btn btn-primary">Admin</a>
             <a ng-href="a/event/{{event.id}}/edit" class="btn btn-primary">Rediger</a>
         </span>

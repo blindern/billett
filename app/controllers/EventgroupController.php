@@ -14,7 +14,7 @@ class EventgroupController extends Controller {
 		return $class::with(array('events' => function($q) {
 			$q->orderBy('time_start');
 
-			if (!\Auth::check() || !\Input::has('admin')) $q->where('is_published', true);
+			if (!\Auth::hasRole('billett.admin') || !\Input::has('admin')) $q->where('is_published', true);
 		}))->findOrFail($id);
 	}
 
