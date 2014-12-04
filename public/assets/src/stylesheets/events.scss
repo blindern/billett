@@ -78,11 +78,6 @@
     .event-image {
         margin: 0 0 1em;
         text-align: center;
-        @media (min-width: $screen-sm-min) {
-            & {
-                text-align: left;
-            }
-        }
     }
 
     .dl-horizontal {
