@@ -23,8 +23,8 @@ class EventGuest extends Event {
         'selling_text'
     );
 
-    public function getSellingTextAttribute() {
+    public function getSellingTextAttribute($val) {
         if (!$this->is_selling) return null;
-        return $this->selling_text;
+        return $val;
     }
 }
