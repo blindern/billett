@@ -35,6 +35,8 @@ $is_dev = (bool)\Config::get('app.dev');
 	<![endif]-->
 </head>
 <body ng-class="{'dev-page': isDevPage}">
+	<ng-toast></ng-toast>
+
 	<?php if ($is_dev): ?>
 	<div class="dev-page-bar">NB! Du er nå på utviklersia! <span>Endringene her blir ikke oppdatert på blindernuka.no.</span></div>
 	<?php endif; ?>
@@ -49,7 +51,10 @@ $is_dev = (bool)\Config::get('app.dev');
 			</ul>
 		</header>
 
-		<div ng-view class="main-view"></div>
+		<div ng-show="!loading" ng-view class="main-view"></div>
+		<div ng-show="loading" class="page-loading">
+			Laster innhold...
+		</div>
 
 		<footer>
 			<ul>

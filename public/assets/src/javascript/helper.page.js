@@ -1,12 +1,23 @@
 'use strict';
 
-var mod = angular.module('billett.helper.page', ['ngAnimate']);
+var mod = angular.module('billett.helper.page', [
+	'ngAnimate',
+	'ngToast'
+]);
 
 mod.factory('Page', function($rootScope) {
 	$rootScope.title = 'default';
 	return {
 		title: function() { return $rootScope.title; },
-		setTitle: function(newTitle) { $rootScope.title = newTitle; }
+		setTitle: function(newTitle) { $rootScope.title = newTitle; },
+
+		toast: function(text, params) {
+			var params = params || {};
+			angular.extend(params, {
+				content: text
+			});
+			ngToast.create(params);
+		}
 	};
 });
 

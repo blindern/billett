@@ -39,7 +39,7 @@ var mod = angular.module('billett.event', ['ngRoute', 'billett.helper.page'])
 		});
 
 		if (count == 0) {
-			alert("Du må velge noen billetter.");
+			Page.toast("Du må velge noen billetter.", { class: 'warning' });
 			return;
 		}
 

@@ -44,6 +44,11 @@ angular.module('billett.admin.event', [
     });
 
     $scope.deleteEvent = function() {
+        if ($scope.event.ticketgroups.length > 0) {
+            Page.toast("Du må først slette billettgruppene som er tilegnet.", { class: 'danger' });
+            return;
+        }
+
         var group = $scope.event.eventgroup.id;
         $scope.event.$delete(function() {
             $location.path('/a/eventgroup/'+group);

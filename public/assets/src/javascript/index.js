@@ -1,6 +1,9 @@
 'use strict';
 
-angular.module('billett.index', ['ngRoute', 'billett.helper.page'])
+angular.module('billett.index', [
+	'ngRoute',
+	'billett.helper.page'
+])
 
 .config(['$routeProvider', function($routeProvider) {
 	$routeProvider.when('/', {

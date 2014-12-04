@@ -21,21 +21,28 @@ var js_files = [
     "./bower_components/angular-file-upload/angular-file-upload.js",
     "./bower_components/moment/moment.js",
     "./bower_components/moment/locale/nb.js",
+    "./bower_components/ngtoast/dist/ngToast.js",
     "./public/assets/src/javascript/**/*.js"
 ];
 
+var css_files = [
+    "./bower_components/ngtoast/dist/ngToast.css",
+    "public/assets/src/stylesheets/frontend.scss"
+];
+
 gulp.task('styles', function() {
-    return gulp.src('public/assets/src/stylesheets/frontend.scss')
+    return gulp.src(css_files)
         .pipe(sourcemaps.init())
         .pipe(sass({ style: isProd ? 'compressed' : 'expanded'}))
+        .pipe(concat('frontend.css'))
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('public/assets/stylesheets'));
 });
 
 gulp.task('scripts', function() {
     return gulp.src(js_files)
-        .pipe(concat('frontend.js'))
         .pipe(sourcemaps.init())
+        .pipe(concat('frontend.js'))
         .pipe(gulpif(isProd, ngAnnotate()))
         .pipe(gulpif(isProd, uglify()))
         .pipe(sourcemaps.write('.'))
