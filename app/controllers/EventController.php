@@ -84,61 +84,11 @@ class EventController extends Controller {
     }
 
     /**
-     * Create new event
+     * Validate input data for new and update methods and update event (but not save)
      */
-    public function store()
+    private function validateInputAndUpdate(Event $event, $is_new)
     {
-        $this->beforeFilter('auth');
-
-        $validator = \Validator::make(Input::all(), array(
-            'group_id' => 'required|integer',
-            'title' => 'required',
-            'time_start' => 'required|integer',
-            'time_end' => 'integer',
-            'category' => '',
-            'location' => '',
-            'max_sales' => 'required|integer',
-            'max_normal_sales' => 'integer',
-            'max_each_person' => 'required|integer'
-        ));
-
-        if ($validator->fails()) {
-            return \Response::json('data validation failed', 400);
-        }
-
-        $group = Eventgroup::find(Input::get('group_id'));
-        if (!$group) {
-            return Response::json('group id not found', 404);
-        }
-
-        $event = new Event;
-        $event->title = Input::get('title');
-        $event->time_start = Input::get('time_start');
-        $event->time_end = Input::get('time_end');
-        $event->category = Input::get('category');
-        $event->location = Input::get('location');
-        $event->max_sales = Input::get('max_sales');
-        $event->max_normal_sales = Input::get('max_normal_sales');
-        $event->max_each_person = Input::get('max_each_person');
-
-        $group->events()->save($event);
-
-        return $event;
-    }
-
-    /**
-     * Update event
-     */
-    public function update($id)
-    {
-        $this->beforeFilter('auth');
-
-        // TODO: https://github.com/blindernuka/billett/issues/18
-
-        $e = Event::findOrFail($id);
-
-        // TODO: fix validation checks (required e.a.)
-        $validator = \Validator::make(Input::all(), array(
+        $fields = array(
             'group_id' => 'integer',
             'title' => '',
             'alias' => '',
@@ -154,10 +104,29 @@ class EventController extends Controller {
             'ticket_text' => '',
             'link' => '',
             'age_restriction' => 'integer'
-        ));
+        );
+
+        if ($is_new) {
+            $fields['group_id'] = 'required|integer';
+            $fields['title'] = 'required';
+            $fields['time_start'] = 'required|integer';
+            $fields['max_sales'] = 'required|integer';
+            $fields['max_each_person'] = 'required|integer';
+        }
+
+        $validator = \Validator::make(Input::all(), $fields);
 
         if ($validator->fails()) {
             return \Response::json('data validation failed', 400);
+        }
+
+        if (Input::has('group_id') && (Input::get('group_id') != $event->group_id || $is_new)) {
+            $group = Eventgroup::find(Input::get('group_id'));
+            if (!$group) {
+                return Response::json('group id not found', 400);
+            }
+
+            $event->eventgroup()->associate($group);
         }
 
         $list = array(
@@ -177,34 +146,57 @@ class EventController extends Controller {
         );
 
         // can only edit alias when not published
-        if (!$e->is_published) {
+        if (!$event->id || !$event->is_published) {
             $list[] = 'alias';
         }
 
         foreach ($list as $field) {
-            if (Input::has($field) && Input::get($field) != $e->{$field}) {
-                $e->{$field} = Input::get($field);
+            if (Input::has($field) && Input::get($field) != $event->{$field}) {
+                $event->{$field} = Input::get($field);
             }
         }
 
         if (Input::has('is_admin_hidden')) {
-            $e->is_admin_hidden = (bool) Input::get('is_admin_hidden');
+            $event->is_admin_hidden = (bool) Input::get('is_admin_hidden');
         }
 
         if (Input::has('is_published')) {
-            $e->is_published = (bool) Input::get('is_published');
+            $event->is_published = (bool) Input::get('is_published');
         }
 
         if (Input::has('is_selling')) {
-            $e->is_selling = (bool) Input::get('is_selling');
+            $event->is_selling = (bool) Input::get('is_selling');
         }
 
-        if (Input::has('group_id') && Input::get('group_id') != $e->group_id) {
-            // TODO: validate and change group
-        }
+        return $event;
+    }
 
-        $e->save();
-        return $e;
+    /**
+     * Create new event
+     */
+    public function store()
+    {
+        $this->beforeFilter('auth');
+
+        $event = $this->validateInputAndUpdate(new Event, true);
+        if (!($event instanceof Event)) return $event;
+
+        $event->save();
+        return $event;
+    }
+
+    /**
+     * Update event
+     */
+    public function update($id)
+    {
+        $this->beforeFilter('auth');
+
+        $event = $this->validateInputAndUpdate(Event::findOrFail($id), false);
+        if (!($event instanceof Event)) return $event;
+
+        $event->save();
+        return $event;
     }
 
     /**
