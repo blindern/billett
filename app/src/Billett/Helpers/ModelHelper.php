@@ -5,9 +5,8 @@ class ModelHelper {
     {
         $guest = 'Guest';
 
-        if (\Input::has('admin'))
+        if (\Input::has('admin') && \Auth::hasRole('billett.admin'))
         {
-            // TODO: auth requirement
             $guest = '';
         }
 

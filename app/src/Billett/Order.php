@@ -186,13 +186,14 @@ class Order extends \Eloquent {
             throw new Exception("Trying to delete a order that is completed!");
         }
 
-        // TODO: some transaction stuff here?
+        \DB::transaction(function() {
+            foreach ($this->tickets()->get() as $ticket) {
+                $ticket->delete();
+            }
 
-        foreach ($this->tickets()->get() as $ticket) {
-            $ticket->delete();
-        }
+            $this->delete();
+        });
 
-        $this->delete();
         return true;
     }
 

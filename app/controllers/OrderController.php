@@ -95,7 +95,6 @@ class OrderController extends \Controller {
 
         $dibs = new DibsPaymentModule;
 
-        // TODO: generate (redirect to) payment form
         return array(
             'url' => $dibs->getCheckoutUrl(),
             'fields' => $dibs->generateCheckoutFields($order)
