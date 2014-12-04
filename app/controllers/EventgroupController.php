@@ -42,7 +42,8 @@ class EventgroupController extends Controller {
 				'status' => $event->web_selling_status,
 				'location' => $event->location,
 				'rel_link' => $event->link,
-				'url' => url('event/'.$event->id)
+				'url' => url('event/'.$event->id),
+				'ticket_info' => $event->ticket_info
 			);
 		}
 
