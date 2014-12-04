@@ -63,7 +63,7 @@ footer {
 }
 
 /* Customize container */
-@media (min-width: 768px) {
+@media (min-width: 730px) {
   .container.noadmin {
     max-width: 730px;
   }
@@ -115,4 +115,11 @@ footer {
       }
     }
   }
+}
+
+
+
+.page-loading {
+  text-align: center;
+  font-size: 150%;
 }

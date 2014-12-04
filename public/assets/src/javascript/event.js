@@ -1,6 +1,10 @@
 'use strict';
 
-var mod = angular.module('billett.event', ['ngRoute', 'billett.helper.page'])
+var mod = angular.module('billett.event', [
+	'ngRoute',
+	'billett.helper.page',
+	'hc.marked'
+])
 
 .config(['$routeProvider', function($routeProvider) {
 	$routeProvider.when('/event/:id', {
@@ -12,7 +16,9 @@ var mod = angular.module('billett.event', ['ngRoute', 'billett.helper.page'])
 .controller('EventController', function(Page, EventReservation, $http, $scope, $location, $routeParams, $sce, ResponseData) {
 	Page.setTitle('Arrangement');
 
+	var loader = Page.setLoading();
 	$http.get('api/event/'+encodeURIComponent($routeParams['id'])).success(function(ret) {
+		loader();
 		// do we have an alias not being used?
 		if (ret.alias != null && $routeParams['id'] != ret.alias) {
 			$location.path('/event/'+ret.alias);

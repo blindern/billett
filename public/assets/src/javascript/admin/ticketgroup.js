@@ -11,12 +11,12 @@ angular.module('billett.admin.ticketgroup', [
     $routeProvider.when('/a/event/:id/ticketgroup/new', {
         templateUrl: 'views/admin/ticketgroup/new.html',
         controller: 'AdminTicketgroupNewController',
-        resolve: 'AuthRequireResolver'
+        resolve: {auth: 'AuthRequireResolver'}
     })
     .when('/a/event/:event_id/ticketgroup/:ticketgroup_id', {
         templateUrl: 'views/admin/ticketgroup/index.html',
         controller: 'AdminTicketgroupController',
-        resolve: 'AuthRequireResolver'
+        resolve: {auth: 'AuthRequireResolver'}
     });
 })
 
@@ -27,7 +27,9 @@ angular.module('billett.admin.ticketgroup', [
     $scope.event_id = $routeParams['event_id'];
     $scope.ticketgroup_id = $routeParams['ticketgroup_id'];
 
+    var loader = Page.setLoading();
     AdminTicketgroup.get({id:$scope.ticketgroup_id}, function(ret) {
+        loader();
         if (ret.event.id != $scope.event_id) {
             $location.path('/a');
             return;
@@ -66,7 +68,9 @@ angular.module('billett.admin.ticketgroup', [
         is_normal: true
     };
 
+    var loader = Page.setLoading();
     AdminEvent.get({id:$routeParams['id']}, function(ret) {
+        loader();
         $scope.event = ret;
     }, function(err) {
         $location.path('/a/event/'+$scope.event_id);

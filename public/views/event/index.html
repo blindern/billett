@@ -1,47 +1,55 @@
+<div class="event-page">
+
 <div class="page-header">
     <h1>
-        <span class="eventgroup"><a href="eventgroup/{{event.eventgroup.id}}">{{event.eventgroup.title}}</a></span>
-        {{event.title}} <span class="eventdate-header">({{event.time_start|formatdate:'DD.MM'}})</span>
+        <span class="eventgroup">
+            <a href="eventgroup/{{event.eventgroup.id}}">{{event.eventgroup.title}}</a>
+        </span>
+        {{event.title}}
+        <span class="eventdate-header">({{event.time_start|formatdate:'DD.MM'}})</span>
+        <span ng-show="AuthService.isLoggedIn()" class="pull-right">
+            <a ng-href="a/event/{{event.id}}" class="btn btn-primary">Admin</a>
+            <a ng-href="a/event/{{event.id}}/edit" class="btn btn-primary">Rediger</a>
+        </span>
     </h1>
     <p ng-show="!event.is_published">Dette arrangementet er ikke publisert. Du er innlogget og kan se.</p>
 </div>
 
-<div class="event-page">
-
-<!-- TODO: category (p_category) -->
 <!-- TODO: ics-link -->
 
 <div class="row">
-    <div class="col-sm-5">
+    <div class="col-sm-5" ng-class="{'no-buy-form': event.web_selling_status == 'no_tickets'}">
 
         <div class="event-image">
             <img ng-src="event/{{event.id}}/image" alt="">
         </div>
-
-        <dl>
+        <dl class="dl-horizontal">
             <dt>Tidspunkt</dt>
-            <dd>{{event.time_start|formatdate:'dddd D. MMMM YYYY'}} kl. {{event.time_start|formatdate:'HH:mm'}}
+            <dd>{{event.time_start|formatdate:'dddd D. MMMM YYYY'}}<br>
+                kl. {{event.time_start|formatdate:'HH:mm'}}
                 <span ng-show="event.time_end">til {{event.time_end|formatdate:'HH:mm'}}</span>
             </dd>
+            <dt ng-show="event.category">Kategori</dt>
+            <dd ng-show="event.category">{{event.category}}</dd>
             <dt ng-show="event.location">Sted</dt>
             <dd ng-show="event.location">{{event.location}}</dd>
             <dt ng-show="event.age_restriction">Aldersgrense</dt>
             <dd ng-show="event.age_restriction">{{event.age_restriction}} år</dd>
         </dl>
 
-        <div ng-show="event.description" ng-bind="event.description" class="event-description"></div>
+        <div ng-show="event.description" marked="event.description" class="event-description"></div>
 
     </div>
 
 <!-- TODO: event custom text -->
 <!-- TODO: event readmore link -->
 
-    <div class="col-sm-7">
+    <div class="col-sm-7 event-right-col">
 
         <div ng-show="!reservation">
             <div ng-show="event.web_selling_status == 'unknown'" class="panel panel-default">
                 <div class="panel-body">
-                    Informasjon om billetter for dette arrangementet er for øyeblikket ikke tilgjengelig.
+                    Informasjon om billetter for dette arrangementet er for øyeblikket ikke tilgjengelig. Sjekk tilbake senere.
                 </div>
             </div>
 
@@ -70,25 +78,39 @@
             </div>
 
             <div ng-show="event.web_selling_status == 'sale'">
-                <form class="form-horizontal panel panel-default">
+                <form class="panel panel-default buy-form">
                     <div class="panel-heading">Kjøp billetter</div>
                     <div class="panel-body">
 
                         <p>Ved kjøp av billetter får du tilsendt en elektronisk billett i PDF-format på
                             e-post som printes ut eller tas med på mobiltelefon til arrangementet.
-                            <a href="om">Informasjon om billetter</a></p>
+                            <a href="hjelp">Informasjon om billetter</a></p>
 
-                        <div class="form-group" ng-repeat="ticketgroup in event.ticketgroups">
-                            <div class="col-sm-5">
-                                <label class="control-label">{{ticketgroup.title}}</label>
-                            </div>
-                            <div class="col-sm-3 control-label">
-                                <p><span class="visible-xs-inline">Pris:</span> {{ticketgroup.price+ticketgroup.fee|price:true}}</p>
-                            </div>
-                            <div class="col-sm-4">
-                                <select ng-model="ticketgroup.order_count" class="form-control" ng-init="ticketgroup.order_count=0">
-                                    <option ng-repeat="i in (ticketgroup.limit||10)+1|range" value="{{i}}">{{i}} stk</option>
-                                </select>
+                        <div class="ticketgroup" ng-repeat="ticketgroup in event.ticketgroups">
+                            <div class="meta">
+                                <div class="title">{{ticketgroup.title}}</div><!-- white space fix for inline-block
+                             --><div class="price">
+                                    <span class="price-label">Pris:</span>
+                                    {{ticketgroup.price+ticketgroup.fee|price:true}}
+                                </div>
+                                <div ng-show="ticketgroup.ticket_text" class="ticket-text">
+                                    {{ticketgroup.ticket_text}}
+                                </div>
+                            </div><!-- white space fix for inline-block
+                         --><div class="count">
+                                <span class="value" ng-init="ticketgroup.order_count=0">
+                                    {{ticketgroup.order_count}}
+                                </span>
+                                <button ng-click="ticketgroup.order_count=ticketgroup.order_count+1;event.max_each_person=event.max_each_person-1"
+                                        class="btn btn-primary btn-sm"
+                                        ng-disabled="event.max_each_person<=0">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </botton>
+                                <button ng-click="ticketgroup.order_count=ticketgroup.order_count-1;event.max_each_person=event.max_each_person+1"
+                                        class="btn btn-primary btn-sm"
+                                        ng-disabled="ticketgroup.order_count<=0">
+                                    <span class="glyphicon glyphicon-minus"></span>
+                                </botton>
                             </div>
                         </div>
 
@@ -104,11 +126,11 @@
             </div>
         </div>
 
-        <div ng-show="reservation && !checkout">
+        <div ng-show="reservation && !checkout && event.web_selling_status != 'no_tickets'">
             <div class="panel panel-warning" ng-show="reservation.tickets[0].event.id != event.id">
-                <div class="panel-heading">Billetter</div>
+                <div class="panel-heading">Kjøp billetter</div>
                 <div class="panel-body">
-                    Du holder allerede på å bestille billetter til <a ng-href="/event/{{reservation.tickets[0].event.alias||reservation.tickets[0].event.id}}">{{reservation.tickets[0].event.title}}</a> og må fullføre/avbryte den bestillingen først.
+                    Du holder allerede på å bestille billetter til <a ng-href="event/{{reservation.tickets[0].event.alias||reservation.tickets[0].event.id}}">{{reservation.tickets[0].event.title}}</a> og må fullføre/avbryte den bestillingen først.
                 </div>
             </div>
             <div class="panel panel-info" ng-show="reservation.tickets[0].event.id == event.id">
@@ -120,7 +142,8 @@
                             <label class="text-right col-sm-4">Valgte billetter</label>
                             <div class="col-sm-8">
                                 <div ng-repeat="ticket in reservation.tickets">
-                                    {{ticket.ticketgroup.title}} ({{ticket.ticketgroup.price+ticket.ticketgroup.fee|price:true}}) #{{ticket.id}}
+                                    {{ticket.ticketgroup.title}} #{{ticket.id}}<br>
+                                    <span class="text-muted">({{ticket.ticketgroup.price|price:true}} + {{ticket.ticketgroup.fee|price:true}} i gebyr)</span>
                                 </div>
                             </div>
                         </div>

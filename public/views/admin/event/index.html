@@ -1,18 +1,20 @@
-<div class="page-header">
-    <h1>{{event.eventgroup.title}}</h1>
-</div>
-
 <div class="admin-event">
 
-<p><a ng-href="a/eventgroup/{{event.eventgroup.id}}">&laquo; Tilbake</a></p>
 
-<h2>
-    {{event.title}}
-    <span class="pull-right">
-        <a ng-href="a/event/{{event.id}}/edit" class="btn btn-primary">Rediger</a>
-        <a href ng-show="!event.has_tickets" class="btn btn-danger" ng-click="deleteEvent()">Slett arrangement</a>
-    </span>
-</h2>
+<div class="page-header">
+    <h1>
+        <span class="eventgroup">
+            <a href="a/eventgroup/{{event.eventgroup.id}}">{{event.eventgroup.title}}</a>
+        </span>
+        {{event.title}}
+        <span class="pull-right">
+            <a ng-href="event/{{event.id}}" class="btn btn-success">Forhåndsvis</a>
+            <a ng-href="a/event/{{event.id}}/edit" class="btn btn-primary">Rediger</a>
+            <a href ng-show="!event.has_tickets" class="btn btn-danger" ng-click="deleteEvent()">Slett arrangement</a>
+        </span>
+    </h1>
+    <p ng-show="!event.is_published">Dette arrangementet er ikke publisert. Du er innlogget og kan se.</p>
+</div>
 
 <div class="row">
     <div class="col-md-6">
@@ -21,7 +23,7 @@
             <dt>Start</dt>
             <dd>{{event.time_start|formatdate:'DD.MM.YYYY HH:mm'}}</dd>
             <dt>Slutt</dt>
-            <dd>{{event.time_end|formatdate:'DD.MM.YYYY HH:mm'}}</dd>
+            <dd>{{!event.time_end ? 'ikke satt' : (event.time_end|formatdate:'DD.MM.YYYY HH:mm')}}</dd>
             <dt>Kategori</dt>
             <dd>{{event.category}}</dd>
             <dt>Alias</dt>
@@ -41,7 +43,7 @@
             <dt>Maks normale salg</dt>
             <dd>{{event.max_normal_sales}}</dd>
             <dt>Beskrivelse</dt>
-            <dd>{{event.description}}</dd>
+            <dd marked="event.description"></dd>
             <dt>Kort beskrivelse</dt>
             <dd>{{event.description_short}}</dd>
             <dt>Billett-tekst</dt>
@@ -67,10 +69,14 @@
     </div>
 </div>
 
+<hr>
+
 <h3>
     Billettgrupper
     <a href="a/event/{{event.id}}/ticketgroup/new" class="btn btn-default pull-right">Ny</a>
 </h3>
+
+<hr>
 
 <p ng-show="event.ticketgroups.length == 0">
     Ingen billettgrupper eksisterer.
@@ -87,7 +93,12 @@
                 <th>Aktiv?</th>
                 <th>Publisert?</th>
                 <th>Normal?</th>
-                <th>Reservert</th>
+                <th>
+                    <abbr title="Ledige">L</abbr> /
+                    <abbr title="Reservert">R</abbr> /
+                    <abbr title="Annulert">A</abbr> /
+                    <abbr title="Innsjekkede">I</abbr>
+                </th>
                 <th>Solgt</th>
                 <th>Omsetning</th>
             </tr>
@@ -102,7 +113,10 @@
                 <td>{{g.is_published ? 'Ja' : 'Nei'}}</td>
                 <td>{{g.is_normal ? 'Ja' : 'Nei'}}</td>
                 <td>
-                    {{event.ticket_count.groups[g.id].pending}}
+                    {{event.ticket_count.groups[g.id].free}} /
+                    {{event.ticket_count.groups[g.id].pending}} /
+                    {{event.ticket_count.groups[g.id].revoked}} /
+                    {{event.ticket_count.groups[g.id].used}}
                 </td>
                 <td>
                     {{event.ticket_count.groups[g.id].valid}}
@@ -121,7 +135,10 @@
             <tr>
                 <th colspan="7">&nbsp;</th>
                 <th>
-                    {{event.ticket_count.totals.pending}}
+                    {{event.ticket_count.totals.free}} /
+                    {{event.ticket_count.totals.pending}} /
+                    {{event.ticket_count.totals.revoked}} /
+                    {{event.ticket_count.totals.used}}
                 </th>
                 <th>
                     {{event.ticket_count.totals.valid}}
@@ -133,6 +150,19 @@
                     {{event.ticket_count.totals.sum_fee|price}}
                 </th>
             </tr>
+            <tr ng-show="event.max_normal_sales">
+                <th colspan="7">Kun &laquo;normale&raquo; salg</th>
+                <th>
+                    {{event.ticket_count.totals.free_normal}} /
+                    - /
+                    - /
+                    -
+                </th>
+                <th>
+                    - /
+                    {{event.max_normal_sales}}
+                </th>
+                <th>&nbsp;</th>
         </tbody>
     </table>
 </div>

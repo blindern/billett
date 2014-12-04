@@ -12,7 +12,9 @@ angular.module('billett.eventgroup', ['ngRoute', 'billett.helper.page'])
 .controller('EventgroupController', function(Page, $http, $scope, $routeParams) {
 	Page.setTitle('Arrangementgruppe');
 
+    var loader = Page.setLoading();
 	$http.get('api/eventgroup/'+encodeURIComponent($routeParams['id'])).success(function(ret) {
+        loader();
 		Page.setTitle(ret.title);
 		$scope.group = ret;
 

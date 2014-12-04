@@ -1,16 +1,16 @@
-<div class="page-header">
-    <h1>{{group.title}}</h1>
-</div>
-
 <div class="admin-eventgroup">
 
-<p><a href="a">&laquo; Tilbake</a></p>
-
-<h2>
-    Arrangementliste
-    <a href="a/eventgroup/{{group.id}}/new_event" class="pull-right btn btn-default">Nytt arrangement</a>
-</h2>
-
+<div class="page-header">
+    <h1>
+        <span class="eventgroup">
+            <a href="a">{{group.title}}</a>
+        </span>
+        Arrangementliste
+        <span class="pull-right">
+            <a href="a/eventgroup/{{group.id}}/new_event" class="btn btn-default">Nytt arrangement</a>
+        </span>
+    </h1>
+</div>
 
 <div ng-show="group.events.length == 0">
     <p>Ingen arrangementer eksisterer.</p>

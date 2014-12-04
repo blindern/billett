@@ -29,7 +29,9 @@ angular.module('billett.admin.eventgroup', [
 .controller('AdminEventgroupController', function(Page, $routeParams, $http, $scope, AdminEventgroup, AdminEvent, $location) {
     Page.setTitle('Arrangementgruppe');
 
+    var loader = Page.setLoading();
     AdminEventgroup.get({id:$routeParams['id']}, function(ret) {
+        loader();
         Page.setTitle(ret.title);
 
         $scope.group = ret;

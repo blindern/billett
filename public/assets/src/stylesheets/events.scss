@@ -1,14 +1,16 @@
-h1 .eventgroup a {
-	display: block;
-	font-size: 14px;
-	color: #888;
-	text-transform: uppercase;
+.page-header {
+    h1 {
+        .eventgroup {
+            display: block;
+            font-size: 14px;
+            a {
+                color: #888;
+                text-transform: uppercase;
+            }
+        }
+    }
 }
 
-.eventdate-header {
-    color: #888;
-    font-size: 60%;
-}
 
 .table-tbody-spacing > tbody:before {
     line-height: 10px;
@@ -60,11 +62,123 @@ h1 .eventgroup a {
 }
 
 .event-page {
+    h1 {
+        .eventdate-header {
+            color: #888;
+            font-size: 60%;
+        }
+    }
+
+    @media (min-width: $screen-sm-min) {
+        .no-buy-form {
+            margin-left: percentage((3.5 / 12));
+        }
+    }
+
     .event-image {
         margin: 0 0 1em;
+        text-align: center;
+        @media (min-width: $screen-sm-min) {
+            & {
+                text-align: left;
+            }
+        }
     }
+
+    .dl-horizontal {
+        border-top: 1px solid $hr-border;
+        margin: 20px 0 0;
+        padding: 10px 0 0;
+        dt, dd {
+            margin-top: 10px;
+        }
+        @media (min-width: $screen-sm-min) {
+            dt {
+                width: 80px;
+            }
+            dd {
+                margin-left: 100px;
+            }
+        }
+    }
+
+    .dl-horizontal + .event-description {
+        border-top: 1px solid $hr-border;
+        padding-top: 20px;
+    }
+
     .event-description {
-        margin: 1em 0;
+        margin: 20px 0 0;
+        & :last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    .event-right-col > div {
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid $hr-border;
+        @media (min-width: $screen-sm-min) {
+            & {
+                margin-top: 0;
+                border-top: none;
+                padding-top: 0;
+            }
+        }
+    }
+
+    .buy-form {
+        .ticketgroup {
+            margin-bottom: 10px;
+            .meta {
+                display: inline-block;
+                vertical-align: middle;
+                width: 70%;
+                .title {
+                    font-weight: bold;
+                }
+                .price {
+                    white-space: nowrap;
+                    .price-label {
+
+                    }
+                }
+                .ticket-text {
+                    color: $gray-light;
+                    font-size: 90%;
+                }
+            }
+            .count {
+                display: inline-block;
+                vertical-align: middle;
+                width: 30%;
+                text-align: right;
+                white-space: nowrap;
+                .value {
+
+                }
+                button {
+                    margin-left: 3px;
+                }
+            }
+        }
+
+        @media (min-width: $screen-sm-min) {
+            .title, .price {
+                display: inline-block;
+                width: 60%;
+            }
+            .price {
+                width: 40%;
+                text-align: right;
+                .price-label {
+                    display: none;
+                }
+            }
+            .count {
+                margin-top: 2px;
+            }
+        }
     }
 }
 
