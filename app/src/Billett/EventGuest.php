@@ -18,6 +18,13 @@ class EventGuest extends Event {
         'web_selling_status',
         'ticketgroups',
         'eventgroup',
-        'max_each_person'
+        'max_each_person',
+        'ticket_info',
+        'selling_text'
     );
+
+    public function getSellingTextAttribute() {
+        if (!$this->is_selling) return null;
+        return $this->selling_text;
+    }
 }

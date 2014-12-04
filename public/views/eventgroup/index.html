@@ -42,7 +42,7 @@
                     <a ng-show="event.web_selling_status == 'sale'" ng-href="event/{{event.alias||event.id}}">{{event.title}}</a>
                     <span ng-show="event.web_selling_status != 'sale'">{{event.title}}</span>
                 </td>
-                <td>
+                <td ng-show="!event.ticket_info">
                     <span ng-show="event.web_selling_status == 'unknown'">Ikke tilgjengelig</span>
                     <span ng-show="event.web_selling_status == 'no_tickets'"></span>
                     <span ng-show="event.web_selling_status == 'old'"></span>
@@ -50,6 +50,9 @@
                     <span ng-show="event.web_selling_status == 'timeout'">I døra</span>
                     <span ng-show="event.web_selling_status == 'sold_out'">Utsolgt</span>
                     <span ng-show="event.web_selling_status == 'sale'">Tilgjengelig</span>
+                </td>
+                <td ng-show="event.ticket_info">
+                    {{event.ticket_info}}
                 </td>
             </tr>
         </tbody>

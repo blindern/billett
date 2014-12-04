@@ -24,10 +24,12 @@ The events itself.
 * string title
 * optional string category
 * optional string location
+* optional string ticket_info (short text for tickets link)
+* optional string selling_text (replaces default text if is_selling = 0, formatted with Markdown)
 * int max_each_person (limit number of tickets for each person)
 * int max_sales (limit of total tickets that can be sold)
 * optional int max_normal_sales (limit of normal tickets that can be sold, admin can sell tickets not counting here)
-* optional string description (HTML-text for description)
+* optional string description (description, formatted with Markdown)
 * optional string description_short (description for meta tag)
 * optional string ticket_text (plain text on the ticket itself)
 * optional string link (link to related article)

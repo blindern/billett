@@ -122,6 +122,10 @@
         }
     }
 
+    .selling-text > :last-child {
+        margin-bottom: 0;
+    }
+
     .buy-form {
         .ticketgroup {
             margin-bottom: 10px;

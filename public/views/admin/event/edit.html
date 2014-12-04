@@ -97,6 +97,20 @@
         </div>
     </div>
     <div class="form-group">
+        <label for="ticket_info" class="col-sm-3 control-label">Billettinfotekst</label>
+        <div class="col-sm-9 col-md-6">
+            <input type="text" class="form-control" ng-model="event.ticket_info" id="ticket_info" placeholder="(valgfritt)">
+            <span class="help-block">Blir synlig på arrangementlisten i stedet for standardteksten.</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="selling_text" class="col-sm-3 control-label">Salgsbeskrivelse</label>
+        <div class="col-sm-9 col-md-6">
+            <textarea class="form-control" ng-model="event.selling_text" id="selling_text" placeholder="(valgfritt)" rows="8"></textarea>
+            <span class="help-block">Tekst i salgsboksen dersom billettinformasjon ikke er annonsert. Erstatter standardteksten om at informasjon er utilgjengelig. Formatteres med <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown</a></span>
+        </div>
+    </div>
+    <div class="form-group">
         <label for="ticket_text" class="col-sm-3 control-label">Tekst på billettene</label>
         <div class="col-sm-9 col-md-6">
             <input type="text" class="form-control" ng-model="event.ticket_text" id="ticket_text" placeholder="(valgfritt)">

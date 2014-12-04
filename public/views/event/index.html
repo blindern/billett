@@ -49,7 +49,8 @@
         <div ng-show="!reservation">
             <div ng-show="event.web_selling_status == 'unknown'" class="panel panel-default">
                 <div class="panel-body">
-                    Informasjon om billetter for dette arrangementet er for øyeblikket ikke tilgjengelig. Sjekk tilbake senere.
+                    <div ng-show="!event.selling_text">Informasjon om billetter for dette arrangementet er for øyeblikket ikke tilgjengelig. Sjekk tilbake senere.</div>
+                    <div ng-show="event.selling_text" class="selling-text" marked="event.selling_text"></div>
                 </div>
             </div>
 
