@@ -20,7 +20,8 @@ class EventGuest extends Event {
         'eventgroup',
         'max_each_person',
         'ticket_info',
-        'selling_text'
+        'selling_text',
+        'link'
     );
 
     public function getSellingTextAttribute($val) {

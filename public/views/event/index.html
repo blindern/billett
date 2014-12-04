@@ -39,10 +39,10 @@
 
         <div ng-show="event.description" marked="event.description" class="event-description"></div>
 
+        <p ng-show="event.link" class="event-link">
+            <a ng-href="{{event.link}}">Gå til arrangementsartikkel &raquo;</a>
+        </p>
     </div>
-
-<!-- TODO: event custom text -->
-<!-- TODO: event readmore link -->
 
     <div class="col-sm-7 event-right-col">
 
@@ -210,7 +210,5 @@
 
     </div>
 </div>
-
-<!-- TODO: visa/mastercard logoer -->
 
 </div>
