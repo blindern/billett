@@ -50,7 +50,7 @@
                     <a ng-href="event/{{event.alias||event.id}}">{{event.title}}</a>
                 </td>
                 <td ng-show="!event.ticket_info">
-                    <span ng-show="event.web_selling_status == 'unknown'">Ikke tilgjengelig</span>
+                    <span ng-show="event.web_selling_status == 'unknown'">TBA</span>
                     <span ng-show="event.web_selling_status == 'no_tickets'"></span>
                     <span ng-show="event.web_selling_status == 'old'"></span>
                     <span ng-show="event.web_selling_status == 'no_web_tickets'"></span>
