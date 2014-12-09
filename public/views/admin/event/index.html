@@ -92,8 +92,8 @@
             <tr>
                 <th>ID</th>
                 <th>Tittel</th>
-                <th>Pris</th>
-                <th>+ Avgift</th>
+                <th><abbr title="Pris inkl. avgift">Pris</abbr></th>
+                <th>= Avgift</th>
                 <th>Aktiv?</th>
                 <th>Publisert?</th>
                 <th>Normal?</th>
@@ -111,7 +111,7 @@
             <tr ng-repeat="g in event.ticketgroups">
                 <td>{{g.id}}</td>
                 <td><a href="a/event/{{event.id}}/ticketgroup/{{g.id}}">{{g.title}}</a></td>
-                <td>{{g.price|price}}</td>
+                <td>{{g.price+g.fee|price}}</td>
                 <td>{{g.fee|price}}</td>
                 <td>{{g.is_active ? 'Ja' : 'Nei'}}</td>
                 <td>{{g.is_published ? 'Ja' : 'Nei'}}</td>
