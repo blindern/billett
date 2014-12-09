@@ -81,7 +81,7 @@ class OrderController extends \Controller {
      */
     public function placeOrder($id) {
         $order = Order::find($id);
-        if (!$order || (!$order->isOwnerOfReservation() || !\Auth::hasRole('billett.admin'))) {
+        if (!$order || (!$order->isOwnerOfReservation() && !\Auth::hasRole('billett.admin'))) {
             return \Response::json('not found', 404);
         }
 
