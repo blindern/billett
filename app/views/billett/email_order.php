@@ -14,10 +14,10 @@ dine og kjøpskvittering.
 
 BILLETTINFORMASJON:
 -------------------
-Som vedlegg til denne e-posten ligger det ett PDF-dokument per billett
-du har kjøpt som hver inneholder en strekkode. Disse billettene skriver
-du ut og tar med til arrangementet. Hver billett og tilhørende strekkode
-kan kun benyttes én gang.
+Som vedlegg til denne e-posten ligger det ett PDF-dokument med dine billetter
+som hver inneholder en strekkode. Disse billettene skriver du ut og tar med
+til arrangementet. Hver billett og tilhørende strekkode kan kun benyttes én
+gang.
 
 Billettene bør skrives ut i 100 % størrelse og ikke fylle hele A4-arket.
 
@@ -50,9 +50,9 @@ foreach ($order->tickets as $ticket) {
     $total += $ticket->ticketgroup->price + $ticket->ticketgroup->fee;
     $time = Carbon::createFromTimeStamp($ticket->event->time_start)->format('d.m.Y H:i');
     echo
-'  '.$time.': '.$ticket->event->title.': '.$ticket->ticketgroup->title.' ('.format_nok($ticket->ticketgroup->price);
+'  '.$time.': '.$ticket->event->title.': '.$ticket->ticketgroup->title.' ('.format_nok($ticket->ticketgroup->price+$ticket->ticketgroup->fee);
 
-    if ($ticket->ticketgroup->fee) echo ' + '.format_nok($ticket->ticketgroup->fee).' billettgebyr';
+    if ($ticket->ticketgroup->fee) echo ', hvorav '.format_nok($ticket->ticketgroup->fee).' i billettgebyr';
 
     echo ') (#'.$ticket->number.')
 ';
