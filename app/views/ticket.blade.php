@@ -43,7 +43,7 @@ $months = array('jan', 'feb', 'mar', 'apr', 'mai', 'jun', 'jul', 'aug', 'sep', '
       font-size: 11pt;
       font-family: Helvetica;
 
-      border: 1px solid #000000;
+      /*border: 1px solid #000000;*/
     }
 
     /** { outline: .3mm dotted #0000FF; }*/
@@ -147,7 +147,7 @@ $months = array('jan', 'feb', 'mar', 'apr', 'mai', 'jun', 'jul', 'aug', 'sep', '
     }
     .event .value {
       display: block;
-      margin-left: 10mm;
+      margin-left: 12mm;
     }
 
     /*
@@ -157,7 +157,8 @@ $months = array('jan', 'feb', 'mar', 'apr', 'mai', 'jun', 'jul', 'aug', 'sep', '
       font-size: 90%;
     }
     .date .type {
-      width: 10mm;
+      display: inline-block;
+      width: 12mm;
     }
     .date .time {
       text-decoration: underline;
@@ -176,6 +177,23 @@ $months = array('jan', 'feb', 'mar', 'apr', 'mai', 'jun', 'jul', 'aug', 'sep', '
     /*
      * section: price
      */
+    .price .type {
+      display: inline-block;
+      width: 12mm;
+    }
+    .price.has-fee {
+      margin-bottom: 0;
+    }
+
+    /*
+     * section: fee
+     */
+    .fee .value {
+        font-size: 75%;
+        color: #666;
+        margin-left: 12mm;
+      }
+    }
 
     /*
      * section: ticket-text-ticketgroup
@@ -190,7 +208,7 @@ $months = array('jan', 'feb', 'mar', 'apr', 'mai', 'jun', 'jul', 'aug', 'sep', '
      */
     .barcode {
       text-align: center;
-      margin: 5mm 0 0 0;
+      margin: 7mm 0 0 0;
     }
 
     .barcode span {
@@ -263,9 +281,9 @@ $months = array('jan', 'feb', 'mar', 'apr', 'mai', 'jun', 'jul', 'aug', 'sep', '
       </p>
 
       <p class="date">
-        <span class="type">Tid:</span>
-        <span class="value">
-          <?=$days[$start->format('N')-1];?> {{{$start->format('j. ')}}} <?=$months[$start->format('n')-1];?> {{{$start->format('Y')}}}
+        <span class="type">Tid:</span><!--
+        --><span class="value"><!--
+          --><?=$days[$start->format('N')-1];?> {{{$start->format('j. ')}}} <?=$months[$start->format('n')-1];?> {{{$start->format('Y')}}}
           kl.
           <span class="time">{{{$start->format('H:i')}}}</span>
         </span>
@@ -277,16 +295,24 @@ $months = array('jan', 'feb', 'mar', 'apr', 'mai', 'jun', 'jul', 'aug', 'sep', '
         </p>
       <?php endif; ?>
 
-      <p class="price">
-        <span class="type">Pris:</span>
-        <span class="value">
-          {{$format_nok($price)}} ({{{$ticket->ticketgroup->title}}})
+      <p class="price<?=($ticket->ticketgroup->fee ? ' has-fee' : '');?>">
+        <span class="type">Pris:</span><!--
+        --><span class="value"><!--
+          -->{{$format_nok($price)}} ({{{$ticket->ticketgroup->title}}})
           <?php if ($ticket->ticketgroup->ticket_text != ""): ?>
             *
           <?php endif; ?>
         </span>
         <!--                 $this->Write($h, "(INKL. BILLETTGEBYR)"); -->
       </p>
+
+      <?php if ($ticket->ticketgroup->fee): ?>
+        <p class="fee">
+          <span class="value">
+            Hvorav {{$format_nok($ticket->ticketgroup->fee)}} i billettgebyr
+          </span>
+        </p>
+      <?php endif; ?>
 
       <?php if ($ticket->ticketgroup->ticket_text != ""): ?>
         <p class="ticket-text-ticketgroup">

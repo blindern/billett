@@ -26,9 +26,9 @@ class PdfTicket
         $this->dompdf = new \DOMPDF();
 
         // variable height
-        $height = 320;
-        if ($this->ticket->ticketgroup->ticket_text != '') $height += 30;
-        if ($this->ticket->event->ticket_text != '') $height += 30;
+        $height = 330;
+        if ($this->ticket->ticketgroup->ticket_text != '') $height += 5 + strlen($this->ticket->ticketgroup->ticket_text)/40*10 + 8;
+        if ($this->ticket->event->ticket_text != '') $height += 5 + strlen($this->ticket->event->ticket_text)/40*10 + 8;
 
         // 72 mm width (paper is 80 mm, only 72 mm is printable)
         $this->dompdf->set_paper(array(0, 0, 204.09, $height));
