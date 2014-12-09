@@ -1,7 +1,7 @@
 <?php
 
 Route::resource('/api/eventgroup', 'EventgroupController', array(
-	'only' => array('index', 'show')
+    'only' => array('index', 'show')
 ));
 Route::get('/api/eventgroup/{id}/simple', 'EventgroupController@simpleList');
 
@@ -14,7 +14,7 @@ Route::resource('/api/order', 'OrderController', array(
 Route::post('/api/event/{id}/createreservation', 'EventController@createReservation');
 Route::get('/api/event/get_upcoming', 'EventController@getUpcoming');
 Route::resource('/api/event', 'EventController', array(
-	'only' => array('show', 'store', 'update', 'destroy')
+    'only' => array('show', 'store', 'update', 'destroy')
 ));
 
 Route::resource('/api/ticketgroup', 'TicketgroupController', array(
@@ -51,9 +51,9 @@ Route::get('/email', function() {
 // TODO: this should probably be changed due to search engines not getting 404
 Route::get('/api/{slug?}', function()
 {
-	return Response::json('not found', 404);
+    return Response::json('not found', 404);
 });
 Route::get('{slug?}', function()
 {
-	return View::make('template');
+    return View::make('template');
 })->where('slug', '.+');

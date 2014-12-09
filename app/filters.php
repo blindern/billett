@@ -15,19 +15,19 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 App::before(function($request)
 {
-	//
+    //
 });
 
 
 App::after(function($request, $response)
 {
-	//
+    //
 });
 
 // handle findOrFail-calls
 App::error(function(ModelNotFoundException $e)
 {
-	return Response::json('not found', 404);
+    return Response::json('not found', 404);
 });
 
 App::missing(function($exception)
@@ -48,23 +48,23 @@ App::missing(function($exception)
 
 Route::filter('auth', function()
 {
-	if (Auth::guest())
-	{
-		if (Request::ajax())
-		{
-			return Response::make('Unauthorized', 401);
-		}
-		else
-		{
-			return Redirect::guest('login');
-		}
-	}
+    if (Auth::guest())
+    {
+        if (Request::ajax())
+        {
+            return Response::make('Unauthorized', 401);
+        }
+        else
+        {
+            return Redirect::guest('login');
+        }
+    }
 });
 
 
 Route::filter('auth.basic', function()
 {
-	return Auth::basic();
+    return Auth::basic();
 });
 
 /*
@@ -80,7 +80,7 @@ Route::filter('auth.basic', function()
 
 Route::filter('guest', function()
 {
-	if (Auth::check()) return Redirect::to('/');
+    if (Auth::check()) return Redirect::to('/');
 });
 
 /*
@@ -96,8 +96,8 @@ Route::filter('guest', function()
 
 Route::filter('csrf', function()
 {
-	if (Session::token() != Input::get('_token'))
-	{
-		throw new Illuminate\Session\TokenMismatchException;
-	}
+    if (Session::token() != Input::get('_token'))
+    {
+        throw new Illuminate\Session\TokenMismatchException;
+    }
 });

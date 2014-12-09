@@ -3,10 +3,10 @@
 moment.locale('nb');
 
 var module = angular.module('billett', [
-	'ngRoute',
+    'ngRoute',
     'billett.auth',
-	'billett.helper.page',
-	'billett.index',
+    'billett.helper.page',
+    'billett.index',
     'billett.admin',
     'billett.info',
     'billett.event',
@@ -15,12 +15,12 @@ var module = angular.module('billett', [
 ]);
 
 module.config(['$routeProvider', function($routeProvider) {
-	$routeProvider.otherwise({redirectTo: '/'});
+    $routeProvider.otherwise({redirectTo: '/'});
 }]);
 
 module.config(['$locationProvider', function($locationProvider) {
-	// use HTML5 history API for nice urls
-	$locationProvider.html5Mode(true);
+    // use HTML5 history API for nice urls
+    $locationProvider.html5Mode(true);
 }]);
 
 module.filter('formatdate', function() {

@@ -67,7 +67,7 @@ class EventController extends Controller {
             }
         }
         if (count($groups) > 0) {
-        	return Response::json('error in ticketgroups', 400);
+            return Response::json('error in ticketgroups', 400);
         }
 
         // check count

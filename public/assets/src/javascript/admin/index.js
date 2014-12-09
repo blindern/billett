@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('billett.admin', [
-	'ngRoute',
+    'ngRoute',
     'billett.auth',
-	'billett.helper.page',
+    'billett.helper.page',
     'billett.admin.event',
     'billett.admin.eventgroup',
     'billett.admin.order',
@@ -12,16 +12,16 @@ angular.module('billett.admin', [
 ])
 
 .config(function($routeProvider) {
-	$routeProvider.when('/a', {
-		templateUrl: 'views/admin/index.html',
-		controller: 'AdminIndexController',
+    $routeProvider.when('/a', {
+        templateUrl: 'views/admin/index.html',
+        controller: 'AdminIndexController',
         resolve: {auth: 'AuthRequireResolver'}
-	});
+    });
 
 }).
 
 controller('AdminIndexController', function(Page, $http, $scope, AdminEventgroup) {
-	Page.setTitle('Administration');
+    Page.setTitle('Administration');
 
     AdminEventgroup.query(function(ret) {
         $scope.eventgroups = ret;

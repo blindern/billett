@@ -3,24 +3,24 @@
 use Blindern\UKA\Billett\Helpers\PdfTicket;
 
 class Ticket extends \Eloquent {
-	protected $table = 'tickets';
+    protected $table = 'tickets';
     protected $appends = array('number');
     protected $hidden = array('pdf');
 
-	public function event()
-	{
-		return $this->belongsTo('\\Blindern\\UKA\\Billett\\Event'.$this->model_suffix, 'event_id');
-	}
+    public function event()
+    {
+        return $this->belongsTo('\\Blindern\\UKA\\Billett\\Event'.$this->model_suffix, 'event_id');
+    }
 
-	public function order()
-	{
-		return $this->belongsTo('\\Blindern\\UKA\\Billett\\Order'.$this->model_suffix, 'order_id');
-	}
+    public function order()
+    {
+        return $this->belongsTo('\\Blindern\\UKA\\Billett\\Order'.$this->model_suffix, 'order_id');
+    }
 
-	public function ticketgroup()
-	{
-		return $this->belongsTo('\\Blindern\\UKA\\Billett\\Ticketgroup'.$this->model_suffix, 'ticketgroup_id');
-	}
+    public function ticketgroup()
+    {
+        return $this->belongsTo('\\Blindern\\UKA\\Billett\\Ticketgroup'.$this->model_suffix, 'ticketgroup_id');
+    }
 
     public function getKeyAttribute($key)
     {
@@ -33,14 +33,14 @@ class Ticket extends \Eloquent {
         return $key;
     }
 
-	/**
-	 * Generate a unique ticket key used for barcode
-	 *
-	 * @return string ticket key
-	 */
-	public static function generateKey()
-	{
-		// keys consists of 6 numbers zeropadded
+    /**
+     * Generate a unique ticket key used for barcode
+     *
+     * @return string ticket key
+     */
+    public static function generateKey()
+    {
+        // keys consists of 6 numbers zeropadded
         do
         {
             $key = str_pad(rand(1, 999999), 6, "0", STR_PAD_LEFT);
@@ -50,7 +50,7 @@ class Ticket extends \Eloquent {
         } while ($ticket); // if we have ticket we failed; retry
 
         return $key;
-	}
+    }
 
     /**
      * Get (generate if neeed) PDF data

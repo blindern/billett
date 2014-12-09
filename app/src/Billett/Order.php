@@ -62,19 +62,19 @@ class Order extends \Eloquent {
         return static::where('order_text_id', $text_id)->firstOrFail();
     }
 
-	protected $model_suffix = '';
+    protected $model_suffix = '';
     protected $table = 'orders';
     protected $appends = array('total_amount');
 
-	public function tickets()
-	{
-		return $this->hasMany('\\Blindern\\UKA\\Billett\\Ticket'.$this->model_suffix, 'order_id');
-	}
+    public function tickets()
+    {
+        return $this->hasMany('\\Blindern\\UKA\\Billett\\Ticket'.$this->model_suffix, 'order_id');
+    }
 
-	public function payments()
-	{
-		return $this->hasMany('\\Blindern\\UKA\\Billett\\Payment'.$this->model_suffix, 'order_id');
-	}
+    public function payments()
+    {
+        return $this->hasMany('\\Blindern\\UKA\\Billett\\Payment'.$this->model_suffix, 'order_id');
+    }
 
     /**
      * Send tickets and receipt to email

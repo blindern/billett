@@ -1,5 +1,5 @@
 <div class="page-header">
-	<h1>Arrangementer</h1>
+    <h1>Arrangementer</h1>
 </div>
 
 <h2>Kommende arrangementer</h2>
@@ -7,7 +7,7 @@
 <p ng-if="!upcoming">Laster data..</p>
 
 <p ng-if="upcoming && upcoming.length == 0">
-	Ingen arrangementer ble funnet.
+    Ingen arrangementer ble funnet.
 </p>
 
 <div ng-if="upcoming && upcoming.length > 0">
@@ -41,7 +41,7 @@
 
 <h2>Arrangementgrupper</h2>
 <ul>
-	<li ng-repeat="group in eventgroups">
-		<a ng-href="eventgroup/{{group.id}}">{{group.title}}</a>
-	</li>
+    <li ng-repeat="group in eventgroups">
+        <a ng-href="eventgroup/{{group.id}}">{{group.title}}</a>
+    </li>
 </ul>

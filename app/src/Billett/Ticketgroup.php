@@ -12,15 +12,15 @@ class Ticketgroup extends \Eloquent {
         return (float) $val;
     }
 
-	public function tickets()
-	{
-		return $this->hasMany('\\Blindern\\UKA\\Billett\\Ticket'.$this->model_suffix, 'ticketgroup_id');
-	}
+    public function tickets()
+    {
+        return $this->hasMany('\\Blindern\\UKA\\Billett\\Ticket'.$this->model_suffix, 'ticketgroup_id');
+    }
 
-	public function event()
-	{
-		return $this->belongsTo('\\Blindern\\UKA\\Billett\\Event'.$this->model_suffix, 'event_id');
-	}
+    public function event()
+    {
+        return $this->belongsTo('\\Blindern\\UKA\\Billett\\Event'.$this->model_suffix, 'event_id');
+    }
 
     /**
      * Check if there tickets associated that are not expired
