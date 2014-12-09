@@ -125,7 +125,7 @@ class OrderController extends \Controller {
         $data = array(
             'status' => 'ACCEPTED',
             'transaction' => 123,
-            'amount' => $order->total_amount,
+            'amount' => $order->total_amount*100,
         );
 
         $dibs = new DibsPaymentModule;
