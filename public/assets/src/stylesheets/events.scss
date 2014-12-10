@@ -150,10 +150,16 @@
                     .price-label {
 
                     }
+                    .price-fee {
+                        display: block;
+                        color: $gray-light;
+                        font-size: 75%;
+                    }
                 }
                 .ticket-text {
                     color: $gray-light;
                     font-size: 90%;
+                    margin-top: 2px;
                 }
             }
             .count {
@@ -174,10 +180,11 @@
         @media (min-width: $screen-sm-min) {
             .title, .price {
                 display: inline-block;
-                width: 60%;
+                vertical-align: middle;
+                width: 55%;
             }
             .price {
-                width: 40%;
+                width: 45%;
                 text-align: right;
                 .price-label {
                     display: none;
@@ -185,6 +192,30 @@
             }
             .count {
                 margin-top: 2px;
+            }
+        }
+
+        .reservation-ticket-price {
+            color: $gray-light;
+            font-size: 85%;
+            display: block;
+            margin-top: -2px;
+        }
+
+        .reservation-details {
+            opacity: 1;
+            transition: 0.3s linear all;
+            &.ng-hide-remove {
+                opacity: 0;
+                &.ng-hide-remove-active {
+                    opacity: 1;
+                }
+            }
+            &.ng-hide-add {
+                /*opacity: 1;*/
+                &.ng-hide-add-active {
+                    opacity: 0;
+                }
             }
         }
     }
