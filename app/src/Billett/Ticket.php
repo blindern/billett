@@ -58,13 +58,13 @@ class Ticket extends \Eloquent {
      * @param bool Regenerate PDF?
      * @return binary
      */
-    public function getPdfData($regenerate = false)
+    public function getPdfData($regenerate = false, $store = true)
     {
         if (!$this->pdf || $regenerate)
         {
             $p = new PdfTicket($this);
             $this->pdf = $p->getPdfData();
-            $this->save();
+            if ($store) $this->save();
         }
 
         return $this->pdf;

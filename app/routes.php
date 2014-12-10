@@ -17,6 +17,7 @@ Route::resource('/api/event', 'EventController', array(
     'only' => array('show', 'store', 'update', 'destroy')
 ));
 
+Route::get('/api/ticketgroup/{id}/previewticket', 'TicketgroupController@previewTicket');
 Route::resource('/api/ticketgroup', 'TicketgroupController', array(
     'only' => array('index', 'show', 'store', 'update', 'destroy')
 ));

@@ -124,4 +124,34 @@ class TicketgroupController extends Controller {
         $g->delete();
         return 'deleted';
     }
+
+    /**
+     * Preview ticket
+     */
+    public function previewTicket($id)
+    {
+        $this->beforeFilter('auth');
+        $g = Ticketgroup::findOrFail($id);
+
+        $order = new Blindern\UKA\Billett\Order;
+        $order->time = time();
+        $order->order_text_id = 'DUMMY_ID';
+        $order->name = "Ola Normann";
+        $order->email = "billett@blindernuka.no";
+        $order->phone = 12345678;
+        $order->id = 123;
+
+        $ticket = new Blindern\UKA\Billett\Ticket;
+        $ticket->ticketgroup()->associate($g);
+        $ticket->order()->associate($order);
+        $ticket->event()->associate($g->event);
+        $ticket->time = time();
+        $ticket->key = 123456;
+        $ticket->id = 321;
+
+        return Response::make($ticket->getPdfData(true, false), 200, array(
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="'.$ticket->getPdfName().'"'
+        ));
+    }
 }

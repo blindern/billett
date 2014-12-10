@@ -19,10 +19,12 @@ $logo = base64_encode(file_get_contents($logo));
 
 // in development server -TEST is added to orderid
 $orderid = $ticket->order->order_text_id;
-$is_test = false;
+$type_text = '';
 if (substr($orderid, -5) == '-TEST') {
   $orderid = substr($orderid, 0, -5);
-  $is_test = true;
+  $type_text = 'TEST';
+} elseif (strpos($orderid, 'DUMMY') !== false) {
+  $type_text = 'DEMO';
 }
 
 $days = array('man', 'tir', 'ons', 'tor', 'fre', 'lør', 'søn');
@@ -223,8 +225,8 @@ $months = array('jan', 'feb', 'mar', 'apr', 'mai', 'jun', 'jul', 'aug', 'sep', '
       Billett
     </h1>
 
-    <?php if ($is_test): ?>
-      <p class="test">TEST</p>
+    <?php if ($type_text): ?>
+      <p class="test"><?=$type_text;?></p>
     <?php endif; ?>
 
     <div class="container">

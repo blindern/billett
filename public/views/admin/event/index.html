@@ -90,6 +90,7 @@
     <table class="table table-striped">
         <thead>
             <tr>
+                <th>&nbsp;</th>
                 <th>ID</th>
                 <th>Tittel</th>
                 <th><abbr title="Pris inkl. avgift">Pris</abbr></th>
@@ -109,6 +110,11 @@
         </thead>
         <tbody>
             <tr ng-repeat="g in event.ticketgroups">
+                <td>
+                    <a ng-href="api/ticketgroup/{{g.id}}/previewticket" target="_blank">
+                        <span class="glyphicon glyphicon-eye-open" title="Forhåndsvis"></span>
+                    </a>
+                </td>
                 <td>{{g.id}}</td>
                 <td><a href="a/event/{{event.id}}/ticketgroup/{{g.id}}">{{g.title}}</a></td>
                 <td>{{g.price+g.fee|price}}</td>
@@ -137,7 +143,7 @@
         </tbody>
         <tbody>
             <tr>
-                <th colspan="7">&nbsp;</th>
+                <th colspan="8">&nbsp;</th>
                 <th>
                     {{event.ticket_count.totals.free}} /
                     {{event.ticket_count.totals.pending}} /
@@ -155,7 +161,7 @@
                 </th>
             </tr>
             <tr ng-show="event.max_normal_sales">
-                <th colspan="7">Kun &laquo;normale&raquo; salg</th>
+                <th colspan="8">Kun &laquo;normale&raquo; salg</th>
                 <th>
                     {{event.ticket_count.totals.free_normal}} /
                     - /
