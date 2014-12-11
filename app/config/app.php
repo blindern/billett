@@ -123,7 +123,8 @@ return array(
         'Illuminate\Workbench\WorkbenchServiceProvider',
         'Dinesh\Barcode\BarcodeServiceProvider',
         'Intervention\Image\ImageServiceProvider',
-        'KnightSwarm\LaravelSaml\LaravelSamlServiceProvider'
+        'KnightSwarm\LaravelSaml\LaravelSamlServiceProvider',
+        'Nutsweb\LaravelPrerender\LaravelPrerenderServiceProvider'
 
     ),
 

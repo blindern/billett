@@ -46,3 +46,19 @@ return array(
 ```
 
 There are also environment configuration stored in `/app/config/ENVIRONMENT/`, where `ENVIRONMENT` is configured in `/bootstrap/start.php`. This overrides configuration files in `/app/config/`.
+
+### Prerender service
+Search engines, Facebook, and more, will normally only grab the template, and not include response from API-calls. To make sure they get a full page, requests are intercepted and served through a service which generates static html.
+
+We use [Prerender](https://prerender.io/) for this.
+
+To enable configuration for this, create a configuration file for the environment in `app/config/packages/nutsweb/laravel-prerender/ENVIRONMENT/config.php` that enables prerender and sets the token, e.g.:
+
+```php
+<?php
+return [
+    'enable' => true,
+    'prerender_token' => 'TOKEN-HERE'
+];
+?>
+```

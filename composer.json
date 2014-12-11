@@ -14,7 +14,8 @@
 		"dinesh/barcode": "dev-master",
 		"intervention/image": "~2.0",
 		"iio/libmergepdf": "~2.4",
-		"knight-swarm/laravel-saml": "dev-master"
+		"knight-swarm/laravel-saml": "dev-master",
+		"nutsweb/laravel-prerender": "dev-master"
 	},
 	"autoload": {
 		"classmap": [

@@ -15,7 +15,7 @@ var module = angular.module('billett', [
 ]);
 
 module.config(['$routeProvider', function($routeProvider) {
-    $routeProvider.otherwise({redirectTo: '/'});
+    $routeProvider.otherwise({templateUrl: 'views/404.html'});
 }]);
 
 module.config(['$locationProvider', function($locationProvider) {
@@ -63,6 +63,20 @@ module.directive('autoFocus', function($timeout) {
             $timeout(function(){
                 _element[0].focus();
             }, 100);
+        }
+    };
+});
+
+// add tags to head
+module.directive('viewHead', function() {
+    return {
+        restrict: 'A',
+        link: function (scope, element) {
+            //element.removeAttr('view-head');
+            angular.element('head').append(element);
+            scope.$on('$destroy', function () {
+                element.remove();
+            });
         }
     };
 });
