@@ -14,7 +14,7 @@ $is_dev = (bool)\Config::get('app.dev');
     <meta name="description" content="">
     <meta name="author" content="">
     <base href="<?=app('request')->getBaseUrl();?>/">
-    <meta name="fragment" value="!">
+    <meta name="fragment" content="!">
 
     <link rel="icon" type="image/x-icon" href="favicon.ico">
 
