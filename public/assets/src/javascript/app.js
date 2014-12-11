@@ -18,9 +18,11 @@ module.config(['$routeProvider', function($routeProvider) {
     $routeProvider.otherwise({templateUrl: 'views/404.html'});
 }]);
 
-module.config(['$locationProvider', function($locationProvider) {
+module.config(['$locationProvider', '$httpProvider', function($locationProvider, $httpProvider) {
     // use HTML5 history API for nice urls
     $locationProvider.html5Mode(true);
+
+    $httpProvider.interceptors.push('CsrfInterceptor');
 }]);
 
 module.filter('formatdate', function() {
@@ -93,3 +95,14 @@ module.service('ResponseData', function() {
     };
 });
 
+module.factory('CsrfInterceptor', function() {
+    return {
+        'request': function(config) {
+            // don't add csrf token to other domains
+            if (config.url.indexOf("//") == -1) {
+                config.headers['X-Csrf-Token'] = $('meta[name=csrf-token]').attr('content');
+            }
+            return config;
+        }
+    }
+});

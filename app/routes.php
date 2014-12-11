@@ -1,5 +1,7 @@
 <?php
 
+Route::when('*', 'csrf', ['delete', 'patch', 'post', 'put']);
+
 Route::resource('/api/eventgroup', 'EventgroupController', array(
     'only' => array('index', 'show')
 ));

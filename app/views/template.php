@@ -15,6 +15,7 @@ $is_dev = (bool)\Config::get('app.dev');
     <meta name="author" content="">
     <base href="<?=app('request')->getBaseUrl();?>/">
     <meta name="fragment" content="!">
+    <meta name="csrf-token" content="<?=csrf_token();?>">
 
     <link rel="icon" type="image/x-icon" href="favicon.ico">
 

@@ -94,9 +94,12 @@ Route::filter('guest', function()
 |
 */
 
-Route::filter('csrf', function()
+Route::filter('csrf', function($route, $request)
 {
-    if (Session::token() != Input::get('_token'))
+    // POST for DIBS form don't require csrf
+    if (substr($request->path(), 0, 5) == 'dibs/') return;
+
+    if (Session::token() != Input::get('_token') && Session::token() != $request->header('X-Csrf-Token'))
     {
         throw new Illuminate\Session\TokenMismatchException;
     }
