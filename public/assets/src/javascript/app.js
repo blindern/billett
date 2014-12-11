@@ -14,16 +14,14 @@ var module = angular.module('billett', [
     'billett.order'
 ]);
 
-module.config(['$routeProvider', function($routeProvider) {
+module.config(function($httpProvider, $locationProvider, $routeProvider) {
     $routeProvider.otherwise({templateUrl: 'views/404.html'});
-}]);
 
-module.config(['$locationProvider', '$httpProvider', function($locationProvider, $httpProvider) {
     // use HTML5 history API for nice urls
     $locationProvider.html5Mode(true);
 
     $httpProvider.interceptors.push('CsrfInterceptor');
-}]);
+});
 
 module.filter('formatdate', function() {
     return function(datetime, format) {
@@ -41,15 +39,15 @@ module.filter('price', function() {
         var formatNumber = function(number, decimals)
         {
             number = number.toFixed(decimals) + '';
-            x = number.split('.');
-            x1 = x[0];
-            x2 = x.length > 1 ? ',' + x[1] : '';
+            var x = number.split('.');
+            var x1 = x[0];
+            var x2 = x.length > 1 ? ',' + x[1] : '';
             var rgx = /(\d+)(\d{3})/;
             while (rgx.test(x1)) {
                 x1 = x1.replace(rgx, '$1' + ' ' + '$2');
             }
             return x1 + x2;
-        }
+        };
 
         if (typeof(decimals) != "number") decimals = 0;
         return (in_nok ? 'NOK ' : 'kr ') + formatNumber(parseFloat(amount), decimals);
