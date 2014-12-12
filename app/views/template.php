@@ -66,9 +66,9 @@ $is_dev = (bool)\Config::get('app.dev');
                 </a>
             </h3>
             <ul class="nav nav-pills navbar-right">
-                <li ng-class="{ active: isActive('/', '/eventgroup/', '/event/') }"><a href=".">Arrangementer</a></li>
-                <li ng-class="{ active: isActive('/salgsbetingelser') }"><a href="salgsbetingelser">Salgsbetingelser</a></li>
-                <li ng-class="{ active: isActive('/hjelp') }"><a href="hjelp">Hjelp</a></li>
+                <li ng-class="{ active: isActive('/', '/eventgroup/', '/event/') }"><a href="."><span class="glyphicon glyphicon-list"></span> Arrangementer</a></li>
+                <li ng-class="{ active: isActive('/salgsbetingelser') }"><a href="salgsbetingelser"><span class="glyphicon glyphicon-flash"></span> Salgsbetingelser</a></li>
+                <li ng-class="{ active: isActive('/hjelp') }"><a href="hjelp"><span class="glyphicon glyphicon-question-sign"></span> Hjelp</a></li>
             </ul>
         </header>
 
