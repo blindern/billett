@@ -65,4 +65,15 @@
             }
         };
     });
+
+    // showing page as 404
+    module.directive('pageNotFound', function (Page) {
+        return {
+            restrict: 'E',
+            templateUrl: 'assets/views/guest/infopages/404.html',
+            link: function(scope, element, attr) {
+                console.log("linked 404");
+            }
+        };
+    });
 })();

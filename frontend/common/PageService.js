@@ -43,6 +43,8 @@
 
             /**
              * Set page property, optionally connected to scope so it will be removed when scope is destroyed
+             *
+             * Call the return value to remove it manually
              */
             set: function (name, value, bind_scope) {
                 var x = {'val': value};
@@ -51,17 +53,21 @@
                 attrs[name].push(x);
                 setActive(name);
 
-                if (bind_scope) {
-                    bind_scope.$on('$destroy', function() {
-                        for (var i = 0; i < attrs[name].length; i++) {
-                            if (attrs[name][i] == x) {
-                                attrs[name].splice(i, 1);
-                                break;
-                            }
+                var removeMe = function () {
+                    for (var i = 0; i < attrs[name].length; i++) {
+                        if (attrs[name][i] == x) {
+                            attrs[name].splice(i, 1);
+                            setActive(name);
+                            break;
                         }
-                        setActive(name);
-                    });
+                    }
+                };
+
+                if (bind_scope) {
+                    bind_scope.$on('$destroy', removeMe);
                 }
+
+                return removeMe;
             },
 
             /**
@@ -112,6 +118,21 @@
                 $rootScope.loading = true;
 
                 return thisLoader;
+            },
+
+            /**
+             * Set current page as 404
+             *
+             * Used on matched routes where the controller don't find it's resources
+             */
+            set404: function () {
+                $rootScope.page404 = true;
+                var title = this.set('title', '404 Page not found');
+                var ev = $rootScope.$on('$routeChangeStart', function () {
+                    $rootScope.page404 = false;
+                    title(); // remove title from stack
+                    ev(); // delete this event
+                });
             }
         };
     });

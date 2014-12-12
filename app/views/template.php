@@ -77,9 +77,12 @@ $is_dev = (bool)\Config::get('app.dev');
         <hr>
         <?php endif; ?>
 
-        <div ng-show="!loading" ng-view class="main-view"></div>
+        <div ng-show="!loading" ng-if="!page404" ng-view class="main-view"></div>
         <div ng-if="loading" class="page-loading">
             Laster innhold...
+        </div>
+        <div ng-if="page404">
+            <page-not-found></page-not-found>
         </div>
 
         <footer>
