@@ -32,8 +32,9 @@
             AdminEventgroup.get({id: $routeParams['group_id']}, function (ret) {
                 $scope.group = ret;
                 loader();
-            }, function (err) {
-                $location.path('/a');
+            }, function () {
+                loader();
+                Page.set404();
             });
         }
 
@@ -52,8 +53,9 @@
 
                 $scope.time_start_text = parseTime($scope.event.time_start);
                 $scope.time_end_text = parseTime($scope.event.time_end);
-            }, function (err) {
-                $location.path('/a');
+            }, function () {
+                loader();
+                Page.set404();
             });
         }
 

@@ -25,7 +25,8 @@
 
             $scope.event = ret;
         }).error(function () {
-            $location.path('/');
+            loader();
+            Page.set404();
         });
 
         // check for reservation

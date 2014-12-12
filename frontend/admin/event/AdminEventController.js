@@ -19,7 +19,8 @@
             loader();
             $scope.event = ret;
         }, function(err) {
-            $location.path('/a');
+            loader();
+            Page.set404();
         });
 
         $scope.deleteEvent = function() {

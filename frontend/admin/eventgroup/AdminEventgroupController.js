@@ -29,7 +29,8 @@
             });
             $scope.categories.sort();
         }, function () {
-            $location.path('/a');
+            loader();
+            Page.set404();
         });
 
         $scope.filter_sale = "";

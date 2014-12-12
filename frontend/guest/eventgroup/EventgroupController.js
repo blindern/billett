@@ -31,7 +31,8 @@
 
             $scope.days = r;
         }).error(function () {
-            $location.path('/');
+            loader();
+            Page.set404();
         });
     });
 })();

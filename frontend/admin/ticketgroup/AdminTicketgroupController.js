@@ -32,7 +32,8 @@
 
             $scope.ticketgroup = ret;
         }, function (err) {
-            $location.path('/a/event/' + $scope.event_id);
+            loader();
+            Page.set404();
         });
 
         $scope.updateTicketgroup = function () {

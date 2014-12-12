@@ -25,8 +25,9 @@
         AdminEvent.get({id: $routeParams['id']}, function (ret) {
             loader();
             $scope.event = ret;
-        }, function (err) {
-            $location.path('/a/event/' + $scope.event_id);
+        }, function () {
+            loader();
+            Page.set404();
         });
 
         $scope.addTicketgroup = function () {
