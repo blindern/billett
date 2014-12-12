@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "262efe1ae9ea4375f7dfd42187618947",
+    "hash": "f41a8faad87314cd991613a757ea67ae",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -682,16 +682,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v4.2.11",
+            "version": "v4.2.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "e29253c7f29e3b1ca716de7fe309b272e3ddf47d"
+                "reference": "70a60f2ff9b96b3fcd88a68ef5382557733fe671"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/e29253c7f29e3b1ca716de7fe309b272e3ddf47d",
-                "reference": "e29253c7f29e3b1ca716de7fe309b272e3ddf47d",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/70a60f2ff9b96b3fcd88a68ef5382557733fe671",
+                "reference": "70a60f2ff9b96b3fcd88a68ef5382557733fe671",
                 "shasum": ""
             },
             "require": {
@@ -793,7 +793,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2014-10-04 18:48:27"
+            "time": "2014-12-11 17:14:36"
         },
         {
             "name": "monolog/monolog",
@@ -963,13 +963,13 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/JeroenNoten/Laravel-Prerender.git",
-                "reference": "95b252c04b367e64d57c1f4d372d389d82d96f20"
+                "url": "https://github.com/henrist/Laravel-Prerender.git",
+                "reference": "9ad30d9173753b16466dd2423048d2455f2e2572"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JeroenNoten/Laravel-Prerender/zipball/95b252c04b367e64d57c1f4d372d389d82d96f20",
-                "reference": "95b252c04b367e64d57c1f4d372d389d82d96f20",
+                "url": "https://api.github.com/repos/henrist/Laravel-Prerender/zipball/9ad30d9173753b16466dd2423048d2455f2e2572",
+                "reference": "9ad30d9173753b16466dd2423048d2455f2e2572",
                 "shasum": ""
             },
             "require": {
@@ -983,7 +983,6 @@
                     "Nutsweb\\LaravelPrerender": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -998,7 +997,10 @@
                 "laravel",
                 "prerender"
             ],
-            "time": "2014-09-30 12:02:30"
+            "support": {
+                "source": "https://github.com/henrist/Laravel-Prerender/tree/master"
+            },
+            "time": "2014-12-12 22:06:28"
         },
         {
             "name": "patchwork/utf8",

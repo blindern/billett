@@ -6,6 +6,10 @@
 		{
 			"type": "vcs",
 			"url": "https://github.com/henrist/laravel-saml"
+		},
+		{
+			"type": "vcs",
+			"url": "https://github.com/henrist/Laravel-Prerender"
 		}
 	],
 	"require": {
