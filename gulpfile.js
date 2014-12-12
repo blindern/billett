@@ -93,7 +93,7 @@ gulp.task('fonts', function() {
 });
 
 gulp.task('watch', function() {
-    gulp.watch('public/assets/src/stylesheets/**/*.scss', ['styles']);
+    gulp.watch('frontend/**/*.scss', ['styles']);
     gulp.watch(js_files, ['scripts']);
     gulp.watch('frontend/**/*.html', ['templates']);
 });
