@@ -109,7 +109,8 @@
         '*.iso',
         '*.flv',
         '*.m4v',
-        '*.torrent'
+        '*.torrent',
+        '*/image*' // don't prerender raw image
     ],
 
 
