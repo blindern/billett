@@ -16,5 +16,7 @@
         $rootScope.$on('$routeChangeStart', function () {
             Page.setDefault('url', $location.absUrl());
         });
+
+        $rootScope.absBaseUrl = $location.absUrl().slice(0, -$location.url().length) + "/";
     });
 })();
