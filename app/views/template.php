@@ -85,7 +85,7 @@ $is_dev = (bool)\Config::get('app.dev');
         <footer>
             <ul>
                 <li>2014</li>
-                <li><a href="http://blindernka.no">UKA på Blindern</a></li>
+                <li><a href="http://blindernuka.no">UKA på Blindern</a></li>
                 <li><a href="http://foreningenbs.no">Foreningen Blindern Studenterhjem</a></li>
                 <li>
                     <a href="a">Administrasjon</a>
