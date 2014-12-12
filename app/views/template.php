@@ -21,7 +21,7 @@ $is_dev = (bool)\Config::get('app.dev');
     <meta property="og:type" content="{{meta.ogType||'website'}}">
     <meta property="og:image" content="{{meta.ogImage||meta.image}}" ng-if="meta.ogImage||meta.image">
     <meta property="og:url" content="{{meta.url}}" ng-if="meta.url">
-    <meta property="og:description" content="{{meta.ogDescription}}" ng-if="meta.ogDescription">
+    <meta property="og:description" content="{{meta.ogDescription||meta.description}}" ng-if="meta.ogDescription||meta.description">
     <meta property="og:site_name" content="UKA på Blindern">
     <meta property="og:locale" content="nb_NO">
     <meta property="fb:admins" content="707840346">
