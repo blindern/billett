@@ -60,7 +60,11 @@ $is_dev = (bool)\Config::get('app.dev');
 
     <div class="container" ng-class="{noadmin:!isAdminPage()}">
         <header class="header navbar" ng-controller="HeaderController">
-            <h3 class="navbar-left"><a href="http://blindernuka.no" class="text-muted">UKA på Blindern</a></h3>
+            <h3 class="navbar-left">
+                <a href="http://blindernuka.no" class="text-muted">
+                    <img src="assets/graphics/uka_gul_pikto.gif" alt="">UKA på Blindern
+                </a>
+            </h3>
             <ul class="nav nav-pills navbar-right">
                 <li ng-class="{ active: isActive('/', '/eventgroup/', '/event/') }"><a href=".">Arrangementer</a></li>
                 <li ng-class="{ active: isActive('/salgsbetingelser') }"><a href="salgsbetingelser">Salgsbetingelser</a></li>
