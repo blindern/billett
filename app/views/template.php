@@ -78,7 +78,7 @@ $is_dev = (bool)\Config::get('app.dev');
         <?php endif; ?>
 
         <div ng-show="!loading" ng-view class="main-view"></div>
-        <div ng-show="loading" class="page-loading">
+        <div ng-if="loading" class="page-loading">
             Laster innhold...
         </div>
 
