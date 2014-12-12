@@ -30,6 +30,7 @@ Thumbs.db
 .env.php
 /app/config/*/dibs.php
 /app/config/packages/nutsweb/laravel-prerender/local/config.php
+/app/config/packages/nutsweb/laravel-prerender/hsw/config.php
 
 # SimpleSAMLphp will be symlinked in /billett/saml/
 /public/saml
