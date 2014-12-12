@@ -34,7 +34,7 @@
     ]);
 
     module.config(function ($locationProvider, $routeProvider) {
-        $routeProvider.otherwise({templateUrl: 'infopages/404.html'});
+        $routeProvider.otherwise({templateUrl: 'assets/views/guest/infopages/404.html'});
 
         // use HTML5 history API for nice urls
         $locationProvider.html5Mode(true);
