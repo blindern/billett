@@ -205,15 +205,15 @@
         .reservation-details {
             opacity: 1;
             transition: 0.3s linear all;
-            &.ng-hide-remove {
+            &.ng-enter {
                 opacity: 0;
-                &.ng-hide-remove-active {
+                &.ng-enter-active {
                     opacity: 1;
                 }
             }
-            &.ng-hide-add {
+            &.ng-leave {
                 /*opacity: 1;*/
-                &.ng-hide-add-active {
+                &.ng-leave-active {
                     opacity: 0;
                 }
             }

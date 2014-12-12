@@ -1,6 +1,6 @@
-<page-property name="title" value="{{event.title}} ({{event.time_start|formatdate:'D. MMM HH:mm'}})"></page-property>
+<page-property name="title" value="{{event.title}} ({{event.time_start|formatdate:'D. MMM \\k\\l HH:mm'}})"></page-property>
 <page-property name="image" value="event/{{event.id}}/image"></page-property>
-<page-property name="description" value="{{event.description_short||event.description}}" ng-if="event.description_short||event.description"></page-property>
+<page-property name="description" value="{{event.description_short||event.description}}"></page-property>
 
 <div class="event-page">
 
@@ -11,12 +11,12 @@
         </span>
         {{event.title}}
         <span class="eventdate-header">({{event.time_start|formatdate:'DD.MM'}})</span>
-        <span ng-show="AuthService.hasRole('billett.admin')" class="pull-right">
+        <span ng-if="AuthService.hasRole('billett.admin')" class="pull-right">
             <a ng-href="a/event/{{event.id}}" class="btn btn-primary">Admin</a>
             <a ng-href="a/event/{{event.id}}/edit" class="btn btn-primary">Rediger</a>
         </span>
     </h1>
-    <p ng-show="!event.is_published">Dette arrangementet er ikke publisert. Du er innlogget og kan se.</p>
+    <p ng-if="!event.is_published">Dette arrangementet er ikke publisert. Du er innlogget og kan se.</p>
 </div>
 
 <!-- TODO: ics-link -->
@@ -31,78 +31,78 @@
             <dt>Tidspunkt</dt>
             <dd>{{event.time_start|formatdate:'dddd D. MMMM YYYY'}}<br>
                 kl. {{event.time_start|formatdate:'HH:mm'}}
-                <span ng-show="event.time_end">til {{event.time_end|formatdate:'HH:mm'}}</span>
+                <span ng-if="event.time_end">til {{event.time_end|formatdate:'HH:mm'}}</span>
             </dd>
-            <dt ng-show="event.category">Kategori</dt>
-            <dd ng-show="event.category">{{event.category}}</dd>
-            <dt ng-show="event.location">Sted</dt>
-            <dd ng-show="event.location">{{event.location}}</dd>
-            <dt ng-show="event.age_restriction">Aldersgrense</dt>
-            <dd ng-show="event.age_restriction">{{event.age_restriction}} år</dd>
+            <dt ng-if="event.category">Kategori</dt>
+            <dd ng-if="event.category">{{event.category}}</dd>
+            <dt ng-if="event.location">Sted</dt>
+            <dd ng-if="event.location">{{event.location}}</dd>
+            <dt ng-if="event.age_restriction">Aldersgrense</dt>
+            <dd ng-if="event.age_restriction">{{event.age_restriction}} år</dd>
         </dl>
 
-        <div ng-show="event.description" marked="event.description" class="event-description"></div>
+        <div ng-if="event.description" marked="event.description" class="event-description"></div>
 
-        <p ng-show="event.link" class="event-link">
+        <p ng-if="event.link" class="event-link">
             <a ng-href="{{event.link}}">Gå til arrangementsartikkel &raquo;</a>
         </p>
     </div>
 
     <div class="col-sm-7 event-right-col">
 
-        <div ng-show="!reservation || event.web_selling_status == 'sale'">
-            <div ng-show="event.web_selling_status == 'unknown'" class="panel panel-default">
+        <div ng-if="!reservation || event.web_selling_status == 'sale'">
+            <div ng-if="event.web_selling_status == 'unknown'" class="panel panel-default">
                 <div class="panel-body">
-                    <div ng-show="!event.selling_text">Informasjon om billetter for dette arrangementet er for øyeblikket ikke tilgjengelig. Sjekk tilbake senere.</div>
-                    <div ng-show="event.selling_text" class="selling-text" marked="event.selling_text"></div>
+                    <div ng-if="!event.selling_text">Informasjon om billetter for dette arrangementet er for øyeblikket ikke tilgjengelig. Sjekk tilbake senere.</div>
+                    <div ng-if="event.selling_text" class="selling-text" marked="event.selling_text"></div>
                 </div>
             </div>
 
-            <div ng-show="event.web_selling_status == 'old'" class="panel panel-default">
+            <div ng-if="event.web_selling_status == 'old'" class="panel panel-default">
                 <div class="panel-body">
                     Billettsalg for arrangementet er avsluttet.
                 </div>
             </div>
 
-            <div ng-show="event.web_selling_status == 'no_web_tickets'" class="panel panel-default">
+            <div ng-if="event.web_selling_status == 'no_web_tickets'" class="panel panel-default">
                 <div class="panel-body">
                     Dette arrangementet selges ikke på nett eller har foreløpig ingen tilgjengelige billetter.
                 </div>
             </div>
 
-            <div ng-show="event.web_selling_status == 'timeout'" class="panel panel-default">
+            <div ng-if="event.web_selling_status == 'timeout'" class="panel panel-default">
                 <div class="panel-body">
                     Nettsalget for dette arrangementet har avsluttet. Evt. tilgjengelige billetter selges i døra.
                 </div>
             </div>
 
-            <div ng-show="event.web_selling_status == 'sold_out'" class="panel panel-default">
+            <div ng-if="event.web_selling_status == 'sold_out'" class="panel panel-default">
                 <div class="panel-body">
                     Arrangementet er dessverre utsolgt. Sjekk tilbake senere for se å om det kanskje blir gjort nye billetter tilgjengelig.
                 </div>
             </div>
         </div>
 
-        <div ng-show="(!reservation && event.web_selling_status == 'sale') || (reservation && !checkout && event.web_selling_status != 'no_tickets')">
-            <div class="panel panel-warning" ng-show="reservation && reservation.tickets[0].event.id != event.id">
+        <div ng-if="(!reservation && event.web_selling_status == 'sale') || (reservation && !checkout && event.web_selling_status != 'no_tickets')">
+            <div class="panel panel-warning" ng-if="reservation && reservation.tickets[0].event.id != event.id">
                 <div class="panel-heading">Kjøp billetter</div>
                 <div class="panel-body">
                     Du holder allerede på å bestille billetter til <a ng-href="event/{{reservation.tickets[0].event.alias||reservation.tickets[0].event.id}}">{{reservation.tickets[0].event.title}}</a> og må fullføre/avbryte den bestillingen først.
                 </div>
             </div>
 
-            <div class="panel panel-info buy-form" ng-show="(!reservation || reservation.tickets[0].event.id == event.id) && loadingReservation">
+            <div class="panel panel-info buy-form" ng-if="(!reservation || reservation.tickets[0].event.id == event.id) && loadingReservation">
                 <div class="panel-heading">Kjøp billetter</div>
                 <div class="panel-body">
                     Ser etter eksisterende ordrereservasjon ...
                 </div>
             </div>
 
-            <div class="panel panel-info buy-form" ng-show="(!reservation || reservation.tickets[0].event.id == event.id) && !loadingReservation">
+            <div class="panel panel-info buy-form" ng-if="(!reservation || reservation.tickets[0].event.id == event.id) && !loadingReservation">
                 <div class="panel-heading">Kjøp billetter</div>
                 <div class="panel-body">
                     <form class="form-horizontal" ng-submit="!form.$valid || placeOrder(forcePay)" name="form">
-                        <div ng-show="!reservation">
+                        <div ng-if="!reservation">
                             <p>Ved kjøp av billetter får du tilsendt en elektronisk billett i PDF-format på
                                 e-post som printes ut eller tas med på mobiltelefon til arrangementet.
                                 <a href="hjelp">Informasjon om billetter</a></p>
@@ -115,7 +115,7 @@
                                         {{ticketgroup.price+ticketgroup.fee|price:true}}
                                         <span class="price-fee">Hvorav {{ticketgroup.fee|price:true}} i gebyr</span>
                                     </div>
-                                    <div ng-show="ticketgroup.ticket_text" class="ticket-text">
+                                    <div ng-if="ticketgroup.ticket_text" class="ticket-text">
                                         {{ticketgroup.ticket_text}}
                                     </div>
                                 </div><!-- white space fix for inline-block
@@ -136,7 +136,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div ng-show="reservation">
+                        <div ng-if="reservation">
                             <p>Du har nå reservert billetter. For å ikke risikere og miste reservasjonen må du fullføre eller oppdatere skjemaet innen 10 minutter.</p>
 
                             <div class="form-group">
@@ -150,7 +150,7 @@
                             </div>
                         </div>
 
-                        <div class="reservation-details" ng-show="reservation || newres.count > 0">
+                        <div class="reservation-details" ng-if="reservation || newres.count > 0">
                             <hr>
                             <div class="form-group">
                                 <label class="text-right col-sm-4">Totalt å betale</label>
@@ -188,7 +188,7 @@
                             <p class="text-center">
                                 <input type="submit" value="Gå til betaling" ng-click="forcePay=false" class="btn btn-primary">
                                 <input type="submit" value="Overstyr betaling" ng-click="forcePay=true" class="btn btn-default">
-                                <input class="btn btn-danger" type="button" value="Avbryt" ng-click="abortOrder()" ng-show="reservation">
+                                <input class="btn btn-danger" type="button" value="Avbryt" ng-click="abortOrder()" ng-if="reservation">
                             </p>
                             <hr>
                         </div>
@@ -203,7 +203,7 @@
             </p>
         </div>
 
-        <div ng-show="checkout">
+        <div ng-if="checkout">
             <div class="panel panel-info">
                 <div class="panel-body">
                     <form action="{{checkout_url}}" method="post" id="checkoutForm">
