@@ -17,6 +17,9 @@ Thumbs.db
 /public/assets/stylesheets/frontend.css
 /public/assets/stylesheets/frontend.css.map
 /public/assets/fonts/
+/public/assets/views/
+/public/assets/templates.js
+/public/assets/templates-admin.js
 
 # IDEA-project-files
 .idea/

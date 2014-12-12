@@ -1,11 +1,14 @@
 var gulp = require('gulp'),
     sass = require('gulp-sass'),
-    sourcemaps = require('gulp-sourcemaps');
+    sourcemaps = require('gulp-sourcemaps'),
     uglify = require('gulp-uglify'),
     concat = require('gulp-concat'),
     ngAnnotate = require('gulp-ng-annotate'),
     gulpif = require('gulp-if'),
-    args = require('yargs').argv;
+    args = require('yargs').argv,
+    templates = require('gulp-angular-templatecache'),
+    minifyHTML = require('gulp-minify-html'),
+    rename = require('gulp-rename');
 
 // run with --production to do more compressing etc
 var isProd = !!args.production;
@@ -25,12 +28,14 @@ var js_files = [
     "./bower_components/marked/lib/marked.js",
     "./bower_components/angular-marked/angular-marked.js",
     "./bower_components/ngtoast/dist/ngToast.js",
-    "./public/assets/src/javascript/**/*.js"
+    "./frontend/*.js",
+    "./frontend/**/_*.js",
+    "./frontend/**/*.js"
 ];
 
 var css_files = [
     "./bower_components/ngtoast/dist/ngToast.css",
-    "public/assets/src/stylesheets/frontend.scss"
+    "frontend/app.scss"
 ];
 
 gulp.task('styles', function() {
@@ -52,6 +57,36 @@ gulp.task('scripts', function() {
         .pipe(gulp.dest('public/assets/javascript'));
 });
 
+gulp.task('templates', function() {
+    gulp.start('templates-normal', 'templates-admin');
+    return gulp.src('frontend/**/*.html')
+        .pipe(gulp.dest('public/assets/views'));
+});
+
+gulp.task('templates-normal', function() {
+    return gulp.src(['frontend/**/*.html', '!frontend/admin/**/*.html'])
+        .pipe(rename(function(path) {
+            path.dirname = "views/" + path.dirname;
+        }))
+        /*.pipe(minifyHTML({
+            quotes: true
+        }))*/
+        .pipe(templates('templates.js', {module: 'billett'}))
+        .pipe(gulp.dest('public/assets'));
+});
+
+gulp.task('templates-admin', function() {
+    return gulp.src('frontend/admin/**/*.html')
+        .pipe(rename(function(path) {
+            path.dirname = "views/admin/" + path.dirname;
+        }))
+        /*.pipe(minifyHTML({
+            quotes: true
+        }))*/
+        .pipe(templates('templates-admin.js', {module: 'billett'}))
+        .pipe(gulp.dest('public/assets'));
+});
+
 gulp.task('fonts', function() {
     return gulp.src('./bower_components/bootstrap-sass-official/assets/fonts/**')
         .pipe(gulp.dest('./public/assets/fonts'));
@@ -60,13 +95,14 @@ gulp.task('fonts', function() {
 gulp.task('watch', function() {
     gulp.watch('public/assets/src/stylesheets/**/*.scss', ['styles']);
     gulp.watch(js_files, ['scripts']);
+    gulp.watch('frontend/**/*.html', ['templates']);
 });
 
 gulp.task('production', function() {
     isProd = true;
-    gulp.start('styles', 'scripts', 'fonts');
+    gulp.start('styles', 'scripts', 'fonts', 'templates');
 });
 
 gulp.task('default', function() {
-    gulp.start('styles', 'scripts');
+    gulp.start('styles', 'scripts', 'templates');
 });

@@ -23,6 +23,10 @@ $is_dev = (bool)\Config::get('app.dev');
 
     <link href="assets/stylesheets/frontend.css" rel="stylesheet">
     <script src="assets/javascript/frontend.js"></script>
+    <script src="assets/templates.js"></script>
+    <?php if ($user): ?>
+    <script src="assets/templates-admin.js"></script>
+    <?php endif; ?>
 
     <script type="text/javascript">
     var logged_in = <?php echo json_encode((bool) $user); ?>;
