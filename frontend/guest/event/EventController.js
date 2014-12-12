@@ -23,7 +23,6 @@
                 return;
             }
 
-            Page.setTitle(ret.title);
             $scope.event = ret;
         }).error(function () {
             $location.path('/');

@@ -1,3 +1,7 @@
+<page-property name="title" value="{{event.title}} ({{event.time_start|formatdate:'D. MMM HH:mm'}})"></page-property>
+<page-property name="image" value="event/{{event.id}}/image"></page-property>
+<page-property name="description" value="{{event.description_short||event.description}}" ng-if="event.description_short||event.description"></page-property>
+
 <div class="event-page">
 
 <div class="page-header">

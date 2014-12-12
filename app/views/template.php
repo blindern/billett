@@ -7,19 +7,29 @@ $is_dev = (bool)\Config::get('app.dev');
 
 ?>
 <!doctype html>
-<html lang="nb" ng-app="billett" ng-controller="PageController">
+<html lang="nb" prefix="og: http://ogp.me/ns#" ng-app="billett" ng-controller="PageController">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="{{meta.description}}">
+    <meta name="author" content="UKA på Blindern">
     <base href="<?=app('request')->getBaseUrl();?>/">
     <meta name="fragment" content="!">
     <meta name="csrf-token" content="<?=csrf_token();?>">
 
+    <meta property="og:title" content="{{meta.title||'UKA på Blindern'}}">
+    <meta property="og:type" content="{{meta.ogType||'website'}}">
+    <meta property="og:image" content="{{meta.ogImage}}" ng-if="meta.ogImage">
+    <meta property="og:url" content="{{meta.url}}" ng-if="meta.url">
+    <meta property="og:description" content="{{meta.ogDescription}}" ng-if="meta.ogDescription">
+    <meta property="og:site_name" content="UKA på Blindern">
+    <meta property="og:locale" content="nb_NO">
+    <meta property="fb:admins" content="707840346">
+    <meta property="fb:app_id" content="109019109266369" />
+
     <link rel="icon" type="image/x-icon" href="favicon.ico">
 
-    <title ng-bind="title">UKA på Blindern</title>
+    <title ng-bind="meta.title">UKA på Blindern</title>
 
     <link href="assets/stylesheets/frontend.css" rel="stylesheet">
     <script src="assets/javascript/frontend.js"></script>

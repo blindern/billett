@@ -14,6 +14,7 @@ class EventGuest extends Event {
         'category',
         'location',
         'description',
+        'description_short',
         'age_restriction',
         'web_selling_status',
         'ticketgroups',

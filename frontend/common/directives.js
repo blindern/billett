@@ -1,7 +1,9 @@
 (function() {
     'use strict';
 
-    var module = angular.module('billett.common.directives', []);
+    var module = angular.module('billett.common.directives', [
+        'billett.common.PageService'
+    ]);
 
     // helper directive to mark a form input with has-error class
     // usage: <div form-input-check="form-name,input-name">
@@ -48,6 +50,18 @@
                 $timeout(function(){
                     _element[0].focus();
                 }, 100);
+            }
+        };
+    });
+
+    // adding page properties
+    module.directive('pageProperty', function(Page, $timeout) {
+        return {
+            restrict: 'E',
+            link: function(scope, element, attr) {
+                attr.$observe('value', function(value) {
+                    Page.set(attr['name'], attr['value'], scope);
+                });
             }
         };
     });
