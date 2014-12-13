@@ -93,7 +93,7 @@
         };
 
         $scope.placeOrder = function (force) {
-            if (!$scope.accept_terms) {
+            if (!$scope.contact.accept_terms) {
                 alert("Du må godta betingelsene for å fullføre.");
                 return;
             }
