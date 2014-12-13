@@ -20,12 +20,12 @@
     border-radius: 3px;
     padding: 3px;
     margin: 2px 0;
-    &:hover {
-      background-color: #EEEEEE;
-    }
-
     &:nth-child(odd) {
       background-color: #F5F5F5;
+    }
+
+    &:hover {
+      background-color: #EEEEEE;
     }
 
     @media (min-width: $grid-float-breakpoint) {
