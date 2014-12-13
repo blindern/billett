@@ -15,7 +15,8 @@
     "angular-resource": "~1.3.3",
     "angular-file-upload": "~1.1.5",
     "angular-marked": "~0.0.12",
-    "ngtoast": "~1.2.0"
+    "ngtoast": "~1.2.0",
+    "angular-google-analytics": "~0.0.9"
   },
   "devDependencies": {
     "angular-ui-utils": "~0.1.1"

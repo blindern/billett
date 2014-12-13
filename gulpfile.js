@@ -28,6 +28,7 @@ var js_files = [
     "./bower_components/marked/lib/marked.js",
     "./bower_components/angular-marked/angular-marked.js",
     "./bower_components/ngtoast/dist/ngToast.js",
+    "./bower_components/angular-google-analytics/dist/angular-google-analytics.js",
     "./frontend/*.js",
     "./frontend/**/_*.js",
     "./frontend/**/*.js"

@@ -6,7 +6,7 @@
         'ngToast'
     ]);
 
-    module.factory('Page', function ($rootScope, ngToast) {
+    module.factory('Page', function ($rootScope, $q, ngToast) {
         var activeLoader;
         $rootScope.$on('$routeChangeStart', function () {
             $rootScope.loading = false;
@@ -107,17 +107,29 @@
              * Set page as loading and return function to call when loading completes
              */
             setLoading: function () {
-                var thisLoader = activeLoader = function () {
+                var thisLoader = activeLoader = $q.defer();
+
+                $rootScope.loading = true;
+                return function () {
                     if (thisLoader == activeLoader) {
                         console.log("correct loader");
+                        thisLoader.resolve();
+                        activeLoader = null;
                         $rootScope.loading = false;
                     } else {
                         console.log("incorrect loader");
+                        thisLoader.reject();
                     }
                 };
-                $rootScope.loading = true;
+            },
 
-                return thisLoader;
+            /**
+             * Get loader promise if it exists
+             */
+            getPageLoaderPromise: function () {
+                if (activeLoader) {
+                    return activeLoader.promise;
+                }
             },
 
             /**
