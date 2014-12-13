@@ -41,6 +41,7 @@
         $locationProvider.html5Mode(true);
 
         AnalyticsProvider.setAccount('UA-19030223-1');
+        AnalyticsProvider.trackPages(false);
         AnalyticsProvider.trackPrefix('billett');
         AnalyticsProvider.useAnalytics(true);
         AnalyticsProvider.useECommerce(true, false);
