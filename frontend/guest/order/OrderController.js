@@ -26,7 +26,8 @@
 
         // TODO: don't add multiple times if user is reloading page
 
-        Analytics.addTrans(res.order.order_text_id, 'Billett UKA på Blindern', res.payment.amount, 0, 0, '', '', '', 'NOK');
+        var is_test = res.order.order_text_id.slice(-5) == "-TEST";
+        Analytics.addTrans(res.order.order_text_id, 'Billett UKA på Blindern' + (is_test ? ' (TEST)' : ''), res.payment.amount, 0, 0, '', '', '', 'NOK');
 
         // group the entries by ticketgroup
         var ticketGroups = {};
@@ -37,7 +38,7 @@
                 ticketGroups[ticket.ticketgroup.id] = [
                     res.order.order_text_id,
                     ticket.event.id + '-' + ticket.ticketgroup.id,
-                    ticket.event.title + '(' + ticket.ticketgroup.title + ')',
+                    ticket.event.title + ' (' + ticket.ticketgroup.title + ')',
                     ticket.event.category,
                     ticket.ticketgroup.price + ticket.ticketgroup.fee,
                     1
