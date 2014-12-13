@@ -14,49 +14,6 @@
     }
 }
 
-
-.table-tbody-spacing > tbody:before {
-    line-height: 10px;
-    content: '-';
-    visibility: hidden;
-    display: block;
-}
-
-.eventgroup-page {
-    .events-table {
-        tbody {
-            &::before {
-                line-height: 20px;
-                content: '-';
-                visibility: hidden;
-                display: block;
-            }
-            tr:nth-child(even) {
-                td,
-                th {
-                    background-color: $table-bg-accent;
-                }
-            }
-            th {
-                font-weight: normal;
-                color: #444;
-                background: transparent !important;
-                border-top: none;
-                border-bottom-width: 2px;
-            }
-            tr:nth-child(2) td {
-                border-top-width: 2px !important;
-            }
-            tr:nth-child(1),
-            tr:nth-child(2),
-            tr:nth-child(4) {
-                white-space: nowrap;
-            }
-        }
-    }
-}
-
-
 /*
  * shared between admin/eventgroup and guest/eventgroup
  */
