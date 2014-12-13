@@ -1,0 +1,27 @@
+.admin-event {
+  .event-image {
+    margin-top: 1em;
+    position: relative;
+    .upload-tip {
+      position: absolute;
+      background: #EEE;
+      padding: 3px;
+      display: none;
+      left: 0;
+    }
+    &:hover .upload-tip {
+      display: block;
+    }
+    &.nv-file-over {
+      outline: 3px dotted #333;
+    }
+
+    @media (min-width: $screen-md-min) {
+      .upload-tip {
+        right: 0;
+        left: auto;
+      }
+      text-align: right;
+    }
+  }
+}

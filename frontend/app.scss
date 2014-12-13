@@ -6,4 +6,9 @@ $screen-sm: 630px;
 
 @import "common/events";
 
+@import "admin/event/event";
+@import "admin/eventgroup/eventgroup";
+
 @import "guest/eventgroup/eventgroup";
+@import "guest/event/event";
+

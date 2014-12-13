@@ -1,0 +1,67 @@
+.admin-eventgroup {
+  table > tbody::before {
+    line-height: 20px;
+    content: '-';
+    visibility: hidden;
+    display: block;
+  }
+  table tbody th {
+    font-weight: normal;
+    color: #444;
+    background: transparent !important;
+    border-top: none;
+    border-bottom-width: 2px;
+  }
+  table tbody > tr:nth-child(2) td {
+    border-top-width: 2px !important;
+  }
+  table {
+    > tbody > tr:nth-child(even) {
+      > td,
+      > th {
+        background-color: $table-bg-accent;
+      }
+    }
+  }
+  table th:nth-child(5), table td:nth-child(5),
+  table th:nth-child(6), table td:nth-child(6),
+  table th:nth-child(7), table td:nth-child(7) {
+    text-align: right;
+  }
+  table th:nth-child(8), table td:nth-child(8),
+  table th:nth-child(9), table td:nth-child(9) {
+    text-align: center;
+  }
+  table td:nth-child(8),
+  table td:nth-child(9) {
+    background-color: hsl(120,100%,90%) !important;
+  }
+  /*table td:nth-child(8) {
+
+  }*/
+  table tr.event-not-published {
+    td {
+      opacity: 0.5;
+    }
+    td:nth-child(8),
+    td:nth-child(9) {
+      opacity: 1;
+    }
+    td:nth-child(8) {
+      background-color: hsl(0,100%,90%) !important;
+    }
+  }
+  table tr.event-no-selling {
+    td:nth-child(9) {
+      background-color: hsl(0,100%,90%) !important;
+    }
+  }
+
+  .eventgroup-event-action {
+    cursor: pointer;
+  }
+
+  .event-not-selling {
+    opacity: .3;
+  }
+}
