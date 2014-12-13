@@ -23,5 +23,14 @@
         $http.get('api/eventgroup').success(function (ret) {
             $scope.eventgroups = ret;
         });
+
+        var categories = [];
+        $scope.categoryNum = function (category) {
+            var i = categories.indexOf(category);
+            if (i == -1) {
+                i = categories.push(category) - 1;
+            }
+            return i;
+        }
     });
 })();
