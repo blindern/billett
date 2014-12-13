@@ -42,13 +42,19 @@ header.header {
 
 
 h1 {
-  font-size: 28px;
+  font-size: 2.8rem;
 }
 h2 {
-  font-size: 25px;
+  font-size: 2.3rem;
 }
 h3 {
-  font-size: 23px;
+  font-size: 1.8rem;
+}
+h4 {
+  font-size: 1.4rem;
+}
+h5 {
+  font-size: 1.2rem;
 }
 @media (min-width: $grid-float-breakpoint) {
   header.header {
@@ -63,13 +69,19 @@ h3 {
     }
   }
   h1 {
-    font-size: $font-size-h1;
+    font-size: 3.5rem;
   }
   h2 {
-    font-size: $font-size-h2;
+    font-size: 2.9rem;
   }
   h3 {
-    font-size: $font-size-h3;
+    font-size: 2.3rem;
+  }
+  h4 {
+    font-size: 1.7rem;
+  }
+  h5 {
+    font-size: 1.3rem;
   }
 }
 
