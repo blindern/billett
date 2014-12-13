@@ -15,8 +15,6 @@
     });
 
     module.controller('OrderController', function (Page, $location, $scope, ResponseData, Analytics) {
-        Page.setTitle('Betaling');
-
         var res = ResponseData.get('order_receipt');
         if (!res) {
             $location.path('/');

@@ -1,3 +1,6 @@
+<page-property name="title" value="Kvittering" ng-if="payment.status == 'ACCEPTED'"></page-property>
+<page-property name="title" value="Ordrebekreftelse" ng-if="payment.status != 'ACCEPTED'"></page-property>
+
 <div class="page-header">
     <h1 ng-show="payment.status == 'ACCEPTED'">Kvittering</h1>
     <h1 ng-show="payment.status != 'ACCEPTED'">Ordrebekreftelse</h1>
