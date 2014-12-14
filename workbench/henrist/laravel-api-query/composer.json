@@ -1,0 +1,21 @@
+{
+    "name": "henrist/laravel-api-query",
+    "description": "Package making listing of API-endpoint easier",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Henrik Steen",
+            "email": "henrist@henrist.net"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/support": "4.2.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Henrist\\LaravelApiQuery\\": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}
