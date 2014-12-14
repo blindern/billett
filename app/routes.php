@@ -28,6 +28,8 @@ Route::resource('/api/ticketgroup', 'TicketgroupController', array(
 Route::get('/event/{id}/image', 'EventController@image');
 Route::post('/event/{id}/image', 'EventController@uploadImage');
 
+Route::get('/api/ticket/{id}/pdf', 'TicketController@pdf');
+
 
 // payment (callback)
 Route::post('/dibs/cancel', 'DibsController@cancel');
@@ -35,15 +37,7 @@ Route::post('/dibs/callback', 'DibsController@callback');
 Route::post('/dibs/accept', 'DibsController@accept');
 
 
-/*Route::get('/pdf', function() {
-    $ticket = Blindern\UKA\Billett\Ticket::findOrFail(\Input::get('id'));
-    return Response::make($ticket->getPdfData(), 200, array(
-        'Content-Type' => 'application/pdf',
-        'Content-Disposition' => 'inline; filename="'.$ticket->getPdfName().'"'
-    ));
-});
-
-Route::get('/email', function() {
+/*Route::get('/email', function() {
     $order = Blindern\UKA\Billett\Order::findOrFail(\Input::get('id'));
     $order->sendEmail();
     var_dump($order->name);
