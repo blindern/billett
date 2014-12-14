@@ -1,11 +1,15 @@
 <?php namespace Blindern\UKA\Billett;
 
 use Blindern\UKA\Billett\Helpers\PdfTicket;
+use Henrist\LaravelApiQuery\ApiQueryInterface;
 
-class Ticket extends \Eloquent {
+class Ticket extends \Eloquent implements ApiQueryInterface {
     protected $table = 'tickets';
     protected $appends = array('number');
     protected $hidden = array('pdf');
+
+    protected $apiAllowedFields = array('id', 'order_id', 'event_id', 'ticketgroup_id', 'time', 'expire', 'is_valid', 'is_revoked', 'used', 'key');
+    protected $apiAllowedRelations = array('event', 'order', 'ticketgroup');
 
     public function event()
     {
@@ -99,5 +103,19 @@ class Ticket extends \Eloquent {
         $this->is_valid = true;
         $this->expire = null;
         $this->time = time();
+    }
+
+    /**
+     * Get fields we can search in
+     */
+    public function getApiAllowedFields() {
+        return $this->apiAllowedFields;
+    }
+
+    /**
+     * Get fields we can use as relations
+     */
+    public function getApiAllowedRelations() {
+        return $this->apiAllowedRelations;
     }
 }

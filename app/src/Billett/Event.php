@@ -2,8 +2,9 @@
 
 use \Blindern\UKA\Billett\Eventgroup;
 use \Illuminate\Database\Eloquent\ModelNotFoundException;
+use \Henrist\LaravelApiQuery\ApiQueryInterface;
 
-class Event extends \Eloquent {
+class Event extends \Eloquent implements ApiQueryInterface {
     /**
      * Get a model by its ID or alias and fail if not found
      *
@@ -30,6 +31,11 @@ class Event extends \Eloquent {
     protected $table = 'events';
     protected $appends = array('is_timeout', 'is_old', 'ticket_count', 'has_tickets', 'web_selling_status');
     protected $hidden = array('image');
+
+    protected $apiAllowedFields = array('id', 'group_id', 'alias', 'is_admin_hidden', 'is_published', 'is_selling', 'time_start',
+        'time_end', 'title', 'category', 'location', 'ticket_info', 'selling_text', 'max_each_person', 'max_sales', 'description',
+        'description_short', 'ticket_text', 'link', 'age_restriction');
+    protected $apiAllowedRelations = array('eventgroup', 'ticketgroups', 'tickets');
 
     /**
      * When the online selling freezes (how many seconds before event start)
@@ -228,5 +234,19 @@ class Event extends \Eloquent {
         //     return 'sold_out';
 
         return 'sale';
+    }
+
+    /**
+     * Get fields we can search in
+     */
+    public function getApiAllowedFields() {
+        return $this->apiAllowedFields;
+    }
+
+    /**
+     * Get fields we can use as relations
+     */
+    public function getApiAllowedRelations() {
+        return $this->apiAllowedRelations;
     }
 }

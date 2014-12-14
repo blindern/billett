@@ -4,6 +4,9 @@ class Ticketgroup extends \Eloquent {
     protected $model_suffix = '';
     protected $table = 'ticketgroups';
 
+    protected $apiAllowedFields = array('id', 'event_id', 'is_active', 'is_published', 'is_normal', 'title', 'ticket_text', 'price', 'fee', 'limit');
+    protected $apiAllowedRelations = array('event', 'tickets');
+
     public function getPriceAttribute($val) {
         return (float) $val;
     }
@@ -32,5 +35,19 @@ class Ticketgroup extends \Eloquent {
         })->first();
 
         return (bool) $res;
+    }
+
+    /**
+     * Get fields we can search in
+     */
+    public function getApiAllowedFields() {
+        return $this->apiAllowedFields;
+    }
+
+    /**
+     * Get fields we can use as relations
+     */
+    public function getApiAllowedRelations() {
+        return $this->apiAllowedRelations;
     }
 }

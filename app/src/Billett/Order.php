@@ -2,8 +2,9 @@
 
 use \Carbon\Carbon;
 use \iio\libmergepdf\Merger;
+use \Henrist\LaravelApiQuery\ApiQueryInterface;
 
-class Order extends \Eloquent {
+class Order extends \Eloquent implements ApiQueryInterface {
     /**
      * How long a incomplete reservation is valid
      */
@@ -65,6 +66,9 @@ class Order extends \Eloquent {
     protected $model_suffix = '';
     protected $table = 'orders';
     protected $appends = array('total_amount');
+
+    protected $apiAllowedFields = array('id', 'order_text_id', 'time', 'ip', 'browser', 'name', 'email', 'phone', 'recruiter', 'total_amount');
+    protected $apiAllowedRelations = array('tickets', 'payments');
 
     public function tickets()
     {
@@ -303,4 +307,17 @@ class Order extends \Eloquent {
         return true;
     }
 
+    /**
+     * Get fields we can search in
+     */
+    public function getApiAllowedFields() {
+        return $this->apiAllowedFields;
+    }
+
+    /**
+     * Get fields we can use as relations
+     */
+    public function getApiAllowedRelations() {
+        return $this->apiAllowedRelations;
+    }
 }

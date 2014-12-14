@@ -124,7 +124,8 @@ return array(
         'Dinesh\Barcode\BarcodeServiceProvider',
         'Intervention\Image\ImageServiceProvider',
         'KnightSwarm\LaravelSaml\LaravelSamlServiceProvider',
-        'Nutsweb\LaravelPrerender\LaravelPrerenderServiceProvider'
+        'Nutsweb\LaravelPrerender\LaravelPrerenderServiceProvider',
+        'Henrist\LaravelApiQuery\LaravelApiQueryServiceProvider',
 
     ),
 
@@ -195,7 +196,8 @@ return array(
         'DNS1D'             => 'Dinesh\Barcode\Facades\DNS1DFacade',
         'DNS2D'             => 'Dinesh\Barcode\Facades\DNS2DFacade',
         'Image'             => 'Intervention\Image\Facades\Image',
-        'Saml'              => 'KnightSwarm\LaravelSaml\Facades\Saml'
+        'Saml'              => 'KnightSwarm\LaravelSaml\Facades\Saml',
+        'ApiQuery'          => 'Henrist\LaravelApiQuery\Facades\ApiQuery',
 
     ),
 
