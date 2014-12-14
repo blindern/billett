@@ -7,6 +7,15 @@ use Blindern\UKA\Billett\Order;
 use Blindern\UKA\Billett\Helpers\ModelHelper;
 
 class EventController extends Controller {
+    public function __construct() {
+        $this->beforeFilter('auth', [
+            'only' => [
+                'store',
+                'update',
+                'destroy',
+                'uploadImage'
+            ]]);
+    }
     public function getUpcoming()
     {
         return EventGuest::with('eventgroup')
@@ -182,8 +191,6 @@ class EventController extends Controller {
      */
     public function store()
     {
-        $this->beforeFilter('auth');
-
         $event = $this->validateInputAndUpdate(new Event, true);
         if (!($event instanceof Event)) return $event;
 
@@ -196,8 +203,6 @@ class EventController extends Controller {
      */
     public function update($id)
     {
-        $this->beforeFilter('auth');
-
         $event = $this->validateInputAndUpdate(Event::findOrFail($id), false);
         if (!($event instanceof Event)) return $event;
 
@@ -210,8 +215,6 @@ class EventController extends Controller {
      */
     public function destroy($id)
     {
-        $this->beforeFilter('auth');
-
         $e = Event::findOrFail($id);
         if ($e->has_tickets) {
             return Response::json('event cannot be deleted - there are tickets in the system', 400);
@@ -225,8 +228,6 @@ class EventController extends Controller {
      * Image upload
      */
     public function uploadImage($id) {
-        $this->beforeFilter('auth');
-
         $event = Event::findOrFail($id);
 
         if (!\Input::hasFile('file')) {

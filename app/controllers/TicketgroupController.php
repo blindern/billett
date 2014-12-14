@@ -4,9 +4,12 @@ use Blindern\UKA\Billett\Event;
 use Blindern\UKA\Billett\Ticketgroup;
 
 class TicketgroupController extends Controller {
+    public function __construct() {
+        $this->beforeFilter('auth', [
+            'except' => []]);
+    }
     public function index()
     {
-        $this->beforeFilter('auth');
         return Ticketgroup::with('event')->paginate();
     }
 
@@ -32,8 +35,6 @@ class TicketgroupController extends Controller {
      */
     public function store()
     {
-        $this->beforeFilter('auth');
-
         $validator = \Validator::make(Input::all(), array(
             'event_id' => 'required|integer',
             'title' => 'required',
@@ -71,8 +72,6 @@ class TicketgroupController extends Controller {
      */
     public function update($id)
     {
-        $this->beforeFilter('auth');
-
         $g = Ticketgroup::findOrFail($id);
 
         $locked_fields = array(
@@ -114,8 +113,6 @@ class TicketgroupController extends Controller {
      */
     public function destroy($id)
     {
-        $this->beforeFilter('auth');
-
         $g = Ticketgroup::findOrFail($id);
         if ($g->has_tickets) {
             return Response::json('ticketgroup cannot be deleted - there are tickets in the system', 400);
@@ -130,7 +127,6 @@ class TicketgroupController extends Controller {
      */
     public function previewTicket($id)
     {
-        $this->beforeFilter('auth');
         $g = Ticketgroup::findOrFail($id);
 
         $order = new Blindern\UKA\Billett\Order;

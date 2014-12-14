@@ -5,6 +5,18 @@ use Blindern\UKA\Billett\Helpers\DibsPaymentModule;
 use Blindern\UKA\Billett\Helpers\ModelHelper;
 
 class OrderController extends \Controller {
+    public function __construct() {
+        $this->beforeFilter('auth', [
+            'except' => [
+                'show',
+                'update',
+                'destroy',
+                'placeOrder',
+                'forceOrder'
+            ]
+        ]);
+    }
+
     /**
      * We only grant access to orders we own
      */
