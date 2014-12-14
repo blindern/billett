@@ -1,1 +1,118 @@
-Order
+<page-property name="title" value="Ordreliste"></page-property>
+
+<div class="admin-order">
+
+    <div class="page-header">
+        <h1>
+            <span class="eventgroup">
+                <a href="a">{{group.title}}</a>
+            </span>
+            Ordreliste
+        </h1>
+    </div>
+
+    <div class="row form-horizontal">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Ordrenr</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" ng-model="search.id" ng-model-options="{debounce:300}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Ordretekstnr</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" ng-model="search.order_text_id" ng-model-options="{debounce:300}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Billettnr</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" ng-model="search['tickets.id']" ng-model-options="{debounce:300}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Strekkode</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" ng-model="search['tickets.key']" ng-model-options="{debounce:300}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Arrangement (ID)</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" ng-model="search['tickets.event.id']" ng-model-options="{debounce:300}">
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Transaksjonsnr</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" ng-model="search['payments.transaction_id']" ng-model-options="{debounce:300}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Navn</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" ng-model="search.name" ng-model-options="{debounce:300}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">E-post</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" ng-model="search.email" ng-model-options="{debounce:300}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Telefon</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" ng-model="search.phone" ng-model-options="{debounce:300}">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-loading" ng-show="!orders.result">Søker...</div>
+
+    <div ng-show="orders.result.length == 0">
+        <p>Ingen ordrer ble funnet.</p>
+    </div>
+
+    <div ng-show="orders.result.length > 0">
+        <table class="table table-striped">
+            <tbody>
+                <tr ng-repeat="order in orders.result">
+                    <td>
+                        {{::order.order_text_id}}<br>
+                        {{::order.time|formatdate:'dd. DD.MM.YYYY HH:mm'}}
+                    </td>
+                    <td>
+                        {{::order.name}}<br>
+                        {{::order.email}}<br>
+                        {{::order.phone}}
+                    </td>
+                    <td>
+                        <div ng-repeat="payment in order.payments">
+                            {{payment.type}}<br>
+                            {{payment.amount|price:0:true}}<br>
+                            {{payment.transaction_id}}
+                        </div>
+                    </td>
+                    <td>
+                        <ul style="margin: 0">
+                            <li ng-repeat="ticket in order.tickets">
+                                <a ng-href="api/ticket/{{::ticket.id}}/pdf" target="_self">#{{::ticket.id}}</a>
+                                <a ng-href="event/{{::ticket.event.id}}">{{::ticket.event.title}}</a>
+                                ({{::ticket.ticketgroup.title}})
+                                {{::(ticket.ticketgroup.price+ticket.ticketgroup.fee)|price:0:true}}
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        TODO: pagination
+    </div>
+
+</div>

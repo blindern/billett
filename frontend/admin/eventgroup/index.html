@@ -71,7 +71,11 @@
                     </div>
                     <a ng-href="a/event/{{event.id}}">{{event.title}}</a>
                 </td>
-                <td>{{event.max_sales == 0 && event.ticket_count.totals.valid == 0 ? '' : event.ticket_count.totals.valid}}</td>
+                <td>
+                    <span ng-show="event.max_sales != 0 || event.ticket_count.totals.valid != 0">
+                        <a ng-href="a/orders?tickets.event.id={{::event.id}}">{{::event.ticket_count.totals.valid}}</a>
+                    </span>
+                </td>
                 <td>{{event.max_sales == 0 ? '' : event.ticket_count.totals.free}}</td>
                 <td>{{event.max_sales == 0 && event.ticket_count.totals.valid == 0 ? '' : (event.ticket_count.totals.sum_price+event.ticket_count.totals.sum_fee|price)}}</td>
                 <td class="eventgroup-event-action" ng-click="eventTogglePublish(event)"><i class="glyphicon" ng-class="event.is_published ? 'glyphicon-ok' : 'glyphicon-remove'"></i></td>
