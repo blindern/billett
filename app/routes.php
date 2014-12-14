@@ -10,7 +10,7 @@ Route::get('/api/eventgroup/{id}/simple', 'EventgroupController@simpleList');
 Route::post('/api/order/{id}/place', 'OrderController@placeOrder');
 Route::post('/api/order/{id}/force', 'OrderController@forceOrder');
 Route::resource('/api/order', 'OrderController', array(
-    'only' => array('show', 'update', 'destroy')
+    'only' => array('index', 'show', 'update', 'destroy')
 ));
 
 Route::post('/api/event/{id}/createreservation', 'EventController@createReservation');

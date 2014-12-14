@@ -17,6 +17,10 @@ class OrderController extends \Controller {
         ]);
     }
 
+    public function index() {
+        return \ApiQuery::processCollection(Order::where('is_valid', true));
+    }
+
     /**
      * We only grant access to orders we own
      */

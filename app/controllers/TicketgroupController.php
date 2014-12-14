@@ -10,7 +10,7 @@ class TicketgroupController extends Controller {
     }
     public function index()
     {
-        return Ticketgroup::with('event')->paginate();
+        return \ApiQuery::process(Ticketgroup::query());
     }
 
     public function show($id)
