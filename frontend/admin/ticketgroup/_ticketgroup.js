@@ -5,6 +5,7 @@
         'ngRoute',
         'ngResource',
         'billett.auth',
-        'billett.common.PageService'
+        'billett.common.PageService',
+        'billett.admin.ticketgroup.new'
     ]);
 })();
