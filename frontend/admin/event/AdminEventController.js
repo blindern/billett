@@ -40,6 +40,9 @@
         // uploading of image
         $scope.uploader = new FileUploader({
             url: 'event/'+$routeParams['id']+'/image',
+            headers: {
+                'X-Csrf-Token': $('meta[name=csrf-token]').attr('content')
+            },
             removeAfterUpload: true
         });
         $scope.uploader.onAfterAddingFile = function(fileItem) {
