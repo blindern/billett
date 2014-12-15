@@ -44,6 +44,7 @@ $is_dev = (bool)\Config::get('app.dev');
     var user = <?php echo json_encode($user); ?>;
     var response_data = <?php echo json_encode($response_data); ?>;
     var is_dev = <?php echo json_encode($is_dev); ?>;
+    var is_dibs_test = <?php echo json_encode(\Config::get('dibs.test')); ?>;
     </script>
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->

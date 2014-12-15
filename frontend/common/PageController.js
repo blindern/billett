@@ -12,6 +12,7 @@
             return $location.path().substring(0, 3) == '/a/';
         };
         $scope.isDevPage = !!window.is_dev;
+        $scope.isDibsTest = !!window.is_dibs_test;
 
         $rootScope.$on('$routeChangeStart', function () {
             Page.setDefault('url', $location.absUrl());

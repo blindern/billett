@@ -194,7 +194,7 @@
                             </div>
                             <p class="text-center">
                                 <input type="submit" value="Gå til betaling" ng-click="$parent.forcePay=false" class="btn btn-primary">
-                                <input type="submit" value="Overstyr betaling" ng-click="$parent.forcePay=true" class="btn btn-default">
+                                <input type="submit" value="Overstyr betaling" ng-click="$parent.forcePay=true" class="btn btn-default" ng-if="isDibsTest">
                                 <input class="btn btn-danger" type="button" value="Avbryt" ng-click="abortOrder()" ng-if="reservation">
                             </p>
                             <hr>
