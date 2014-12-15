@@ -85,9 +85,10 @@
         // update order with contact info
         var step2 = function () {
             var data = {
-                'name': $scope.contact.name,
-                'email': $scope.contact.email,
-                'phone': $scope.contact.phone
+                name: $scope.contact.name,
+                email: $scope.contact.email,
+                phone: $scope.contact.phone,
+                recruiter: $scope.contact.recruiter
             };
             return reservation.update(data);
         };

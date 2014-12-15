@@ -76,4 +76,28 @@
             }
         };
     });
+
+    // simple pagination
+    module.directive('pagination', function($parse) {
+        return {
+            restrict: 'E',
+            templateUrl: 'assets/views/common/paginationDirective.html',
+            scope: {
+                total: '=pageTotal',
+                limit: '=pageLimit',
+                page: '=pageActive'
+            },
+            replace: true,
+            link: function(scope) {
+                scope.$watchGroup(['total','limit'], function() {
+                    scope.numPages = Math.ceil(scope.total / scope.limit);
+                });
+
+                scope.changePage = function(to) {
+                    if (to < 1 || to > scope.numPages) return;
+                    scope.page = to;
+                };
+            }
+        };
+    })
 })();
