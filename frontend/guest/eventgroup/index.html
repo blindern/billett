@@ -17,6 +17,10 @@
 
     <div ng-if="group.events.length > 0">
 
+        <p ng-if="isFilter">
+            <a ng-href="eventgroup/{{group.id}}">Vis hele arrangementlista</a>
+        </p>
+
         <div class="eventgroup-event-list">
             <ul class="days">
                 <li class="day" ng-repeat="(day, events) in days">
