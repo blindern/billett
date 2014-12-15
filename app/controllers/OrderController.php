@@ -60,7 +60,8 @@ class OrderController extends \Controller {
         $validator = \Validator::make(Input::all(), array(
             'name' => 'required|min:3',
             'email' => 'required|email',
-            'phone' => 'required|regex:/\\+?\\d+/'
+            'phone' => 'required|regex:/\\+?\\d+/',
+            'recruiter' => ''
         ));
 
         if ($validator->fails()) {
@@ -70,6 +71,7 @@ class OrderController extends \Controller {
         $order->name = Input::get('name');
         $order->email = Input::get('email');
         $order->phone = Input::get('phone');
+        $order->recruiter = Input::get('recruiter');
         $order->save();
 
         return $order;
