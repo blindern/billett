@@ -9,6 +9,10 @@
 		},
 		{
 			"type": "vcs",
+			"url": "https://github.com/henrist/laravel-api-query"
+		},
+		{
+			"type": "vcs",
 			"url": "https://github.com/henrist/Laravel-Prerender"
 		}
 	],
@@ -19,7 +23,8 @@
 		"intervention/image": "~2.0",
 		"iio/libmergepdf": "~2.4",
 		"knight-swarm/laravel-saml": "dev-master",
-		"nutsweb/laravel-prerender": "dev-master"
+		"nutsweb/laravel-prerender": "dev-master",
+		"henrist/laravel-api-query": "dev-master"
 	},
 	"autoload": {
 		"classmap": [
