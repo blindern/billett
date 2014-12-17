@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f41a8faad87314cd991613a757ea67ae",
+    "hash": "3894fd45ca1ae574e72f649dfa136c00",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -357,6 +357,46 @@
             "time": "2014-08-17 21:15:53"
         },
         {
+            "name": "henrist/laravel-api-query",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/henrist/laravel-api-query.git",
+                "reference": "91896c8af16c8db645d014ba5234c6bef456c0fe"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/henrist/laravel-api-query/zipball/91896c8af16c8db645d014ba5234c6bef456c0fe",
+                "reference": "91896c8af16c8db645d014ba5234c6bef456c0fe",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "4.2.*",
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Henrist\\LaravelApiQuery\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Henrik Steen",
+                    "email": "henrist@henrist.net"
+                }
+            ],
+            "description": "Package making listing of API-endpoint easier",
+            "support": {
+                "source": "https://github.com/henrist/laravel-api-query/tree/master",
+                "issues": "https://github.com/henrist/laravel-api-query/issues"
+            },
+            "time": "2014-12-17 13:16:15"
+        },
+        {
             "name": "iio/libmergepdf",
             "version": "2.4.0",
             "source": {
@@ -407,16 +447,16 @@
         },
         {
             "name": "intervention/image",
-            "version": "2.0.14",
+            "version": "2.0.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Intervention/image.git",
-                "reference": "0d2eb5858520ace6a7d1b42f4267a6488a63c0ed"
+                "reference": "e012301c8596118578c4abef178955888d02b435"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Intervention/image/zipball/0d2eb5858520ace6a7d1b42f4267a6488a63c0ed",
-                "reference": "0d2eb5858520ace6a7d1b42f4267a6488a63c0ed",
+                "url": "https://api.github.com/repos/Intervention/image/zipball/e012301c8596118578c4abef178955888d02b435",
+                "reference": "e012301c8596118578c4abef178955888d02b435",
                 "shasum": ""
             },
             "require": {
@@ -459,7 +499,7 @@
                 "thumbnail",
                 "watermark"
             ],
-            "time": "2014-11-21 18:49:22"
+            "time": "2014-12-12 15:45:28"
         },
         {
             "name": "ircmaxell/password-compat",
@@ -2164,7 +2204,8 @@
     "stability-flags": {
         "dinesh/barcode": 20,
         "knight-swarm/laravel-saml": 20,
-        "nutsweb/laravel-prerender": 20
+        "nutsweb/laravel-prerender": 20,
+        "henrist/laravel-api-query": 20
     },
     "prefer-stable": false,
     "platform": [],
