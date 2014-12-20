@@ -8,12 +8,17 @@ var gulp = require('gulp'),
     args = require('yargs').argv,
     templates = require('gulp-angular-templatecache'),
     minifyHTML = require('gulp-minify-html'),
-    rename = require('gulp-rename');
+    rename = require('gulp-rename'),
+    rev = require('gulp-rev'),
+    buffer = require('gulp-buffer'),
+    extend = require('gulp-extend'),
+    runSequence = require('run-sequence'),
+    minifyCSS = require('gulp-minify-css');
 
 // run with --production to do more compressing etc
 var isProd = !!args.production;
 
-var js_files = [
+var js_files_library = [
     "./bower_components/jquery/dist/jquery.js",
     "./bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js",
     "./bower_components/angular/angular.js",
@@ -28,7 +33,10 @@ var js_files = [
     "./bower_components/marked/lib/marked.js",
     "./bower_components/angular-marked/angular-marked.js",
     "./bower_components/ngtoast/dist/ngToast.js",
-    "./bower_components/angular-google-analytics/dist/angular-google-analytics.js",
+    "./bower_components/angular-google-analytics/dist/angular-google-analytics.js"
+];
+
+var js_files = [
     "./frontend/app.js",
     "./frontend/**/module.js",
     "./frontend/**/*.js"
@@ -39,53 +47,70 @@ var css_files = [
     "frontend/app.scss"
 ];
 
+var processScripts = function (files, name) {
+    return gulp.src(files)
+        .pipe(sourcemaps.init())
+        .pipe(concat(name + '.js'))
+        .pipe(gulpif(isProd, ngAnnotate()))
+        .pipe(gulpif(isProd, uglify()))
+        .pipe(buffer())
+        .pipe(rev())
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest('public/assets'))
+        .pipe(rev.manifest({path: 'rev-manifest-scripts-' + name + '.json'}))
+        .pipe(gulp.dest('public/assets'));
+};
+
+var processTemplates = function (files, subpath, name) {
+    return gulp.src(files)
+        .pipe(rename(function(path) {
+            path.dirname = "views/" + subpath + path.dirname;
+        }))
+        .pipe(minifyHTML({
+            quotes: true,
+            empty: true
+        }))
+        .pipe(templates(name + '.js', {module: 'billett'}))
+        .pipe(buffer())
+        .pipe(rev())
+        .pipe(gulp.dest('public/assets'))
+        .pipe(rev.manifest({path: 'rev-manifest-' + name + '.json'}))
+        .pipe(gulp.dest('public/assets'));
+};
+
 gulp.task('styles', function() {
     return gulp.src(css_files)
         .pipe(sourcemaps.init())
-        .pipe(sass({ style: isProd ? 'compressed' : 'expanded'}))
+        .pipe(sass())
         .pipe(concat('frontend.css'))
+        .pipe(gulpif(isProd, minifyCSS()))
+        .pipe(buffer())
+        .pipe(rev())
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('public/assets/stylesheets'));
+        .pipe(gulp.dest('public/assets'))
+        .pipe(rev.manifest({path: 'rev-manifest-styles.json'}))
+        .pipe(gulp.dest('public/assets'));
+});
+
+gulp.task('scripts-library', function () {
+    return processScripts(js_files_library, 'library');
 });
 
 gulp.task('scripts', function() {
-    return gulp.src(js_files)
-        .pipe(sourcemaps.init())
-        .pipe(concat('frontend.js'))
-        .pipe(gulpif(isProd, ngAnnotate()))
-        .pipe(gulpif(isProd, uglify()))
-        .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('public/assets/javascript'));
+    return processScripts(js_files, 'frontend');
 });
 
-gulp.task('templates', function() {
-    gulp.start('templates-normal', 'templates-admin');
+gulp.task('templates', ['templates-normal', 'templates-admin'], function() {
     return gulp.src('frontend/**/*.html')
         .pipe(gulp.dest('public/assets/views'));
 });
 
 gulp.task('templates-normal', function() {
-    return gulp.src(['frontend/**/*.html', '!frontend/admin/**/*.html'])
-        .pipe(rename(function(path) {
-            path.dirname = "views/" + path.dirname;
-        }))
-        /*.pipe(minifyHTML({
-            quotes: true
-        }))*/
-        .pipe(templates('templates.js', {module: 'billett'}))
-        .pipe(gulp.dest('public/assets'));
+    return processTemplates(['frontend/**/*.html', '!frontend/admin/**/*.html'], '', 'templates');
 });
 
 gulp.task('templates-admin', function() {
-    return gulp.src('frontend/admin/**/*.html')
-        .pipe(rename(function(path) {
-            path.dirname = "views/admin/" + path.dirname;
-        }))
-        /*.pipe(minifyHTML({
-            quotes: true
-        }))*/
-        .pipe(templates('templates-admin.js', {module: 'billett'}))
-        .pipe(gulp.dest('public/assets'));
+    return processTemplates('frontend/admin/**/*.html', 'admin/', 'templates-admin');
 });
 
 gulp.task('fonts', function() {
@@ -93,17 +118,29 @@ gulp.task('fonts', function() {
         .pipe(gulp.dest('./public/assets/fonts'));
 });
 
+gulp.task('rev-concat', function() {
+    return gulp.src('public/assets/rev-manifest-*.json')
+        .pipe(extend('rev-manifest.json'))
+        .pipe(gulp.dest('public/assets'));
+});
+
 gulp.task('watch', function() {
-    gulp.watch('frontend/**/*.scss', ['styles']);
-    gulp.watch(js_files, ['scripts']);
-    gulp.watch('frontend/**/*.html', ['templates']);
+    gulp.watch('frontend/**/*.scss').on('change', function () { runSequence('styles', 'rev-concat'); });
+    gulp.watch(js_files).on('change', function () { runSequence('scripts', 'rev-concat'); });
+    gulp.watch('frontend/**/*.html').on('change', function () { runSequence('templates', 'rev-concat'); });
 });
 
-gulp.task('production', function() {
+gulp.task('production', function(cb) {
     isProd = true;
-    gulp.start('styles', 'scripts', 'fonts', 'templates');
+    runSequence(
+        ['styles', 'scripts-library', 'scripts', 'fonts', 'templates'],
+        'rev-concat',
+        cb);
 });
 
-gulp.task('default', function() {
-    gulp.start('styles', 'scripts', 'templates');
+gulp.task('default', function(cb) {
+    runSequence(
+        ['styles', 'scripts-library', 'scripts', 'templates'],
+        'rev-concat',
+        cb);
 });
