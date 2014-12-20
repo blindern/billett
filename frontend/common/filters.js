@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    var module = angular.module('billett.common.filters', []);
+    var module = angular.module('billett.common');
 
     module.filter('formatdate', function() {
         return function(datetime, format) {

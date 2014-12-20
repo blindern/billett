@@ -1,9 +1,7 @@
 (function() {
     'use strict';
 
-    var module = angular.module('billett.common.directives', [
-        'billett.common.PageService'
-    ]);
+    var module = angular.module('billett.common');
 
     // helper directive to mark a form input with has-error class
     // usage: <div form-input-check="form-name,input-name">

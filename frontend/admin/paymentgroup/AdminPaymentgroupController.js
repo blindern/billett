@@ -1,11 +1,7 @@
 (function() {
     'use strict';
 
-    var module = angular.module('billett.admin.paymentgroup', [
-        'ngRoute',
-        'billett.auth',
-        'billett.common.PageService'
-    ]);
+    var module = angular.module('billett.admin');
 
     module.config(function ($routeProvider) {
         $routeProvider.when('/a/paymentgroup/:id', {

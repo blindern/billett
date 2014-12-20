@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    var module = angular.module('billett.admin.order');
+    var module = angular.module('billett.admin');
 
     module.config(function ($routeProvider) {
         $routeProvider.when('/a/orders', {

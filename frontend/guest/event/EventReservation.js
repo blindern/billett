@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    var module = angular.module('billett.event');
+    var module = angular.module('billett.guest');
 
     module.factory('EventReservation', function ($http, $q) {
         var current; // the active reservation (should really only be one)

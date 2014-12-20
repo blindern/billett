@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    var module = angular.module('billett.event');
+    var module = angular.module('billett.guest');
 
     module.filter('range', function () {
         return function (count) {

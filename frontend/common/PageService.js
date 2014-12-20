@@ -1,10 +1,7 @@
 (function() {
     'use strict';
 
-    var module = angular.module('billett.common.PageService', [
-        'ngAnimate',
-        'ngToast'
-    ]);
+    var module = angular.module('billett.common');
 
     module.factory('Page', function ($rootScope, $q, ngToast) {
         var activeLoader;

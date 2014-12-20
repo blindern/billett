@@ -1,10 +1,7 @@
 (function() {
     'use strict';
 
-    var module = angular.module('billett.infopages.HjelpController', [
-        'ngRoute',
-        'billett.common.PageService'
-    ]);
+    var module = angular.module('billett.guest');
 
     module.config(function ($routeProvider) {
         $routeProvider.when('/hjelp', {

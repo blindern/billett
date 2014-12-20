@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    var module = angular.module('billett.admin.eventgroup');
+    var module = angular.module('billett.admin');
 
     module.factory('AdminEventgroup', function ($resource) {
         var r = $resource('api/eventgroup/:id', {

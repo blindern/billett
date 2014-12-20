@@ -1,11 +1,7 @@
 (function() {
     'use strict';
 
-    var module = angular.module('billett.order', [
-        'ngRoute',
-        'billett.common.PageService',
-        'billett.common.ResponseDataService'
-    ]);
+    var module = angular.module('billett.guest');
 
     module.config(function ($routeProvider) {
         $routeProvider.when('/dibs/accept', {

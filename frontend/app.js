@@ -7,31 +7,9 @@
         'ngRoute',
         'angular-google-analytics',
         'billett.auth',
-
-        // common
-        'billett.common.directives',
-        'billett.common.filters',
-        'billett.common.CsrfInceptorService',
-        'billett.common.HeaderController',
-        'billett.common.PageController',
-        'billett.common.PageService',
-        'billett.common.ResponseDataService',
-
-        // admin
-        'billett.admin.event',
-        'billett.admin.eventgroup',
-        'billett.admin.index',
-        'billett.admin.order',
-        'billett.admin.paymentgroup',
-        'billett.admin.ticketgroup',
-
-        // guest
-        'billett.event',
-        'billett.eventgroup',
-        'billett.index',
-        'billett.infopages.HjelpController',
-        'billett.infopages.SalgsBetController',
-        'billett.order'
+        'billett.common',
+        'billett.admin',
+        'billett.guest'
     ]);
 
     module.config(function ($locationProvider, $routeProvider, AnalyticsProvider) {

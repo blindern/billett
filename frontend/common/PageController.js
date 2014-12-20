@@ -1,10 +1,7 @@
 (function() {
     'use strict';
 
-    var module = angular.module('billett.common.PageController', [
-        'ngAnimate',
-        'ngToast'
-    ]);
+    var module = angular.module('billett.common');
 
     // global page
     module.controller('PageController', function (Page, $scope, $location, $rootScope) {

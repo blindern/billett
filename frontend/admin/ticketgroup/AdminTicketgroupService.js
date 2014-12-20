@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    var module = angular.module('billett.admin.ticketgroup');
+    var module = angular.module('billett.admin');
 
     module.factory('AdminTicketgroup', function ($resource) {
         var r = $resource('api/ticketgroup/:id', {

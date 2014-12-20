@@ -1,11 +1,7 @@
 (function() {
     'use strict';
 
-    var module = angular.module('billett.admin.index', [
-        'ngRoute',
-        'billett.auth',
-        'billett.common.PageService',
-    ]);
+    var module = angular.module('billett.admin');
 
     module.config(function ($routeProvider) {
         $routeProvider.when('/a', {

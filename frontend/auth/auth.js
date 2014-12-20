@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    var module = angular.module('billett.auth', ['ngRoute']);
+    var module = angular.module('billett.auth');
 
     module.config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/login', {

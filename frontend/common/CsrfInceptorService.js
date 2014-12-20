@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    var module = angular.module('billett.common.CsrfInceptorService', []);
+    var module = angular.module('billett.common');
 
     module.config(function($httpProvider) {
         $httpProvider.interceptors.push('CsrfInterceptor');

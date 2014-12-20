@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    var module = angular.module('billett.common.ResponseDataService', []);
+    var module = angular.module('billett.common');
 
     module.service('ResponseData', function() {
         this.get = function(name) {

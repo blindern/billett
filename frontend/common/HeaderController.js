@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    var module = angular.module('billett.common.HeaderController', []);
+    var module = angular.module('billett.common');
 
     // the menu
     module.controller('HeaderController', function ($scope, $location) {

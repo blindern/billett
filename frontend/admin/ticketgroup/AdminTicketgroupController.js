@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    var module = angular.module('billett.admin.ticketgroup');
+    var module = angular.module('billett.admin');
 
     module.config(function ($routeProvider) {
         $routeProvider.when('/a/event/:event_id/ticketgroup/:ticketgroup_id', {

@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    var module = angular.module('billett.event');
+    var module = angular.module('billett.guest');
 
     module.config(function ($routeProvider) {
         $routeProvider.when('/event/:id', {
