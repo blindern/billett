@@ -6,11 +6,12 @@
     module.config(function ($routeProvider) {
         $routeProvider.when('/event/:id', {
             templateUrl: 'assets/views/guest/event/index.html',
-            controller: 'EventController'
+            controller: 'EventController as ctrl'
         });
     });
 
     module.controller('EventController', function (Page, EventReservation, $http, $scope, $location, $routeParams, $sce, ResponseData, $q) {
+        var ctrl = this;
         Page.setTitle('Arrangement');
 
         var loader = Page.setLoading();
@@ -24,6 +25,10 @@
             }
 
             $scope.event = ret;
+            ctrl.event_status = ret.web_selling_status;
+            if (ret.selling_text && (ret.web_selling_status == 'unknown' || ret.web_selling_status == 'no_web_tickets')) {
+                ctrl.event_status = 'selling_text';
+            }
         }).error(function () {
             loader();
             Page.set404();

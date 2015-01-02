@@ -22,7 +22,7 @@
 <!-- TODO: ics-link -->
 
 <div class="row">
-    <div class="col-sm-5" ng-class="{'no-buy-form': event.web_selling_status == 'no_tickets'}">
+    <div class="col-sm-5" ng-class="{'no-buy-form': ctrl.event_status == 'no_tickets'}">
 
         <div class="event-image">
             <img ng-src="event/{{event.id}}/image" alt="">
@@ -50,40 +50,45 @@
 
     <div class="col-sm-7 event-right-col">
 
-        <div ng-if="!reservation || event.web_selling_status == 'sale'">
-            <div ng-if="event.web_selling_status == 'unknown'" class="panel panel-default">
+        <div ng-if="!reservation || ctrl.event_status == 'sale'">
+            <div ng-if="ctrl.event_status == 'selling_text'" class="panel panel-default">
                 <div class="panel-body">
-                    <div ng-if="!event.selling_text">Informasjon om billetter for dette arrangementet er for øyeblikket ikke tilgjengelig. Sjekk tilbake senere.</div>
-                    <div ng-if="event.selling_text" class="selling-text" marked="event.selling_text"></div>
+                    <div class="selling-text" marked="event.selling_text"></div>
                 </div>
             </div>
 
-            <div ng-if="event.web_selling_status == 'old'" class="panel panel-default">
+            <div ng-if="ctrl.event_status == 'unknown'" class="panel panel-default">
+                <div class="panel-body">
+                    <div>Informasjon om billetter for dette arrangementet er for øyeblikket ikke tilgjengelig. Sjekk tilbake senere.</div>
+                </div>
+            </div>
+
+            <div ng-if="ctrl.event_status == 'old'" class="panel panel-default">
                 <div class="panel-body">
                     Billettsalg for arrangementet er avsluttet.
                 </div>
             </div>
 
-            <div ng-if="event.web_selling_status == 'no_web_tickets'" class="panel panel-default">
+            <div ng-if="ctrl.event_status == 'no_web_tickets'" class="panel panel-default">
                 <div class="panel-body">
                     Dette arrangementet selges ikke på nett eller har foreløpig ingen tilgjengelige billetter.
                 </div>
             </div>
 
-            <div ng-if="event.web_selling_status == 'timeout'" class="panel panel-default">
+            <div ng-if="ctrl.event_status == 'timeout'" class="panel panel-default">
                 <div class="panel-body">
                     Nettsalget for dette arrangementet har avsluttet. Evt. tilgjengelige billetter selges i døra.
                 </div>
             </div>
 
-            <div ng-if="event.web_selling_status == 'sold_out'" class="panel panel-default">
+            <div ng-if="ctrl.event_status == 'sold_out'" class="panel panel-default">
                 <div class="panel-body">
                     Arrangementet er dessverre utsolgt. Sjekk tilbake senere for se å om det kanskje blir gjort nye billetter tilgjengelig.
                 </div>
             </div>
         </div>
 
-        <div ng-if="(!reservation && event.web_selling_status == 'sale') || (reservation && !checkout && event.web_selling_status != 'no_tickets')">
+        <div ng-if="(!reservation && ctrl.event_status == 'sale') || (reservation && !checkout && ctrl.event_status != 'no_tickets')">
             <div class="panel panel-warning" ng-if="reservation && reservation.tickets[0].event.id != event.id">
                 <div class="panel-heading">Kjøp billetter</div>
                 <div class="panel-body">

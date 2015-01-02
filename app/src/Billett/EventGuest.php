@@ -26,7 +26,7 @@ class EventGuest extends Event {
     );
 
     public function getSellingTextAttribute($val) {
-        if (!$this->is_selling) return null;
+        if ($this->is_selling && $this->web_selling_status != 'no_web_tickets') return null;
         return $val;
     }
 }
