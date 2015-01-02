@@ -45,7 +45,7 @@
 
             requireUser: function() {
                 if (!logged_in) {
-                    window.location.href = 'login';
+                    window.location.href = 'login?url='+encodeURIComponent($location.path());
                     return false;
                 }
                 if (!this.hasRole('billett.admin')) {
