@@ -13,6 +13,7 @@
     # Handle Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_URI} !^/billett/assets/
     RewriteRule ^ index.php [L]
 
     AddDefaultCharset UTF-8
