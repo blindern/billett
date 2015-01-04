@@ -3,14 +3,6 @@
 
     var module = angular.module('billett.admin');
 
-    module.config(function ($routeProvider) {
-        $routeProvider.when('/a/event/:id/ticketgroup/new', {
-            templateUrl: 'assets/views/admin/ticketgroup/new.html',
-            controller: 'AdminTicketgroupNewController',
-            resolve: {auth: 'AuthRequireResolver'}
-        });
-    });
-
     module.controller('AdminTicketgroupNewController', function (Page, $routeParams,
                                                                  AdminTicketgroup, AdminEvent, $scope, $location) {
         Page.setTitle('Ny billettgruppe');

@@ -3,20 +3,6 @@
 
     var module = angular.module('billett.admin');
 
-    module.config(function($routeProvider) {
-        $routeProvider.when('/a/event/:id/edit', {
-            templateUrl: 'assets/views/admin/event/edit.html',
-            controller: 'AdminEventEditNewController',
-            resolve: {auth: 'AuthRequireResolver'}
-        });
-
-        $routeProvider.when('/a/eventgroup/:group_id/new_event', {
-            templateUrl: 'assets/views/admin/event/edit.html',
-            controller: 'AdminEventEditNewController',
-            resolve: {auth: 'AuthRequireResolver'}
-        });
-    });
-
     module.controller('AdminEventEditNewController', function (Page, AdminEventgroup, $routeParams, $rootScope, $scope, AdminEvent, $location, $window, $timeout) {
         var is_new = $scope.is_new = !('id' in $routeParams);
 

@@ -3,14 +3,6 @@
 
     var module = angular.module('billett.admin');
 
-    module.config(function ($routeProvider) {
-        $routeProvider.when('/a/eventgroup/:id', {
-            templateUrl: 'assets/views/admin/eventgroup/index.html',
-            controller: 'AdminEventgroupController',
-            resolve: {auth: 'AuthRequireResolver'}
-        });
-    });
-
     module.controller('AdminEventgroupController', function (Page, $routeParams, $http, $scope, AdminEventgroup, AdminEvent, $location) {
         Page.setTitle('Arrangementgruppe');
 

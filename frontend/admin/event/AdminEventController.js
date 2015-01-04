@@ -3,14 +3,6 @@
 
     var module = angular.module('billett.admin');
 
-    module.config(function($routeProvider) {
-        $routeProvider.when('/a/event/:id', {
-            templateUrl: 'assets/views/admin/event/index.html',
-            controller: 'AdminEventController',
-            resolve: {auth: 'AuthRequireResolver'}
-        });
-    });
-
     module.controller('AdminEventController', function(Page, $routeParams, AdminEvent, $location, $scope, FileUploader) {
         Page.setTitle("Arrangement");
 

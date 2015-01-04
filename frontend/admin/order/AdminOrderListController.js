@@ -3,15 +3,6 @@
 
     var module = angular.module('billett.admin');
 
-    module.config(function ($routeProvider) {
-        $routeProvider.when('/a/orders', {
-            templateUrl: 'assets/views/admin/order/index.html',
-            controller: 'AdminOrderListController',
-            resolve: {auth: 'AuthRequireResolver'},
-            reloadOnSearch: false
-        });
-    });
-
     module.controller('AdminOrderListController', function (AdminOrder, Page, $scope, $location) {
         $scope.curPage = 1;
         var limit = 20;

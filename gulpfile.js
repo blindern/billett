@@ -39,6 +39,7 @@ var js_files_library = [
 var js_files = [
     "./frontend/app.js",
     "./frontend/**/module.js",
+    "./frontend/**/routes.js",
     "./frontend/**/*.js"
 ];
 
