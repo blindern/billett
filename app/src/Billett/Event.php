@@ -49,7 +49,7 @@ class Event extends \Eloquent implements ApiQueryInterface {
 
     public function ticketgroups()
     {
-        return $this->hasMany('\\Blindern\\UKA\\Billett\\Ticketgroup'.$this->model_suffix, 'event_id');
+        return $this->hasMany('\\Blindern\\UKA\\Billett\\Ticketgroup'.$this->model_suffix, 'event_id')->orderBy('order');
     }
 
     public function tickets()

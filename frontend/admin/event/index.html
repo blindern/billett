@@ -109,7 +109,7 @@
                 <th>Omsetning</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody ng-sortable="{animation: 100, onUpdate: ctrl.onTicketgroupsOrder}">
             <tr ng-repeat="g in event.ticketgroups">
                 <td>
                     <a ng-href="api/ticketgroup/{{g.id}}/previewticket" target="_blank">

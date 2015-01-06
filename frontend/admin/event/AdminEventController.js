@@ -48,5 +48,10 @@
             };
             fileItem.upload();
         };
+
+        // sorting of ticket groups
+        this.onTicketgroupsOrder = function (groups) {
+            $scope.event.setTicketgroupsOrder(groups);
+        };
     })
 })();

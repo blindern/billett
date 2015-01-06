@@ -63,6 +63,8 @@ class TicketgroupController extends Controller {
         $g->limit = Input::get('limit');
         if (empty($g->limit)) $g->limit = null;
 
+        $g->order = count($event->ticketgroups);
+
         $event->ticketgroups()->save($g);
         return $g;
     }

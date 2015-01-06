@@ -17,7 +17,7 @@ angular.module('billett.admin').config(function($routeProvider) {
         })
         .when('/a/event/:id', {
             templateUrl: 'assets/views/admin/event/index.html',
-            controller: 'AdminEventController',
+            controller: 'AdminEventController as ctrl',
             resolve: {auth: 'AuthRequireResolver'}
         });
 });

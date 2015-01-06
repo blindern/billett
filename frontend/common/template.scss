@@ -178,3 +178,8 @@ footer {
   text-align: center;
   font-size: 150%;
 }
+
+
+[ng-sortable] > * {
+  cursor: pointer;
+}

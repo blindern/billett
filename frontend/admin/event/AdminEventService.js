@@ -25,6 +25,19 @@
             });
         };
 
+        r.prototype.setTicketgroupsOrder = function (groups) {
+            var opts = {
+                'admin': 1
+            };
+
+            var i = 0;
+            groups.forEach(function (group) {
+                opts[group.id] = i++;
+            });
+
+            return $http.post('api/event/' + this.id + '/ticketgroups_order', opts);
+        };
+
         return r;
     });
 })();

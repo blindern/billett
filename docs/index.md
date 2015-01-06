@@ -82,6 +82,7 @@ Ticket groups. All tickets belongs to a ticket group, which is also a price grou
 * decimal(7,2) price
 * optional decimal(7,2) fee (ticket fee)
 * optional int limit (max number of tickets for this group, 0 = unlimited)
+* int order (field to order ticketgroups by)
 
 ### Ticket
 The tickets itself.

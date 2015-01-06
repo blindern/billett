@@ -19,7 +19,8 @@
     "angular-google-analytics": "~0.0.9"
   },
   "devDependencies": {
-    "angular-ui-utils": "~0.1.1"
+    "angular-ui-utils": "~0.1.1",
+    "Sortable": "~1.0.0"
   },
   "resolutions": {
     "angular-animate": "~1.3",

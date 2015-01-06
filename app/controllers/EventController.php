@@ -266,4 +266,26 @@ class EventController extends Controller {
             'Content-Type' => 'image/jpeg',
             'Content-Length' => strlen($img)));
     }
+
+    /**
+     * Change sorting on ticketgroups
+     */
+    public function ticketgroupsSetOrder($id) {
+        $event = Event::findOrFail($id);
+        $groups = $event->ticketgroups;
+
+        $changed = 0;
+        foreach ($groups as $group) {
+            if (\Input::has($group->id)) {
+                $new_order = \Input::get($group->id);
+                if ($new_order != $group->order) {
+                    $group->order = $new_order;
+                    $group->save();
+                    $changed++;
+                }
+            }
+        }
+
+        return $changed;
+    }
 }

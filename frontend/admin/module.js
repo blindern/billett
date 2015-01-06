@@ -5,6 +5,7 @@
         'billett.common',
         'ngResource',
         'ngRoute',
-        'ui.unique'
+        'ui.unique',
+        'ng-sortable'
     ]);
 })();

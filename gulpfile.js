@@ -33,7 +33,9 @@ var js_files_library = [
     "./bower_components/marked/lib/marked.js",
     "./bower_components/angular-marked/angular-marked.js",
     "./bower_components/ngtoast/dist/ngToast.js",
-    "./bower_components/angular-google-analytics/dist/angular-google-analytics.js"
+    "./bower_components/angular-google-analytics/dist/angular-google-analytics.js",
+    "./bower_components/Sortable/Sortable.js", // min.js
+    "./bower_components/Sortable/ng-sortable.js"
 ];
 
 var js_files = [
