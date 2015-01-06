@@ -15,4 +15,7 @@ class OrderGuest extends Order {
         'time',
         'total_amount'
     );
+    protected $appends = array(
+        'total_amount'
+    );
 }

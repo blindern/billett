@@ -77,7 +77,7 @@ class Order extends \Eloquent implements ApiQueryInterface {
 
     protected $model_suffix = '';
     protected $table = 'orders';
-    protected $appends = array('total_amount');
+    //protected $appends = array('total_amount');
 
     protected $apiAllowedFields = array('id', 'order_text_id', 'time', 'ip', 'browser', 'name', 'email', 'phone', 'recruiter', 'total_amount');
     protected $apiAllowedRelations = array('tickets', 'payments');
