@@ -11,5 +11,5 @@
 |
 */
 
+Artisan::add(new CleanOrders);
 Artisan::add(new SendOrderEmail);
-

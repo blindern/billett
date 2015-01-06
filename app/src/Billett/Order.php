@@ -63,6 +63,18 @@ class Order extends \Eloquent implements ApiQueryInterface {
         return static::where('order_text_id', $text_id)->firstOrFail();
     }
 
+    /**
+     * Get query for expired reservations
+     */
+    public static function expiredReservations()
+    {
+        return static::where('is_valid', false)->where(function ($q) {
+            $q->where('is_locked', true)->where('time', '<', time() - static::EXPIRE_LOCKED_RESERVATION);
+        })->orWhere(function ($q) {
+            $q->where('is_locked', false)->where('time', '<', time() - static::EXPIRE_INCOMPLETE_RESERVATION);
+        });
+    }
+
     protected $model_suffix = '';
     protected $table = 'orders';
     protected $appends = array('total_amount');
