@@ -37,9 +37,11 @@
             <tr ng-repeat="event in ctrl.events">
                 <td><a ng-href="a/event/{{::event.id}}">{{::event.title}}</a> ({{::event.time_start|formatdate:'DD. MMM HH:mm'}})</td>
                 <td ng-repeat="accum in event.daysAccum">
-                    {{accum.price+accum.fee}}
-                    <br>
-                    {{accum.count-accum.revoked}} stk
+                    <span ng-if="accum.count > 0 || accum.revoked > 0">
+                        {{accum.price+accum.fee}}
+                        <br>
+                        {{accum.count-accum.revoked}} stk
+                    </span>
                 </td>
                 <th>
                     {{event.accum.price+event.accum.fee}}
