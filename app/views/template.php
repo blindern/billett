@@ -95,7 +95,7 @@ $rev = json_decode($rev_manifest, true);
 
         <footer>
             <ul>
-                <li>2014</li>
+                <li>2015</li>
                 <li><a href="http://blindernuka.no">UKA på Blindern</a></li>
                 <li><a href="http://foreningenbs.no">Foreningen Blindern Studenterhjem</a></li>
                 <li>
