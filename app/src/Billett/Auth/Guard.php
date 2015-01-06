@@ -18,7 +18,8 @@ class Guard extends \Illuminate\Auth\Guard {
         'ingebjorgbm',
         'jannekj',
         'soensteby',
-        'tirilskaardal'
+        'tirilskaardal',
+        'linemykland'
     );
 
     /**
