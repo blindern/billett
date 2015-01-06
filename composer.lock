@@ -362,12 +362,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/henrist/laravel-api-query.git",
-                "reference": "91896c8af16c8db645d014ba5234c6bef456c0fe"
+                "reference": "554865c37210d3b0d9c4652c4e4865caab4d4b1c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/henrist/laravel-api-query/zipball/91896c8af16c8db645d014ba5234c6bef456c0fe",
-                "reference": "91896c8af16c8db645d014ba5234c6bef456c0fe",
+                "url": "https://api.github.com/repos/henrist/laravel-api-query/zipball/554865c37210d3b0d9c4652c4e4865caab4d4b1c",
+                "reference": "554865c37210d3b0d9c4652c4e4865caab4d4b1c",
                 "shasum": ""
             },
             "require": {
@@ -394,7 +394,7 @@
                 "source": "https://github.com/henrist/laravel-api-query/tree/master",
                 "issues": "https://github.com/henrist/laravel-api-query/issues"
             },
-            "time": "2014-12-17 13:16:15"
+            "time": "2015-01-06 18:43:50"
         },
         {
             "name": "iio/libmergepdf",
@@ -447,16 +447,16 @@
         },
         {
             "name": "intervention/image",
-            "version": "2.0.15",
+            "version": "2.0.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Intervention/image.git",
-                "reference": "e012301c8596118578c4abef178955888d02b435"
+                "reference": "b91b0d63488f9a295815af082f987e4773d2843c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Intervention/image/zipball/e012301c8596118578c4abef178955888d02b435",
-                "reference": "e012301c8596118578c4abef178955888d02b435",
+                "url": "https://api.github.com/repos/Intervention/image/zipball/b91b0d63488f9a295815af082f987e4773d2843c",
+                "reference": "b91b0d63488f9a295815af082f987e4773d2843c",
                 "shasum": ""
             },
             "require": {
@@ -499,7 +499,7 @@
                 "thumbnail",
                 "watermark"
             ],
-            "time": "2014-12-12 15:45:28"
+            "time": "2014-12-29 11:58:35"
         },
         {
             "name": "ircmaxell/password-compat",
@@ -666,12 +666,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/henrist/laravel-saml.git",
-                "reference": "9740d2baf00751e0a745da00090bb4e11325e92b"
+                "reference": "9ecc21f7234c8a09916d817ab0c629dea28dc2f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/henrist/laravel-saml/zipball/9740d2baf00751e0a745da00090bb4e11325e92b",
-                "reference": "9740d2baf00751e0a745da00090bb4e11325e92b",
+                "url": "https://api.github.com/repos/henrist/laravel-saml/zipball/9ecc21f7234c8a09916d817ab0c629dea28dc2f3",
+                "reference": "9ecc21f7234c8a09916d817ab0c629dea28dc2f3",
                 "shasum": ""
             },
             "require": {
@@ -718,20 +718,20 @@
             "support": {
                 "source": "https://github.com/henrist/laravel-saml/tree/master"
             },
-            "time": "2014-12-02 23:55:53"
+            "time": "2015-01-03 03:35:01"
         },
         {
             "name": "laravel/framework",
-            "version": "v4.2.12",
+            "version": "v4.2.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "70a60f2ff9b96b3fcd88a68ef5382557733fe671"
+                "reference": "31fe6a5747bbe3c2df21dc4cc8f291e75ab6144f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/70a60f2ff9b96b3fcd88a68ef5382557733fe671",
-                "reference": "70a60f2ff9b96b3fcd88a68ef5382557733fe671",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/31fe6a5747bbe3c2df21dc4cc8f291e75ab6144f",
+                "reference": "31fe6a5747bbe3c2df21dc4cc8f291e75ab6144f",
                 "shasum": ""
             },
             "require": {
@@ -833,20 +833,20 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2014-12-11 17:14:36"
+            "time": "2014-12-22 20:56:10"
         },
         {
             "name": "monolog/monolog",
-            "version": "1.11.0",
+            "version": "1.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "ec3961874c43840e96da3a8a1ed20d8c73d7e5aa"
+                "reference": "1fbe8c2641f2b163addf49cc5e18f144bec6b19f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/ec3961874c43840e96da3a8a1ed20d8c73d7e5aa",
-                "reference": "ec3961874c43840e96da3a8a1ed20d8c73d7e5aa",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/1fbe8c2641f2b163addf49cc5e18f144bec6b19f",
+                "reference": "1fbe8c2641f2b163addf49cc5e18f144bec6b19f",
                 "shasum": ""
             },
             "require": {
@@ -860,7 +860,7 @@
                 "aws/aws-sdk-php": "~2.4, >2.4.8",
                 "doctrine/couchdb": "~1.0@dev",
                 "graylog2/gelf-php": "~1.0",
-                "phpunit/phpunit": "~3.7.0",
+                "phpunit/phpunit": "~4.0",
                 "raven/raven": "~0.5",
                 "ruflin/elastica": "0.90.*",
                 "videlalvaro/php-amqplib": "~2.4"
@@ -879,7 +879,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.11.x-dev"
+                    "dev-master": "1.12.x-dev"
                 }
             },
             "autoload": {
@@ -905,7 +905,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2014-09-30 13:30:58"
+            "time": "2014-12-29 21:29:35"
         },
         {
             "name": "nesbot/carbon",
