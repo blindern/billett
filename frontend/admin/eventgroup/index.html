@@ -19,6 +19,11 @@
 </div>
 
 <div ng-show="group.events.length > 0">
+    <ul>
+        <li><a ng-href="a/eventgroup/{{group.id}}/sold_tickets_stats">Billettstatistikk (salgsoversikt)</a></li>
+        <li><a ng-href="a/orders?tickets.event.eventgroup.id={{group.id}}">Ordreliste</a></li>
+    </ul>
+
     <div class="form-inline">
         <select class="form-control" ng-model="filter_sale" ng-change="applyFilter()">
             <option value="">Vis alle salgsmodus</option>

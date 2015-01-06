@@ -1,0 +1,54 @@
+<div class="admin-soldTicketsStats">
+    <page-property name="title" value="Billettstatistikk"></page-property>
+
+    <div class="page-header">
+        <h1>
+            <span class="eventgroup">
+                <a href="a">Administrasjon</a>
+            </span>
+            Billettstatistikk
+        </h1>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Arrangement</th>
+                <th ng-repeat="day in ctrl.days">{{day}}</th>
+                <th>Sum</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>Sum</th>
+                <td ng-repeat="accum in ctrl.daysAccum">
+                    {{accum.price+accum.fee}}
+                    <br>
+                    {{accum.count-accum.revoked}} stk
+                </td>
+                <th>
+                    {{ctrl.topAccum.price+ctrl.topAccum.fee}}
+                    <br>
+                    {{ctrl.topAccum.count-ctrl.topAccum.revoked}} stk
+                </th>
+            </tr>
+        </tfoot>
+        <tbody>
+            <tr ng-repeat="event in ctrl.events">
+                <td><a ng-href="a/event/{{::event.id}}">{{::event.title}}</a> ({{::event.time_start|formatdate:'DD. MMM HH:mm'}})</td>
+                <td ng-repeat="accum in event.daysAccum">
+                    {{accum.price+accum.fee}}
+                    <br>
+                    {{accum.count-accum.revoked}} stk
+                </td>
+                <th>
+                    {{event.accum.price+event.accum.fee}}
+                    <br>
+                    {{event.accum.count-event.accum.revoked}} stk
+                </th>
+                <!-- TODO: data for ticketgroups are in .ticketgroups -->
+            </tr>
+        </tbody>
+    </table>
+
+</div>

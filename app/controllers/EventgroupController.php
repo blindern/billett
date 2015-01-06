@@ -49,4 +49,12 @@ class EventgroupController extends Controller {
 
         return $list;
     }
+
+    /**
+     * Sold tickets stats
+     */
+    public function soldTicketsStats($id) {
+        Eventgroup::findOrFail($id);
+        return \Blindern\UKA\Billett\Ticket::getStats($id);
+    }
 }

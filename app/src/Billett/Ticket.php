@@ -4,6 +4,52 @@ use Blindern\UKA\Billett\Helpers\PdfTicket;
 use Henrist\LaravelApiQuery\ApiQueryInterface;
 
 class Ticket extends \Eloquent implements ApiQueryInterface {
+    /**
+     * Get sold stats
+     */
+    public static function getStats($eventgroup_id)
+    {
+        $q = \DB::select('
+            SELECT DATE(FROM_UNIXTIME(t.time)) day, ticketgroup_id, event_id,
+              COUNT(t.id) num_tickets,
+              SUM(IF(t.is_revoked=0, 0, 1)) num_revoked
+            FROM tickets t
+              JOIN events e ON t.event_id = e.id
+            WHERE t.is_valid = 1 AND e.group_id = ?
+            GROUP BY DATE(FROM_UNIXTIME(t.time))', array($eventgroup_id));
+
+        $ticketgroups = array();
+        $events = array();
+
+        foreach ($q as $row) {
+            if (!in_array($row->ticketgroup_id, $ticketgroups)) $ticketgroups[] = $row->ticketgroup_id;
+            if (!in_array($row->event_id, $events)) $events[] = $row->event_id;
+        }
+
+        if (count($ticketgroups) > 0) {
+            $qs = implode(",", array_fill(0, count($ticketgroups), "?"));
+            $ticketgroups = \DB::select("
+                SELECT id, title, price, fee, event_id
+                FROM ticketgroups
+                WHERE id IN ($qs)", $ticketgroups);
+        }
+
+        if (count($events) > 0) {
+            $qs = implode(",", array_fill(0, count($events), "?"));
+            $events = \DB::select("
+                SELECT id, title, time_start, category
+                FROM events
+                WHERE id IN ($qs)
+                ORDER BY time_start", $events);
+        }
+
+        return array(
+            'tickets' => $q,
+            'ticketgroups' => $ticketgroups,
+            'events' => $events
+        );
+    }
+
     protected $table = 'tickets';
     protected $appends = array('number');
     protected $hidden = array('pdf');
