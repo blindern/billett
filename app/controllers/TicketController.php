@@ -8,6 +8,11 @@ class TicketController extends \Controller {
         $this->beforeFilter('auth');
     }
 
+    public function index()
+    {
+        return \ApiQuery::processCollection(Ticket::query());
+    }
+
     public function pdf($id)
     {
         $ticket = Ticket::findOrFail($id);

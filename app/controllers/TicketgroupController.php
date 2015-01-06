@@ -10,7 +10,7 @@ class TicketgroupController extends Controller {
     }
     public function index()
     {
-        return \ApiQuery::process(Ticketgroup::query());
+        return \ApiQuery::processCollection(Ticketgroup::query());
     }
 
     public function show($id)

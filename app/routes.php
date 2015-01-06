@@ -29,8 +29,16 @@ Route::resource('/api/ticketgroup', 'TicketgroupController', array(
 Route::get('/event/{id}/image', 'EventController@image');
 Route::post('/event/{id}/image', 'EventController@uploadImage');
 
+// tickets
 Route::get('/api/ticket/{id}/pdf', 'TicketController@pdf');
+Route::resource('/api/ticket', 'TicketController', array(
+    'only' => array('index')
+));
 
+// payments
+Route::resource('/api/payment', 'PaymentController', array(
+    'only' => array('index')
+));
 
 // payment (callback)
 Route::post('/dibs/cancel', 'DibsController@cancel');
