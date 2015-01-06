@@ -12,8 +12,6 @@
     });
 
     module.controller('AdminIndexController', function (Page, $http, $scope, AdminEventgroup) {
-        Page.setTitle('Administration');
-
         AdminEventgroup.query(function (ret) {
             $scope.eventgroups = ret;
         });

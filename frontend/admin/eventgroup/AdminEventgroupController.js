@@ -9,7 +9,6 @@
         var loader = Page.setLoading();
         AdminEventgroup.get({id: $routeParams['id']}, function (ret) {
             loader();
-            Page.setTitle(ret.title);
 
             $scope.group = ret;
             $scope.applyFilter();

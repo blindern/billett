@@ -5,8 +5,6 @@
 
     module.controller('AdminTicketgroupNewController', function (Page, $routeParams,
                                                                  AdminTicketgroup, AdminEvent, $scope, $location) {
-        Page.setTitle('Ny billettgruppe');
-
         $scope.event_id = $routeParams['id'];
         $scope.ticketgroup = {
             price: 0,
