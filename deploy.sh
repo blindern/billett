@@ -5,6 +5,8 @@
 git pull
 composer install
 
+php artisan migrate
+
 npm install
 bower install
 
