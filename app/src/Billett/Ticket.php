@@ -10,7 +10,7 @@ class Ticket extends \Eloquent implements ApiQueryInterface {
     public static function getStats($eventgroup_id)
     {
         $q = \DB::select('
-            SELECT day, ticketgroup_id, event_id, SUM(num_tickets) num_tickets, SUM(num_revoked) num_revoked
+            SELECT day, ticketgroup_id, event_id, CAST(SUM(num_tickets) AS UNSIGNED) num_tickets, CAST(SUM(num_revoked) AS UNSIGNED) num_revoked
             FROM (
                 SELECT DATE(FROM_UNIXTIME(t.time)) day, ticketgroup_id, event_id,
                   COUNT(t.id) num_tickets,
