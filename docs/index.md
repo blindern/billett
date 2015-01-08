@@ -53,9 +53,13 @@ A reservation or actual order.
 ### Paymentgroup
 Payments that are not on web must belong to a Paymentgroup for accounting purposes.
 * int id
+* int eventgroup_id
 * datetime time_start (the time the payment group was created)
 * optional datetime time_end (the time the payment group was ended, if set refuse more payments)
 * string title (a small description for the group)
+* string user_created
+* optional string user_closed
+* optional string description
 
 ### Payments
 Link between payment methods and orders.

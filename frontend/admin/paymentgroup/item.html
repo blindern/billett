@@ -1,0 +1,52 @@
+<div class="admin-paymentgroup-item">
+    <page-property name="title" value="Betalingsgruppe"></page-property>
+
+    <div class="page-header">
+        <h1>
+            <span class="eventgroup">
+                <a href="a/eventgroup/{{ctrl.paymentgroup.eventgroup.id}}">{{ctrl.paymentgroup.eventgroup.title}}</a>
+            </span>
+            Betalingsgruppe: {{ctrl.paymentgroup.title}}
+            <a ng-if="!ctrl.edit" ng-click="ctrl.startEdit()" class="btn btn-default pull-right">Rediger</a>
+        </h1>
+    </div>
+
+    <form ng-if="ctrl.edit" ng-submit="ctrl.save()" class="form-horizontal" autocomplete="off">
+        <div class="form-group">
+            <label for="title" class="col-sm-2 control-label">Tittel</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" ng-model="ctrl.edit.title" id="title" placeholder="" required autofocus>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="description" class="col-sm-2 control-label">Beskrivelse</label>
+            <div class="col-sm-6">
+                <textarea class="form-control" ng-model="ctrl.edit.description" id="description" rows="5" placeholder="(valgfritt)"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-6 col-sm-offset-2">
+                <input type="submit" value="Oppdater" class="btn btn-primary">
+                <a class="btn" ng-click="ctrl.abortEdit()">Avbryt</a>
+            </div>
+        </div>
+    </form>
+
+    <dl class="dl-horizontal" ng-if="!ctrl.edit">
+        <dt>Tittel</dt>
+        <dd>{{ctrl.paymentgroup.title}}</dd>
+        <dt>Beskrivelse</dt>
+        <dd marked="ctrl.paymentgroup.description"></dd>
+        <dt>Opprettet</dt>
+        <dd>{{ctrl.paymentgroup.time_start|formatdate:'DD.MM.YYYY HH:mm'}} (av {{ctrl.paymentgroup.user_created}})</dd>
+        <dt>Avsluttet</dt>
+        <dd ng-if="ctrl.paymentgroup.time_end">{{ctrl.paymentgroup.time_end|formatdate:'DD.MM.YYYY HH:mm'}} (av {{ctrl.paymentgroup.user_closed}})</dd>
+        <dd ng-if="!ctrl.paymentgroup.time_end">Ikke avsluttet</dd>
+    </dl>
+
+    <p ng-if="!ctrl.paymentgroup.time_end">
+        <button class="btn btn-primary" ng-click="ctrl.close()">Avslutt/ta oppgjør</button>
+    </p>
+
+    TODO: regnskapsrapport
+</div>

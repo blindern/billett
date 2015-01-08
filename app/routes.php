@@ -47,6 +47,12 @@ Route::post('/dibs/cancel', 'DibsController@cancel');
 Route::post('/dibs/callback', 'DibsController@callback');
 Route::post('/dibs/accept', 'DibsController@accept');
 
+// paymentgroups
+Route::resource('/api/paymentgroup', 'PaymentgroupController', array(
+    'only' => array('index', 'show', 'store', 'update')
+));
+Route::post('/api/paymentgroup/{id}/close', 'PaymentgroupController@close');
+
 
 /*Route::get('/email', function() {
     $order = Blindern\UKA\Billett\Order::findOrFail(\Input::get('id'));
