@@ -1,15 +1,14 @@
 <page-property name="description" value="Oversikt over arrangementer for {{group.title}}"></page-property>
 
-<div class="page-header">
-    <h1>
-        {{group.title}}
+<div class="eventgroup-page">
+    <div class="page-header">
+        <h1>
+            {{group.title}}
         <span ng-if="AuthService.hasRole('billett.admin')" class="pull-right">
             <a ng-href="a/eventgroup/{{group.id}}" class="btn btn-primary">Admin</a>
         </span>
-    </h1>
-</div>
-
-<div class="eventgroup-page">
+        </h1>
+    </div>
 
     <div ng-if="group.events.length == 0">
         <p>Ingen arrangementer eksisterer.</p>
