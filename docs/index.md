@@ -68,7 +68,7 @@ Link between payment methods and orders.
 * int order_id (reference to order)
 * optional int group_id (reference to payment group)
 * datetime time (when the payment happened)
-* string type (payment type, e.g. web, cash, card, other)
+* bool is_web (if the payment is by card on web page)
 * decimal(7,2) amount (the amount paid, negative will mean a refund)
 * optional decimal(7,2) fee (additional fee paid)
 * optional string transaction_id (used by web payment)

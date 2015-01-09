@@ -115,7 +115,7 @@ class DibsPaymentModule {
                     if ($data['status'] == 'DECLINED') {
                         $payment = new Payment;
                         $payment->order()->associate($order);
-                        $payment->type = 'web';
+                        $payment->is_web = true;
                         $payment->time = time();
                         $payment->amount = 0;
                         $payment->status = $data['status'];
@@ -137,7 +137,7 @@ class DibsPaymentModule {
                     if (!$payment) {
                         $payment = new Payment;
                         $payment->order()->associate($order);
-                        $payment->type = 'web';
+                        $payment->is_web = true;
                         $payment->transaction_id = $data['transaction'];
                     }
                     $payment->time = time();
