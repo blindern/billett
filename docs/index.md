@@ -42,6 +42,7 @@ A reservation or actual order.
 * string order_text_id (longer unique identificator)
 * bool is_locked (lock if payments are being processed, disallow modifications to ticket collection)
 * bool is_valid (if the order has been processed successfully)
+* bool is_admin (if the order is created by admin/ticket office, reservations of this will not expire)
 * datetime time (when the order was created/completed)
 * optional string ip (ip of the client)
 * optional string browser (browser of the client)

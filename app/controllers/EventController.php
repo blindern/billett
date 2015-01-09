@@ -88,6 +88,11 @@ class EventController extends Controller {
         $class = ModelHelper::getModelPath('Order');
         $order = $class::createReservation($groups_to_add);
 
+        // store in session so we know which orders belong to this user
+        $orders = \Session::get('billett_reservations', array());
+        $orders[] = $order->id;
+        \Session::put('billett_reservations', $orders);
+
         $order->load('tickets.ticketgroup', 'tickets.event');
         return $order;
     }

@@ -19,21 +19,18 @@ class Order extends \Eloquent implements ApiQueryInterface {
      * Create reservation
      *
      * @param array(array(Ticketgroup, int ticket-count), ...)
+     * @param bool by ticket office
      */
-    public static function createReservation($grouplist)
+    public static function createReservation($grouplist, $is_admin = false)
     {
         $order = new static();
 
         $order->time = time();
         $order->ip = $_SERVER['REMOTE_ADDR'];
         $order->browser = $_SERVER['HTTP_USER_AGENT'];
+        $order->is_admin = $is_admin;
         $order->save();
         $order->generateOrderTextId();
-
-        // store in session so we know which orders belong to this user
-        $orders = \Session::get('billett_reservations', array());
-        $orders[] = $order->id;
-        \Session::put('billett_reservations', $orders);
 
         // create and assign the tickets
         foreach ($grouplist as $group) {
@@ -42,7 +39,9 @@ class Order extends \Eloquent implements ApiQueryInterface {
                 $ticket->event()->associate($group[0]->event);
                 $ticket->ticketgroup()->associate($group[0]);
                 $ticket->order()->associate($order);
-                $ticket->expire = time() + static::EXPIRE_INCOMPLETE_RESERVATION;
+                if (!$is_admin) {
+                    $ticket->expire = time() + static::EXPIRE_INCOMPLETE_RESERVATION;
+                }
                 $ticket->save();
             }
         }
@@ -68,7 +67,7 @@ class Order extends \Eloquent implements ApiQueryInterface {
      */
     public static function expiredReservations()
     {
-        return static::where('is_valid', false)->where(function ($q) {
+        return static::where('is_valid', false)->where('is_admin', false)->where(function ($q) {
             $q->where('is_locked', true)->where('time', '<', time() - static::EXPIRE_LOCKED_RESERVATION);
         })->orWhere(function ($q) {
             $q->where('is_locked', false)->where('time', '<', time() - static::EXPIRE_INCOMPLETE_RESERVATION);
@@ -79,7 +78,7 @@ class Order extends \Eloquent implements ApiQueryInterface {
     protected $table = 'orders';
     //protected $appends = array('total_amount');
 
-    protected $apiAllowedFields = array('id', 'order_text_id', 'time', 'ip', 'browser', 'name', 'email', 'phone', 'recruiter', 'total_amount');
+    protected $apiAllowedFields = array('id', 'order_text_id', 'is_valid', 'is_admin', 'time', 'ip', 'browser', 'name', 'email', 'phone', 'recruiter', 'total_amount');
     protected $apiAllowedRelations = array('tickets', 'payments');
 
     public function tickets()
@@ -127,7 +126,7 @@ class Order extends \Eloquent implements ApiQueryInterface {
      */
     public function hasExpired()
     {
-        if (!$this->isReservation()) return false;
+        if (!$this->isReservation() || $this->is_admin) return false;
         return time() > $this->time + $this->getExpireDelay();
     }
 
@@ -259,8 +258,10 @@ class Order extends \Eloquent implements ApiQueryInterface {
         }
 
         foreach ($this->tickets as $ticket) {
-            $ticket->expire = time() + $this->getExpireDelay();
-            $ticket->save();
+            if ($ticket->expire) {
+                $ticket->expire = time() + $this->getExpireDelay();
+                $ticket->save();
+            }
         }
 
         $this->time = time();
