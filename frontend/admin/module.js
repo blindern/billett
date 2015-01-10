@@ -4,7 +4,7 @@
         'billett.auth',
         'billett.common',
         'ngResource',
-        'ngRoute',
+        'ui.router',
         'ui.unique',
         'ng-sortable'
     ]);

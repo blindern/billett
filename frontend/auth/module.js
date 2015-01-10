@@ -1,5 +1,5 @@
 (function() {
     angular.module('billett.auth', [
-        'ngRoute'
+        'ui.router'
     ]);
 })();

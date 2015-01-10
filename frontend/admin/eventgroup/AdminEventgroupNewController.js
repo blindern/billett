@@ -3,7 +3,7 @@
 
     var module = angular.module('billett.admin');
 
-    module.controller('AdminEventgroupNewController', function (Page, $routeParams) {
+    module.controller('AdminEventgroupNewController', function (Page, $stateParams) {
 
     });
 })();

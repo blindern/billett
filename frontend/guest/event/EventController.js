@@ -3,23 +3,24 @@
 
     var module = angular.module('billett.guest');
 
-    module.config(function ($routeProvider) {
-        $routeProvider.when('/event/:id', {
+    module.config(function ($stateProvider) {
+        $stateProvider.state('event', {
+            url: '/event/:id',
             templateUrl: 'assets/views/guest/event/index.html',
             controller: 'EventController as ctrl'
         });
     });
 
-    module.controller('EventController', function (Page, EventReservation, $http, $scope, $location, $routeParams, $sce, ResponseData, $q) {
+    module.controller('EventController', function (Page, EventReservation, $http, $scope, $location, $stateParams, $sce, ResponseData, $q) {
         var ctrl = this;
         Page.setTitle('Arrangement');
 
         var loader = Page.setLoading();
-        $http.get('api/event/' + encodeURIComponent($routeParams['id'])).success(function (ret) {
+        $http.get('api/event/' + encodeURIComponent($stateParams['id'])).success(function (ret) {
             loader();
 
             // do we have an alias not being used?
-            if (ret.alias != null && $routeParams['id'] != ret.alias) {
+            if (ret.alias != null && $stateParams['id'] != ret.alias) {
                 $location.path('/event/' + ret.alias);
                 return;
             }

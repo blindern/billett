@@ -1,8 +1,8 @@
-angular.module('billett.admin').controller('AdminPaymentgroupNewController', function ($routeParams, $location, AdminEventgroup, AdminPaymentgroupService, Page) {
+angular.module('billett.admin').controller('AdminPaymentgroupNewController', function ($stateParams, $location, AdminEventgroup, AdminPaymentgroupService, Page) {
     var ctrl = this;
 
     var loader = Page.setLoading();
-    AdminEventgroup.get({id: $routeParams['eventgroup_id']}, function (ret) {
+    AdminEventgroup.get({id: $stateParams['eventgroup_id']}, function (ret) {
         loader();
 
         ctrl.eventgroup = ret;

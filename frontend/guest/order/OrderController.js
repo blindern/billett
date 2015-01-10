@@ -3,8 +3,9 @@
 
     var module = angular.module('billett.guest');
 
-    module.config(function ($routeProvider) {
-        $routeProvider.when('/dibs/accept', {
+    module.config(function ($stateProvider) {
+        $stateProvider.state('dibs-accept', {
+            url: '/dibs/accept',
             templateUrl: 'assets/views/guest/order/receipt.html',
             controller: 'OrderController'
         });

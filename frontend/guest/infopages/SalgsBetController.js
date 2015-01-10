@@ -3,8 +3,9 @@
 
     var module = angular.module('billett.guest');
 
-    module.config(function ($routeProvider) {
-        $routeProvider.when('/salgsbetingelser', {
+    module.config(function ($stateProvider) {
+        $stateProvider.state('salgsbetingelser', {
+            url: '/salgsbetingelser',
             templateUrl: 'assets/views/guest/infopages/salgsbetingelser.html',
             controller: 'SalgsBetController'
         });

@@ -3,19 +3,19 @@
 
     var module = angular.module('billett.admin');
 
-    module.controller('AdminEventEditNewController', function (Page, AdminEventgroup, $routeParams, $rootScope, $scope, AdminEvent, $location, $window, $timeout) {
-        var is_new = $scope.is_new = !('id' in $routeParams);
+    module.controller('AdminEventEditNewController', function (Page, AdminEventgroup, $stateParams, $rootScope, $scope, AdminEvent, $location, $window, $timeout) {
+        var is_new = $scope.is_new = !('id' in $stateParams);
 
         var loader = Page.setLoading();
         if (is_new) {
             Page.setTitle('Nytt arrangement');
-            $scope.eventgroup_id = $routeParams['group_id'];
+            $scope.eventgroup_id = $stateParams['group_id'];
             $scope.event = {
                 max_sales: 0,
                 max_each_person: 10
             };
 
-            AdminEventgroup.get({id: $routeParams['group_id']}, function (ret) {
+            AdminEventgroup.get({id: $stateParams['group_id']}, function (ret) {
                 $scope.group = ret;
                 loader();
             }, function () {
@@ -27,7 +27,7 @@
         else {
             Page.setTitle('Rediger arrangement');
 
-            AdminEvent.get({id: $routeParams['id']}, function (ret) {
+            AdminEvent.get({id: $stateParams['id']}, function (ret) {
                 loader();
                 $scope.event = ret;
                 $scope.group = ret.eventgroup;

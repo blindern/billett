@@ -85,7 +85,7 @@ $rev = json_decode($rev_manifest, true);
         <hr>
         <?php endif; ?>
 
-        <div ng-show="!loading" ng-if="!page404" ng-view class="main-view"></div>
+        <div ng-show="!loading" ng-if="!page404" ui-view class="main-view"></div>
         <div ng-if="loading" class="page-loading">
             Laster innhold...
         </div>

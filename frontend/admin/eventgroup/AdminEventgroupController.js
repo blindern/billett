@@ -3,11 +3,11 @@
 
     var module = angular.module('billett.admin');
 
-    module.controller('AdminEventgroupController', function (Page, $routeParams, $http, $scope, AdminEventgroup, AdminEvent, $location) {
+    module.controller('AdminEventgroupController', function (Page, $stateParams, $http, $scope, AdminEventgroup, AdminEvent, $location) {
         Page.setTitle('Arrangementgruppe');
 
         var loader = Page.setLoading();
-        AdminEventgroup.get({id: $routeParams['id']}, function (ret) {
+        AdminEventgroup.get({id: $stateParams['id']}, function (ret) {
             loader();
 
             $scope.group = ret;
