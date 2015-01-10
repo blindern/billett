@@ -2,7 +2,7 @@
     angular.module('billett.guest', [
         'billett.common',
         'hc.marked',
-        'ngRoute',
+        'ui.router',
         'ngAnimate'
     ]);
 })();

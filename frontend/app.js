@@ -4,7 +4,7 @@
     moment.locale('nb');
 
     var module = angular.module('billett', [
-        'ngRoute',
+        'ui.router',
         'angular-google-analytics',
         'billett.auth',
         'billett.common',
@@ -12,8 +12,17 @@
         'billett.guest'
     ]);
 
-    module.config(function ($locationProvider, $routeProvider, AnalyticsProvider) {
-        $routeProvider.otherwise({templateUrl: 'assets/views/guest/infopages/404.html'});
+    module.config(function ($locationProvider, $stateProvider, $urlRouterProvider, AnalyticsProvider) {
+        $stateProvider.state('404', {
+            templateUrl: 'assets/views/guest/infopages/404.html'
+        });
+
+        $urlRouterProvider.otherwise(function ($injector, $location) {
+            console.log("404 found");
+            $injector.invoke(['$state', function ($state) {
+                $state.go('404');
+            }]);
+        });
 
         // use HTML5 history API for nice urls
         $locationProvider.html5Mode(true);
@@ -26,7 +35,7 @@
     });
 
     module.run(function ($rootScope, $timeout, Analytics, Page) {
-        $rootScope.$on('$routeChangeSuccess', function () {
+        $rootScope.$on('$stateChangeSuccess', function () {
             // let it finish page setup
             $timeout(function() {
                 var loaded = function() {

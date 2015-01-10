@@ -3,14 +3,16 @@
 
     var module = angular.module('billett.guest');
 
-    module.config(function ($routeProvider) {
-        $routeProvider.when('/eventgroup/:id/:query?', {
-            templateUrl: 'assets/views/guest/eventgroup/index.html',
-            controller: 'EventgroupController'
-        });
+    module.config(function ($stateProvider) {
+        $stateProvider
+            .state('eventgroup', {
+                url: '/eventgroup/{id}{query:(?:/.*)?}',
+                templateUrl: 'assets/views/guest/eventgroup/index.html',
+                controller: 'EventgroupController'
+            });
     });
 
-    module.controller('EventgroupController', function (Page, $http, $scope, $routeParams, $location) {
+    module.controller('EventgroupController', function (Page, $http, $scope, $stateParams, $location) {
         Page.setTitle('Arrangementgruppe');
 
         var filter = {
@@ -18,18 +20,19 @@
             category: null
         };
         $scope.isFilter = false;
-        if ($routeParams['query']) {
-            var date = moment($routeParams['query'], 'YYYY-MM-DD');
+        if ($stateParams['query']) {
+            $stateParams['query'] = $stateParams['query'].substring(1); // remove leading slash
+            var date = moment($stateParams['query'], 'YYYY-MM-DD');
             if (date.isValid()) {
                 filter.date = date.format('YYYY-MM-DD');
             } else {
-                filter.category = $routeParams['query'];
+                filter.category = $stateParams['query'];
             }
             $scope.isFilter = true;
         }
 
         var loader = Page.setLoading();
-        $http.get('api/eventgroup/' + encodeURIComponent($routeParams['id'])).success(function (ret) {
+        $http.get('api/eventgroup/' + encodeURIComponent($stateParams['id'])).success(function (ret) {
             loader();
             Page.setTitle(ret.title);
             $scope.group = ret;
