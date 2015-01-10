@@ -3,11 +3,11 @@
 
     var module = angular.module('billett.admin');
 
-    module.controller('AdminEventController', function(Page, $routeParams, AdminEvent, $location, $scope, FileUploader) {
+    module.controller('AdminEventController', function(Page, $stateParams, AdminEvent, $location, $scope, FileUploader) {
         Page.setTitle("Arrangement");
 
         var loader = Page.setLoading();
-        AdminEvent.get({id:$routeParams['id']}, function(ret) {
+        AdminEvent.get({id:$stateParams['id']}, function(ret) {
             loader();
             $scope.event = ret;
         }, function(err) {
@@ -31,7 +31,7 @@
 
         // uploading of image
         $scope.uploader = new FileUploader({
-            url: 'event/'+$routeParams['id']+'/image',
+            url: 'event/'+$stateParams['id']+'/image',
             headers: {
                 'X-Csrf-Token': $('meta[name=csrf-token]').attr('content')
             },

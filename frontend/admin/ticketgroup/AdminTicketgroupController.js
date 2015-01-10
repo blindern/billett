@@ -3,12 +3,12 @@
 
     var module = angular.module('billett.admin');
 
-    module.controller('AdminTicketgroupController', function (Page, $routeParams,
+    module.controller('AdminTicketgroupController', function (Page, $stateParams,
                                                               AdminTicketgroup, $scope, $location) {
         Page.setTitle('Billettgruppe');
 
-        $scope.event_id = $routeParams['event_id'];
-        $scope.ticketgroup_id = $routeParams['ticketgroup_id'];
+        $scope.event_id = $stateParams['event_id'];
+        $scope.ticketgroup_id = $stateParams['ticketgroup_id'];
 
         var loader = Page.setLoading();
         AdminTicketgroup.get({id: $scope.ticketgroup_id}, function (ret) {

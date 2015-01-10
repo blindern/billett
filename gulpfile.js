@@ -22,7 +22,7 @@ var js_files_library = [
     "./bower_components/jquery/dist/jquery.js",
     "./bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js",
     "./bower_components/angular/angular.js",
-    "./bower_components/angular-route/angular-route.js",
+    "./bower_components/angular-ui-router/release/angular-ui-router.js",
     "./bower_components/angular-animate/angular-animate.js",
     "./bower_components/angular-resource/angular-resource.js",
     "./bower_components/angular-sanitize/angular-sanitize.js",

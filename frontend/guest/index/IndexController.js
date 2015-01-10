@@ -3,8 +3,9 @@
 
     var module = angular.module('billett.guest');
 
-    module.config(function ($routeProvider) {
-        $routeProvider.when('/', {
+    module.config(function ($stateProvider) {
+        $stateProvider.state('index', {
+            url: '/',
             templateUrl: 'assets/views/guest/index/index.html',
             controller: 'IndexController'
         });

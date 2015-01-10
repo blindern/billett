@@ -1,9 +1,9 @@
-angular.module('billett.admin').controller('AdminEventgroupSoldTicketsStatsController', function (Page, $routeParams, AdminEventgroup) {
+angular.module('billett.admin').controller('AdminEventgroupSoldTicketsStatsController', function (Page, $stateParams, AdminEventgroup) {
     var self = this;
     Page.setTitle('Billettstatistikk for arrangementgruppe');
 
     var loader = Page.setLoading();
-    AdminEventgroup.getSoldTicketsStats($routeParams['id']).success(function (ret) {
+    AdminEventgroup.getSoldTicketsStats($stateParams['id']).success(function (ret) {
         loader();
 
         var accum = function () {

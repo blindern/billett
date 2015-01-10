@@ -3,8 +3,9 @@
 
     var module = angular.module('billett.admin');
 
-    module.config(function ($routeProvider) {
-        $routeProvider.when('/a', {
+    module.config(function ($stateProvider) {
+        $stateProvider.state('admin-index', {
+            url: '/a',
             templateUrl: 'assets/views/admin/index/index.html',
             controller: 'AdminIndexController',
             resolve: {auth: 'AuthRequireResolver'}

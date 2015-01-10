@@ -1,16 +1,19 @@
-angular.module('billett.admin').config(function ($routeProvider) {
-    $routeProvider
-        .when('/a/paymentgroup/:id', {
+angular.module('billett.admin').config(function ($stateProvider) {
+    $stateProvider
+        .state('admin-paymentgroup', {
+            url: '/a/paymentgroup/:id',
             templateUrl: 'assets/views/admin/paymentgroup/item.html',
             controller: 'AdminPaymentgroupItemController as ctrl',
             resolve: {auth: 'AuthRequireResolver'}
         })
-        .when('/a/eventgroup/:eventgroup_id/paymentgroups', {
+        .state('admin-paymentgroups', {
+            url: '/a/eventgroup/:eventgroup_id/paymentgroups',
             templateUrl: 'assets/views/admin/paymentgroup/list.html',
             controller: 'AdminPaymentgroupListController as ctrl',
             resolve: {auth: 'AuthRequireResolver'}
         })
-        .when('/a/eventgroup/:eventgroup_id/paymentgroup/new', {
+        .state('admin-paymentgroup-new', {
+            url: '/a/eventgroup/:eventgroup_id/paymentgroup/new',
             templateUrl: 'assets/views/admin/paymentgroup/new.html',
             controller: 'AdminPaymentgroupNewController as ctrl',
             resolve: {auth: 'AuthRequireResolver'}

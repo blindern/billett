@@ -3,20 +3,22 @@
 
     var module = angular.module('billett.auth');
 
-    module.config(['$routeProvider', function($routeProvider) {
-        $routeProvider.when('/login', {
+    module.config(function($stateProvider) {
+        $stateProvider.state('login', {
+            url: '/login',
             template: 'Går til logg inn side',
             controller: function() {
                 window.location.href = 'login';
             }
         }).
-        when('/logout', {
+        state('logout', {
+            url: '/logout',
             template: 'Logger ut',
             controller: function() {
                 window.location.href = 'logout';
             }
         });
-    }]);
+    });
 
     module.run(function($rootScope, AuthService) {
         // create a global binding that can be used by templates

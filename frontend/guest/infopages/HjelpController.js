@@ -3,8 +3,9 @@
 
     var module = angular.module('billett.guest');
 
-    module.config(function ($routeProvider) {
-        $routeProvider.when('/hjelp', {
+    module.config(function ($stateProvider) {
+        $stateProvider.state('hjelp', {
+            url: '/hjelp',
             templateUrl: 'assets/views/guest/infopages/hjelp.html',
             controller: 'HjelpController'
         });
