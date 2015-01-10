@@ -1,26 +1,152 @@
 <div class="admin-eventgroup-sell">
-    <page-property name="title" value="Billettluke"></page-property>
+    <page-property name="title" value="Billettluke - ny ordre"></page-property>
 
     <div class="page-header">
+        <div class="pull-right form-inline" ng-if="ctrl.paymentgroups.length > 0">
+            Oppgjørskonto:
+            <select class="form-control" ng-options="(g.time_start|formatdate:'DD.MM.YYYY HH:mm ') + '(' + g.user_created + '): ' + g.title for g in ctrl.paymentgroups" ng-model="ctrl.active_paymentgroup" ng-change="ctrl.changePaymentgroup()">
+                <option value="" ng-if="!ctrl.active_paymentgroup">Velg ...</option>
+            </select>
+            (<a ui-sref="admin-paymentgroup-new({eventgroup_id: ctrl.eventgroup.id, is_selling: true})">Opprett ny</a>)
+        </div>
+
         <h1>
             <span class="eventgroup">
                 <a href="a/eventgroup/{{ctrl.eventgroup.id}}">{{ctrl.eventgroup.title}}</a>
             </span>
-            Billettluke
+            Billettluke - ny ordre
         </h1>
     </div>
 
     <p>Dette er løsningen beregnet for salg av billetter gjennom billettluke. Når en ordre er registrert her, er det viktig også å få betalt for ordren. På slutten av salgsdagen tas det oppgjør som viser hva som er solgt og verdi innsamlet.</p>
 
-    <p>TODO: velg betalingsgruppe (blir kun brukt når ordren gjennomføres)</p>
+    <p class="alert alert-danger" ng-if="ctrl.paymentgroups.length == 0">
+        Ingen oppgjørskonto eksisterer. Du må <a ng-href="a/eventgroup/{{ctrl.eventgroup.id}}/paymentgroup/new">opprette en ny</a> for å fortsette.
+    </p>
 
-    <p>TODO: ordredetaljer (skjema man kan fylle inn)</p>
+    <div ng-if="ctrl.paymentgroups.length > 0">
+        <div class="row">
+            <div class="col-sm-6">
 
-    <p>TODO: liste over alle arrangementer med billettgrupper det kan kjøpes billetter, +/- for å legge til/fjerne billett</p>
+                <h2>Ordredetaljer</h2>
+                <p>Dersom ordredetaljer fylles ut vil det bli sendt en kopi på e-post når ordren blir opprettet.</p>
+                <form class="form-horizontal" ng-submit="!form.$valid || placeOrder()" name="form">
+                    <div class="form-group">
+                        <label class="text-right col-sm-4">Ordrenr</label>
+                        <div class="col-sm-8">
+                            TODO
+                        </div>
+                    </div>
+                    <div class="form-group" form-input-check="form,username">
+                        <label class="control-label col-sm-4">Fullt navn</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="username" ng-model="contact.name" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-group" form-input-check="form,email">
+                        <label class="control-label col-sm-4">E-postadresse</label>
+                        <div class="col-sm-8">
+                            <input type="email" name="email" ng-model="contact.email" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-group" form-input-check="form,phone">
+                        <label class="control-label col-sm-4">Telefonnummer</label>
+                        <div class="col-sm-8">
+                            <input type="tel" name="phone" ng-model="contact.phone" class="form-control" ng-pattern="/^\+?\d+$/" required>
+                        </div>
+                    </div>
+                    <div class="form-group" form-input-check="form,recruiter">
+                        <label class="control-label col-sm-4">Evt. vervet av</label>
+                        <div class="col-sm-8">
+                            <input type="tel" name="recruiter" ng-model="contact.recruiter" class="form-control" placeholder="(valgfritt)">
+                            <span class="help-block">Navn på beboer ved Blindern Studenterhjem</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="text-right col-sm-4">Totalt å betale</label>
+                        <div class="col-sm-8">
+                            <b>{{(TODO||123)|price:true}}</b>
+                        </div>
+                    </div>
 
-    <p>TODO: (steg 1:) reserver</p>
+                    <input class="btn btn-success" type="submit" value="Registrer og marker som betalt">
+                    <input class="btn btn-danger" type="button" value="Avbryt ordre">
 
-    <p>TODO: (steg 2:) gjennomfør en reservasjon (på denne måten kan man få betaling før billettene faktisk utstedes, og samtidig være sikker på at billettene er tilgjengelig)</p>
+                </form>
 
+            </div>
+            <div class="col-sm-6">
+
+                <h2>
+                    <span class="pull-right">
+                        <label><input type="checkbox" ng-model="ctrl.ticketfilter.show_old"> Vis gamle arrangementer</label><br>
+                        <label><input type="checkbox" ng-model="ctrl.ticketfilter.show_inactive"> Vis inaktive billettgrupper</label>
+                    </span>
+                    Billetter
+                </h2>
+
+                <p><input class="form-control" type="text" ng-model="ctrl.ticket_search" placeholder="Søk .."></p>
+
+                <div class="event-list">
+                    <div class="event" ng-repeat="event in ctrl.events|filter:ctrl.ticket_search">
+                        <h4>
+                            <span class="pull-right">{{::event.time_start|formatdate:'ddd D. MMM YYYY HH:mm'}}</span>
+                            {{::event.title}}
+                        </h4>
+                        <dl class="event-info">
+                            <dt>Tilgjengelig</dt>
+                            <dd>{{::event.ticket_count.totals.free}} / {{::event.max_sales}}</dd>
+                        </dl>
+                        <div class="ticketgroup" ng-repeat="ticketgroup in event.ticketgroups|filter:{'is_active': ctrl.ticketfilter.show_inactive}:ctrl.ticketgroup_check">
+                            <div class="meta">
+                                <div class="title">{{ticketgroup.title}}</div><!-- white space fix for inline-block
+                                 --><div class="price">
+                                        <span class="price-label">Pris:</span>
+                                        {{ticketgroup.price+ticketgroup.fee|price:true}}
+                                        <span class="price-fee">Hvorav {{ticketgroup.fee|price:true}} i gebyr</span>
+                                    </div>
+                                    <div ng-if="ticketgroup.ticket_text" class="ticket-text">
+                                        {{ticketgroup.ticket_text}}
+                                    </div>
+                                </div><!-- white space fix for inline-block
+                             --><div class="count">
+                                    <span class="value" ng-init="ticketgroup.order_count=0">
+                                        {{ticketgroup.order_count}}
+                                    </span>
+                                    <button type="button" ng-click="changeTicketgroupNum(ticketgroup, 1)"
+                                            class="btn btn-primary btn-sm"
+                                            ng-disabled="event.max_each_person<=0">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                    <button type="button" ng-click="changeTicketgroupNum(ticketgroup, -1)"
+                                            class="btn btn-primary btn-sm"
+                                            ng-disabled="ticketgroup.order_count<=0">
+                                        <span class="glyphicon glyphicon-minus"></span>
+                                    </button>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--
+            <div class="form-group">
+                <label class="text-right col-sm-4">Reserverte billetter</label>
+                <div class="col-sm-8">
+                    <div ng-repeat="ticket in reservation.tickets">
+                        {{ticket.ticketgroup.title}} #{{ticket.id}}
+                        <span class="reservation-ticket-price">{{ticket.ticketgroup.price+ticket.ticketgroup.fee|price:true}} (hvorav {{ticket.ticketgroup.fee|price:true}} i gebyr)</span>
+                    </div>
+                </div>
+            </div>-->
+
+            </div>
+        </div>
+
+    </div>
+
+    <hr>
+
+    <h2>Ordrehistorikk</h2>
     <p>TODO: liste over siste 5 ordre i betalingsgruppa, lenke til betalingsgruppe med full liste</p>
+    <p>TODO: hva med reservasjoner ikke fullført?</p>
 </div>
