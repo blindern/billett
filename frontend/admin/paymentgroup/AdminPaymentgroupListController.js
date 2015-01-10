@@ -8,7 +8,7 @@ angular.module('billett.admin').controller('AdminPaymentgroupListController', fu
         AdminPaymentgroupService.query({filter: 'eventgroup_id='+ret.id}, function (groups) {
             loader();
 
-            ctrl.paymentgroups = groups.result;
+            ctrl.paymentgroups = groups;
         });
     });
 });

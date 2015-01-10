@@ -2,12 +2,6 @@ angular.module('billett.admin').factory('AdminPaymentgroupService', function ($h
     var r = $resource('api/paymentgroup/:id', {
         id: '@id'
     }, {
-        query: {
-            isArray: false,
-            params: {
-                limit: 9999
-            }
-        },
         update: {
             method: 'PUT'
         }
