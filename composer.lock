@@ -362,12 +362,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/henrist/laravel-api-query.git",
-                "reference": "554865c37210d3b0d9c4652c4e4865caab4d4b1c"
+                "reference": "d2c3c7fae736347d26cc8530143b226755dbd0e8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/henrist/laravel-api-query/zipball/554865c37210d3b0d9c4652c4e4865caab4d4b1c",
-                "reference": "554865c37210d3b0d9c4652c4e4865caab4d4b1c",
+                "url": "https://api.github.com/repos/henrist/laravel-api-query/zipball/d2c3c7fae736347d26cc8530143b226755dbd0e8",
+                "reference": "d2c3c7fae736347d26cc8530143b226755dbd0e8",
                 "shasum": ""
             },
             "require": {
@@ -394,7 +394,7 @@
                 "source": "https://github.com/henrist/laravel-api-query/tree/master",
                 "issues": "https://github.com/henrist/laravel-api-query/issues"
             },
-            "time": "2015-01-06 18:43:50"
+            "time": "2015-01-10 17:14:29"
         },
         {
             "name": "iio/libmergepdf",
