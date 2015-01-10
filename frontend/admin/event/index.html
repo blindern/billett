@@ -88,7 +88,7 @@
         Ingen billettgrupper eksisterer.
     </p>
 
-    <div ng-show="event.ticketgroups.length > 0" class="table-responsive">
+    <div ng-show="event.ticketgroups.length > 0" class="table-responsive ticketgroups">
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -111,7 +111,7 @@
                 </tr>
             </thead>
             <tbody ng-sortable="{animation: 100, onUpdate: ctrl.onTicketgroupsOrder}">
-                <tr ng-repeat="g in event.ticketgroups">
+                <tr ng-class="{ 'not-published': !g.is_published, 'not-active': !g.is_active }" ng-repeat="g in event.ticketgroups">
                     <td>
                         <a ng-href="api/ticketgroup/{{g.id}}/previewticket" target="_blank">
                             <span class="glyphicon glyphicon-eye-open" title="Forhåndsvis"></span>
@@ -143,7 +143,7 @@
                     </td>
                 </tr>
             </tbody>
-            <tbody>
+            <tfoot>
                 <tr>
                     <th colspan="8">&nbsp;</th>
                     <th>
@@ -175,7 +175,7 @@
                         {{event.max_normal_sales}}
                     </th>
                     <th>&nbsp;</th>
-            </tbody>
+            </tfoot>
         </table>
     </div>
 
