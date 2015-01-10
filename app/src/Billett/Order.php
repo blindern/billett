@@ -21,10 +21,11 @@ class Order extends \Eloquent implements ApiQueryInterface {
      * @param array(array(Ticketgroup, int ticket-count), ...)
      * @param bool by ticket office
      */
-    public static function createReservation($grouplist, $is_admin = false)
+    public static function createReservation(Eventgroup $eg, $grouplist, $is_admin = false)
     {
         $order = new static();
 
+        $order->eventgroup_id = $eg->id;
         $order->time = time();
         $order->ip = $_SERVER['REMOTE_ADDR'];
         $order->browser = $_SERVER['HTTP_USER_AGENT'];
@@ -78,8 +79,13 @@ class Order extends \Eloquent implements ApiQueryInterface {
     protected $table = 'orders';
     //protected $appends = array('total_amount');
 
-    protected $apiAllowedFields = array('id', 'order_text_id', 'is_valid', 'is_admin', 'time', 'ip', 'browser', 'name', 'email', 'phone', 'recruiter', 'total_amount');
-    protected $apiAllowedRelations = array('tickets', 'payments');
+    protected $apiAllowedFields = array('id', 'eventgroup_id', 'order_text_id', 'is_valid', 'is_admin', 'time', 'ip', 'browser', 'name', 'email', 'phone', 'recruiter', 'total_amount');
+    protected $apiAllowedRelations = array('eventgroup', 'tickets', 'payments');
+
+    public function eventgroup()
+    {
+        return $this->belongsTo('\\Blindern\\UKA\\Billett\\Eventgroup'.$this->model_suffix, 'group_id');
+    }
 
     public function tickets()
     {
