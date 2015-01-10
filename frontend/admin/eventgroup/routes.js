@@ -14,5 +14,10 @@ angular.module('billett.admin').config(function ($routeProvider) {
             templateUrl: 'assets/views/admin/eventgroup/sold_tickets_stats.html',
             controller: 'AdminEventgroupSoldTicketsStatsController as ctrl',
             resolve: {auth: 'AuthRequireResolver'}
+        })
+        .when('/a/eventgroup/:id/sell', {
+            templateUrl: 'assets/views/admin/eventgroup/sell.html',
+            controller: 'AdminEventgroupSellController as ctrl',
+            resolve: {auth: 'AuthRequireResolver'}
         });
 });
