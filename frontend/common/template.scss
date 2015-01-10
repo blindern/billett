@@ -4,14 +4,6 @@ body {
 }
 
 
-@media (min-width: $grid-float-breakpoint) {
-  .container {
-    width: auto;
-  }
-}
-
-
-
 header.header {
   border-bottom: 1px solid $hr-border;
 
@@ -135,6 +127,10 @@ footer {
 }
 
 /* Customize container */
+.container {
+  width: auto;
+  max-width: $screen-lg-min;
+}
 @media (min-width: 730px) {
   .container.noadmin {
     max-width: 730px;
