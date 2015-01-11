@@ -3,11 +3,28 @@
 use \Carbon\Carbon;
 $order_time = Carbon::createFromTimeStamp($order->time)->format('d.m.Y H:i:s');
 
+// ticket list
+$tickets_valid = [];
+$tickets_revoked = [];
+$total = 0;
+foreach ($order->tickets as $ticket) {
+    if (!$ticket->is_valid) continue;
+    if ($ticket->is_revoked) {
+        $tickets_revoked[] = $ticket;
+        continue;
+    }
+    $tickets_valid[] = $ticket;
+    $total += $ticket->ticketgroup->price + $ticket->ticketgroup->fee;
+}
+
 // only add payment info to email if there is only one valid payment and it is a online/web payment
+// if any tickets are revoked, we assume the order has been changed and should not contain payment info
 $payment = null;
-$payments = $order->payments()->where('amount', '!=', 0)->get();
-if (count($payments) == 1 && $payments[0]->status == 'ACCEPTED') {
-    $payment = $payments[0];
+if (count($tickets_revoked) == 0) {
+    $payments = $order->payments()->where('amount', '!=', 0)->get();
+    if (count($payments) == 1 && $payments[0]->status == 'ACCEPTED') {
+        $payment = $payments[0];
+    }
 }
 
 ?>
@@ -47,22 +64,37 @@ Ordrenummer: <?=$order->order_text_id;?>
 
 Kjøpstidspunkt: <?=$order_time;?>
 
-
-Billettspesifikasjon:
 <?php
-$total = 0;
-foreach ($order->tickets as $ticket) {
-    $total += $ticket->ticketgroup->price + $ticket->ticketgroup->fee;
+
+echo '
+Billettspesifikasjon:';
+
+foreach ($tickets_valid as $ticket) {
     $time = Carbon::createFromTimeStamp($ticket->event->time_start)->format('d.m.Y H:i');
-    echo
-'  '.$time.': '.$ticket->event->title.': '.$ticket->ticketgroup->title.' ('.format_nok($ticket->ticketgroup->price+$ticket->ticketgroup->fee);
 
-    if ($ticket->ticketgroup->fee) echo ', hvorav '.format_nok($ticket->ticketgroup->fee).' i billettgebyr';
+    $price = format_nok($ticket->ticketgroup->price+$ticket->ticketgroup->fee);
+    if ($ticket->ticketgroup->fee) $price .= ', hvorav '.format_nok($ticket->ticketgroup->fee).' i billettgebyr';
 
-    echo ') (#'.$ticket->number.')
-';
+    echo '
+  '.$time.': '.$ticket->event->title.': '.$ticket->ticketgroup->title.' ('.$price.') (#'.$ticket->number.')';
+}
+
+
+if (count($tickets_revoked) > 0) {
+    echo '
+
+Billetter som er trukket tilbake (til informasjon):';
+
+    foreach ($tickets_revoked as $ticket) {
+        $time = Carbon::createFromTimeStamp($ticket->event->time_start)->format('d.m.Y H:i');
+
+        echo '
+  '.$time.': '.$ticket->event->title.': '.$ticket->ticketgroup->title.' (#'.$ticket->number.')';
+    }
 }
 ?>
+
+
 
 Merverdiavgift: <?=format_nok(0);?>
 
