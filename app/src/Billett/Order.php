@@ -104,13 +104,15 @@ class Order extends \Eloquent implements ApiQueryInterface {
      */
     public function sendEmail()
     {
-        \Mail::send(array('text' => 'billett.email_order'), array('order' => $this), function($message)
+        $events = $this->getEvents();
+
+        \Mail::send(array('text' => 'billett.email_order'), array('order' => $this), function($message) use ($events)
         {
-            $ticket = $this->tickets->first();
-            $ticketinfo = $ticket ? " - ".$ticket->event->title." (".Carbon::createFromTimeStamp($ticket->event->time_start)->format('d.m.Y').")" : '';
+            $event = count($events) == 1 ? $events[0] : null;
+            $eventinfo = $event ? " - ".$event->title." (".Carbon::createFromTimeStamp($event->time_start)->format('d.m.Y').")" : '';
 
             $message->to($this->email, $this->name);
-            $message->subject('Billett'.(count($this->tickets) == 1 ? '' : 'er').' UKA på Blindern #'.$this->order_text_id.$ticketinfo);
+            $message->subject('Billett'.(count($this->tickets) == 1 ? '' : 'er').' UKA på Blindern #'.$this->order_text_id.$eventinfo);
 
             $merger = new Merger();
             foreach ($this->tickets as $ticket) {
@@ -119,6 +121,18 @@ class Order extends \Eloquent implements ApiQueryInterface {
 
             $message->attachData($merger->merge(), 'billetter_'.$this->order_text_id.'.pdf', array('mime' => 'application/pdf'));
         });
+    }
+
+    /**
+     * Get list of events this order is referenced with
+     */
+    public function getEvents()
+    {
+        $this->load('tickets.event');
+        return array_reduce($this->tickets->all(), function ($prev, $ticket) {
+            if (!in_array($ticket->event, $prev)) $prev[] = $ticket->event;
+            return $prev;
+        }, []);
     }
 
     /**
