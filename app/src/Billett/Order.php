@@ -79,7 +79,7 @@ class Order extends \Eloquent implements ApiQueryInterface {
     protected $table = 'orders';
     //protected $appends = array('total_amount');
 
-    protected $apiAllowedFields = array('id', 'eventgroup_id', 'order_text_id', 'is_valid', 'is_admin', 'time', 'ip', 'browser', 'name', 'email', 'phone', 'recruiter', 'total_amount');
+    protected $apiAllowedFields = array('id', 'eventgroup_id', 'order_text_id', 'is_valid', 'is_admin', 'time', 'ip', 'browser', 'name', 'email', 'phone', 'recruiter', 'total_amount', 'comment');
     protected $apiAllowedRelations = array('eventgroup', 'tickets', 'payments');
 
     public function eventgroup()

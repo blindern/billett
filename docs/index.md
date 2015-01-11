@@ -51,6 +51,7 @@ A reservation or actual order.
 * optional string email (email of the buyer)
 * optional string phone (phonenumber of the buyer)
 * optional string recruiter (name of person that recruited this order)
+* optional string comment (admin comment)
 
 ### Paymentgroup
 Payments that are not on web must belong to a Paymentgroup for accounting purposes.
