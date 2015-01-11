@@ -18,8 +18,10 @@ class Order extends \Eloquent implements ApiQueryInterface {
     /**
      * Create reservation
      *
+     * @param Eventgroup $eg
      * @param array(array(Ticketgroup, int ticket-count), ...)
      * @param bool by ticket office
+     * @return Order
      */
     public static function createReservation(Eventgroup $eg, $grouplist, $is_admin = false)
     {
@@ -279,6 +281,7 @@ class Order extends \Eloquent implements ApiQueryInterface {
     /**
      * Check if we can renew the order
      *
+     * @throws \Exception
      * @return boolean
      */
     public function canRenew()
