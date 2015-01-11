@@ -84,7 +84,7 @@ class Order extends \Eloquent implements ApiQueryInterface {
 
     public function eventgroup()
     {
-        return $this->belongsTo('\\Blindern\\UKA\\Billett\\Eventgroup'.$this->model_suffix, 'group_id');
+        return $this->belongsTo('\\Blindern\\UKA\\Billett\\Eventgroup'.$this->model_suffix, 'eventgroup_id');
     }
 
     public function tickets()
