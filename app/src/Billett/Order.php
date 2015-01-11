@@ -116,7 +116,9 @@ class Order extends \Eloquent implements ApiQueryInterface {
 
             $merger = new Merger();
             foreach ($this->tickets as $ticket) {
-                $merger->addRaw($ticket->getPdfData());
+                if ($ticket->is_valid && !$ticket->is_revoked) {
+                    $merger->addRaw($ticket->getPdfData());
+                }
             }
 
             $message->attachData($merger->merge(), 'billetter_'.$this->order_text_id.'.pdf', array('mime' => 'application/pdf'));
@@ -202,6 +204,7 @@ class Order extends \Eloquent implements ApiQueryInterface {
 
         $amount = 0;
         foreach ($tickets as $ticket) {
+            if ($ticket->is_revoked) continue;
             $amount += $ticket->ticketgroup->price + $ticket->ticketgroup->fee;
         }
 
