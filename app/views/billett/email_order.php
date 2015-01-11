@@ -3,7 +3,12 @@
 use \Carbon\Carbon;
 $order_time = Carbon::createFromTimeStamp($order->time)->format('d.m.Y H:i:s');
 
-$payment = $order->payments()->where('status', 'ACCEPTED')->first();
+// only add payment info to email if there is only one valid payment and it is a online/web payment
+$payment = null;
+$payments = $order->payments()->where('amount', '!=', 0)->get();
+if (count($payments) == 1 && $payments[0]->status == 'ACCEPTED') {
+    $payment = $payments[0];
+}
 
 ?>
 Hei,
