@@ -61,7 +61,8 @@ foreach ($order->tickets as $ticket) {
 
 Merverdiavgift: <?=format_nok(0);?>
 
-Totalbeløp: <?=format_nok($total);?> har blitt belastet ditt kort
+Totalbeløp: <?=format_nok($total);?><?php if ($payment): ?> har blitt belastet ditt kort<?php endif; ?>
+
 
 
 SPØRSMÅL/PROBLEMER:
