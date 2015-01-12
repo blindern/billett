@@ -64,6 +64,22 @@ class Ticket extends \Eloquent implements ApiQueryInterface {
         );
     }
 
+    /**
+     * Generate merged PDF with given tickets
+     *
+     * @param array $tickets List of Ticket objects
+     * @return blob PDF-data
+     */
+    public static function generateTicketsPdf(array $tickets)
+    {
+        $merger = new Merger();
+        foreach ($tickets as $ticket) {
+            $merger->addRaw($ticket->getPdfData());
+        }
+
+        return $merger->merge();
+    }
+
     protected $table = 'tickets';
     protected $appends = array('number');
     protected $hidden = array('pdf');

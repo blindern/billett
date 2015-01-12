@@ -114,15 +114,18 @@ class Order extends \Eloquent implements ApiQueryInterface {
             $message->to($this->email, $this->name);
             $message->subject('Billett'.(count($this->tickets) == 1 ? '' : 'er').' UKA på Blindern #'.$this->order_text_id.$eventinfo);
 
-            $merger = new Merger();
-            foreach ($this->tickets as $ticket) {
-                if ($ticket->is_valid && !$ticket->is_revoked) {
-                    $merger->addRaw($ticket->getPdfData());
-                }
-            }
-
-            $message->attachData($merger->merge(), 'billetter_'.$this->order_text_id.'.pdf', array('mime' => 'application/pdf'));
+            $message->attachData($this->generateTicketsPdf, 'billetter_'.$this->order_text_id.'.pdf', array('mime' => 'application/pdf'));
         });
+    }
+
+    /**
+     * Generate PDF with all valid tickets
+     */
+    public function generateTicketsPdf()
+    {
+        return Ticket::generateTicketsPdf(array_filter($this->tickets, function ($ticket) {
+            return $ticket->is_valid && !$ticket->is_revoked;
+        }));
     }
 
     /**
