@@ -167,12 +167,40 @@ class Ticket extends \Eloquent implements ApiQueryInterface {
 
     /**
      * Set ticket valid
+     *
+     * @param Paymentgroup associated paymentgroup
+     * @throws \Exception
      */
-    public function setValid()
+    public function setValid(Paymentgroup $paymentgroup = null)
     {
+        if ($this->is_valid) throw new \Exception("Ticket already valid");
+
         $this->is_valid = true;
         $this->expire = null;
         $this->time = time();
+
+        if ($paymentgroup) {
+            $this->valid_paymentgroup()->associate($paymentgroup);
+        }
+    }
+
+    /**
+     * Mark ticket as revoked
+     *
+     * @param Paymentgroup associated paymentgroup
+     * @throws \Exception
+     */
+    public function setRevoked(Paymentgroup $paymentgroup = null)
+    {
+        if (!$this->is_valid) throw new \Exception("Cannot revoke invalid ticket.");
+        if ($this->is_revoked) throw new \Exception("Ticket already revoked.");
+
+        $this->is_revoked = true;
+        $this->time_revoked = time();
+
+        if ($paymentgroup) {
+            $this->revoked_paymentgroup()->associate($paymentgroup);
+        }
     }
 
     /**
