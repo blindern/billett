@@ -106,4 +106,4 @@ The tickets itself.
 * optional int revoked_paymentgroup_id (paymentgroup where it was revoked, if null => web)
 * optional datetime used (when the ticket was registered used/checked in)
 * string key (the unique special number used to identify the ticket)
-* blob pdf (the actual PDF for the ticket)
+* optional blob pdf (the actual PDF for the ticket)
