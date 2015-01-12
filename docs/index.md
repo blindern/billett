@@ -14,7 +14,7 @@ Grouping of events.
 ### Event
 The events itself.
 * int id
-* int group_id (reference to event group)
+* int eventgroup_id (reference to event group)
 * optional string alias (address used in url)
 * bool is_admin_hidden (hide from default view in admin)
 * bool is_published
@@ -68,7 +68,7 @@ Payments that are not on web must belong to a Paymentgroup for accounting purpos
 Link between payment methods and orders.
 * int id
 * int order_id (reference to order)
-* optional int group_id (reference to payment group)
+* optional int paymentgroup_id (reference to payment group)
 * datetime time (when the payment happened)
 * bool is_web (if the payment is by card on web page)
 * decimal(7,2) amount (the amount paid, negative will mean a refund)

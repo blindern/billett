@@ -103,7 +103,7 @@ class EventController extends Controller {
     private function validateInputAndUpdate(Event $event, $is_new)
     {
         $fields = array(
-            'group_id' => 'integer',
+            'eventgroup_id' => 'integer',
             'title' => '',
             'alias' => '',
             'time_start' => 'integer',
@@ -123,7 +123,7 @@ class EventController extends Controller {
         );
 
         if ($is_new) {
-            $fields['group_id'] = 'required|integer';
+            $fields['eventgroup_id'] = 'required|integer';
             $fields['title'] = 'required';
             $fields['time_start'] = 'required|integer';
             $fields['max_sales'] = 'required|integer';
@@ -136,10 +136,10 @@ class EventController extends Controller {
             return \Response::json('data validation failed', 400);
         }
 
-        if (Input::has('group_id') && (Input::get('group_id') != $event->group_id || $is_new)) {
-            $group = Eventgroup::find(Input::get('group_id'));
+        if (Input::has('eventgroup_id') && (Input::get('eventgroup_id') != $event->eventgroup_id || $is_new)) {
+            $group = Eventgroup::find(Input::get('eventgroup_id'));
             if (!$group) {
-                return Response::json('group id not found', 400);
+                return Response::json('eventgroup id not found', 400);
             }
 
             $event->eventgroup()->associate($group);

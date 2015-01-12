@@ -9,13 +9,13 @@
         var loader = Page.setLoading();
         if (is_new) {
             Page.setTitle('Nytt arrangement');
-            $scope.eventgroup_id = $stateParams['group_id'];
+            $scope.eventgroup_id = $stateParams['eventgroup_id'];
             $scope.event = {
                 max_sales: 0,
                 max_each_person: 10
             };
 
-            AdminEventgroup.get({id: $stateParams['group_id']}, function (ret) {
+            AdminEventgroup.get({id: $stateParams['eventgroup_id']}, function (ret) {
                 $scope.group = ret;
                 loader();
             }, function () {
@@ -60,7 +60,7 @@
 
             if (is_new) {
                 var e = new AdminEvent($scope.event);
-                e.group_id = $scope.eventgroup_id;
+                e.eventgroup_id = $scope.eventgroup_id;
                 e.$save(function (res) {
                     $location.path('/a/event/' + res.id);
                 }, function (err) {

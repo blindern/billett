@@ -17,7 +17,7 @@ class Ticket extends \Eloquent implements ApiQueryInterface {
                   0 num_revoked
                 FROM tickets t
                   JOIN events e ON t.event_id = e.id
-                WHERE t.is_valid = 1 AND e.group_id = ?
+                WHERE t.is_valid = 1 AND e.eventgroup_id = ?
                 GROUP BY DATE(FROM_UNIXTIME(t.time)), ticketgroup_id, event_id
 
                 UNION ALL
@@ -27,7 +27,7 @@ class Ticket extends \Eloquent implements ApiQueryInterface {
                   COUNT(t.id) num_revoked
                 FROM tickets t
                   JOIN events e ON t.event_id = e.id
-                WHERE t.is_revoked = 1 AND e.group_id = ?
+                WHERE t.is_revoked = 1 AND e.eventgroup_id = ?
                 GROUP BY DATE(FROM_UNIXTIME(t.time)), ticketgroup_id, event_id
             ) ref
             GROUP BY day, ticketgroup_id, event_id', array($eventgroup_id, $eventgroup_id));

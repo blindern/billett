@@ -11,7 +11,7 @@ class Eventgroup extends \Eloquent implements ApiQueryInterface {
 
     public function events()
     {
-        return $this->hasMany('\\Blindern\\UKA\\Billett\\Event'.$this->model_suffix, 'group_id');
+        return $this->hasMany('\\Blindern\\UKA\\Billett\\Event'.$this->model_suffix, 'eventgroup_id');
     }
 
     public function orders()
