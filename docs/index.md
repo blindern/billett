@@ -102,6 +102,8 @@ The tickets itself.
 * optional datetime expire (when the ticket will expire if not paid for, e.g. while creating order)
 * bool is_valid (if the ticket is valid, e.g. paid for)
 * bool is_revoked (if the ticket is revoked, e.g. refunded)
+* optional int valid_paymentgroup_id (paymentgroup where it was made valid, if null => web)
+* optional int revoked_paymentgroup_id (paymentgroup where it was revoked, if null => web)
 * optional datetime used (when the ticket was registered used/checked in)
 * string key (the unique special number used to identify the ticket)
 * blob pdf (the actual PDF for the ticket)

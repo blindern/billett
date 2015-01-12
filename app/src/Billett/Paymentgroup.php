@@ -7,7 +7,7 @@ class Paymentgroup extends \Eloquent implements ApiQueryInterface {
     protected $table = 'paymentgroups';
 
     protected $apiAllowedFields = array('id', 'eventgroup_id', 'time_start', 'time_end', 'title', 'user_created', 'user_closed');
-    protected $apiAllowedRelations = array('payments', 'eventgroup');
+    protected $apiAllowedRelations = array('payments', 'eventgroup', 'valid_tickets', 'revoked_tickets');
 
     public function payments()
     {
@@ -17,6 +17,17 @@ class Paymentgroup extends \Eloquent implements ApiQueryInterface {
     public function eventgroup()
     {
         return $this->belongsTo('\\Blindern\\UKA\\Billett\\Eventgroup'.$this->model_suffix, 'eventgroup_id');
+    }
+
+    public function valid_tickets()
+    {
+        // this will list tickets that was assign to this paymentgroup when it was made valid, but it might be revoked now
+        return $this->belongsTo('\\Blindern\\UKA\\Billett\\Ticket'.$this->model_suffix, 'valid_paymentgroup_id');
+    }
+
+    public function revoked_tickets()
+    {
+        return $this->belongsTo('\\Blindern\\UKA\\Billett\\Ticket'.$this->model_suffix, 'revoked_paymentgroup_id');
     }
 
     /**

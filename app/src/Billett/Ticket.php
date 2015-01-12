@@ -69,7 +69,7 @@ class Ticket extends \Eloquent implements ApiQueryInterface {
     protected $hidden = array('pdf');
 
     protected $apiAllowedFields = array('id', 'order_id', 'event_id', 'ticketgroup_id', 'time', 'expire', 'is_valid', 'is_revoked', 'used', 'key');
-    protected $apiAllowedRelations = array('event', 'order', 'ticketgroup');
+    protected $apiAllowedRelations = array('event', 'order', 'ticketgroup', 'valid_paymentgroup', 'revoked_paymentgroup');
 
     public function event()
     {
@@ -84,6 +84,16 @@ class Ticket extends \Eloquent implements ApiQueryInterface {
     public function ticketgroup()
     {
         return $this->belongsTo('\\Blindern\\UKA\\Billett\\Ticketgroup'.$this->model_suffix, 'ticketgroup_id');
+    }
+
+    public function valid_paymentgroup()
+    {
+        return $this->belongsTo('\\Blindern\\UKA\\Billett\\Paymentgroup'.$this->model_suffix, 'valid_paymentgroup_id');
+    }
+
+    public function revoked_paymentgroup()
+    {
+        return $this->belongsTo('\\Blindern\\UKA\\Billett\\Paymentgroup'.$this->model_suffix, 'revoked_paymentgroup_id');
     }
 
     public function getKeyAttribute($key)
