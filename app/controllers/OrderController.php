@@ -243,4 +243,22 @@ class OrderController extends \Controller {
 
         return $order->createTickets($grouplist);
     }
+
+    /**
+     * Mark order as completed/valid (converts from reservation to actual order)
+     */
+    public function validate($id)
+    {
+        $order = Order::findOrFail($id);
+
+        if ($order->isCompleted()) {
+            return \Response::json('order is already complete', 400);
+        }
+
+        if (!$order->markComplete()) {
+            return \Response::json('could not convert from reservation to order, renew reservation failed', 400);
+        }
+
+        return $order;
+    }
 }

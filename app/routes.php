@@ -13,6 +13,7 @@ Route::get('/api/eventgroup/{id}/sold_tickets_stats', 'EventgroupController@sold
 Route::post('/api/order/{id}/place', 'OrderController@placeOrder');
 Route::post('/api/order/{id}/force', 'OrderController@forceOrder');
 Route::post('/api/order/{id}/create_tickets', 'OrderController@createTickets');
+Route::post('/api/order/{id}/validate', 'OrderController@validate');
 Route::resource('/api/order', 'OrderController', array(
     'only' => array('index', 'show', 'store', 'update', 'destroy')
 ));
