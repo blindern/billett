@@ -72,4 +72,31 @@ class TicketController extends \Controller {
 
         $ticket->setRevoked($paymentgroup);
     }
+
+    /**
+     * Set a ticket valid (and assign to paymentgroup)
+     */
+    public function validate($id)
+    {
+        $ticket = Ticket::findOrFail($id);
+
+        if (!Input::has('paymentgroup_id')) {
+            return Response::json('missing paymentgroup', 400);
+        }
+
+        if ($ticket->is_valid) {
+            return $ticket;
+        }
+
+        $paymentgroup = Paymentgroup::find(Input::get('paymentgroup_id'));
+        if (!$paymentgroup || $paymentgroup->eventgroup_id != $ticket->event->eventgroup->id) {
+            return Response::json('paymentgroup not found', 400);
+        }
+
+        if ($paymentgroup->time_end) {
+            return Response::json('paymentgroup is closed', 400);
+        }
+
+        $ticket->setValid($paymentgroup);
+    }
 }
