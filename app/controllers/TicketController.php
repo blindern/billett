@@ -31,6 +31,37 @@ class TicketController extends \Controller {
     }
 
     /**
+     * Retrive merged PDF of multiple tickets
+     */
+    public function mergedPDF()
+    {
+        if (!\Input::has('ids')) {
+            return Response::json('missing id list');
+        }
+
+        $id_list = array_map('trim', explode(",", \Input::get('ids')));
+        $tickets = [];
+        foreach (Ticket::find($id_list) as $ticket) {
+            $tickets[$ticket->id] = $ticket;
+        }
+
+        foreach ($id_list as $id) {
+            if (!isset($tickets[$id])) {
+                return Response::json('ticket with id "' . $id . '" not found', 404);
+            }
+
+            if (!$tickets[$id]->is_valid) {
+                return Response::json('ticket with id "' . $id . '" is not set valid', 404);
+            }
+        }
+
+        return Response::make(Ticket::generateTicketsPdf($tickets), 200, array(
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="tickets.pdf"'
+        ));
+    }
+
+    /**
      * Retrieve PDF for the ticket
      */
     public function pdf($id)
