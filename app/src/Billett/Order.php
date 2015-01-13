@@ -370,6 +370,46 @@ class Order extends \Eloquent implements ApiQueryInterface {
     }
 
     /**
+     * Hard refresh of balance
+     */
+    public function refreshBalance() {
+        DB::statement('
+            UPDATE
+                orders, (
+                    SELECT order_id, SUM(amount) amount
+                    FROM
+                        (
+                            SELECT t.order_id, -g.price - g.fee AS amount
+                            FROM tickets t JOIN ticketgroups g ON t.ticketgroup_id = g.id
+                            WHERE t.order_id = ? AND t.is_valid = 1 AND t.is_revoked = 0
+                            UNION ALL
+                            SELECT order_id, amount AS amount
+                            FROM payments
+                            WHERE order_id = ?
+                        ) ref
+                    GROUP BY order_id
+                ) amounts
+            SET orders.balance = amounts.amount
+            WHERE orders.id = amounts.order_id', [$this->id, $this->id]);
+
+        $this->balance = DB::table('orders')->where('id', $this->id)->pluck('balance');
+    }
+
+    /**
+     * Modify balance
+     */
+    public function modifyBalance($amount)
+    {
+        $this->balance += $amount;
+
+        // make sure we have no races
+        DB::statement('
+            UPDATE orders
+            SET balance = balance + ?
+            WHERE id = ?', [$amount, $this->id]);
+    }
+
+    /**
      * Get fields we can search in
      */
     public function getApiAllowedFields() {

@@ -146,6 +146,10 @@ class DibsPaymentModule {
                     $payment->data = json_encode(array('server' => $_SERVER, 'data' => $data));
                     $payment->save();
 
+                    if ($data['status'] == 'ACCEPTED') {
+                        $order->modifyBalance(-$data['amount']/100.0);
+                    }
+
                     $order->time = time();
 
                     if ($payment->status == 'ACCEPTED') {
