@@ -35,8 +35,9 @@ Route::post('/event/{id}/image', 'EventController@uploadImage');
 
 // tickets
 Route::get('/api/ticket/{id}/pdf', 'TicketController@pdf');
+Route::post('/api/ticket/{id}/revoke', 'TicketController@revoke');
 Route::resource('/api/ticket', 'TicketController', array(
-    'only' => array('index')
+    'only' => array('index', 'destroy')
 ));
 
 // payments
