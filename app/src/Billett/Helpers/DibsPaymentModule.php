@@ -160,7 +160,7 @@ class DibsPaymentModule {
 
                         if ($order->markComplete()) {
                             // send the receipt
-                            $order->sendEmail();
+                            $order->sendEmailOrderWebComplete();
                         }
                     }
 

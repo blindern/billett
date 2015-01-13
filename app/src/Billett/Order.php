@@ -85,13 +85,13 @@ class Order extends \Eloquent implements ApiQueryInterface {
     }
 
     /**
-     * Send tickets and receipt to email
+     * Send tickets and receipt to email when online web order has been completed (paid)
      */
-    public function sendEmail()
+    public function sendEmailOrderWebComplete()
     {
         $events = $this->getEvents();
 
-        \Mail::send(array('text' => 'billett.email_order'), array('order' => $this), function($message) use ($events)
+        \Mail::send(array('text' => 'billett.email_order_web_complete'), array('order' => $this), function($message) use ($events)
         {
             $event = count($events) == 1 ? $events[0] : null;
             $eventinfo = $event ? " - ".$event->title." (".Carbon::createFromTimeStamp($event->time_start)->format('d.m.Y').")" : '';
@@ -100,6 +100,48 @@ class Order extends \Eloquent implements ApiQueryInterface {
             $message->subject('Billett'.(count($this->tickets) == 1 ? '' : 'er').' UKA på Blindern #'.$this->order_text_id.$eventinfo);
 
             $message->attachData($this->generateTicketsPdf(), 'billetter_'.$this->order_text_id.'.pdf', array('mime' => 'application/pdf'));
+        });
+    }
+
+    /**
+     * Send orderdetails to email
+     *
+     * @param optional string email
+     * @throws \Exception
+     */
+    public function sendEmail($email = null)
+    {
+        $name = $this->name;
+        if (empty($email)) {
+            if (empty($this->email)) {
+                throw new \Exception("Cannot send email without receiver");
+            }
+            $email = $this->email;
+            $name = null;
+        }
+
+        \Mail::send(array('text' => 'billett.email_order_details'), array('order' => $this), function($message) use ($email, $name)
+        {
+            $events = $this->getEvents();
+            $event = count($events) == 1 ? $events[0] : null;
+            $eventinfo = $event ? " - ".$event->title." (".Carbon::createFromTimeStamp($event->time_start)->format('d.m.Y').")" : '';
+
+            $has_valid_tickets = false;
+            foreach ($this->tickets as $ticket) {
+                if ($ticket->is_valid && !$ticket->is_revoked) {
+                    $has_valid_tickets = true;
+                    break;
+                }
+            }
+
+            $subj = $has_valid_tickets ? 'Billett'.(count($this->tickets) == 1 ? '' : 'er') : 'Ordredetaljer';
+
+            $message->to($email, $name);
+            $message->subject($subj.' UKA på Blindern #'.$this->order_text_id.$eventinfo);
+
+            if ($has_valid_tickets) {
+                $message->attachData($this->generateTicketsPdf(), 'billetter_'.$this->order_text_id.'.pdf', array('mime' => 'application/pdf'));
+            }
         });
     }
 
