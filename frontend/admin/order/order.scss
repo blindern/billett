@@ -1,8 +1,47 @@
-.admin-order {
+.admin-order-list {
   ul {
     margin: 0;
   }
   .pagination {
     margin: 0 auto;
+  }
+}
+
+.admin-order {
+  .tickets {
+    td {
+      vertical-align: middle;
+    }
+    tr > :nth-child(5),
+    tr > :nth-child(6) {
+      text-align: right;
+    }
+    tr.revoked {
+      opacity: 0.7;
+      td:nth-child(3) {
+        a {
+          text-decoration: line-through;
+        }
+      }
+      td:nth-child(5),
+      td:nth-child(6) {
+        text-decoration: line-through;
+      }
+    }
+    tr.invalid {
+      opacity: 0.7;
+    }
+    td:last-child {
+      text-align: right;
+    }
+  }
+
+  .payments {
+    td {
+      vertical-align: middle;
+    }
+    tr > :nth-child(2) {
+      text-align: right;
+    }
   }
 }

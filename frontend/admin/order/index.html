@@ -1,6 +1,6 @@
 <page-property name="title" value="Ordreliste"></page-property>
 
-<div class="admin-order">
+<div class="admin-order-list">
 
     <div class="page-header">
         <h1>
@@ -92,7 +92,7 @@
             <tbody>
                 <tr ng-repeat="order in orders.result">
                     <td>
-                        {{::order.order_text_id}}<br>
+                        <a ng-href="a/order/{{::order.id}}">{{::order.order_text_id}}</a><br>
                         {{::order.time|formatdate:'dd. DD.MM.YYYY HH:mm'}}
                     </td>
                     <td>
@@ -103,9 +103,9 @@
                     </td>
                     <td>
                         <div ng-repeat="payment in order.payments">
-                            {{payment.type}}<br>
-                            {{payment.amount|price:0:true}}<br>
-                            {{payment.transaction_id}}
+                            {{payment.time|formatdate:'DD.MM.YYYY'}}<br>
+                            {{payment.is_web ? 'web: ' + payment.transaction_id : 'manual payment'}}<br>
+                            {{payment.amount|price:0:true}}
                         </div>
                     </td>
                     <td>
