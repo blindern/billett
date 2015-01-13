@@ -94,6 +94,10 @@ class TicketgroupController extends Controller {
         $fields = $g->has_tickets ? $other_fields : array_merge($other_fields, $locked_fields);
         $validator = \Validator::make(Input::all(), $fields);
 
+        if ($validator->fails()) {
+            return \Response::json('data validation failed', 400);
+        }
+
         if (!$g->has_tickets) {
             $g->title = Input::get('title');
             $g->ticket_text = Input::get('ticket_text');
