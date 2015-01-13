@@ -1,6 +1,7 @@
 <?php
 
 use Blindern\UKA\Billett\Ticket;
+use Blindern\UKA\Billett\Paymentgroup;
 
 class TicketController extends \Controller {
     public function __construct()
