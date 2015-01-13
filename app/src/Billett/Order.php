@@ -23,31 +23,17 @@ class Order extends \Eloquent implements ApiQueryInterface {
      * @param bool by ticket office
      * @return Order
      */
-    public static function createReservation(Eventgroup $eg, $grouplist, $is_admin = false)
+    public static function createReservation(Eventgroup $eg, $is_admin = false)
     {
         $order = new static();
 
-        $order->eventgroup_id = $eg->id;
+        $order->eventgroup()->associate($eg);
         $order->time = time();
         $order->ip = $_SERVER['REMOTE_ADDR'];
         $order->browser = $_SERVER['HTTP_USER_AGENT'];
         $order->is_admin = $is_admin;
         $order->save();
         $order->generateOrderTextId();
-
-        // create and assign the tickets
-        foreach ($grouplist as $group) {
-            for ($i = 0; $i < $group[1]; $i++) {
-                $ticket = new Ticket;
-                $ticket->event()->associate($group[0]->event);
-                $ticket->ticketgroup()->associate($group[0]);
-                $ticket->order()->associate($order);
-                if (!$is_admin) {
-                    $ticket->expire = time() + static::EXPIRE_INCOMPLETE_RESERVATION;
-                }
-                $ticket->save();
-            }
-        }
 
         return $order;
     }
@@ -354,6 +340,34 @@ class Order extends \Eloquent implements ApiQueryInterface {
         $this->save();
 
         return true;
+    }
+
+    /**
+     * Create and attach tickets (tickets will be saved)
+     *
+     * @param array list of [Ticketgroup, count] representing each new ticketgroup and number of tickets, eager load of event is preferred
+     * @return array list of Ticket, the new tickets created
+     */
+    public function createTickets(array $ticketgroups)
+    {
+        $tickets = [];
+        foreach ($ticketgroups as $row) {
+            for ($i = 0; $i < $row[1]; $i++) {
+                $ticket = new Ticket;
+                $ticket->event()->associate($row[0]->event);
+                $ticket->ticketgroup()->associate($row[0]);
+                $ticket->order()->associate($this);
+
+                if (!$this->is_admin) {
+                    $ticket->expire = time() + static::EXPIRE_INCOMPLETE_RESERVATION;
+                }
+
+                $ticket->save();
+                $tickets[] = $ticket;
+            }
+        }
+
+        return $tickets;
     }
 
     /**

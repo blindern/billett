@@ -160,12 +160,15 @@ class Event extends \Eloquent implements ApiQueryInterface {
      *
      * The list of groups must be valid for this event
      *
-     * @param array(array(group, count), ...)
+     * @param array(array(ticketgroup, count), ...)
+     * @return boolean
      */
     public function checkIsAvailable($groups)
     {
         $total = 0;
         $countinfo = $this->ticket_count;
+
+        // TODO: 'is_normal' field?
 
         foreach ($groups as $item) {
             $group = $item[0];

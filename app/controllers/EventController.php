@@ -69,7 +69,8 @@ class EventController extends Controller {
             if (isset($groups[$group->id])) {
                 $val = $groups[$group->id];
 
-                if (!$group->is_published || !$group->is_active || !is_numeric($val)) continue;
+                if (!$group->is_published || !$group->is_active) continue;
+                if (filter_var($val, FILTER_VALIDATE_INT) === false || $val <= 0) continue;
 
                 $groups_to_add[] = array($group, $val);
                 unset($groups[$group->id]);
@@ -86,7 +87,9 @@ class EventController extends Controller {
 
         // create a new reservation
         $class = ModelHelper::getModelPath('Order');
-        $order = $class::createReservation($event->eventgroup, $groups_to_add);
+        $order = $class::createReservation($event->eventgroup);
+
+        $order->createTickets($groups_to_add);
 
         // store in session so we know which orders belong to this user
         $orders = \Session::get('billett_reservations', array());

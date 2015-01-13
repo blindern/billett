@@ -9,10 +9,12 @@ Route::resource('/api/eventgroup', 'EventgroupController', array(
 Route::get('/api/eventgroup/{id}/simple', 'EventgroupController@simpleList');
 Route::get('/api/eventgroup/{id}/sold_tickets_stats', 'EventgroupController@soldTicketsStats');
 
+// orders
 Route::post('/api/order/{id}/place', 'OrderController@placeOrder');
 Route::post('/api/order/{id}/force', 'OrderController@forceOrder');
+Route::post('/api/order/{id}/create_tickets', 'OrderController@createTickets');
 Route::resource('/api/order', 'OrderController', array(
-    'only' => array('index', 'show', 'update', 'destroy')
+    'only' => array('index', 'show', 'store', 'update', 'destroy')
 ));
 
 Route::post('/api/event/{id}/createreservation', 'EventController@createReservation');
