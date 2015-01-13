@@ -26,6 +26,8 @@ var js_files_library = [
     "./bower_components/angular-animate/angular-animate.js",
     "./bower_components/angular-resource/angular-resource.js",
     "./bower_components/angular-sanitize/angular-sanitize.js",
+    "./bower_components/angular-bootstrap/ui-bootstrap.js",
+    "./bower_components/angular-bootstrap/ui-bootstrap-tpls.js",
     "./bower_components/angular-ui-utils/ui-utils.js",
     "./bower_components/angular-file-upload/angular-file-upload.js",
     "./bower_components/moment/moment.js",
