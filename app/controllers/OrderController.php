@@ -213,7 +213,7 @@ class OrderController extends \Controller {
     {
         $order = Order::findOrFail($order_id);
 
-        $list = Input::get('paymentgroups');
+        $list = Input::get('ticketgroups');
         $validate = function ($list) {
             if (!is_array($list)) return false;
             foreach ($list as $id => $count) {
