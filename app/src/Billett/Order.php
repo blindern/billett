@@ -296,25 +296,16 @@ class Order extends \Eloquent implements ApiQueryInterface {
         if (!$this->hasExpired()) return true;
 
         // check if the tickets are still available
-        $events = [];
         $groups = [];
-        foreach ($this->tickets()->with('ticketgroup', 'event')->get() as $ticket) {
-            $event = $ticket->event;
-            if (!isset($events[$event->id])) {
-                $events[$event->id] = $event;
-                $groups[$event->id] = [];
+        foreach ($this->tickets()->where('is_valid', 0)->with('ticketgroup', 'event')->get() as $ticket) {
+            if (!isset($groups[$ticket->ticketgroup->id])) {
+                $groups[$ticket->ticketgroup->id] = array($ticket->ticketgroup, 0);
             }
-
-            if (!isset($groups[$event->id][$ticket->ticketgroup->id])) {
-                $groups[$event->id][$ticket->ticketgroup->id] = array($ticket->ticketgroup, 0);
-            }
-            $groups[$event->id][$ticket->ticketgroup->id][1]++;
+            $groups[$ticket->ticketgroup->id][1]++;
         }
 
-        foreach ($events as $event) {
-            if (!$event->checkIsAvailable($groups[$event->id])) {
-                return false;
-            }
+        if (!Ticketgroup::checkIsAvailable($groups)) {
+            return false;
         }
 
         return true;
@@ -330,7 +321,9 @@ class Order extends \Eloquent implements ApiQueryInterface {
         if (!$this->canRenew()) return false;
 
         foreach ($this->tickets as $ticket) {
-            $ticket->setValid();
+            if (!$ticket->is_valid) {
+                $ticket->setValid();
+            }
         }
 
         $this->time = time();
