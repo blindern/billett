@@ -97,7 +97,7 @@ The tickets itself.
 * int order_id (reference to order)
 * int event_id (reference to event this ticket belongs)
 * int ticketgroup_id (reference to ticket group)
-* datetime time (when the ticket was made valid)
+* datetime time (when the ticket was created, and then when it was made valid)
 * optional time_revoked (when the ticket was revoked)
 * optional datetime expire (when the ticket will expire if not paid for, e.g. while creating order)
 * bool is_valid (if the ticket is valid, e.g. paid for)

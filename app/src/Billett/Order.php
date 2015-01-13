@@ -390,6 +390,7 @@ class Order extends \Eloquent implements ApiQueryInterface {
                 $ticket->event()->associate($row[0]->event);
                 $ticket->ticketgroup()->associate($row[0]);
                 $ticket->order()->associate($this);
+                $ticket->time = time();
 
                 if (!$this->is_admin) {
                     $ticket->expire = time() + static::EXPIRE_INCOMPLETE_RESERVATION;
