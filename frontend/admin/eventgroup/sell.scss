@@ -4,7 +4,7 @@
   }
 
   .event-list {
-    max-height: 300px;
+    max-height: 500px;
     overflow-y: auto;
 
     .event {
@@ -24,14 +24,39 @@
       }
     }
 
-    .ticketgroup {
+    .event-info {
       margin-bottom: 10px;
+      dt, dd {
+        display: inline-block;
+        margin-right: 5px;
+      }
+      dd {
+        margin-right: 10px;
+      }
+    }
+
+    .ticketgroup {
+      /*background: hsl(89, 38%, 90%);*/
+      &.inactive {
+        background: hsl(10, 80%, 90%);
+      }
+      &.notpub {
+        background: hsl(55, 43%, 90%);
+      }
+
+      margin: -3px -3px 7px;
+      padding: 3px;
+
       .meta {
         display: inline-block;
         vertical-align: middle;
-        width: 70%;
+        width: 65%;
         .title {
           font-weight: bold;
+          abbr {
+            margin-left: 5px;
+            font-weight: normal;
+          }
         }
         .price {
           white-space: nowrap;
@@ -53,7 +78,7 @@
       .count {
         display: inline-block;
         vertical-align: middle;
-        width: 30%;
+        width: 35%;
         text-align: right;
         white-space: nowrap;
         .value {

@@ -25,6 +25,11 @@ angular.module('billett.admin').controller('AdminEventgroupSellController', func
             if (event.is_old && !ctrl.ticketfilter.show_old) return false;
             return event.is_selling && event.ticketgroups.length > 0;
         });
+
+        // add fields for later filtering
+        ctrl.events.forEach(function (event) {
+            event.dateinfo = moment.unix(event.time_start).format('ddd D. MMM YYYY HH:mm');
+        });
     };
 
     var loadLastPaymentgroup = function () {

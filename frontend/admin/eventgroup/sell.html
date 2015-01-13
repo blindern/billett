@@ -26,7 +26,7 @@
 
     <div ng-if="ctrl.paymentgroups.length > 0">
         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-md-6">
 
                 <h2>Ordredetaljer</h2>
                 <p>Dersom ordredetaljer fylles ut vil det bli sendt en kopi på e-post når ordren blir opprettet.</p>
@@ -75,11 +75,11 @@
                 </form>
 
             </div>
-            <div class="col-sm-6">
+            <div class="col-md-6">
 
                 <h2>
                     <span class="pull-right">
-                        <label><input type="checkbox" ng-model="ctrl.ticketfilter.show_old"> Vis gamle arrangementer</label><br>
+                        <label><input type="checkbox" ng-model="ctrl.ticketfilter.show_old"> Vis tidligere arrangementer</label><br>
                         <label><input type="checkbox" ng-model="ctrl.ticketfilter.show_inactive"> Vis inaktive billettgrupper</label>
                     </span>
                     Billetter
@@ -90,41 +90,47 @@
                 <div class="event-list">
                     <div class="event" ng-repeat="event in ctrl.events|filter:ctrl.ticket_search">
                         <h4>
-                            <span class="pull-right">{{::event.time_start|formatdate:'ddd D. MMM YYYY HH:mm'}}</span>
-                            {{::event.title}}
+                            <span class="pull-right">{{::event.dateinfo}}</span>
+                            <a ng-href="a/event/{{::event.id}}">{{::event.title}}</a>
                         </h4>
                         <dl class="event-info">
                             <dt>Tilgjengelig</dt>
                             <dd>{{::event.ticket_count.totals.free}} / {{::event.max_sales}}</dd>
                         </dl>
-                        <div class="ticketgroup" ng-repeat="ticketgroup in event.ticketgroups|filter:{'is_active': ctrl.ticketfilter.show_inactive}:ctrl.ticketgroup_check">
+
+                        <div class="ticketgroup" ng-class="{'inactive': !ticketgroup.is_active, 'notpub': ticketgroup.is_active && !ticketgroup.is_published}" ng-repeat="ticketgroup in event.ticketgroups|filter:{'is_active': ctrl.ticketfilter.show_inactive}:ctrl.ticketgroup_check">
                             <div class="meta">
-                                <div class="title">{{ticketgroup.title}}</div><!-- white space fix for inline-block
-                                 --><div class="price">
-                                        <span class="price-label">Pris:</span>
-                                        {{ticketgroup.price+ticketgroup.fee|price:true}}
-                                        <span class="price-fee">Hvorav {{ticketgroup.fee|price:true}} i gebyr</span>
-                                    </div>
-                                    <div ng-if="ticketgroup.ticket_text" class="ticket-text">
-                                        {{ticketgroup.ticket_text}}
-                                    </div>
+                                <div class="title">
+                                    {{ticketgroup.title}}
+                                    <abbr ng-if="!ticketgroup.is_active" title="NB! Billettgruppen er ikke satt aktiv">Inaktiv</abbr>
+                                    <abbr ng-if="!ticketgroup.is_published && ticketgroup.is_active" title="Billettgruppen er ikke publisert for nettsalg">Upub</abbr>
                                 </div><!-- white space fix for inline-block
-                             --><div class="count">
-                                    <span class="value" ng-init="ticketgroup.order_count=0">
-                                        {{ticketgroup.order_count}}
-                                    </span>
-                                    <button type="button" ng-click="changeTicketgroupNum(ticketgroup, 1)"
-                                            class="btn btn-primary btn-sm"
-                                            ng-disabled="event.max_each_person<=0">
-                                        <span class="glyphicon glyphicon-plus"></span>
-                                    </button>
-                                    <button type="button" ng-click="changeTicketgroupNum(ticketgroup, -1)"
-                                            class="btn btn-primary btn-sm"
-                                            ng-disabled="ticketgroup.order_count<=0">
-                                        <span class="glyphicon glyphicon-minus"></span>
-                                    </button>
+                             --><div class="price">
+                                    <span class="price-label">Pris:</span>
+                                    {{ticketgroup.price+ticketgroup.fee|price:true}}
+                                    <span class="price-fee">Hvorav {{ticketgroup.fee|price:true}} i gebyr</span>
                                 </div>
+                                <div ng-if="ticketgroup.ticket_text" class="ticket-text">
+                                    {{ticketgroup.ticket_text}}
+                                </div>
+                            </div><!-- white space fix for inline-block
+                         --><div class="count">
+                                <span class="value" ng-init="ticketgroup.order_count=0">
+                                    {{ticketgroup.order_count}} / {{event.ticket_count.groups[ticketgroup.id].free}}
+                                </span>
+                                <button type="button" ng-click="changeTicketgroupNum(ticketgroup, 1)"
+                                        class="btn btn-primary btn-sm"
+                                        ng-disabled="event.max_each_person<=0">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                                <button type="button" ng-click="changeTicketgroupNum(ticketgroup, -1)"
+                                        class="btn btn-primary btn-sm"
+                                        ng-disabled="ticketgroup.order_count<=0">
+                                    <span class="glyphicon glyphicon-minus"></span>
+                                </button>
+                            </div>
                         </div>
+
                     </div>
                 </div>
 
@@ -147,6 +153,6 @@
     <hr>
 
     <h2>Ordrehistorikk</h2>
-    <p>TODO: liste over siste 5 ordre i betalingsgruppa, lenke til betalingsgruppe med full liste</p>
+    <p>TODO: liste over siste 5 manuelle ordre i arrangementgruppa, lenke til full liste</p>
     <p>TODO: hva med reservasjoner ikke fullført?</p>
 </div>
