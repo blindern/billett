@@ -1,15 +1,15 @@
-angular.module('billett.admin').controller('AdminEventgroupSellController', function ($http, $location, $q, $scope, $stateParams, Page, AdminEventgroup) {
+angular.module('billett.admin').controller('AdminEventgroupSellController', function ($http, $location, $q, $scope, $stateParams, Page, AdminEventgroup, AdminPaymentgroup) {
     var ctrl = this;
     Page.setTitle('Selg billetter');
 
     var loader = Page.setLoading();
     $q.all([
         AdminEventgroup.get({id: $stateParams['id']}).$promise,
-        $http.get('api/paymentgroup?filter=eventgroup_id='+parseInt($stateParams['id'])+',time_end=0')
+        AdminPaymentgroup.getValid(parseInt($stateParams['id'])).$promise
     ]).then(function (res) {
         loader();
         ctrl.eventgroup = res[0];
-        ctrl.paymentgroups = res[1].data;
+        ctrl.paymentgroups = res[1];
 
         loadLastPaymentgroup();
         generateEventList();
@@ -28,24 +28,15 @@ angular.module('billett.admin').controller('AdminEventgroupSellController', func
     };
 
     var loadLastPaymentgroup = function () {
-        var id = null;
-        if ($stateParams['paymentgroup_id']) id = $stateParams['paymentgroup_id'];
-        else if (typeof(Storage) !== 'undefined' && sessionStorage.lastPaymentgroup) id = sessionStorage.lastPaymentgroup;
-
-        if (id) {
-            ctrl.paymentgroups.forEach(function (g) {
-                if (g.id == id) {
-                    ctrl.active_paymentgroup = g;
-                    ctrl.changePaymentgroup();
-                }
-            });
+        var group = AdminPaymentgroup.getPreferredGroup(ctrl.paymentgroups, $stateParams['paymentgroup_id']);
+        if (group) {
+            ctrl.active_paymentgroup = group;
+            ctrl.changePaymentgroup();
         }
     };
 
     ctrl.changePaymentgroup = function () {
-        if (typeof(Storage) !== 'undefined') {
-            sessionStorage.lastPaymentgroup = ctrl.active_paymentgroup.id;
-        }
+        AdminPaymentgroup.setPreferredGroup(ctrl.active_paymentgroup);
     };
 
     ctrl.ticketfilter = {};

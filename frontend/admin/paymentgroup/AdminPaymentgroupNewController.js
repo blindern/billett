@@ -1,4 +1,4 @@
-angular.module('billett.admin').controller('AdminPaymentgroupNewController', function ($state, $stateParams, $location, AdminEventgroup, AdminPaymentgroupService, Page) {
+angular.module('billett.admin').controller('AdminPaymentgroupNewController', function ($state, $stateParams, $location, AdminEventgroup, AdminPaymentgroup, Page) {
     var ctrl = this;
 
     console.log("state", $stateParams);
@@ -8,7 +8,7 @@ angular.module('billett.admin').controller('AdminPaymentgroupNewController', fun
         loader();
 
         ctrl.eventgroup = ret;
-        ctrl.paymentgroup = new AdminPaymentgroupService;
+        ctrl.paymentgroup = new AdminPaymentgroup;
         ctrl.paymentgroup.eventgroup_id = ret.id;
 
         ctrl.save = function () {
