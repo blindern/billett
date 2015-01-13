@@ -365,7 +365,7 @@ class Order extends \Eloquent implements ApiQueryInterface {
      * Hard refresh of balance
      */
     public function refreshBalance() {
-        DB::statement('
+        \DB::statement('
             UPDATE
                 orders, (
                     SELECT order_id, SUM(amount) amount
@@ -384,7 +384,7 @@ class Order extends \Eloquent implements ApiQueryInterface {
             SET orders.balance = amounts.amount
             WHERE orders.id = amounts.order_id', [$this->id, $this->id]);
 
-        $this->balance = DB::table('orders')->where('id', $this->id)->pluck('balance');
+        $this->balance = \DB::table('orders')->where('id', $this->id)->pluck('balance');
     }
 
     /**
@@ -395,7 +395,7 @@ class Order extends \Eloquent implements ApiQueryInterface {
         $this->balance += $amount;
 
         // make sure we have no races
-        DB::statement('
+        \DB::statement('
             UPDATE orders
             SET balance = balance + ?
             WHERE id = ?', [$amount, $this->id]);
