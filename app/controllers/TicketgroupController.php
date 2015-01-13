@@ -40,6 +40,7 @@ class TicketgroupController extends Controller {
         $validator = \Validator::make(Input::all(), array(
             'event_id' => 'required|integer',
             'title' => 'required',
+            'is_published' => '',
             'is_normal' => '',
             'ticket_text' => '',
             'price' => 'required|integer',
@@ -58,6 +59,7 @@ class TicketgroupController extends Controller {
 
         $g = new Ticketgroup;
         $g->title = Input::get('title');
+        $g->is_published = Input::get('is_published');
         $g->is_normal = Input::get('is_normal');
         $g->ticket_text = Input::get('ticket_text');
         $g->price = Input::get('price');
