@@ -88,7 +88,7 @@ class OrderController extends \Controller {
             return \Response::json('not found', 404);
         }
 
-        if (!$order->isReservation()) {
+        if (!$order->isReservation() && !\Auth::hasRole('billett.admin')) {
             return \Response::json('not a reservation', 400);
         }
 
