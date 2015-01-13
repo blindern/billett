@@ -261,4 +261,21 @@ class OrderController extends \Controller {
 
         return $order;
     }
+
+    /**
+     * Send email copy
+     */
+    public function email($id)
+    {
+        $order = Order::findOrFail($id);
+
+        // manual email?
+        $email = null;
+        if (\Input::has('email')) {
+            $email = \Input::get('email');
+        }
+
+        $order->sendEmail($email);
+        return \Response::json('email sent');
+    }
 }
