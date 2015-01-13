@@ -126,6 +126,7 @@ return array(
         'KnightSwarm\LaravelSaml\LaravelSamlServiceProvider',
         'Nutsweb\LaravelPrerender\LaravelPrerenderServiceProvider',
         'Henrist\LaravelApiQuery\LaravelApiQueryServiceProvider',
+        'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
 
     ),
 
