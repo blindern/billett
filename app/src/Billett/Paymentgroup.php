@@ -22,12 +22,12 @@ class Paymentgroup extends \Eloquent implements ApiQueryInterface {
     public function valid_tickets()
     {
         // this will list tickets that was assign to this paymentgroup when it was made valid, but it might be revoked now
-        return $this->belongsTo('\\Blindern\\UKA\\Billett\\Ticket'.$this->model_suffix, 'valid_paymentgroup_id');
+        return $this->hasMany('\\Blindern\\UKA\\Billett\\Ticket'.$this->model_suffix, 'valid_paymentgroup_id');
     }
 
     public function revoked_tickets()
     {
-        return $this->belongsTo('\\Blindern\\UKA\\Billett\\Ticket'.$this->model_suffix, 'revoked_paymentgroup_id');
+        return $this->hasMany('\\Blindern\\UKA\\Billett\\Ticket'.$this->model_suffix, 'revoked_paymentgroup_id');
     }
 
     /**
