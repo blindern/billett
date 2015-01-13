@@ -73,7 +73,6 @@ Link between payment methods and orders.
 * datetime time (when the payment happened)
 * bool is_web (if the payment is by card on web page)
 * decimal(7,2) amount (the amount paid, negative will mean a refund)
-* optional decimal(7,2) fee (additional fee paid)
 * optional string transaction_id (used by web payment)
 * optional string status (used by web payment)
 * optional string data (additional data if applicable in json)
