@@ -2,6 +2,7 @@
 
 use Blindern\UKA\Billett\Helpers\PdfTicket;
 use Henrist\LaravelApiQuery\ApiQueryInterface;
+use \iio\libmergepdf\Merger;
 
 class Ticket extends \Eloquent implements ApiQueryInterface {
     /**

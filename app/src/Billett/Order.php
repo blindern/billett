@@ -1,7 +1,6 @@
 <?php namespace Blindern\UKA\Billett;
 
 use \Carbon\Carbon;
-use \iio\libmergepdf\Merger;
 use \Henrist\LaravelApiQuery\ApiQueryInterface;
 
 class Order extends \Eloquent implements ApiQueryInterface {
@@ -100,7 +99,7 @@ class Order extends \Eloquent implements ApiQueryInterface {
             $message->to($this->email, $this->name);
             $message->subject('Billett'.(count($this->tickets) == 1 ? '' : 'er').' UKA på Blindern #'.$this->order_text_id.$eventinfo);
 
-            $message->attachData($this->generateTicketsPdf, 'billetter_'.$this->order_text_id.'.pdf', array('mime' => 'application/pdf'));
+            $message->attachData($this->generateTicketsPdf(), 'billetter_'.$this->order_text_id.'.pdf', array('mime' => 'application/pdf'));
         });
     }
 
@@ -109,7 +108,7 @@ class Order extends \Eloquent implements ApiQueryInterface {
      */
     public function generateTicketsPdf()
     {
-        return Ticket::generateTicketsPdf(array_filter($this->tickets, function ($ticket) {
+        return Ticket::generateTicketsPdf(array_filter($this->tickets->all(), function ($ticket) {
             return $ticket->is_valid && !$ticket->is_revoked;
         }));
     }
