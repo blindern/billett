@@ -44,7 +44,7 @@ Route::resource('/api/ticket', 'TicketController', array(
 
 // payments
 Route::resource('/api/payment', 'PaymentController', array(
-    'only' => array('index')
+    'only' => array('index', 'store')
 ));
 
 // payment (callback)
