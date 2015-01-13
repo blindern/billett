@@ -27,8 +27,8 @@ if (count($tickets_revoked) == 0) {
     }
 }
 
-?>
-Hei,
+echo
+'Hei,
 
 Takk for at du har kjøpt billetter hos UKA på Blindern. Her er billettene
 dine og kjøpskvittering.
@@ -49,24 +49,20 @@ og er tilpasset dette formålet.
 
 BEKREFTELSE PÅ KJØP (KVITTERING):
 ---------------------------------
-Navn: <?=$order->name;?>
+Navn: '.$order->name.'
+E-post: '.$order->email.'
+Telefon: '.$order->phone.'
+';
 
-E-post: <?=$order->email;?>
-
-Telefon: <?=$order->phone;?>
-
-
-<?php if ($payment): ?>
-Transaksjonsnummer: <?=$payment->transaction_id;?>
-<?php endif; ?>
-
-Ordrenummer: <?=$order->order_text_id;?>
-
-Kjøpstidspunkt: <?=$order_time;?>
-
-<?php
+if ($payment) {
+    echo '
+Transaksjonsnummer: ' . $payment->transaction_id;
+}
 
 echo '
+Ordrenummer: '.$order->order_text_id.'
+Kjøpstidspunkt: '.$order_time.'
+
 Billettspesifikasjon:';
 
 foreach ($tickets_valid as $ticket) {
@@ -92,14 +88,12 @@ Billetter som er trukket tilbake (til informasjon):';
   '.$time.': '.$ticket->event->title.': '.$ticket->ticketgroup->title.' (#'.$ticket->number.')';
     }
 }
-?>
+
+echo '
 
 
-
-Merverdiavgift: <?=format_nok(0);?>
-
-Totalbeløp: <?=format_nok($total);?><?php if ($payment): ?> har blitt belastet ditt kort<?php endif; ?>
-
+Merverdiavgift: '.format_nok(0).'
+Totalbeløp: '.format_nok($total).($payment ? ' har blitt belastet ditt kort' : '').'
 
 
 SPØRSMÅL/PROBLEMER:
@@ -114,4 +108,4 @@ Vi håper du får en flott opplevelse på UKA på Blindern!
 --
 UKA på Blindern
 Foreningen Blindern Studenterhjem
-http://blindernuka.no/
+http://blindernuka.no/';
