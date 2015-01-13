@@ -321,7 +321,7 @@ class Order extends \Eloquent implements ApiQueryInterface {
     }
 
     /**
-     * Mark order as complete
+     * Mark order as complete, in practise changing from reservation to actual order
      */
     public function markComplete()
     {
@@ -331,7 +331,6 @@ class Order extends \Eloquent implements ApiQueryInterface {
 
         foreach ($this->tickets as $ticket) {
             $ticket->setValid();
-            $ticket->save();
         }
 
         $this->time = time();

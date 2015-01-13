@@ -200,6 +200,8 @@ class Ticket extends \Eloquent implements ApiQueryInterface {
             $this->valid_paymentgroup()->associate($paymentgroup);
         }
 
+        $this->save();
+
         $this->order->modifyBalance(-$this->ticketgroup->price - $this->ticketgroup->fee);
     }
 
@@ -220,6 +222,8 @@ class Ticket extends \Eloquent implements ApiQueryInterface {
         if ($paymentgroup) {
             $this->revoked_paymentgroup()->associate($paymentgroup);
         }
+
+        $this->save();
 
         $this->order->modifyBalance($this->ticketgroup->price + $this->ticketgroup->fee);
     }
