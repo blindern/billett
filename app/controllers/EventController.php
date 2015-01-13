@@ -3,7 +3,6 @@
 use Blindern\UKA\Billett\Event;
 use Blindern\UKA\Billett\EventGuest;
 use Blindern\UKA\Billett\Eventgroup;
-use Blindern\UKA\Billett\Order;
 use Blindern\UKA\Billett\Helpers\ModelHelper;
 
 class EventController extends Controller {

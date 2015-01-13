@@ -1,6 +1,8 @@
 <?php
 
 use Blindern\UKA\Billett\Payment;
+use Blindern\UKA\Billett\Paymentgroup;
+use Blindern\UKA\Billett\Order;
 
 class PaymentController extends \Controller {
     public function __construct()

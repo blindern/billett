@@ -1,6 +1,8 @@
 <?php
 
 use Blindern\UKA\Billett\Event;
+use Blindern\UKA\Billett\Order;
+use Blindern\UKA\Billett\Ticket;
 use Blindern\UKA\Billett\Ticketgroup;
 
 class TicketgroupController extends Controller {
@@ -131,7 +133,7 @@ class TicketgroupController extends Controller {
     {
         $g = Ticketgroup::findOrFail($id);
 
-        $order = new Blindern\UKA\Billett\Order;
+        $order = new Order;
         $order->time = time();
         $order->order_text_id = 'DUMMY_ID';
         $order->name = "Ola Normann";
@@ -139,7 +141,7 @@ class TicketgroupController extends Controller {
         $order->phone = 12345678;
         $order->id = 123;
 
-        $ticket = new Blindern\UKA\Billett\Ticket;
+        $ticket = new Ticket;
         $ticket->ticketgroup()->associate($g);
         $ticket->order()->associate($order);
         $ticket->event()->associate($g->event);
