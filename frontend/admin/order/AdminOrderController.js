@@ -138,7 +138,11 @@
                         return ctrl.order.eventgroup.id;
                     },
                     getOrder: function () {
-                        return ctrl.order;
+                        return function () {
+                            return $q(function (resolve) {
+                                resolve(ctrl.order);
+                            });
+                        };
                     },
                     addHandler: function () {
                         return function (ticketgroups) {
