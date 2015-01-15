@@ -22,13 +22,11 @@
             <tr>
                 <th>Sum</th>
                 <td ng-repeat="accum in ctrl.daysAccum">
-                    {{accum.price+accum.fee|price}}
-                    <br>
+                    {{accum.price+accum.fee|price}}<br>
                     {{accum.count-accum.revoked}} stk
                 </td>
                 <th>
-                    {{ctrl.topAccum.price+ctrl.topAccum.fee|price}}
-                    <br>
+                    {{ctrl.topAccum.price+ctrl.topAccum.fee|price}}<br>
                     {{ctrl.topAccum.count-ctrl.topAccum.revoked}} stk
                 </th>
             </tr>
@@ -41,14 +39,12 @@
                 </td>
                 <td ng-repeat="accum in event.daysAccum">
                     <span ng-if="accum.count > 0 || accum.revoked > 0">
-                        {{accum.price+accum.fee|price}}
-                        <br>
+                        {{accum.price+accum.fee|price}}<br>
                         {{accum.count-accum.revoked}} stk
                     </span>
                 </td>
                 <th>
-                    {{event.accum.price+event.accum.fee|price}}
-                    <br>
+                    {{event.accum.price+event.accum.fee|price}}<br>
                     {{event.accum.count-event.accum.revoked}} stk
                 </th>
                 <!-- TODO: data for ticketgroups are in .ticketgroups -->
