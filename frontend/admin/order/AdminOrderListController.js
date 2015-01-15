@@ -17,7 +17,7 @@
             $scope.orders = AdminOrder.query(q);
         };
 
-        var equals = ['id', 'order_text_id', 'tickets.id', 'tickets.key', 'tickets.event.id', 'payments.transaction_id'];
+        var equals = ['eventgroup_id', 'id', 'order_text_id', 'tickets.id', 'tickets.key', 'tickets.event.id', 'payments.transaction_id'];
         var genFilter = function() {
             var r = [];
             angular.forEach($scope.search, function(val, name) {
