@@ -355,16 +355,23 @@ class Order extends \Eloquent implements ApiQueryInterface {
 
     /**
      * Mark order as complete, in practise changing from reservation to actual order
+     *
+     * @param bool         $skip_tickets Skip convertion of tickets reserved
+     * @param Paymentgroup $paymentgroup Paymentgroup to associate validated tickets
+     * @return bool If success
+     * @throws \Exception
      */
-    public function markComplete()
+    public function markComplete($skip_tickets = null, $paymentgroup = null)
     {
         if ($this->isCompleted()) throw new \Exception("The order is already marked complete");
 
         if (!$this->canRenew()) return false;
 
-        foreach ($this->tickets as $ticket) {
-            if (!$ticket->is_valid) {
-                $ticket->setValid();
+        if (!$skip_tickets) {
+            foreach ($this->tickets as $ticket) {
+                if (!$ticket->is_valid) {
+                    $ticket->setValid($paymentgroup);
+                }
             }
         }
 

@@ -2,6 +2,8 @@
 
 use Blindern\UKA\Billett\Eventgroup;
 use Blindern\UKA\Billett\Order;
+use Blindern\UKA\Billett\Payment;
+use Blindern\UKA\Billett\Paymentgroup;
 use Blindern\UKA\Billett\Ticketgroup;
 use Blindern\UKA\Billett\Helpers\DibsPaymentModule;
 use Blindern\UKA\Billett\Helpers\ModelHelper;
@@ -214,6 +216,12 @@ class OrderController extends \Controller {
 
     /**
      * Create tickets for a order
+     *
+     * Params:
+     * - ticketgroups: {ticketgroup_id: count, ..} list of ticketgroups and number tickets to add
+     *
+     * Returns:
+     * - New tickets
      */
     public function createTickets($order_id)
     {
@@ -252,17 +260,65 @@ class OrderController extends \Controller {
 
     /**
      * Mark order as completed/valid (converts from reservation to actual order)
+     *
+     * Params:
+     * - paymentgroup: id of paymentgroup (will not convert tickets if not given)
+     * - amount: amount that should be the same as the tickets that will be validated (will reject if not)
+     * - sendmail: whether to send email when validated
      */
     public function validate($id)
     {
-        $order = Order::findOrFail($id);
+        $order = Order::with('tickets.ticketgroup', 'tickets.order')->findOrFail($id);
 
         if ($order->isCompleted()) {
             return \Response::json('order is already complete', 400);
         }
 
-        if (!$order->markComplete()) {
+        $skip_tickets = true;
+        $paymentgroup = null;
+        $sum = 0;
+        if (\Input::has('paymentgroup')) {
+            $paymentgroup = Paymentgroup::findOrFail(\Input::get('paymentgroup'));
+            $skip_tickets = false;
+
+            if (!\Input::exists('amount')) {
+                return \Response::json('missing amount', 400);
+            }
+
+            foreach ($order->tickets as $ticket) {
+                if (!$ticket->is_valid) {
+                    $sum += $ticket->ticketgroup->price + $ticket->ticketgroup->fee;
+                }
+            }
+
+            if ($sum != \Input::get('amount')) {
+                return \Response::json('amount mismatched', 400);
+            }
+        }
+
+        if (!$order->markComplete($skip_tickets, $paymentgroup)) {
             return \Response::json('could not convert from reservation to order, renew reservation failed', 400);
+        }
+
+        if ($paymentgroup && $sum > 0) {
+            $payment = new Payment;
+            $payment->order()->associate($order);
+            $payment->paymentgroup()->associate($paymentgroup);
+            $payment->time = time();
+            $payment->is_web = false;
+            $payment->amount = (float) $sum;
+            $payment->save();
+
+            $order->modifyBalance($payment->amount);
+        }
+
+        if (\Input::get('sendmail') && $order->email) {
+            $order->sendEmail();
+        }
+
+        // remove ticket's order (backreference needed for setValid and order's balance sync)
+        foreach ($order->tickets as $ticket) {
+            unset($ticket->order);
         }
 
         return $order;
