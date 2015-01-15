@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e93ab9526222e8d205a668b7f2947300",
+    "hash": "7c99de4227c725864890072b5b34b9be",
     "packages": [
         {
             "name": "barryvdh/laravel-ide-helper",
@@ -900,12 +900,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/henrist/laravel-api-query.git",
-                "reference": "d2c3c7fae736347d26cc8530143b226755dbd0e8"
+                "reference": "88ca9e6e6b4e374b1e0b60874ecc69a5127618e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/henrist/laravel-api-query/zipball/d2c3c7fae736347d26cc8530143b226755dbd0e8",
-                "reference": "d2c3c7fae736347d26cc8530143b226755dbd0e8",
+                "url": "https://api.github.com/repos/henrist/laravel-api-query/zipball/88ca9e6e6b4e374b1e0b60874ecc69a5127618e3",
+                "reference": "88ca9e6e6b4e374b1e0b60874ecc69a5127618e3",
                 "shasum": ""
             },
             "require": {
@@ -932,7 +932,7 @@
                 "source": "https://github.com/henrist/laravel-api-query/tree/master",
                 "issues": "https://github.com/henrist/laravel-api-query/issues"
             },
-            "time": "2015-01-10 17:14:29"
+            "time": "2015-01-15 07:17:50"
         },
         {
             "name": "iio/libmergepdf",
