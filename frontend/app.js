@@ -12,7 +12,7 @@
         'billett.guest'
     ]);
 
-    module.config(function ($locationProvider, $stateProvider, $urlRouterProvider, AnalyticsProvider) {
+    module.config(function ($locationProvider, $stateProvider, $urlRouterProvider, AnalyticsProvider, ngToastProvider) {
         $stateProvider.state('404', {
             templateUrl: 'assets/views/guest/infopages/404.html'
         });
@@ -32,6 +32,10 @@
         AnalyticsProvider.trackPrefix('billett');
         AnalyticsProvider.useAnalytics(true);
         AnalyticsProvider.useECommerce(true, false);
+
+        ngToastProvider.configure({
+            horizontalPosition: 'center'
+        });
     });
 
     module.run(function ($rootScope, $timeout, Analytics, Page) {
