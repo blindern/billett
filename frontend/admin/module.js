@@ -1,5 +1,5 @@
 (function() {
-    angular.module('billett.admin', [
+    var module = angular.module('billett.admin', [
         'angularFileUpload',
         'billett.auth',
         'billett.common',
@@ -10,4 +10,15 @@
         'ui.unique',
         'ng-sortable'
     ]);
+
+    module.run(function ($modalStack, $rootScope) {
+        // make sure modals close on state change
+        $rootScope.$on('$stateChangeSuccess', function () {
+            var topModal = $modalStack.getTop();
+            while (topModal) {
+                $modalStack.dismiss(topModal.key, '$locationChangeSuccess');
+                topModal = $modalStack.getTop();
+            }
+        });
+    });
 })();
