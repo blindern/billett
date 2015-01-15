@@ -91,7 +91,7 @@ class Event extends \Eloquent implements ApiQueryInterface {
             SELECT g.id,
                 g.is_normal,
                 COUNT(IF(t.is_valid != 0 AND t.is_revoked = 0, 1, NULL)) count_valid,
-                COUNT(IF(t.is_valid = 0 AND t.is_revoked = 0 AND t.expire > ?, 1, NULL)) count_pending,
+                COUNT(IF(t.is_valid = 0 AND t.is_revoked = 0 AND (t.expire IS NULL OR t.expire > ?), 1, NULL)) count_pending,
                 COUNT(IF(t.is_valid = 0 AND t.is_revoked = 0 AND t.expire <= ?, 1, NULL)) count_expired,
                 COUNT(IF(t.is_valid != 0 AND t.is_revoked != 0, 1, NULL)) count_revoked,
                 COUNT(IF(t.is_revoked = 0 AND t.used IS NOT NULL, 1, NULL)) count_used,
