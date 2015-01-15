@@ -21,7 +21,8 @@
     "angular-ui-utils": "~0.1.1",
     "Sortable": "~1.0.0",
     "angular-ui-router": "~0.2.13",
-    "angular-bootstrap": "~0.12.0"
+    "angular-bootstrap": "~0.12.0",
+    "ng-focus-on": "~0.2.2"
   },
   "resolutions": {
     "angular-animate": "~1.3",

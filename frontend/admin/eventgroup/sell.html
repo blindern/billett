@@ -1,24 +1,18 @@
 <div class="admin-eventgroup-sell">
-    <page-property name="title" value="Billettluke - ny ordre"></page-property>
+    <page-property name="title" value="Ny ordre"></page-property>
 
     <div class="page-header">
-        <div class="pull-right form-inline" ng-if="ctrl.paymentgroups.length > 0">
-            Oppgjørskonto:
-            <select class="form-control" ng-options="(g.time_start|formatdate:'DD.MM.YYYY HH:mm ') + '(' + g.user_created + '): ' + g.title for g in ctrl.paymentgroups" ng-model="ctrl.active_paymentgroup" ng-change="ctrl.changePaymentgroup()">
-                <option value="" ng-if="!ctrl.active_paymentgroup">Velg ...</option>
-            </select>
-            (<a ui-sref="admin-paymentgroup-new({eventgroup_id: ctrl.eventgroup.id, is_selling: true})">Opprett ny</a>)
-        </div>
-
         <h1>
             <span class="eventgroup">
                 <a href="a/eventgroup/{{ctrl.eventgroup.id}}">{{ctrl.eventgroup.title}}</a>
             </span>
-            Billettluke - ny ordre
+            Ny ordre
+
+            <span class="pull-right">
+                <a class="btn btn-default" ng-href="a/orders?eventgroup_id={{ctrl.eventgroup.id}}">Ordreliste</a>
+            </span>
         </h1>
     </div>
-
-    <p>Dette er løsningen beregnet for salg av billetter gjennom billettluke. Når en ordre er registrert her, er det viktig også å få betalt for ordren. På slutten av salgsdagen tas det oppgjør som viser hva som er solgt og verdi innsamlet.</p>
 
     <p class="alert alert-danger" ng-if="ctrl.paymentgroups.length == 0">
         Ingen oppgjørskonto eksisterer. Du må <a ng-href="a/eventgroup/{{ctrl.eventgroup.id}}/paymentgroup/new">opprette en ny</a> for å fortsette.
@@ -29,48 +23,82 @@
             <div class="col-md-6">
 
                 <h2>Ordredetaljer</h2>
-                <p>Dersom ordredetaljer fylles ut vil det bli sendt en kopi på e-post når ordren blir opprettet.</p>
+
                 <form class="form-horizontal" ng-submit="!form.$valid || placeOrder()" name="form">
-                    <div class="form-group">
+                    <div class="form-group" ng-if="ctrl.order.id">
                         <label class="text-right col-sm-4">Ordrenr</label>
                         <div class="col-sm-8">
-                            TODO
+                            {{ctrl.order.order_text_id}}
                         </div>
                     </div>
                     <div class="form-group" form-input-check="form,username">
                         <label class="control-label col-sm-4">Fullt navn</label>
                         <div class="col-sm-8">
-                            <input type="text" name="username" ng-model="contact.name" class="form-control" required>
+                            <input type="text" name="username" ng-model="ctrl.order.name" class="form-control" placeholder="(valgfritt)" focus-on="namefocus">
                         </div>
                     </div>
                     <div class="form-group" form-input-check="form,email">
                         <label class="control-label col-sm-4">E-postadresse</label>
                         <div class="col-sm-8">
-                            <input type="email" name="email" ng-model="contact.email" class="form-control" required>
+                            <input type="email" name="email" ng-model="ctrl.order.email" class="form-control" placeholder="(valgfritt)">
+                            <span class="help-block">Vi sender kopi av ordre hvis e-post fylles ut</span>
                         </div>
                     </div>
                     <div class="form-group" form-input-check="form,phone">
                         <label class="control-label col-sm-4">Telefonnummer</label>
                         <div class="col-sm-8">
-                            <input type="tel" name="phone" ng-model="contact.phone" class="form-control" ng-pattern="/^\+?\d+$/" required>
+                            <input type="tel" name="phone" ng-model="ctrl.order.phone" class="form-control" ng-pattern="/^\+?\d+$/" placeholder="(valgfritt)">
                         </div>
                     </div>
                     <div class="form-group" form-input-check="form,recruiter">
                         <label class="control-label col-sm-4">Evt. vervet av</label>
                         <div class="col-sm-8">
-                            <input type="tel" name="recruiter" ng-model="contact.recruiter" class="form-control" placeholder="(valgfritt)">
+                            <input type="tel" name="recruiter" ng-model="ctrl.order.recruiter" class="form-control" placeholder="(valgfritt)">
                             <span class="help-block">Navn på beboer ved Blindern Studenterhjem</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="comment" class="col-sm-4 control-label">Kommentar</label>
+                        <div class="col-sm-8">
+                            <textarea class="form-control" ng-model="ctrl.order.comment" id="comment" rows="5" placeholder="(valgfritt)"></textarea>
+                            <span class="help-block">Kommentar er ikke synlig for kunden.</span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="text-right col-sm-4">Totalt å betale</label>
                         <div class="col-sm-8">
-                            <b>{{(TODO||123)|price:true}}</b>
+                            <b>{{ctrl.total|price:true}}</b>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-if="ctrl.order.tickets && ctrl.order.tickets.length > 0">
+                        <label class="text-right col-sm-4">TODO</label>
+                        <div class="col-sm-8">
+                            Enkel måte å skrive ut billetter
                         </div>
                     </div>
 
-                    <input class="btn btn-success" type="submit" value="Registrer og marker som betalt">
-                    <input class="btn btn-danger" type="button" value="Avbryt ordre">
+                    <div class="form-group" ng-if="ctrl.order.tickets && ctrl.order.tickets.length > 0">
+                        <label class="col-sm-4 control-label" for="paymentgroup">Oppgjørskonto</label>
+                        <div class="col-sm-8">
+                            <select class="form-control" id="paymentgroup" ng-options="(g.time_start|formatdate:'DD.MM.YYYY HH:mm ') + '(' + g.user_created + '): ' + g.title for g in ctrl.paymentgroups" ng-model="ctrl.active_paymentgroup" ng-change="ctrl.changePaymentgroup()">
+                                <option value="" ng-if="!ctrl.active_paymentgroup">Velg ...</option>
+                            </select>
+                            <span class="help-block"><a ui-sref="admin-paymentgroup-new({eventgroup_id: ctrl.eventgroup.id, is_selling: true})" ng-click="ctrl.saveEdit()">Opprett ny</a></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-offset-4 col-sm-8">
+                            <div ng-if="ctrl.order.id">
+                                <input class="btn btn-success" type="submit" value="Marker som betalt" ng-click="ctrl.completeOrder()" ng-if="ctrl.order.tickets && ctrl.order.tickets.length > 0">
+                                <input class="btn btn-default" type="button" value="Lagre reservasjon" ng-click="ctrl.saveOrder()">
+                                <input class="btn btn-danger" type="button" value="Slett" ng-click="ctrl.abortOrder()">
+                            </div>
+                            <div ng-if="!ctrl.order.id">
+                                <input class="btn btn-primary" type="button" value="Registrer" ng-click="ctrl.createBlank()">
+                            </div>
+                        </div>
+                    </div>
 
                 </form>
 
@@ -78,72 +106,50 @@
             <div class="col-md-6">
 
                 <h2>
-                    <span class="pull-right">
-                        <label><input type="checkbox" ng-model="ctrl.ticketfilter.show_old"> Vis tidligere arrangementer</label><br>
-                        <label><input type="checkbox" ng-model="ctrl.ticketfilter.show_inactive"> Vis inaktive billettgrupper</label>
-                    </span>
-                    Billetter
+                    Reserverte billetter
                 </h2>
 
-                <p><input class="form-control" type="text" ng-model="ctrl.ticket_search" placeholder="Søk .."></p>
+                <p ng-if="!ctrl.ticketgroups">
+                    Ingen billetter er reservert.
+                </p>
 
-                <div class="event-list">
-                    <div class="event" ng-repeat="event in ctrl.events|filter:ctrl.ticket_search">
-                        <h4>
-                            <span class="pull-right">{{::event.dateinfo}}</span>
-                            <a ng-href="a/event/{{::event.id}}">{{::event.title}}</a>
-                        </h4>
-                        <dl class="event-info">
-                            <dt>Tilgjengelig</dt>
-                            <dd>{{::event.ticket_count.totals.free}} / {{::event.max_sales}}</dd>
-                        </dl>
-
-                        <div class="ticketgroup" ng-class="{'inactive': !ticketgroup.is_active, 'notpub': ticketgroup.is_active && !ticketgroup.is_published}" ng-repeat="ticketgroup in event.ticketgroups|filter:{'is_active': ctrl.ticketfilter.show_inactive}:ctrl.ticketgroup_check">
-                            <div class="meta">
-                                <div class="title">
-                                    {{ticketgroup.title}}
-                                    <abbr ng-if="!ticketgroup.is_active" title="NB! Billettgruppen er ikke satt aktiv">Inaktiv</abbr>
-                                    <abbr ng-if="!ticketgroup.is_published && ticketgroup.is_active" title="Billettgruppen er ikke publisert for nettsalg">Upub</abbr>
-                                </div><!-- white space fix for inline-block
-                             --><div class="price">
-                                    <span class="price-label">Pris:</span>
-                                    {{ticketgroup.price+ticketgroup.fee|price:true}}
-                                    <span class="price-fee">Hvorav {{ticketgroup.fee|price:true}} i gebyr</span>
-                                </div>
-                                <div ng-if="ticketgroup.ticket_text" class="ticket-text">
-                                    {{ticketgroup.ticket_text}}
-                                </div>
-                            </div><!-- white space fix for inline-block
-                         --><div class="count">
-                                <span class="value" ng-init="ticketgroup.order_count=0">
-                                    {{ticketgroup.order_count}} / {{event.ticket_count.groups[ticketgroup.id].free}}
-                                </span>
-                                <button type="button" ng-click="changeTicketgroupNum(ticketgroup, 1)"
-                                        class="btn btn-primary btn-sm"
-                                        ng-disabled="event.max_each_person<=0">
-                                    <span class="glyphicon glyphicon-plus"></span>
+                <table class="tickets table table-striped table-condensed" ng-if="ctrl.ticketgroups">
+                    <thead>
+                        <tr>
+                            <th>Arrangement</th>
+                            <th>Billettgruppe</th>
+                            <th>Antall</th>
+                            <th>Sum</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="group in ctrl.ticketgroups">
+                            <td>
+                                <a ng-href="a/event/{{group.event.id}}" target="_blank">{{group.event.time_start|formatdate:'D. MMM YYYY HH:mm'}}: {{group.event.title}}</a>
+                            </td>
+                            <td>{{group.ticketgroup.title}}</td>
+                            <td>{{group.num}}</td>
+                            <td>{{group.num * (group.ticketgroup.price + group.ticketgroup.fee)|price}}</td>
+                            <td>
+                                <button class="btn btn-sm btn-danger" ng-click="ctrl.deleteTicket(group)" title="Slett én reservasjon" ng-disabled="group.working">
+                                    <i class="glyphicon glyphicon-remove" ng-if="!group.working"></i>
+                                    <i class="glyphicon glyphicon-cog" ng-if="group.working"></i>
                                 </button>
-                                <button type="button" ng-click="changeTicketgroupNum(ticketgroup, -1)"
-                                        class="btn btn-primary btn-sm"
-                                        ng-disabled="ticketgroup.order_count<=0">
-                                    <span class="glyphicon glyphicon-minus"></span>
-                                </button>
-                            </div>
-                        </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="2">Sum</th>
+                            <th>{{ctrl.order.tickets.length}}</th>
+                            <th>{{ctrl.total|price}}</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </tfoot>
+                </table>
 
-                    </div>
-                </div>
-
-                <!--
-            <div class="form-group">
-                <label class="text-right col-sm-4">Reserverte billetter</label>
-                <div class="col-sm-8">
-                    <div ng-repeat="ticket in reservation.tickets">
-                        {{ticket.ticketgroup.title}} #{{ticket.id}}
-                        <span class="reservation-ticket-price">{{ticket.ticketgroup.price+ticket.ticketgroup.fee|price:true}} (hvorav {{ticket.ticketgroup.fee|price:true}} i gebyr)</span>
-                    </div>
-                </div>
-            </div>-->
+                <a class="btn btn-primary" ng-click="ctrl.addTickets()">Legg til{{ctrl.order.tickets.length==0?'':' flere'}} billetter</a>
 
             </div>
         </div>

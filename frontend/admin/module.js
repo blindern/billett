@@ -8,7 +8,8 @@
         'ui.bootstrap.modal',
         'ui.bootstrap.tpls',
         'ui.unique',
-        'ng-sortable'
+        'ng-sortable',
+        'focusOn'
     ]);
 
     module.run(function ($modalStack, $rootScope) {

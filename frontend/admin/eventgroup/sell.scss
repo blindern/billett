@@ -1,120 +1,16 @@
 .admin-eventgroup-sell {
-  h2 .pull-right {
-    font-size: $font-size-base;
-  }
-
-  .event-list {
-    max-height: 500px;
-    overflow-y: auto;
-
-    .event {
-      padding: 10px 10px 0 10px;
-      border: 1px solid #BBB;
-      border-radius: 4px;
-      margin-bottom: 10px;
-      &:last-child {
-        margin-bottom: 0;
-      }
-
-      h4 {
-        font-weight: bold;
-        margin-top: 0;
-        padding-bottom: 3px;
-        border-bottom: 1px dotted #BBB;
-      }
+  .tickets {
+    td {
+      vertical-align: middle;
     }
-
-    .event-info {
-      margin-bottom: 10px;
-      dt, dd {
-        display: inline-block;
-        margin-right: 5px;
-      }
-      dd {
-        margin-right: 10px;
-      }
-    }
-
-    .ticketgroup {
-      /*background: hsl(89, 38%, 90%);*/
-      &.inactive {
-        background: hsl(10, 80%, 90%);
-      }
-      &.notpub {
-        background: hsl(55, 43%, 90%);
-      }
-
-      margin: -3px -3px 7px;
-      padding: 3px;
-
-      .meta {
-        display: inline-block;
-        vertical-align: middle;
-        width: 65%;
-        .title {
-          font-weight: bold;
-          abbr {
-            margin-left: 5px;
-            font-weight: normal;
-          }
-        }
-        .price {
-          white-space: nowrap;
-          .price-label {
-
-          }
-          .price-fee {
-            display: block;
-            color: $gray-light;
-            font-size: 75%;
-          }
-        }
-        .ticket-text {
-          color: $gray-light;
-          font-size: 90%;
-          margin-top: 2px;
-        }
-      }
-      .count {
-        display: inline-block;
-        vertical-align: middle;
-        width: 35%;
-        text-align: right;
-        white-space: nowrap;
-        .value {
-
-        }
-        button {
-          margin-left: 3px;
-        }
-      }
-    }
-
-    @media (min-width: $screen-sm-min) {
-      .title, .price {
-        display: inline-block;
-        vertical-align: middle;
-        width: 55%;
-      }
-      .price {
-        width: 45%;
-        text-align: right;
-        .price-label {
-          display: none;
-        }
-      }
-      .count {
-        margin-top: 2px;
-      }
-    }
-
-    .reservation-ticket-price {
-      color: $gray-light;
-      font-size: 85%;
-      display: block;
-      margin-top: -2px;
+    thead th:nth-child(3),
+    thead th:nth-child(4),
+    tbody td:nth-child(3),
+    tbody td:nth-child(4),
+    tfoot th:nth-child(2),
+    tfoot th:nth-child(3) {
+      text-align: right;
+      white-space: nowrap;
     }
   }
-
-
 }
