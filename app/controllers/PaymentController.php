@@ -23,7 +23,7 @@ class PaymentController extends \Controller {
         $fields = [
             'order_id' => 'required|integer',
             'paymentgroup_id' => 'required|integer',
-            'amount' => 'required|numeric'
+            'amount' => 'required|numeric|not_in:0'
         ];
         $validator = \Validator::make(Input::all(), $fields);
 
