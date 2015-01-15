@@ -41,7 +41,7 @@ A reservation or actual order.
 * int id
 * int eventgroup_id
 * string order_text_id (longer unique identificator)
-* bool is_locked (lock if payments are being processed, disallow modifications to ticket collection)
+* bool is_locked (lock if payments are being processed, disallow modifications to ticket collection by guestuser)
 * bool is_valid (if the order has been processed successfully)
 * bool is_admin (if the order is created by admin/ticket office, reservations of this will not expire)
 * datetime time (when the order was created/completed)
