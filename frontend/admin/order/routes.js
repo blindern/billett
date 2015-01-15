@@ -7,7 +7,7 @@ angular.module('billett.admin').config(function ($stateProvider) {
             resolve: {auth: 'AuthRequireResolver'}
         })
         .state('admin-orders', {
-            url: '/a/orders',
+            url: '/a/orders?eventgroup_id',
             templateUrl: 'assets/views/admin/order/index.html',
             controller: 'AdminOrderListController',
             resolve: {auth: 'AuthRequireResolver'},
