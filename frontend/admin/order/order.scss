@@ -34,6 +34,16 @@
     color: #FFF;
     background-color: #F00;
   }
+
+  .order-detail {
+    display: block;
+  }
+  .is_admin {
+    font-size: 80%;
+    background: $gray-lighter;
+    padding: 1px;
+    border-radius: 3px;
+  }
 }
 
 .admin-order {

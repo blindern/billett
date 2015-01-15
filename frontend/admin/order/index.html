@@ -98,7 +98,7 @@
 
     <div ng-show="orders.result.length > 0">
         <h2>Søkeresultat</h2>
-        <table class="table table-striped">
+        <table class="table table-striped table-condensed">
             <thead>
                 <tr>
                     <th>Ordre</th>
@@ -113,12 +113,14 @@
                         <a ng-href="a/order/{{::order.id}}">{{::order.order_text_id}}</a><br>
                         {{::order.time|formatdate:'dd. DD.MM.YYYY HH:mm'}}
                         <span ng-if="!order.is_valid"><br>(kun reservasjon)</span>
+                        <span class="order-detail" ng-if="::order.is_admin"><span class="is_admin">Billettluke</span></span>
                     </td>
                     <td>
-                        {{::order.name}}<br>
-                        {{::order.email}}<br>
-                        {{::order.phone}}
-                        <span ng-show="::order.recruiter"><br>Vervet av: {{order.recruiter}}</span>
+                        <span class="order-detail" ng-if="::order.name">{{::order.name}}</span>
+                        <span class="order-detail" ng-if="::order.email">{{::order.email}}</span>
+                        <span class="order-detail" ng-if="::order.phone">{{::order.phone}}</span>
+                        <span class="order-detail" ng-if="::order.recruiter">Vervet av: {{::order.recruiter}}</span>
+                        <span class="order-detail" ng-if="::(!order.name && !order.email && !order.phone && !order.recruiter)"><i>Ingen detaljer</i></span>
                     </td>
                     <td>
                         {{order.total_valid|price}}
