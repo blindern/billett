@@ -14,7 +14,16 @@
                 offset: limit * ($scope.search.page - 1),
                 filter: genFilter()
             };
-            $scope.orders = AdminOrder.query(q);
+            $scope.orders = AdminOrder.query(q, function () {
+                $scope.orders.result.forEach(function (order) {
+                    order.total_valid = 0;
+                    order.total_reserved = 0;
+                    order.tickets.forEach(function (ticket) {
+                        if (ticket.is_revoked) return;
+                        order[ticket.is_valid ? 'total_valid' : 'total_reserved'] += ticket.ticketgroup.price + ticket.ticketgroup.fee;
+                    });
+                });
+            });
         };
 
         var equals = ['eventgroup_id', 'id', 'order_text_id', 'tickets.id', 'tickets.key', 'tickets.event.id', 'payments.transaction_id'];

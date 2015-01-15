@@ -93,11 +93,20 @@
     <div ng-show="orders.result.length > 0">
         <h2>Søkeresultat</h2>
         <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Ordre</th>
+                    <th>Detaljer</th>
+                    <th>Ordretotal</th>
+                    <th>Billetter</th>
+                </tr>
+            </thead>
             <tbody>
-                <tr ng-repeat="order in orders.result">
+                <tr ng-class="{invalid: !order.is_valid}" ng-repeat="order in orders.result">
                     <td>
                         <a ng-href="a/order/{{::order.id}}">{{::order.order_text_id}}</a><br>
                         {{::order.time|formatdate:'dd. DD.MM.YYYY HH:mm'}}
+                        <span ng-if="!order.is_valid"><br>(kun reservasjon)</span>
                     </td>
                     <td>
                         {{::order.name}}<br>
@@ -106,15 +115,19 @@
                         <span ng-show="::order.recruiter"><br>Vervet av: {{order.recruiter}}</span>
                     </td>
                     <td>
-                        <div ng-repeat="payment in order.payments">
+                        {{order.total_valid|price}}
+                        <span ng-if="order.total_reserved"><br>(reservert: {{order.total_reserved|price}})</span>
+                        <span class="unbalance" ng-if="order.balance != 0"><br>(ubalanse: {{order.balance|price}})</span>
+
+                        <!--<div ng-repeat="payment in order.payments">
                             {{payment.time|formatdate:'DD.MM.YYYY'}}<br>
                             {{payment.is_web ? 'web: ' + payment.transaction_id : 'manual payment'}}<br>
                             {{payment.amount|price:0:true}}
-                        </div>
+                        </div>-->
                     </td>
                     <td>
                         <ul>
-                            <li ng-repeat="ticket in order.tickets">
+                            <li ng-class="{reservation: !ticket.is_valid, revoked: ticket.is_revoked}" ng-repeat="ticket in order.tickets">
                                 <a ng-href="api/ticket/{{::ticket.id}}/pdf" target="_self">#{{::ticket.id}}</a>
                                 <a ng-href="a/event/{{::ticket.event.id}}">{{::ticket.event.title}} ({{::ticket.event.time_start|formatdate:'DD.MM \\k\\l HH'}})</a>
                                 ({{::ticket.ticketgroup.title}})

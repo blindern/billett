@@ -5,6 +5,35 @@
   .pagination {
     margin: 0 auto;
   }
+
+  .invalid {
+    opacity: 0.6;
+    color: red;
+  }
+
+  .reservation {
+    color: red;
+    &:after {
+      content: ' (reservasjon)';
+    }
+  }
+  .revoked {
+    opacity: 0.6;
+    text-decoration: line-through;
+    &:after {
+      content: ' (tilbaketrukket)';
+    }
+  }
+
+  th:nth-child(3),
+  td:nth-child(3) {
+    text-align: right;
+  }
+
+  .unbalance {
+    color: #FFF;
+    background-color: #F00;
+  }
 }
 
 .admin-order {
