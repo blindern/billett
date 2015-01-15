@@ -60,7 +60,7 @@ $rev = json_decode($rev_manifest, true);
     <![endif]-->
 </head>
 <body ng-class="{'dev-page': isDevPage}">
-    <ng-toast></ng-toast>
+    <toast></toast>
 
     <?php if ($is_dev): ?>
     <div class="dev-page-bar">NB! Du er nå på utviklersia! <span>Endringene her blir ikke oppdatert på blindernuka.no.</span></div>
