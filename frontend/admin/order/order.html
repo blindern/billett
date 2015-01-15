@@ -10,8 +10,9 @@
             Ordre: {{ctrl.order.order_text_id}}
 
             <span class="pull-right">
-                <a class="btn btn-primary" ng-click="ctrl.startEdit()">Rediger</a>
-                <a class="btn btn-default" ng-click="ctrl.email()">Send e-post</a>
+                <a class="btn btn-success" ng-href="a/eventgroup/{{ctrl.order.eventgroup.id}}/sell" accesskey="n">Ny ordre</a>
+                <a class="btn btn-primary" ng-click="ctrl.startEdit()" accesskey="e">Rediger</a>
+                <a class="btn btn-default" ng-click="ctrl.email()" ng-if="ctrl.order.is_valid">Send e-post</a>
             </span>
         </h1>
     </div>
@@ -20,25 +21,25 @@
         <div class="form-group">
             <label for="name" class="col-sm-2 control-label">Navn</label>
             <div class="col-sm-6">
-                <input type="text" class="form-control" ng-model="ctrl.edit.name" id="name" placeholder="" autofocus>
+                <input type="text" class="form-control" ng-model="ctrl.edit.name" id="name" placeholder="(valgfritt)" autofocus>
             </div>
         </div>
         <div class="form-group">
             <label for="email" class="col-sm-2 control-label">E-postadresse</label>
             <div class="col-sm-6">
-                <input type="email" class="form-control" ng-model="ctrl.edit.email" id="email" placeholder="">
+                <input type="email" class="form-control" ng-model="ctrl.edit.email" id="email" placeholder="(valgfritt)">
             </div>
         </div>
         <div class="form-group">
             <label for="phone" class="col-sm-2 control-label">Telefon</label>
             <div class="col-sm-6">
-                <input type="tel" class="form-control" ng-model="ctrl.edit.phone" id="phone" placeholder="" ng-pattern="/^\+?\d+$/">
+                <input type="tel" class="form-control" ng-model="ctrl.edit.phone" id="phone" placeholder="(valgfritt)" ng-pattern="/^\+?\d+$/">
             </div>
         </div>
         <div class="form-group">
             <label for="recruiter" class="col-sm-2 control-label">Vervet av</label>
             <div class="col-sm-6">
-                <input type="text" class="form-control" ng-model="ctrl.edit.recruiter" id="recruiter" placeholder="">
+                <input type="text" class="form-control" ng-model="ctrl.edit.recruiter" id="recruiter" placeholder="(valgfritt)">
             </div>
         </div>
         <div class="form-group">
@@ -57,6 +58,15 @@
     </form>
 
     <div ng-if="!ctrl.edit">
+        <div class="alert alert-warning" ng-if="!ctrl.order.is_valid">
+            <p>Dette er kun en reservasjon og ikke endelig ordre. For å lage gyldige billetter eller tilordne transaksjonen, må reservasjonen lagres som en endelig ordre.</p>
+
+            <p>
+                <button class="btn btn-success" ng-click="ctrl.completeOrder()" ng-if="ctrl.order.tickets.length > 0">Marker som betalt og fullfør ordre</button>
+                <button class="btn btn-primary" ng-click="ctrl.convertOrder()">Konverter, men ikke valider billetter enda</button>
+                <button class="btn btn-danger" ng-click="ctrl.deleteReservation()">Slett reservasjon</button>
+            </p>
+        </div>
 
         <div class="alert alert-warning" ng-if="ctrl.order.balance != 0">
             Ordren er ikke i balanse.
@@ -64,37 +74,53 @@
             <span ng-if="ctrl.order.balance > 0">Vi skylder kunden {{ctrl.order.balance|price}}.</span>
         </div>
 
-        <dl class="dl-horizontal">
-            <dt>Navn</dt>
-            <dd ng-if="ctrl.order.name">{{ctrl.order.name}}</dd>
-            <dd ng-if="!ctrl.order.name"><i>Ikke registrert</i></dd>
+        <div class="row">
 
-            <dt>E-post</dt>
-            <dd ng-if="ctrl.order.email">{{ctrl.order.email}}</dd>
-            <dd ng-if="!ctrl.order.email"><i>Ikke registrert</i></dd>
+            <div class="col-sm-6">
 
-            <dt>Telefon</dt>
-            <dd ng-if="ctrl.order.phone">{{ctrl.order.phone}}</dd>
-            <dd ng-if="!ctrl.order.phone"><i>Ikke registrert</i></dd>
+                <dl class="dl-horizontal">
+                    <dt>Navn</dt>
+                    <dd ng-if="ctrl.order.name">{{ctrl.order.name}}</dd>
+                    <dd ng-if="!ctrl.order.name"><i>Ikke registrert</i></dd>
 
-            <dt>Vervet av</dt>
-            <dd ng-if="ctrl.order.recruiter">{{ctrl.order.recruiter}}</dd>
-            <dd ng-if="!ctrl.order.recruiter"><i>Ikke registrert</i></dd>
-        </dl>
+                    <dt>E-post</dt>
+                    <dd ng-if="ctrl.order.email">{{ctrl.order.email}}</dd>
+                    <dd ng-if="!ctrl.order.email"><i>Ikke registrert</i></dd>
 
-        <dl class="dl-horizontal">
-            <dt>Opprinnelse</dt>
-            <dd>{{ctrl.order.is_admin ? 'Billettluke' : 'Nettbestilling'}}</dd>
-            <dt>Tidspunkt</dt>
-            <dd>{{ctrl.order.time|formatdate:'D. MMMM YYYY HH:mm'}}</dd>
-            <dt>Ordretotal</dt>
-            <dd>{{ctrl.total|price}} ({{ctrl.total_paid|price}} betalt<span ng-if="ctrl.order.balance != 0">, {{-ctrl.order.balance|price}} gjenstår</span>)</dd>
-        </dl>
+                    <dt>Telefon</dt>
+                    <dd ng-if="ctrl.order.phone">{{ctrl.order.phone}}</dd>
+                    <dd ng-if="!ctrl.order.phone"><i>Ikke registrert</i></dd>
 
-        <dl class="dl-horizontal" ng-if="ctrl.order.comment">
-            <dt>Kommentar</dt>
-            <dd marked="ctrl.order.comment"></dd>
-        </dl>
+                    <dt>Vervet av</dt>
+                    <dd ng-if="ctrl.order.recruiter">{{ctrl.order.recruiter}}</dd>
+                    <dd ng-if="!ctrl.order.recruiter"><i>Ikke registrert</i></dd>
+                </dl>
+
+                <dl class="dl-horizontal">
+                    <dt>Opprinnelse</dt>
+                    <dd>{{ctrl.order.is_admin ? 'Billettluke' : 'Nettbestilling'}}</dd>
+                    <dt>Tidspunkt</dt>
+                    <dd>{{ctrl.order.time|formatdate:'D. MMMM YYYY HH:mm'}}</dd>
+                    <dt>Ordretotal</dt>
+                    <dd>
+                        {{ctrl.total|price}} ({{ctrl.total_paid|price}} betalt<span ng-if="ctrl.order.balance != 0">, {{-ctrl.order.balance|price}} gjenstår</span>)
+                        <i ng-if="ctrl.total_reserved > 0">
+                            <br>
+                            Reserverte billetter: {{ctrl.total_reserved|price}} (totalt {{ctrl.total+ctrl.total_reserved|price}})
+                        </i>
+                    </dd>
+                </dl>
+
+            </div>
+
+            <div class="col-sm-6">
+                <div class="panel panel-info" ng-if="ctrl.order.comment">
+                    <div class="panel-heading">Kommentar</div>
+                    <div class="panel-body" marked="ctrl.order.comment"></div>
+                </div>
+            </div>
+
+        </div>
 
         <hr>
 
@@ -104,13 +130,13 @@
                 <h2>
                     Billetter
                     <span class="pull-right">
-                        <a class="btn btn-default" ng-click="ctrl.newTicket()">Tilorde ny billett</a>
+                        <a class="btn btn-default" ng-click="ctrl.addTickets()">Tilorde nye billetter</a>
                         <a class="btn btn-default" ng-if="ctrl.validtickets.length > 0" ng-href="api/ticket/pdf?ids={{ctrl.validtickets.join(',')}}" target="_self">Last ned billetter</a>
                     </span>
                 </h2>
 
                 <p ng-if="ctrl.order.tickets.length == 0">
-                    Ingen billetter eksisterer for ordren.
+                    Ingen billetter er tilordnet.
                 </p>
 
                 <table class="tickets table table-striped table-condensed" ng-if="ctrl.order.tickets.length > 0">
@@ -135,9 +161,9 @@
                             <td>{{ticket.id}}</td>
                             <td>
                                 <a ng-href="a/event/{{ticket.event.id}}">{{ticket.event.time_start|formatdate:'D. MMM YYYY HH:mm'}}: {{ticket.event.title}}</a>
-                                <span ng-if="!ticket.is_valid">(kun reservasjon)</span>
+                                <span ng-if="ticket.time != ctrl.order.time"><br>(registrert {{ticket.time|formatdate:'D. MMM YYYY HH:mm'}})</span>
+                                <span ng-if="!ticket.is_valid"><br>(kun reservasjon)</span>
                                 <span ng-if="ticket.is_revoked"><br>(tilbaketrukket {{ticket.time_revoked|formatdate:'D. MMM YYYY HH:mm'}})</span>
-                                <span ng-if="ticket.time != ctrl.order.time"><br>(lagt til {{ticket.time|formatdate:'D. MMM YYYY HH:mm'}})</span>
                             </td>
                             <td>
                                 {{ticket.ticketgroup.title}}
@@ -146,12 +172,18 @@
                             <td>{{ticket.ticketgroup.fee|price}}</td>
                             <td>
                                 <a class="btn btn-sm btn-danger" ng-if="!ticket.is_revoked && ticket.is_valid" ng-click="ctrl.revokeTicket(ticket)" title="Tilbaketrekk billett"><i class="glyphicon glyphicon-remove"></i></a>
-                                <a class="btn btn-sm btn-success" ng-if="!ticket.is_valid" ng-click="ctrl.validateTicket(ticket)" title="Godkjenn reservasjon"><i class="glyphicon glyphicon-plus"></i></a>
+                                <a class="btn btn-sm btn-success" ng-if="!ticket.is_valid && ctrl.order.is_valid" ng-click="ctrl.validateTicket(ticket)" title="Godkjenn reservasjon"><i class="glyphicon glyphicon-plus"></i></a>
                                 <a class="btn btn-sm btn-danger" ng-if="!ticket.is_valid" ng-click="ctrl.deleteTicket(ticket)" title="Slett reservasjon"><i class="glyphicon glyphicon-remove"></i></a>
                             </td>
                         </tr>
                     </tbody>
                 </table>
+
+                <div ng-if="ctrl.order.tickets.length > 1">
+                    <b>{{ctrl.ticketcount.valid}}</b> gyldig{{ctrl.ticketcount.valid==1?'':'e'}} billett{{ctrl.ticketcount.valid==1?'':'er'}},
+                    <b>{{ctrl.ticketcount.reserved}}</b> reservert{{ctrl.ticketcount.reserved==1?'':'e'}} billett{{ctrl.ticketcount.reserved==1?'':'er'}}
+                    og <b>{{ctrl.ticketcount.revoked}}</b> tilbaketruk{{ctrl.ticketcount.revoked==1?'ket':'ne'}} billett{{ctrl.ticketcount.revoked?'':'er'}}.
+                </div>
 
             </div>
 
@@ -161,10 +193,13 @@
 
                 <h2>
                     Transaksjoner
-                    <a class="pull-right btn btn-default" ng-click="ctrl.newPayment()">Ny transaksjon</a>
+                    <a class="pull-right btn btn-default" ng-click="ctrl.newPayment()" ng-if="ctrl.order.is_valid">Ny transaksjon</a>
                 </h2>
                 <p ng-if="ctrl.order.payments.length == 0">
                     Ingen transaksjoner er tilordnet ordren.
+                </p>
+                <p class="alert alert-warning" ng-if="!ctrl.order.is_valid">
+                    Ingen transaksjoner kan tilordnes før reservasjonen er konvertert til ordre.
                 </p>
                 <table class="payments table table-striped table-condensed" ng-if="ctrl.order.payments.length > 0">
                     <thead>
