@@ -38,6 +38,17 @@ angular.module('billett.admin').controller('AdminEventgroupSoldTicketsStatsContr
             return prev;
         }, []).sort();
 
+        var lastDay;
+        self.daysDetails = self.days.map(function (day) {
+            var tmp = lastDay;
+            lastDay = day;
+
+            return {
+                'day': day,
+                'short': (!tmp || tmp.slice(0, 7) != day.slice(0, 7)) ? day : '-'+day.slice(8)
+            };
+        });
+
         var events = {};
         self.events = [];
         ret.events.forEach(function (event) {

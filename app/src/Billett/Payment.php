@@ -7,7 +7,7 @@ class Payment extends \Eloquent implements ApiQueryInterface {
     protected $table = 'payments';
     protected $hidden = array('data');
 
-    protected $apiAllowedFields = array('id', 'order_id', 'group_id', 'time', 'is_web', 'amount', 'fee', 'transaction_id', 'status', 'data');
+    protected $apiAllowedFields = array('id', 'order_id', 'paymentgroup_id', 'time', 'is_web', 'amount', 'transaction_id', 'status', 'data');
     protected $apiAllowedRelations = array('order', 'paymentgroup');
 
     public function order()
@@ -17,7 +17,7 @@ class Payment extends \Eloquent implements ApiQueryInterface {
 
     public function paymentgroup()
     {
-        return $this->belongsTo('\\Blindern\\UKA\\Billett\\Paymentgroup'.$this->model_suffix, 'group_id');
+        return $this->belongsTo('\\Blindern\\UKA\\Billett\\Paymentgroup'.$this->model_suffix, 'paymentgroup_id');
     }
 
     /**

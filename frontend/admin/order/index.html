@@ -1,6 +1,6 @@
 <page-property name="title" value="Ordreliste"></page-property>
 
-<div class="admin-order">
+<div class="admin-order-list">
 
     <div class="page-header">
         <h1>
@@ -8,6 +8,10 @@
                 <a href="a">Administrasjon</a>
             </span>
             Ordreliste
+
+            <span class="pull-right" ng-if="search.eventgroup_id">
+                <a class="btn btn-success" ng-href="a/order/new/{{search.eventgroup_id}}" accesskey="n">Ny ordre</a>
+            </span>
         </h1>
     </div>
 
@@ -75,6 +79,12 @@
                     <input class="form-control" type="text" ng-model="search.phone" ng-model-options="{debounce:300}">
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Status</label>
+                <div class="col-sm-8">
+                    <select class="form-control" ng-model="search.status" ng-options="x.id as x.val for x in search_status"></select>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -89,11 +99,20 @@
     <div ng-show="orders.result.length > 0">
         <h2>Søkeresultat</h2>
         <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Ordre</th>
+                    <th>Detaljer</th>
+                    <th>Ordretotal</th>
+                    <th>Billetter</th>
+                </tr>
+            </thead>
             <tbody>
-                <tr ng-repeat="order in orders.result">
+                <tr ng-class="{invalid: !order.is_valid}" ng-repeat="order in orders.result">
                     <td>
-                        {{::order.order_text_id}}<br>
+                        <a ng-href="a/order/{{::order.id}}">{{::order.order_text_id}}</a><br>
                         {{::order.time|formatdate:'dd. DD.MM.YYYY HH:mm'}}
+                        <span ng-if="!order.is_valid"><br>(kun reservasjon)</span>
                     </td>
                     <td>
                         {{::order.name}}<br>
@@ -102,15 +121,19 @@
                         <span ng-show="::order.recruiter"><br>Vervet av: {{order.recruiter}}</span>
                     </td>
                     <td>
-                        <div ng-repeat="payment in order.payments">
-                            {{payment.type}}<br>
-                            {{payment.amount|price:0:true}}<br>
-                            {{payment.transaction_id}}
-                        </div>
+                        {{order.total_valid|price}}
+                        <span ng-if="order.total_reserved"><br>(reservert: {{order.total_reserved|price}})</span>
+                        <span class="unbalance" ng-if="order.balance != 0"><br>(ubalanse: {{order.balance|price}})</span>
+
+                        <!--<div ng-repeat="payment in order.payments">
+                            {{payment.time|formatdate:'DD.MM.YYYY'}}<br>
+                            {{payment.is_web ? 'web: ' + payment.transaction_id : 'manual payment'}}<br>
+                            {{payment.amount|price:0:true}}
+                        </div>-->
                     </td>
                     <td>
                         <ul>
-                            <li ng-repeat="ticket in order.tickets">
+                            <li ng-class="{reservation: !ticket.is_valid, revoked: ticket.is_revoked}" ng-repeat="ticket in order.tickets">
                                 <a ng-href="api/ticket/{{::ticket.id}}/pdf" target="_self">#{{::ticket.id}}</a>
                                 <a ng-href="a/event/{{::ticket.event.id}}">{{::ticket.event.title}} ({{::ticket.event.time_start|formatdate:'DD.MM \\k\\l HH'}})</a>
                                 ({{::ticket.ticketgroup.title}})

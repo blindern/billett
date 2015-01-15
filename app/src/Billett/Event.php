@@ -32,7 +32,7 @@ class Event extends \Eloquent implements ApiQueryInterface {
     protected $appends = array('is_timeout', 'is_old', 'ticket_count', 'has_tickets', 'web_selling_status');
     protected $hidden = array('image');
 
-    protected $apiAllowedFields = array('id', 'group_id', 'alias', 'is_admin_hidden', 'is_published', 'is_selling', 'time_start',
+    protected $apiAllowedFields = array('id', 'eventgroup_id', 'alias', 'is_admin_hidden', 'is_published', 'is_selling', 'time_start',
         'time_end', 'title', 'category', 'location', 'ticket_info', 'selling_text', 'max_each_person', 'max_sales', 'description',
         'description_short', 'ticket_text', 'link', 'age_restriction');
     protected $apiAllowedRelations = array('eventgroup', 'ticketgroups', 'tickets');
@@ -44,7 +44,7 @@ class Event extends \Eloquent implements ApiQueryInterface {
 
     public function eventgroup()
     {
-        return $this->belongsTo('\\Blindern\\UKA\\Billett\\Eventgroup'.$this->model_suffix, 'group_id');
+        return $this->belongsTo('\\Blindern\\UKA\\Billett\\Eventgroup'.$this->model_suffix, 'eventgroup_id');
     }
 
     public function ticketgroups()
@@ -160,12 +160,15 @@ class Event extends \Eloquent implements ApiQueryInterface {
      *
      * The list of groups must be valid for this event
      *
-     * @param array(array(group, count), ...)
+     * @param array(array(ticketgroup, count), ...)
+     * @return boolean
      */
     public function checkIsAvailable($groups)
     {
         $total = 0;
         $countinfo = $this->ticket_count;
+
+        // TODO: 'is_normal' field?
 
         foreach ($groups as $item) {
             $group = $item[0];

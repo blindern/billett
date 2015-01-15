@@ -33,3 +33,5 @@ Thumbs.db
 # SimpleSAMLphp will be symlinked in /billett/saml/
 /public/saml
 
+# IDE-helper-files
+/_ide_helper.php

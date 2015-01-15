@@ -16,6 +16,9 @@ angular.module('billett.admin').config(function ($stateProvider) {
             url: '/a/eventgroup/:eventgroup_id/paymentgroup/new',
             templateUrl: 'assets/views/admin/paymentgroup/new.html',
             controller: 'AdminPaymentgroupNewController as ctrl',
-            resolve: {auth: 'AuthRequireResolver'}
+            resolve: {auth: 'AuthRequireResolver'},
+            params: {
+                'is_selling': null // if controller is run with this state, it will return to the selling page
+            }
         });
 });

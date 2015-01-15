@@ -3,7 +3,6 @@
 use Blindern\UKA\Billett\Event;
 use Blindern\UKA\Billett\EventGuest;
 use Blindern\UKA\Billett\Eventgroup;
-use Blindern\UKA\Billett\Order;
 use Blindern\UKA\Billett\Helpers\ModelHelper;
 
 class EventController extends Controller {
@@ -69,7 +68,8 @@ class EventController extends Controller {
             if (isset($groups[$group->id])) {
                 $val = $groups[$group->id];
 
-                if (!$group->is_published || !$group->is_active || !is_numeric($val)) continue;
+                if (!$group->is_published || !$group->is_active) continue;
+                if (filter_var($val, FILTER_VALIDATE_INT) === false || $val <= 0) continue;
 
                 $groups_to_add[] = array($group, $val);
                 unset($groups[$group->id]);
@@ -86,7 +86,9 @@ class EventController extends Controller {
 
         // create a new reservation
         $class = ModelHelper::getModelPath('Order');
-        $order = $class::createReservation($groups_to_add);
+        $order = $class::createReservation($event->eventgroup);
+
+        $order->createTickets($groups_to_add);
 
         // store in session so we know which orders belong to this user
         $orders = \Session::get('billett_reservations', array());
@@ -103,7 +105,7 @@ class EventController extends Controller {
     private function validateInputAndUpdate(Event $event, $is_new)
     {
         $fields = array(
-            'group_id' => 'integer',
+            'eventgroup_id' => 'integer',
             'title' => '',
             'alias' => '',
             'time_start' => 'integer',
@@ -123,7 +125,7 @@ class EventController extends Controller {
         );
 
         if ($is_new) {
-            $fields['group_id'] = 'required|integer';
+            $fields['eventgroup_id'] = 'required|integer';
             $fields['title'] = 'required';
             $fields['time_start'] = 'required|integer';
             $fields['max_sales'] = 'required|integer';
@@ -136,10 +138,10 @@ class EventController extends Controller {
             return \Response::json('data validation failed', 400);
         }
 
-        if (Input::has('group_id') && (Input::get('group_id') != $event->group_id || $is_new)) {
-            $group = Eventgroup::find(Input::get('group_id'));
+        if (Input::has('eventgroup_id') && (Input::get('eventgroup_id') != $event->eventgroup_id || $is_new)) {
+            $group = Eventgroup::find(Input::get('eventgroup_id'));
             if (!$group) {
-                return Response::json('group id not found', 400);
+                return Response::json('eventgroup id not found', 400);
             }
 
             $event->eventgroup()->associate($group);

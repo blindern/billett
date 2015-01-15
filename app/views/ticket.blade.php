@@ -172,7 +172,6 @@ $months = array('jan', 'feb', 'mar', 'apr', 'mai', 'jun', 'jul', 'aug', 'sep', '
      */
     .ticket-text-event {
       font-size: 80%;
-      color: #FF0000;
       /*margin: 0;*/
     }
 
@@ -192,7 +191,6 @@ $months = array('jan', 'feb', 'mar', 'apr', 'mai', 'jun', 'jul', 'aug', 'sep', '
      */
     .fee .value {
         font-size: 75%;
-        color: #666;
         margin-left: 12mm;
       }
     }
@@ -202,7 +200,6 @@ $months = array('jan', 'feb', 'mar', 'apr', 'mai', 'jun', 'jul', 'aug', 'sep', '
      */
     .ticket-text-ticketgroup {
       font-size: 80%;
-      color: #FF0000;
     }
 
     /*

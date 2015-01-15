@@ -24,7 +24,9 @@
 		"iio/libmergepdf": "~2.4",
 		"knight-swarm/laravel-saml": "dev-master",
 		"nutsweb/laravel-prerender": "dev-master",
-		"henrist/laravel-api-query": "dev-master"
+		"henrist/laravel-api-query": "dev-master",
+		"doctrine/dbal": "~2.5",
+		"barryvdh/laravel-ide-helper": "~1.11"
 	},
 	"autoload": {
 		"classmap": [
@@ -46,6 +48,7 @@
 		],
 		"post-update-cmd": [
 			"php artisan clear-compiled",
+			"php artisan ide-helper:generate",
 			"php artisan optimize"
 		],
 		"post-create-project-cmd": [

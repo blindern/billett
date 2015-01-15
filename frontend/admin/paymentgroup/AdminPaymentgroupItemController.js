@@ -1,12 +1,11 @@
-angular.module('billett.admin').controller('AdminPaymentgroupItemController', function ($stateParams, AdminPaymentgroupService, Page) {
+angular.module('billett.admin').controller('AdminPaymentgroupItemController', function ($stateParams, AdminPaymentgroup, Page) {
     var ctrl = this;
 
     var loader = Page.setLoading();
-    AdminPaymentgroupService.get({id: $stateParams['id']}, function (ret) {
+    AdminPaymentgroup.get({id: $stateParams['id']}, function (ret) {
         loader();
 
         ctrl.paymentgroup = ret;
-        ctrl.editing = true;
     });
 
     ctrl.startEdit = function () {

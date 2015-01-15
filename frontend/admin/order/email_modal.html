@@ -1,0 +1,24 @@
+<div>
+    <div class="modal-header">
+        <h3 class="modal-title">Send ordredetaljer på e-post</h3>
+    </div>
+    <div class="modal-body">
+        <p>E-posten som sendes inneholder ordredetaljer, billettinformasjon, betalingsoversikt og billetter i PDF.</p>
+        <form class="form-horizontal" ng-submit="ctrl.send()" ng-if="!ctrl.sending">
+            <div class="form-group">
+                <label for="email" class="col-sm-4 control-label">E-postadresse</label>
+                <div class="col-sm-6">
+                    <input type="email" class="form-control" ng-model="ctrl.email" id="email" placeholder="{{ctrl.order.email}}" autofocus>
+                    <span class="help-block" ng-if="ctrl.order.email">Fyll inn feltet hvis annen adresse ønskes</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-4">
+                    <input class="btn btn-primary" type="submit" value="Send e-post" ng-disabled="!ctrl.email && !ctrl.order.email">
+                    <button type="button" class="btn btn-default" ng-click="ctrl.cancel()">Avbryt</button>
+                </div>
+            </div>
+        </form>
+        <div class="text-center" ng-if="ctrl.sending">Sender e-post ...</div>
+    </div>
+</div>

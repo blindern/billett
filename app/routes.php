@@ -9,10 +9,15 @@ Route::resource('/api/eventgroup', 'EventgroupController', array(
 Route::get('/api/eventgroup/{id}/simple', 'EventgroupController@simpleList');
 Route::get('/api/eventgroup/{id}/sold_tickets_stats', 'EventgroupController@soldTicketsStats');
 
+// orders
+Route::get('/api/order/fixbalance', 'OrderController@fixbalance');
 Route::post('/api/order/{id}/place', 'OrderController@placeOrder');
 Route::post('/api/order/{id}/force', 'OrderController@forceOrder');
+Route::post('/api/order/{id}/create_tickets', 'OrderController@createTickets');
+Route::post('/api/order/{id}/validate', 'OrderController@validate');
+Route::post('/api/order/{id}/email', 'OrderController@email');
 Route::resource('/api/order', 'OrderController', array(
-    'only' => array('index', 'show', 'update', 'destroy')
+    'only' => array('index', 'show', 'store', 'update', 'destroy')
 ));
 
 Route::post('/api/event/{id}/createreservation', 'EventController@createReservation');
@@ -32,14 +37,17 @@ Route::get('/event/{id}/image', 'EventController@image');
 Route::post('/event/{id}/image', 'EventController@uploadImage');
 
 // tickets
+Route::get('/api/ticket/pdf', 'TicketController@mergedPdf');
 Route::get('/api/ticket/{id}/pdf', 'TicketController@pdf');
+Route::post('/api/ticket/{id}/revoke', 'TicketController@revoke');
+Route::post('/api/ticket/{id}/validate', 'TicketController@validate');
 Route::resource('/api/ticket', 'TicketController', array(
-    'only' => array('index')
+    'only' => array('index', 'destroy')
 ));
 
 // payments
 Route::resource('/api/payment', 'PaymentController', array(
-    'only' => array('index')
+    'only' => array('index', 'store')
 ));
 
 // payment (callback)

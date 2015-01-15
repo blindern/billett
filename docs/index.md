@@ -14,7 +14,7 @@ Grouping of events.
 ### Event
 The events itself.
 * int id
-* int group_id (reference to event group)
+* int eventgroup_id (reference to event group)
 * optional string alias (address used in url)
 * bool is_admin_hidden (hide from default view in admin)
 * bool is_published
@@ -39,8 +39,9 @@ The events itself.
 ### Order
 A reservation or actual order.
 * int id
+* int eventgroup_id
 * string order_text_id (longer unique identificator)
-* bool is_locked (lock if payments are being processed, disallow modifications to ticket collection)
+* bool is_locked (lock if payments are being processed, disallow modifications to ticket collection by guestuser)
 * bool is_valid (if the order has been processed successfully)
 * bool is_admin (if the order is created by admin/ticket office, reservations of this will not expire)
 * datetime time (when the order was created/completed)
@@ -50,6 +51,8 @@ A reservation or actual order.
 * optional string email (email of the buyer)
 * optional string phone (phonenumber of the buyer)
 * optional string recruiter (name of person that recruited this order)
+* optional string comment (admin comment)
+* decimal(7,2) balance (difference between payments registered and ticket value, paid - ticketvalue)
 
 ### Paymentgroup
 Payments that are not on web must belong to a Paymentgroup for accounting purposes.
@@ -66,11 +69,10 @@ Payments that are not on web must belong to a Paymentgroup for accounting purpos
 Link between payment methods and orders.
 * int id
 * int order_id (reference to order)
-* optional int group_id (reference to payment group)
+* optional int paymentgroup_id (reference to payment group)
 * datetime time (when the payment happened)
 * bool is_web (if the payment is by card on web page)
 * decimal(7,2) amount (the amount paid, negative will mean a refund)
-* optional decimal(7,2) fee (additional fee paid)
 * optional string transaction_id (used by web payment)
 * optional string status (used by web payment)
 * optional string data (additional data if applicable in json)
@@ -95,11 +97,13 @@ The tickets itself.
 * int order_id (reference to order)
 * int event_id (reference to event this ticket belongs)
 * int ticketgroup_id (reference to ticket group)
-* datetime time (when the ticket was made valid)
+* datetime time (when the ticket was created, and then when it was made valid)
 * optional time_revoked (when the ticket was revoked)
 * optional datetime expire (when the ticket will expire if not paid for, e.g. while creating order)
 * bool is_valid (if the ticket is valid, e.g. paid for)
 * bool is_revoked (if the ticket is revoked, e.g. refunded)
+* optional int valid_paymentgroup_id (paymentgroup where it was made valid, if null => web)
+* optional int revoked_paymentgroup_id (paymentgroup where it was revoked, if null => web)
 * optional datetime used (when the ticket was registered used/checked in)
 * string key (the unique special number used to identify the ticket)
-* blob pdf (the actual PDF for the ticket)
+* optional blob pdf (the actual PDF for the ticket)

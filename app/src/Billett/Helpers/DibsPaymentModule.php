@@ -149,14 +149,15 @@ class DibsPaymentModule {
                     $order->time = time();
 
                     if ($payment->status == 'ACCEPTED') {
+                        $order->modifyBalance($data['amount']/100.0);
+
                         if (!$order->isReservation()) {
                             Log::alert('Order is not a reservation but payment registered');
-                            die('Order is not a reservation but payment registered');
-                        }
-
-                        if ($order->markComplete()) {
-                            // send the receipt
-                            $order->sendEmail();
+                        } else {
+                            if ($order->markComplete()) {
+                                // send the receipt
+                                $order->sendEmailOrderWebComplete();
+                            }
                         }
                     }
 

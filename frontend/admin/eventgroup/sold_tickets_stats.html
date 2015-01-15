@@ -10,11 +10,11 @@
         </h1>
     </div>
 
-    <table class="table">
+    <table class="table table-striped table-condensed">
         <thead>
             <tr>
                 <th>Arrangement</th>
-                <th ng-repeat="day in ctrl.days">{{day}}</th>
+                <th ng-repeat="day in ctrl.daysDetails">{{day.short}}</th>
                 <th>Sum</th>
             </tr>
         </thead>
@@ -22,12 +22,12 @@
             <tr>
                 <th>Sum</th>
                 <td ng-repeat="accum in ctrl.daysAccum">
-                    {{accum.price+accum.fee}}
+                    {{accum.price+accum.fee|price}}
                     <br>
                     {{accum.count-accum.revoked}} stk
                 </td>
                 <th>
-                    {{ctrl.topAccum.price+ctrl.topAccum.fee}}
+                    {{ctrl.topAccum.price+ctrl.topAccum.fee|price}}
                     <br>
                     {{ctrl.topAccum.count-ctrl.topAccum.revoked}} stk
                 </th>
@@ -35,16 +35,19 @@
         </tfoot>
         <tbody>
             <tr ng-repeat="event in ctrl.events">
-                <td><a ng-href="a/event/{{::event.id}}">{{::event.title}}</a> ({{::event.time_start|formatdate:'DD. MMM HH:mm'}})</td>
+                <td>
+                    <a ng-href="a/event/{{::event.id}}">{{::event.title}}</a>
+                    <span class="event-time">({{::event.time_start|formatdate:'ddd D. MMMM HH:mm'}})</span>
+                </td>
                 <td ng-repeat="accum in event.daysAccum">
                     <span ng-if="accum.count > 0 || accum.revoked > 0">
-                        {{accum.price+accum.fee}}
+                        {{accum.price+accum.fee|price}}
                         <br>
                         {{accum.count-accum.revoked}} stk
                     </span>
                 </td>
                 <th>
-                    {{event.accum.price+event.accum.fee}}
+                    {{event.accum.price+event.accum.fee|price}}
                     <br>
                     {{event.accum.count-event.accum.revoked}} stk
                 </th>

@@ -27,7 +27,7 @@
         <div class="form-group">
             <div class="col-sm-6 col-sm-offset-2">
                 <input type="submit" value="Opprett" class="btn btn-primary">
-                <a ng-href="a/eventgroup/{{ctrl.eventgroup.id}}/paymentgroups" class="btn">Avbryt</a>
+                <a ng-click="ctrl.abort()" class="btn">Avbryt</a>
             </div>
         </div>
     </form>

@@ -26,6 +26,8 @@ var js_files_library = [
     "./bower_components/angular-animate/angular-animate.js",
     "./bower_components/angular-resource/angular-resource.js",
     "./bower_components/angular-sanitize/angular-sanitize.js",
+    "./bower_components/angular-bootstrap/ui-bootstrap.js",
+    "./bower_components/angular-bootstrap/ui-bootstrap-tpls.js",
     "./bower_components/angular-ui-utils/ui-utils.js",
     "./bower_components/angular-file-upload/angular-file-upload.js",
     "./bower_components/moment/moment.js",
@@ -35,7 +37,8 @@ var js_files_library = [
     "./bower_components/ngtoast/dist/ngToast.js",
     "./bower_components/angular-google-analytics/dist/angular-google-analytics.js",
     "./bower_components/Sortable/Sortable.js", // min.js
-    "./bower_components/Sortable/ng-sortable.js"
+    "./bower_components/Sortable/ng-sortable.js",
+    "./bower_components/ng-focus-on/lib/index.js"
 ];
 
 var js_files = [

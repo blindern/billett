@@ -7,12 +7,16 @@
                 <a href="a">Administrasjon</a>
             </span>
             {{group.title}}
+
+            <span class="pull-right">
+                <a class="btn btn-success" ng-href="a/order/new/{{group.id}}">Ny ordre</a>
+            </span>
         </h1>
     </div>
 
     <ul>
         <li><a ng-href="a/eventgroup/{{group.id}}/sold_tickets_stats">Billettstatistikk (salgsoversikt)</a></li>
-        <li><a ng-href="a/orders?tickets.event.eventgroup.id={{group.id}}">Ordreliste</a></li>
+        <li><a ng-href="a/orders?eventgroup_id={{group.id}}">Ordreliste</a></li>
         <li><a ng-href="a/eventgroup/{{group.id}}/paymentgroups">Betalingsgrupper/oppgjør</a></li>
     </ul>
 

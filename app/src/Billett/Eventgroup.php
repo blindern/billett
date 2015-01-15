@@ -7,11 +7,16 @@ class Eventgroup extends \Eloquent implements ApiQueryInterface {
     protected $table = 'eventgroups';
 
     protected $apiAllowedFields = array('id', 'is_active', 'title', 'sort_value');
-    protected $apiAllowedRelations = array('events');
+    protected $apiAllowedRelations = array('events', 'orders', 'paymentgroups');
 
     public function events()
     {
-        return $this->hasMany('\\Blindern\\UKA\\Billett\\Event'.$this->model_suffix, 'group_id');
+        return $this->hasMany('\\Blindern\\UKA\\Billett\\Event'.$this->model_suffix, 'eventgroup_id');
+    }
+
+    public function orders()
+    {
+        return $this->hasMany('\\Blindern\\UKA\\Billett\\Order'.$this->model_suffix, 'eventgroup_id');
     }
 
     public function paymentgroups()

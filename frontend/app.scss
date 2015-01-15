@@ -8,7 +8,9 @@ $screen-sm: 630px;
 
 @import "admin/event/event";
 @import "admin/eventgroup/eventgroup";
+@import "admin/order/new";
 @import "admin/order/order";
+@import "admin/ticketgroup/add_ticketgroup_to_order";
 
 @import "guest/eventgroup/eventgroup";
 @import "guest/event/event";

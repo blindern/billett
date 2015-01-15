@@ -2,6 +2,7 @@
 
 use Blindern\UKA\Billett\Helpers\PdfTicket;
 use Henrist\LaravelApiQuery\ApiQueryInterface;
+use \iio\libmergepdf\Merger;
 
 class Ticket extends \Eloquent implements ApiQueryInterface {
     /**
@@ -17,7 +18,7 @@ class Ticket extends \Eloquent implements ApiQueryInterface {
                   0 num_revoked
                 FROM tickets t
                   JOIN events e ON t.event_id = e.id
-                WHERE t.is_valid = 1 AND e.group_id = ?
+                WHERE t.is_valid = 1 AND e.eventgroup_id = ?
                 GROUP BY DATE(FROM_UNIXTIME(t.time)), ticketgroup_id, event_id
 
                 UNION ALL
@@ -27,7 +28,7 @@ class Ticket extends \Eloquent implements ApiQueryInterface {
                   COUNT(t.id) num_revoked
                 FROM tickets t
                   JOIN events e ON t.event_id = e.id
-                WHERE t.is_revoked = 1 AND e.group_id = ?
+                WHERE t.is_revoked = 1 AND e.eventgroup_id = ?
                 GROUP BY DATE(FROM_UNIXTIME(t.time)), ticketgroup_id, event_id
             ) ref
             GROUP BY day, ticketgroup_id, event_id', array($eventgroup_id, $eventgroup_id));
@@ -64,12 +65,28 @@ class Ticket extends \Eloquent implements ApiQueryInterface {
         );
     }
 
+    /**
+     * Generate merged PDF with given tickets
+     *
+     * @param array $tickets List of Ticket objects
+     * @return blob PDF-data
+     */
+    public static function generateTicketsPdf(array $tickets)
+    {
+        $merger = new Merger();
+        foreach ($tickets as $ticket) {
+            $merger->addRaw($ticket->getPdfData());
+        }
+
+        return $merger->merge();
+    }
+
     protected $table = 'tickets';
     protected $appends = array('number');
     protected $hidden = array('pdf');
 
     protected $apiAllowedFields = array('id', 'order_id', 'event_id', 'ticketgroup_id', 'time', 'expire', 'is_valid', 'is_revoked', 'used', 'key');
-    protected $apiAllowedRelations = array('event', 'order', 'ticketgroup');
+    protected $apiAllowedRelations = array('event', 'order', 'ticketgroup', 'valid_paymentgroup', 'revoked_paymentgroup');
 
     public function event()
     {
@@ -84,6 +101,16 @@ class Ticket extends \Eloquent implements ApiQueryInterface {
     public function ticketgroup()
     {
         return $this->belongsTo('\\Blindern\\UKA\\Billett\\Ticketgroup'.$this->model_suffix, 'ticketgroup_id');
+    }
+
+    public function valid_paymentgroup()
+    {
+        return $this->belongsTo('\\Blindern\\UKA\\Billett\\Paymentgroup'.$this->model_suffix, 'valid_paymentgroup_id');
+    }
+
+    public function revoked_paymentgroup()
+    {
+        return $this->belongsTo('\\Blindern\\UKA\\Billett\\Paymentgroup'.$this->model_suffix, 'revoked_paymentgroup_id');
     }
 
     public function getKeyAttribute($key)
@@ -157,12 +184,48 @@ class Ticket extends \Eloquent implements ApiQueryInterface {
 
     /**
      * Set ticket valid
+     *
+     * @param Paymentgroup associated paymentgroup
+     * @throws \Exception
      */
-    public function setValid()
+    public function setValid(Paymentgroup $paymentgroup = null)
     {
+        if ($this->is_valid) throw new \Exception("Ticket already valid");
+
         $this->is_valid = true;
         $this->expire = null;
         $this->time = time();
+
+        if ($paymentgroup) {
+            $this->valid_paymentgroup()->associate($paymentgroup);
+        }
+
+        $this->save();
+
+        $this->order->modifyBalance(-$this->ticketgroup->price - $this->ticketgroup->fee);
+    }
+
+    /**
+     * Mark ticket as revoked
+     *
+     * @param Paymentgroup associated paymentgroup
+     * @throws \Exception
+     */
+    public function setRevoked(Paymentgroup $paymentgroup = null)
+    {
+        if (!$this->is_valid) throw new \Exception("Cannot revoke invalid ticket.");
+        if ($this->is_revoked) throw new \Exception("Ticket already revoked.");
+
+        $this->is_revoked = true;
+        $this->time_revoked = time();
+
+        if ($paymentgroup) {
+            $this->revoked_paymentgroup()->associate($paymentgroup);
+        }
+
+        $this->save();
+
+        $this->order->modifyBalance($this->ticketgroup->price + $this->ticketgroup->fee);
     }
 
     /**

@@ -1,6 +1,39 @@
 <?php namespace Blindern\UKA\Billett;
 
 class Ticketgroup extends \Eloquent {
+    /**
+     * Check if list of ticketgroups is available
+     *
+     * @param array(array(ticketgroup, count), ...)
+     * @return boolean
+     */
+    public static function checkIsAvailable($groups)
+    {
+        // split into the different events
+        // and check for each event
+
+        $events = [];
+        $events_ticketgroups = [];
+
+        foreach ($groups as $row) {
+            $ticketgroup = $row[0];
+            if (!isset($events[$ticketgroup->event->id])) {
+                $events[$ticketgroup->event->id] = $ticketgroup->event;
+                $events_ticketgroups[$ticketgroup->event->id] = [];
+            }
+
+            $events_ticketgroups[$ticketgroup->event->id][] = $row;
+        }
+
+        foreach ($events as $event) {
+            if (!$event->checkIsAvailable($events_ticketgroups[$event->id])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     protected $model_suffix = '';
     protected $table = 'ticketgroups';
 
