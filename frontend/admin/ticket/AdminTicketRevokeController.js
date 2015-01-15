@@ -1,4 +1,4 @@
-angular.module('billett.admin').controller('AdminTicketRevokeController', function ($http, $modalInstance, $scope, order, ticket, AdminPaymentgroup) {
+angular.module('billett.admin').controller('AdminTicketRevokeController', function ($http, $modalInstance, order, ticket, AdminPaymentgroup) {
     var ctrl = this;
     ctrl.order = order;
     ctrl.ticket = ticket;
