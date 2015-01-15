@@ -16,12 +16,13 @@ class Ticketgroup extends \Eloquent {
         $events_ticketgroups = [];
 
         foreach ($groups as $row) {
-            if (!isset($events[$row->event->id])) {
-                $events[$row->event->id] = $row->event;
-                $events_ticketgroups[$row->event->id] = [];
+            $ticketgroup = $row[0];
+            if (!isset($events[$ticketgroup->event->id])) {
+                $events[$ticketgroup->event->id] = $ticketgroup->event;
+                $events_ticketgroups[$ticketgroup->event->id] = [];
             }
 
-            $events_ticketgroups[$row->event->id][] = $row;
+            $events_ticketgroups[$ticketgroup->event->id][] = $row;
         }
 
         foreach ($events as $event) {
