@@ -22,7 +22,9 @@ class OrderController extends \Controller {
     }
 
     public function index() {
-        return \ApiQuery::processCollection(Order::where('is_valid', true)->orWhere('is_admin', true));
+        return \ApiQuery::processCollection(Order::where(function ($query) {
+            $query->where('is_valid', true)->orWhere('is_admin', true);
+        }));
     }
 
     /**
