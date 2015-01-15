@@ -370,6 +370,9 @@ class Order extends \Eloquent implements ApiQueryInterface {
         if (!$skip_tickets) {
             foreach ($this->tickets as $ticket) {
                 if (!$ticket->is_valid) {
+                    if (!isset($ticket->order)) {
+                        $ticket->setRelation('order', $this);
+                    }
                     $ticket->setValid($paymentgroup);
                 }
             }

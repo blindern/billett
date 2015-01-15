@@ -273,7 +273,7 @@ class OrderController extends \Controller {
      */
     public function validate($id)
     {
-        $order = Order::with('tickets.ticketgroup', 'tickets.order')->findOrFail($id);
+        $order = Order::with('tickets.ticketgroup')->findOrFail($id);
 
         if ($order->isCompleted()) {
             return \Response::json('order is already complete', 400);
