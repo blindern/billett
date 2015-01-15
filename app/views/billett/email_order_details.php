@@ -107,7 +107,7 @@ Ingen betalinger er registrert.';
         $time = Carbon::createFromTimeStamp($payment->time)->format('d.m.Y H:i');
 
         echo '
-'.$time.': '.format_nok($payment->amount).' ('.($payment->is_web ? 'betalt på nett, transaksjonsnr '.$payment->transaction_id : 'manuelt behandlet').')';
+'.$time.': '.format_nok($payment->amount).' ('.($payment->is_web ? 'betalt på nett, transaksjonsnr '.$payment->transaction_id : 'billettluke').')';
     }
 }
 
