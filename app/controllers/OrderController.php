@@ -78,6 +78,11 @@ class OrderController extends \Controller {
         }
 
         $order->save();
+
+        $order->load('eventgroup');
+        $order->load('tickets.ticketgroup', 'tickets.event');
+        $order->load('payments.paymentgroup');
+
         return $order;
     }
 
