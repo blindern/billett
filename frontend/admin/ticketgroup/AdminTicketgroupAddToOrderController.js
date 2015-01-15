@@ -1,4 +1,4 @@
-angular.module('billett.admin').controller('AdminTicketgroupAddToOrderController', function ($modalInstance, $scope, eventgroup_id, AdminEventgroup, addHandler) {
+angular.module('billett.admin').controller('AdminTicketgroupAddToOrderController', function ($http, $modalInstance, $scope, eventgroup_id, getOrder, AdminEventgroup, addHandler) {
     var ctrl = this;
     ctrl.count = 0;  // num tickets to add
     ctrl.amount = 0; // price to pay
@@ -68,12 +68,24 @@ angular.module('billett.admin').controller('AdminTicketgroupAddToOrderController
     // add selected tickets
     ctrl.addTickets = function () {
         ctrl.sending = true;
-        addHandler(ctrl.ticketgroups_add).then(function () {
-            $modalInstance.close();
-        }, function () {
-            alert("Ukjent feil oppsto ved registrering av billetter");
-        }).finally(function () {
-            delete ctrl.sending;
+
+        var groups = {};
+        angular.forEach(ctrl.ticketgroups_add, function (group) {
+            groups[group.ticketgroup.id] = group.num
+        });
+
+        getOrder().then(function (order) {
+            $http.post('api/order/'+order.id+'/create_tickets', {
+                ticketgroups: groups
+            }).success(function (ret) {
+                addHandler().finally(function () {
+                    $modalInstance.close(ret);
+                });
+            }).error(function (err) {
+                alert("Ukjent feil oppsto ved registrering av billetter");
+            }).finally(function () {
+                delete ctrl.sending;
+            });
         });
     };
 });

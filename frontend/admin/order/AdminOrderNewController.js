@@ -226,27 +226,18 @@ angular.module('billett.admin').controller('AdminOrderNewController', function (
                 eventgroup_id: function () {
                     return ctrl.eventgroup.id;
                 },
+                getOrder: function () {
+                    return getOrder;
+                },
                 addHandler: function () {
-                    return function (ticketgroups) {
-                        return $q(function (resolve, reject) {
-                            getOrder().then(function (order) {
-                                var groups = {};
-                                angular.forEach(ticketgroups, function (group) {
-                                    groups[group.ticketgroup.id] = group.num
-                                });
-                                $http.post('api/order/'+order.id+'/create_tickets', {
-                                    ticketgroups: groups
-                                }).success(function (res) {
-                                    // reload order with new data
-                                    getOrder(true).then(function () {
-                                        resolve();
-                                    }, function () {
-                                        alert("Ukjent feil oppsto ved forsøk på å laste ordren på nytt");
-                                        resolve(); // consider it a success anyways
-                                    });
-                                }).error(function (res) {
-                                    reject(res);
-                                });
+                    return function () {
+                        return $q(function (resolve) {
+                            // reload order with new data
+                            getOrder(true).then(function () {
+                                resolve();
+                            }, function () {
+                                alert("Ukjent feil oppsto ved forsøk på å laste ordren på nytt");
+                                resolve(); // consider it a success anyways
                             });
                         });
                     }

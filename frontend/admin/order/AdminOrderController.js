@@ -137,25 +137,18 @@
                     eventgroup_id: function () {
                         return ctrl.order.eventgroup.id;
                     },
+                    getOrder: function () {
+                        return ctrl.order;
+                    },
                     addHandler: function () {
                         return function (ticketgroups) {
                             return $q(function (resolve, reject) {
-                                var groups = {};
-                                angular.forEach(ticketgroups, function (group) {
-                                    groups[group.ticketgroup.id] = group.num
-                                });
-                                $http.post('api/order/'+ctrl.order.id+'/create_tickets', {
-                                    ticketgroups: groups
-                                }).success(function () {
-                                    // reload order with new data
-                                    loadOrder().then(function () {
-                                        resolve();
-                                    }, function () {
-                                        alert("Ukjent feil oppsto ved forsøk på å laste ordren på nytt");
-                                        resolve(); // consider it a success anyways
-                                    });
-                                }).error(function (err) {
-                                    reject(err);
+                                // reload order with new data
+                                loadOrder().then(function () {
+                                    resolve();
+                                }, function () {
+                                    alert("Ukjent feil oppsto ved forsøk på å laste ordren på nytt");
+                                    resolve(); // consider it a success anyways
                                 });
                             });
                         }
