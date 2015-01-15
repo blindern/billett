@@ -1,0 +1,40 @@
+<div>
+    <div class="modal-header">
+        <h3 class="modal-title">Registrer transaksjon</h3>
+    </div>
+    <div class="modal-body" ng-show="!ctrl.sending">
+        <div ng-if="!ctrl.paymentgroups">
+            Laster oppgjørsgrupper
+        </div>
+
+        <form class="form-horizontal" ng-submit="ctrl.register()" ng-if="ctrl.paymentgroups">
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Beløp</label>
+                <div class="col-sm-4">
+                    <input class="form-control" type="number" ng-model="ctrl.amount" placeholder="beløp i NOK" autofocus required>
+                    <span class="help-block">Negativt for utbetaling</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="paymentgroup" class="col-sm-4 control-label">Oppgjørsgruppe</label>
+                <div class="col-sm-7">
+                    <select class="form-control" id="paymentgroup" ng-options="(g.time_start|formatdate:'DD.MM.YYYY HH:mm ') + '(' + g.user_created + '): ' + g.title for g in ctrl.paymentgroups" ng-model="ctrl.active_paymentgroup" ng-change="ctrl.changePaymentgroup()" required>
+                        <option value="" ng-if="!ctrl.active_paymentgroup">Velg ...</option>
+                    </select>
+                    <span class="help-block">
+                        <a ui-sref="admin-paymentgroup-new({eventgroup_id: ctrl.order.eventgroup.id})">Opprett ny</a>
+                    </span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-7 col-sm-offset-4">
+                    <input class="btn btn-success" type="submit" value="Registrer" ng-disabled="ctrl.amount==0">
+                    <button type="button" class="btn btn-default" ng-click="ctrl.cancel()">Avbryt</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-body text-center" ng-if="ctrl.sending">Utfører ...</div>
+</div>
