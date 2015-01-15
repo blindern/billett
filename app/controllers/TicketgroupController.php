@@ -59,8 +59,8 @@ class TicketgroupController extends Controller {
 
         $g = new Ticketgroup;
         $g->title = Input::get('title');
-        $g->is_published = Input::get('is_published');
-        $g->is_normal = Input::get('is_normal');
+        $g->is_published = (bool) Input::get('is_published');
+        $g->is_normal = (bool) Input::get('is_normal');
         $g->ticket_text = Input::get('ticket_text');
         $g->price = Input::get('price');
         $g->fee = Input::get('fee');
