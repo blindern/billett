@@ -65,3 +65,35 @@
     opacity: .3;
   }
 }
+
+
+.admin-soldTicketsStats {
+  .event-time {
+    display: block;
+    color: $gray;
+    font-size: 90%;
+  }
+
+  table {
+    font-size: 85%;
+  }
+
+  table td,
+  table th {
+    white-space: nowrap;
+  }
+
+  td:not(:first-child),
+  th:not(:first-child) {
+    text-align: right
+  }
+
+  th,
+  td {
+    &:first-child {
+      max-width: 150px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
+}
