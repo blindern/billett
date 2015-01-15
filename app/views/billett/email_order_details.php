@@ -40,9 +40,9 @@ og er tilpasset dette formålet.' : '').'
 
 ORDREDETALJER:
 --------------
-Navn: '.$order->name.'
-E-post: '.$order->email.'
-Telefon: '.$order->phone.'
+Navn: '.($order->name ?: 'Ikke registrert').'
+E-post: '.($order->email ?: 'Ikke registrert').'
+Telefon: '.($order->phone ?: 'Ikke registrert').'
 
 Ordrenummer: '.$order->order_text_id.'
 Ordretidspunkt: '.$order_time.'

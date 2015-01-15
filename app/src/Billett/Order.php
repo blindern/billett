@@ -96,7 +96,7 @@ class Order extends \Eloquent implements ApiQueryInterface {
             $event = count($events) == 1 ? $events[0] : null;
             $eventinfo = $event ? " - ".$event->title." (".Carbon::createFromTimeStamp($event->time_start)->format('d.m.Y').")" : '';
 
-            $message->to($this->email, $this->name);
+            $message->to($this->email, $this->name ?: null);
             $message->subject('Billett'.(count($this->tickets) == 1 ? '' : 'er').' UKA på Blindern #'.$this->order_text_id.$eventinfo);
 
             $message->attachData($this->generateTicketsPdf(), 'billetter_'.$this->order_text_id.'.pdf', array('mime' => 'application/pdf'));
@@ -111,7 +111,7 @@ class Order extends \Eloquent implements ApiQueryInterface {
      */
     public function sendEmail($email = null)
     {
-        $name = $this->name;
+        $name = $this->name ?: null;
         if (empty($email)) {
             if (empty($this->email)) {
                 throw new \Exception("Cannot send email without receiver");
