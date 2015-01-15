@@ -37,7 +37,7 @@ class TicketController extends \Controller {
     public function mergedPDF()
     {
         if (!\Input::has('ids')) {
-            return Response::json('missing id list');
+            return Response::json('missing id list', 400);
         }
 
         $id_list = array_map('trim', explode(",", \Input::get('ids')));

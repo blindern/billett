@@ -125,4 +125,7 @@ Vi håper du får en flott opplevelse på UKA på Blindern!
 --
 UKA på Blindern
 Foreningen Blindern Studenterhjem
-http://blindernuka.no/';
+http://blindernuka.no/
+
+Dette billettsystemet har vi utviklet som fri programvare og er fritt tilgjengelig,
+se https://github.com/blindernuka/billett';
