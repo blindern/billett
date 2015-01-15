@@ -10,7 +10,7 @@
             Ordre: {{ctrl.order.order_text_id}}
 
             <span class="pull-right">
-                <a class="btn btn-success" ng-href="a/eventgroup/{{ctrl.order.eventgroup.id}}/sell" accesskey="n">Ny ordre</a>
+                <a class="btn btn-success" ng-href="a/order/new/{{ctrl.order.eventgroup.id}}" accesskey="n">Ny ordre</a>
                 <a class="btn btn-primary" ng-click="ctrl.startEdit()" accesskey="e">Rediger</a>
                 <a class="btn btn-default" ng-click="ctrl.email()" ng-if="ctrl.order.is_valid">Send e-post</a>
             </span>

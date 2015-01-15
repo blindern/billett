@@ -15,7 +15,7 @@ angular.module('billett.admin').controller('AdminPaymentgroupNewController', fun
             if (ctrl.paymentgroup.title && ctrl.paymentgroup.title.length > 0) {
                 ctrl.paymentgroup.$save(function (paymentgroup) {
                     if ($stateParams['is_selling']) {
-                        $state.go('admin-eventgroup-sell', {id: ctrl.eventgroup.id, paymentgroup_id: paymentgroup.id});
+                        $state.go('admin-order-new', {id: ctrl.eventgroup.id, paymentgroup_id: paymentgroup.id});
                     } else {
                         $location.path('a/paymentgroup/' + paymentgroup.id);
                     }
@@ -25,7 +25,7 @@ angular.module('billett.admin').controller('AdminPaymentgroupNewController', fun
 
         ctrl.abort = function () {
             if ($stateParams['is_selling']) {
-                $state.go('admin-eventgroup-sell', {id: ctrl.eventgroup.id});
+                $state.go('admin-order-new', {id: ctrl.eventgroup.id});
             } else {
                 $state.go('admin-paymentgroups', {id: ctrl.eventgroup.id});
             }

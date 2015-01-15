@@ -17,14 +17,5 @@ angular.module('billett.admin').config(function ($stateProvider) {
             templateUrl: 'assets/views/admin/eventgroup/sold_tickets_stats.html',
             controller: 'AdminEventgroupSoldTicketsStatsController as ctrl',
             resolve: {auth: 'AuthRequireResolver'}
-        })
-        .state('admin-eventgroup-sell', {
-            url: '/a/eventgroup/:id/sell',
-            templateUrl: 'assets/views/admin/eventgroup/sell.html',
-            controller: 'AdminEventgroupSellController as ctrl',
-            resolve: {auth: 'AuthRequireResolver'},
-            params: {
-                'paymentgroup_id': null
-            }
         });
 });

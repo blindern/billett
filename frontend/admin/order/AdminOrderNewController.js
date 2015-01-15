@@ -1,4 +1,4 @@
-angular.module('billett.admin').controller('AdminEventgroupSellController', function ($http, $location, $modal, $q, $scope, $state, $stateParams, $timeout, focus, Page, AdminEventgroup, AdminPaymentgroup, AdminOrder) {
+angular.module('billett.admin').controller('AdminOrderNewController', function ($http, $location, $modal, $q, $scope, $state, $stateParams, $timeout, focus, Page, AdminEventgroup, AdminPaymentgroup, AdminOrder) {
     var ctrl = this;
     Page.setTitle('Ny ordre');
 
