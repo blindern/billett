@@ -26,6 +26,25 @@
             });
         };
 
+        $scope.search_status = [
+            {
+                id: 'all',
+                val: 'Alle ordre'
+            },
+            {
+                id: 'res',
+                val: 'Kun reservasjoner'
+            },
+            {
+                id: 'normal',
+                val: 'Skjul reservasjoner'
+            },
+            {
+                id: 'unbal',
+                val: 'Ubalanserte'
+            }
+        ];
+
         var equals = ['eventgroup_id', 'id', 'order_text_id', 'tickets.id', 'tickets.key', 'tickets.event.id', 'payments.transaction_id'];
         var genFilter = function() {
             var r = [];
@@ -33,7 +52,12 @@
                 $location.search(name, (name == 'page' && val == 1 ? null : val||null));
 
                 if (val == "" || name == 'page') return;
-                if (equals.indexOf(name) != -1) {
+
+                if (name == 'status') {
+                    if (val == 'res') r.push('is_valid=0'); // TODO: ticket reservations
+                    if (val == 'normal') r.push('is_valid=1');
+                    if (val == 'unbal') r.push('balance!=0');
+                } else if (equals.indexOf(name) != -1) {
                     r.push(name + '=' + val);
                 } else {
                     r.push(name + ':like:' + val+'%');

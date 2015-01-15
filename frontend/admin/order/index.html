@@ -79,6 +79,12 @@
                     <input class="form-control" type="text" ng-model="search.phone" ng-model-options="{debounce:300}">
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Status</label>
+                <div class="col-sm-8">
+                    <select class="form-control" ng-model="search.status" ng-options="x.id as x.val for x in search_status"></select>
+                </div>
+            </div>
         </div>
     </div>
 
