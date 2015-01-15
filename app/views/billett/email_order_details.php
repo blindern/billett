@@ -42,7 +42,8 @@ ORDREDETALJER:
 --------------
 Navn: '.($order->name ?: 'Ikke registrert').'
 E-post: '.($order->email ?: 'Ikke registrert').'
-Telefon: '.($order->phone ?: 'Ikke registrert').'
+Telefon: '.($order->phone ?: 'Ikke registrert').($order->recruiter ? '
+Vervet av: '.$order->recruiter : '').'
 
 Ordrenummer: '.$order->order_text_id.'
 Ordretidspunkt: '.$order_time.'

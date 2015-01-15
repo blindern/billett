@@ -51,7 +51,8 @@ BEKREFTELSE PÅ KJØP (KVITTERING):
 ---------------------------------
 Navn: '.$order->name.'
 E-post: '.$order->email.'
-Telefon: '.$order->phone.'
+Telefon: '.$order->phone.($order->recruiter ? '
+Vervet av: '.$order->recruiter : '').'
 ';
 
 if ($payment) {
