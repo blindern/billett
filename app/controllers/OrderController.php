@@ -347,4 +347,13 @@ class OrderController extends \Controller {
         $order->sendEmail($email);
         return \Response::json('email sent');
     }
+
+    /**
+     * Force refresh of order balances in case they are out of sync
+     */
+    public function fixbalance()
+    {
+        Order::refreshBalances();
+        return \Response::json('balances refreshed');
+    }
 }

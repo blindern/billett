@@ -10,6 +10,7 @@ Route::get('/api/eventgroup/{id}/simple', 'EventgroupController@simpleList');
 Route::get('/api/eventgroup/{id}/sold_tickets_stats', 'EventgroupController@soldTicketsStats');
 
 // orders
+Route::get('/api/order/fixbalance', 'OrderController@fixbalance');
 Route::post('/api/order/{id}/place', 'OrderController@placeOrder');
 Route::post('/api/order/{id}/force', 'OrderController@forceOrder');
 Route::post('/api/order/{id}/create_tickets', 'OrderController@createTickets');

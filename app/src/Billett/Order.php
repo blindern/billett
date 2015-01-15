@@ -62,11 +62,38 @@ class Order extends \Eloquent implements ApiQueryInterface {
         });
     }
 
+    /**
+     * Refresh all orders balances
+     */
+    public static function refreshBalances($order_id = null)
+    {
+        $p = $order_id ? [$order_id, $order_id] : [];
+
+        \DB::statement("
+            UPDATE
+                orders, (
+                    SELECT order_id, SUM(amount) amount
+                    FROM
+                        (
+                            SELECT t.order_id, -IFNULL(g.price, 0) - IFNULL(g.fee, 0) AS amount
+                            FROM tickets t JOIN ticketgroups g ON t.ticketgroup_id = g.id
+                            WHERE ".($order_id ? "t.order_id = ? AND " : "")."t.is_valid = 1 AND t.is_revoked = 0
+                            UNION ALL
+                            SELECT order_id, amount AS amount
+                            FROM payments
+                            ".($order_id ? "WHERE t.order_id = ?" : "")."
+                        ) ref
+                    GROUP BY order_id
+                ) amounts
+            SET orders.balance = amounts.amount
+            WHERE orders.id = amounts.order_id", $p);
+    }
+
     protected $model_suffix = '';
     protected $table = 'orders';
     //protected $appends = array('total_amount');
 
-    protected $apiAllowedFields = array('id', 'eventgroup_id', 'order_text_id', 'is_valid', 'is_admin', 'time', 'ip', 'browser', 'name', 'email', 'phone', 'recruiter', 'total_amount', 'comment');
+    protected $apiAllowedFields = array('id', 'eventgroup_id', 'order_text_id', 'is_valid', 'is_admin', 'time', 'ip', 'browser', 'name', 'email', 'phone', 'recruiter', 'total_amount', 'comment', 'balance');
     protected $apiAllowedRelations = array('eventgroup', 'tickets', 'payments');
 
     public function eventgroup()
@@ -418,24 +445,7 @@ class Order extends \Eloquent implements ApiQueryInterface {
      * Hard refresh of balance
      */
     public function refreshBalance() {
-        \DB::statement('
-            UPDATE
-                orders, (
-                    SELECT order_id, SUM(amount) amount
-                    FROM
-                        (
-                            SELECT t.order_id, -g.price - g.fee AS amount
-                            FROM tickets t JOIN ticketgroups g ON t.ticketgroup_id = g.id
-                            WHERE t.order_id = ? AND t.is_valid = 1 AND t.is_revoked = 0
-                            UNION ALL
-                            SELECT order_id, amount AS amount
-                            FROM payments
-                            WHERE order_id = ?
-                        ) ref
-                    GROUP BY order_id
-                ) amounts
-            SET orders.balance = amounts.amount
-            WHERE orders.id = amounts.order_id', [$this->id, $this->id]);
+        static::refreshBalances($this->id);
 
         $this->balance = \DB::table('orders')->where('id', $this->id)->pluck('balance');
     }
