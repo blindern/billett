@@ -137,7 +137,7 @@
             set404: function () {
                 $rootScope.page404 = true;
                 var title = this.set('title', '404 Page not found');
-                var ev = $rootScope.$on('$routeChangeStart', function () {
+                var ev = $rootScope.$on('$stateChangeStart', function () {
                     $rootScope.page404 = false;
                     title(); // remove title from stack
                     ev(); // delete this event
