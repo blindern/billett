@@ -27,7 +27,7 @@ angular.module('billett.admin').controller('AdminPaymentgroupNewController', fun
             if ($stateParams['is_selling']) {
                 $state.go('admin-order-new', {id: ctrl.eventgroup.id});
             } else {
-                $state.go('admin-paymentgroups', {id: ctrl.eventgroup.id});
+                $state.go('admin-paymentgroups', {eventgroup_id: ctrl.eventgroup.id});
             }
         };
     });
