@@ -24,7 +24,9 @@
             <ul class="days">
                 <li class="day" ng-repeat="(day, events) in days">
                     <div class="header">
-                        {{::events[0].time_start-21600|formatdate:'dddd D. MMMM YYYY'}}
+                        <a ng-href="{{::('eventgroup/'+group.id+'/'+(events[0].time_start-21600|formatdate:'YYYY-MM-DD'))}}">
+                            {{::events[0].time_start-21600|formatdate:'dddd D. MMMM YYYY'}}
+                        </a>
                     </div>
 
                     <!-- each event -->
@@ -43,7 +45,7 @@
 
                             <a ng-href="event/{{::event.alias||event.id}}">{{::event.title}}</a>
                             <span class="category" ng-class="'category-'+categoryNum(event.category)"
-                                  ng-show="::event.category">{{::event.category}}</span>
+                                  ng-show="::event.category"><a ng-href="{{::('eventgroup/'+group.id+'/'+event.category|lowercase)}}">{{::event.category}}</a></span>
                         </li>
                         <li>
                             <div ng-show="::!event.ticket_info">

@@ -13,6 +13,9 @@
       font-size: 120%;
       margin-top: 25px;
     }
+    a {
+      color: $text-color;
+    }
   }
   .event {
     display: flex;
@@ -84,6 +87,9 @@
       border-radius: 5px;
       font-size: 75%;
       opacity: 0.8;
+      a {
+        color: $text-color;
+      }
     }
 
     @for $i from 0 through 8 {
