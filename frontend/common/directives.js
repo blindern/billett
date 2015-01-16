@@ -39,9 +39,9 @@
         };
     });
 
-    // add 'auto-focus' as an attribute to a tag
+    // add 'autofocus' as an attribute to a tag
     // source: http://stackoverflow.com/a/20865048
-    module.directive('autoFocus', function($timeout) {
+    module.directive('autofocus', function($timeout) {
         return {
             restrict: 'AC',
             link: function(_scope, _element) {
