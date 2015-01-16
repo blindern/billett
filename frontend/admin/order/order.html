@@ -213,7 +213,7 @@
                         <tr ng-repeat="payment in ctrl.order.payments">
                             <td>
                                 {{payment.time|formatdate:'DD.MM.YYYY HH:mm'}}<br>
-                                {{payment.is_web ? 'Nettbetaling' : 'Manuell betaling'}}
+                                {{payment.is_web ? 'Nettbetaling' : 'Billettluke'}}
                             </td>
                             <td>{{payment.amount|price}}</td>
                             <td ng-if="payment.is_web">
