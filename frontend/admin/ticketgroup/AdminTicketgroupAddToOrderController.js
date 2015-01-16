@@ -83,7 +83,6 @@ angular.module('billett.admin').controller('AdminTicketgroupAddToOrderController
                 });
             }).error(function (err) {
                 alert("Ukjent feil oppsto ved registrering av billetter");
-            }).finally(function () {
                 delete ctrl.sending;
             });
         });
