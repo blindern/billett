@@ -18,8 +18,8 @@
                 return;
             }
 
-            ret.is_active = !!ret.is_active;
-            ret.is_published = !!ret.is_published;
+            ret.use_web = !!ret.use_web;
+            ret.use_office = !!ret.use_office;
             ret.is_normal = !!ret.is_normal;
 
             $scope.ticketgroup = ret;

@@ -81,8 +81,8 @@ Link between payment methods and orders.
 Ticket groups. All tickets belongs to a ticket group, which is also a price group.
 * int id
 * int event_id
-* bool is_active (available to use, default is true)
-* bool is_published (available on web page if active)
+* bool use_office (available to normal use on admin page, default is true)
+* bool use_web (available for guests)
 * bool is_normal (default = true) (should tickets with this group count in max_normal_sales for event?)
 * string title (price group title)
 * optional string ticket_text (additional plain text on the ticket)

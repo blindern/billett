@@ -37,7 +37,7 @@ class Ticketgroup extends \Eloquent {
     protected $model_suffix = '';
     protected $table = 'ticketgroups';
 
-    protected $apiAllowedFields = array('id', 'event_id', 'is_active', 'is_published', 'is_normal', 'title', 'ticket_text', 'price', 'fee', 'limit', 'order');
+    protected $apiAllowedFields = array('id', 'event_id', 'use_office', 'use_web', 'is_normal', 'title', 'ticket_text', 'price', 'fee', 'limit', 'order');
     protected $apiAllowedRelations = array('event', 'tickets');
 
     public function getPriceAttribute($val) {

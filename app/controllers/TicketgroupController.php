@@ -20,7 +20,7 @@ class TicketgroupController extends Controller {
         $g = Ticketgroup::findOrFail($id);
 
         $show_all = \Auth::hasRole('billett.admin');
-        if (!$show_all && !$g->is_published) {
+        if (!$show_all && !$g->use_web) {
             App::abort(404);
         }
 
@@ -40,7 +40,8 @@ class TicketgroupController extends Controller {
         $validator = \Validator::make(Input::all(), array(
             'event_id' => 'required|integer',
             'title' => 'required',
-            'is_published' => '',
+            'use_office' => '',
+            'use_web' => '',
             'is_normal' => '',
             'ticket_text' => '',
             'price' => 'required|integer',
@@ -59,7 +60,8 @@ class TicketgroupController extends Controller {
 
         $g = new Ticketgroup;
         $g->title = Input::get('title');
-        $g->is_published = (bool) Input::get('is_published');
+        $g->use_office = (bool) Input::get('use_office');
+        $g->use_web = (bool) Input::get('use_web');
         $g->is_normal = (bool) Input::get('is_normal');
         $g->ticket_text = Input::get('ticket_text');
         $g->price = Input::get('price');
@@ -87,8 +89,8 @@ class TicketgroupController extends Controller {
             'fee' => 'integer'
         );
         $other_fields = array(
-            'is_active' => '',
-            'is_published' => '',
+            'use_office' => '',
+            'use_web' => '',
             'is_normal' => '',
             'limit' => 'integer'
         );
@@ -107,8 +109,8 @@ class TicketgroupController extends Controller {
             $g->fee = Input::get('fee');
         }
 
-        $g->is_active = Input::get('is_active');
-        $g->is_published = Input::get('is_published');
+        $g->use_office = Input::get('use_office');
+        $g->use_web = Input::get('use_web');
         $g->is_normal = Input::get('is_normal');
         $g->limit = Input::get('limit');
         if (empty($g->limit)) $g->limit = null;

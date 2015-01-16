@@ -43,13 +43,14 @@
     table td:nth-child(7) {
       background-color: hsl(120, 100%, 90%) !important;
     }
-    table tr.not-active {
+    table tr.not-office.not-published {
       td {
         opacity: 0.5;
       }
+    }
+    table tr.not-office {
       td:nth-child(6) {
         background-color: hsl(0, 100%, 90%) !important;
-        opacity: 1;
       }
     }
     table tr.not-published {

@@ -53,11 +53,11 @@
                     </tr>
 
                     <!-- eventgroups: -->
-                    <tr ng-class="{'inactive': !ticketgroup.is_active, 'notpub': ticketgroup.is_active && !ticketgroup.is_published}" ng-repeat="ticketgroup in event.ticketgroups|filter:{'is_active': ctrl.ticketfilter.show_inactive}:ctrl.ticketgroup_check">
+                    <tr ng-class="{'no-office': !ticketgroup.use_office, 'no-web': !ticketgroup.use_web}" ng-repeat="ticketgroup in event.ticketgroups|filter:{'use_office': ctrl.ticketfilter.show_inactive}:ctrl.ticketgroup_check">
                         <td>
                             {{ticketgroup.title}}
-                            <abbr ng-if="!ticketgroup.is_active" title="NB! Billettgruppen er ikke satt aktiv">Inaktiv</abbr>
-                            <abbr ng-if="!ticketgroup.is_published && ticketgroup.is_active" title="Billettgruppen er ikke publisert for nettsalg">Upub</abbr>
+                            <abbr ng-if="!ticketgroup.use_office" title="NB! Billettgruppen er ikke satt for billettluke">Ikke luke</abbr>
+                            <abbr ng-if="!ticketgroup.use_web" title="Billettgruppen er ikke publisert for nettsalg">Upub</abbr>
 
                             <div ng-if="ticketgroup.ticket_text" class="ticket-text">
                                 {{ticketgroup.ticket_text}}

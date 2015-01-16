@@ -21,11 +21,11 @@
     tbody > tr:nth-child(even) {
       background-color: $table-bg-accent;
     }
-    tbody > tr.inactive {
-      background: hsl(10, 80%, 90%);
-    }
-    tbody > tr.notpub {
+    tbody > tr.no-office {
       background: hsl(55, 43%, 90%);
+    }
+    tbody > tr.no-office.no-web {
+      background: hsl(10, 80%, 90%);
     }
 
     td {

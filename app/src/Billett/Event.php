@@ -219,7 +219,7 @@ class Event extends \Eloquent implements ApiQueryInterface {
         // TODO: optimize this (!)
         $groups = 0;
         foreach ($this->ticketgroups as $g) {
-            if (!$g->is_active || !$g->is_published) continue;
+            if (!$g->use_web) continue;
             $groups++;
         }
 

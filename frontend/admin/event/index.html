@@ -97,8 +97,8 @@
                     <th>Tittel</th>
                     <th><abbr title="Pris inkl. avgift">Pris</abbr></th>
                     <th>= Avgift</th>
-                    <th>Aktiv?</th>
-                    <th>Publisert?</th>
+                    <th>Billettluke?</th>
+                    <th>Nettsalg?</th>
                     <th>Normal?</th>
                     <th>
                         <abbr title="Ledige">L</abbr> /
@@ -111,7 +111,7 @@
                 </tr>
             </thead>
             <tbody ng-sortable="{animation: 100, onUpdate: ctrl.onTicketgroupsOrder}">
-                <tr ng-class="{ 'not-published': !g.is_published, 'not-active': !g.is_active }" ng-repeat="g in event.ticketgroups">
+                <tr ng-class="{ 'not-published': !g.use_web, 'not-office': !g.use_office }" ng-repeat="g in event.ticketgroups">
                     <td>
                         <a ng-href="api/ticketgroup/{{g.id}}/previewticket" target="_blank">
                             <span class="glyphicon glyphicon-eye-open" title="Forhåndsvis"></span>
@@ -121,8 +121,8 @@
                     <td><a href="a/event/{{event.id}}/ticketgroup/{{g.id}}">{{g.title}}</a></td>
                     <td>{{g.price+g.fee|price}}</td>
                     <td>{{g.fee|price}}</td>
-                    <td>{{g.is_active ? 'Ja' : 'Nei'}}</td>
-                    <td>{{g.is_published ? 'Ja' : 'Nei'}}</td>
+                    <td>{{g.use_office ? 'Ja' : 'Nei'}}</td>
+                    <td>{{g.use_web ? 'Ja' : 'Nei'}}</td>
                     <td>{{g.is_normal ? 'Ja' : 'Nei'}}</td>
                     <td>
                         {{event.ticket_count.groups[g.id].free}} /

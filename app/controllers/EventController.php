@@ -39,7 +39,7 @@ class EventController extends Controller {
         $ev->load(array('ticketgroups' => function($query) use ($show_all)
         {
             if ($show_all) $query->get();
-            else $query->where('is_published', true)->where('is_active', true);
+            else $query->where('use_web', true);
         }));
 
         return $ev;
@@ -68,7 +68,7 @@ class EventController extends Controller {
             if (isset($groups[$group->id])) {
                 $val = $groups[$group->id];
 
-                if (!$group->is_published || !$group->is_active) continue;
+                if (!$group->use_web) continue;
                 if (filter_var($val, FILTER_VALIDATE_INT) === false || $val <= 0) continue;
 
                 $groups_to_add[] = array($group, $val);
