@@ -123,41 +123,33 @@
         };
 
         ctrl.convertOrder = function () {
-            $http.post('api/order/'+ctrl.order.id+'/validate').success(function () {
-                loadOrder();
-            }).error(function (err) {
-                alert(err);
-            });
+            thenReloadOrError($http.post('api/order/'+ctrl.order.id+'/validate'));
         };
 
         // start new tickets form
         ctrl.addTickets = function () {
-            var modal = $modal.open({
-                templateUrl: 'assets/views/admin/ticketgroup/add_ticketgroup_to_order.html',
-                controller: 'AdminTicketgroupAddToOrderController as ctrl',
-                resolve: {
-                    eventgroup_id: function () {
-                        return ctrl.order.eventgroup.id;
-                    },
-                    getOrder: function () {
-                        return function () {
-                            return $q(function (resolve) {
-                                resolve(ctrl.order);
+            AdminOrder.addTicketsModal({
+                eventgroup_id: function () {
+                    return ctrl.order.eventgroup.id;
+                },
+                getOrder: function () {
+                    return function () {
+                        return $q(function (resolve) {
+                            resolve(ctrl.order);
+                        });
+                    };
+                },
+                addHandler: function () {
+                    return function (ticketgroups) {
+                        return $q(function (resolve, reject) {
+                            // reload order with new data
+                            loadOrder().then(function () {
+                                resolve();
+                            }, function () {
+                                alert("Ukjent feil oppsto ved forsøk på å laste ordren på nytt");
+                                resolve(); // consider it a success anyways
                             });
-                        };
-                    },
-                    addHandler: function () {
-                        return function (ticketgroups) {
-                            return $q(function (resolve, reject) {
-                                // reload order with new data
-                                loadOrder().then(function () {
-                                    resolve();
-                                }, function () {
-                                    alert("Ukjent feil oppsto ved forsøk på å laste ordren på nytt");
-                                    resolve(); // consider it a success anyways
-                                });
-                            });
-                        }
+                        });
                     }
                 }
             });

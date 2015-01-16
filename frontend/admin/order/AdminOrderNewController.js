@@ -219,33 +219,27 @@ angular.module('billett.admin').controller('AdminOrderNewController', function (
     // adding tickets to reservation
 
     ctrl.addTickets = function () {
-        var modal = $modal.open({
-            templateUrl: 'assets/views/admin/ticketgroup/add_ticketgroup_to_order.html',
-            controller: 'AdminTicketgroupAddToOrderController as ctrl',
-            resolve: {
-                eventgroup_id: function () {
-                    return ctrl.eventgroup.id;
-                },
-                getOrder: function () {
-                    return getOrder;
-                },
-                addHandler: function () {
-                    return function () {
-                        return $q(function (resolve) {
-                            // reload order with new data
-                            getOrder(true).then(function () {
-                                resolve();
-                            }, function () {
-                                alert("Ukjent feil oppsto ved forsøk på å laste ordren på nytt");
-                                resolve(); // consider it a success anyways
-                            });
+        AdminOrder.addTicketsModal({
+            eventgroup_id: function () {
+                return ctrl.eventgroup.id;
+            },
+            getOrder: function () {
+                return getOrder;
+            },
+            addHandler: function () {
+                return function () {
+                    return $q(function (resolve) {
+                        // reload order with new data
+                        getOrder(true).then(function () {
+                            resolve();
+                        }, function () {
+                            alert("Ukjent feil oppsto ved forsøk på å laste ordren på nytt");
+                            resolve(); // consider it a success anyways
                         });
-                    }
+                    });
                 }
             }
-        });
-
-        modal.result.then(function () {
+        }).result.then(function () {
             focus('namefocus');
         });
     };
