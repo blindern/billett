@@ -59,7 +59,7 @@ $rev = json_decode($rev_manifest, true);
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 </head>
-<body ng-class="{'dev-page': isDevPage}">
+<body ng-class="{'dev-page': isDevPage, isInIframe: isInIframe}">
     <toast></toast>
 
     <?php if ($is_dev): ?>

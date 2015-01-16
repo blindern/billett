@@ -8,13 +8,21 @@
     margin: 15px 0 10px 0;
     padding: 0 0 5px 0;
     border-bottom: 2px solid $hr-border;
-    font-weight: bold;
     @media (min-width: $grid-float-breakpoint) {
       font-size: 120%;
       margin-top: 25px;
     }
     a {
       color: $text-color;
+    }
+    .date {
+      float: right;
+      span {
+        font-weight: bold;
+      }
+    }
+    .theme {
+
     }
   }
   .event {
@@ -105,5 +113,12 @@
         font-weight: bold;
       }
     }
+  }
+}
+
+.isInIframe .eventgroup-event-list {
+  .header {
+    border-bottom: none;
+    margin-bottom: 0;
   }
 }

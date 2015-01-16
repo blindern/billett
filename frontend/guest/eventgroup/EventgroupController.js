@@ -15,6 +15,20 @@
     module.controller('EventgroupController', function (Page, $http, $scope, $stateParams, $location) {
         Page.setTitle('Arrangementgruppe');
 
+        // TODO: move this to eventgroup object, see #79
+        $scope.daythemes = {
+            '2015-01-31': 'UKEvors',
+            '2015-02-04': 'Beboerpremiere',
+            '2015-02-05': 'Urpremiere',
+            '2015-02-06': 'Premiere',
+            '2015-02-07': 'GB-aften',
+            '2015-02-10': 'Samfunnsvitenskapelig Aften',
+            '2015-02-11': 'Koraften',
+            '2015-02-12': 'Erotisk Aften',
+            '2015-02-13': 'Teknisk-Matematisk Aften',
+            '2015-02-14': 'Komikveld'
+        };
+
         var filter = {
             date: null,
             category: null

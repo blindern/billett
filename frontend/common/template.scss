@@ -169,6 +169,21 @@ footer {
 }
 
 
+// page inside a iframe
+.isInIframe {
+  margin-top: 0;
+  background: none;
+  .dev-page-bar,
+  header.header,
+  .page-header,
+  footer {
+    display: none;
+  }
+  .container {
+    padding: 0;
+  }
+}
+
 
 .page-loading {
   text-align: center;

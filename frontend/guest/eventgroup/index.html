@@ -24,8 +24,12 @@
             <ul class="days">
                 <li class="day" ng-repeat="(day, events) in days">
                     <div class="header">
-                        <a ng-href="{{::('eventgroup/'+group.id+'/'+(events[0].time_start-21600|formatdate:'YYYY-MM-DD'))}}">
-                            {{::events[0].time_start-21600|formatdate:'dddd D. MMMM YYYY'}}
+                        <a ng-href="{{::('eventgroup/'+group.id+'/'+day)}}">
+                            <span class="date">
+                                <span>{{::events[0].time_start-21600|formatdate:'dddd'}}</span>
+                                {{::events[0].time_start-21600|formatdate:'D. MMMM YYYY'}}
+                            </span>
+                            <span class="theme" ng-if="daythemes[day]">{{daythemes[day]}}</span>
                         </a>
                     </div>
 
@@ -43,7 +47,7 @@
                             </span>
                             </div>
 
-                            <a ng-href="event/{{::event.alias||event.id}}">{{::event.title}}</a>
+                            <a ng-href="event/{{::event.alias||event.id}}" target="_top">{{::event.title}}</a>
                             <span class="category" ng-class="'category-'+categoryNum(event.category)"
                                   ng-show="::event.category"><a ng-href="{{::('eventgroup/'+group.id+'/'+event.category|lowercase)}}">{{::event.category}}</a></span>
                         </li>
@@ -56,7 +60,7 @@
                                 <span ng-show="::event.web_selling_status == 'timeout'">I døra</span>
                                 <span ng-show="::event.web_selling_status == 'sold_out'">Utsolgt</span>
                             <span ng-show="::event.web_selling_status == 'sale'">
-                                <a href="event/{{::event.alias||event.id}}">
+                                <a href="event/{{::event.alias||event.id}}" target="_top">
                                     <img src="http://blindernuka.no/2013/img/program/billettgul.png" alt="Kjøp billett">
                                 </a>
                             </span>

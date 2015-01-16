@@ -54,5 +54,8 @@
                 else loaded();
             }, 0);
         });
+
+        // iframe state
+        $rootScope.isInIframe = window.top != window.self;
     });
 })();
