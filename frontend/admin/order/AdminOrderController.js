@@ -3,7 +3,7 @@
 
     var module = angular.module('billett.admin');
 
-    module.controller('AdminOrderController', function ($http, $modal, $q, $state, $stateParams, Page, AdminOrder, AdminPaymentgroup, AdminTicket) {
+    module.controller('AdminOrderController', function ($http, $modal, $q, $state, $stateParams, Page, AdminOrder, AdminPaymentgroup, AdminTicket, AdminPayment) {
         var ctrl = this;
         Page.setTitle("Ordre");
 
@@ -200,17 +200,7 @@
 
         // start new payment form
         ctrl.newPayment = function () {
-            var modal = $modal.open({
-                templateUrl: 'assets/views/admin/payment/payment_add.html',
-                controller: 'AdminPaymentAddController as ctrl',
-                resolve: {
-                    order: function () {
-                        return ctrl.order;
-                    }
-                }
-            });
-
-            modal.result.then(function (payment) {
+            AdminPayment.newModal(ctrl.order).result.then(function () {
                 loadOrder();
             });
         };
