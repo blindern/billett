@@ -3,7 +3,7 @@
 
     var module = angular.module('billett.admin');
 
-    module.controller('AdminOrderController', function ($http, $modal, $q, $state, $stateParams, Page, AdminOrder, AdminPaymentgroup) {
+    module.controller('AdminOrderController', function ($http, $modal, $q, $state, $stateParams, Page, AdminOrder, AdminPaymentgroup, AdminTicket) {
         var ctrl = this;
         Page.setTitle("Ordre");
 
@@ -165,20 +165,7 @@
 
         // revoke specific ticket
         ctrl.revokeTicket = function (ticket) {
-            var modal = $modal.open({
-                templateUrl: 'assets/views/admin/ticket/ticket_revoke_modal.html',
-                controller: 'AdminTicketRevokeController as ctrl',
-                resolve: {
-                    order: function () {
-                        return ctrl.order;
-                    },
-                    ticket: function () {
-                        return ticket;
-                    }
-                }
-            });
-
-            modal.result.then(function () {
+            AdminTicket.revokeModal(ctrl.order, ticket).result.then(function () {
                 loadOrder();
             });
         };
