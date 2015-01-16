@@ -344,7 +344,7 @@ class OrderController extends \Controller {
             $email = \Input::get('email');
         }
 
-        $order->sendEmail($email);
+        $order->sendEmail($email, \Input::get('text'));
         return \Response::json('email sent');
     }
 

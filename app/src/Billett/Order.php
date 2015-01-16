@@ -133,10 +133,11 @@ class Order extends \Eloquent implements ApiQueryInterface {
     /**
      * Send orderdetails to email
      *
-     * @param optional string email
+     * @param string $email Override email address
+     * @param string $text Text to write in the email
      * @throws \Exception
      */
-    public function sendEmail($email = null)
+    public function sendEmail($email = null, $text = null)
     {
         $name = $this->name ?: null;
         if (empty($email)) {
@@ -147,7 +148,7 @@ class Order extends \Eloquent implements ApiQueryInterface {
             $name = null;
         }
 
-        \Mail::send(array('text' => 'billett.email_order_details'), array('order' => $this), function($message) use ($email, $name)
+        \Mail::send(array('text' => 'billett.email_order_details'), array('order' => $this, 'text' => $text), function($message) use ($email, $name, $text)
         {
             $events = $this->getEvents();
             $event = count($events) == 1 ? $events[0] : null;
@@ -165,6 +166,11 @@ class Order extends \Eloquent implements ApiQueryInterface {
 
             $message->to($email, $name);
             $message->subject($subj.' UKA på Blindern #'.$this->order_text_id.$eventinfo);
+
+            if (!empty($text)) {
+                // TODO: move email to eventgroup data
+                $message->bcc(\Config::get('dibs.test') ? 'admin@blindernuka.no' : 'billett@blindernuka.no');
+            }
 
             if ($has_valid_tickets) {
                 $message->attachData($this->generateTicketsPdf(), 'billetter_'.$this->order_text_id.'.pdf', array('mime' => 'application/pdf'));

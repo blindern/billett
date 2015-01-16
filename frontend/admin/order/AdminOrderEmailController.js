@@ -4,7 +4,7 @@ angular.module('billett.admin').controller('AdminOrderEmailController', function
 
     ctrl.send = function () {
         ctrl.sending = true;
-        ctrl.order.sendEmail(ctrl.email).then(function () {
+        ctrl.order.sendEmail(ctrl.email, ctrl.text).then(function () {
             $modalInstance.close();
         }, function () {
             alert("Ukjent feil oppsto");

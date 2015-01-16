@@ -19,10 +19,9 @@ foreach ($order->tickets as $ticket) {
 
 $payments = $order->payments()->where('amount', '!=', 0)->get();
 
-echo
-'Hei,
+echo (!empty($text) ? $text : 'Hei,
 
-Her følger detaljer om din ordre hos UKA på Blindern.'.(count($tickets_valid) > 0 ? ' Dine billetter er vedlagt.
+Her følger detaljer om din ordre hos UKA på Blindern.'.(count($tickets_valid) > 0 ? ' Dine billetter er vedlagt.' : '')).(count($tickets_valid) > 0 ? '
 
 
 BILLETTINFORMASJON:

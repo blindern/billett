@@ -7,13 +7,20 @@
         <form class="form-horizontal" ng-submit="ctrl.send()" ng-if="!ctrl.sending">
             <div class="form-group">
                 <label for="email" class="col-sm-4 control-label">E-postadresse</label>
-                <div class="col-sm-6">
+                <div class="col-sm-7">
                     <input type="email" class="form-control" ng-model="ctrl.email" id="email" placeholder="{{ctrl.order.email}}" autofocus>
                     <span class="help-block" ng-if="ctrl.order.email">Fyll inn feltet hvis annen adresse ønskes</span>
                 </div>
             </div>
+            <div class="form-group">
+                <label for="text" class="col-sm-4 control-label">Ekstra tekst</label>
+                <div class="col-sm-7">
+                    <textarea class="form-control" ng-model="ctrl.text" id="text" rows="6" placeholder="(valgfritt)"></textarea>
+                    <span class="help-block">Skriv gjerne under så mottaker kan forstå hvem som har sendt e-posten ved f.eks. ytterligere henvendelser.</span>
+                </div>
+            </div>
             <div class="row">
-                <div class="col-sm-6 col-sm-offset-4">
+                <div class="col-sm-7 col-sm-offset-4">
                     <input class="btn btn-primary" type="submit" value="Send e-post" ng-disabled="!ctrl.email && !ctrl.order.email">
                     <button type="button" class="btn btn-default" ng-click="ctrl.cancel()">Avbryt</button>
                 </div>

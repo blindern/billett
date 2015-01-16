@@ -21,9 +21,10 @@
             update: {method: 'PUT'}
         });
 
-        r.prototype.sendEmail = function (email) {
+        r.prototype.sendEmail = function (email, text) {
             var params = {};
             if (email) params.email = email;
+            if (text) params.text = text;
             return $http.post('api/order/'+this.id+'/email', params);
         };
 
