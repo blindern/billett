@@ -3,11 +3,7 @@
         <h3 class="modal-title">Tilordne oppgjør</h3>
     </div>
     <div class="modal-body">
-        <div ng-if="!ctrl.paymentgroups">
-            Laster oppgjørsgrupper
-        </div>
-
-        <form class="form-horizontal" ng-submit="ctrl.complete()" ng-if="ctrl.paymentgroups">
+        <form class="form-horizontal" ng-submit="ctrl.complete()">
             <div class="form-group">
                 <label class="col-sm-4 control-label">Beløp</label>
                 <div class="col-sm-7 form-control-static">
@@ -17,18 +13,13 @@
             <div class="form-group">
                 <label for="paymentgroup" class="col-sm-4 control-label">Oppgjørsgruppe</label>
                 <div class="col-sm-7">
-                    <select class="form-control" id="paymentgroup" ng-options="(g.time_start|formatdate:'DD.MM.YYYY HH:mm ') + '(' + g.user_created + '): ' + g.title for g in ctrl.paymentgroups" ng-model="ctrl.active_paymentgroup" ng-change="ctrl.changePaymentgroup()" autofocus required>
-                        <option value="" ng-if="!ctrl.active_paymentgroup">Velg ...</option>
-                    </select>
-                    <span class="help-block">
-                        <a ui-sref="admin-paymentgroup-new({eventgroup_id: ctrl.order.eventgroup.id})">Opprett ny</a>
-                    </span>
+                    <paymentgroup-select eventgroup-id="ctrl.order.eventgroup.id" paymentgroup="ctrl.paymentgroup" id="paymentgroup"></paymentgroup-select>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-sm-7 col-sm-offset-4">
-                    <button class="btn btn-success" type="submit">{{ctrl.actionText}}</button>
+                    <button class="btn btn-success" type="submit" ng-disabled="!ctrl.paymentgroup">{{ctrl.actionText}}</button>
                     <button class="btn btn-default" type="button" ng-click="ctrl.cancel()">Avbryt</button>
                 </div>
             </div>
