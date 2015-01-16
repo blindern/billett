@@ -13,21 +13,23 @@ angular.module('billett.admin').directive('paymentgroupSelect', function(AdminPa
                 delete scope.paymentgroups;
                 AdminPaymentgroup.getValid(scope.eventgroupId).$promise.then(function (ret) {
                     scope.paymentgroups = ret;
-                    scope.paymentgroup = AdminPaymentgroup.getPreferredGroup(ret, scope.paymentgroup ? scope.paymentgroup.id : null);
+                    scope.paymentgroup = scope.t.paymentgroup = AdminPaymentgroup.getPreferredGroup(ret, scope.paymentgroup ? scope.paymentgroup.id : null);
                 });
             };
 
             reload();
+            scope.t = {};
 
             scope.new = function () {
                 AdminPaymentgroup.newModal(scope.eventgroupId).result.then(function (paymentgroup) {
-                    scope.paymentgroup = paymentgroup;
+                    scope.t.paymentgroup = paymentgroup;
                     scope.update();
                     reload();
                 })
             };
 
             scope.update = function () {
+                scope.paymentgroup = scope.t.paymentgroup;
                 AdminPaymentgroup.setPreferredGroup(scope.paymentgroup);
             };
         }
