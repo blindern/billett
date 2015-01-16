@@ -4,13 +4,18 @@
     padding: 0;
     list-style: none;
   }
+  .day {
+    margin-top: 30px;
+    @media (min-width: $grid-float-breakpoint) {
+      margin-top: 40px;
+    }
+  }
   .header {
-    margin: 15px 0 10px 0;
+    margin: 0 0 10px 0;
     padding: 0 0 5px 0;
     border-bottom: 2px solid $hr-border;
     @media (min-width: $grid-float-breakpoint) {
       font-size: 120%;
-      margin-top: 25px;
     }
     a {
       color: $text-color;
@@ -25,6 +30,7 @@
 
     }
   }
+
   .event {
     display: flex;
     background-color: #FAFAFA;
