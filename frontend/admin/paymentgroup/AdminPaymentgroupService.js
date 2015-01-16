@@ -16,14 +16,14 @@ angular.module('billett.admin').factory('AdminPaymentgroup', function ($http, $m
     };
 
     r.setPreferredGroup = function (group) {
-        if (typeof(Storage) !== 'undefined') {
+        if (group) {
             sessionStorage.lastPaymentgroup = group.id;
         }
     };
 
     r.getPreferredGroup = function (grouplist, override_id) {
         var group = null;
-        var last_id = (typeof(Storage) !== 'undefined' && sessionStorage.lastPaymentgroup ? sessionStorage.lastPaymentgroup : null);
+        var last_id = sessionStorage.lastPaymentgroup ? sessionStorage.lastPaymentgroup : null;
 
         grouplist.forEach(function (row) {
             if (row.id == override_id) {
