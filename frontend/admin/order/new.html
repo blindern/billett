@@ -76,17 +76,14 @@
                     <div class="form-group" ng-if="ctrl.order.tickets && ctrl.order.tickets.length > 0">
                         <label class="col-sm-4 control-label" for="paymentgroup">Oppgjørskonto</label>
                         <div class="col-sm-8">
-                            <select class="form-control" id="paymentgroup" ng-options="(g.time_start|formatdate:'DD.MM.YYYY HH:mm ') + '(' + g.user_created + '): ' + g.title for g in ctrl.paymentgroups" ng-model="ctrl.active_paymentgroup" ng-change="ctrl.changePaymentgroup()" required>
-                                <option value="" ng-if="!ctrl.active_paymentgroup">Velg ...</option>
-                            </select>
-                            <span class="help-block"><a ui-sref="admin-paymentgroup-new({eventgroup_id: ctrl.eventgroup.id, is_selling: true})" ng-click="ctrl.saveEdit()">Opprett ny</a></span>
+                            <paymentgroup-select eventgroup-id="ctrl.eventgroup.id" paymentgroup="ctrl.paymentgroup" id="paymentgroup"></paymentgroup-select>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-sm-offset-4 col-sm-8">
                             <div ng-if="ctrl.order.id">
-                                <input class="btn btn-success" type="submit" value="Marker som betalt" ng-if="ctrl.order.tickets && ctrl.order.tickets.length > 0" ng-disabled="ctrl.paymentgroups.length == 0">
+                                <input class="btn btn-success" type="submit" value="Marker som betalt" ng-if="ctrl.order.tickets && ctrl.order.tickets.length > 0" ng-disabled="!ctrl.paymentgroup">
                                 <input class="btn btn-default" type="button" value="Lagre reservasjon" ng-click="ctrl.saveOrder()">
                                 <input class="btn btn-danger" type="button" value="Slett" ng-click="ctrl.abortOrder()">
                             </div>

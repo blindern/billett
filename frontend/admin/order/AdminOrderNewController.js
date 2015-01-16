@@ -3,12 +3,8 @@ angular.module('billett.admin').controller('AdminOrderNewController', function (
     Page.setTitle('Ny ordre');
 
     var loader = Page.setLoading();
-    $q.all([
-        AdminEventgroup.get({id: $stateParams['id']}).$promise,
-        AdminPaymentgroup.getValid(parseInt($stateParams['id'])).$promise
-    ]).then(function (res) {
-        ctrl.eventgroup = res[0];
-        ctrl.paymentgroups = res[1];
+    AdminEventgroup.get({id: $stateParams['id']}, function (res) {
+        ctrl.eventgroup = res;
 
         // if page is reloaded, check if we are in progress of a order
         if (localStorage['billett.neworder.id']) {
@@ -25,26 +21,9 @@ angular.module('billett.admin').controller('AdminOrderNewController', function (
             loader();
             ctrl.addTickets();
         }
-
-        loadLastPaymentgroup();
     }, function () {
         $location.path('a');
     });
-
-
-    // -------------------------------------------------------------------------
-    // payment group
-
-    var loadLastPaymentgroup = function () {
-        ctrl.active_paymentgroup = AdminPaymentgroup.getPreferredGroup(ctrl.paymentgroups, $stateParams['paymentgroup_id']);
-        if (ctrl.active_paymentgroup) {
-            ctrl.changePaymentgroup();
-        }
-    };
-
-    ctrl.changePaymentgroup = function () {
-        AdminPaymentgroup.setPreferredGroup(ctrl.active_paymentgroup);
-    };
 
 
     // -------------------------------------------------------------------------
@@ -67,7 +46,7 @@ angular.module('billett.admin').controller('AdminOrderNewController', function (
         var loader = Page.setLoading();
         ctrl.saveEdit().then(function () {
             $http.post('api/order/' + ctrl.order.id + '/validate', {
-                paymentgroup: ctrl.active_paymentgroup.id,
+                paymentgroup: ctrl.paymentgroup.id,
                 amount: ctrl.total,
                 sendmail: true
             }).success(function () {

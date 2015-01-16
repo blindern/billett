@@ -1,16 +1,7 @@
-angular.module('billett.admin').controller('AdminTicketRevokeController', function ($http, $modalInstance, order, ticket, AdminPaymentgroup) {
+angular.module('billett.admin').controller('AdminTicketRevokeController', function ($http, $modalInstance, order, ticket) {
     var ctrl = this;
     ctrl.order = order;
     ctrl.ticket = ticket;
-
-    AdminPaymentgroup.getValid(ctrl.order.eventgroup.id).$promise.then(function (ret) {
-        ctrl.paymentgroups = ret;
-        ctrl.active_paymentgroup = AdminPaymentgroup.getPreferredGroup(ret);
-    });
-
-    ctrl.changePaymentgroup = function () {
-        AdminPaymentgroup.setPreferredGroup(ctrl.active_paymentgroup);
-    };
 
     ctrl.revoke = function () {
         ctrl.sending = true;
