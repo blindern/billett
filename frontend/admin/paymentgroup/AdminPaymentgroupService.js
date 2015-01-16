@@ -1,4 +1,4 @@
-angular.module('billett.admin').factory('AdminPaymentgroup', function ($http, $resource) {
+angular.module('billett.admin').factory('AdminPaymentgroup', function ($http, $modal, $resource) {
     var r = $resource('api/paymentgroup/:id', {
         id: '@id'
     }, {
@@ -34,6 +34,18 @@ angular.module('billett.admin').factory('AdminPaymentgroup', function ($http, $r
         });
 
         return group;
+    };
+
+    r.newModal = function (eventgroupId) {
+        return $modal.open({
+            templateUrl: 'assets/views/admin/paymentgroup/new.html',
+            controller: 'AdminPaymentgroupNewController as ctrl',
+            resolve: {
+                eventgroupId: function () {
+                    return eventgroupId;
+                }
+            }
+        });
     };
 
     return r;
