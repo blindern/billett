@@ -3,7 +3,7 @@
 
     var module = angular.module('billett.admin');
 
-    module.controller('AdminOrderController', function ($http, $modal, $q, $state, $stateParams, Page, AdminOrder) {
+    module.controller('AdminOrderController', function ($http, $modal, $q, $state, $stateParams, Page, AdminOrder, AdminPaymentgroup) {
         var ctrl = this;
         Page.setTitle("Ordre");
 
@@ -49,6 +49,14 @@
             Page.set404();
         });
 
+        var thenReloadOrError = function (q) {
+            q.then(function () {
+                loadOrder();
+            }, function (err) {
+                alert(err);
+            });
+        };
+
         var editFields = ['name', 'email', 'phone', 'recruiter', 'comment'];
 
         // start edit mode (order details)
@@ -86,23 +94,17 @@
         };
 
         ctrl.completeOrder = function () {
-            var modal = $modal.open({
-                templateUrl: 'assets/views/admin/paymentgroup/paymentgroup_select.html',
-                controller: 'AdminPaymentgroupSelectController as ctrl',
-                resolve: {
-                    order: function () {
-                        return ctrl.order;
-                    },
-                    actionText: function () {
-                        return 'Marker som betalt';
-                    },
-                    amount: function () {
-                        return ctrl.total_reserved;
-                    }
+            AdminPaymentgroup.selectModal({
+                order: function () {
+                    return ctrl.order;
+                },
+                actionText: function () {
+                    return 'Marker som betalt';
+                },
+                amount: function () {
+                    return ctrl.total_reserved;
                 }
-            });
-
-            modal.result.then(function (paymentgroup) {
+            }).result.then(function (paymentgroup) {
                 $http.post('api/order/'+ctrl.order.id+'/validate', {
                     paymentgroup: paymentgroup.id,
                     amount: ctrl.total_reserved,
@@ -183,30 +185,20 @@
 
         // validate specific ticket
         ctrl.validateTicket = function (ticket) {
-            var modal = $modal.open({
-                templateUrl: 'assets/views/admin/paymentgroup/paymentgroup_select.html',
-                controller: 'AdminPaymentgroupSelectController as ctrl',
-                resolve: {
-                    order: function () {
-                        return ctrl.order;
-                    },
-                    actionText: function () {
-                        return 'Marker som betalt';
-                    },
-                    amount: function () {
-                        return ticket.ticketgroup.price + ticket.ticketgroup.fee;
-                    }
+            AdminPaymentgroup.selectModal({
+                order: function () {
+                    return ctrl.order;
+                },
+                actionText: function () {
+                    return 'Inntektsfør';
+                },
+                amount: function () {
+                    return ticket.ticketgroup.price + ticket.ticketgroup.fee;
                 }
-            });
-
-            modal.result.then(function (paymentgroup) {
-                $http.post('api/ticket/'+ticket.id+'/validate', {
+            }).result.then(function (paymentgroup) {
+                thenReloadOrError($http.post('api/ticket/'+ticket.id+'/validate', {
                     paymentgroup_id: paymentgroup.id
-                }).success(function () {
-                    loadOrder();
-                }).error(function (err) {
-                    alert(err);
-                });
+                }));
             });
         };
 

@@ -48,5 +48,13 @@ angular.module('billett.admin').factory('AdminPaymentgroup', function ($http, $m
         });
     };
 
+    r.selectModal = function (resolve) {
+        return $modal.open({
+            templateUrl: 'assets/views/admin/paymentgroup/paymentgroup_select.html',
+            controller: 'AdminPaymentgroupSelectController as ctrl',
+            resolve: resolve
+        });
+    };
+
     return r;
 });
