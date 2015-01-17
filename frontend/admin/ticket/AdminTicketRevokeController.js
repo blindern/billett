@@ -5,8 +5,8 @@ angular.module('billett.admin').controller('AdminTicketRevokeController', functi
 
     ctrl.revoke = function () {
         ctrl.sending = true;
-        $http.post('api/ticket/' + ticket.id + '/revoke',  {
-            'paymentgroup_id': ctrl.active_paymentgroup.id
+        $http.post('api/ticket/' + ctrl.ticket.id + '/revoke',  {
+            'paymentgroup_id': ctrl.paymentgroup.id
         }).then(function () {
             $modalInstance.close();
         }, function () {
