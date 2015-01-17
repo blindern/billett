@@ -15,10 +15,21 @@
         Ingen betalingsgrupper eksisterer for denne arrangementgruppen.
     </p>
 
-    <ul ng-if="ctrl.paymentgroups.length > 0">
-        <li ng-repeat="group in ctrl.paymentgroups">
-            <!-- TODO: closed status -->
-            <a ng-href="a/paymentgroup/{{::group.id}}">{{::group.title}} {{::group.time_start|formatdate:'DD.MM.YYYY'}} ({{::group.user_created}})</a>
-        </li>
-    </ul>
+    <table class="table" ng-if="ctrl.paymentgroups.length > 0">
+        <thead>
+            <tr>
+                <th>Tittel</th>
+                <th>Opprettet</th>
+                <th>Avsluttet</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="group in ctrl.paymentgroups">
+                <td><a ng-href="a/paymentgroup/{{::group.id}}">{{::group.title}}</a></td>
+                <td>{{::group.time_start|formatdate:'DD.MM.YYYY'}} av {{::group.user_created}}</td>
+                <td ng-if="::group.time_end">{{::group.time_end|formatdate:'DD.MM.YYYY'}} av {{::group.user_closed}}</td>
+                <td ng-if="::!group.time_end">Ikke avsluttet</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
