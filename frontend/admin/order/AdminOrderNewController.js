@@ -34,6 +34,7 @@ angular.module('billett.admin').controller('AdminOrderNewController', function (
         ctrl.order = {};
         ctrl.total = 0;
         ctrl.ticketgroups = null;
+        reloadHistory();
     };
 
     // create a blank order
@@ -220,6 +221,31 @@ angular.module('billett.admin').controller('AdminOrderNewController', function (
             }
         }).result.then(function () {
             focus('namefocus');
+        });
+    };
+
+
+    // -------------------------------------------------------------------------
+    // list of previous orders
+
+    var reloadHistory = function () {
+        ctrl.previousOrders = null;
+
+        AdminOrder.query({
+            order: '-time',
+            with: 'tickets.event,tickets.ticketgroup,payments',
+            limit: 3,
+            filter: 'eventgroup_id='+$stateParams['id']+',is_admin=1'
+        }, function (data) {
+            ctrl.previousOrders = data.result.map(function (order) {
+                order.total_valid = 0;
+                order.total_reserved = 0;
+                order.tickets.forEach(function (ticket) {
+                    if (ticket.is_revoked) return;
+                    order[ticket.is_valid ? 'total_valid' : 'total_reserved'] += ticket.ticketgroup.price + ticket.ticketgroup.fee;
+                });
+                return order;
+            });
         });
     };
 
