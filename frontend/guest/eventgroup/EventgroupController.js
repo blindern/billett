@@ -66,7 +66,7 @@
 
             // if blank page on filter
             if (c == 0 && (filter.date || filter.category)) {
-                //Page.set404();
+                Page.set404();
                 //$location.path('eventgroup/' + ret.id);
             }
 
