@@ -16,7 +16,16 @@ class PaymentgroupController extends \Controller {
 
     public function show($id)
     {
-        $eg = Paymentgroup::with('eventgroup')->findOrFail($id);
+        $eg = Paymentgroup::with(
+            'eventgroup',
+            'payments.order',
+            'valid_tickets.order',
+            'valid_tickets.ticketgroup',
+            'valid_tickets.event',
+            'revoked_tickets.order',
+            'revoked_tickets.ticketgroup',
+            'revoked_tickets.event'
+        )->findOrFail($id);
         return $eg;
     }
 

@@ -1,0 +1,39 @@
+.admin-paymentgroup-item {
+    table.paymentgroup-sales {
+        th, td {
+            &:nth-child(2),
+            &:nth-child(3) {
+                text-align: right;
+            }
+        }
+    }
+
+    table.paymentgroup-inbalance {
+        th, td {
+            text-align: right;
+            &:nth-child(1),
+            &:nth-child(2) {
+                text-align: left;
+            }
+        }
+    }
+
+    table.paymentgroup-payments {
+        th, td {
+            &:nth-child(3) {
+                text-align: right;
+            }
+        }
+    }
+
+    table.paymentgroup-tickets {
+        th, td {
+            &:nth-child(5),
+            &:nth-child(6) {
+                text-align: right;
+            }
+        }
+    }
+
+
+}
