@@ -11,6 +11,12 @@ class Guard extends \Illuminate\Auth\Guard {
         'benden',
         'miaemilie',
         'dionars',
+        'linemykland',
+        'annaro',
+        'haakonpt',
+        'patjohan',
+
+        // UKEstyret
         'andvin',
         'annanok',
         'chrimsam',
@@ -18,8 +24,7 @@ class Guard extends \Illuminate\Auth\Guard {
         'ingebjorgbm',
         'jannekj',
         'soensteby',
-        'tirilskaardal',
-        'linemykland'
+        'tirilskaardal'
     );
 
     /**
