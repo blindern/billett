@@ -13,7 +13,8 @@ var gulp = require('gulp'),
     buffer = require('gulp-buffer'),
     extend = require('gulp-extend'),
     runSequence = require('run-sequence'),
-    minifyCSS = require('gulp-minify-css');
+    minifyCSS = require('gulp-minify-css'),
+    autoprefixer = require('gulp-autoprefixer');
 
 // run with --production to do more compressing etc
 var isProd = !!args.production;
@@ -88,6 +89,7 @@ gulp.task('styles', function() {
     return gulp.src(css_files)
         .pipe(sourcemaps.init())
         .pipe(sass())
+        .pipe(autoprefixer())
         .pipe(concat('frontend.css'))
         .pipe(gulpif(isProd, minifyCSS()))
         .pipe(buffer())
