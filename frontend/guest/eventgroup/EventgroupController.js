@@ -6,7 +6,7 @@
     module.config(function ($stateProvider) {
         $stateProvider
             .state('eventgroup', {
-                url: '/eventgroup/{id}{query:(?:/.*)?}',
+                url: '/eventgroup/{id}{query:(?:/[^/]*)?}',
                 templateUrl: 'assets/views/guest/eventgroup/index.html',
                 controller: 'EventgroupController'
             });
@@ -64,9 +64,10 @@
                 c++;
             });
 
-            // redirect if blank page on filter
+            // if blank page on filter
             if (c == 0 && (filter.date || filter.category)) {
-                $location.path('eventgroup/' + ret.id);
+                //Page.set404();
+                //$location.path('eventgroup/' + ret.id);
             }
 
             $scope.days = r;
