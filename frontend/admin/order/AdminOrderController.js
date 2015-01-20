@@ -3,7 +3,7 @@
 
     var module = angular.module('billett.admin');
 
-    module.controller('AdminOrderController', function ($http, $modal, $q, $state, $stateParams, Page, AdminOrder, AdminPaymentgroup, AdminTicket, AdminPayment) {
+    module.controller('AdminOrderController', function ($http, $modal, $q, $state, $stateParams, Page, AdminOrder, AdminPaymentgroup, AdminPrinter, AdminTicket, AdminPayment) {
         var ctrl = this;
         Page.setTitle("Ordre");
 
@@ -211,6 +211,34 @@
 
             modal.result.then(function () {
                 Page.toast("E-post ble sendt", {class: 'success'});
+            });
+        };
+
+        ctrl.printTickets = function () {
+            AdminPrinter.printSelectModal(function (printername) {
+                return $q(function (resolve, reject) {
+                    AdminPrinter.printTickets(printername, ctrl.validtickets).then(function () {
+                        Page.toast('Utskrift lagt i kø', {class: 'success'});
+                        resolve();
+                    }, function () {
+                        Page.toast('Ukjent feil oppsto!', {class: 'warning'});
+                        reject();
+                    });
+                });
+            });
+        };
+
+        ctrl.printTicket = function (ticketid) {
+            AdminPrinter.printSelectModal(function (printername) {
+                return $q(function (resolve, reject) {
+                    AdminPrinter.printTicket(printername, ticketid).then(function () {
+                        Page.toast('Utskrift lagt i kø', {class: 'success'});
+                        resolve();
+                    }, function () {
+                        Page.toast('Ukjent feil oppsto!', {class: 'warning'});
+                        reject();
+                    });
+                });
             });
         };
     });

@@ -2,6 +2,7 @@
 
 use Blindern\UKA\Billett\Ticket;
 use Blindern\UKA\Billett\Paymentgroup;
+use Blindern\UKA\Billett\Printer;
 
 class TicketController extends \Controller {
     public function __construct()
@@ -36,30 +37,37 @@ class TicketController extends \Controller {
      */
     public function mergedPDF()
     {
-        if (!\Input::has('ids')) {
-            return Response::json('missing id list', 400);
-        }
-
-        $id_list = array_map('trim', explode(",", \Input::get('ids')));
-        $tickets = [];
-        foreach (Ticket::find($id_list) as $ticket) {
-            $tickets[$ticket->id] = $ticket;
-        }
-
-        foreach ($id_list as $id) {
-            if (!isset($tickets[$id])) {
-                return Response::json('ticket with id "' . $id . '" not found', 404);
-            }
-
-            if (!$tickets[$id]->is_valid) {
-                return Response::json('ticket with id "' . $id . '" is not set valid', 404);
-            }
+        $tickets = $this->getTicketsByIds();
+        if (is_object($tickets)) {
+            return $tickets;
         }
 
         return Response::make(Ticket::generateTicketsPdf($tickets), 200, array(
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline; filename="tickets.pdf"'
         ));
+    }
+
+    /**
+     * Print a merged PDF
+     */
+    public function printMergedPdf($printername)
+    {
+        $tickets = $this->getTicketsByIds();
+        if (is_object($tickets)) {
+            return $tickets;
+        }
+
+        $printer = Printer::find($printername);
+        if (!$printer) {
+            return \Response::json('unknown printer', 400);
+        }
+
+        if ($printer->printPdf(Ticket::generateTicketsPdf($tickets))) {
+            return \Response::json('OK');
+        } else {
+            return \Response::json('Print failed', 503);
+        }
     }
 
     /**
@@ -72,6 +80,25 @@ class TicketController extends \Controller {
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline; filename="'.$ticket->getPdfName().'"'
         ));
+    }
+
+    /**
+     * Print a specific ticket
+     */
+    public function printTicket($id, $printername)
+    {
+        $ticket = Ticket::findOrFail($id);
+
+        $printer = Printer::find($printername);
+        if (!$printer) {
+            return \Response::json('unknown printer', 400);
+        }
+
+        if ($printer->printPdf($ticket->getPdfData())) {
+            return \Response::json('OK');
+        } else {
+            return \Response::json('Print failed', 503);
+        }
     }
 
     /**
@@ -130,5 +157,33 @@ class TicketController extends \Controller {
         }
 
         $ticket->setValid($paymentgroup);
+    }
+
+    /**
+     * Get tickets by ids
+     */
+    private function getTicketsByIds()
+    {
+        if (!\Input::has('ids') || !is_array(\Input::get('ids'))) {
+            return Response::json('missing id list', 400);
+        }
+
+        $id_list = array_map('trim', \Input::get('ids'));
+        $tickets = [];
+        foreach (Ticket::find($id_list) as $ticket) {
+            $tickets[$ticket->id] = $ticket;
+        }
+
+        foreach ($id_list as $id) {
+            if (!isset($tickets[$id])) {
+                return Response::json('ticket with id "' . $id . '" not found', 404);
+            }
+
+            if (!$tickets[$id]->is_valid) {
+                return Response::json('ticket with id "' . $id . '" is not set valid', 404);
+            }
+        }
+
+        return $tickets;
     }
 }

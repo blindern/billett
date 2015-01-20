@@ -3,7 +3,7 @@
 
     var module = angular.module('billett.admin');
 
-    module.controller('AdminEventController', function(Page, $stateParams, AdminEvent, $location, $scope, FileUploader) {
+    module.controller('AdminEventController', function(Page, $q, $stateParams, AdminEvent, AdminPrinter, $location, $scope, FileUploader) {
         Page.setTitle("Arrangement");
 
         var loader = Page.setLoading();
@@ -52,6 +52,20 @@
         // sorting of ticket groups
         this.onTicketgroupsOrder = function (groups) {
             $scope.event.setTicketgroupsOrder(groups);
+        };
+
+        this.previewTicketPrint = function (ticketgroupid) {
+            AdminPrinter.printSelectModal(function (printername) {
+                return $q(function (resolve, reject) {
+                    AdminPrinter.printPreviewTicket(printername, ticketgroupid).then(function () {
+                        Page.toast('Utskrift lagt i kø', {class: 'success'});
+                        resolve();
+                    }, function () {
+                        Page.toast('Ukjent feil oppsto!', {class: 'warning'});
+                        reject();
+                    });
+                });
+            });
         };
     })
 })();

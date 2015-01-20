@@ -12,9 +12,13 @@
         });
     });
 
-    module.controller('AdminIndexController', function (Page, $http, $scope, AdminEventgroup) {
+    module.controller('AdminIndexController', function (Page, $http, $scope, AdminEventgroup, AdminPrinter) {
         AdminEventgroup.query(function (ret) {
             $scope.eventgroups = ret;
         });
+
+        $scope.printText = function () {
+            AdminPrinter.printTextModal();
+        };
     });
 })();

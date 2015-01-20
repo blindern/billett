@@ -28,6 +28,7 @@ Route::resource('/api/event', 'EventController', array(
 ));
 
 Route::get('/api/ticketgroup/{id}/previewticket', 'TicketgroupController@previewTicket');
+Route::post('/api/ticketgroup/{id}/previewticket/print/{printername}', 'TicketgroupController@previewTicketPrint');
 Route::resource('/api/ticketgroup', 'TicketgroupController', array(
     'only' => array('index', 'show', 'store', 'update', 'destroy')
 ));
@@ -38,7 +39,9 @@ Route::post('/event/{id}/image', 'EventController@uploadImage');
 
 // tickets
 Route::get('/api/ticket/pdf', 'TicketController@mergedPdf');
+Route::post('/api/ticket/print/{printername}', 'TicketController@printMergedPdf');
 Route::get('/api/ticket/{id}/pdf', 'TicketController@pdf');
+Route::post('/api/ticket/{id}/print/{printername}', 'TicketController@printTicket');
 Route::post('/api/ticket/{id}/revoke', 'TicketController@revoke');
 Route::post('/api/ticket/{id}/validate', 'TicketController@validate');
 Route::resource('/api/ticket', 'TicketController', array(
@@ -61,6 +64,10 @@ Route::resource('/api/paymentgroup', 'PaymentgroupController', array(
 ));
 Route::post('/api/paymentgroup/{id}/close', 'PaymentgroupController@close');
 
+// printer handling
+Route::get('/api/printer', 'PrinterController@index');
+Route::post('/api/printer/announce', 'PrinterController@printerAnnounce');
+Route::post('/api/printer/{printername}/text', 'PrinterController@printText');
 
 /*Route::get('/email', function() {
     $order = Blindern\UKA\Billett\Order::findOrFail(\Input::get('id'));

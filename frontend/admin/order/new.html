@@ -67,9 +67,9 @@
                         </div>
                     </div>
                     <div class="form-group" ng-if="ctrl.order.tickets && ctrl.order.tickets.length > 0">
-                        <label class="text-right col-sm-4">TODO</label>
+                        <label class="col-sm-4 control-label" for="printer">Skriv ut billetter</label>
                         <div class="col-sm-8">
-                            Enkel måte å skrive ut billetter
+                            <printer-list id="printer" printer="ctrl.printer" can-disable="true"></printer-list>
                         </div>
                     </div>
 

@@ -2,6 +2,7 @@
 
 use Blindern\UKA\Billett\Event;
 use Blindern\UKA\Billett\Order;
+use Blindern\UKA\Billett\Printer;
 use Blindern\UKA\Billett\Ticket;
 use Blindern\UKA\Billett\Ticketgroup;
 
@@ -139,6 +140,38 @@ class TicketgroupController extends Controller {
      */
     public function previewTicket($id)
     {
+        $ticket = $this->getPreviewTicket($id);
+
+        return Response::make($ticket->getPdfData(true, false), 200, array(
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="'.$ticket->getPdfName().'"'
+        ));
+    }
+
+    /**
+     * Print a preview
+     */
+    public function previewTicketPrint($id, $printername)
+    {
+        $ticket = $this->getPreviewTicket($id);
+
+        $printer = Printer::find($printername);
+        if (!$printer) {
+            return \Response::json('unknown printer', 400);
+        }
+
+        if ($printer->printPdf($ticket->getPdfData(true, false))) {
+            return \Response::json('OK');
+        } else {
+            return \Response::json('Print failed', 503);
+        }
+    }
+
+    /**
+     * Get preview ticket
+     */
+    private function getPreviewTicket($id)
+    {
         $g = Ticketgroup::findOrFail($id);
 
         $order = new Order;
@@ -157,9 +190,6 @@ class TicketgroupController extends Controller {
         $ticket->key = 123456;
         $ticket->id = 321;
 
-        return Response::make($ticket->getPdfData(true, false), 200, array(
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="'.$ticket->getPdfName().'"'
-        ));
+        return $ticket;
     }
 }

@@ -132,6 +132,7 @@
                     <span class="pull-right">
                         <a class="btn btn-default" ng-click="ctrl.addTickets()">Tilorde nye billetter</a>
                         <a class="btn btn-default" ng-if="ctrl.validtickets.length > 0" ng-href="api/ticket/pdf?ids={{ctrl.validtickets.join(',')}}" target="_self">Last ned billetter</a>
+                        <a class="btn btn-default" ng-if="ctrl.validtickets.length > 0" ng-click="ctrl.printTickets()">Skriv ut billetter</a>
                     </span>
                 </h2>
 
@@ -156,6 +157,9 @@
                             <td>
                                 <a ng-if="ticket.is_valid && !ticket.is_revoked" ng-href="api/ticket/{{ticket.id}}/pdf" target="_blank">
                                     <span class="glyphicon glyphicon-eye-open" title="Last ned PDF"></span>
+                                </a>
+                                <a href ng-click="ctrl.printTicket(ticket.id)">
+                                    <span class="glyphicon glyphicon-print" title="Skriv ut billett"></span>
                                 </a>
                             </td>
                             <td>{{ticket.id}}</td>

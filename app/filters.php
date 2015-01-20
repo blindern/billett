@@ -99,6 +99,9 @@ Route::filter('csrf', function($route, $request)
     // POST for DIBS form don't require csrf
     if (substr($request->path(), 0, 5) == 'dibs/') return;
 
+    // POST for ticekt printer don't require csrf
+    if (substr($request->path(), 0, 20) == 'api/printer/announce') return;
+
     if (Session::token() != Input::get('_token') && Session::token() != $request->header('X-Csrf-Token'))
     {
         throw new Illuminate\Session\TokenMismatchException;

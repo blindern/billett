@@ -1,4 +1,4 @@
-angular.module('billett.admin').controller('AdminOrderNewController', function ($http, $location, $modal, $q, $scope, $state, $stateParams, $timeout, focus, Page, AdminEventgroup, AdminPaymentgroup, AdminOrder) {
+angular.module('billett.admin').controller('AdminOrderNewController', function ($http, $location, $modal, $q, $scope, $state, $stateParams, $timeout, focus, Page, AdminEventgroup, AdminPaymentgroup, AdminPrinter, AdminOrder) {
     var ctrl = this;
     Page.setTitle('Ny ordre');
 
@@ -50,12 +50,16 @@ angular.module('billett.admin').controller('AdminOrderNewController', function (
                 paymentgroup: ctrl.paymentgroup.id,
                 amount: ctrl.total,
                 sendmail: true
-            }).success(function () {
+            }).success(function (ret) {
                 loader();
+
+                ctrl.order = ret;
                 Page.toast('Ordren ble vellykket opprettet. <a href="a/order/' + ctrl.order.id + '">Vis ordre</a>', {
                     class: 'success',
                     timeout: 15000
                 });
+
+                printTickets();
 
                 delete localStorage['billett.neworder.id'];
                 resetOrder();
@@ -250,4 +254,22 @@ angular.module('billett.admin').controller('AdminOrderNewController', function (
     };
 
     resetOrder();
+
+    function printTickets() {
+        if (!ctrl.printer) return;
+
+        var list = [];
+        ctrl.order.tickets.forEach(function (ticket) {
+            if (ticket.is_revoked || !ticket.is_valid) return;
+            list.push(ticket.id);
+        });
+
+        if (list.length == 0) return;
+
+        AdminPrinter.printTickets(ctrl.printer.name, list).then(function () {
+            Page.toast('Utskrift lagt i kø', {class: 'success'});
+        }, function () {
+            Page.toast('Ukjent feil oppsto!', {class: 'warning'});
+        });
+    }
 });
