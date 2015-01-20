@@ -151,6 +151,14 @@ class Printer {
     {
         $ch = curl_init('http://'.$this->data['ip'].':'.$this->data['port'].'/print');
 
+        if (!function_exists('curl_file_create')) {
+            function curl_file_create($filename, $mimetype = '', $postname = '') {
+                return "@$filename;filename="
+                    .($postname ?: basename($filename))
+                    .($mimetype ? ";type=$mimetype" : '');
+            }
+        }
+
         $file = $this->storeFile($data);
         $fields = [
             'file' => curl_file_create($file, $mime, $filename),
