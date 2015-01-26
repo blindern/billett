@@ -31,7 +31,7 @@ angular.module('billett.admin').controller('AdminEventgroupSoldTicketsStatsContr
         self.daysAccum = {};
 
         self.days = ret.tickets.reduce(function (prev, cur) {
-            if (prev.indexOf(cur.day) == -1) {
+            if (cur.day && prev.indexOf(cur.day) == -1) {
                 prev.push(cur.day);
                 self.daysAccum[cur.day] = new accum;
             }
@@ -74,6 +74,7 @@ angular.module('billett.admin').controller('AdminEventgroupSoldTicketsStatsContr
         });
 
         ret.tickets.forEach(function (ticket) {
+            if (!ticket.day) return;
             var ticketgroup = ticketgroups[ticket.ticketgroup_id];
             var event = events[ticket.event_id];
             ticketgroup.days[ticket.day] = ticket;

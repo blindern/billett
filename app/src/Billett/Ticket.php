@@ -13,6 +13,7 @@ class Ticket extends \Eloquent implements ApiQueryInterface {
         $q = \DB::select('
             SELECT day, ticketgroup_id, event_id, CAST(SUM(num_tickets) AS UNSIGNED) num_tickets, CAST(SUM(num_revoked) AS UNSIGNED) num_revoked
             FROM (
+                /* activated tickets */
                 SELECT DATE(FROM_UNIXTIME(t.time)) day, ticketgroup_id, event_id,
                   COUNT(t.id) num_tickets,
                   0 num_revoked
@@ -23,6 +24,7 @@ class Ticket extends \Eloquent implements ApiQueryInterface {
 
                 UNION ALL
 
+                /* revoked tickets */
                 SELECT DATE(FROM_UNIXTIME(t.time_revoked)) day, ticketgroup_id, event_id,
                   0 num_tickets,
                   COUNT(t.id) num_revoked
@@ -30,8 +32,15 @@ class Ticket extends \Eloquent implements ApiQueryInterface {
                   JOIN events e ON t.event_id = e.id
                 WHERE t.is_revoked = 1 AND e.eventgroup_id = ?
                 GROUP BY DATE(FROM_UNIXTIME(t.time)), ticketgroup_id, event_id
+
+                UNION ALL
+
+                /* all ticketgroups */
+                SELECT NULL, tg.id, e.id, 0, 0
+                FROM ticketgroups tg JOIN events e ON e.id = tg.event_id
+                WHERE e.eventgroup_id = ? AND (tg.use_office != 0 OR tg.use_web != 0)
             ) ref
-            GROUP BY day, ticketgroup_id, event_id', array($eventgroup_id, $eventgroup_id));
+            GROUP BY day, ticketgroup_id, event_id', array($eventgroup_id, $eventgroup_id, $eventgroup_id));
 
         $ticketgroups = array();
         $events = array();
