@@ -61,7 +61,7 @@ class Ticket extends \Eloquent implements ApiQueryInterface {
         if (count($events) > 0) {
             $qs = implode(",", array_fill(0, count($events), "?"));
             $events = \DB::select("
-                SELECT id, title, time_start, category
+                SELECT id, title, time_start, category, max_sales, max_normal_sales
                 FROM events
                 WHERE id IN ($qs)
                 ORDER BY time_start", $events);

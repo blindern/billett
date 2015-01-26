@@ -29,6 +29,8 @@ angular.module('billett.admin').controller('AdminEventgroupSoldTicketsStatsContr
 
         self.topAccum = new accum;
         self.daysAccum = {};
+        self.max_sales = 0;
+        self.max_normal_sales = 0;
 
         self.days = ret.tickets.reduce(function (prev, cur) {
             if (cur.day && prev.indexOf(cur.day) == -1) {
@@ -60,6 +62,9 @@ angular.module('billett.admin').controller('AdminEventgroupSoldTicketsStatsContr
             }, {});
             events[event.id] = event;
             self.events.push(event);
+
+            self.max_sales += event.max_sales;
+            self.max_normal_sales += event.max_normal_sales || event.max_sales;
         });
 
         var ticketgroups = {};

@@ -27,7 +27,7 @@
                 </td>
                 <th>
                     {{ctrl.topAccum.price+ctrl.topAccum.fee|price}}<br>
-                    {{ctrl.topAccum.count-ctrl.topAccum.revoked}} stk
+                    {{ctrl.topAccum.count-ctrl.topAccum.revoked}} / {{ctrl.max_normal_sales||ctrl.max_sales}}{{ctrl.max_normal_sales ? ' (' + ctrl.max_sales + ')' : ''}} stk
                 </th>
             </tr>
         </tfoot>
@@ -45,7 +45,7 @@
                 </td>
                 <th>
                     {{event.accum.price+event.accum.fee|price}}<br>
-                    {{event.accum.count-event.accum.revoked}} stk
+                    {{event.accum.count-event.accum.revoked}} / {{event.max_normal_sales||event.max_sales}}{{event.max_normal_sales ? ' (' + event.max_sales + ')' : ''}} stk
                 </th>
                 <!-- TODO: data for ticketgroups are in .ticketgroups -->
             </tr>
