@@ -27,7 +27,7 @@
                 </td>
                 <th>
                     {{ctrl.topAccum.price+ctrl.topAccum.fee|price}}<br>
-                    {{ctrl.topAccum.count-ctrl.topAccum.revoked}} / {{ctrl.max_normal_sales||ctrl.max_sales}}{{ctrl.max_normal_sales ? ' (' + ctrl.max_sales + ')' : ''}} stk
+                    {{ctrl.topAccum.count-ctrl.topAccum.revoked}} / {{ctrl.max_normal_sales||ctrl.max_sales}}{{ctrl.max_normal_sales != ctrl.max_sales ? ' (' + ctrl.max_sales + ')' : ''}} stk
                 </th>
             </tr>
         </tfoot>
