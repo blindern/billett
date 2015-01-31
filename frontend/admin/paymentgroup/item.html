@@ -76,7 +76,7 @@
 
         <h2>
             Betalingskilder
-            <span class="pull-right btn btn-primary" ng-click="ctrl.newPaymentsource()">Registrer opptelling</span>
+            <span class="pull-right btn btn-primary" ng-if="!ctrl.paymentgroup.time_end" ng-click="ctrl.newPaymentsource()">Registrer opptelling</span>
         </h2>
 
         <div ng-if="ctrl.ps.cashgroups.length == 0 && ctrl.ps.other.length == 0">
