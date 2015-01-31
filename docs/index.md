@@ -10,6 +10,7 @@ Grouping of events.
 * bool is_active (allow modifications)
 * string title
 * string sort_value
+* string paymentsources_data (JSON-data, see issue #87)
 
 ### Event
 The events itself.
@@ -64,6 +65,20 @@ Payments that are not on web must belong to a Paymentgroup for accounting purpos
 * string user_created
 * optional string user_closed
 * optional string description
+
+### Paymentsources
+* id
+* paymentgroup_id
+* is_deleted (default = 0)
+* time_created
+* time_deleted
+* user_created
+* user_deleted
+* type (enum: cash, other)
+* title
+* comment
+* amount (start-amount is registered with minus)
+* data (JSON for cash sales)
 
 ### Payments
 Link between payment methods and orders.

@@ -24,7 +24,8 @@ class PaymentgroupController extends \Controller {
             'valid_tickets.event',
             'revoked_tickets.order',
             'revoked_tickets.ticketgroup',
-            'revoked_tickets.event'
+            'revoked_tickets.event',
+            'paymentsources'
         )->findOrFail($id);
         return $eg;
     }
