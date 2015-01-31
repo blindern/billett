@@ -64,6 +64,11 @@ Route::resource('/api/paymentgroup', 'PaymentgroupController', array(
 ));
 Route::post('/api/paymentgroup/{id}/close', 'PaymentgroupController@close');
 
+// paymentsources
+Route::resource('/api/paymentsource', 'PaymentsourceController', array(
+    'only' => array('index', 'show', 'store', 'update', 'destroy')
+));
+
 // printer handling
 Route::get('/api/printer', 'PrinterController@index');
 Route::post('/api/printer/announce', 'PrinterController@printerAnnounce');

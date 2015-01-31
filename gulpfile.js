@@ -39,7 +39,8 @@ var js_files_library = [
     "./bower_components/angular-google-analytics/dist/angular-google-analytics.js",
     "./bower_components/Sortable/Sortable.js", // min.js
     "./bower_components/Sortable/ng-sortable.js",
-    "./bower_components/ng-focus-on/lib/index.js"
+    "./bower_components/ng-focus-on/lib/index.js",
+    "./bower_components/mathjs/dist/math.js"
 ];
 
 var js_files = [
