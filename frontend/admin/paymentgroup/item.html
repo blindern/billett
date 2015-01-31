@@ -66,6 +66,94 @@
             <dd>{{(-ctrl.totals.valid-ctrl.totals.revoked-ctrl.totals.payments)|price}}</dd>
         </dl>
 
+        <dl class="dl-horizontal">
+            <dt>Registrerte betalinger</dt>
+            <dd>{{ctrl.ps.sum|price}}</dd>
+            <dt>Kassedifferanse</dt>
+            <dd>{{ctrl.totals.payments-ctrl.ps.sum|price}}</dd>
+        </dl>
+
+
+        <h2>
+            Betalingskilder
+            <span class="pull-right btn btn-primary" ng-click="ctrl.newPaymentsource()">Registrer opptelling</span>
+        </h2>
+
+        <div ng-if="ctrl.ps.cashgroups.length == 0 && ctrl.ps.other.length == 0">
+            Ingen betalingskilder er registrert.
+        </div>
+
+        <div ng-repeat="group in ctrl.ps.cashgroups">
+            <div ng-class="{is_deleted: group.is_deleted}" ng-if="!group.is_deleted || ctrl.show_details">
+                <h3>
+                    {{group.title}} ({{group.total|price}})
+                    <span ng-if="group.is_deleted">(Slettet - teller ikke på oppgjøret)</span>
+                </h3>
+                <table class="table table-condensed table-striped cashgroup">
+                    <thead>
+                        <tr>
+                            <th rowspan="2">&nbsp;</th>
+                            <th ng-repeat="paymentsource in group.cols">{{paymentsource.time_created|formatdate:'DD.MM.YYYY HH:mm'}}</th>
+                            <th colspan="2">Totaler</th>
+                        </tr>
+                        <tr>
+                            <th ng-repeat="paymentsource in group.cols">
+                                {{paymentsource.user_created}}
+                            </th>
+                            <th>Antall</th>
+                            <th>Beløp</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Sum</th>
+                            <th ng-repeat="paymentsource in group.cols">
+                                {{paymentsource.amount|price}}
+                                <span ng-if="!group.is_deleted && !ctrl.paymentgroup.time_end">
+                                    <br>
+                                    <a href ng-click="ctrl.deletePaymentsource(paymentsource)">Slett</a>
+                                </span>
+                            </th>
+                            <th>&nbsp;</th>
+                            <th>{{group.total|price}}</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        <tr ng-repeat="row in group.rows">
+                            <th ng-if="row.is_num">{{row.key|price}}</th>
+                            <th ng-if="!row.is_num">{{row.key == 'other' ? 'Annet' : row.key}}</th>
+                            <td ng-repeat="item in row.items track by $index">{{item}}</td>
+                            <td ng-if="row.is_num">{{row.total}}</td>
+                            <td ng-if="!row.is_num">&nbsp;</td>
+                            <td>{{row.amount|price}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div ng-repeat="paymentsource in group.cols">
+                    <div ng-if="paymentsource.comment">
+                        <h4>Kommentar til {{paymentsource.time_created|formatdate:'DD.MM.YYYY HH:mm'}} ({{paymentsource.user_created}}, {{paymentsource.amount|price}})</h4>
+                        <div marked="paymentsource.comment"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-repeat="paymentsource in ctrl.ps.other">
+            <div ng-class="{is_deleted: paymentsource.is_deleted}" ng-if="!paymentsource.is_deleted || ctrl.show_details">
+                <h3>
+                    {{paymentsource.title}} ({{paymentsource.amount|price}})
+                    <span ng-if="paymentsource.is_deleted">(Slettet - teller ikke på oppgjøret)</span>
+                </h3>
+                <p>
+                    Registrert {{paymentsource.time_created|formatdate:'DD.MM.YYYY HH:mm'}} av {{paymentsource.user_created}}.
+                    <span ng-if="paymentsource.is_deleted">Slettet {{paymentsource.time_deleted|formatdate:'DD.MM.YYYY HH:mm'}} av {{paymentsource.user_deleted}}.</span>
+                    <a href ng-click="ctrl.deletePaymentsource(paymentsource)" ng-if="!paymentsource.is_deleted && !ctrl.paymentgroup.time_end">Slett</a>
+                </p>
+                <div ng-if="paymentsource.comment" marked="paymentsource.comment"></div>
+            </div>
+        </div>
+
 
         <h2>Salgsoversikt</h2>
 

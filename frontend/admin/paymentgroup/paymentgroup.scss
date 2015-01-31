@@ -35,5 +35,46 @@
         }
     }
 
+    .table {
+        width: auto;
+    }
 
+    .cashgroup {
+        td, th {
+            text-align: right !important;
+        }
+        thead tr:first-child th:last-child {
+            text-align: center !important;
+        }
+    }
+
+    .is_deleted {
+        opacity: 0.7;
+        h3 {
+            color: red;
+        }
+    }
+}
+
+.admin-paymentsource-new {
+    table {
+        margin-bottom: 0;
+        tbody td:nth-child(2) {
+            width: 100px;
+        }
+        td, th {
+            vertical-align: middle !important;
+            text-align: right;
+        }
+        thead th:nth-child(1),
+        thead th:nth-child(2),
+        tbody th,
+        tbody td:nth-child(2) {
+            text-align: center;
+        }
+
+        input {
+            text-align: center;
+        }
+    }
 }

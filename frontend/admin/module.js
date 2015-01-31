@@ -6,6 +6,7 @@
         'ngResource',
         'ui.router',
         'ui.bootstrap.modal',
+        'ui.bootstrap.typeahead',
         'ui.bootstrap.tpls',
         'ui.unique',
         'ng-sortable',
