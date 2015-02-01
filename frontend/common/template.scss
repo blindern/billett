@@ -185,6 +185,40 @@ footer {
 }
 
 
+/* print setup */
+@page {
+  margin: 1cm;
+  size: A4;
+  /*counter-increment: page;
+  counter-reset: page 1;
+  @bottom-center {
+    content: "Side " counter(page) " av " counter(pages);
+  }*/
+}
+@media print {
+  html {
+    width: 1050px;
+  }
+  .page-header {
+    &, h1 {
+      margin-top: 0;
+    }
+  }
+  footer {
+    display: none;
+  }
+  a:link:after {
+    display: none;
+  }
+  /*.dev-page {
+    margin-top: 0 !important;
+    .dev-page-bar {
+      display: none !important;
+    }
+  }*/
+}
+
+
 .page-loading {
   text-align: center;
   font-size: 150%;
