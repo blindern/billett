@@ -352,8 +352,11 @@ class Order extends \Eloquent implements ApiQueryInterface {
             }
         }
 
-        $this->time = time();
-        $this->save();
+        // don't update admin reservations, as they will never expire
+        if (!$this->is_admin) {
+            $this->time = time();
+            $this->save();
+        }
 
         return true;
     }
