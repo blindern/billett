@@ -24,10 +24,9 @@ class EventgroupsPaymentsourcesData extends Migration {
      */
     public function down()
     {
-        Schema::table('tickets', function(Blueprint $table)
+        Schema::table('eventgroups', function(Blueprint $table)
         {
-            $table->dropColumn('valid_paymentgroup_id');
-            $table->dropColumn('revoked_paymentgroup_id');
+            $table->dropColumn('paymentsources_data');
         });
     }
 
