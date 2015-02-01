@@ -1,4 +1,43 @@
 .admin-paymentgroup-item {
+    .dl-prefix {
+        margin-bottom: 0;
+        font-style: italic;
+        font-size: 90%;
+    }
+
+    @media print {
+        table {
+            td,
+            th {
+                padding: 2px 4px !important;
+            }
+        }
+
+        .dl-horizontal dt {
+            float: left;
+            width: 190px;
+            clear: left;
+            text-align: right;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .dl-horizontal dd {
+            margin-left: 210px;
+        }
+    }
+
+    h1, h2 {
+        page-break-after: avoid;
+    }
+    .print-page-section {
+        page-break-inside: avoid;
+    }
+
+    div.row + h2 {
+        margin-top: 0;
+    }
+
     table.paymentgroup-sales {
         th, td {
             &:nth-child(2),

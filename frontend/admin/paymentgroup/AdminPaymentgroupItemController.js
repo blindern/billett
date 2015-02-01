@@ -192,6 +192,8 @@ angular.module('billett.admin').controller('AdminPaymentgroupItemController', fu
         var cashgroups_link = {};
         ctrl.ps.cashgroups = [];
         ctrl.ps.other = [];
+        ctrl.ps.payments_deviation_prefix = ctrl.paymentgroup.eventgroup.paymentsources_data['payments_deviation_prefix'] || 'Kassedifferanse';
+        ctrl.ps.orders_deviation_prefix = ctrl.paymentgroup.eventgroup.paymentsources_data['orders_deviation_prefix'] || 'Utestående beløp';
 
         ctrl.paymentgroup.paymentsources.forEach(function (paymentsource) {
             if (!paymentsource.is_deleted) ctrl.ps.sum += paymentsource.amount;
