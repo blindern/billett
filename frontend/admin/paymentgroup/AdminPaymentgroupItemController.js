@@ -157,7 +157,7 @@ angular.module('billett.admin').controller('AdminPaymentgroupItemController', fu
     };
 
     ctrl.close = function () {
-        if (!ctrl.paymentgroup.time_end && confirm("Er du sikker på at du vil lukke betalingsgruppen? Dette gjøres kun ved oppgjør av økonomi.")) {
+        if (!ctrl.paymentgroup.time_end && confirm("Er du sikker på at du vil lukke betalingsgruppen? Dette gjøres kun ved oppgjør av økonomi. Kontroller evt. avvik først. Handlingen kan ikke angres.")) {
             ctrl.paymentgroup.close().success(function (ret) {
                 ctrl.paymentgroup = ret;
             });
