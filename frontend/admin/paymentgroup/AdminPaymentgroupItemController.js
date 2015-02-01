@@ -70,7 +70,7 @@ angular.module('billett.admin').controller('AdminPaymentgroupItemController', fu
 
             ctrl.paymentgroup.payments.forEach(function (payment) {
                 ctrl.totals.payments += payment.amount * 1;
-                addOrderBalance(payment.order, payment.amount * 1);
+                addOrderBalance(payment.order, payment.amount * 1, true);
             });
             ctrl.paymentgroup.valid_tickets.forEach(function (ticket) {
                 ctrl.totals.valid -= ticket.ticketgroup.price + ticket.ticketgroup.fee;
