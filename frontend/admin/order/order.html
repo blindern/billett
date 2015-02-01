@@ -101,6 +101,7 @@
                     <dd>{{ctrl.order.is_admin ? 'Billettluke' : 'Nettbestilling'}}</dd>
                     <dt>Tidspunkt</dt>
                     <dd>{{ctrl.order.time|formatdate:'D. MMMM YYYY HH:mm'}}</dd>
+                    <dd class="text-muted" ng-if="ctrl.order.user_created">(Opprettet av {{ctrl.order.user_created}})</dd>
                     <dt>Ordretotal</dt>
                     <dd>
                         {{ctrl.total|price}} ({{ctrl.total_paid|price}} betalt<span ng-if="ctrl.order.balance != 0">, {{-ctrl.order.balance|price}} gjenstår</span>)
@@ -165,9 +166,9 @@
                             <td>{{ticket.id}}</td>
                             <td>
                                 <a ng-href="a/event/{{ticket.event.id}}">{{ticket.event.time_start|formatdate:'D. MMM YYYY HH:mm'}}: {{ticket.event.title}}</a>
-                                <span ng-if="ticket.time != ctrl.order.time"><br>(registrert {{ticket.time|formatdate:'D. MMM YYYY HH:mm'}})</span>
+                                <span class="text-muted"><br>(registrert {{ticket.time|formatdate:'D. MMM YYYY HH:mm'}}<span ng-if="ticket.user_valid"> av {{ticket.user_valid}}</span>)</span>
                                 <span ng-if="!ticket.is_valid"><br>(kun reservasjon)</span>
-                                <span ng-if="ticket.is_revoked"><br>(tilbaketrukket {{ticket.time_revoked|formatdate:'D. MMM YYYY HH:mm'}})</span>
+                                <span class="text-muted" ng-if="ticket.is_revoked"><br>(tilbaketrukket {{ticket.time_revoked|formatdate:'D. MMM YYYY HH:mm'}}<span ng-if="ticket.user_revoked"> av {{ticket.user_revoked}}</span>)</span>
                             </td>
                             <td>
                                 {{ticket.ticketgroup.title}}
@@ -226,6 +227,7 @@
                             </td>
                             <td ng-if="!payment.is_web">
                                 Oppgjør: <a ng-href="a/paymentgroup/{{payment.paymentgroup.id}}">{{payment.paymentgroup.title}}</a>
+                                <span class="text-muted" ng-if="payment.user_created"><br>Registrert av {{payment.user_created}}</span>
                             </td>
                         </tr>
                     </tbody>

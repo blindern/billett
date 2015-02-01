@@ -7,7 +7,7 @@ class Payment extends \Eloquent implements ApiQueryInterface {
     protected $table = 'payments';
     protected $hidden = array('data');
 
-    protected $apiAllowedFields = array('id', 'order_id', 'paymentgroup_id', 'time', 'is_web', 'amount', 'transaction_id', 'status', 'data');
+    protected $apiAllowedFields = array('id', 'order_id', 'paymentgroup_id', 'time', 'user_created', 'is_web', 'amount', 'transaction_id', 'status', 'data');
     protected $apiAllowedRelations = array('order', 'paymentgroup');
 
     public function order()

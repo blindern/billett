@@ -46,6 +46,7 @@ class PaymentController extends \Controller {
         $payment->order()->associate($order);
         $payment->paymentgroup()->associate($paymentgroup);
         $payment->time = time();
+        $payment->user_created = \Auth::user()->username;
         $payment->is_web = false;
         $payment->amount = (float) Input::get('amount');
         $payment->save();

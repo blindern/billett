@@ -94,7 +94,7 @@ class Ticket extends \Eloquent implements ApiQueryInterface {
     protected $appends = array('number');
     protected $hidden = array('pdf');
 
-    protected $apiAllowedFields = array('id', 'order_id', 'event_id', 'ticketgroup_id', 'time', 'expire', 'is_valid', 'is_revoked', 'used', 'key');
+    protected $apiAllowedFields = array('id', 'order_id', 'event_id', 'ticketgroup_id', 'time', 'expire', 'is_valid', 'is_revoked', 'user_valid', 'user_revoked', 'used', 'key');
     protected $apiAllowedRelations = array('event', 'order', 'ticketgroup', 'valid_paymentgroup', 'revoked_paymentgroup');
 
     public function event()
@@ -209,6 +209,7 @@ class Ticket extends \Eloquent implements ApiQueryInterface {
             $this->valid_paymentgroup()->associate($paymentgroup);
         }
 
+        $this->user_valid = \Auth::check() ? \Auth::user()->username : null;
         $this->save();
 
         $this->order->modifyBalance(-$this->ticketgroup->price - $this->ticketgroup->fee);
@@ -232,6 +233,7 @@ class Ticket extends \Eloquent implements ApiQueryInterface {
             $this->revoked_paymentgroup()->associate($paymentgroup);
         }
 
+        $this->user_revoked = \Auth::check() ? \Auth::user()->username : null;
         $this->save();
 
         $this->order->modifyBalance($this->ticketgroup->price + $this->ticketgroup->fee);

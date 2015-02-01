@@ -31,6 +31,11 @@ class Order extends \Eloquent implements ApiQueryInterface {
         $order->ip = $_SERVER['REMOTE_ADDR'];
         $order->browser = $_SERVER['HTTP_USER_AGENT'];
         $order->is_admin = $is_admin;
+
+        if ($is_admin) {
+            $order->user_created = \Auth::check() ? \Auth::user()->username : null;
+        }
+
         $order->save();
         $order->generateOrderTextId();
 
@@ -93,7 +98,7 @@ class Order extends \Eloquent implements ApiQueryInterface {
     protected $table = 'orders';
     //protected $appends = array('total_amount');
 
-    protected $apiAllowedFields = array('id', 'eventgroup_id', 'order_text_id', 'is_valid', 'is_admin', 'time', 'ip', 'browser', 'name', 'email', 'phone', 'recruiter', 'total_amount', 'comment', 'balance');
+    protected $apiAllowedFields = array('id', 'eventgroup_id', 'order_text_id', 'is_valid', 'is_admin', 'time', 'user_created', 'ip', 'browser', 'name', 'email', 'phone', 'recruiter', 'total_amount', 'comment', 'balance');
     protected $apiAllowedRelations = array('eventgroup', 'tickets', 'payments');
 
     public function eventgroup()
