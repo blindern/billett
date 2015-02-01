@@ -12,7 +12,7 @@ angular.module('billett.admin').factory('AdminPaymentgroup', function ($http, $m
     };
 
     r.getValid = function (eventgroup_id) {
-        return this.query({filter: 'eventgroup_id='+parseInt(eventgroup_id)+',time_end=0'});
+        return this.query({filter: 'eventgroup_id='+parseInt(eventgroup_id)+',time_end:NULL'});
     };
 
     r.setPreferredGroup = function (group) {

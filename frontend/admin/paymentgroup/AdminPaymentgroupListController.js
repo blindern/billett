@@ -6,7 +6,10 @@ angular.module('billett.admin').controller('AdminPaymentgroupListController', fu
         AdminEventgroup.get({id: $stateParams['eventgroup_id']}, function (ret) {
             ctrl.eventgroup = ret;
 
-            AdminPaymentgroup.query({filter: 'eventgroup_id='+ret.id}, function (groups) {
+            AdminPaymentgroup.query({
+                filter: 'eventgroup_id='+ret.id,
+                order: 'time_end:NOTNULL,-time_end,-time_start'
+            }, function (groups) {
                 loader();
 
                 ctrl.paymentgroups = groups;
