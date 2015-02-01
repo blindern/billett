@@ -1,18 +1,23 @@
 <div class="admin-paymentgroup-list">
-    <page-property name="title" value="Betalingsgrupper"></page-property>
+    <page-property name="title" value="Oppgjør"></page-property>
 
     <div class="page-header">
         <h1>
             <span class="eventgroup">
                 <a href="a/eventgroup/{{ctrl.eventgroup.id}}">{{ctrl.eventgroup.title}}</a>
             </span>
-            Betalingsgrupper
-            <a class="btn btn-default pull-right" ng-click="ctrl.new()">Ny</a>
+            Oppgjør
+            <a class="btn btn-default pull-right" ng-click="ctrl.new()">Nytt oppgjør</a>
         </h1>
     </div>
 
+    <p class="text-muted">Alle billetter og transaksjoner endret/opprettet i billettluke må tilegnes et oppgjør.
+        Når oppgjøret avsluttes registrerer man Z-rapport fra betalingsterminal, kontantopptelling m.v.
+        for å kontrollere at transaksjonene stemmer. Oppgjøret danner også grunnlaget for salgsinntekten
+        som føres i regnskapet.</p>
+
     <p ng-if="ctrl.paymentgroups.length == 0">
-        Ingen betalingsgrupper eksisterer for denne arrangementgruppen.
+        Ingen oppgjør eksisterer for denne arrangementgruppen.
     </p>
 
     <table class="table" ng-if="ctrl.paymentgroups.length > 0">

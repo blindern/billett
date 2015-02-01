@@ -10,14 +10,14 @@
 
             <span class="pull-right">
                 <a class="btn btn-success" ng-href="a/order/new/{{group.id}}">Ny ordre</a>
+                <a class="btn btn-default" ng-href="a/orders?eventgroup_id={{group.id}}">Ordreliste</a>
             </span>
         </h1>
     </div>
 
     <ul>
         <li><a ng-href="a/eventgroup/{{group.id}}/sold_tickets_stats">Billettstatistikk (salgsoversikt)</a></li>
-        <li><a ng-href="a/orders?eventgroup_id={{group.id}}">Ordreliste</a></li>
-        <li><a ng-href="a/eventgroup/{{group.id}}/paymentgroups">Betalingsgrupper/oppgjør</a></li>
+        <li><a ng-href="a/eventgroup/{{group.id}}/paymentgroups">Oppgjørsoversikt</a></li>
     </ul>
 
     <hr>
