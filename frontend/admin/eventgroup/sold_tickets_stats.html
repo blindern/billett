@@ -14,21 +14,21 @@
         <thead>
             <tr>
                 <th>Arrangement</th>
-                <th ng-repeat="day in ctrl.daysDetails">{{day.short}}</th>
                 <th>Sum</th>
+                <th ng-repeat="day in ctrl.daysDetails">{{day.short}}</th>
             </tr>
         </thead>
         <tfoot>
             <tr>
                 <th>Sum</th>
-                <td ng-repeat="accum in ctrl.daysAccum">
-                    {{accum.price+accum.fee|price}}<br>
-                    {{accum.count-accum.revoked}} stk
-                </td>
                 <th>
                     {{ctrl.topAccum.price+ctrl.topAccum.fee|price}}<br>
                     {{ctrl.topAccum.count-ctrl.topAccum.revoked}} / {{ctrl.max_normal_sales||ctrl.max_sales}}{{ctrl.max_normal_sales != ctrl.max_sales ? ' (' + ctrl.max_sales + ')' : ''}} stk
                 </th>
+                <td ng-repeat="day in ctrl.daysDetails">
+                    {{ctrl.daysAccum[day.day].price+ctrl.daysAccum[day.day].fee|price}}<br>
+                    {{ctrl.daysAccum[day.day].count-ctrl.daysAccum[day.day].revoked}} stk
+                </td>
             </tr>
         </tfoot>
         <tbody>
@@ -37,16 +37,17 @@
                     <a ng-href="a/event/{{::event.id}}">{{::event.title}}</a>
                     <span class="event-time">({{::event.time_start|formatdate:'ddd D. MMMM HH:mm'}})</span>
                 </td>
-                <td ng-repeat="accum in event.daysAccum">
-                    <span ng-if="accum.count > 0 || accum.revoked > 0">
-                        {{accum.price+accum.fee|price}}<br>
-                        {{accum.count-accum.revoked}} stk
-                    </span>
-                </td>
                 <th>
                     {{event.accum.price+event.accum.fee|price}}<br>
                     {{event.accum.count-event.accum.revoked}} / {{event.max_normal_sales||event.max_sales}}{{event.max_normal_sales ? ' (' + event.max_sales + ')' : ''}} stk
                 </th>
+
+                <td ng-repeat="day in ctrl.daysDetails">
+                    <span ng-if="event.daysAccum[day.day].count > 0 || event.daysAccum[day.day].revoked > 0">
+                        {{event.daysAccum[day.day].price+event.daysAccum[day.day].fee|price}}<br>
+                        {{event.daysAccum[day.day].count-event.daysAccum[day.day].revoked}} stk
+                    </span>
+                </td>
                 <!-- TODO: data for ticketgroups are in .ticketgroups -->
             </tr>
         </tbody>

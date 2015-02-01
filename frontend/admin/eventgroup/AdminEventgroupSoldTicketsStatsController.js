@@ -38,7 +38,7 @@ angular.module('billett.admin').controller('AdminEventgroupSoldTicketsStatsContr
                 self.daysAccum[cur.day] = new accum;
             }
             return prev;
-        }, []).sort();
+        }, []).sort().reverse();
 
         var lastDay;
         self.daysDetails = self.days.map(function (day) {
