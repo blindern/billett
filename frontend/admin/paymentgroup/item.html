@@ -44,7 +44,7 @@
     </form>
 
     <div ng-if="!ctrl.edit">
-        <div class="alert alert-warning"><b>NB!</b> Oppgjøret er ikke avsluttet!</div>
+        <div class="alert alert-warning" ng-if="!ctrl.paymentgroup.time_end"><b>NB!</b> Oppgjøret er ikke avsluttet!</div>
 
         <div class="row">
             <div class="col-xs-6">
