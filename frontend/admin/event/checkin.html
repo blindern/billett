@@ -59,6 +59,7 @@
                                 <abbr title="Billetter lagt ut for salg">{{ctrl.event.max_normal_sales}}</abbr> (<abbr title="Øvre billettbegrensning">{{ctrl.event.max_sales}}</abbr>)
                             </span>
                             <abbr ng-if="!ctrl.event.max_normal_sales" title="Billetter lagt ut for salg">{{ctrl.event.max_sales}}</abbr>
+                            <br>
                             ({{ctrl.event.ticket_count.totals.valid-ctrl.event.ticket_count.totals.used}} gjenstår)
                         </th>
                     </tr>
