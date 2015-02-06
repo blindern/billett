@@ -192,7 +192,7 @@ class TicketController extends \Controller {
      */
     public function checkin($id)
     {
-        $this->checkinout($id, true);
+        return $this->checkinout($id, true);
     }
 
     /**
@@ -200,7 +200,7 @@ class TicketController extends \Controller {
      */
     public function checkout($id)
     {
-        $this->checkinout($id, false);
+        return $this->checkinout($id, false);
     }
 
     /**
