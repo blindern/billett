@@ -12,6 +12,7 @@
                 <a ng-href="event/{{event.id}}" class="btn btn-success">Forhåndsvis</a>
                 <a ng-href="a/event/{{event.id}}/edit" class="btn btn-primary">Rediger</a>
                 <a href ng-show="!event.has_tickets" class="btn btn-danger" ng-click="deleteEvent()">Slett arrangement</a>
+                <a ng-href="a/event/{{event.id}}/checkin" ng-show="event.has_tickets" class="btn btn-default">Innsjekking</a>
                 <a ng-href="a/orders?tickets.event.id={{event.id}}" ng-show="event.has_tickets" class="btn btn-default">Vis ordre</a>
             </span>
         </h1>
@@ -178,6 +179,7 @@
                         {{event.max_normal_sales}}
                     </th>
                     <th>&nbsp;</th>
+                </tr>
             </tfoot>
         </table>
     </div>

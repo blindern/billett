@@ -245,31 +245,46 @@ class Event extends \Eloquent implements ApiQueryInterface {
     public function getCheckinAttribute()
     {
         $q = \DB::select('
-            SELECT orders.is_admin, tickets.used IS NOT NULL AS is_used, COUNT(tickets.id) AS count
+            SELECT orders.is_admin, tickets.used IS NOT NULL AS is_used, tickets.ticketgroup_id, COUNT(tickets.id) AS count
             FROM tickets JOIN orders ON tickets.order_id = orders.id
             WHERE tickets.event_id = ? AND tickets.is_revoked = 0
-            GROUP BY orders.is_admin, tickets.used IS NOT NULL', [$this->id]);
+            GROUP BY orders.is_admin, tickets.used IS NOT NULL, tickets.ticketgroup_id', [$this->id]);
 
         $res = [
             'valid' => [
                 'total' => 0,
                 'admin' => 0,
-                'other' => 0
+                'other' => 0,
+                'groups' => []
             ],
             'used' => [
                 'total' => 0,
                 'admin' => 0,
-                'other' => 0
+                'other' => 0,
+                'groups' => []
             ]
         ];
 
-        foreach ($q as $row) {
-            $res['valid']['total'] += $row->count;
-            $res['valid'][$row->is_admin ? 'admin' : 'other'] += $row->count;
+        $addStats = function(&$arr, $row) {
+            $arr['total'] += $row->count;
+            $arr[$row->is_admin ? 'admin' : 'other'] += $row->count;
 
+            if (!isset($arr['groups'][$row->ticketgroup_id])) {
+                $arr['groups'][$row->ticketgroup_id] = [
+                    'total' => 0,
+                    'admin' => 0,
+                    'other' => 0
+                ];
+            }
+
+            $arr['groups'][$row->ticketgroup_id]['total'] += $row->count;
+            $arr['groups'][$row->ticketgroup_id][$row->is_admin ? 'admin' : 'other'] += $row->count;
+        };
+
+        foreach ($q as $row) {
+            $addStats($res['valid'], $row);
             if ($row->is_used) {
-                $res['used']['total'] += $row->count;
-                $res['used'][$row->is_admin ? 'admin' : 'other'] += $row->count;
+                $addStats($res['used'], $row);
             }
         }
 
