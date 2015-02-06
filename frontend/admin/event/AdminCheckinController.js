@@ -21,12 +21,14 @@
         ctrl.checkin = function (ticket_id) {
             return $http.post('api/ticket/' + ticket_id + '/checkin').then(function () {
                 runSearch();
+                $('#keyfield').select();
             });
         };
 
         ctrl.checkout = function (ticket_id) {
             return $http.post('api/ticket/' + ticket_id + '/checkout').then(function () {
                 runSearch();
+                $('#keyfield').select();
             });
         };
 
