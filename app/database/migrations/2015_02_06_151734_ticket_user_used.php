@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UserTracking extends Migration {
+class TicketUserUsed extends Migration {
 
     /**
      * Run the migrations.
