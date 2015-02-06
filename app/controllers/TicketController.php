@@ -186,4 +186,44 @@ class TicketController extends \Controller {
 
         return $tickets;
     }
+
+    /**
+     * Checkin ticket (set as used)
+     */
+    public function checkin($id)
+    {
+        $this->checkinout($id, true);
+    }
+
+    /**
+     * Checkout ticket (remove used status)
+     */
+    public function checkout($id)
+    {
+        $this->checkinout($id, false);
+    }
+
+    /**
+     * Checkin/checkout ticket
+     */
+    private function checkinout($id, $is_checkin)
+    {
+        $ticket = Ticket::findOrFail($id);
+
+        if ($ticket->is_revoked) {
+            throw new \Exception("Ticket is revoked.");
+        }
+
+        if ($is_checkin && $ticket->used) {
+            throw new \Exception("Ticket is already marked as used.");
+        } elseif (!$is_checkin && !$ticket->used) {
+            throw new \Exception("Ticket is not marked as used.");
+        }
+
+        $ticket->used = $is_checkin ? time() : null;
+        $ticket->user_used = $is_checkin ? \Auth::user()->username : null;
+        $ticket->save();
+
+        return $ticket;
+    }
 }
