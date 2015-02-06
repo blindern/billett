@@ -240,6 +240,43 @@ class Event extends \Eloquent implements ApiQueryInterface {
     }
 
     /**
+     * Get checkin status information
+     */
+    public function getCheckinAttribute()
+    {
+        $q = \DB::select('
+            SELECT orders.is_admin, tickets.used IS NOT NULL AS is_used, COUNT(tickets.id) AS count
+            FROM tickets JOIN orders ON tickets.order_id = orders.id
+            WHERE tickets.event_id = ? AND tickets.is_revoked = 0
+            GROUP BY orders.is_admin, tickets.used IS NOT NULL', [$this->id]);
+
+        $res = [
+            'valid' => [
+                'total' => 0,
+                'admin' => 0,
+                'other' => 0
+            ],
+            'used' => [
+                'total' => 0,
+                'admin' => 0,
+                'other' => 0
+            ]
+        ];
+
+        foreach ($q as $row) {
+            $res['valid']['total'] += $row->count;
+            $res['valid'][$row->is_admin ? 'admin' : 'other'] += $row->count;
+
+            if ($row->is_used) {
+                $res['used']['total'] += $row->count;
+                $res['used'][$row->is_admin ? 'admin' : 'other'] += $row->count;
+            }
+        }
+
+        return $res;
+    }
+
+    /**
      * Get fields we can search in
      */
     public function getApiAllowedFields() {
