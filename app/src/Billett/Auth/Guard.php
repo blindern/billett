@@ -15,6 +15,7 @@ class Guard extends \Illuminate\Auth\Guard {
         'annaro',
         'haakonpt',
         'patjohan',
+        'stianval',
 
         // UKEstyret
         'andvin',
