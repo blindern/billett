@@ -86,7 +86,7 @@
                 <tbody>
                     <tr ng-repeat="ticket in ctrl.lastUsedTickets">
                         <td>
-                            <a ng-href="a/order/{{::order.id}}">{{::ticket.order.order_text_id}}</a><br>
+                            <a ng-href="a/order/{{::ticket.order.id}}">{{::ticket.order.order_text_id}}</a><br>
                             {{::ticket.order.time|formatdate:'dd. DD.MM.YYYY HH:mm'}}
 
                             <span class="order-detail" ng-if="::ticket.order.name">{{::ticket.order.name}}</span>
