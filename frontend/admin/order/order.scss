@@ -4,7 +4,8 @@
   }
 }
 
-.order-list-table {
+.order-list-table,
+.ticket-list-table {
   tr.invalid {
     opacity: 0.6;
     color: red;
@@ -48,6 +49,14 @@
       text-decoration: line-through;
       &:after {
         content: ' (tilbaketrukket)';
+      }
+    }
+
+    li.keyresult {
+      > :first-child {
+        background: hsla(118, 81%, 68%, 0.8);
+        padding: 7px 2px;
+        margin: -7px -2px;
       }
     }
   }
@@ -94,5 +103,11 @@
     tr > :nth-child(2) {
       text-align: right;
     }
+  }
+}
+
+.admin-event-checkin {
+  .isLoading {
+    opacity: 0.4;
   }
 }
