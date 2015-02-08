@@ -13,7 +13,9 @@ class TicketController extends \Controller {
     public function index()
     {
         return \ApiQuery::processCollection(Ticket::whereHas('order', function ($query) {
-            $query->where('is_valid', true)->orWhere('is_admin', true);
+            $query->where(function ($q) {
+                $q->where('is_valid', true)->orWhere('is_admin', true);
+            });
         }));
     }
 
