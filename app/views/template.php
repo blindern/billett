@@ -74,7 +74,7 @@ $rev = json_decode($rev_manifest, true);
                 </a>
             </h3>
             <ul class="nav nav-pills navbar-right">
-                <li ng-class="{ active: isActive('/', '/eventgroup/', '/event/') }"><a href="eventgroup/1"><span class="glyphicon glyphicon-list"></span> Arrangementer</a></li>
+                <li ng-class="{ active: isActive('/', '/eventgroup/', '/event/') }"><a href="eventgroup/2"><span class="glyphicon glyphicon-list"></span> Arrangementer</a></li>
                 <li ng-class="{ active: isActive('/salgsbetingelser') }"><a href="salgsbetingelser"><span class="glyphicon glyphicon-flash"></span> Salgsbetingelser</a></li>
                 <li ng-class="{ active: isActive('/hjelp') }"><a href="hjelp"><span class="glyphicon glyphicon-question-sign"></span> Hjelp</a></li>
             </ul>
