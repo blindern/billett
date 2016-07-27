@@ -29,7 +29,7 @@
             '2015-02-14': 'Komikveld',
             '2016-08-22': 'Pub-til-pub',
             '2016-08-23': 'Improteater',
-            '2016-08-24': 'Pub-til-pub'
+            '2016-08-24': 'Internaften'
         };
 
         var filter = {
