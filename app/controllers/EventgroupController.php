@@ -18,6 +18,59 @@ class EventgroupController extends Controller {
         }))->findOrFail($id);
     }
 
+
+    /**
+     * Create new eventgroup
+     */
+    public function store()
+    {
+        $eventgroup = $this->validateInputAndUpdate(new Eventgroup, true);
+        if (!($eventgroup instanceof Eventgroup)) return $eventgroup;
+        $eventgroup->save();
+        return $eventgroup;
+    }
+
+    /**
+     * Validate input data for new and update methods and update eventgroup (but not save)
+     */
+    private function validateInputAndUpdate(Eventgroup $eventgroup, $is_new)
+    {
+        $fields = array(
+            'title' => ''
+        );
+
+        if ($is_new) {
+            $fields['title'] = 'required';
+        }
+
+        $validator = \Validator::make(Input::all(), $fields);
+        if ($validator->fails()) {
+            return \Response::json('data validation failed', 400);
+        }
+
+        $list = array(
+            'title'
+        );
+
+        foreach ($list as $field) {
+            if (Input::exists($field) && Input::get($field) != $eventgroup->{$field}) {
+                $val = Input::get($field);
+                if ($val === '') $val = null;
+                $eventgroup->{$field} = $val;
+            }
+        }
+
+        if (Input::exists('is_active')) {
+            $eventgroup->is_active = (bool) Input::get('is_active');
+        }
+
+	$eventgroup->sort_value = date('Y-m-').explode(" ", $eventgroup->title)[0];
+
+        return $eventgroup;
+
+    }
+
+
     /**
      * Special list for blindernuka.no
      */

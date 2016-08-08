@@ -4,7 +4,7 @@ Route::when('*', 'csrf', ['delete', 'patch', 'post', 'put']);
 
 // eventgroup
 Route::resource('/api/eventgroup', 'EventgroupController', array(
-    'only' => array('index', 'show')
+    'only' => array('index', 'show', 'store')
 ));
 Route::get('/api/eventgroup/{id}/simple', 'EventgroupController@simpleList');
 Route::get('/api/eventgroup/{id}/sold_tickets_stats', 'EventgroupController@soldTicketsStats');
