@@ -8,7 +8,7 @@ angular.module('billett.admin').config(function ($stateProvider) {
             resolve: {auth: 'AuthRequireResolver'}
         })
         .state('admin-eventgroup-edit', {
-            url: '/a/eventgroup/:eventgroup_id/edit',
+            url: '/a/eventgroup/:id/edit',
             templateUrl: 'assets/views/admin/eventgroup/edit.html',
             controller: 'AdminEventgroupEditNewController',
             resolve: {auth: 'AuthRequireResolver'}

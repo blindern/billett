@@ -7,6 +7,8 @@
     module.controller('AdminEventgroupEditNewController', function (Page, AdminEventgroup, $stateParams, $rootScope, $scope, $location, $window, $timeout) {
         var is_new = $scope.is_new = !('id' in $stateParams);
 
+	console.log('is_new: ' + is_new);
+
         var loader = Page.setLoading();
 
         if (is_new) {
@@ -15,7 +17,22 @@
         }
         else {
             Page.setTitle('Rediger arrangementgruppe');
-			loader();
+	    //loader();
+
+            AdminEventgroup.get({id: $stateParams['id']}, function (ret) {
+                loader();
+                
+		console.log($scope);
+
+                $scope.eventgroup = ret;
+
+		console.log($scope);
+
+            }, function () {
+                loader();
+                Page.set404();
+            });
+
         }
 
         $scope.storeEventgroup = function () {
@@ -34,7 +51,7 @@
                     alert(err.data);
                 });
             } else {
-                $scope.group.$update(function (res) {
+                $scope.eventgroup.$update(function (res) {
                     // go to previous page or redirect to eventgroup admin page
                     var timer = $timeout(function () {
                         $location.path('/a/eventgroup/' + res.id);

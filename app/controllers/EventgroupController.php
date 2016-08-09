@@ -31,6 +31,17 @@ class EventgroupController extends Controller {
     }
 
     /**
+     * Update event
+     */
+    public function update($id)
+    {
+        $eventgroup = $this->validateInputAndUpdate(Eventgroup::findOrFail($id), false);
+        if (!($eventgroup instanceof Eventgroup)) return $eventgroup;
+        $eventgroup->save();
+        return $eventgroup;
+    }
+
+    /**
      * Validate input data for new and update methods and update eventgroup (but not save)
      */
     private function validateInputAndUpdate(Eventgroup $eventgroup, $is_new)
