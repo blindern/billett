@@ -26,7 +26,10 @@
             '2015-02-11': 'Koraften',
             '2015-02-12': 'Erotisk Aften',
             '2015-02-13': 'Teknisk-Matematisk Aften',
-            '2015-02-14': 'Komikveld'
+            '2015-02-14': 'Komikveld',
+            '2016-08-22': 'Pub-til-pub',
+            '2016-08-23': 'Improteater',
+            '2016-08-24': 'Internaften'
         };
 
         var filter = {
