@@ -1,0 +1,28 @@
+<div>
+    <div class="modal-header">
+        <h3 class="modal-title">Tilordne oppgjør</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal" ng-submit="ctrl.complete()">
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Beløp</label>
+                <div class="col-sm-7 form-control-static">
+                    {{ctrl.amount|price}}
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="paymentgroup" class="col-sm-4 control-label">Oppgjørsgruppe</label>
+                <div class="col-sm-7">
+                    <paymentgroup-select eventgroup-id="ctrl.order.eventgroup.id" paymentgroup="ctrl.paymentgroup" id="paymentgroup"></paymentgroup-select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-7 col-sm-offset-4">
+                    <button class="btn btn-success" type="submit" ng-disabled="!ctrl.paymentgroup">{{ctrl.actionText}}</button>
+                    <button class="btn btn-default" type="button" ng-click="ctrl.cancel()">Avbryt</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

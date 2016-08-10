@@ -1,0 +1,20 @@
+<page-property name="title" value="Administrasjon"></page-property>
+
+<div class="page-header">
+    <h1>Administrasjon</h1>
+</div>
+
+<h2>Verktøy</h2>
+<ul>
+    <li><a href ng-click="printText()">Skriv ut tekst på billettskriver</a></li>
+</ul>
+
+<h2>
+    Arrangementgrupper
+    <a href="a/eventgroup/new" class="btn btn-default pull-right">Ny gruppe</a>
+</h2>
+<ul>
+    <li ng-repeat="group in eventgroups">
+        <a ng-href="a/eventgroup/{{group.id}}">{{group.title}}</a>
+    </li>
+</ul>

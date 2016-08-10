@@ -1,0 +1,14 @@
+<div>
+    <div ng-if="!paymentgroups" class="form-control-static">
+        Laster oppgjørsgrupper ...
+    </div>
+    <div ng-if="paymentgroups">
+        <select class="form-control" id="{{id}}" ng-options="(g.time_start|formatdate:'DD.MM.YYYY HH:mm ') + '(' + g.user_created + '): ' + g.title for g in paymentgroups" ng-model="t.paymentgroup" ng-change="update()">
+            <!-- TODO: autofocus required -->
+            <option value="" ng-if="!paymentgroup">Velg ...</option>
+        </select>
+        <span class="help-block">
+            <a href ng-click="new()">Opprett ny</a>
+        </span>
+    </div>
+</div>

@@ -1,0 +1,233 @@
+<page-property name="title" value="{{event.title}} ({{event.time_start|formatdate:'D. MMM \\k\\l HH:mm'}})"></page-property>
+<page-property name="image" value="{{absBaseUrl}}event/{{event.id}}/image"></page-property>
+<page-property name="description" value="{{event.description_short||event.description}}"></page-property>
+
+<div class="event-page">
+
+    <div class="page-header">
+        <h1>
+            <span class="eventgroup">
+                <a href="eventgroup/{{event.eventgroup.id}}">{{event.eventgroup.title}}</a>
+            </span>
+            {{event.title}}
+            <span class="eventdate-header">({{event.time_start|formatdate:'DD.MM'}})</span>
+            <span ng-if="AuthService.hasRole('billett.admin')" class="pull-right">
+                <a ng-href="a/event/{{event.id}}" class="btn btn-primary">Admin</a>
+                <a ng-href="a/event/{{event.id}}/edit" class="btn btn-primary">Rediger</a>
+            </span>
+        </h1>
+        <p ng-if="!event.is_published">Dette arrangementet er ikke publisert. Du er innlogget og kan se.</p>
+    </div>
+
+    <!-- TODO: ics-link -->
+
+    <div class="row">
+        <div class="col-sm-5" ng-class="{'no-buy-form': ctrl.event_status == 'no_tickets'}">
+
+            <div class="event-image">
+                <img ng-src="event/{{event.id}}/image" alt="">
+            </div>
+            <dl class="dl-horizontal">
+                <dt>Tidspunkt</dt>
+                <dd>{{event.time_start|formatdate:'dddd D. MMMM YYYY'}}<br>
+                    kl. {{event.time_start|formatdate:'HH:mm'}}
+                    <span ng-if="event.time_end">til {{event.time_end|formatdate:'HH:mm'}}</span>
+                </dd>
+                <dt ng-if="event.category">Kategori</dt>
+                <dd ng-if="event.category">{{event.category}}</dd>
+                <dt ng-if="event.location">Sted</dt>
+                <dd ng-if="event.location">{{event.location}}</dd>
+                <dt ng-if="event.age_restriction">Aldersgrense</dt>
+                <dd ng-if="event.age_restriction">{{event.age_restriction}} år</dd>
+            </dl>
+
+            <div ng-if="event.description" marked="event.description" class="event-description"></div>
+
+            <p ng-if="event.link" class="event-link">
+                <a ng-href="{{event.link}}">Gå til arrangementsartikkel &raquo;</a>
+            </p>
+        </div>
+
+        <div class="col-sm-7 event-right-col">
+
+            <div ng-if="!reservation || ctrl.event_status == 'sale'">
+                <div ng-if="ctrl.event_status == 'selling_text'" class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="selling-text" marked="event.selling_text"></div>
+                    </div>
+                </div>
+
+                <div ng-if="ctrl.event_status == 'unknown'" class="panel panel-default">
+                    <div class="panel-body">
+                        <div>Informasjon om billetter for dette arrangementet er for øyeblikket ikke tilgjengelig. Sjekk tilbake senere.</div>
+                    </div>
+                </div>
+
+                <div ng-if="ctrl.event_status == 'old'" class="panel panel-default">
+                    <div class="panel-body">
+                        Billettsalg for arrangementet er avsluttet.
+                    </div>
+                </div>
+
+                <div ng-if="ctrl.event_status == 'no_web_tickets'" class="panel panel-default">
+                    <div class="panel-body">
+                        Dette arrangementet selges ikke på nett eller har foreløpig ingen tilgjengelige billetter.
+                    </div>
+                </div>
+
+                <div ng-if="ctrl.event_status == 'timeout'" class="panel panel-default">
+                    <div class="panel-body">
+                        Nettsalget for dette arrangementet har avsluttet. Evt. tilgjengelige billetter selges i døra.
+                    </div>
+                </div>
+
+                <div ng-if="ctrl.event_status == 'sold_out'" class="panel panel-default">
+                    <div class="panel-body">
+                        Arrangementet er dessverre utsolgt. Sjekk tilbake senere for se å om det kanskje blir gjort nye billetter tilgjengelig.
+                    </div>
+                </div>
+            </div>
+
+            <div ng-if="(!reservation && ctrl.event_status == 'sale') || (reservation && !checkout && ctrl.event_status != 'no_tickets')">
+                <div class="panel panel-warning" ng-if="reservation && reservation.tickets[0].event.id != event.id">
+                    <div class="panel-heading">Kjøp billetter</div>
+                    <div class="panel-body">
+                        Du holder allerede på å bestille billetter til <a ng-href="event/{{reservation.tickets[0].event.alias||reservation.tickets[0].event.id}}">{{reservation.tickets[0].event.title}}</a> og må fullføre/avbryte den bestillingen først.
+                    </div>
+                </div>
+
+                <div class="panel panel-info buy-form" ng-if="(!reservation || reservation.tickets[0].event.id == event.id) && loadingReservation">
+                    <div class="panel-heading">Kjøp billetter</div>
+                    <div class="panel-body">
+                        Ser etter eksisterende ordrereservasjon ...
+                    </div>
+                </div>
+
+                <div class="panel panel-info buy-form" ng-if="(!reservation || reservation.tickets[0].event.id == event.id) && !loadingReservation">
+                    <div class="panel-heading">Kjøp billetter</div>
+                    <div class="panel-body">
+                        <form class="form-horizontal" ng-submit="!form.$valid || placeOrder(ctrl.forcePay)" name="form">
+                            <div ng-if="!reservation">
+                                <p>Ved kjøp av billetter får du tilsendt en elektronisk billett i PDF-format på
+                                    e-post som printes ut eller tas med på mobiltelefon til arrangementet.
+                                    <a href="hjelp">Informasjon om billetter</a></p>
+
+                                <div class="ticketgroup" ng-repeat="ticketgroup in event.ticketgroups">
+                                    <div class="meta">
+                                        <div class="title">{{ticketgroup.title}}</div><!-- white space fix for inline-block
+                                     --><div class="price">
+                                            <span class="price-label">Pris:</span>
+                                            {{ticketgroup.price+ticketgroup.fee|price:true}}
+                                            <span class="price-fee">Hvorav {{ticketgroup.fee|price:true}} i gebyr</span>
+                                        </div>
+                                        <div ng-if="ticketgroup.ticket_text" class="ticket-text">
+                                            {{ticketgroup.ticket_text}}
+                                        </div>
+                                    </div><!-- white space fix for inline-block
+                                 --><div class="count">
+                                        <span class="value" ng-init="ticketgroup.order_count=0">
+                                            {{ticketgroup.order_count}}
+                                        </span>
+                                        <button type="button" ng-click="changeTicketgroupNum(ticketgroup, 1)"
+                                                class="btn btn-primary btn-sm"
+                                                ng-disabled="event.max_each_person<=0">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                        <button type="button" ng-click="changeTicketgroupNum(ticketgroup, -1)"
+                                                class="btn btn-primary btn-sm"
+                                                ng-disabled="ticketgroup.order_count<=0">
+                                            <span class="glyphicon glyphicon-minus"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div ng-if="reservation">
+                                <p>Du har nå reservert billetter. For å ikke risikere og miste reservasjonen må du fullføre eller oppdatere skjemaet innen 10 minutter.</p>
+
+                                <div class="form-group">
+                                    <label class="text-right col-sm-4">Reserverte billetter</label>
+                                    <div class="col-sm-8">
+                                        <div ng-repeat="ticket in reservation.tickets">
+                                            {{ticket.ticketgroup.title}} #{{ticket.id}}
+                                            <span class="reservation-ticket-price">{{ticket.ticketgroup.price+ticket.ticketgroup.fee|price:true}} (hvorav {{ticket.ticketgroup.fee|price:true}} i gebyr)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="reservation-details" ng-if="reservation || newres.count > 0">
+                                <hr>
+                                <div class="form-group">
+                                    <label class="text-right col-sm-4">Totalt å betale</label>
+                                    <div class="col-sm-8">
+                                        <b>{{(reservation.total_amount||newres.total_amount)|price:true}}</b>
+                                    </div>
+                                </div>
+                                <div class="form-group" form-input-check="form,username">
+                                    <label class="control-label col-sm-4">Fullt navn</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" name="username" ng-model="contact.name" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="form-group" form-input-check="form,email">
+                                    <label class="control-label col-sm-4">E-post</label>
+                                    <div class="col-sm-8">
+                                        <input type="email" name="email" ng-model="contact.email" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="form-group" form-input-check="form,phone">
+                                    <label class="control-label col-sm-4">Telefonnummer</label>
+                                    <div class="col-sm-8">
+                                        <input type="tel" name="phone" ng-model="contact.phone" class="form-control" ng-pattern="/^\+?\d+$/" required>
+                                    </div>
+                                </div>
+                                <div class="form-group" form-input-check="form,recruiter">
+                                    <label class="control-label col-sm-4">Evt. vervet av</label>
+                                    <div class="col-sm-8">
+                                        <input type="tel" name="recruiter" ng-model="contact.recruiter" class="form-control" placeholder="(valgfritt)">
+                                        <span class="help-block">Navn på beboer ved Blindern Studenterhjem</span>
+                                    </div>
+                                </div>
+                                <!-- TODO: i gammel løsning hadde vi støtte for "nyhetsbrev"-"påmelding" -->
+                                <div class="form-group" form-input-check="form,terms">
+                                    <div class="col-sm-offset-4 col-sm-8">
+                                        <label>
+                                            <input type="checkbox" name="terms" ng-model="contact.accept_terms" required>
+                                            Jeg godtar <a href="salgsbetingelser" target="_blank">salgsbetingelsene</a>
+                                        </label>
+                                    </div>
+                                </div>
+                                <p class="text-center">
+                                    <input type="submit" value="Gå til betaling" ng-click="ctrl.forcePay=false" class="btn btn-primary">
+                                    <input type="submit" value="Overstyr betaling" ng-click="ctrl.forcePay=true" class="btn btn-default" ng-if="isDibsTest">
+                                    <input class="btn btn-danger" type="button" value="Avbryt" ng-click="abortOrder()" ng-if="reservation">
+                                </p>
+                                <hr>
+                            </div>
+                        </form>
+                        <div class="text-center text-muted">Billettprisene inkluderer evt. mva og billettgebyr.</div>
+                    </div>
+                </div>
+                <p class="text-center">
+                    <a href="http://www.dibs.no/">
+                        <img src="https://cdn.dibspayment.com/logo/checkout/combo/horiz/DIBS_checkout_kombo_horizontal_02.png" alt="DIBS - Payments made easy" width="300"/>
+                    </a>
+                </p>
+            </div>
+
+            <div ng-if="checkout">
+                <div class="panel panel-info">
+                    <div class="panel-body">
+                        <form action="{{checkout_url}}" method="post" id="checkoutForm">
+                            <input type="hidden" name="{{key}}" ng-value="value" ng-repeat="(key, value) in checkout.fields">
+                            <p>Du blir nå automatisk videresendt til betalingsskjemaet. Hvis du ikke blir videresendt innen 5 sekunder trykk på knappen nedenfor.</p>
+                            <input type="submit" value="Gå til betalingsskjema">
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
