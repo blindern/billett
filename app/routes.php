@@ -2,6 +2,11 @@
 
 Route::when('*', 'csrf', ['delete', 'patch', 'post', 'put']);
 
+// daytheme
+Route::resource('/api/daytheme', 'DaythemeController', array(
+    'only' => array('index', 'show', 'store', 'update')
+));
+
 // eventgroup
 Route::resource('/api/eventgroup', 'EventgroupController', array(
     'only' => array('index', 'show', 'store', 'update')

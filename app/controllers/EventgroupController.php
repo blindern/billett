@@ -11,13 +11,15 @@ class EventgroupController extends Controller {
 
     public function show($id) {
         $class = ModelHelper::getModelPath('Eventgroup');
-        return $class::with(array('events' => function($q) {
-            $q->orderBy('time_start');
-
-            if (!\Auth::hasRole('billett.admin') || !\Input::has('admin')) $q->where('is_published', true);
+        return $class::with(array(
+			'events' => function($q) {
+				$q->orderBy('time_start');
+				if (!\Auth::hasRole('billett.admin') || !\Input::has('admin')) $q->where('is_published', true);
+			},
+			'daythemes' => function($q) {
+				$q->orderBy('date');
         }))->findOrFail($id);
     }
-
 
     /**
      * Create new eventgroup
