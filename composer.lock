@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "da12cc9a8f2da7be2bb1622fd045dbbc",
-    "content-hash": "79dbc2f8d403c13575c93a84f701dc56",
+    "hash": "c6e27aabe26466469c67024fe7c83a47",
+    "content-hash": "6416330934ec4bf28b0c80a9c165b83b",
     "packages": [
         {
             "name": "barryvdh/laravel-ide-helper",
@@ -1153,17 +1153,17 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/henrist/laravel-saml.git",
-                "reference": "9ecc21f7234c8a09916d817ab0c629dea28dc2f3"
+                "url": "https://github.com/KnightSwarm/laravel-saml.git",
+                "reference": "712d02f6edae914db7b48438361444b2daf66930"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/henrist/laravel-saml/zipball/9ecc21f7234c8a09916d817ab0c629dea28dc2f3",
-                "reference": "9ecc21f7234c8a09916d817ab0c629dea28dc2f3",
+                "url": "https://api.github.com/repos/KnightSwarm/laravel-saml/zipball/712d02f6edae914db7b48438361444b2daf66930",
+                "reference": "712d02f6edae914db7b48438361444b2daf66930",
                 "shasum": ""
             },
             "require": {
-                "illuminate/support": "~4.1",
+                "illuminate/support": ">=4.1",
                 "php": ">=5.3.0"
             },
             "type": "library",
@@ -1175,6 +1175,7 @@
                     "KnightSwarm\\LaravelSaml": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1184,29 +1185,26 @@
                     "email": "code@knightswarm.com"
                 },
                 {
-                    "name": "Tom Mount",
-                    "email": "tmountjr@ebay.com"
-                },
-                {
                     "name": "Phil Preston",
                     "email": "phpreston@ebay.com"
                 },
                 {
                     "name": "Jeremy French",
                     "email": "jeremy@jeremyfrench.co.uk"
+                },
+                {
+                    "name": "Tom Mount",
+                    "email": "tmountjr@gmail.com"
                 }
             ],
-            "description": "saml auth provider for laravel 4.*",
+            "description": "saml auth provider for laravel 5.*",
             "keywords": [
+                "SSO",
                 "laravel",
                 "laravel-saml",
-                "saml",
-                "sso"
+                "saml"
             ],
-            "support": {
-                "source": "https://github.com/henrist/laravel-saml/tree/master"
-            },
-            "time": "2015-01-03 03:35:01"
+            "time": "2016-04-06 20:25:39"
         },
         {
             "name": "laravel/framework",
