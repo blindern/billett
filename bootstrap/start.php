@@ -24,12 +24,9 @@ $app = new Illuminate\Foundation\Application;
 |
 */
 
-$env = $app->detectEnvironment(array(
-
-	'local' => array('athene.foreningenbs.no'),
-    'hsw' => array('serask.hsw.no')
-
-));
+$env = $app->detectEnvironment(function() {
+    return empty(getenv('LARAVEL_ENV')) ? 'local' : getenv('LARAVEL_ENV');
+});
 
 /*
 |--------------------------------------------------------------------------

@@ -10,6 +10,7 @@ services:
     environment:
       SIMPLESAMLPHP_ADMINPASS: billett
       SIMPLESAMLPHP_SECRETSALT: replace-this-in-other-envs
+      LARAVEL_ENV: local
   nginx:
     image: nginx:stable-alpine
     ports:
