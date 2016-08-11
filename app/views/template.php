@@ -5,12 +5,6 @@ if (!isset($response_data)) $response_data = null;
 
 $is_dev = (bool)\Config::get('app.dev');
 
-$rev_manifest = @file_get_contents(public_path() . '/assets/rev-manifest.json');
-if ($rev_manifest === false) {
-    throw new \Exception("Missing revision manifest.");
-}
-$rev = json_decode($rev_manifest, true);
-
 ?>
 <!doctype html>
 <html lang="nb" prefix="og: http://ogp.me/ns#" ng-app="billett" ng-controller="PageController">
@@ -37,12 +31,12 @@ $rev = json_decode($rev_manifest, true);
 
     <title ng-bind="meta.title">UKA på Blindern</title>
 
-    <link href="assets/<?=$rev['frontend.css'];?>" rel="stylesheet">
-    <script src="assets/<?=$rev['library.js'];?>"></script>
-    <script src="assets/<?=$rev['frontend.js'];?>"></script>
-    <script src="assets/<?=$rev['templates.js'];?>"></script>
+    <link href="assets/frontend.css" rel="stylesheet">
+    <script src="assets/library.js"></script>
+    <script src="assets/frontend.js"></script>
+    <script src="assets/templates.js"></script>
     <?php if ($user): ?>
-    <script src="assets/<?=$rev['templates-admin.js'];?>"></script>
+    <script src="assets/templates-admin.js"></script>
     <?php endif; ?>
 
     <script type="text/javascript">
