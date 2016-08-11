@@ -1,0 +1,30 @@
+version: '2'
+
+services:
+  fpm:
+    build: .
+    image: blindernuka/billett-backend
+    volumes:
+     - ./:/var/www/html/
+     - ./.data/vendor/:/var/www/html/vendor/
+    environment:
+      SIMPLESAMLPHP_ADMINPASS: billett
+      SIMPLESAMLPHP_SECRETSALT: replace-this-in-other-envs
+  nginx:
+    image: nginx:stable-alpine
+    ports:
+     - "8081:80"
+    volumes:
+     - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+     - ./public/:/var/www/html/
+    volumes_from:
+     - fpm:ro
+  database:
+    image: mysql:5.6
+    volumes:
+      - ./.data/db/:/var/lib/mysql/
+    environment:
+      MYSQL_ROOT_PASSWORD: uka
+      MYSQL_DATABASE: uka_billett
+      MYSQL_USER: uka_billett
+      MYSQL_PASSWORD: uka_billett

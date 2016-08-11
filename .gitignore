@@ -3,6 +3,7 @@
 composer.phar
 .DS_Store
 Thumbs.db
+.data
 
 # Dependencies from package manager
 /bower_components/
