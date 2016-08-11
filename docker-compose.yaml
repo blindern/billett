@@ -11,6 +11,8 @@ services:
       SIMPLESAMLPHP_ADMINPASS: billett
       SIMPLESAMLPHP_SECRETSALT: replace-this-in-other-envs
       LARAVEL_ENV: local
+      BILLETT_KEY: KeNd439jeX9n9hqudOxXqCQErFmbApoi
+      BILLETT_MYSQL_PASS: uka_billett
   nginx:
     image: nginx:stable-alpine
     ports:
