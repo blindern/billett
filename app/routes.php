@@ -85,12 +85,7 @@ Route::post('/api/printer/{printername}/text', 'PrinterController@printText');
 });*/
 
 // catch-all route
-// TODO: this should probably be changed due to search engines not getting 404
-Route::get('/api/{slug?}', function()
+Route::get('{slug?}', function()
 {
     return Response::json('not found', 404);
 });
-Route::get('{slug?}', function()
-{
-    return View::make('template');
-})->where('slug', '.+');
