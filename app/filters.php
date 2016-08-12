@@ -97,7 +97,7 @@ Route::filter('guest', function()
 Route::filter('csrf', function($route, $request)
 {
     // POST for DIBS form don't require csrf
-    if (substr($request->path(), 0, 5) == 'dibs/') return;
+    if (substr($request->path(), 0, 9) == 'api/dibs/') return;
 
     // POST for ticekt printer don't require csrf
     if (substr($request->path(), 0, 20) == 'api/printer/announce') return;

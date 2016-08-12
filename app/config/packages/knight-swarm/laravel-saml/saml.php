@@ -29,6 +29,14 @@ return array(
     'logout_target' => url(),
 
     /*
+     * The route slugs to use for the login and logout controller methods
+     */
+    'routes' => [
+        'login' => 'api/login',
+        'logout' => 'api/logout'
+    ],
+
+    /*
      * Internal id property, defaults to email.
      * The property to identify users by in the system.
      * 'internal_id_property' => 'email',

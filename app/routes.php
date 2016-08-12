@@ -28,6 +28,8 @@ Route::resource('/api/order', 'OrderController', array(
 Route::post('/api/event/{id}/createreservation', 'EventController@createReservation');
 Route::post('/api/event/{id}/ticketgroups_order', 'EventController@ticketgroupsSetOrder');
 Route::get('/api/event/get_upcoming', 'EventController@getUpcoming');
+Route::get('/api/event/{id}/image', 'EventController@image');
+Route::post('/api/event/{id}/image', 'EventController@uploadImage');
 Route::resource('/api/event', 'EventController', array(
     'only' => array('show', 'store', 'update', 'destroy')
 ));
@@ -37,10 +39,6 @@ Route::post('/api/ticketgroup/{id}/previewticket/print/{printername}', 'Ticketgr
 Route::resource('/api/ticketgroup', 'TicketgroupController', array(
     'only' => array('index', 'show', 'store', 'update', 'destroy')
 ));
-
-
-Route::get('/event/{id}/image', 'EventController@image');
-Route::post('/event/{id}/image', 'EventController@uploadImage');
 
 // tickets
 Route::get('/api/ticket/pdf', 'TicketController@mergedPdf');
@@ -59,9 +57,9 @@ Route::resource('/api/payment', 'PaymentController', array(
 ));
 
 // payment (callback)
-Route::post('/dibs/cancel', 'DibsController@cancel');
-Route::post('/dibs/callback', 'DibsController@callback');
-Route::post('/dibs/accept', 'DibsController@accept');
+Route::post('/api/dibs/cancel', 'DibsController@cancel');
+Route::post('/api/dibs/callback', 'DibsController@callback');
+Route::post('/api/dibs/accept', 'DibsController@accept');
 
 // paymentgroups
 Route::resource('/api/paymentgroup', 'PaymentgroupController', array(
