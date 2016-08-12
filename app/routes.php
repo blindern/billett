@@ -84,6 +84,9 @@ Route::post('/api/printer/{printername}/text', 'PrinterController@printText');
     die;
 });*/
 
+// login details
+Route::get('/api/me', 'UserController@me');
+
 // catch-all route
 Route::get('{slug?}', function()
 {
