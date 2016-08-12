@@ -25,7 +25,7 @@ App::after(function($request, $response)
     if (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'localhost:3000') !== false) {
         $response->headers->set('Access-Control-Allow-Origin', 'http://localhost:3000');
         $response->headers->set('Access-Control-Allow-Credentials', 'true');
-        $response->headers->set('Access-Control-Allow-Headers', 'X-Requested-With,X-Csrf-Token');
+        $response->headers->set('Access-Control-Allow-Headers', 'X-Requested-With,X-Csrf-Token,Content-Type');
     }
 });
 
