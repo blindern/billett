@@ -4,6 +4,7 @@ composer.phar
 .DS_Store
 Thumbs.db
 .data
+/billett-frontend
 
 # Dependencies from package manager
 /bower_components/
