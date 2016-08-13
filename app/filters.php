@@ -26,6 +26,7 @@ App::after(function($request, $response)
         $response->headers->set('Access-Control-Allow-Origin', 'http://localhost:3000');
         $response->headers->set('Access-Control-Allow-Credentials', 'true');
         $response->headers->set('Access-Control-Allow-Headers', 'X-Requested-With,X-Csrf-Token,Content-Type');
+        $response->headers->set('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,DELETE');
     }
 });
 
