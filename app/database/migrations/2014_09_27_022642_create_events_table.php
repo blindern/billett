@@ -37,7 +37,7 @@ class CreateEventsTable extends Migration {
             $table->string('ticket_text')->nullable();
             $table->string('link')->nullable();
             $table->tinyInteger('age_restriction')->unsigned()->nullable();
-            $table->binary('image')->nullable();
+            $table->binary('image');
         });
     }
 
