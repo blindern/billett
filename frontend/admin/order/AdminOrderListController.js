@@ -1,9 +1,13 @@
+import {api} from '../../api';
+
 (function() {
     'use strict';
 
     var module = angular.module('billett.admin');
 
     module.controller('AdminOrderListController', function (AdminOrder, Page, $scope, $location) {
+        $scope.api = api;
+
         $scope.curPage = 1;
         var limit = 20;
         var get = function() {

@@ -1,8 +1,8 @@
 <page-property name="title" value="{{event.title}} ({{event.time_start|formatdate:'D. MMM \\k\\l HH:mm'}})"></page-property>
-<page-property name="image" value="{{absBaseUrl}}event/{{event.id}}/image"></page-property>
+<page-property name="image" value="{{ctrl.api('event/' + event.id + '/image')}}"></page-property>
 <page-property name="description" value="{{event.description_short||event.description}}"></page-property>
 
-<div class="event-page">
+<div class="event-page" ng-if="event">
 
     <div class="page-header">
         <h1>
@@ -11,7 +11,7 @@
             </span>
             {{event.title}}
             <span class="eventdate-header">({{event.time_start|formatdate:'DD.MM'}})</span>
-            <span ng-if="AuthService.hasRole('billett.admin')" class="pull-right">
+            <span ng-if="ctrl.has_role_admin" class="pull-right">
                 <a ng-href="a/event/{{event.id}}" class="btn btn-primary">Admin</a>
                 <a ng-href="a/event/{{event.id}}/edit" class="btn btn-primary">Rediger</a>
             </span>
@@ -25,7 +25,7 @@
         <div class="col-sm-5" ng-class="{'no-buy-form': ctrl.event_status == 'no_tickets'}">
 
             <div class="event-image">
-                <img ng-src="event/{{event.id}}/image" alt="">
+                <img ng-src="{{ctrl.api('event/' + event.id + '/image')}}" alt="">
             </div>
             <dl class="dl-horizontal">
                 <dt>Tidspunkt</dt>

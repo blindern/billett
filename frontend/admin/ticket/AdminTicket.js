@@ -2,7 +2,7 @@ angular.module('billett.admin').factory('AdminTicket', function ($modal) {
     return {
         revokeModal: function (order, ticket) {
             return $modal.open({
-                templateUrl: 'assets/views/admin/ticket/ticket_revoke_modal.html',
+                templateUrl: require('./ticket_revoke_modal.html'),
                 controller: 'AdminTicketRevokeController as ctrl',
                 resolve: {
                     order: function () {

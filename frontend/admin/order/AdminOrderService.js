@@ -1,10 +1,12 @@
+import {api} from '../../api';
+
 (function() {
     'use strict';
 
     var module = angular.module('billett.admin');
 
     module.factory('AdminOrder', function ($http, $modal, $resource) {
-        var r = $resource('api/order/:id', {
+        var r = $resource(api('order/:id'), {
             'id': '@id',
             'admin': 1,
             limit: 20
@@ -25,12 +27,12 @@
             var params = {};
             if (email) params.email = email;
             if (text) params.text = text;
-            return $http.post('api/order/'+this.id+'/email', params);
+            return $http.post(api('order/'+this.id+'/email'), params);
         };
 
         r.addTicketsModal = function (resolve) {
             return $modal.open({
-                templateUrl: 'assets/views/admin/ticketgroup/add_ticketgroup_to_order.html',
+                templateUrl: require('../ticketgroup/add_ticketgroup_to_order.html'),
                 controller: 'AdminTicketgroupAddToOrderController as ctrl',
                 resolve: resolve
             });

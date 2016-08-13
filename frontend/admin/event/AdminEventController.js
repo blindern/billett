@@ -1,3 +1,5 @@
+import {api} from '../../api';
+
 (function() {
     'use strict';
 
@@ -5,6 +7,8 @@
 
     module.controller('AdminEventController', function(Page, $q, $stateParams, AdminEvent, AdminPrinter, $location, $scope, FileUploader) {
         Page.setTitle("Arrangement");
+
+        $scope.api = api;
 
         var loader = Page.setLoading();
         AdminEvent.get({id:$stateParams['id']}, function(ret) {
@@ -31,7 +35,7 @@
 
         // uploading of image
         $scope.uploader = new FileUploader({
-            url: 'event/'+$stateParams['id']+'/image',
+            url: api('event/'+$stateParams['id']+'/image'),
             headers: {
                 'X-Csrf-Token': $('meta[name=csrf-token]').attr('content')
             },

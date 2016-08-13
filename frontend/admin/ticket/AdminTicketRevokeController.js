@@ -1,3 +1,5 @@
+import {api} from '../../api';
+
 angular.module('billett.admin').controller('AdminTicketRevokeController', function ($http, $modalInstance, order, ticket) {
     var ctrl = this;
     ctrl.order = order;
@@ -5,7 +7,7 @@ angular.module('billett.admin').controller('AdminTicketRevokeController', functi
 
     ctrl.revoke = function () {
         ctrl.sending = true;
-        $http.post('api/ticket/' + ctrl.ticket.id + '/revoke',  {
+        $http.post(api('ticket/' + ctrl.ticket.id + '/revoke'),  {
             'paymentgroup_id': ctrl.paymentgroup.id
         }).then(function () {
             $modalInstance.close();

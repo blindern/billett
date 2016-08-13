@@ -1,3 +1,5 @@
+import {api} from '../../api';
+
 (function() {
     'use strict';
 
@@ -6,6 +8,8 @@
     module.controller('AdminOrderController', function ($http, $modal, $q, $state, $stateParams, Page, AdminOrder, AdminPaymentgroup, AdminPrinter, AdminTicket, AdminPayment) {
         var ctrl = this;
         Page.setTitle("Ordre");
+
+        ctrl.api = api;
 
         var loadOrder = function () {
             return AdminOrder.get({id: $stateParams['id']}, function(ret) {
@@ -105,7 +109,7 @@
                     return ctrl.total_reserved;
                 }
             }).result.then(function (paymentgroup) {
-                $http.post('api/order/'+ctrl.order.id+'/validate', {
+                $http.post(api('order/'+ctrl.order.id+'/validate'), {
                     paymentgroup: paymentgroup.id,
                     amount: ctrl.total_reserved,
                     sendmail: false
@@ -123,7 +127,7 @@
         };
 
         ctrl.convertOrder = function () {
-            thenReloadOrError($http.post('api/order/'+ctrl.order.id+'/validate'));
+            thenReloadOrError($http.post(api('order/'+ctrl.order.id+'/validate')));
         };
 
         // start new tickets form
@@ -175,7 +179,7 @@
                     return ticket.ticketgroup.price + ticket.ticketgroup.fee;
                 }
             }).result.then(function (paymentgroup) {
-                thenReloadOrError($http.post('api/ticket/'+ticket.id+'/validate', {
+                thenReloadOrError($http.post(api('ticket/'+ticket.id+'/validate'), {
                     paymentgroup_id: paymentgroup.id
                 }));
             });
@@ -183,7 +187,7 @@
 
         // delete ticket reservation
         ctrl.deleteTicket = function (ticket) {
-            $http.delete('api/ticket/' + ticket.id).success(function () {
+            $http.delete(api('ticket/' + ticket.id)).success(function () {
                 console.log("ticket deleted");
             }).finally(function () {
                 loadOrder();
@@ -200,7 +204,7 @@
         // send email
         ctrl.email = function () {
             var modal = $modal.open({
-                templateUrl: 'assets/views/admin/order/email_modal.html',
+                templateUrl: require('./email_modal.html'),
                 controller: 'AdminOrderEmailController as ctrl',
                 resolve: {
                     order: function () {

@@ -1,3 +1,5 @@
+import {api} from '../../api';
+
 (function() {
     'use strict';
 
@@ -6,19 +8,21 @@
     module.config(function ($stateProvider) {
         $stateProvider.state('index', {
             url: '/',
-            templateUrl: 'assets/views/guest/index/index.html',
+            templateUrl: require('./index.html'),
             controller: 'IndexController'
         });
     });
 
-    module.controller('IndexController', function (Page, $http, $scope) {
+    module.controller('IndexController', function (AuthService, Page, $http, $scope) {
         Page.setTitle('Arrangementer');
 
-        $http.get('api/event/get_upcoming').success(function (ret) {
+        $scope.has_role_admin = AuthService.hasRole('billett.admin');
+
+        $http.get(api('event/get_upcoming')).success(function (ret) {
             $scope.upcoming = ret;
         });
 
-        $http.get('api/eventgroup').success(function (ret) {
+        $http.get(api('eventgroup')).success(function (ret) {
             $scope.eventgroups = ret;
         });
 

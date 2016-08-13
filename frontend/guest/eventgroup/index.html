@@ -4,7 +4,7 @@
     <div class="page-header">
         <h1>
             {{group.title}}
-        <span ng-if="AuthService.hasRole('billett.admin')" class="pull-right">
+        <span ng-if="has_role_admin" class="pull-right">
             <a ng-href="a/eventgroup/{{group.id}}" class="btn btn-primary">Admin</a>
         </span>
         </h1>
@@ -40,7 +40,7 @@
 
                         <li>
                             <!-- admin links -->
-                            <div class="edit-link-wrap" ng-show="AuthService.hasRole('billet.admin')">
+                            <div class="edit-link-wrap" ng-show="has_role_admin">
                             <span class="edit-link">
                                 <a ng-href="a/event/{{::event.id}}/edit">Rediger</a>
                                 <a ng-href="a/event/{{::event.id}}">Detaljert</a>

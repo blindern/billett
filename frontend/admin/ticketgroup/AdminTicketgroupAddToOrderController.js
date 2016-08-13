@@ -1,3 +1,5 @@
+import {api} from '../../api';
+
 angular.module('billett.admin').controller('AdminTicketgroupAddToOrderController', function ($http, $modalInstance, $scope, eventgroup_id, getOrder, AdminEventgroup, addHandler) {
     var ctrl = this;
     ctrl.count = 0;  // num tickets to add
@@ -75,7 +77,7 @@ angular.module('billett.admin').controller('AdminTicketgroupAddToOrderController
         });
 
         getOrder().then(function (order) {
-            $http.post('api/order/'+order.id+'/create_tickets', {
+            $http.post(api('order/'+order.id+'/create_tickets'), {
                 ticketgroups: groups
             }).success(function (ret) {
                 addHandler().finally(function () {

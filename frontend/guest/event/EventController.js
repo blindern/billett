@@ -1,3 +1,5 @@
+import {api} from '../../api';
+
 (function() {
     'use strict';
 
@@ -6,17 +8,20 @@
     module.config(function ($stateProvider) {
         $stateProvider.state('event', {
             url: '/event/:id',
-            templateUrl: 'assets/views/guest/event/index.html',
+            templateUrl: require('./index.html'),
             controller: 'EventController as ctrl'
         });
     });
 
-    module.controller('EventController', function (Page, EventReservation, $http, $scope, $location, $stateParams, $sce, ResponseData, $q) {
+    module.controller('EventController', function (AuthService, Page, EventReservation, $http, $scope, $location, $stateParams, $sce, $q) {
         var ctrl = this;
         Page.setTitle('Arrangement');
 
+        ctrl.api = api;
+        ctrl.has_role_admin = AuthService.hasRole('billett.admin');
+
         var loader = Page.setLoading();
-        $http.get('api/event/' + encodeURIComponent($stateParams['id'])).success(function (ret) {
+        $http.get(api('event/' + encodeURIComponent($stateParams['id']))).success(function (ret) {
             loader();
 
             // do we have an alias not being used?
@@ -113,10 +118,9 @@
                     // send to payment
                     reservation.place(force).then(function (ret) {
                         if (force) {
-                            angular.forEach(ret, function (val, name) {
-                                ResponseData.set(name, val);
-                            });
-                            $location.path('/dibs/accept');
+                            // details about the order is fetched at the
+                            // completed url
+                            $location.path('order/complete');
                         } else {
                             $scope.checkout = ret;
                             $scope.checkout_url = $sce.trustAsResourceUrl(ret.url);

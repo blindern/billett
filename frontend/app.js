@@ -1,20 +1,29 @@
+import AuthService from './auth/AuthService';
+
 (function() {
     'use strict';
 
+    require('./app.scss');
+
+    const angular = require('angular');
+    require('bootstrap-sass');
+
     moment.locale('nb');
 
-    var module = angular.module('billett', [
-        'ui.router',
-        'angular-google-analytics',
-        'billett.auth',
-        'billett.common',
-        'billett.admin',
-        'billett.guest'
+    let module = angular.module('billett', [
+        require('ui.router'),
+        require('angular-google-analytics'),
+        require('./auth'),
+        require('./common'),
+        require('./admin'),
+        require('./guest'),
     ]);
 
-    module.config(function ($locationProvider, $stateProvider, $urlRouterProvider, AnalyticsProvider, ngToastProvider) {
+    const template404 = require('./guest/infopages/404.html');
+
+    module.config(function ($locationProvider, $httpProvider, $stateProvider, $urlRouterProvider, AnalyticsProvider, ngToastProvider) {
         $stateProvider.state('404', {
-            templateUrl: 'assets/views/guest/infopages/404.html'
+            templateUrl: template404,
         });
 
         $urlRouterProvider.otherwise(function ($injector, $location) {
@@ -26,6 +35,8 @@
 
         // use HTML5 history API for nice urls
         $locationProvider.html5Mode(true);
+
+        $httpProvider.defaults.withCredentials = true;
 
         AnalyticsProvider.setAccount('UA-19030223-1');
         AnalyticsProvider.trackPages(false);
@@ -45,8 +56,12 @@
                 var loaded = function() {
                     // let the digest run so all states are updated
                     $timeout(function() {
-                        console.log("tracking page view");
-                        Analytics.trackPage();
+                        AuthService.isDevPage().then(isDevPage => {
+                            if (!isDevPage) {
+                                console.log("tracking page view");
+                                Analytics.trackPage();
+                            }
+                        });
                     }, 0);
                 };
                 var p = Page.getPageLoaderPromise();

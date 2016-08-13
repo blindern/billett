@@ -6,7 +6,7 @@
     module.config(function ($stateProvider) {
         $stateProvider.state('admin-index', {
             url: '/a',
-            templateUrl: 'assets/views/admin/index/index.html',
+            templateUrl: require('./index.html'),
             controller: 'AdminIndexController',
             resolve: {auth: 'AuthRequireResolver'}
         });

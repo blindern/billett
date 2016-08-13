@@ -1,3 +1,5 @@
+import {backendUrl} from '../api';
+
 (function() {
     'use strict';
 
@@ -7,13 +9,19 @@
         $httpProvider.interceptors.push('CsrfInterceptor');
     });
 
-    module.factory('CsrfInterceptor', function() {
+    module.factory('CsrfInterceptor', function(AuthService) {
         return {
             'request': function(config) {
-                // don't add csrf token to other domains
-                if (config.url.indexOf("//") == -1) {
-                    config.headers['X-Csrf-Token'] = $('meta[name=csrf-token]').attr('content');
+                // only add csrf-token to api-endpoint, but not /api/me
+                if (config.url.substring(0, backendUrl.length) === backendUrl && config.url.indexOf('api/me') === -1) {
+                    return new Promise((resolve, reject) => {
+                        AuthService.getCsrfToken().then(csrfToken => {
+                            config.headers['X-Csrf-Token'] = csrfToken;
+                            resolve(config);
+                        }, reject);
+                    });
                 }
+
                 return config;
             }
         }

@@ -6,7 +6,7 @@
     module.config(function ($stateProvider) {
         $stateProvider.state('salgsbetingelser', {
             url: '/salgsbetingelser',
-            templateUrl: 'assets/views/guest/infopages/salgsbetingelser.html',
+            templateUrl: require('./salgsbetingelser.html'),
             controller: 'SalgsBetController'
         });
     });

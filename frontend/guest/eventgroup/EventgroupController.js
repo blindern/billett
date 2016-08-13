@@ -1,3 +1,5 @@
+import {api} from '../../api';
+
 (function() {
     'use strict';
 
@@ -7,13 +9,15 @@
         $stateProvider
             .state('eventgroup', {
                 url: '/eventgroup/{id}{query:(?:/[^/]*)?}',
-                templateUrl: 'assets/views/guest/eventgroup/index.html',
+                templateUrl: require('./index.html'),
                 controller: 'EventgroupController'
             });
     });
 
-    module.controller('EventgroupController', function (Page, $http, $scope, $stateParams, $location) {
+    module.controller('EventgroupController', function (AuthService, Page, $http, $scope, $stateParams, $location) {
         Page.setTitle('Arrangementgruppe');
+
+        $scope.has_role_admin = AuthService.hasRole('billett.admin');
 
         // TODO: move this to eventgroup object, see #79
         $scope.daythemes = {
@@ -49,7 +53,7 @@
         }
 
         var loader = Page.setLoading();
-        $http.get('api/eventgroup/' + encodeURIComponent($stateParams['id'])).success(function (ret) {
+        $http.get(api('eventgroup/' + encodeURIComponent($stateParams['id']))).success(function (ret) {
             loader();
             Page.setTitle(ret.title);
             $scope.group = ret;

@@ -1,10 +1,12 @@
+import {api} from '../../api';
+
 (function() {
     'use strict';
 
     var module = angular.module('billett.admin');
 
     module.factory('AdminEventgroup', function ($http, $resource) {
-        var r = $resource('api/eventgroup/:id', {
+        var r = $resource(api('eventgroup/:id'), {
             'id': '@id',
             'admin': 1
         }, {
@@ -12,7 +14,7 @@
         });
 
         r.getSoldTicketsStats = function (id) {
-            return $http.get('api/eventgroup/' + id + '/sold_tickets_stats');
+            return $http.get(api('eventgroup/' + id + '/sold_tickets_stats'));
         };
 
         return r;

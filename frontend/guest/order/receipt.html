@@ -1,3 +1,9 @@
+<div ng-if="!order">
+    Vennligst vent...
+</div>
+
+<div ng-if="order">
+
 <page-property name="title" value="Kvittering" ng-if="payment.status == 'ACCEPTED'"></page-property>
 <page-property name="title" value="Ordrebekreftelse" ng-if="payment.status != 'ACCEPTED'"></page-property>
 
@@ -50,3 +56,5 @@
 </ul>
 
 <p>Vi håper du får en flott opplevelse på UKA på Blindern!</p>
+
+</div>

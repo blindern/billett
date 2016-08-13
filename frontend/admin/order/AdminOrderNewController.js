@@ -1,6 +1,10 @@
+import {api} from '../../api';
+
 angular.module('billett.admin').controller('AdminOrderNewController', function ($http, $location, $modal, $q, $scope, $state, $stateParams, $timeout, focus, Page, AdminEventgroup, AdminPaymentgroup, AdminPrinter, AdminOrder) {
     var ctrl = this;
     Page.setTitle('Ny ordre');
+
+    ctrl.api = api;
 
     var loader = Page.setLoading();
     AdminEventgroup.get({id: $stateParams['id']}, function (res) {
@@ -46,7 +50,7 @@ angular.module('billett.admin').controller('AdminOrderNewController', function (
     ctrl.completeOrder = function () {
         var loader = Page.setLoading();
         ctrl.saveEdit().then(function () {
-            $http.post('api/order/' + ctrl.order.id + '/validate', {
+            $http.post(api('order/' + ctrl.order.id + '/validate'), {
                 paymentgroup: ctrl.paymentgroup.id,
                 amount: ctrl.total,
                 sendmail: true
@@ -187,7 +191,7 @@ angular.module('billett.admin').controller('AdminOrderNewController', function (
     // delete a reserved ticket
     ctrl.deleteTicket = function (ticketgroup) {
         ticketgroup.working = true;
-        $http.delete('api/ticket/' + ticketgroup.tickets[0].id).success(function () {
+        $http.delete(api('ticket/' + ticketgroup.tickets[0].id)).success(function () {
             getOrder(true).then(function () {
                 ticketgroup.working = false;
             }, function () {

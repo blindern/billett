@@ -136,7 +136,7 @@
                     <td>
                         <ul>
                             <li ng-class="{reservation: !ticket.is_valid, revoked: ticket.is_revoked}" ng-repeat="ticket in order.tickets">
-                                <a ng-href="api/ticket/{{::ticket.id}}/pdf" target="_self">#{{::ticket.id}}</a>
+                                <a ng-href="{{::api('ticket/' + ticket.id + '/pdf')}}" target="_self">#{{::ticket.id}}</a>
                                 <a ng-href="a/event/{{::ticket.event.id}}">{{::ticket.event.title}} ({{::ticket.event.time_start|formatdate:'DD.MM \\k\\l HH'}})</a>
                                 ({{::ticket.ticketgroup.title}})
                                 {{::(ticket.ticketgroup.price+ticket.ticketgroup.fee)|price:0:true}}

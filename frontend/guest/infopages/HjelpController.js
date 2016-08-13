@@ -6,7 +6,7 @@
     module.config(function ($stateProvider) {
         $stateProvider.state('hjelp', {
             url: '/hjelp',
-            templateUrl: 'assets/views/guest/infopages/hjelp.html',
+            templateUrl: require('./hjelp.html'),
             controller: 'HjelpController'
         });
     });

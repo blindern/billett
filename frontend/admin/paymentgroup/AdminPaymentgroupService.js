@@ -1,5 +1,7 @@
+import {api} from '../../api';
+
 angular.module('billett.admin').factory('AdminPaymentgroup', function ($http, $modal, $resource) {
-    var r = $resource('api/paymentgroup/:id', {
+    var r = $resource(api('paymentgroup/:id'), {
         id: '@id'
     }, {
         update: {
@@ -8,7 +10,7 @@ angular.module('billett.admin').factory('AdminPaymentgroup', function ($http, $m
     });
 
     r.prototype.close = function () {
-        return $http.post('api/paymentgroup/' + this.id + '/close');
+        return $http.post(api('paymentgroup/' + this.id + '/close'));
     };
 
     r.getValid = function (eventgroup_id) {
@@ -38,7 +40,7 @@ angular.module('billett.admin').factory('AdminPaymentgroup', function ($http, $m
 
     r.newModal = function (eventgroupId) {
         return $modal.open({
-            templateUrl: 'assets/views/admin/paymentgroup/new.html',
+            templateUrl: require('./new.html'),
             controller: 'AdminPaymentgroupNewController as ctrl',
             resolve: {
                 eventgroupId: function () {
@@ -50,7 +52,7 @@ angular.module('billett.admin').factory('AdminPaymentgroup', function ($http, $m
 
     r.selectModal = function (resolve) {
         return $modal.open({
-            templateUrl: 'assets/views/admin/paymentgroup/paymentgroup_select.html',
+            templateUrl: require('./paymentgroup_select.html'),
             controller: 'AdminPaymentgroupSelectController as ctrl',
             resolve: resolve
         });

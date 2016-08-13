@@ -1,10 +1,12 @@
+import {api} from '../../api';
+
 (function() {
     'use strict';
 
     var module = angular.module('billett.admin');
 
     module.factory('AdminEvent', function ($resource, $http) {
-        var r = $resource('api/event/:id', {
+        var r = $resource(api('event/:id'), {
             'id': '@id',
             'admin': 1
         }, {
@@ -12,14 +14,14 @@
         });
 
         r.prototype.setPublish = function (state) {
-            return $http.patch('api/event/' + this.id, {
+            return $http.patch(api('event/' + this.id), {
                 'is_published': state,
                 'admin': 1
             });
         };
 
         r.prototype.setSelling = function (state) {
-            return $http.patch('api/event/' + this.id, {
+            return $http.patch(api('event/' + this.id), {
                 'is_selling': state,
                 'admin': 1
             });
@@ -35,7 +37,7 @@
                 opts[group.id] = i++;
             });
 
-            return $http.post('api/event/' + this.id + '/ticketgroups_order', opts);
+            return $http.post(api('event/' + this.id + '/ticketgroups_order'), opts);
         };
 
         return r;

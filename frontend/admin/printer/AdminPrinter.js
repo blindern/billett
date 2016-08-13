@@ -1,11 +1,13 @@
+import {api} from '../../api';
+
 angular.module('billett.admin').factory('AdminPrinter', function ($http, $modal) {
     return {
         getList: function () {
-            return $http.get('api/printer');
+            return $http.get(api('printer'));
         },
         printSelectModal: function (addHandler) {
             return $modal.open({
-                templateUrl: 'assets/views/admin/printer/select_modal.html',
+                templateUrl: require('./select_modal.html'),
                 controller: 'AdminPrinterSelectController as ctrl',
                 resolve: {
                     addHandler: function () {
@@ -16,23 +18,23 @@ angular.module('billett.admin').factory('AdminPrinter', function ($http, $modal)
         },
         printTextModal: function () {
             return $modal.open({
-                templateUrl: 'assets/views/admin/printer/text_modal.html',
+                templateUrl: require('./text_modal.html'),
                 controller: 'AdminPrinterTextController as ctrl'
             });
         },
         printTickets: function (printername, ticketids) {
-            return $http.post('api/ticket/print/'+printername, {
+            return $http.post(api('ticket/print/'+printername), {
                 ids: ticketids
             });
         },
         printTicket: function (printername, ticketid) {
-            return $http.post('api/ticket/'+ticketid+'/print/'+printername);
+            return $http.post(api('ticket/'+ticketid+'/print/'+printername));
         },
         printPreviewTicket: function (printername, ticketgroupid) {
-            return $http.post('api/ticketgroup/'+ticketgroupid+'/previewticket/print/'+printername);
+            return $http.post(api('ticketgroup/'+ticketgroupid+'/previewticket/print/'+printername));
         },
         printText: function (printername, text) {
-            return $http.post('api/printer/'+printername+'/text', {
+            return $http.post(api('printer/'+printername+'/text'), {
                 text: text
             });
         },

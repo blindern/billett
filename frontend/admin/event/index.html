@@ -69,7 +69,7 @@
         <div class="col-md-6">
             <div class="event-image" nv-file-drop="" nv-file-over="" uploader="uploader">
                 <span class="upload-tip">Dra et bilde over her for å laste opp nytt bilde!</span>
-                <img ng-src="event/{{event.id}}/image?v={{image_version||''}}" alt="" ng-show="!uploadprogress">
+                <img ng-src="{{api('event/' + event.id + '/image?v=' + (image_version||''))}}" alt="" ng-show="!uploadprogress">
                 <span ng-show="uploadprogress">Laster opp nytt bilde...</span>
             </div>
         </div>
@@ -113,7 +113,7 @@
             <tbody ng-sortable="{animation: 100, onUpdate: ctrl.onTicketgroupsOrder}">
                 <tr ng-class="{ 'not-published': !g.use_web, 'not-office': !g.use_office }" ng-repeat="g in event.ticketgroups">
                     <td>
-                        <a ng-href="api/ticketgroup/{{g.id}}/previewticket" target="_blank">
+                        <a ng-href="{{api('ticketgroup/' + g.id + '/previewticket')}}" target="_blank">
                             <span class="glyphicon glyphicon-eye-open" title="Forhåndsvis"></span>
                         </a>
                         <a href ng-click="ctrl.previewTicketPrint(g.id)">

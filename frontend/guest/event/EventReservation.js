@@ -1,3 +1,5 @@
+import {api} from '../../api';
+
 (function() {
     'use strict';
 
@@ -19,7 +21,7 @@
         EventReservation.prototype.abort = function () {
             var id = this.data.id;
             return $q(function (resolve, reject) {
-                $http.delete('api/order/' + id).success(function () {
+                $http.delete(api('order/' + id)).success(function () {
                     EventReservation.removePersistedReservation(id);
                     resolve();
                 }).error(reject);
@@ -29,7 +31,7 @@
         EventReservation.prototype.update = function (data) {
             var self = this;
             return $q(function (resolve, reject) {
-                $http.patch('api/order/' + self.data.id, data).success(function (ret) {
+                $http.patch(api('order/' + self.data.id), data).success(function (ret) {
                     self.data = ret;
                     resolve(ret);
                 }).error(reject);
@@ -40,7 +42,7 @@
         EventReservation.prototype.place = function (force) {
             var self = this;
             return $q(function (resolve, reject) {
-                $http.post('api/order/' + self.data.id + '/' + (force ? 'force' : 'place'))
+                $http.post(api('order/' + self.data.id + '/' + (force ? 'force' : 'place')))
                     .success(resolve)
                     .error(reject);
             });
@@ -54,7 +56,7 @@
 
         EventReservation.getReservation = function (id) {
             return $q(function (resolve, reject) {
-                $http.get('api/order/' + id).success(function (ret) {
+                $http.get(api('order/' + id)).success(function (ret) {
                     if (ret.is_valid) { // real order, no reservation
                         reject("last reservation is valid order");
                         return;
@@ -94,7 +96,7 @@
 
         EventReservation.create = function (event_id, ticketgroups) {
             return $q(function (resolve, reject) {
-                $http.post('api/event/' + event_id + '/createreservation', {
+                $http.post(api('event/' + event_id + '/createreservation'), {
                     'ticketgroups': ticketgroups
                 }).success(function (res) {
                     resolve(EventReservation.setReservation(res));

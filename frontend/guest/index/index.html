@@ -18,7 +18,7 @@
             <li>{{::event.location}}</li>
             <li>
                 <!-- admin links -->
-                <div class="edit-link-wrap" ng-show="AuthService.hasRole('billet.admin')">
+                <div class="edit-link-wrap" ng-show="has_role_admin">
                     <span class="edit-link">
                         <a ng-href="a/event/{{::event.id}}/edit">Rediger</a>
                         <a ng-href="a/event/{{::event.id}}">Detaljert</a>
