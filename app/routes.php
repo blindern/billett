@@ -18,6 +18,7 @@ Route::get('/api/eventgroup/{id}/sold_tickets_stats', 'EventgroupController@sold
 Route::get('/api/order/fixbalance', 'OrderController@fixbalance');
 Route::post('/api/order/{id}/place', 'OrderController@placeOrder');
 Route::post('/api/order/{id}/force', 'OrderController@forceOrder');
+Route::get('/api/order/receipt', 'OrderController@receipt');
 Route::post('/api/order/{id}/create_tickets', 'OrderController@createTickets');
 Route::post('/api/order/{id}/validate', 'OrderController@validate');
 Route::post('/api/order/{id}/email', 'OrderController@email');

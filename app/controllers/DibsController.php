@@ -51,14 +51,13 @@ class DibsController extends Controller {
 
         $order->load('tickets.ticketgroup', 'tickets.event');
         unset($payment->order);
-        return View::make('template', array(
-            'response_data' => array(
-                'order_receipt' => array(
-                    'order' => $order,
-                    'payment' => $payment
-                )
-            )
-        ));
+
+        Session::put('order_receipt',
+            'order' => $order,
+            'payment' => $payment
+        );
+
+        return Redirect::to('order/completed');
     }
 
     private function getOrderAndValidate()
