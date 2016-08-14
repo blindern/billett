@@ -3,25 +3,50 @@
 More details about this system is available at:
 https://github.com/blindernuka/billett
 
+## Details
+
+* Npm for dependencies
+* Webpack for module loading and building
+* Angular 1.x
+
 ## Setup
 
-### Requirements
+The application is run inside Docker, so make sure Docker is up and running.
 
-#### npm (package manager for node.js)
-A lot of tools we use are javascript tools which we need `npm` to install. This should probably be installed system wide with `sudo apt-get install npm` or similar, and will also make sure Node.js is installed so we can run these applications.
+The backend repo contains a script that will run both backend and frontend together.
 
-### Initial setup
-* Make sure requirements are met
-* Install global Node.js-tools (might need sudo):<br>```$ npm install -g gulp bower```
-* Load required Node.js-tools:<br>```$ npm install```
-* Install bower-dependencies: (bower is installed above with npm)<br>```$ bower install```
-* Continue on updating section
+### Development version
 
-### Updating
-* If `packages.json` is changed, install new npm-dependencies:<br>```$ npm install```
-* If `bower.json` is changed, install new bower-dependencies:<br>```$ bower install```
-* Regenerate static files:<br>```gulp production``` (see development section for development tips)
+Simply run the provided `run-dev.sh` script.
 
-### Developing
-* When javascript/scss-sources are changed, new static files must be compiled. The easiest way to handle this is to make gulp run in background and watch files:<br>```$ gulp watch```
-* or you may manually create the static files every time:<br>```$ gulp```
+It will run a Docker-instance, mounting the source code, install npm packages and
+start Webpack development server on port 3000. It will also listen to changes in
+the source code and rebuild the application on-the-fly.
+
+http://localhost:3000/billett/
+
+If you want to testing against production data you can set the backend to production:
+
+`BACKEND_URL=http://blindernuka.no/billett/ ./run-dev.sh`
+
+### Running npm commands
+
+Instead of running the development server, another command can be passed
+to the `run-dev.sh` script:
+
+```bash
+./run-dev.sh bash
+
+# you now have a shell inside the docker container
+npm -v
+```
+
+### Building dist files
+
+The dist files are the files that are served in the production environment.
+
+See the script `container/build-dist.sh`.
+
+Files are build to /usr/src/app-dist.
+
+See the backend repo that contains nginx for more details how this is set up.
