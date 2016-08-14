@@ -164,11 +164,11 @@ class TicketController extends \Controller {
      */
     private function getTicketsByIds()
     {
-        if (!\Input::has('ids') || !is_array(\Input::get('ids'))) {
+        if (!\Input::has('ids')) {
             return Response::json('missing id list', 400);
         }
 
-        $id_list = array_map('trim', \Input::get('ids'));
+        $id_list = array_map('trim', explode(",", \Input::get('ids')));
         $tickets = [];
         foreach (Ticket::find($id_list) as $ticket) {
             $tickets[$ticket->id] = $ticket;
