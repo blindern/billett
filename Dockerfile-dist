@@ -1,0 +1,9 @@
+FROM blindernuka/billett-frontend
+MAINTAINER Henrik Steen <henrist@henrist.net>
+
+CMD ["/build-dist.sh"]
+
+COPY package.json /usr/src/app/
+RUN npm install
+
+COPY . /usr/src/app/
