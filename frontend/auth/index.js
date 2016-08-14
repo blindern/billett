@@ -16,7 +16,7 @@ module.exports = 'billett.auth';
             url: '/login',
             template: 'Går til logg inn side',
             controller: function($location) {
-                window.location.href = api('login?url=' + encodeURIComponent($location.path()));
+                window.location.href = api('login?url=a');
             }
         }).
         state('logout', {
