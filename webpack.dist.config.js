@@ -1,5 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   cache: false,
@@ -28,8 +29,9 @@ module.exports = {
       {test: /\.css$/, loader: 'style!css'},
       {test: /\.scss$/, loader: 'style!css!sass'},
       {test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url-loader?limit=10000&minetype=application/font-woff'},
-      {test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'file-loader'},
-      {test: /\.html$/, loader: 'file!extract!html'},
+      {test: /\.(ttf|eot|svg|gif)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'file-loader'},
+      {test: /\.html$/, exclude: path.resolve(__dirname, 'frontend/index.html'), loader: 'file!extract!html'},
+      {test: /\.html$/, include: path.resolve(__dirname, 'frontend/index.html'), loader: 'html?interpolate'},
       {test: /\.json$/, loader: 'json'},
     ]
   },
@@ -63,6 +65,10 @@ module.exports = {
 
     // keeps hashes consistent between compilations
     new webpack.optimize.OccurenceOrderPlugin(),
+
+    new HtmlWebpackPlugin({
+      template: 'frontend/index.html'
+    }),
 
     // removes a lot of debugging code in React
     new webpack.DefinePlugin({

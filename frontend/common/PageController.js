@@ -37,5 +37,7 @@
         $rootScope.$on('$routeChangeStart', function () {
             Page.setDefault('url', $location.absUrl());
         });
+
+        $rootScope.domainUrl = $location.protocol() + '://' + $location.host();
     });
 })();

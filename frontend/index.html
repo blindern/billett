@@ -10,7 +10,7 @@
 
     <meta property="og:title" content="{{meta.title||'UKA på Blindern'}}">
     <meta property="og:type" content="{{meta.ogType||'website'}}">
-    <meta property="og:image" content="{{meta.ogImage||meta.image||absBaseUrl+'assets/graphics/uka_gul_pikto.gif'}}">
+    <meta property="og:image" content="{{meta.ogImage||meta.image||domainUrl+'${require('./assets/graphics/uka_gul_pikto.gif')}'}}">
     <meta property="og:url" content="{{meta.url}}" ng-if="meta.url">
     <meta property="og:description" content="{{meta.ogDescription||meta.description}}" ng-if="meta.ogDescription||meta.description">
     <meta property="og:site_name" content="UKA på Blindern">
@@ -25,7 +25,6 @@
     <script src="library.js"></script>
     <!-- angular-ui-utils not available in npm -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-utils/0.1.1/angular-ui-utils.min.js"></script>
-    <script src="app.js"></script>
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -33,56 +32,6 @@
     <![endif]-->
 </head>
 <body ng-class="{'dev-page': isDevPage, isInIframe: isInIframe}">
-    <toast></toast>
-
-    <!-- TODO: move to other template so it is not in all pages -->
-    <div class="dev-page-bar" ng-if="isDevPage">NB! Du er nå på utviklersia! <span>Endringene her blir ikke oppdatert på blindernuka.no.</span></div>
-
-    <div class="container" ng-class="{noadmin:!isAdminPage()}">
-        <header class="header navbar" ng-controller="HeaderController">
-            <h3 class="navbar-left">
-                <a href="http://blindernuka.no" class="text-muted">
-                    <img src="assets/graphics/uka_gul_pikto.gif" alt="">UKA på Blindern
-                </a>
-            </h3>
-            <ul class="nav nav-pills navbar-right">
-                <li ng-class="{ active: isActive('/', '/eventgroup/', '/event/') }"><a href="eventgroup/2"><span class="glyphicon glyphicon-list"></span> Arrangementer</a></li>
-                <li ng-class="{ active: isActive('/salgsbetingelser') }"><a href="salgsbetingelser"><span class="glyphicon glyphicon-flash"></span> Salgsbetingelser</a></li>
-                <li ng-class="{ active: isActive('/hjelp') }"><a href="hjelp"><span class="glyphicon glyphicon-question-sign"></span> Hjelp</a></li>
-            </ul>
-        </header>
-
-        <div ng-if="loggedInButNoAccess">
-            <p class="text-center"><b>NB!</b> Du er innlogget som <u>{{realname}}</u> men har ikke tilgang til dette systemet. <a href="logout" target="_self">Logg ut</a></p>
-            <hr>
-        </div>
-
-        <div ng-show="!loading" ng-if="!page404" ui-view class="main-view"></div>
-        <div ng-if="loading" class="page-loading">
-            Laster innhold...
-        </div>
-        <div ng-if="page404">
-            <page-not-found></page-not-found>
-        </div>
-
-        <footer>
-            <ul>
-                <li>2015</li>
-                <li><a href="http://blindernuka.no">UKA på Blindern</a></li>
-                <li><a href="http://foreningenbs.no">Foreningen Blindern Studenterhjem</a></li>
-                <li>
-                    <a href="a">Administrasjon</a>
-                    <span ng-if="isLoggedIn">
-                        <br>
-                        {{username}}
-                        <br>
-                        <a href="logout">[logg ut]</a>
-                    </span>
-                </li>
-            </ul>
-        </footer>
-
-    </div>
-
+    <div content-wrapper>Laster innhold...</div>
 </body>
 </html>

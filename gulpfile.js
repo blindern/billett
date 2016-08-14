@@ -75,17 +75,10 @@ gulp.task('webpack-dev-server', function(callback) {
     });
 });
 
-gulp.task('copy', function() {
-    gulp.src(['./frontend/index.html'])
-        .pipe(gulp.dest('./dist/billett'));
-    gulp.src(['./frontend/assets/**/*'])
-        .pipe(gulp.dest('./dist/billett/assets'));
-});
-
 gulp.task('clean', function() {
     del('dist');
 });
 
-gulp.task('build', ['copy', 'webpack:build', 'scripts-library']);
-gulp.task('build-dev', ['copy', 'webpack:build-dev', 'scripts-library']);
-gulp.task('default', ['copy', 'webpack-dev-server', 'scripts-library']);
+gulp.task('build', ['webpack:build', 'scripts-library']);
+gulp.task('build-dev', ['webpack:build-dev', 'scripts-library']);
+gulp.task('default', ['webpack-dev-server', 'scripts-library']);

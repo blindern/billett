@@ -1,3 +1,5 @@
+import './ContentWrapper.js';
+
 (function() {
     'use strict';
 
