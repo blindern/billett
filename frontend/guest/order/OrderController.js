@@ -8,12 +8,7 @@ import {api} from '../../api';
     module.config(function ($stateProvider) {
         $stateProvider.state('order-complete', {
             url: '/order/complete',
-            templateProvider: ($q) => {
-                  return $q((resolve) => {
-                        // lazy load the view
-                        require.ensure([], () => resolve(require('!!html!./receipt.html')));
-                  });
-            },
+            templateUrl: require('./receipt.html'),
             controller: 'OrderController'
         });
     });

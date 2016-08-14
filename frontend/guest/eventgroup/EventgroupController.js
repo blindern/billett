@@ -9,12 +9,7 @@ import {api} from '../../api';
         $stateProvider
             .state('eventgroup', {
                 url: '/eventgroup/{id}{query:(?:/[^/]*)?}',
-                templateProvider: ($q) => {
-                      return $q((resolve) => {
-                            // lazy load the view
-                            require.ensure([], () => resolve(require('!!html!./index.html')));
-                      });
-                },
+                templateUrl: require('./index.html'),
                 controller: 'EventgroupController'
             });
     });

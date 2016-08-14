@@ -8,12 +8,7 @@ import {api} from '../../api';
     module.config(function ($stateProvider) {
         $stateProvider.state('index', {
             url: '/',
-            templateProvider: ($q) => {
-                  return $q((resolve) => {
-                        // lazy load the view
-                        require.ensure([], () => resolve(require('!!html!./index.html')));
-                  });
-            },
+            templateUrl: require('./index.html'),
             controller: 'IndexController'
         });
     });

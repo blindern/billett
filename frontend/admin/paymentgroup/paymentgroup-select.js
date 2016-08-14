@@ -1,12 +1,7 @@
 angular.module('billett.admin').directive('paymentgroupSelect', function(AdminPaymentgroup) {
     return {
         restrict: 'E',
-        templateProvider: ($q) => {
-            return $q((resolve) => {
-                // lazy load the view
-                require.ensure([], () => resolve(require('!!html!./paymentgroup_select_box.html')));
-            });
-        },
+        templateUrl: require('./paymentgroup_select_box.html'),
         scope: {
             paymentgroup: '=',
             eventgroupId: '=',

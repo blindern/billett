@@ -8,12 +8,7 @@ import {api} from '../../api';
     module.config(function ($stateProvider) {
         $stateProvider.state('event', {
             url: '/event/:id',
-            templateProvider: ($q) => {
-                  return $q((resolve) => {
-                        // lazy load the view
-                        require.ensure([], () => resolve(require('!!html!./index.html')));
-                  });
-            },
+            templateUrl: require('./index.html'),
             controller: 'EventController as ctrl'
         });
     });
