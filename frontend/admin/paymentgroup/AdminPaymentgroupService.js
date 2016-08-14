@@ -40,7 +40,7 @@ angular.module('billett.admin').factory('AdminPaymentgroup', function ($http, $m
 
     r.newModal = function (eventgroupId) {
         return $modal.open({
-            templateUrl: require('./new.html'),
+            template: require('./new.html'),
             controller: 'AdminPaymentgroupNewController as ctrl',
             resolve: {
                 eventgroupId: function () {
@@ -52,7 +52,7 @@ angular.module('billett.admin').factory('AdminPaymentgroup', function ($http, $m
 
     r.selectModal = function (resolve) {
         return $modal.open({
-            templateUrl: require('./paymentgroup_select.html'),
+            template: require('./paymentgroup_select.html'),
             controller: 'AdminPaymentgroupSelectController as ctrl',
             resolve: resolve
         });

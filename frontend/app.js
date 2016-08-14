@@ -19,11 +19,9 @@ import AuthService from './auth/AuthService';
         require('./guest'),
     ]);
 
-    const template404 = require('./guest/infopages/404.html');
-
     module.config(function ($locationProvider, $httpProvider, $stateProvider, $urlRouterProvider, AnalyticsProvider, ngToastProvider) {
         $stateProvider.state('404', {
-            templateUrl: template404,
+            template: require('./guest/infopages/404.html'),
         });
 
         $urlRouterProvider.otherwise(function ($injector, $location) {

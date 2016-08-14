@@ -11,7 +11,7 @@ angular.module('billett.admin').factory('AdminPaymentsource', function ($http, $
 
     r.newModal = function (paymentgroup) {
         return $modal.open({
-            templateUrl: require('./paymentsource_new.html'),
+            template: require('./paymentsource_new.html'),
             controller: 'AdminPaymentsourceNewController as ctrl',
             resolve: {
                 paymentgroup: function () {
@@ -23,7 +23,7 @@ angular.module('billett.admin').factory('AdminPaymentsource', function ($http, $
 
     r.selectModal = function (resolve) {
         return $modal.open({
-            templateUrl: require('./paymentgroup_select.html'),
+            template: require('./paymentgroup_select.html'),
             controller: 'AdminPaymentgroupSelectController as ctrl',
             resolve: resolve
         });

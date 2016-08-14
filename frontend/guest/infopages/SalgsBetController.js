@@ -6,7 +6,12 @@
     module.config(function ($stateProvider) {
         $stateProvider.state('salgsbetingelser', {
             url: '/salgsbetingelser',
-            templateUrl: require('./salgsbetingelser.html'),
+            templateProvider: ($q) => {
+                  return $q((resolve) => {
+                        // lazy load the view
+                        require.ensure([], () => resolve(require('!!html!./salgsbetingelser.html')));
+                  });
+            },
             controller: 'SalgsBetController'
         });
     });

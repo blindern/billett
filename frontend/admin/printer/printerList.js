@@ -1,7 +1,12 @@
 angular.module('billett.admin').directive('printerList', function(AdminPrinter) {
     return {
         restrict: 'E',
-        templateUrl: require('./select_box.html'),
+        templateProvider: ($q) => {
+              return $q((resolve) => {
+                    // lazy load the view
+                    require.ensure([], () => resolve(require('!!html!./select_box.html')));
+              });
+        },
         scope: {
             printer: '=',
             id: '@',

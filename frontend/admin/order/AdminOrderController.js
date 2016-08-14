@@ -204,7 +204,7 @@ import {api} from '../../api';
         // send email
         ctrl.email = function () {
             var modal = $modal.open({
-                templateUrl: require('./email_modal.html'),
+                template: require('!!html!./email_modal.html'),
                 controller: 'AdminOrderEmailController as ctrl',
                 resolve: {
                     order: function () {

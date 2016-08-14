@@ -68,7 +68,7 @@
     module.directive('pageNotFound', function (Page) {
         return {
             restrict: 'E',
-            templateUrl: require('../guest/infopages/404.html'),
+            template: require('../guest/infopages/404.html'),
             link: function(scope, element, attr) {
                 console.log("linked 404");
             }
@@ -79,7 +79,12 @@
     module.directive('pagination', function($parse) {
         return {
             restrict: 'E',
-            templateUrl: require('./paginationDirective.html'),
+            templateProvider: ($q) => {
+                return $q((resolve) => {
+                    // lazy load the view
+                    require.ensure([], () => resolve(require('!!html!./paginationDirective.html')));
+                });
+            },
             scope: {
                 total: '=pageTotal',
                 limit: '=pageLimit',

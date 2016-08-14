@@ -6,7 +6,12 @@
     module.config(function ($stateProvider) {
         $stateProvider.state('admin-index', {
             url: '/a',
-            templateUrl: require('./index.html'),
+            templateProvider: ($q) => {
+                return $q((resolve) => {
+                    // lazy load the view
+                    require.ensure([], () => resolve(require('!!html!./index.html')));
+                });
+            },
             controller: 'AdminIndexController',
             resolve: {auth: 'AuthRequireResolver'}
         });

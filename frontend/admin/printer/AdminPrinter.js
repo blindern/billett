@@ -7,7 +7,7 @@ angular.module('billett.admin').factory('AdminPrinter', function ($http, $modal)
         },
         printSelectModal: function (addHandler) {
             return $modal.open({
-                templateUrl: require('./select_modal.html'),
+                template: require('./select_modal.html'),
                 controller: 'AdminPrinterSelectController as ctrl',
                 resolve: {
                     addHandler: function () {
@@ -18,7 +18,7 @@ angular.module('billett.admin').factory('AdminPrinter', function ($http, $modal)
         },
         printTextModal: function () {
             return $modal.open({
-                templateUrl: require('./text_modal.html'),
+                template: require('./text_modal.html'),
                 controller: 'AdminPrinterTextController as ctrl'
             });
         },

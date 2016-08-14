@@ -6,7 +6,12 @@
     module.config(function ($stateProvider) {
         $stateProvider.state('hjelp', {
             url: '/hjelp',
-            templateUrl: require('./hjelp.html'),
+            templateProvider: ($q) => {
+                  return $q((resolve) => {
+                        // lazy load the view
+                        require.ensure([], () => resolve(require('!!html!./hjelp.html')));
+                  });
+            },
             controller: 'HjelpController'
         });
     });
