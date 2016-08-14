@@ -1,5 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
@@ -27,7 +28,8 @@ module.exports = {
     loaders: [
       {test: /\.jsx?$/, exclude: /node_modules/, loaders: ['ng-annotate', 'babel?stage=0']},
       {test: /\.css$/, loader: 'style!css'},
-      {test: /\.scss$/, loader: 'style!css!sass'},
+      {test: /\.css$/, loader: ExtractTextPlugin.extract('style', 'css')},
+      {test: /\.scss$/, loader: ExtractTextPlugin.extract('style', 'css!sass')},
       {test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url-loader?limit=10000&minetype=application/font-woff'},
       {test: /\.(ttf|eot|svg|gif)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'file-loader'},
       {test: /\.html$/, exclude: path.resolve(__dirname, 'frontend/index.html'), loader: 'file!extract!html'},
@@ -65,6 +67,8 @@ module.exports = {
 
     // keeps hashes consistent between compilations
     new webpack.optimize.OccurenceOrderPlugin(),
+
+    new ExtractTextPlugin("styles.css"),
 
     new HtmlWebpackPlugin({
       template: 'frontend/index.html'
