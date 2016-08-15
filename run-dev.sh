@@ -25,9 +25,9 @@ docker run \
   -it \
   --rm \
   -v "$(pwd)":/usr/src/app \
-  -v "$(pwd)"/node_modules:/usr/src/app/node_modules \
+  -v billett-node_modules:/usr/src/app/node_modules \
   -v billett-frontend-dist:/usr/src/app-dist \
   -p 3000:3000 \
   -e BACKEND_URL="$backend_url" \
-  blindernuka/billett-frontend-dev \
+  blindernuka/billett-frontend \
   $command
