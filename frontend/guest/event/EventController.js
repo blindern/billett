@@ -18,7 +18,6 @@ import {api} from '../../api';
         Page.setTitle('Arrangement');
 
         ctrl.api = api;
-        ctrl.has_role_admin = AuthService.hasRole('billett.admin');
 
         var loader = Page.setLoading();
         $http.get(api('event/' + encodeURIComponent($stateParams['id']))).success(function (ret) {
