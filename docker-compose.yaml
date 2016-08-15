@@ -4,7 +4,7 @@ services:
   fpm:
     build:
       context: .
-      dockerfile: Dockerfile-dist
+      dockerfile: Dockerfile
     image: blindernuka/billett-backend
     environment:
       SIMPLESAMLPHP_ADMINPASS: billett

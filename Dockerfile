@@ -65,6 +65,34 @@ COPY simplesamlphp/saml20-idp-remote.php /var/simplesamlphp/metadata/
 RUN cd /var/simplesamlphp && tail -n +2 config/config.override.php >>config/config.php
 
 COPY container/entrypoint.sh /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
 
-VOLUME ["/var/simplesamlphp", "/var/billett"]
+USER www-data
+
+COPY composer.* /var/www/html/
+
+# create directories that are scanned on composer install
+# this is later replaced with new source, but we need this
+# here to have cache of composer modules to avoid cache miss
+# in case only our code is updated and not dependencies
+RUN mkdir -p app/commands \
+             app/controllers \
+             app/models \
+             app/database/migrations \
+             app/database/seeds \
+             app/tests \
+             app/src \
+    && echo -e '#!/usr/bin/env php\n<?php' >artisan \
+    && echo -e '#!/usr/bin/env php\n<?php' >app/tests/TestCase.php \
+    && chmod +x artisan \
+    && composer install
+
+COPY . /var/www/html/
+
+# we run composer install again so the post process commands
+# are run
+RUN composer install
+
+USER root
+
+VOLUME ["/var/simplesamlphp", "/var/billett", "/var/www/html/vendor"]
+ENTRYPOINT ["/entrypoint.sh"]
