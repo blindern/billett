@@ -78,7 +78,7 @@ return array(
     |
     */
 
-    'key' => $_ENV['BILLETT_KEY'],
+    'key' => isset($_ENV['BILLETT_KEY']) ? $_ENV['BILLETT_KEY'] : 'KeNd439jeX9n9hqudOxXqCQErFmbApoi',
 
     'cipher' => MCRYPT_RIJNDAEL_128,
 
