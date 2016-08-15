@@ -7,7 +7,8 @@
 # Set BACKEND_URL as environment variable to override the default
 # e.g.: BACKEND_URL=https://blindernuka.no/billett/ ./run-dev.sh
 
-docker build -t blindernuka/billett-frontend .
+# fetch from docker hub instead of building locally
+#docker build -t blindernuka/billett-frontend .
 
 if [ -n "$BACKEND_URL" ]; then
   backend_url="$BACKEND_URL"
@@ -24,6 +25,7 @@ docker run \
   -it \
   --rm \
   -v "$(pwd)":/usr/src/app \
+  -v "$(pwd)"/node_modules:/usr/src/app/node_modules \
   -v billett-frontend-dist:/usr/src/app-dist \
   -p 3000:3000 \
   -e BACKEND_URL="$backend_url" \

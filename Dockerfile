@@ -20,4 +20,15 @@ COPY container/build-dist.sh /build-dist.sh
 COPY container/dev.sh /dev.sh
 
 WORKDIR /usr/src/app
+
+COPY package.json /usr/src/app/
+RUN npm install
+
+COPY . /usr/src/app/
+
+RUN /build-dist.sh
+
+VOLUME ["/usr/src/app/node_modules"]
+
 ENTRYPOINT ["/entrypoint.sh"]
+CMD ["/build-dist.sh"]
