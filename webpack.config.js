@@ -30,7 +30,7 @@ module.exports = {
       {test: /\.css$/, loader: 'style!css'},
       {test: /\.scss$/, loader: 'style!css!sass'},
       {test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url-loader?limit=10000&minetype=application/font-woff'},
-      {test: /\.(ttf|eot|svg|gif)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'file-loader'},
+      {test: /\.(ttf|eot|svg|gif|ico)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'file-loader'},
       {test: /\.html$/, exclude: path.resolve(__dirname, 'frontend/index.html'), loader: 'file!extract!html'},
       {test: /\.html$/, include: path.resolve(__dirname, 'frontend/index.html'), loader: 'html?interpolate'},
       {test: /\.json$/, loader: 'json'},
