@@ -56,7 +56,7 @@ RUN \
     && mkdir -p /var/billett/meta \
     && mkdir -p /var/billett/sessions \
     && mkdir -p /var/billett/views \
-    && chown -R www-data:www-data /var/billett /var/www/html
+    && chown -R www-data:www-data /var/billett /var/www /var/www/html
 
 # configure simplesamlphp
 COPY simplesamlphp/config.override.php /var/simplesamlphp/config/
@@ -64,16 +64,13 @@ COPY simplesamlphp/authsources.php /var/simplesamlphp/config/
 COPY simplesamlphp/saml20-idp-remote.php /var/simplesamlphp/metadata/
 RUN cd /var/simplesamlphp && tail -n +2 config/config.override.php >>config/config.php
 
-COPY container/entrypoint.sh /entrypoint.sh
-
-USER www-data
-
 COPY composer.* /var/www/html/
 
 # create directories that are scanned on composer install
 # this is later replaced with new source, but we need this
 # here to have cache of composer modules to avoid cache miss
 # in case only our code is updated and not dependencies
+USER www-data
 RUN mkdir -p app/commands \
              app/controllers \
              app/models \
@@ -84,7 +81,9 @@ RUN mkdir -p app/commands \
     && echo -e '#!/usr/bin/env php\n<?php' >artisan \
     && echo -e '#!/usr/bin/env php\n<?php' >app/tests/TestCase.php \
     && chmod +x artisan \
-    && composer install
+    && composer install \
+    && mv vendor /var/www/html-vendor \
+    && ln -s /var/www/html-vendor /var/www/html/vendor
 
 COPY . /var/www/html/
 
@@ -93,6 +92,9 @@ COPY . /var/www/html/
 RUN composer install
 
 USER root
+COPY container/entrypoint.sh /entrypoint.sh
+COPY container/dev.sh /dev.sh
 
-VOLUME ["/var/simplesamlphp", "/var/billett", "/var/www/html/vendor"]
+VOLUME ["/var/simplesamlphp", "/var/billett"]
 ENTRYPOINT ["/entrypoint.sh"]
+CMD ["php-fpm"]

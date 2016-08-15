@@ -4,7 +4,7 @@ services:
   fpm:
     volumes:
      - ./:/var/www/html/
-     - ./.data/vendor:/var/www/html/vendor
+    command: /dev.sh
   nginx:
     volumes:
      - ./nginx/default.dev.conf:/etc/nginx/conf.d/default.conf

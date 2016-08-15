@@ -1,2 +1,12 @@
-vendor
 .data
+.dockerignore
+.git
+.gitattributes
+.gitignore
+Dockerfile
+Makefile
+billett-frontend
+docker-compose.dev.yaml
+docker-compose.yaml
+nginx
+vendor

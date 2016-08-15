@@ -7,17 +7,20 @@ if [ "$1" != "php-fpm" ] && [ -f /var/www/html/README.md ]; then
   gid=$(stat -c %u /var/www/html/README.md)
 
   if [ $(id -u) != $(stat -c %u /var/www/html/README.md) ]; then
-    userdel app 2>/dev/null || true
-    groupdel app 2>/dev/null || true
-    groupadd -g $gid app
-    useradd -m -g $gid -u $uid app
+    olduid=$(id -u www-data)
+    oldgid=$(id -g www-data)
+
+    usermod -u $uid www-data
+    groupmod -g $gid www-data
+    find /var -user $olduid -exec chown -h $uid "{}" \; 2>/dev/null
+    find /var -group $oldgid -exec chgrp -h $gid "{}" \; 2>/dev/null
+    usermod -g $gid www-data
 
     # make sure vendor is owner by this user
-    chown -R app:app /var/www/html/vendor
-
-    gosu app "$@"
-    exit
+    chown -R www-data:www-data /var/www/html/vendor
   fi
+else
+  chown -R www-data:www-data /var/billett
 fi
 
 exec "$@"
