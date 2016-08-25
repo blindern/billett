@@ -47,6 +47,7 @@
   },
   "scripts": {
     "dev": "node_modules/.bin/gulp",
-    "dist": "node_modules/.bin/gulp build"
+    "dist": "node_modules/.bin/gulp build",
+    "test": "echo 'no tests'"
   }
 }
