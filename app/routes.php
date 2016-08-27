@@ -18,6 +18,7 @@ Route::get('/api/eventgroup/{id}/sold_tickets_stats', 'EventgroupController@sold
 Route::get('/api/order/fixbalance', 'OrderController@fixbalance');
 Route::post('/api/order/{id}/place', 'OrderController@placeOrder');
 Route::post('/api/order/{id}/force', 'OrderController@forceOrder');
+Route::get('/api/order/receipt', 'OrderController@receipt');
 Route::post('/api/order/{id}/create_tickets', 'OrderController@createTickets');
 Route::post('/api/order/{id}/validate', 'OrderController@validate');
 Route::post('/api/order/{id}/email', 'OrderController@email');
@@ -28,6 +29,8 @@ Route::resource('/api/order', 'OrderController', array(
 Route::post('/api/event/{id}/createreservation', 'EventController@createReservation');
 Route::post('/api/event/{id}/ticketgroups_order', 'EventController@ticketgroupsSetOrder');
 Route::get('/api/event/get_upcoming', 'EventController@getUpcoming');
+Route::get('/api/event/{id}/image', 'EventController@image');
+Route::post('/api/event/{id}/image', 'EventController@uploadImage');
 Route::resource('/api/event', 'EventController', array(
     'only' => array('show', 'store', 'update', 'destroy')
 ));
@@ -37,10 +40,6 @@ Route::post('/api/ticketgroup/{id}/previewticket/print/{printername}', 'Ticketgr
 Route::resource('/api/ticketgroup', 'TicketgroupController', array(
     'only' => array('index', 'show', 'store', 'update', 'destroy')
 ));
-
-
-Route::get('/event/{id}/image', 'EventController@image');
-Route::post('/event/{id}/image', 'EventController@uploadImage');
 
 // tickets
 Route::get('/api/ticket/pdf', 'TicketController@mergedPdf');
@@ -59,9 +58,9 @@ Route::resource('/api/payment', 'PaymentController', array(
 ));
 
 // payment (callback)
-Route::post('/dibs/cancel', 'DibsController@cancel');
-Route::post('/dibs/callback', 'DibsController@callback');
-Route::post('/dibs/accept', 'DibsController@accept');
+Route::post('/api/dibs/cancel', 'DibsController@cancel');
+Route::post('/api/dibs/callback', 'DibsController@callback');
+Route::post('/api/dibs/accept', 'DibsController@accept');
 
 // paymentgroups
 Route::resource('/api/paymentgroup', 'PaymentgroupController', array(
@@ -86,13 +85,11 @@ Route::post('/api/printer/{printername}/text', 'PrinterController@printText');
     die;
 });*/
 
+// login details
+Route::get('/api/me', 'UserController@me');
+
 // catch-all route
-// TODO: this should probably be changed due to search engines not getting 404
-Route::get('/api/{slug?}', function()
+Route::get('{slug?}', function()
 {
     return Response::json('not found', 404);
 });
-Route::get('{slug?}', function()
-{
-    return View::make('template');
-})->where('slug', '.+');

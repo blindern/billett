@@ -56,38 +56,42 @@ class BillettSeeder extends Seeder {
     {
         $tg = new Ticketgroup;
         $tg->event()->associate($ev);
-        $tg->is_active = true;
-        $tg->is_published = true;
+        $tg->use_office = true;
+        $tg->use_web = true;
         $tg->title = "Studentbillett";
         $tg->price = 80;
         $tg->fee = 4;
+        $tg->order = 1;
         $tg->save();
 
         $tg = new Ticketgroup;
         $tg->event()->associate($ev);
-        $tg->is_active = true;
-        $tg->is_published = true;
+        $tg->use_office = true;
+        $tg->use_web = true;
         $tg->title = "Ordinær billett";
         $tg->price = 100;
         $tg->fee = 5;
+        $tg->order = 2;
         $tg->save();
 
         $tg = new Ticketgroup;
         $tg->event()->associate($ev);
-        $tg->is_active = true;
-        $tg->is_published = false;
+        $tg->use_office = true;
+        $tg->use_web = false;
         $tg->title = "Studentbillett (billettluke)";
         $tg->price = 90;
         $tg->fee = 0;
+        $tg->order = 3;
         $tg->save();
 
         $tg = new Ticketgroup;
         $tg->event()->associate($ev);
-        $tg->is_active = true;
-        $tg->is_published = false;
+        $tg->use_office = true;
+        $tg->use_web = false;
         $tg->title = "Ordinær billett (billettluke)";
         $tg->price = 110;
         $tg->fee = 0;
+        $tg->order = 4;
         $tg->save();
     }
 }

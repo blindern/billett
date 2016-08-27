@@ -47,9 +47,9 @@ class DibsPaymentModule {
         $params['amount']           = $amount;
         $params['currency']         = \Config::get('dibs.currency_id');
         $params['language']         = \Config::get('dibs.language');
-        $params['acceptReturnUrl']  = url('dibs/accept');
-        $params['callbackUrl']      = url('dibs/callback');
-        $params['cancelReturnUrl']  = url('dibs/cancel');
+        $params['acceptReturnUrl']  = url('api/dibs/accept');
+        $params['callbackUrl']      = url('api/dibs/callback');
+        $params['cancelReturnUrl']  = url('api/dibs/cancel');
 
         $params['billingFirstName']   = $order->name;
         $params['billingEmail'] = $order->email;

@@ -16,7 +16,8 @@ class OrderController extends \Controller {
                 'update',
                 'destroy',
                 'placeOrder',
-                'forceOrder'
+                'forceOrder',
+                'receipt',
             ]
         ]);
     }
@@ -213,12 +214,30 @@ class OrderController extends \Controller {
 
         $order->load('tickets.ticketgroup', 'tickets.event');
         unset($payment->order);
-        return array(
-            'order_receipt' => array(
-                'order' => $order,
-                'payment' => $payment
-            )
-        );
+
+        Session::put('order_receipt', array(
+            'order' => $order,
+            'payment' => $payment
+        ));
+
+        return 'OK';
+    }
+
+    /**
+     * Get receipt details for previous completed order
+     */
+    public function receipt() {
+        // In case the user refreshes the page we still want
+        // to show the completed order. This is why we don't
+        // delete the receipt. It will be overwritten if there
+        // is a new order completed.
+
+        $ret = Session::get('order_receipt', null);
+        if (!$ret) {
+            return \Response::json('no receipt exists', 404);
+        }
+
+        return  $ret;
     }
 
     /**

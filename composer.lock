@@ -1,10 +1,11 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7c99de4227c725864890072b5b34b9be",
+    "hash": "c6e27aabe26466469c67024fe7c83a47",
+    "content-hash": "6416330934ec4bf28b0c80a9c165b83b",
     "packages": [
         {
             "name": "barryvdh/laravel-ide-helper",
@@ -74,12 +75,12 @@
             "version": "1.0.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/mtdowling/ClassPreloader.git",
+                "url": "https://github.com/ClassPreloader/ClassPreloader.git",
                 "reference": "2c9f3bcbab329570c57339895bd11b5dd3b00877"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mtdowling/ClassPreloader/zipball/2c9f3bcbab329570c57339895bd11b5dd3b00877",
+                "url": "https://api.github.com/repos/ClassPreloader/ClassPreloader/zipball/2c9f3bcbab329570c57339895bd11b5dd3b00877",
                 "reference": "2c9f3bcbab329570c57339895bd11b5dd3b00877",
                 "shasum": ""
             },
@@ -121,12 +122,12 @@
             "version": "v1.0.8",
             "source": {
                 "type": "git",
-                "url": "https://github.com/d11wtq/boris.git",
+                "url": "https://github.com/borisrepl/boris.git",
                 "reference": "125dd4e5752639af7678a22ea597115646d89c6e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/d11wtq/boris/zipball/125dd4e5752639af7678a22ea597115646d89c6e",
+                "url": "https://api.github.com/repos/borisrepl/boris/zipball/125dd4e5752639af7678a22ea597115646d89c6e",
                 "reference": "125dd4e5752639af7678a22ea597115646d89c6e",
                 "shasum": ""
             },
@@ -149,58 +150,6 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "time": "2014-01-17 12:21:18"
-        },
-        {
-            "name": "dinesh/barcode",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/dineshrabara/barcode.git",
-                "reference": "9a7380a7ccb92e47329b298e9ceb64453af6731d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/dineshrabara/barcode/zipball/9a7380a7ccb92e47329b298e9ceb64453af6731d",
-                "reference": "9a7380a7ccb92e47329b298e9ceb64453af6731d",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/support": "4.*|5.*",
-                "php": ">=5.3.0"
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "src/migrations"
-                ],
-                "psr-0": {
-                    "Dinesh\\Barcode": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Dinesh Rabara",
-                    "email": "dinesh.rabara@gmail.com"
-                }
-            ],
-            "description": "Barcode generator like Qr Code , PDF417,C39, C39+,C39E,C39E+,C93,S25,S25+,I25,I25+,C128,C128A,C128B,C128C,2-Digits UPC-Based Extention,5-Digits UPC-Based Extention,EAN 8,EAN 13,UPC-A,UPC-E,MSI (Variation of Plessey code) ",
-            "keywords": [
-                "CODABAR",
-                "CODE 128",
-                "CODE 39",
-                "barcode",
-                "datamatrix",
-                "ean",
-                "laravel",
-                "pdf417",
-                "qr code",
-                "qrcode"
-            ],
-            "time": "2014-11-22 04:58:23"
         },
         {
             "name": "doctrine/annotations",
@@ -1204,17 +1153,17 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/henrist/laravel-saml.git",
-                "reference": "9ecc21f7234c8a09916d817ab0c629dea28dc2f3"
+                "url": "https://github.com/KnightSwarm/laravel-saml.git",
+                "reference": "712d02f6edae914db7b48438361444b2daf66930"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/henrist/laravel-saml/zipball/9ecc21f7234c8a09916d817ab0c629dea28dc2f3",
-                "reference": "9ecc21f7234c8a09916d817ab0c629dea28dc2f3",
+                "url": "https://api.github.com/repos/KnightSwarm/laravel-saml/zipball/712d02f6edae914db7b48438361444b2daf66930",
+                "reference": "712d02f6edae914db7b48438361444b2daf66930",
                 "shasum": ""
             },
             "require": {
-                "illuminate/support": "~4.1",
+                "illuminate/support": ">=4.1",
                 "php": ">=5.3.0"
             },
             "type": "library",
@@ -1226,6 +1175,7 @@
                     "KnightSwarm\\LaravelSaml": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1235,29 +1185,26 @@
                     "email": "code@knightswarm.com"
                 },
                 {
-                    "name": "Tom Mount",
-                    "email": "tmountjr@ebay.com"
-                },
-                {
                     "name": "Phil Preston",
                     "email": "phpreston@ebay.com"
                 },
                 {
                     "name": "Jeremy French",
                     "email": "jeremy@jeremyfrench.co.uk"
+                },
+                {
+                    "name": "Tom Mount",
+                    "email": "tmountjr@gmail.com"
                 }
             ],
-            "description": "saml auth provider for laravel 4.*",
+            "description": "saml auth provider for laravel 5.*",
             "keywords": [
+                "SSO",
                 "laravel",
                 "laravel-saml",
-                "saml",
-                "sso"
+                "saml"
             ],
-            "support": {
-                "source": "https://github.com/henrist/laravel-saml/tree/master"
-            },
-            "time": "2015-01-03 03:35:01"
+            "time": "2016-04-06 20:25:39"
         },
         {
             "name": "laravel/framework",
@@ -1373,6 +1320,55 @@
                 "laravel"
             ],
             "time": "2014-12-22 20:56:10"
+        },
+        {
+            "name": "milon/barcode",
+            "version": "4.2.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/milon/barcode.git",
+                "reference": "0e853f4a746e682d47efa6f82870c8dbeb6b5b91"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/milon/barcode/zipball/0e853f4a746e682d47efa6f82870c8dbeb6b5b91",
+                "reference": "0e853f4a746e682d47efa6f82870c8dbeb6b5b91",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "4.*",
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Milon\\Barcode": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Nuruzzaman Milon",
+                    "email": "contact@milon.com"
+                }
+            ],
+            "description": "Barcode generator like Qr Code , PDF417,C39, C39+,C39E,C39E+,C93,S25,S25+,I25,I25+,C128,C128A,C128B,C128C,2-Digits UPC-Based Extention,5-Digits UPC-Based Extention,EAN 8,EAN 13,UPC-A,UPC-E,MSI (Variation of Plessey code) ",
+            "keywords": [
+                "CODABAR",
+                "CODE 128",
+                "CODE 39",
+                "barcode",
+                "datamatrix",
+                "ean",
+                "laravel",
+                "pdf417",
+                "qr code",
+                "qrcode"
+            ],
+            "time": "2016-03-30 23:38:19"
         },
         {
             "name": "monolog/monolog",
@@ -2008,12 +2004,12 @@
             "target-dir": "Symfony/Component/BrowserKit",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/BrowserKit.git",
+                "url": "https://github.com/symfony/browser-kit.git",
                 "reference": "b2b78b850a32251cbbd9915ab61453302e7ecd72"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/BrowserKit/zipball/b2b78b850a32251cbbd9915ab61453302e7ecd72",
+                "url": "https://api.github.com/repos/symfony/browser-kit/zipball/b2b78b850a32251cbbd9915ab61453302e7ecd72",
                 "reference": "b2b78b850a32251cbbd9915ab61453302e7ecd72",
                 "shasum": ""
             },
@@ -2063,12 +2059,12 @@
             "target-dir": "Symfony/Component/ClassLoader",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/ClassLoader.git",
+                "url": "https://github.com/symfony/class-loader.git",
                 "reference": "deac802f76910708ab50d039806cfd1866895b52"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ClassLoader/zipball/deac802f76910708ab50d039806cfd1866895b52",
+                "url": "https://api.github.com/repos/symfony/class-loader/zipball/deac802f76910708ab50d039806cfd1866895b52",
                 "reference": "deac802f76910708ab50d039806cfd1866895b52",
                 "shasum": ""
             },
@@ -2113,12 +2109,12 @@
             "target-dir": "Symfony/Component/Console",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/Console.git",
+                "url": "https://github.com/symfony/console.git",
                 "reference": "754f4b6de7b4a1d442f9b6a728bfb7adef54592c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/754f4b6de7b4a1d442f9b6a728bfb7adef54592c",
+                "url": "https://api.github.com/repos/symfony/console/zipball/754f4b6de7b4a1d442f9b6a728bfb7adef54592c",
                 "reference": "754f4b6de7b4a1d442f9b6a728bfb7adef54592c",
                 "shasum": ""
             },
@@ -2168,12 +2164,12 @@
             "target-dir": "Symfony/Component/CssSelector",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/CssSelector.git",
+                "url": "https://github.com/symfony/css-selector.git",
                 "reference": "d45b306421462295e76b94bcf76b963867450327"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/CssSelector/zipball/d45b306421462295e76b94bcf76b963867450327",
+                "url": "https://api.github.com/repos/symfony/css-selector/zipball/d45b306421462295e76b94bcf76b963867450327",
                 "reference": "d45b306421462295e76b94bcf76b963867450327",
                 "shasum": ""
             },
@@ -2219,12 +2215,12 @@
             "target-dir": "Symfony/Component/Debug",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/Debug.git",
+                "url": "https://github.com/symfony/debug.git",
                 "reference": "672a71e72310099540dfb03da2da553896e88483"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Debug/zipball/672a71e72310099540dfb03da2da553896e88483",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/672a71e72310099540dfb03da2da553896e88483",
                 "reference": "672a71e72310099540dfb03da2da553896e88483",
                 "shasum": ""
             },
@@ -2275,12 +2271,12 @@
             "target-dir": "Symfony/Component/DomCrawler",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/DomCrawler.git",
+                "url": "https://github.com/symfony/dom-crawler.git",
                 "reference": "3860edcf7ff7e173cfe2151f0d425e610e77cc35"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/DomCrawler/zipball/3860edcf7ff7e173cfe2151f0d425e610e77cc35",
+                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/3860edcf7ff7e173cfe2151f0d425e610e77cc35",
                 "reference": "3860edcf7ff7e173cfe2151f0d425e610e77cc35",
                 "shasum": ""
             },
@@ -2328,12 +2324,12 @@
             "target-dir": "Symfony/Component/EventDispatcher",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/EventDispatcher.git",
+                "url": "https://github.com/symfony/event-dispatcher.git",
                 "reference": "40ff70cadea3785d83cac1c8309514b36113064e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/EventDispatcher/zipball/40ff70cadea3785d83cac1c8309514b36113064e",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/40ff70cadea3785d83cac1c8309514b36113064e",
                 "reference": "40ff70cadea3785d83cac1c8309514b36113064e",
                 "shasum": ""
             },
@@ -2386,12 +2382,12 @@
             "target-dir": "Symfony/Component/Filesystem",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/Filesystem.git",
+                "url": "https://github.com/symfony/filesystem.git",
                 "reference": "a1f566d1f92e142fa1593f4555d6d89e3044a9b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Filesystem/zipball/a1f566d1f92e142fa1593f4555d6d89e3044a9b7",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/a1f566d1f92e142fa1593f4555d6d89e3044a9b7",
                 "reference": "a1f566d1f92e142fa1593f4555d6d89e3044a9b7",
                 "shasum": ""
             },
@@ -2480,12 +2476,12 @@
             "target-dir": "Symfony/Component/HttpFoundation",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/HttpFoundation.git",
+                "url": "https://github.com/symfony/http-foundation.git",
                 "reference": "154d6c9ae8f7c27799a6119688dbd6026234441a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/154d6c9ae8f7c27799a6119688dbd6026234441a",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/154d6c9ae8f7c27799a6119688dbd6026234441a",
                 "reference": "154d6c9ae8f7c27799a6119688dbd6026234441a",
                 "shasum": ""
             },
@@ -2533,12 +2529,12 @@
             "target-dir": "Symfony/Component/HttpKernel",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/HttpKernel.git",
+                "url": "https://github.com/symfony/http-kernel.git",
                 "reference": "a218b9ba87b24c440e4e9cd171c880e83796a5bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/HttpKernel/zipball/a218b9ba87b24c440e4e9cd171c880e83796a5bb",
+                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/a218b9ba87b24c440e4e9cd171c880e83796a5bb",
                 "reference": "a218b9ba87b24c440e4e9cd171c880e83796a5bb",
                 "shasum": ""
             },
@@ -2654,12 +2650,12 @@
             "target-dir": "Symfony/Component/Routing",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/Routing.git",
+                "url": "https://github.com/symfony/routing.git",
                 "reference": "47e350dadadabdf64c8dbab499a1132c567f9411"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Routing/zipball/47e350dadadabdf64c8dbab499a1132c567f9411",
+                "url": "https://api.github.com/repos/symfony/routing/zipball/47e350dadadabdf64c8dbab499a1132c567f9411",
                 "reference": "47e350dadadabdf64c8dbab499a1132c567f9411",
                 "shasum": ""
             },
@@ -2840,12 +2836,12 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "dinesh/barcode": 20,
         "knight-swarm/laravel-saml": 20,
         "nutsweb/laravel-prerender": 20,
         "henrist/laravel-api-query": 20
     },
     "prefer-stable": false,
+    "prefer-lowest": false,
     "platform": [],
     "platform-dev": []
 }

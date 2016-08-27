@@ -16,7 +16,7 @@ return array(
     /*
      * The path to the working phpsimplesaml install
      */
-    'sp_path' => __DIR__."/../../../../../../simplesamlphp",
+    'sp_path' => '/var/simplesamlphp',
 
     /*
      * The service provider name
@@ -27,6 +27,14 @@ return array(
      * The redirect destination after logging out
      */
     'logout_target' => url(),
+
+    /*
+     * The route slugs to use for the login and logout controller methods
+     */
+    'routes' => [
+        'login' => 'api/login',
+        'logout' => 'api/logout'
+    ],
 
     /*
      * Internal id property, defaults to email.

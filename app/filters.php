@@ -21,7 +21,13 @@ App::before(function($request)
 
 App::after(function($request, $response)
 {
-    //
+    // cors for development version of frontend
+    if (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'localhost:3000') !== false) {
+        $response->headers->set('Access-Control-Allow-Origin', 'http://localhost:3000');
+        $response->headers->set('Access-Control-Allow-Credentials', 'true');
+        $response->headers->set('Access-Control-Allow-Headers', 'X-Requested-With,X-Csrf-Token,Content-Type');
+        $response->headers->set('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,DELETE');
+    }
 });
 
 // handle findOrFail-calls
@@ -97,7 +103,7 @@ Route::filter('guest', function()
 Route::filter('csrf', function($route, $request)
 {
     // POST for DIBS form don't require csrf
-    if (substr($request->path(), 0, 5) == 'dibs/') return;
+    if (substr($request->path(), 0, 9) == 'api/dibs/') return;
 
     // POST for ticekt printer don't require csrf
     if (substr($request->path(), 0, 20) == 'api/printer/announce') return;

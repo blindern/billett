@@ -5,10 +5,6 @@
 	"repositories": [
 		{
 			"type": "vcs",
-			"url": "https://github.com/henrist/laravel-saml"
-		},
-		{
-			"type": "vcs",
 			"url": "https://github.com/henrist/laravel-api-query"
 		},
 		{
@@ -19,7 +15,7 @@
 	"require": {
 		"laravel/framework": "4.2.*",
 		"dompdf/dompdf" : "0.6.*",
-		"dinesh/barcode": "dev-master",
+		"milon/barcode": "~4.2",
 		"intervention/image": "~2.0",
 		"iio/libmergepdf": "~2.4",
 		"knight-swarm/laravel-saml": "dev-master",

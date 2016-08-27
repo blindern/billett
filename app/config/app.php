@@ -78,7 +78,7 @@ return array(
     |
     */
 
-    'key' => $_ENV['BILLETT_KEY'],
+    'key' => isset($_ENV['BILLETT_KEY']) ? $_ENV['BILLETT_KEY'] : 'KeNd439jeX9n9hqudOxXqCQErFmbApoi',
 
     'cipher' => MCRYPT_RIJNDAEL_128,
 
@@ -121,7 +121,7 @@ return array(
         'Illuminate\Validation\ValidationServiceProvider',
         'Illuminate\View\ViewServiceProvider',
         'Illuminate\Workbench\WorkbenchServiceProvider',
-        'Dinesh\Barcode\BarcodeServiceProvider',
+        'Milon\Barcode\BarcodeServiceProvider',
         'Intervention\Image\ImageServiceProvider',
         'KnightSwarm\LaravelSaml\LaravelSamlServiceProvider',
         'Nutsweb\LaravelPrerender\LaravelPrerenderServiceProvider',
@@ -194,8 +194,8 @@ return array(
         'URL'               => 'Illuminate\Support\Facades\URL',
         'Validator'         => 'Illuminate\Support\Facades\Validator',
         'View'              => 'Illuminate\Support\Facades\View',
-        'DNS1D'             => 'Dinesh\Barcode\Facades\DNS1DFacade',
-        'DNS2D'             => 'Dinesh\Barcode\Facades\DNS2DFacade',
+        'DNS1D'             => 'Milon\Barcode\Facades\DNS1DFacade',
+        'DNS2D'             => 'Milon\Barcode\Facades\DNS2DFacade',
         'Image'             => 'Intervention\Image\Facades\Image',
         'Saml'              => 'KnightSwarm\LaravelSaml\Facades\Saml',
         'ApiQuery'          => 'Henrist\LaravelApiQuery\Facades\ApiQuery',
