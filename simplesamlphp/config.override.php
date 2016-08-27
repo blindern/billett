@@ -6,6 +6,7 @@ $proto = isset($_SERVER['HTTP_X_FORWARDED_PROTO']) ? $_SERVER['HTTP_X_FORWARDED_
 if ($proto == "https") {
     // ugly hack for getting the redirects to work
     $_SERVER['SERVER_PORT'] = 443;
+    $_SERVER['HTTPS'] = 'on';
 }
 
 $config = array_merge($config, array(
