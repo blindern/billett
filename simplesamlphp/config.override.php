@@ -3,6 +3,10 @@
 // we run behind a reverse proxy (nginx) that does the ssl job..
 // we don't need to bother checking $_SERVER['HTTPS']
 $proto = isset($_SERVER['HTTP_X_FORWARDED_PROTO']) ? $_SERVER['HTTP_X_FORWARDED_PROTO'] : 'http';
+if ($proto == "https") {
+    // ugly hack for getting the redirects to work
+    $_SERVER['SERVER_PORT'] = 443;
+}
 
 $config = array_merge($config, array(
     'baseurlpath' => $proto . '://' . $_SERVER['HTTP_HOST'] . '/billett/saml/',
