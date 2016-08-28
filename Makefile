@@ -1,6 +1,6 @@
 # this file is to easier set up docker stuff
 
-all: frontend-dist
+all: frontend-dist build
 	docker-compose up -d
 
 frontend-dist:
@@ -10,6 +10,11 @@ frontend-dist:
 		-v $(CURDIR)/.data/billett-frontend-dist:/usr/src/app-dist \
 		blindernuka/billett-frontend \
 		/build-dist.sh
+
+build:
+	docker-compose \
+		-f docker-compose.yaml -f docker-compose.dev.yaml \
+		build
 
 dev:
 	# this runs the development server of the frontend
