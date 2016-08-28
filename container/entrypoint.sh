@@ -2,11 +2,11 @@
 
 # make sure we are the same user as the one who owns the files
 # this is relevant in development when the developer's source code is mounted in
-if [ "$1" != "php-fpm" ] && [ -f /var/www/html/README.md ]; then
-  uid=$(stat -c %u /var/www/html/README.md)
-  gid=$(stat -c %u /var/www/html/README.md)
+if [ "$1" != "php-fpm" ] && [ -d /var/www/html/app ]; then
+  uid=$(stat -c %u /var/www/html/app)
+  gid=$(stat -c %u /var/www/html/app)
 
-  if [ $(id -u) != $(stat -c %u /var/www/html/README.md) ]; then
+  if [ $(id -u) != $(stat -c %u /var/www/html/app) ]; then
     olduid=$(id -u www-data)
     oldgid=$(id -g www-data)
 

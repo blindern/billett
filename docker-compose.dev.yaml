@@ -3,7 +3,7 @@ version: '2'
 services:
   fpm:
     volumes:
-     - ./:/var/www/html/
+     - ./src/:/var/www/html/
     command: /dev.sh
   nginx:
     volumes:

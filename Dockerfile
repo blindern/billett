@@ -64,7 +64,7 @@ COPY simplesamlphp/authsources.php /var/simplesamlphp/config/
 COPY simplesamlphp/saml20-idp-remote.php /var/simplesamlphp/metadata/
 RUN cd /var/simplesamlphp && tail -n +2 config/config.override.php >>config/config.php
 
-COPY composer.* /var/www/html/
+COPY src/composer.* /var/www/html/
 
 # create directories that are scanned on composer install
 # this is later replaced with new source, but we need this
@@ -85,7 +85,7 @@ RUN mkdir -p app/commands \
     && mv vendor /var/www/html-vendor \
     && ln -s /var/www/html-vendor /var/www/html/vendor
 
-COPY . /var/www/html/
+COPY src /var/www/html/
 
 # we run composer install again so the post process commands
 # are run
