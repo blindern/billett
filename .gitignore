@@ -5,6 +5,7 @@ composer.phar
 Thumbs.db
 .data
 /billett-frontend
+docker-compose.prod.yaml
 
 # Dependencies from package manager
 /bower_components/
