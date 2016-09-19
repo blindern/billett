@@ -16,7 +16,10 @@ import {api} from '../../api';
     module.controller('IndexController', function (AuthService, Page, $http, $scope) {
         Page.setTitle('Arrangementer');
 
-        $scope.has_role_admin = AuthService.hasRole('billett.admin');
+        $scope.has_role_admin = false;
+        AuthService.hasRole('billett.admin').then(res => {
+            $scope.has_role_admin = res;
+        });
 
         $http.get(api('event/get_upcoming')).success(function (ret) {
             $scope.upcoming = ret;

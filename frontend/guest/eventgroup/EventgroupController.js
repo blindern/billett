@@ -17,7 +17,10 @@ import {api} from '../../api';
     module.controller('EventgroupController', function (AuthService, Page, $http, $scope, $stateParams, $location) {
         Page.setTitle('Arrangementgruppe');
 
-        $scope.has_role_admin = AuthService.hasRole('billett.admin');
+        $scope.has_role_admin = false;
+        AuthService.hasRole('billett.admin').then(res => {
+            $scope.has_role_admin = res;
+        });
 
         // TODO: move this to eventgroup object, see #79
         $scope.daythemes = {
