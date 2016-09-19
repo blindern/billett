@@ -54,7 +54,7 @@ ssh -p 2222 -o StrictHostKeyChecking=no core@server2016.blindernuka.no /bin/bash
       --rm \
       -v ~/billett/.data/billett-frontend-dist:/dst \
       blindernuka/billett-frontend:$commit \
-      mv /usr/src/app-dist/latest /dst/
+      sh -c "rm -rf /dst/latest; cp -rp /usr/src/app-dist/latest /dst/"
   fi
 EOF
 
