@@ -6,28 +6,21 @@ class Guard extends \Illuminate\Auth\Guard {
      */
     protected static $allowed = array(
         'henrste',
-        'ingceckri',
         'vegardan',
-        'benden',
-        'miaemilie',
-        'dionars',
-        'linemykland',
-        'annaro',
-        'haakonpt',
-        'patjohan',
+        'kristinaca',
 
         // UKEstyret
-        'andvin',
-        'annanok',
-        'chrimsam',
-        'goranbs',
-        'ingebjorgbm',
-        'jannekj',
-        'soensteby',
+        'marthhsa',
+        'bjornreu',
+        'linestandalsoernes',
+        'trygvels',
+        'miaemilie',
+        'grieglet',
+        'sebastwi',
         'tirilskaardal',
 
         // kjellerøkonomi
-        'lervikml',
+        'bfesche',
     );
 
     /**
