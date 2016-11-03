@@ -5,11 +5,11 @@ class Guard extends \Illuminate\Auth\Guard {
      * Temporary solution
      */
     protected static $allowed = array(
-        'henrste',
-        'vegardan',
-        'kristinaca',
+        'henrste', // ikt 2017/systemansvarlig
+        'vegardan', // web 2017
+        'kristinaca', // booking 2017
 
-        // UKEstyret
+        // UKEstyret 2017
         'marthhsa',
         'bjornreu',
         'linestandalsoernes',
@@ -19,8 +19,8 @@ class Guard extends \Illuminate\Auth\Guard {
         'sebastwi',
         'tirilskaardal',
 
-        // kjellerøkonomi
-        'bfesche',
+        'bfesche', // kjellerøkonomi 2017
+        'stianval', // billettsjef 2017
     );
 
     /**
