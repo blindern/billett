@@ -171,7 +171,7 @@ class EventController extends Controller {
         }
 
         foreach ($list as $field) {
-            if (Input::exists($field) && Input::get($field) != $event->{$field}) {
+            if (Input::exists($field) && Input::get($field) !== $event->{$field}) {
                 $val = Input::get($field);
                 if ($val === '') $val = null;
                 $event->{$field} = $val;
