@@ -57,7 +57,7 @@ class DibsController extends Controller {
             'payment' => $payment
         ));
 
-        return Redirect::to('order/completed');
+        return Redirect::to('order/complete');
     }
 
     private function getOrderAndValidate()
