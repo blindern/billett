@@ -12,6 +12,7 @@ services:
       LARAVEL_ENV: local
       BILLETT_KEY: KeNd439jeX9n9hqudOxXqCQErFmbApoi
       BILLETT_MYSQL_PASS: uka_billett
+      DIBS_HMAC_KEY: overridden-in-local-configuration
   nginx:
     image: nginx:stable-alpine
     ports:
