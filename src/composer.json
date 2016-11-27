@@ -6,10 +6,6 @@
 		{
 			"type": "vcs",
 			"url": "https://github.com/henrist/laravel-api-query"
-		},
-		{
-			"type": "vcs",
-			"url": "https://github.com/henrist/Laravel-Prerender"
 		}
 	],
 	"require": {
@@ -19,7 +15,6 @@
 		"intervention/image": "~2.0",
 		"iio/libmergepdf": "~2.4",
 		"knight-swarm/laravel-saml": "dev-master",
-		"nutsweb/laravel-prerender": "dev-master",
 		"henrist/laravel-api-query": "dev-master",
 		"doctrine/dbal": "~2.5",
 		"barryvdh/laravel-ide-helper": "~1.11"

@@ -124,7 +124,6 @@ return array(
         'Milon\Barcode\BarcodeServiceProvider',
         'Intervention\Image\ImageServiceProvider',
         'KnightSwarm\LaravelSaml\LaravelSamlServiceProvider',
-        'Nutsweb\LaravelPrerender\LaravelPrerenderServiceProvider',
         'Henrist\LaravelApiQuery\LaravelApiQueryServiceProvider',
         'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
 
