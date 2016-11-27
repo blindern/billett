@@ -52,10 +52,10 @@ class DibsController extends Controller {
         $order->load('tickets.ticketgroup', 'tickets.event');
         unset($payment->order);
 
-        Session::put('order_receipt',
+        Session::put('order_receipt', array(
             'order' => $order,
             'payment' => $payment
-        );
+        ));
 
         return Redirect::to('order/completed');
     }
