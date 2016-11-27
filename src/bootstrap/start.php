@@ -67,4 +67,8 @@ require $framework.'/Illuminate/Foundation/start.php';
 |
 */
 
+// move this to a middleware when upgrading to Laravel 5
+// we always run the system behind a proxy, so no check is needed
+$app['request']->setTrustedProxies($app['request']->getClientIps());
+
 return $app;
