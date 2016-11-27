@@ -14,7 +14,7 @@ $format_nok = function($num) {
 };
 
 $img = \DNS1D::getBarcodePNG($ticket->key, "C128", 2.4, 40);
-$logo = public_path() . '/assets/graphics/uka_gul_pikto.gif';
+$logo = app_path() . '/assets/images/uka_gul_pikto.gif';
 $logo = base64_encode(file_get_contents($logo));
 
 // in development server -TEST is added to orderid
