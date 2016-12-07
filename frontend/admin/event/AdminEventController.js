@@ -5,7 +5,7 @@ import {api} from '../../api';
 
     var module = angular.module('billett.admin');
 
-    module.controller('AdminEventController', function(Page, $q, $stateParams, AdminEvent, AdminPrinter, $location, $scope, FileUploader) {
+    module.controller('AdminEventController', function(Page, $q, $stateParams, AdminEvent, AdminPrinter, $location, $scope, FileUploader, AuthService) {
         Page.setTitle("Arrangement");
 
         $scope.api = api;
@@ -36,11 +36,12 @@ import {api} from '../../api';
         // uploading of image
         $scope.uploader = new FileUploader({
             url: api('event/'+$stateParams['id']+'/image'),
-            headers: {
-                'X-Csrf-Token': $('meta[name=csrf-token]').attr('content')
-            },
             removeAfterUpload: true
         });
+        // inject the csrf token
+        AuthService.getCsrfToken().then(csrfToken => {
+            $scope.uploader.headers['X-Csrf-Token'] = csrfToken;
+        })
         $scope.uploader.onAfterAddingFile = function(fileItem) {
             $scope.uploadprogress = true;
             fileItem.onSuccess = function(res) {
