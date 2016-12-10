@@ -17,7 +17,7 @@ class Guard extends \Illuminate\Auth\Guard {
         'miaemilie',
         'grieglet',
         'sebastwi',
-        'tirilskaardal',
+        'kjersfos',
 
         'bfesche', // kjellerøkonomi 2017
         'stianval', // billettsjef 2017
