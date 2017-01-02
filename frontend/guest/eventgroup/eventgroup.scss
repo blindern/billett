@@ -31,6 +31,12 @@
     .theme {
 
     }
+
+    &:after {
+      content: '';
+      display: block;
+      clear: both;
+    }
   }
 
   .event {
