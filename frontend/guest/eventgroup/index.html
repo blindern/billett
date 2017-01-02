@@ -41,15 +41,18 @@
                         <li>
                             <!-- admin links -->
                             <div class="edit-link-wrap" ng-show="has_role_admin">
-                            <span class="edit-link">
-                                <a ng-href="a/event/{{::event.id}}/edit">Rediger</a>
-                                <a ng-href="a/event/{{::event.id}}">Detaljert</a>
-                            </span>
+                                <span class="edit-link">
+                                    <a ng-href="a/event/{{::event.id}}/edit">Rediger</a>
+                                    <a ng-href="a/event/{{::event.id}}">Detaljert</a>
+                                </span>
                             </div>
 
                             <a ng-href="event/{{::event.alias||event.id}}" target="_top">{{::event.title}}</a>
                             <span class="category" ng-class="'category-'+categoryNum(event.category)"
-                                  ng-show="::event.category"><a ng-href="{{::('eventgroup/'+group.id+'/'+event.category|lowercase)}}">{{::event.category}}</a></span>
+                                  ng-show="::event.category"
+                            >
+                                <a ng-href="{{::('eventgroup/'+group.id+'/'+event.category|lowercase)}}">{{::event.category}}</a>
+                            </span>
                         </li>
                         <li>
                             <div ng-show="::!event.ticket_info">
@@ -59,11 +62,11 @@
                                 <span ng-show="::event.web_selling_status == 'no_web_tickets'"></span>
                                 <span ng-show="::event.web_selling_status == 'timeout'">I døra</span>
                                 <span ng-show="::event.web_selling_status == 'sold_out'">Utsolgt</span>
-                            <span ng-show="::event.web_selling_status == 'sale'">
-                                <a href="event/{{::event.alias||event.id}}" target="_top">
-                                    <img src="http://blindernuka.no/2013/img/program/billettgul.png" alt="Kjøp billett">
-                                </a>
-                            </span>
+                                <span ng-show="::event.web_selling_status == 'sale'">
+                                    <a href="event/{{::event.alias||event.id}}" target="_top">
+                                        <img src="http://blindernuka.no/2013/img/program/billettgul.png" alt="Kjøp billett">
+                                    </a>
+                                </span>
                             </div>
 
                             <div ng-show="::event.ticket_info">
