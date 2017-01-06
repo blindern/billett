@@ -22,22 +22,7 @@ import {api} from '../../api';
             $scope.has_role_admin = res;
         });
 
-        // TODO: move this to eventgroup object, see #79
-        $scope.daythemes = {
-            '2015-01-31': 'UKEvors',
-            '2015-02-04': 'Beboerpremiere',
-            '2015-02-05': 'Urpremiere',
-            '2015-02-06': 'Premiere',
-            '2015-02-07': 'GB-aften',
-            '2015-02-10': 'Samfunnsvitenskapelig Aften',
-            '2015-02-11': 'Koraften',
-            '2015-02-12': 'Erotisk Aften',
-            '2015-02-13': 'Teknisk-Matematisk Aften',
-            '2015-02-14': 'Komikveld',
-            '2016-08-22': 'Pub-til-pub',
-            '2016-08-23': 'Improteater',
-            '2016-08-24': 'Internaften'
-        };
+        $scope.daythemes = {};
 
         var filter = {
             date: null,
@@ -72,6 +57,11 @@ import {api} from '../../api';
                 r[k] = r[k] || [];
                 r[k].push(item);
                 c++;
+            });
+
+            angular.forEach($scope.group.daythemes, function (item) {
+                var day = moment.unix(item.date).format('YYYY-MM-DD');
+                $scope.daythemes[day] = item.title;
             });
 
             // if blank page on filter
