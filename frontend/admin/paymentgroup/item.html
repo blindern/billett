@@ -189,7 +189,7 @@
                 </div>
 
                 <div class="print-page-section" ng-repeat="category in ctrl.categories" ng-if="ctrl.categories.length > 0">
-                    <h3>{{::category.name}} - sum salg: {{::-category.total|price}}</h3>
+                    <h3>{{::category.name||'Uten kategori'}} - sum salg: {{::-category.total|price}}</h3>
 
                     <div ng-repeat="event in category.events">
                         <table class="table table-condensed table-striped paymentgroup-sales">
