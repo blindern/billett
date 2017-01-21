@@ -31,7 +31,26 @@ class Eventgroup extends \Eloquent implements ApiQueryInterface {
 
     public function getPaymentsourcesDataAttribute($val)
     {
-        return json_decode($val, true);
+        $data = json_decode($val, true);
+
+        // this information might not exist yet
+        // we will return a mocked state of the data
+        if (!$data) {
+            // TODO: need a way for the admin user to easily add and change this
+            // TODO: we don't really want to have to mocked... it should always exist?
+            $data = array(
+                'cash_prefix' => 'D 1910 Kontanter',
+                'payments_deviation_prefix' => 'D 1909 Kassedifferanser UKA',
+                'orders_deviation_prefix' => 'D 1941 Oppgjørskonto billetter UKA',
+                'sources' => array(
+                    array('title' => 'D 1940 Oppgjørskonto bet.term. UKA'),
+                    array('title' => 'D 1941 Oppgjørskonto billetter UKA'),
+                    array('title' => 'D 1942 Oppgjørskonto Vipps UKA'),
+                )
+            );
+        }
+
+        return $data;
     }
 
     public function setPaymentsourcesDataAttribute($val)
