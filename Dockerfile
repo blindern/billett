@@ -101,6 +101,6 @@ USER root
 COPY container/entrypoint.sh /entrypoint.sh
 COPY container/dev.sh /dev.sh
 
-VOLUME ["/var/simplesamlphp", "/var/billett"]
+VOLUME ["/var/billett"]
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["php-fpm"]
