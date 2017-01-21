@@ -2,5 +2,5 @@
 
 return array(
     'debug' => false,
-    'url' => 'http://blindernuka.no/billett/',
+    'url' => 'https://billett.blindernuka.no/',
 );

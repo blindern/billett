@@ -9,5 +9,5 @@ if (isset($_SERVER['HTTP_HOST']) && ($pos = strpos($_SERVER['HTTP_HOST'], ":")) 
 return array(
     'debug' => true,
     'dev' => true,
-    'url' => 'http://localhost:8081/billett/',
+    'url' => 'http://localhost:8081/',
 );

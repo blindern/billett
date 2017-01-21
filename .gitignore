@@ -33,7 +33,7 @@ docker-compose.prod.yaml
 /app/config/packages/nutsweb/laravel-prerender/local/config.php
 /app/config/packages/nutsweb/laravel-prerender/hsw/config.php
 
-# SimpleSAMLphp will be symlinked in /billett/saml/
+# SimpleSAMLphp will be symlinked in /saml/
 /public/saml
 
 # IDE-helper-files

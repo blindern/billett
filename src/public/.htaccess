@@ -8,12 +8,12 @@
     # Redirect Trailing Slashes...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^(.*)/$ /billett/$1 [L,R=301]
+    RewriteRule ^(.*)/$ /$1 [L,R=301]
 
     # Handle Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_URI} !^/billett/assets/
+    RewriteCond %{REQUEST_URI} !^/assets/
     RewriteRule ^ index.php [L]
 
     AddDefaultCharset UTF-8

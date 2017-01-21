@@ -43,7 +43,7 @@ Normally all that is needed is to run:
 `make dev`
 
 And the development environment should start and be available
-at http://localhost:8081/billett/
+at http://localhost:8081/
 
 ## Prerender service
 

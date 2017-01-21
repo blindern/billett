@@ -6,7 +6,7 @@ return array(
     'lifetime' => 120,
     'expire_on_close' => false,
     'cookie' => 'billett_session',
-    'path' => '/billett/',
+    'path' => '/',
     'domain' => null,
     'secure' => false,
 );
