@@ -4,6 +4,8 @@
 
 ## Data attributes/model
 
+![Entity relation](diagram_er.png)
+
 ### Eventgroup
 Grouping of events.
 * int id

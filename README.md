@@ -1,64 +1,54 @@
 # UKA på Blindern's ticket system
 
-**This is an incomplete project!**
+This project contains code for running UKA på Blindern's ticket system.
+Even though the code is in production, it currently lacks a few features
+and is probably little of use for others. The plan is to have a more complete
+feature set by the end of 2016.
 
 More documentation: [Documentation (norwegian)](docs/index.md)
 
-## Setup
+## Architecture
 
-### Requirements
-* PHP 5.4+
+This project is run with Docker and mainly consists of:
 
-#### Composer
-Composer is a package manager for PHP. It is used to install the Laravel framework and other third party packages we use. See https://getcomposer.org/download/
+* PHP backend container running php-fpm serving the backend api as well as simplesamlphp for authentication
+* node frontend image that compiles static frontend files
+* nginx container that serves the static files and acts as a proxy to the backend
+* mysql container as database
 
-#### npm (package manager for node.js)
-A lot of tools we use are javascript tools which we need `npm` to install. This should probably be installed system wide with `sudo apt-get install npm` or similar, and will also make sure Node.js is installed so we can run these applications.
+The frontend repository is located at https://github.com/blindernuka/billett-frontend
 
-### Initial setup
-* Make sure requirements are met
-* Set up configuration (see section below)
-* Install PHP-dependencies:<br>```$ composer install```
-* Install global Node.js-tools (might need sudo):<br>```$ npm install -g gulp bower```
-* Load required Node.js-tools:<br>```$ npm install```
-* Install bower-dependencies: (bower is installed above with npm)<br>```$ bower install```
-* Continue on updating section
+Docker Compose is used to simplify running the containers.
 
-### Updating
-* If `composer.json` is changed, install new PHP-dependencies:<br>```$ composer install```
-* If `packages.json` is changed, install new npm-dependencies:<br>```$ npm install```
-* If `bower.json` is changed, install new bower-dependencies:<br>```$ bower install```
-* Regenerate static files:<br>```gulp production``` (see development section for development tips)
+## Backend API details
 
-### Developing
-* When javascript/scss-sources are changed, new static files must be compiled. The easiest way to handle this is to make gulp run in background and watch files:<br>```$ gulp watch```
-* or you may manually create the static files every time:<br>```$ gulp```
+The backend runs Laravel and provides only an API for the frontend. See the
+Laravel web page for more details.
 
-### Configuration
-Create the file ```/.env.php```:
-```php
-<?php
-return array(
-	'BILLETT_KEY' => 'REPLACE',
-	'BILLETT_MYSQL_PASS' => 'REPLACE'
-);
-?>
-```
+## Production setup
 
-There are also environment configuration stored in `/app/config/ENVIRONMENT/`, where `ENVIRONMENT` is configured in `/bootstrap/start.php`. This overrides configuration files in `/app/config/`.
+The production is held updated automatically by Travis CI. See
+`scripts/deploy.sh` for details.
 
-### Prerender service
+The file `docker-compose.prod.yaml` is a local file that must exist
+at the production server. A copy of this should be available at
+https://foreningenbs.no/confluence/x/qgYf
+
+## Development setup
+
+To ease development, see `Makefile`
+
+Normally all that is needed is to run:
+
+`make dev`
+
+And the development environment should start and be available
+at http://localhost:8081/billett/
+
+## Prerender service
+
 Search engines, Facebook, and more, will normally only grab the template, and not include response from API-calls. To make sure they get a full page, requests are intercepted and served through a service which generates static html.
 
 We use [Prerender](https://prerender.io/) for this.
 
-To enable configuration for this, create a configuration file for the environment in `app/config/packages/nutsweb/laravel-prerender/ENVIRONMENT/config.php` that enables prerender and sets the token, e.g.:
-
-```php
-<?php
-return [
-    'enable' => true,
-    'prerender_token' => 'TOKEN-HERE'
-];
-?>
-```
+The interception is done through in the nginx gateway.
