@@ -20,9 +20,9 @@ module.exports = {
     ],
   },
   output: {
-    path: __dirname + '/dist/billett/',
+    path: __dirname + '/dist',
     filename: '[name].js',
-    publicPath: '/billett/'
+    publicPath: '/'
   },
   module: {
     loaders: [
@@ -64,7 +64,7 @@ module.exports = {
     new webpack.NoErrorsPlugin(),
     new webpack.DefinePlugin({
       DEBUG: true,
-      BACKEND_URL: JSON.stringify(process.env.BACKEND_URL || '/billett/'),
+      BACKEND_URL: JSON.stringify(process.env.BACKEND_URL || '/'),
     }),
     new HtmlWebpackPlugin({
       template: 'frontend/index.html'

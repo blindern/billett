@@ -35,7 +35,7 @@ gulp.task('scripts-library', function() {
     return gulp.src(js_files_library)
         .pipe(concat('library.js'))
         //.pipe(uglify())
-        .pipe(gulp.dest('dist/billett'));
+        .pipe(gulp.dest('dist'));
 });
 
 var webpackBuild = function(callback, config, name) {
@@ -63,7 +63,7 @@ gulp.task('webpack-dev-server', function(callback) {
 
     new WebpackDevServer(webpack(webpackConfigDev), {
         historyApiFallback: {
-            index: '/billett/'
+            index: '/'
         },
         hot: true,
         inline: true,

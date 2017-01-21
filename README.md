@@ -23,11 +23,11 @@ It will run a Docker-instance, mounting the source code, install npm packages an
 start Webpack development server on port 3000. It will also listen to changes in
 the source code and rebuild the application on-the-fly.
 
-http://localhost:3000/billett/
+http://localhost:3000/
 
 If you want to testing against production data you can set the backend to production:
 
-`BACKEND_URL=http://blindernuka.no/billett/ ./run-dev.sh`
+`BACKEND_URL=https://billett.blindernuka.no/ ./run-dev.sh`
 
 ### Running npm commands
 
