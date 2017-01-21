@@ -48,6 +48,8 @@ Route::get('/api/ticket/{id}/pdf', 'TicketController@pdf');
 Route::post('/api/ticket/{id}/print/{printername}', 'TicketController@printTicket');
 Route::post('/api/ticket/{id}/revoke', 'TicketController@revoke');
 Route::post('/api/ticket/{id}/validate', 'TicketController@validate');
+Route::post('/api/ticket/{id}/checkin', 'TicketController@checkin');
+Route::post('/api/ticket/{id}/checkout', 'TicketController@checkout');
 Route::resource('/api/ticket', 'TicketController', array(
     'only' => array('index', 'destroy')
 ));

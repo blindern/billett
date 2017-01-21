@@ -12,7 +12,11 @@ class TicketController extends \Controller {
 
     public function index()
     {
-        return \ApiQuery::processCollection(Ticket::query());
+        return \ApiQuery::processCollection(Ticket::whereHas('order', function ($query) {
+            $query->where(function ($q) {
+                $q->where('is_valid', true)->orWhere('is_admin', true);
+            });
+        }));
     }
 
     /**
@@ -185,5 +189,45 @@ class TicketController extends \Controller {
         }
 
         return $tickets;
+    }
+
+    /**
+     * Checkin ticket (set as used)
+     */
+    public function checkin($id)
+    {
+        return $this->checkinout($id, true);
+    }
+
+    /**
+     * Checkout ticket (remove used status)
+     */
+    public function checkout($id)
+    {
+        return $this->checkinout($id, false);
+    }
+
+    /**
+     * Checkin/checkout ticket
+     */
+    private function checkinout($id, $is_checkin)
+    {
+        $ticket = Ticket::findOrFail($id);
+
+        if ($ticket->is_revoked) {
+            throw new \Exception("Ticket is revoked.");
+        }
+
+        if ($is_checkin && $ticket->used) {
+            throw new \Exception("Ticket is already marked as used.");
+        } elseif (!$is_checkin && !$ticket->used) {
+            throw new \Exception("Ticket is not marked as used.");
+        }
+
+        $ticket->used = $is_checkin ? time() : null;
+        $ticket->user_used = $is_checkin ? \Auth::user()->username : null;
+        $ticket->save();
+
+        return $ticket;
     }
 }

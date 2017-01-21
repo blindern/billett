@@ -42,6 +42,11 @@ class EventController extends Controller {
             else $query->where('use_web', true);
         }));
 
+        if (\Input::exists('checkin')) {
+            // make sure checkin-variable gets populated
+            $ev->checkin = true;
+        }
+
         return $ev;
     }
 

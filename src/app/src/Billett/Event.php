@@ -240,6 +240,58 @@ class Event extends \Eloquent implements ApiQueryInterface {
     }
 
     /**
+     * Get checkin status information
+     */
+    public function getCheckinAttribute()
+    {
+        $q = \DB::select('
+            SELECT orders.is_admin, tickets.used IS NOT NULL AS is_used, tickets.ticketgroup_id, COUNT(tickets.id) AS count
+            FROM tickets JOIN orders ON tickets.order_id = orders.id
+            WHERE tickets.event_id = ? AND tickets.is_revoked = 0
+            GROUP BY orders.is_admin, tickets.used IS NOT NULL, tickets.ticketgroup_id', [$this->id]);
+
+        $res = [
+            'valid' => [
+                'total' => 0,
+                'admin' => 0,
+                'other' => 0,
+                'groups' => []
+            ],
+            'used' => [
+                'total' => 0,
+                'admin' => 0,
+                'other' => 0,
+                'groups' => []
+            ]
+        ];
+
+        $addStats = function(&$arr, $row) {
+            $arr['total'] += $row->count;
+            $arr[$row->is_admin ? 'admin' : 'other'] += $row->count;
+
+            if (!isset($arr['groups'][$row->ticketgroup_id])) {
+                $arr['groups'][$row->ticketgroup_id] = [
+                    'total' => 0,
+                    'admin' => 0,
+                    'other' => 0
+                ];
+            }
+
+            $arr['groups'][$row->ticketgroup_id]['total'] += $row->count;
+            $arr['groups'][$row->ticketgroup_id][$row->is_admin ? 'admin' : 'other'] += $row->count;
+        };
+
+        foreach ($q as $row) {
+            $addStats($res['valid'], $row);
+            if ($row->is_used) {
+                $addStats($res['used'], $row);
+            }
+        }
+
+        return $res;
+    }
+
+    /**
      * Get fields we can search in
      */
     public function getApiAllowedFields() {

@@ -126,5 +126,6 @@ The tickets itself.
 * optional string user_valid (user that validated ticket)
 * optional string user_revoked (user that revoked ticket)
 * optional datetime used (when the ticket was registered used/checked in)
+* optional string user_used (who marked the ticket as used)
 * string key (the unique special number used to identify the ticket)
 * optional blob pdf (the actual PDF for the ticket)
