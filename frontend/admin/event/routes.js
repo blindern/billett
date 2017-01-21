@@ -14,8 +14,8 @@ angular.module('billett.admin').config(function($stateProvider) {
         })
         .state('admin-event-checkin', {
             url: '/a/event/:id/checkin',
-            //TODO templateUrl: require('./checkin.html'),
-            controller: 'AdminCheckinController',
+            templateUrl: require('./checkin.html'),
+            controller: 'AdminCheckinController as ctrl',
             resolve: {auth: 'AuthRequireResolver'}
         })
         .state('admin-event', {

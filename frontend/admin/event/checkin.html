@@ -1,0 +1,276 @@
+<div class="admin-event-checkin" ng-if="ctrl.event">
+
+    <page-property name="title" value="Innsjekking: {{ctrl.event.title}} ({{ctrl.event.time_start|formatdate:'DD. MMM'}})"></page-property>
+
+    <div class="page-header">
+        <h1>
+            <span class="eventgroup">
+                <a ng-href="a/eventgroup/{{ctrl.event.eventgroup.id}}">{{ctrl.event.eventgroup.title}}</a>
+            </span>
+            <a ng-href="a/event/{{ctrl.event.id}}">{{ctrl.event.title}} ({{ctrl.event.time_start|formatdate:'ddd D. MMM YYYY HH.mm'}})</a>
+            <span class="pull-right">
+                <button class="btn btn-primary" ng-click="ctrl.loadTickets()">Last inn hele billettlista</button>
+                <a class="btn btn-default" ng-href="a/orders?eventgroup_id={{ctrl.event.eventgroup.id}}" target="_blank">Avansert ordresøk</a>
+            </span>
+        </h1>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-5">
+
+            <table class="table table-striped table-condensed ticketgroups">
+                <thead>
+                    <tr>
+                        <th>Billettgruppe</th>
+                        <th>
+                            <abbr title="Ledige">L</abbr> /
+                            <abbr title="Reservert">R</abbr>
+                        </th>
+                        <th>Innsjekkede</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="g in ctrl.event.ticketgroups">
+                        <td>
+                            #{{g.id}}
+                            <a href="a/event/{{ctrl.event.id}}/ticketgroup/{{g.id}}">{{g.title}}</a>
+                            <abbr title="Pris inkl. avgift">{{g.price+g.fee|price}}</abbr>
+                            <span ng-if="!g.is_normal">(teller ikke som normal)</span>
+                        </td>
+                        <td>
+                            {{ctrl.event.ticket_count.groups[g.id].free}} /
+                            {{ctrl.event.ticket_count.groups[g.id].pending}}
+                        </td>
+                        <td>
+                            {{ctrl.event.ticket_count.groups[g.id].used}} /
+                            {{ctrl.event.ticket_count.groups[g.id].valid}}
+                            ({{ctrl.event.ticket_count.groups[g.id].valid-ctrl.event.ticket_count.groups[g.id].used}} gjenstår)
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="1">&nbsp;</th>
+                        <th>
+                            {{ctrl.event.ticket_count.totals.free}} /
+                            {{ctrl.event.ticket_count.totals.pending}}
+                        </th>
+                        <th>
+                            {{ctrl.event.ticket_count.totals.used}} /
+                            <abbr title="Gyldige billetter">{{ctrl.event.ticket_count.totals.valid}}</abbr> /
+                            <span ng-if="ctrl.event.max_normal_sales">
+                                <abbr title="Billetter lagt ut for salg">{{ctrl.event.max_normal_sales}}</abbr> (<abbr title="Øvre billettbegrensning">{{ctrl.event.max_sales}}</abbr>)
+                            </span>
+                            <abbr ng-if="!ctrl.event.max_normal_sales" title="Billetter lagt ut for salg">{{ctrl.event.max_sales}}</abbr>
+                            <br>
+                            ({{ctrl.event.ticket_count.totals.valid-ctrl.event.ticket_count.totals.used}} gjenstår)
+                        </th>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <hr>
+
+            <h3>Siste innsjekkede billetter</h3>
+            <p ng-show="!ctrl.lastUsedTickets && ctrl.lastUsedTicketsLoading">Laster data...</p>
+            <p ng-show="ctrl.lastUsedTickets && ctrl.lastUsedTickets.length == 0 && !ctrl.lastUsedTicketsLoading">
+                Ingen billetter er innsjekket.
+            </p>
+            <table ng-class="{isLoading: ctrl.lastUsedTicketsLoading}" class="table table-striped table-condensed ticket-list-table" ng-show="ctrl.lastUsedTickets && ctrl.lastUsedTickets.length > 0">
+                <thead>
+                    <tr>
+                        <th>Ordre</th>
+                        <th>Billett</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="ticket in ctrl.lastUsedTickets">
+                        <td>
+                            <a ng-href="a/order/{{::ticket.order.id}}">{{::ticket.order.order_text_id}}</a><br>
+                            {{::ticket.order.time|formatdate:'dd. DD.MM.YYYY HH:mm'}}
+
+                            <span class="order-detail" ng-if="::ticket.order.name">{{::ticket.order.name}}</span>
+                            <span class="order-detail" ng-if="::ticket.order.email">{{::ticket.order.email}}</span>
+                            <span class="order-detail" ng-if="::ticket.order.phone">{{::ticket.order.phone}}</span>
+                            <span class="order-detail" ng-if="::(!ticket.order.name && !ticket.order.email && !ticket.order.phone)"><i>Ingen detaljer</i></span>
+                        </td>
+                        <td ng-class="{reservation: !ticket.is_valid, revoked: ticket.is_revoked}">
+                            <a ng-href="api/ticket/{{::ticket.id}}/pdf" target="_self">#{{::ticket.id}}</a>
+                            <span ng-if="ticket.is_valid && !ticket.is_revoked">
+                                <span ng-if="ticket.used">
+                                    <button class="btn btn-danger" ng-click="ctrl.checkout(ticket)">Utsjekk</button>
+                                </span>
+                                <span ng-if="!ticket.used">
+                                    <button class="btn btn-success" ng-click="ctrl.checkin(ticket)">Innsjekk</button>
+                                </span>
+                            </span>
+                            ({{::ticket.ticketgroup.title}})
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+        <div class="col-sm-7">
+
+            <div ng-class="{'alert-success': ctrl.keyok, 'alert-danger': !ctrl.keyok}" class="alert" ng-if="ctrl.keysearchticket">
+                <h4>Scanning av strekkode</h4>
+                <p>TODO</p>
+            </div>
+
+            <p>Ved scanning av strekkode vil billett automatisk bli markert som benyttet, dersom mulig.</p>
+
+            <form class="form-horizontal" ng-submit="ctrl.performSearch()">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">Navn eller strekkode</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="text" id="keyfield" ng-model="ctrl.searchinput.name" ng-model-options="{debounce:300}" autofocus>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">E-post</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="text" ng-model="ctrl.searchinput.email" ng-model-options="{debounce:300}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">Telefon</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="text" ng-model="ctrl.searchinput.phone" ng-model-options="{debounce:300}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">Ordrenr</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="text" ng-model="ctrl.searchinput.id" ng-model-options="{debounce:300}">
+                    </div>
+                </div>
+                <input type="submit" value="Søk" style="display: none">
+            </form>
+
+
+            <!-- resultat etter ordresøk -->
+            <div ng-show="ctrl.orders || ctrl.ordersLoading">
+                <h3>Ordresøk</h3>
+                <div class="page-loading" ng-show="!ctrl.orders.result">Søker...</div>
+
+                <div ng-show="ctrl.orders.result.length == 0">
+                    <p class="text-center">Ingen ordrer ble funnet.</p>
+                </div>
+
+                <div ng-show="ctrl.orders.result.length > 0">
+                    <table class="table table-striped table-condensed order-list-table">
+                        <thead>
+                            <tr>
+                                <th>Ordre</th>
+                                <th>Billetter</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-class="{invalid: !order.is_valid}" ng-repeat="order in ctrl.orders.result">
+                                <td>
+                                    <a ng-href="a/order/{{::order.id}}">{{::order.order_text_id}}</a><br>
+                                    {{::order.time|formatdate:'dd. DD.MM.YYYY HH:mm'}}
+                                    <span ng-if="!order.is_valid"><br>(kun reservasjon)</span>
+
+                                    <span class="order-detail" ng-if="::order.name">{{::order.name}}</span>
+                                    <span class="order-detail" ng-if="::order.email">{{::order.email}}</span>
+                                    <span class="order-detail" ng-if="::order.phone">{{::order.phone}}</span>
+                                    <span class="order-detail" ng-if="::(!order.name && !order.email && !order.phone)"><i>Ingen detaljer</i></span>
+
+                                    <span class="unbalance" ng-if="order.balance != 0"><br>(ubalanse: {{order.balance|price}})</span>
+                                </td>
+                                <td>
+                                    <ul>
+                                        <li ng-class="{reservation: !ticket.is_valid, revoked: ticket.is_revoked, keyresult: ticket.key == ctrl.keysearch}" ng-repeat="ticket in order.tickets">
+                                            <a ng-href="api/ticket/{{::ticket.id}}/pdf" target="_self">#{{::ticket.id}}</a>
+                                            <span ng-if="ticket.event.id == ctrl.event.id && ticket.is_valid && !ticket.is_revoked">
+                                                <span ng-if="ticket.used">
+                                                    <button class="btn btn-danger" ng-click="ctrl.checkout(ticket)">Utsjekk</button>
+                                                </span>
+                                                <span ng-if="!ticket.used">
+                                                    <button class="btn btn-success" ng-click="ctrl.checkin(ticket)">Innsjekk</button>
+                                                </span>
+                                            </span>
+                                            <span ng-if="ticket.event.id != ctrl.event.id">
+                                                <a ng-if="ticket.event.id != ctrl.event.id" ng-href="a/event/{{::ticket.event.id}}">
+                                                    {{::ticket.event.title}} ({{::ticket.event.time_start|formatdate:'DD.MM \\k\\l HH'}})
+                                                </a>
+                                            </span>
+                                            ({{::ticket.ticketgroup.title}})
+                                            <span ng-if="ticket.key == ctrl.keysearch"><b>(DENNE BLE SØKT OPP)</b></span>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="text-center">
+                        <pagination page-active="ctrl.searchinput.page" page-total="ctrl.orders.pagination.total" page-limit="ctrl.orders.pagination.limit"></pagination>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- hele billettlisten -->
+            <div ng-show="ctrl.tickets || ctrl.ticketsLoading">
+                <h3>Billettliste</h3>
+                <div class="page-loading" ng-show="!ctrl.tickets">Henter data...</div>
+
+                <div ng-show="ctrl.tickets.length == 0">
+                    <p class="text-center">Ingen billetter ble funnet.</p>
+                </div>
+
+                <div ng-show="ctrl.tickets.length > 0">
+                    <table class="table table-striped table-condensed ticket-list-table">
+                        <thead>
+                            <tr>
+                                <th>Ordre</th>
+                                <th>Billetter</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-class="{invalid: !order.is_valid}" ng-repeat="order in ctrl.tickets">
+                                <td>
+                                    <a ng-href="a/order/{{::order.id}}">{{::order.order_text_id}}</a><br>
+                                    {{::order.time|formatdate:'dd. DD.MM.YYYY HH:mm'}}
+                                    <span ng-if="!order.is_valid"><br>(kun reservasjon)</span>
+
+                                    <span class="order-detail" ng-if="::order.name">{{::order.name}}</span>
+                                    <span class="order-detail" ng-if="::order.email">{{::order.email}}</span>
+                                    <span class="order-detail" ng-if="::order.phone">{{::order.phone}}</span>
+                                    <span class="order-detail" ng-if="::(!order.name && !order.email && !order.phone)"><i>Ingen detaljer</i></span>
+
+                                    <span class="unbalance" ng-if="order.balance != 0"><br>(ubalanse: {{order.balance|price}})</span>
+                                </td>
+                                <td>
+                                    <ul>
+                                        <li ng-class="{reservation: !ticket.is_valid, revoked: ticket.is_revoked}" ng-repeat="ticket in order.tickets">
+                                            <a ng-href="api/ticket/{{::ticket.id}}/pdf" target="_self">#{{::ticket.id}}</a>
+                                            <span ng-if="ticket.is_valid && !ticket.is_revoked">
+                                                <span ng-if="ticket.used">
+                                                    <button class="btn btn-danger" ng-click="ctrl.checkout(ticket)">Utsjekk</button>
+                                                </span>
+                                                <span ng-if="!ticket.used">
+                                                    <button class="btn btn-success" ng-click="ctrl.checkin(ticket)">Innsjekk</button>
+                                                </span>
+                                            </span>
+                                            ({{::ticket.ticketgroup.title}})
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+
+
+</div>
