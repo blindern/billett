@@ -37,10 +37,16 @@ RUN \
     && docker-php-ext-install -j$(nproc) gd \
     \
     # set up composer
-    && php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php');" \
-    && php -r "if (hash_file('SHA384', '/tmp/composer-setup.php') === 'e115a8dc7871f15d853148a7fbac7da27d6c0030b848d9b3dc09e2a0388afed865e6a3d6b3c0fad45c48e2b5fc1196ae') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('/tmp/composer-setup.php'); } echo PHP_EOL;" \
-    && php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer \
-    && php -r "unlink('/tmp/composer-setup.php');" \
+    && EXPECTED_SIGNATURE=$(wget -q -O - https://composer.github.io/installer.sig) \
+    && php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
+    && ACTUAL_SIGNATURE=$(php -r "echo hash_file('SHA384', 'composer-setup.php');") \
+    && if [ "$EXPECTED_SIGNATURE" != "$ACTUAL_SIGNATURE" ]; then \
+          >&2 echo 'ERROR: Invalid installer signature'; \
+          rm composer-setup.php; \
+          exit 1; \
+       fi \
+    && php composer-setup.php --install-dir=/usr/local/bin --filename=composer --quiet \
+    && rm composer-setup.php \
     \
     # simplesamlphp
     && mkdir /var/simplesamlphp \
