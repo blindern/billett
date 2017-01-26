@@ -172,7 +172,11 @@ class TicketController extends \Controller {
             return Response::json('missing id list', 400);
         }
 
-        $id_list = array_map('trim', explode(",", \Input::get('ids')));
+        $id_list = \Input::get('ids');
+        if (!is_array($id_list)) {
+            $id_list = array_map('trim', explode(",", $id_list));
+        }
+
         $tickets = [];
         foreach (Ticket::find($id_list) as $ticket) {
             $tickets[$ticket->id] = $ticket;
