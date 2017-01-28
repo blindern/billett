@@ -23,7 +23,7 @@ class Guard extends \Illuminate\Auth\Guard {
         'stianval', // billettsjef 2017
 
         // billettgruppa 2017
-        'ainabalto',
+        'ainabal',
         'khayalea',
         'mbwettre',
         'camillast',
