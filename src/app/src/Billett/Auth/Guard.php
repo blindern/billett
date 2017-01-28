@@ -21,6 +21,14 @@ class Guard extends \Illuminate\Auth\Guard {
 
         'bfesche', // kjellerøkonomi 2017
         'stianval', // billettsjef 2017
+
+        // billettgruppa 2017
+        'ainabalto',
+        'khayalea',
+        'mbwettre',
+        'camillast',
+        'vildenordstrom',
+        'ingeriddm',
     );
 
     /**
