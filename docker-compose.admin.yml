@@ -1,0 +1,13 @@
+version: '2'
+
+services:
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+     - PMA_HOST=database
+     - PMA_USER=uka_billett
+     - PMA_PASSWORD=uka_billett
+    ports:
+     - 127.0.0.1:8080:80
+    volumes:
+     - /sessions

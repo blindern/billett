@@ -45,6 +45,12 @@ Normally all that is needed is to run:
 And the development environment should start and be available
 at http://localhost:8081/
 
+## Running phpMyAdmin for development
+
+`docker-compose -f docker-compose.admin.yml up`
+
+Now go to http://localhost:8080/
+
 ## Prerender service
 
 Search engines, Facebook, and more, will normally only grab the template, and not include response from API-calls. To make sure they get a full page, requests are intercepted and served through a service which generates static html.
