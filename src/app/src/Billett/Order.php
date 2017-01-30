@@ -29,7 +29,7 @@ class Order extends \Eloquent implements ApiQueryInterface {
         $order->eventgroup()->associate($eg);
         $order->time = time();
         $order->ip = $_SERVER['REMOTE_ADDR'];
-        $order->browser = $_SERVER['HTTP_USER_AGENT'];
+        $order->browser = substr($_SERVER['HTTP_USER_AGENT'], 0, 255); // truncate in case it overflows
         $order->is_admin = $is_admin;
 
         if ($is_admin) {
