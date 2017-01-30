@@ -88,7 +88,7 @@ class Eventgroup extends \Eloquent implements ApiQueryInterface {
                 JOIN tickets ON tickets.order_id = orders.id AND tickets.is_valid = 1 AND tickets.is_revoked = 0
                 JOIN ticketgroups ON ticketgroups.id = tickets.ticketgroup_id
                 JOIN events ON events.id = tickets.event_id
-            WHERE events.eventgroup_id = ?
+            WHERE events.eventgroup_id = ? AND orders.recruiter IS NOT NULL AND orders.recruiter != ''
             ORDER BY orders.time DESC', array($this->id));
 
         return $q;
