@@ -4,6 +4,16 @@ use Blindern\UKA\Billett\Eventgroup;
 use Blindern\UKA\Billett\Helpers\ModelHelper;
 
 class EventgroupController extends Controller {
+    public function __construct() {
+        $this->beforeFilter('auth', [
+            'except' => [
+                'index',
+                'show',
+                'simpleList',
+            ]
+        ]);
+    }
+
     public function index() {
         $class = ModelHelper::getModelPath('Eventgroup');
         return $class::orderBy('sort_value')->get();
