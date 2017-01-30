@@ -133,4 +133,12 @@ class EventgroupController extends Controller {
         Eventgroup::findOrFail($id);
         return \Blindern\UKA\Billett\Ticket::getStats($id);
     }
+
+    /**
+     * Recruiter list
+     */
+    public function recruiterList($id) {
+        $eventgroup = Eventgroup::findOrFail($id);
+        return $eventgroup->getRecruiterList();
+    }
 }

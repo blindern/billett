@@ -71,4 +71,26 @@ class Eventgroup extends \Eloquent implements ApiQueryInterface {
     public function getApiAllowedRelations() {
         return $this->apiAllowedRelations;
     }
+
+    /**
+     * Get list of tickets with recruiter details
+     */
+    public function getRecruiterList() {
+        $q = \DB::select('
+            SELECT
+                tickets.id ticket_id,
+                orders.order_text_id, orders.id order_id, FROM_UNIXTIME(orders.time) order_time,
+                orders.is_admin order_is_admin, orders.name order_name, orders.recruiter order_recruiter,
+                events.id event_id, FROM_UNIXTIME(events.time_start) event_time_start, events.title event_title,
+                events.category event_category,
+                ticketgroups.price ticketgroup_price, ticketgroups.title ticketgroup_title
+            FROM orders
+                JOIN tickets ON tickets.order_id = orders.id AND tickets.is_valid = 1 AND tickets.is_revoked = 0
+                JOIN ticketgroups ON ticketgroups.id = tickets.ticketgroup_id
+                JOIN events ON events.id = tickets.event_id
+            WHERE events.eventgroup_id = ?
+            ORDER BY orders.time DESC', array($this->id));
+
+        return $q;
+    }
 }

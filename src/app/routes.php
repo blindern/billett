@@ -13,6 +13,7 @@ Route::resource('/api/eventgroup', 'EventgroupController', array(
 ));
 Route::get('/api/eventgroup/{id}/simple', 'EventgroupController@simpleList');
 Route::get('/api/eventgroup/{id}/sold_tickets_stats', 'EventgroupController@soldTicketsStats');
+Route::get('/api/eventgroup/{id}/recruiters', 'EventgroupController@recruiterList');
 
 // orders
 Route::get('/api/order/fixbalance', 'OrderController@fixbalance');
