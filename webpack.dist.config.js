@@ -71,7 +71,8 @@ module.exports = {
     new ExtractTextPlugin("styles.css"),
 
     new HtmlWebpackPlugin({
-      template: 'frontend/index.html'
+      template: 'frontend/index.html',
+      hash: true
     }),
 
     // removes a lot of debugging code in React

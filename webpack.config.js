@@ -67,7 +67,8 @@ module.exports = {
       BACKEND_URL: JSON.stringify(process.env.BACKEND_URL || '/'),
     }),
     new HtmlWebpackPlugin({
-      template: 'frontend/index.html'
+      template: 'frontend/index.html',
+      hash: true
     }),
   ]
 };
