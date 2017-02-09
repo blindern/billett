@@ -40,7 +40,7 @@ class Event extends \Eloquent implements ApiQueryInterface {
     /**
      * When the online selling freezes (how many seconds before event start)
      */
-    const SELL_TIMEOUT = 3600;
+    const SELL_TIMEOUT = 0;
 
     public function eventgroup()
     {
