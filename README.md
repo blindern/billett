@@ -1,5 +1,7 @@
 # UKA på Blindern's ticket system
 
+[![Build Status](https://travis-ci.org/blindernuka/billett.svg?branch=master)](https://travis-ci.org/blindernuka/billett)
+
 This project contains code for running UKA på Blindern's ticket system.
 Even though the code is in production, it currently lacks a few features
 and is probably little of use for others. The plan is to have a more complete
