@@ -15,3 +15,12 @@ services:
      - ./billett-frontend:/usr/src/app
      - ./.data/node_modules:/usr/src/app/node_modules
     command: /dev.sh
+  database:
+    image: mysql:5.6
+    volumes:
+      - ./.data/db/:/var/lib/mysql/
+    environment:
+      MYSQL_ROOT_PASSWORD: uka
+      MYSQL_DATABASE: uka_billett
+      MYSQL_USER: uka_billett
+      MYSQL_PASSWORD: uka_billett
