@@ -1,5 +1,7 @@
 # UKA på Blindern's ticket system (frontend)
 
+[![Build Status](https://travis-ci.org/blindernuka/billett-frontend.svg?branch=master)](https://travis-ci.org/blindernuka/billett-frontend)
+
 More details about this system is available at:
 https://github.com/blindernuka/billett
 
