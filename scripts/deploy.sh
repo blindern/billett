@@ -41,7 +41,7 @@ ssh -p 2222 -o StrictHostKeyChecking=no core@server2016.blindernuka.no /bin/bash
   git fetch
   git checkout $TRAVIS_COMMIT
 
-  docker login -e $DOCKER_EMAIL -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+  docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
   time docker build -t blindernuka/billett-frontend:$tag -t blindernuka/billett-frontend:$commit .
   time docker push blindernuka/billett-frontend:$tag
   time docker push blindernuka/billett-frontend:$commit
