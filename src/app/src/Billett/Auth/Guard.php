@@ -11,6 +11,7 @@ class Guard extends \Illuminate\Auth\Guard {
         'katinkjl', // kjellerøkonomi 2019
         'stianval', // billettsjef 2017
         'majaft', // billettsjef 2019
+        'oliverjohansen', // billettsjef 2021
 
         // UKEstyret 2019
         'erlendak',
