@@ -10,7 +10,7 @@
 	],
 	"require": {
 		"laravel/framework": "4.2.*",
-		"dompdf/dompdf" : "0.6.*",
+		"dompdf/dompdf" : "1.2.*",
 		"milon/barcode": "~4.2",
 		"intervention/image": "~2.0",
 		"iio/libmergepdf": "~2.4",
