@@ -7,29 +7,20 @@ class Guard extends \Illuminate\Auth\Guard {
     protected static $allowed = array(
         'henrste', // ikt 2017/systemansvarlig
         'vegardan', // web 2017
-        'simenstr', // booking 2019
-        'katinkjl', // kjellerøkonomi 2019
-        'stianval', // billettsjef 2017
-        'majaft', // billettsjef 2019
-        'oliverjohansen', // billettsjef 2021
+        'skbj004', // billettsjef 2023
 
-        // UKEstyret 2019
-        'erlendak',
-        'ivarbjor',
-        'bragebg',
-        'emmavo',
-        'ingrid',
-        'jorgine77',
-        'snsr',
-        'hannatc',
+        // UKEstyret 2023
+        'cmnilsen',
+        'emilchri',
+        'emsk010',
+        'fionask',
+        'marireim',
+        'olemfr',
+        'sindrec',
+        'waldemarrg',
 
-        // billettgruppa 2017
-        'ainabal',
-        'khayalea',
-        'mbwettre',
-        'camillast',
-        'vildenordstrom',
-        'ingeriddm',
+        // billettgruppa 2023
+        // ...
     );
 
     /**
