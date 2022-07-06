@@ -1,7 +1,5 @@
 # UKA på Blindern's ticket system
 
-[![Build Status](https://travis-ci.org/blindernuka/billett.svg?branch=master)](https://travis-ci.org/blindernuka/billett)
-
 This project contains code for running UKA på Blindern's ticket system.
 Even though the code is in production, it currently lacks a few features
 and is probably little of use for others. The plan is to have a more complete
@@ -29,12 +27,17 @@ Laravel web page for more details.
 
 ## Production setup
 
-The production is held updated automatically by Travis CI. See
-`scripts/deploy.sh` for details.
+The production setup is managed from
+https://github.com/blindern/drift
 
-The file `docker-compose.prod.yaml` is a local file that must exist
-at the production server. A copy of this should be available at
-https://foreningenbs.no/confluence/x/qgYf
+As of July 2022 deployment to production is manually.
+
+Command to run migrations after deploying new version:
+
+```bash
+ssh root@fcos-1.nrec.foreningenbs.no
+docker exec -t uka-billett-fpm ./artisan migrate
+```
 
 ## Development setup
 
