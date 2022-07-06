@@ -7,6 +7,7 @@ class Guard extends \Illuminate\Auth\Guard {
     protected static $allowed = array(
         'henrste', // ikt 2017/systemansvarlig
         'vegardan', // web 2017
+        'majaft', // billettsjef 2019
         'skbj004', // billettsjef 2023
 
         // UKEstyret 2023
