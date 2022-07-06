@@ -1,7 +1,5 @@
 # UKA på Blindern's ticket system (frontend)
 
-[![Build Status](https://travis-ci.org/blindernuka/billett-frontend.svg?branch=master)](https://travis-ci.org/blindernuka/billett-frontend)
-
 More details about this system is available at:
 https://github.com/blindernuka/billett
 
@@ -52,3 +50,10 @@ See the script `container/build-dist.sh`.
 Files are build to /usr/src/app-dist.
 
 See the backend repo that contains nginx for more details how this is set up.
+
+## Deploy to production
+
+As of July 2022 this is done manually.
+
+See https://github.com/blindern/drift/tree/master/ansible/roles/service-uka-billett
+for more details.
