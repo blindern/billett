@@ -39,6 +39,7 @@ jobs:
         with:
           context: .
           file: Dockerfile.nginx
+          push: true
           tags: blindernuka/billett-proxy:latest
 
       - name: Push fpm container
@@ -47,4 +48,5 @@ jobs:
         with:
           context: .
           file: Dockerfile.fpm
+          push: true
           tags: blindernuka/billett-backend:latest
