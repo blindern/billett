@@ -14,6 +14,7 @@
     "angular-route": "~1.2.17-build.163.1",
     "angular-sanitize": "~1.2.27",
     "angular-ui-router": "~0.2.13",
+    "babel-plugin-angularjs-annotate": "0.10.0",
     "bootstrap-sass": "~3.3",
     "jquery": "~2.1.1",
     "marked": "~0.3.6",
@@ -24,7 +25,8 @@
     "prettier": "2.7.1",
     "sass": "1.53.0",
     "sortablejs": "1.15.0",
-    "vite": "2.9.13"
+    "vite": "2.9.13",
+    "vite-plugin-babel": "1.1.0"
   },
   "scripts": {
     "dev": "vite",
