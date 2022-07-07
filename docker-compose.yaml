@@ -22,3 +22,6 @@ services:
      - "8081:80"
     volumes_from:
      - fpm:ro
+    environment:
+      FPM_HOST: fpm:9000
+      FRONTEND_URL: http://uka-billett-frontend
