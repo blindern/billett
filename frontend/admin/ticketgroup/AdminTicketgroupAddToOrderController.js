@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 import {api} from '../../api';
 
 angular.module('billett.admin').controller('AdminTicketgroupAddToOrderController', function ($http, $modalInstance, $scope, eventgroup_id, getOrder, AdminEventgroup, addHandler) {

@@ -1,3 +1,5 @@
+import { evaluate } from "mathjs";
+
 angular.module('billett.admin').controller('AdminPaymentsourceNewController', function ($modalInstance, $scope, paymentgroup, AdminPaymentsource, Page) {
     var ctrl = this;
 
@@ -69,7 +71,7 @@ angular.module('billett.admin').controller('AdminPaymentsourceNewController', fu
     }
 
     function parseInputs() {
-        ctrl.othervalue = ctrl.other === '' ? 0 : math.eval(ctrl.other.replace(",", "."));
+        ctrl.othervalue = ctrl.other === '' ? 0 : evaluate(ctrl.other.replace(",", "."));
         ctrl.paymentsource.amount = ctrl.othervalue || 0;
 
         if (ctrl.paymentsource.type == 'cash') {
@@ -77,7 +79,7 @@ angular.module('billett.admin').controller('AdminPaymentsourceNewController', fu
             angular.forEach(ctrl.cashinputs, function (val, key) {
                 if (val === '') return;
                 try {
-                    ctrl.cashvalues[key] = math.eval(val.replace(",", "."));
+                    ctrl.cashvalues[key] = evaluate(val.replace(",", "."));
                 } catch (e) {
                     ctrl.cashvalues[key] = NaN;
                 }

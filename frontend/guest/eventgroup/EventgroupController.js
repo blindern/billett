@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 import {api} from '../../api';
 
 import template from './index.html?raw';

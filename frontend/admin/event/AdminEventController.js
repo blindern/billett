@@ -55,8 +55,8 @@ import {api} from '../../api';
         };
 
         // sorting of ticket groups
-        this.onTicketgroupsOrder = function (groups) {
-            $scope.event.setTicketgroupsOrder(groups);
+        this.onTicketgroupsOrder = function (ev) {
+            $scope.event.setTicketgroupsOrder(ev.models);
         };
 
         this.previewTicketPrint = function (ticketgroupid) {
