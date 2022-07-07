@@ -9,11 +9,18 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Build
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - run: npm ci
+      - run: npm run build
+
+      - name: Build docker image
         uses: docker/build-push-action@v3
         with:
           context: .
-          push: false
+          push: ${{ github.ref == 'refs/heads/master' }}
           tags: blindernuka/billett-frontend:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max

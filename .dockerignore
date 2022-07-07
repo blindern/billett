@@ -1,6 +1,3 @@
-.dockerignore
-.git
-Dockerfile
-Dockerfile-dist
-dist
-node_modules
+*
+!/container/
+!/dist/
