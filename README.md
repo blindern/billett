@@ -55,11 +55,3 @@ at http://localhost:8081/
 `docker-compose -f docker-compose.admin.yml up`
 
 Now go to http://localhost:8080/
-
-## Prerender service
-
-Search engines, Facebook, and more, will normally only grab the template, and not include response from API-calls. To make sure they get a full page, requests are intercepted and served through a service which generates static html.
-
-We use [Prerender](https://prerender.io/) for this.
-
-The interception is done through in the nginx gateway.

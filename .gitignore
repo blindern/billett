@@ -30,8 +30,6 @@ docker-compose.prod.yaml
 .env.*.php
 .env.php
 /app/config/*/dibs.php
-/app/config/packages/nutsweb/laravel-prerender/local/config.php
-/app/config/packages/nutsweb/laravel-prerender/hsw/config.php
 
 # SimpleSAMLphp will be symlinked in /saml/
 /public/saml
