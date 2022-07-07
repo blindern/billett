@@ -138,15 +138,15 @@ module.controller(
             amount: ctrl.total_reserved,
             sendmail: false,
           })
-          .success(function () {
+          .then(function () {
             loadOrder()
           })
-          .error(function (err) {
-            if (err == "amount mismatched") {
+          .catch(function (err) {
+            if (err.data == "amount mismatched") {
               alert("Noe i ordren ser ut til å ha endret seg. Prøv på nytt.")
               loadOrder()
             } else {
-              alert(err)
+              alert(err.data)
             }
           })
       })
@@ -222,7 +222,7 @@ module.controller(
     ctrl.deleteTicket = function (ticket) {
       $http
         .delete(api("ticket/" + ticket.id))
-        .success(function () {
+        .then(function () {
           console.log("ticket deleted")
         })
         .finally(function () {

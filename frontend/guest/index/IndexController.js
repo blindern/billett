@@ -22,12 +22,12 @@ module.controller(
       $scope.has_role_admin = res
     })
 
-    $http.get(api("event/get_upcoming")).success(function (ret) {
-      $scope.upcoming = ret
+    $http.get(api("event/get_upcoming")).then(function (response) {
+      $scope.upcoming = response.data
     })
 
-    $http.get(api("eventgroup")).success(function (ret) {
-      $scope.eventgroups = ret
+    $http.get(api("eventgroup")).then(function (response) {
+      $scope.eventgroups = response.data
     })
 
     var categories = []

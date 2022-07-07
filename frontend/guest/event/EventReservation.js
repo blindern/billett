@@ -20,11 +20,11 @@ module.factory("EventReservation", function ($http, $q) {
     return $q(function (resolve, reject) {
       $http
         .delete(api("order/" + id))
-        .success(function () {
+        .then(function () {
           EventReservation.removePersistedReservation(id)
           resolve()
         })
-        .error(reject)
+        .catch(reject)
     })
   }
 
@@ -33,11 +33,11 @@ module.factory("EventReservation", function ($http, $q) {
     return $q(function (resolve, reject) {
       $http
         .patch(api("order/" + self.data.id), data)
-        .success(function (ret) {
-          self.data = ret
-          resolve(ret)
+        .then(function (response) {
+          self.data = response.data
+          resolve(response.data)
         })
-        .error(reject)
+        .catch(reject)
     })
   }
 
@@ -47,8 +47,8 @@ module.factory("EventReservation", function ($http, $q) {
     return $q(function (resolve, reject) {
       $http
         .post(api("order/" + self.data.id + "/" + (force ? "force" : "place")))
-        .success(resolve)
-        .error(reject)
+        .then(resolve)
+        .catch(reject)
     })
   }
 
@@ -62,15 +62,15 @@ module.factory("EventReservation", function ($http, $q) {
     return $q(function (resolve, reject) {
       $http
         .get(api("order/" + id))
-        .success(function (ret) {
-          if (ret.is_valid) {
+        .then(function (response) {
+          if (response.data.is_valid) {
             // real order, no reservation
             reject("last reservation is valid order")
             return
           }
-          resolve(new EventReservation(ret))
+          resolve(new EventReservation(response.data))
         })
-        .error(reject)
+        .catch(reject)
     })
   }
 
@@ -114,10 +114,10 @@ module.factory("EventReservation", function ($http, $q) {
         .post(api("event/" + event_id + "/createreservation"), {
           ticketgroups: ticketgroups,
         })
-        .success(function (res) {
-          resolve(EventReservation.setReservation(res))
+        .then(function (response) {
+          resolve(EventReservation.setReservation(response.data))
         })
-        .error(reject)
+        .catch(reject)
     })
   }
 

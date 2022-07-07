@@ -7,9 +7,10 @@ angular
       Page.setTitle("Billettstatistikk for arrangementgruppe")
 
       var loader = Page.setLoading()
-      AdminEventgroup.getSoldTicketsStats($stateParams["id"]).success(function (
-        ret,
+      AdminEventgroup.getSoldTicketsStats($stateParams["id"]).then(function (
+        response,
       ) {
+        const ret = response.data
         loader()
 
         var accum = function () {

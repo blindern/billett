@@ -45,10 +45,10 @@ module.controller(
     var loader = Page.setLoading()
     $http
       .get(api("eventgroup/" + encodeURIComponent($stateParams["id"])))
-      .success(function (ret) {
+      .then(function (response) {
         loader()
-        Page.setTitle(ret.title)
-        $scope.group = ret
+        Page.setTitle(response.data.title)
+        $scope.group = response.data
 
         var r = {}
         var c = 0
@@ -80,7 +80,7 @@ module.controller(
 
         $scope.days = r
       })
-      .error(function () {
+      .catch(function () {
         loader()
         Page.set404()
       })

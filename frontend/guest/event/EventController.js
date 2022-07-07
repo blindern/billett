@@ -33,7 +33,8 @@ module.controller(
     var loader = Page.setLoading()
     $http
       .get(api("event/" + encodeURIComponent($stateParams["id"])))
-      .success(function (ret) {
+      .then(function (response) {
+        const ret = response.data
         loader()
 
         // do we have an alias not being used?
@@ -52,7 +53,7 @@ module.controller(
           ctrl.event_status = "selling_text"
         }
       })
-      .error(function () {
+      .catch(function () {
         loader()
         Page.set404()
       })
@@ -66,6 +67,7 @@ module.controller(
         reservation = reservationResult
         $scope.reservation = $scope.contact = reservation.data
       })
+      .catch(() => null)
       .finally(function () {
         $scope.loadingReservation = false
       })
@@ -138,14 +140,14 @@ module.controller(
             function () {
               // send to payment
               reservation.place(force).then(
-                function (ret) {
+                function (response) {
                   if (force) {
                     // details about the order is fetched at the
                     // completed url
                     $location.path("order/complete")
                   } else {
-                    $scope.checkout = ret
-                    $scope.checkout_url = $sce.trustAsResourceUrl(ret.url)
+                    $scope.checkout = response.data
+                    $scope.checkout_url = $sce.trustAsResourceUrl(response.data.url)
 
                     // FIXME: should not perform DOM call from here
                     setTimeout(function () {

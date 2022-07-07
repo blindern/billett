@@ -16,10 +16,10 @@ angular
         scope.t = {}
         scope.Math = window.Math
 
-        AdminPrinter.getList().success(function (ret) {
-          scope.printers = ret
+        AdminPrinter.getList().then(function (response) {
+          scope.printers = response.data
           scope.printer = scope.t.printer = AdminPrinter.getPreferred(
-            ret,
+            response.data,
             scope.printer ? scope.printer.name : null,
           )
         })

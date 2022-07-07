@@ -101,12 +101,12 @@ angular
             .post(api("order/" + order.id + "/create_tickets"), {
               ticketgroups: groups,
             })
-            .success(function (ret) {
+            .then(function (response) {
               addHandler().finally(function () {
-                $modalInstance.close(ret)
+                $modalInstance.close(response.data)
               })
             })
-            .error(function (err) {
+            .catch(function (err) {
               alert("Ukjent feil oppsto ved registrering av billetter")
               delete ctrl.sending
             })

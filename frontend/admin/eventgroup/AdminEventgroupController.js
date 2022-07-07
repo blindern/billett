@@ -70,7 +70,8 @@ module.controller(
     $scope.eventTogglePublish = function (event) {
       new AdminEvent(event)
         .setPublish(!event.is_published)
-        .success(function (ret) {
+        .then(function (response) {
+          const ret = response.data
           event.is_published = ret.is_published
         })
     }
@@ -78,7 +79,8 @@ module.controller(
     $scope.eventToggleSelling = function (event) {
       new AdminEvent(event)
         .setSelling(!event.is_selling)
-        .success(function (ret) {
+        .then(function (response) {
+          const ret = response.data
           event.is_selling = ret.is_selling
         })
     }

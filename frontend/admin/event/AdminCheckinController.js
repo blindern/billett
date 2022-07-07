@@ -242,11 +242,11 @@ module.controller(
             with: "order,ticketgroup",
           },
         })
-        .success(function (ret) {
-          ctrl.tickets = parseTicketsList(ret)
+        .then(function (response) {
+          ctrl.tickets = parseTicketsList(response.data)
           delete ctrl.ticketsLoading
         })
-        .error(function () {
+        .catch(function () {
           alert("Ukjent feil ved lasting av billetter.")
         })
     }
@@ -291,11 +291,12 @@ module.controller(
             with: "order,ticketgroup",
           },
         })
-        .success(function (ret) {
+        .then(function (response) {
+          const ret = response.data
           delete ctrl.lastUsedTicketsLoading
           ctrl.lastUsedTickets = ret.result
         })
-        .error(function () {
+        .catch(function () {
           alert("Ukjent feil ved lasting av siste innsjekkede billetter")
         })
     }
@@ -322,7 +323,8 @@ module.controller(
             "ticket/" + ticket.id + "/" + (isCheckin ? "checkin" : "checkout"),
           ),
         )
-        .success(function (newTicket) {
+        .then(function (response) {
+          const newTicket = response.data
           delete ticket.isWorking
           newTicket.event = ticket.event
           newTicket.ticketgroup = ticket.ticketgroup
@@ -330,7 +332,7 @@ module.controller(
           angular.copy(newTicket, ticket)
           ticketsChangedEvent(ticket)
         })
-        .error(function () {
+        .catch(function () {
           delete ticket.isWorking
         })
     }

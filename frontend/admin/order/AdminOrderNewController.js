@@ -83,7 +83,8 @@ angular
                 amount: ctrl.total,
                 sendmail: true,
               })
-              .success(function (ret) {
+              .then(function (response) {
+                const ret = response.data
                 loader()
 
                 ctrl.order = ret
@@ -102,15 +103,15 @@ angular
                 delete localStorage["billett.neworder.id"]
                 resetOrder()
               })
-              .error(function (err) {
+              .catch(function (err) {
                 loader()
-                if (err == "amount mismatched") {
+                if (err.data == "amount mismatched") {
                   alert(
                     "Noe i reservasjonen ser ut til å ha endret seg. Prøv på nytt.",
                   )
                   getOrder(true)
                 } else {
-                  alert(err)
+                  alert(err.data)
                 }
               })
           },
@@ -244,7 +245,7 @@ angular
         ticketgroup.working = true
         $http
           .delete(api("ticket/" + ticketgroup.tickets[0].id))
-          .success(function () {
+          .then(function () {
             getOrder(true).then(
               function () {
                 ticketgroup.working = false
@@ -254,7 +255,7 @@ angular
               },
             )
           })
-          .error(function () {
+          .catch(function () {
             alert("Unknown error deleting order")
           })
       }

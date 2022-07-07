@@ -185,8 +185,8 @@ angular
             "Er du sikker på at du vil lukke betalingsgruppen? Dette gjøres kun ved oppgjør av økonomi. Kontroller evt. avvik først. Handlingen kan ikke angres.",
           )
         ) {
-          ctrl.paymentgroup.close().success(function (ret) {
-            ctrl.paymentgroup = ret
+          ctrl.paymentgroup.close().then(function (response) {
+            ctrl.paymentgroup = response.data
           })
         }
       }
