@@ -1,38 +1,34 @@
 import moment from 'moment';
 
-(function() {
-    'use strict';
+var module = angular.module('billett.common');
 
-    var module = angular.module('billett.common');
+module.filter('formatdate', function() {
+    return function(datetime, format) {
+        return moment.unix(datetime).format(format);
+    };
+});
 
-    module.filter('formatdate', function() {
-        return function(datetime, format) {
-            return moment.unix(datetime).format(format);
-        };
-    });
+module.filter('price', function() {
+    return function(amount, decimals, in_nok) {
+        if (typeof decimals == 'boolean') {
+            in_nok = decimals;
+            decimals = 0;
+        }
 
-    module.filter('price', function() {
-        return function(amount, decimals, in_nok) {
-            if (typeof decimals == 'boolean') {
-                in_nok = decimals;
-                decimals = 0;
+        var formatNumber = function(number, decimals)
+        {
+            number = number.toFixed(decimals) + '';
+            var x = number.split('.');
+            var x1 = x[0];
+            var x2 = x.length > 1 ? ',' + x[1] : '';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + ' ' + '$2');
             }
-
-            var formatNumber = function(number, decimals)
-            {
-                number = number.toFixed(decimals) + '';
-                var x = number.split('.');
-                var x1 = x[0];
-                var x2 = x.length > 1 ? ',' + x[1] : '';
-                var rgx = /(\d+)(\d{3})/;
-                while (rgx.test(x1)) {
-                    x1 = x1.replace(rgx, '$1' + ' ' + '$2');
-                }
-                return x1 + x2;
-            };
-
-            if (typeof(decimals) != "number") decimals = 0;
-            return (in_nok ? 'NOK ' : 'kr ') + formatNumber(parseFloat(amount), decimals);
+            return x1 + x2;
         };
-    });
-})();
+
+        if (typeof(decimals) != "number") decimals = 0;
+        return (in_nok ? 'NOK ' : 'kr ') + formatNumber(parseFloat(amount), decimals);
+    };
+});

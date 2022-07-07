@@ -1,26 +1,22 @@
 import template from "./index.html?raw";
 
-(function() {
-    'use strict';
+var module = angular.module('billett.admin');
 
-    var module = angular.module('billett.admin');
+module.config(function ($stateProvider) {
+    $stateProvider.state('admin-index', {
+        url: '/a',
+        template,
+        controller: 'AdminIndexController',
+        resolve: {auth: 'AuthRequireResolver'}
+    });
+});
 
-    module.config(function ($stateProvider) {
-        $stateProvider.state('admin-index', {
-            url: '/a',
-            template,
-            controller: 'AdminIndexController',
-            resolve: {auth: 'AuthRequireResolver'}
-        });
+module.controller('AdminIndexController', function (Page, $http, $scope, AdminEventgroup, AdminPrinter) {
+    AdminEventgroup.query(function (ret) {
+        $scope.eventgroups = ret;
     });
 
-    module.controller('AdminIndexController', function (Page, $http, $scope, AdminEventgroup, AdminPrinter) {
-        AdminEventgroup.query(function (ret) {
-            $scope.eventgroups = ret;
-        });
-
-        $scope.printText = function () {
-            AdminPrinter.printTextModal();
-        };
-    });
-})();
+    $scope.printText = function () {
+        AdminPrinter.printTextModal();
+    };
+});
