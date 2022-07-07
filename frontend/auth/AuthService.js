@@ -1,4 +1,3 @@
-import reqwest from 'reqwest';
 import {api} from '../api';
 
 let authData;
@@ -9,11 +8,9 @@ let authData;
 export default {
     getAuthData(renew = false) {
         if (!authData || renew) {
-            authData = reqwest({
-                url: api('me'),
-                withCredentials: true,
-                type: 'json'
-            });
+            authData = fetch(api('me'), {
+                credentials: 'include',
+            }).then((response) => response.json());
         }
 
         return new Promise((resolve, reject) => {

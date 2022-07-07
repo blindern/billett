@@ -1,5 +1,7 @@
 import {api} from '../../api';
 
+import receiptTemplate from './receipt.html?raw';
+
 (function() {
     'use strict';
 
@@ -8,7 +10,7 @@ import {api} from '../../api';
     module.config(function ($stateProvider) {
         $stateProvider.state('order-complete', {
             url: '/order/complete',
-            templateUrl: require('./receipt.html'),
+            template: receiptTemplate,
             controller: 'OrderController'
         });
     });

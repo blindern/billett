@@ -1,7 +1,9 @@
+import paymentgroupSelectBoxTemplate from './paymentgroup_select_box.html?raw';
+
 angular.module('billett.admin').directive('paymentgroupSelect', function(AdminPaymentgroup) {
     return {
         restrict: 'E',
-        templateUrl: require('./paymentgroup_select_box.html'),
+        template: paymentgroupSelectBoxTemplate,
         scope: {
             paymentgroup: '=',
             eventgroupId: '=',

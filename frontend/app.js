@@ -1,27 +1,33 @@
 import AuthService from './auth/AuthService';
 
+import angularGoogleAnalytics from 'angular-google-analytics';
+import auth from './auth';
+import common from './common';
+import admin from './admin';
+import guest from './guest';
+import angular from 'angular';
+
+import './app.scss';
+
+import template404 from './guest/infopages/404.html?raw';
+
 (function() {
     'use strict';
-
-    require('./app.scss');
-
-    const angular = require('angular');
-    require('bootstrap-sass');
 
     moment.locale('nb');
 
     let module = angular.module('billett', [
-        require('ui.router'),
-        require('angular-google-analytics'),
-        require('./auth'),
-        require('./common'),
-        require('./admin'),
-        require('./guest'),
+        "ui.router",
+        angularGoogleAnalytics,
+        auth,
+        common,
+        admin,
+        guest,
     ]);
 
     module.config(function ($locationProvider, $httpProvider, $stateProvider, $urlRouterProvider, AnalyticsProvider, ngToastProvider) {
         $stateProvider.state('404', {
-            templateUrl: require('./guest/infopages/404.html'),
+            template: template404,
         });
 
         $urlRouterProvider.otherwise(function ($injector, $location) {

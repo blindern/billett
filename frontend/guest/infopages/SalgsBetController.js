@@ -1,3 +1,5 @@
+import template from './salgsbetingelser.html?raw';
+
 (function() {
     'use strict';
 
@@ -6,7 +8,7 @@
     module.config(function ($stateProvider) {
         $stateProvider.state('salgsbetingelser', {
             url: '/salgsbetingelser',
-            templateUrl: require('./salgsbetingelser.html'),
+            template,
             controller: 'SalgsBetController'
         });
     });

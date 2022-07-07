@@ -1,5 +1,5 @@
 /*global BACKEND_URL*/
-let backendUrl = BACKEND_URL;
+export let backendUrl = BACKEND_URL;
 
 if (backendUrl.indexOf('SAMEHOST') !== -1) {
   backendUrl = backendUrl.replace('SAMEHOST', window.location.hostname);
@@ -15,10 +15,6 @@ if (backendUrl.indexOf('//') === -1) {
   backendUrl = window.location.origin + seperator + backendUrl;
 }
 
-export default {
-  api(url) {
-    return backendUrl + 'api/' + url; // see webpack config
-  },
-
-  backendUrl,
+export function api(url) {
+  return backendUrl + 'api/' + url; // see webpack config
 }

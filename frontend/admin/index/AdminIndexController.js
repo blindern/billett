@@ -1,3 +1,5 @@
+import template from "./index.html?raw";
+
 (function() {
     'use strict';
 
@@ -6,7 +8,7 @@
     module.config(function ($stateProvider) {
         $stateProvider.state('admin-index', {
             url: '/a',
-            templateUrl: require('./index.html'),
+            template,
             controller: 'AdminIndexController',
             resolve: {auth: 'AuthRequireResolver'}
         });

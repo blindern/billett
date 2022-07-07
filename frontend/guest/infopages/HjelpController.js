@@ -1,3 +1,5 @@
+import template from './hjelp.html?raw';
+
 (function() {
     'use strict';
 
@@ -6,7 +8,7 @@
     module.config(function ($stateProvider) {
         $stateProvider.state('hjelp', {
             url: '/hjelp',
-            templateUrl: require('./hjelp.html'),
+            template,
             controller: 'HjelpController'
         });
     });

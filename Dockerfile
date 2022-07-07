@@ -1,4 +1,4 @@
-FROM node:6
+FROM node:16-slim
 
 RUN set -eux; \
     apt-get update; \
@@ -14,8 +14,8 @@ COPY container/dev.sh /dev.sh
 
 WORKDIR /usr/src/app
 
-COPY package.json /usr/src/app/
-RUN npm install
+COPY package*.json /usr/src/app/
+RUN npm ci
 
 COPY . /usr/src/app/
 

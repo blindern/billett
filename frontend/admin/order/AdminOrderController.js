@@ -1,5 +1,7 @@
 import {api} from '../../api';
 
+import emailModalTemplate from './email_modal.html?raw';
+
 (function() {
     'use strict';
 
@@ -204,7 +206,7 @@ import {api} from '../../api';
         // send email
         ctrl.email = function () {
             var modal = $modal.open({
-                templateUrl: require('./email_modal.html'),
+                template: emailModalTemplate,
                 controller: 'AdminOrderEmailController as ctrl',
                 resolve: {
                     order: function () {

@@ -1,26 +1,30 @@
+import editTemplate from "./edit.html?raw"
+import checkinTemplate from "./checkin.html?raw"
+import template from "./index.html?raw"
+
 angular.module('billett.admin').config(function($stateProvider) {
     $stateProvider
         .state('admin-event-new', {
             url: '/a/eventgroup/:eventgroup_id/new_event',
-            templateUrl: require('./edit.html'),
+            template: editTemplate,
             controller: 'AdminEventEditNewController',
             resolve: {auth: 'AuthRequireResolver'}
         })
         .state('admin-event-edit', {
             url: '/a/event/:id/edit',
-            templateUrl: require('./edit.html'),
+            template: editTemplate,
             controller: 'AdminEventEditNewController',
             resolve: {auth: 'AuthRequireResolver'}
         })
         .state('admin-event-checkin', {
             url: '/a/event/:id/checkin',
-            templateUrl: require('./checkin.html'),
+            template: checkinTemplate,
             controller: 'AdminCheckinController as ctrl',
             resolve: {auth: 'AuthRequireResolver'}
         })
         .state('admin-event', {
             url: '/a/event/:id',
-            templateUrl: require('./index.html'),
+            template,
             controller: 'AdminEventController as ctrl',
             resolve: {auth: 'AuthRequireResolver'}
         });

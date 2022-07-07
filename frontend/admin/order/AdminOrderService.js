@@ -1,5 +1,7 @@
 import {api} from '../../api';
 
+import addTicketgroupToOrderTemplate from '../ticketgroup/add_ticketgroup_to_order.html?raw';
+
 (function() {
     'use strict';
 
@@ -32,7 +34,7 @@ import {api} from '../../api';
 
         r.addTicketsModal = function (resolve) {
             return $modal.open({
-                templateUrl: require('../ticketgroup/add_ticketgroup_to_order.html'),
+                template: addTicketgroupToOrderTemplate,
                 controller: 'AdminTicketgroupAddToOrderController as ctrl',
                 resolve: resolve
             });

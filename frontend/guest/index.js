@@ -1,23 +1,14 @@
-const angular = require('angular');
+import "./module"
 
-module.exports = 'billett.guest';
+import './infopages/HjelpController';
+import './infopages/SalgsBetController';
+import './event/event.scss';
+import './event/filters';
+import './event/EventController';
+import './event/EventReservation';
+import './index/IndexController';
+import './order/OrderController';
+import './eventgroup/EventgroupController';
+import './eventgroup/eventgroup.scss';
 
-(function() {
-    angular.module('billett.guest', [
-        require('../common'),
-        require('angular-marked'),
-        require('ui.router'),
-        require('angular-animate'),
-    ]);
-
-    require('./infopages/HjelpController');
-    require('./infopages/SalgsBetController');
-    require('./event/event.scss');
-    require('./event/filters');
-    require('./event/EventController');
-    require('./event/EventReservation');
-    require('./index/IndexController');
-    require('./order/OrderController');
-    require('./eventgroup/EventgroupController');
-    require('./eventgroup/eventgroup.scss');
-})();
+export default 'billett.guest';

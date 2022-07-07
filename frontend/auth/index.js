@@ -1,8 +1,8 @@
 import {api} from '../api';
 import AuthService from './AuthService';
-const angular = require('angular');
+import angular from 'angular';
 
-module.exports = 'billett.auth';
+export default 'billett.auth';
 
 (function() {
     'use strict';

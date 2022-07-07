@@ -1,8 +1,12 @@
+import newTemplate from "./new.html?raw";
+import orderTemplate from "./order.html?raw";
+import template from "./index.html?raw";
+
 angular.module('billett.admin').config(function ($stateProvider) {
     $stateProvider
         .state('admin-order-new', {
             url: '/a/order/new/:id',
-            templateUrl: require('./new.html'),
+            template: newTemplate,
             controller: 'AdminOrderNewController as ctrl',
             resolve: {auth: 'AuthRequireResolver'},
             params: {
@@ -11,13 +15,13 @@ angular.module('billett.admin').config(function ($stateProvider) {
         })
         .state('admin-order', {
             url: '/a/order/:id',
-            templateUrl: require('./order.html'),
+            template: orderTemplate,
             controller: 'AdminOrderController as ctrl',
             resolve: {auth: 'AuthRequireResolver'}
         })
         .state('admin-orders', {
             url: '/a/orders?eventgroup_id',
-            templateUrl: require('./index.html'),
+            template,
             controller: 'AdminOrderListController',
             resolve: {auth: 'AuthRequireResolver'},
             reloadOnSearch: false

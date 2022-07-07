@@ -1,5 +1,7 @@
 import {api} from '../../api';
 
+import template from './index.html?raw';
+
 (function() {
     'use strict';
 
@@ -8,7 +10,7 @@ import {api} from '../../api';
     module.config(function ($stateProvider) {
         $stateProvider.state('event', {
             url: '/event/:id',
-            templateUrl: require('./index.html'),
+            template,
             controller: 'EventController as ctrl'
         });
     });

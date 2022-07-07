@@ -1,5 +1,8 @@
 import {api} from '../../api';
 
+import paymentgroupSelectTemplate from './paymentgroup_select.html?raw';
+import paymentsourceNewTemplate from './paymentsource_new.html?raw';
+
 angular.module('billett.admin').factory('AdminPaymentsource', function ($http, $modal, $resource) {
     var r = $resource(api('paymentsource/:id'), {
         id: '@id'
@@ -11,7 +14,7 @@ angular.module('billett.admin').factory('AdminPaymentsource', function ($http, $
 
     r.newModal = function (paymentgroup) {
         return $modal.open({
-            templateUrl: require('./paymentsource_new.html'),
+            template: paymentsourceNewTemplate,
             controller: 'AdminPaymentsourceNewController as ctrl',
             resolve: {
                 paymentgroup: function () {
@@ -23,7 +26,7 @@ angular.module('billett.admin').factory('AdminPaymentsource', function ($http, $
 
     r.selectModal = function (resolve) {
         return $modal.open({
-            templateUrl: require('./paymentgroup_select.html'),
+            template: paymentgroupSelectTemplate,
             controller: 'AdminPaymentgroupSelectController as ctrl',
             resolve: resolve
         });

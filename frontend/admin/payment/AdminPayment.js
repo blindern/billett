@@ -1,8 +1,10 @@
+import paymentAddTemplate from "./payment_add.html?raw";
+
 angular.module('billett.admin').factory('AdminPayment', function ($modal) {
     return {
         newModal: function (order) {
             return $modal.open({
-                templateUrl: require('./payment_add.html'),
+                template: paymentAddTemplate,
                 controller: 'AdminPaymentAddController as ctrl',
                 resolve: {
                     order: function () {

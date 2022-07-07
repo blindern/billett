@@ -1,92 +1,64 @@
-const angular = require('angular');
+import "./module"
 
-module.exports = 'billett.admin';
+import './daytheme/AdminDaythemeController';
+import './daytheme/AdminDaythemeEditNewController';
+import './daytheme/AdminDaythemeService';
+import './daytheme/daytheme.scss';
+import './daytheme/routes';
 
-(function() {
-    var module = angular.module('billett.admin', [
-        require('angular-file-upload'),
-        require('../auth'),
-        require('../common'),
-        require('angular-resource'),
-        require('ui.router'),
-        require('ui.bootstrap.modal'),
-        require('ui.bootstrap.typeahead'),
-        require('ui.bootstrap.tpls'),
-        require('ui.unique'),
-        require('ng-sortable'),
-        require('ng-focus-on'),
-    ]);
+import './event/AdminCheckinController';
+import './event/AdminEventController';
+import './event/AdminEventEditNewController';
+import './event/AdminEventService';
+import './event/event.scss';
+import './event/routes';
 
-    module.run(function ($modalStack, $rootScope) {
-        // make sure modals close on state change
-        $rootScope.$on('$stateChangeSuccess', function () {
-            var topModal = $modalStack.getTop();
-            while (topModal) {
-                $modalStack.dismiss(topModal.key, '$locationChangeSuccess');
-                topModal = $modalStack.getTop();
-            }
-        });
-    });
+import './eventgroup/AdminEventgroupController';
+import './eventgroup/AdminEventgroupEditNewController';
+import './eventgroup/AdminEventgroupNewController';
+import './eventgroup/AdminEventgroupService';
+import './eventgroup/AdminEventgroupSoldTicketsStatsController';
+import './eventgroup/eventgroup.scss';
+import './eventgroup/routes';
 
-    require('./daytheme/AdminDaythemeController');
-    require('./daytheme/AdminDaythemeEditNewController');
-    require('./daytheme/AdminDaythemeService');
-    require('./daytheme/daytheme.scss');
-    require('./daytheme/routes');
+import './index/AdminIndexController';
 
-    require('./event/AdminCheckinController');
-    require('./event/AdminEventController');
-    require('./event/AdminEventEditNewController');
-    require('./event/AdminEventService');
-    require('./event/event.scss');
-    require('./event/routes');
+import './order/AdminOrderController';
+import './order/AdminOrderEmailController';
+import './order/AdminOrderListController';
+import './order/AdminOrderNewController';
+import './order/AdminOrderService';
+import './order/new.scss';
+import './order/order.scss';
+import './order/routes';
 
-    require('./eventgroup/AdminEventgroupController');
-    require('./eventgroup/AdminEventgroupEditNewController');
-    require('./eventgroup/AdminEventgroupNewController');
-    require('./eventgroup/AdminEventgroupService');
-    require('./eventgroup/AdminEventgroupSoldTicketsStatsController');
-    require('./eventgroup/eventgroup.scss');
-    require('./eventgroup/routes');
+import './payment/AdminPaymentAddController';
+import './payment/AdminPayment';
 
-    require('./index/AdminIndexController');
+import './paymentgroup/AdminPaymentgroupItemController';
+import './paymentgroup/AdminPaymentgroupListController';
+import './paymentgroup/AdminPaymentgroupNewController';
+import './paymentgroup/AdminPaymentgroupSelectController';
+import './paymentgroup/AdminPaymentgroupService';
+import './paymentgroup/AdminPaymentsource';
+import './paymentgroup/AdminPaymentsourceNewController';
+import './paymentgroup/paymentgroup.scss';
+import './paymentgroup/paymentgroup-select';
+import './paymentgroup/routes';
 
-    require('./order/AdminOrderController');
-    require('./order/AdminOrderEmailController');
-    require('./order/AdminOrderListController');
-    require('./order/AdminOrderNewController');
-    require('./order/AdminOrderService');
-    require('./order/new.scss');
-    require('./order/order.scss');
-    require('./order/routes');
+import './printer/AdminPrinter';
+import './printer/AdminPrinterSelectController';
+import './printer/AdminPrinterTextController';
+import './printer/printerList';
 
-    require('./payment/AdminPaymentAddController');
-    require('./payment/AdminPayment');
+import './ticket/AdminTicket';
+import './ticket/AdminTicketRevokeController';
 
-    require('./paymentgroup/AdminPaymentgroupItemController');
-    require('./paymentgroup/AdminPaymentgroupListController');
-    require('./paymentgroup/AdminPaymentgroupNewController');
-    require('./paymentgroup/AdminPaymentgroupSelectController');
-    require('./paymentgroup/AdminPaymentgroupService');
-    require('./paymentgroup/AdminPaymentsource');
-    require('./paymentgroup/AdminPaymentsourceNewController');
-    require('./paymentgroup/paymentgroup.scss');
-    require('./paymentgroup/paymentgroup-select');
-    require('./paymentgroup/routes');
+import './ticketgroup/AdminTicketgroupAddToOrderController';
+import './ticketgroup/AdminTicketgroupController';
+import './ticketgroup/AdminTicketgroupNewController';
+import './ticketgroup/AdminTicketgroupService';
+import './ticketgroup/add_ticketgroup_to_order.scss';
+import './ticketgroup/routes';
 
-    require('./printer/AdminPrinter');
-    require('./printer/AdminPrinterSelectController');
-    require('./printer/AdminPrinterTextController');
-    require('./printer/printerList');
-
-    require('./ticket/AdminTicket');
-    require('./ticket/AdminTicketRevokeController');
-
-    require('./ticketgroup/AdminTicketgroupAddToOrderController');
-    require('./ticketgroup/AdminTicketgroupController');
-    require('./ticketgroup/AdminTicketgroupNewController');
-    require('./ticketgroup/AdminTicketgroupService');
-    require('./ticketgroup/add_ticketgroup_to_order.scss');
-    require('./ticketgroup/routes');
-
-})();
+export default 'billett.admin';

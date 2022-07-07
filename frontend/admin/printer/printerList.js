@@ -1,7 +1,9 @@
+import template from "./select_box.html?raw";
+
 angular.module('billett.admin').directive('printerList', function(AdminPrinter) {
     return {
         restrict: 'E',
-        templateUrl: require('./select_box.html'),
+        template,
         scope: {
             printer: '=',
             id: '@',

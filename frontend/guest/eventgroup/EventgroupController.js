@@ -1,5 +1,7 @@
 import {api} from '../../api';
 
+import template from './index.html?raw';
+
 (function() {
     'use strict';
 
@@ -9,7 +11,7 @@ import {api} from '../../api';
         $stateProvider
             .state('eventgroup', {
                 url: '/eventgroup/{id}{query:(?:/[^/]*)?}',
-                templateUrl: require('./index.html'),
+                template,
                 controller: 'EventgroupController'
             });
     });

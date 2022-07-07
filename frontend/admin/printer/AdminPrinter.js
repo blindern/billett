@@ -1,5 +1,8 @@
 import {api} from '../../api';
 
+import selectModalTemplate from "./select_modal.html?raw";
+import textModalTemplate from './text_modal.html?raw';
+
 angular.module('billett.admin').factory('AdminPrinter', function ($http, $modal) {
     return {
         getList: function () {
@@ -7,7 +10,7 @@ angular.module('billett.admin').factory('AdminPrinter', function ($http, $modal)
         },
         printSelectModal: function (addHandler) {
             return $modal.open({
-                templateUrl: require('./select_modal.html'),
+                template: selectModalTemplate,
                 controller: 'AdminPrinterSelectController as ctrl',
                 resolve: {
                     addHandler: function () {
@@ -18,7 +21,7 @@ angular.module('billett.admin').factory('AdminPrinter', function ($http, $modal)
         },
         printTextModal: function () {
             return $modal.open({
-                templateUrl: require('./text_modal.html'),
+                template: textModalTemplate,
                 controller: 'AdminPrinterTextController as ctrl'
             });
         },

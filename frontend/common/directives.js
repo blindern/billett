@@ -1,5 +1,8 @@
 import './ContentWrapper.js';
 
+import template404 from '../guest/infopages/404.html?raw';
+import templatePaginationDirective from './paginationDirective.html?raw';
+
 (function() {
     'use strict';
 
@@ -70,7 +73,7 @@ import './ContentWrapper.js';
     module.directive('pageNotFound', function (Page) {
         return {
             restrict: 'E',
-            templateUrl: require('../guest/infopages/404.html'),
+            template: template404,
             link: function(scope, element, attr) {
                 console.log("linked 404");
             }
@@ -81,7 +84,7 @@ import './ContentWrapper.js';
     module.directive('pagination', function($parse) {
         return {
             restrict: 'E',
-            templateUrl: require('./paginationDirective.html'),
+            template: templatePaginationDirective,
             scope: {
                 total: '=pageTotal',
                 limit: '=pageLimit',
