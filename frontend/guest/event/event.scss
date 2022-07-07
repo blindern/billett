@@ -10,7 +10,7 @@
 
   @media (min-width: $screen-sm-min) {
     .no-buy-form {
-      margin-left: percentage((3.5 / 12));
+      margin-left: percentage(calc(3.5 / 12));
     }
   }
 
