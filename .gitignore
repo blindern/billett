@@ -4,7 +4,6 @@ composer.phar
 .DS_Store
 Thumbs.db
 .data
-/billett-frontend
 docker-compose.prod.yaml
 
 # Dependencies from package manager

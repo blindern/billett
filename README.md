@@ -12,7 +12,6 @@ More documentation: [Documentation (norwegian)](docs/index.md)
 This project is run with Docker and mainly consists of:
 
 * PHP backend container running php-fpm serving the backend api as well as simplesamlphp for authentication
-* node frontend image that compiles static frontend files
 * nginx container that serves the static files and acts as a proxy to the backend
 * mysql container as database
 

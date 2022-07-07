@@ -15,11 +15,36 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and conditionally push
+      - name: Build nginx container
         uses: docker/build-push-action@v3
         with:
           context: .
-          push: ${{ github.ref == 'refs/heads/master' }}
-          tags: blindernuka/billett-backend:latest
+          file: Dockerfile.nginx
+          load: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Build fpm container
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: Dockerfile.fpm
+          load: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Push nginx container
+        if: github.ref == 'refs/heads/master'
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: Dockerfile.nginx
+          tags: blindernuka/billett-proxy:latest
+
+      - name: Push fpm container
+        if: github.ref == 'refs/heads/master'
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: Dockerfile.fpm
+          tags: blindernuka/billett-backend:latest
