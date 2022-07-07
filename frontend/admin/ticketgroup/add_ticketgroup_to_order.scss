@@ -1,4 +1,4 @@
-@import '../../common/vars';
+@import "../../common/vars";
 
 .admin-ticketgroup-add {
   dl {
@@ -35,7 +35,7 @@
     }
 
     tbody + tbody:before {
-      content: '';
+      content: "";
       height: 20px;
       display: block;
     }
@@ -79,6 +79,5 @@
     button {
       margin-left: 3px;
     }
-
   }
 }

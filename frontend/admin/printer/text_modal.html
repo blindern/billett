@@ -1,31 +1,53 @@
 <div>
-    <div class="modal-header">
-        <h3 class="modal-title">Skriv ut tekst på billettskriver</h3>
-    </div>
-    <div class="modal-body">
-        <form class="form-horizontal" ng-submit="ctrl.complete()">
-            <div class="form-group">
-                <label for="printer" class="col-sm-4 control-label">Billettskriver</label>
-                <div class="col-sm-7">
-                    <printer-list printer="ctrl.printer" id="printer"></printer-list>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-4 control-label" for="text">Tekst</label>
-                <div class="col-sm-7">
-                    <textarea class="form-control" ng-model="ctrl.text" id="text" rows="10" required ng-disabled="ctrl.sending" autofocus></textarea>
-                </div>
-            </div>
+  <div class="modal-header">
+    <h3 class="modal-title">Skriv ut tekst på billettskriver</h3>
+  </div>
+  <div class="modal-body">
+    <form class="form-horizontal" ng-submit="ctrl.complete()">
+      <div class="form-group">
+        <label for="printer" class="col-sm-4 control-label"
+          >Billettskriver</label
+        >
+        <div class="col-sm-7">
+          <printer-list printer="ctrl.printer" id="printer"></printer-list>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-4 control-label" for="text">Tekst</label>
+        <div class="col-sm-7">
+          <textarea
+            class="form-control"
+            ng-model="ctrl.text"
+            id="text"
+            rows="10"
+            required
+            ng-disabled="ctrl.sending"
+            autofocus
+          ></textarea>
+        </div>
+      </div>
 
-            <div class="row" ng-show="!ctrl.sending">
-                <div class="col-sm-7 col-sm-offset-4">
-                    <button class="btn btn-success" type="submit" ng-disabled="!ctrl.printer">Skriv ut</button>
-                    <button class="btn btn-default" type="button" ng-click="ctrl.cancel()">Avbryt</button>
-                </div>
-            </div>
-            <p class="text-center" ng-if="ctrl.sending">
-                Sender data til utskrift ...
-            </p>
-        </form>
-    </div>
+      <div class="row" ng-show="!ctrl.sending">
+        <div class="col-sm-7 col-sm-offset-4">
+          <button
+            class="btn btn-success"
+            type="submit"
+            ng-disabled="!ctrl.printer"
+          >
+            Skriv ut
+          </button>
+          <button
+            class="btn btn-default"
+            type="button"
+            ng-click="ctrl.cancel()"
+          >
+            Avbryt
+          </button>
+        </div>
+      </div>
+      <p class="text-center" ng-if="ctrl.sending">
+        Sender data til utskrift ...
+      </p>
+    </form>
+  </div>
 </div>

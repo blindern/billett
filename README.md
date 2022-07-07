@@ -5,9 +5,9 @@ https://github.com/blindernuka/billett
 
 ## Details
 
-* Npm for dependencies
-* Webpack for module loading and building
-* Angular 1.x
+- Npm for dependencies
+- Webpack for module loading and building
+- Angular 1.x
 
 ## Setup
 

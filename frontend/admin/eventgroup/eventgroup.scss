@@ -1,9 +1,9 @@
-@import '../../common/vars';
+@import "../../common/vars";
 
 .admin-eventgroup {
   table > tbody::before {
     line-height: 20px;
-    content: '-';
+    content: "-";
     visibility: hidden;
     display: block;
   }
@@ -25,18 +25,23 @@
       }
     }
   }
-  table th:nth-child(5), table td:nth-child(5),
-  table th:nth-child(6), table td:nth-child(6),
-  table th:nth-child(7), table td:nth-child(7) {
+  table th:nth-child(5),
+  table td:nth-child(5),
+  table th:nth-child(6),
+  table td:nth-child(6),
+  table th:nth-child(7),
+  table td:nth-child(7) {
     text-align: right;
   }
-  table th:nth-child(8), table td:nth-child(8),
-  table th:nth-child(9), table td:nth-child(9) {
+  table th:nth-child(8),
+  table td:nth-child(8),
+  table th:nth-child(9),
+  table td:nth-child(9) {
     text-align: center;
   }
   table td:nth-child(8),
   table td:nth-child(9) {
-    background-color: hsl(120,100%,90%) !important;
+    background-color: hsl(120, 100%, 90%) !important;
   }
   /*table td:nth-child(8) {
 
@@ -50,12 +55,12 @@
       opacity: 1;
     }
     td:nth-child(8) {
-      background-color: hsl(0,100%,90%) !important;
+      background-color: hsl(0, 100%, 90%) !important;
     }
   }
   table tr.event-no-selling {
     td:nth-child(9) {
-      background-color: hsl(0,100%,90%) !important;
+      background-color: hsl(0, 100%, 90%) !important;
     }
   }
 
@@ -64,10 +69,9 @@
   }
 
   .event-not-selling {
-    opacity: .3;
+    opacity: 0.3;
   }
 }
-
 
 .admin-soldTicketsStats {
   .event-time {
@@ -87,7 +91,7 @@
 
   td:not(:first-child),
   th:not(:first-child) {
-    text-align: right
+    text-align: right;
   }
 
   th,

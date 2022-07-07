@@ -1,7 +1,8 @@
-@import '../../common/vars';
+@import "../../common/vars";
 
 .eventgroup-event-list {
-  ul, li {
+  ul,
+  li {
     margin: 0;
     padding: 0;
     list-style: none;
@@ -29,11 +30,10 @@
       }
     }
     .theme {
-
     }
 
     &:after {
-      content: '';
+      content: "";
       display: block;
       clear: both;
     }
@@ -41,16 +41,16 @@
 
   .event {
     display: flex;
-    background-color: #FAFAFA;
+    background-color: #fafafa;
     border-radius: 3px;
     padding: 3px;
     margin: 2px 0;
     &:nth-child(odd) {
-      background-color: #F5F5F5;
+      background-color: #f5f5f5;
     }
 
     &:hover {
-      background-color: #EEEEEE;
+      background-color: #eeeeee;
     }
 
     @media (min-width: $grid-float-breakpoint) {
@@ -99,7 +99,6 @@
     .edit-link-wrap {
       display: none;
       .edit-link {
-
       }
     }
 
@@ -116,7 +115,7 @@
 
     @for $i from 0 through 8 {
       .category-#{$i} {
-        background-color: adjust-hue(hsla(0, 100%, 90%, 1), $i*35);
+        background-color: adjust-hue(hsla(0, 100%, 90%, 1), $i * 35);
       }
     }
   }

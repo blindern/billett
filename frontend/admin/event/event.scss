@@ -1,4 +1,4 @@
-@import '../../common/vars';
+@import "../../common/vars";
 
 .admin-event {
   .event-image {
@@ -6,7 +6,7 @@
     position: relative;
     .upload-tip {
       position: absolute;
-      background: #EEE;
+      background: #eee;
       padding: 3px;
       display: none;
       left: 0;

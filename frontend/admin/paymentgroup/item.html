@@ -1,357 +1,477 @@
 <div class="admin-paymentgroup-item">
-    <page-property name="title" value="Oppgjør"></page-property>
+  <page-property name="title" value="Oppgjør"></page-property>
 
-    <div class="page-header">
-        <h1>
-            <span class="eventgroup">
-                <a href="a/eventgroup/{{ctrl.paymentgroup.eventgroup.id}}/paymentgroups">{{ctrl.paymentgroup.eventgroup.title}}</a>
-            </span>
-            Oppgjør: {{ctrl.paymentgroup.title}}
+  <div class="page-header">
+    <h1>
+      <span class="eventgroup">
+        <a href="a/eventgroup/{{ctrl.paymentgroup.eventgroup.id}}/paymentgroups"
+          >{{ctrl.paymentgroup.eventgroup.title}}</a
+        >
+      </span>
+      Oppgjør: {{ctrl.paymentgroup.title}}
 
-            <span class="pull-right hidden-print">
-                <button class="btn btn-default" ng-click="ctrl.startEdit()" ng-if="!ctrl.paymentgroup.time_end && !ctrl.edit">
-                    Rediger
-                </button>
-                <button class="btn btn-default" ng-click="ctrl.show_details = !ctrl.show_details">
-                    {{ctrl.show_details ? 'Skjul detaljer' : 'Vis detaljer'}}
-                </button>
-                <button class="btn btn-primary" ng-click="ctrl.close()" ng-if="!ctrl.paymentgroup.time_end">
-                    Avslutt/ta oppgjør
-                </button>
-            </span>
-        </h1>
+      <span class="pull-right hidden-print">
+        <button
+          class="btn btn-default"
+          ng-click="ctrl.startEdit()"
+          ng-if="!ctrl.paymentgroup.time_end && !ctrl.edit"
+        >
+          Rediger
+        </button>
+        <button
+          class="btn btn-default"
+          ng-click="ctrl.show_details = !ctrl.show_details"
+        >
+          {{ctrl.show_details ? 'Skjul detaljer' : 'Vis detaljer'}}
+        </button>
+        <button
+          class="btn btn-primary"
+          ng-click="ctrl.close()"
+          ng-if="!ctrl.paymentgroup.time_end"
+        >
+          Avslutt/ta oppgjør
+        </button>
+      </span>
+    </h1>
+  </div>
+
+  <form
+    ng-if="ctrl.edit"
+    ng-submit="ctrl.save()"
+    class="form-horizontal"
+    autocomplete="off"
+  >
+    <div class="form-group">
+      <label for="title" class="col-sm-2 control-label">Tittel</label>
+      <div class="col-sm-6">
+        <input
+          type="text"
+          class="form-control"
+          ng-model="ctrl.edit.title"
+          id="title"
+          placeholder=""
+          required
+          autofocus
+        />
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="description" class="col-sm-2 control-label"
+        >Beskrivelse</label
+      >
+      <div class="col-sm-6">
+        <textarea
+          class="form-control"
+          ng-model="ctrl.edit.description"
+          id="description"
+          rows="5"
+          placeholder="(valgfritt)"
+        ></textarea>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-6 col-sm-offset-2">
+        <input type="submit" value="Oppdater" class="btn btn-primary" />
+        <a class="btn" ng-click="ctrl.abortEdit()">Avbryt</a>
+      </div>
+    </div>
+  </form>
+
+  <div ng-if="!ctrl.edit">
+    <div class="alert alert-warning" ng-if="!ctrl.paymentgroup.time_end">
+      <b>NB!</b> Oppgjøret er ikke avsluttet!
     </div>
 
-    <form ng-if="ctrl.edit" ng-submit="ctrl.save()" class="form-horizontal" autocomplete="off">
-        <div class="form-group">
-            <label for="title" class="col-sm-2 control-label">Tittel</label>
-            <div class="col-sm-6">
-                <input type="text" class="form-control" ng-model="ctrl.edit.title" id="title" placeholder="" required autofocus>
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="description" class="col-sm-2 control-label">Beskrivelse</label>
-            <div class="col-sm-6">
-                <textarea class="form-control" ng-model="ctrl.edit.description" id="description" rows="5" placeholder="(valgfritt)"></textarea>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-6 col-sm-offset-2">
-                <input type="submit" value="Oppdater" class="btn btn-primary">
-                <a class="btn" ng-click="ctrl.abortEdit()">Avbryt</a>
-            </div>
-        </div>
-    </form>
+    <div class="row">
+      <div class="col-xs-6">
+        <dl class="dl-horizontal">
+          <dt>Tittel</dt>
+          <dd>{{ctrl.paymentgroup.title}}</dd>
+          <dt>Opprettet</dt>
+          <dd>
+            {{ctrl.paymentgroup.time_start|formatdate:'DD.MM.YYYY HH:mm'}} av
+            {{ctrl.paymentgroup.user_created}}
+          </dd>
+          <dt>Avsluttet</dt>
+          <dd ng-if="ctrl.paymentgroup.time_end">
+            {{ctrl.paymentgroup.time_end|formatdate:'DD.MM.YYYY HH:mm'}} av
+            {{ctrl.paymentgroup.user_closed}}
+          </dd>
+          <dd ng-if="!ctrl.paymentgroup.time_end">Ikke avsluttet</dd>
+        </dl>
 
-    <div ng-if="!ctrl.edit">
-        <div class="alert alert-warning" ng-if="!ctrl.paymentgroup.time_end"><b>NB!</b> Oppgjøret er ikke avsluttet!</div>
+        <div
+          class="alert alert-info"
+          ng-if="ctrl.paymentgroup.description"
+          marked="ctrl.paymentgroup.description"
+        ></div>
+      </div>
+      <div class="col-xs-6">
+        <p class="dl-prefix">Registrerte salg og transaksjoner:</p>
+        <dl class="dl-horizontal">
+          <dt>Solgte billetter</dt>
+          <dd ng-if="ctrl.totals.revoked != 0">
+            {{-ctrl.totals.valid|price}} (registrerte) -
+            {{ctrl.totals.revoked|price}} (refunderte) =
+            {{-ctrl.totals.valid-ctrl.totals.revoked|price}} (netto)
+          </dd>
+          <dd ng-if="ctrl.totals.revoked == 0">
+            {{-ctrl.totals.valid-ctrl.totals.revoked|price}}
+          </dd>
+          <dt>Registrerte transaksjoner</dt>
+          <dd>{{ctrl.totals.payments|price}}</dd>
+          <dt>Utestående beløp</dt>
+          <dd>
+            {{(-ctrl.totals.valid-ctrl.totals.revoked-ctrl.totals.payments)|price}}
+          </dd>
+        </dl>
 
-        <div class="row">
-            <div class="col-xs-6">
-
-                <dl class="dl-horizontal">
-                    <dt>Tittel</dt>
-                    <dd>{{ctrl.paymentgroup.title}}</dd>
-                    <dt>Opprettet</dt>
-                    <dd>{{ctrl.paymentgroup.time_start|formatdate:'DD.MM.YYYY HH:mm'}} av {{ctrl.paymentgroup.user_created}}</dd>
-                    <dt>Avsluttet</dt>
-                    <dd ng-if="ctrl.paymentgroup.time_end">{{ctrl.paymentgroup.time_end|formatdate:'DD.MM.YYYY HH:mm'}} av {{ctrl.paymentgroup.user_closed}}</dd>
-                    <dd ng-if="!ctrl.paymentgroup.time_end">Ikke avsluttet</dd>
-                </dl>
-
-                <div class="alert alert-info" ng-if="ctrl.paymentgroup.description" marked="ctrl.paymentgroup.description"></div>
-
-            </div>
-            <div class="col-xs-6">
-
-                <p class="dl-prefix">Registrerte salg og transaksjoner:</p>
-                <dl class="dl-horizontal">
-                    <dt>Solgte billetter</dt>
-                    <dd ng-if="ctrl.totals.revoked != 0">{{-ctrl.totals.valid|price}} (registrerte) - {{ctrl.totals.revoked|price}} (refunderte) = {{-ctrl.totals.valid-ctrl.totals.revoked|price}} (netto)</dd>
-                    <dd ng-if="ctrl.totals.revoked == 0">{{-ctrl.totals.valid-ctrl.totals.revoked|price}}</dd>
-                    <dt>Registrerte transaksjoner</dt>
-                    <dd>{{ctrl.totals.payments|price}}</dd>
-                    <dt>Utestående beløp</dt>
-                    <dd>{{(-ctrl.totals.valid-ctrl.totals.revoked-ctrl.totals.payments)|price}}</dd>
-                </dl>
-
-                <p class="dl-prefix">Opptelling/kontroll:</p>
-                <dl class="dl-horizontal">
-                    <dt>Verifiserte transaksjoner</dt>
-                    <dd>{{ctrl.ps.sum|price}}</dd>
-                    <dt>Kassedifferanse/avvik</dt>
-                    <dd>{{ctrl.totals.payments-ctrl.ps. sum|price}}</dd>
-                </dl>
-
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-xs-6">
-
-                <h2>
-                    Opptelling/kontroll
-                    <span class="pull-right btn btn-primary hidden-print" ng-if="!ctrl.paymentgroup.time_end" ng-click="ctrl.newPaymentsource()">Registrer opptelling</span>
-                </h2>
-
-                <div ng-if="ctrl.ps.cashgroups.length == 0 && ctrl.ps.other.length == 0">
-                    Ingen opptellinger er registrert.
-                </div>
-
-                <div class="print-page-section" ng-repeat="group in ctrl.ps.cashgroups">
-                    <div ng-class="{is_deleted: group.is_deleted}" ng-if="!group.is_deleted || ctrl.show_details">
-                        <h3>
-                            {{group.title}}: {{group.total|price}}
-                            <span ng-if="group.is_deleted">(Slettet - teller ikke på oppgjøret)</span>
-                        </h3>
-                        <table class="table table-condensed table-striped cashgroup">
-                            <thead>
-                                <tr>
-                                    <th rowspan="2">&nbsp;</th>
-                                    <th ng-repeat="paymentsource in group.cols">{{paymentsource.time_created|formatdate:'DD.MM.YYYY HH:mm'}}</th>
-                                    <th colspan="2">Totaler</th>
-                                </tr>
-                                <tr>
-                                    <th ng-repeat="paymentsource in group.cols">
-                                        {{paymentsource.user_created}}
-                                    </th>
-                                    <th>Antall</th>
-                                    <th>Beløp</th>
-                                </tr>
-                            </thead>
-                            <tfoot>
-                                <tr>
-                                    <th>Sum</th>
-                                    <th ng-repeat="paymentsource in group.cols">
-                                        {{paymentsource.amount|price}}
-                                        <span ng-if="!group.is_deleted && !ctrl.paymentgroup.time_end">
-                                            <br>
-                                            <a href ng-click="ctrl.deletePaymentsource(paymentsource)">Slett</a>
-                                        </span>
-                                    </th>
-                                    <th>&nbsp;</th>
-                                    <th>{{group.total|price}}</th>
-                                </tr>
-                            </tfoot>
-                            <tbody>
-                                <tr ng-repeat="row in group.rows">
-                                    <th ng-if="row.is_num">{{row.key|price}}</th>
-                                    <th ng-if="!row.is_num">{{row.key == 'other' ? 'Annet' : row.key}}</th>
-                                    <td ng-repeat="item in row.items track by $index">{{item}}</td>
-                                    <td ng-if="row.is_num">{{row.total}}</td>
-                                    <td ng-if="!row.is_num">&nbsp;</td>
-                                    <td>{{row.amount|price}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                        <div ng-repeat="paymentsource in group.cols">
-                            <div ng-if="paymentsource.comment">
-                                <h4>Kommentar til {{paymentsource.time_created|formatdate:'DD.MM.YYYY HH:mm'}} ({{paymentsource.user_created}}, {{paymentsource.amount|price}})</h4>
-                                <div marked="paymentsource.comment"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="print-page-section" ng-repeat="paymentsource in ctrl.ps.other">
-                    <div ng-class="{is_deleted: paymentsource.is_deleted}" ng-if="!paymentsource.is_deleted || ctrl.show_details">
-                        <h3>
-                            {{paymentsource.title}}: {{paymentsource.amount|price}}
-                            <span ng-if="paymentsource.is_deleted">(Slettet - teller ikke på oppgjøret)</span>
-                        </h3>
-                        <p>
-                            Registrert {{paymentsource.time_created|formatdate:'DD.MM.YYYY HH:mm'}} av {{paymentsource.user_created}}.
-                            <span ng-if="paymentsource.is_deleted">Slettet {{paymentsource.time_deleted|formatdate:'DD.MM.YYYY HH:mm'}} av {{paymentsource.user_deleted}}.</span>
-                            <a href ng-click="ctrl.deletePaymentsource(paymentsource)" ng-if="!paymentsource.is_deleted && !ctrl.paymentgroup.time_end">Slett</a>
-                        </p>
-                        <div ng-if="paymentsource.comment" marked="paymentsource.comment"></div>
-                    </div>
-                </div>
-
-                <!-- utestående beløp -->
-                <h3 ng-if="-ctrl.totals.valid-ctrl.totals.revoked-ctrl.totals.payments != 0">
-                    {{ctrl.ps.orders_deviation_prefix}}: {{(-ctrl.totals.valid-ctrl.totals.revoked-ctrl.totals.payments)|price}} (ordre i ubalanse)
-                </h3>
-
-                <!-- avvik/svinn -->
-                <h3 ng-if="ctrl.totals.payments-ctrl.ps.sum != 0">
-                    {{ctrl.ps.payments_deviation_prefix}}: {{ctrl.totals.payments-ctrl.ps.sum|price}}
-                </h3>
-
-            </div>
-            <div class="col-xs-6">
-
-                <h2>Salgsoversikt</h2>
-
-                <div ng-if="ctrl.categories.length == 0">
-                    <p>Ingen bevegelser på billetter er utført.</p>
-                </div>
-
-                <div class="print-page-section" ng-repeat="category in ctrl.categories" ng-if="ctrl.categories.length > 0">
-                    <h3>{{::category.name||'Uten kategori'}} - sum salg: {{::-category.total|price}}</h3>
-
-                    <div ng-repeat="event in category.events">
-                        <table class="table table-condensed table-striped paymentgroup-sales">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <a ng-href="a/event/{{event.id}}">
-                                            {{::event.time_start|formatdate:'D. MMM YYYY HH:mm'}}:
-                                            {{::event.title}}
-                                        </a>
-                                    </th>
-                                    <th>Antall</th>
-                                    <th>Beløp</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="ticketgroup in event.ticketgroups">
-                                    <td>{{::ticketgroup.title}}</td>
-                                    <td>{{::-ticketgroup.paymentgroup_count}}</td>
-                                    <td>{{::-ticketgroup.paymentgroup_balance|price}}</td>
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>Sum</th>
-                                    <th>{{::-event.paymentgroup_count}}</th>
-                                    <th>{{::-event.paymentgroup_balance|price}}</th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-
-        <div class="print-page-section" ng-if="ctrl.orders_inbalance.length > 0">
-            <h2>Ordre i ubalanse</h2>
-            <p>Dette er ordre som er registrert i dette oppgjøret hvor billetter ikke stemmer med betalinger. Dette er ikke nødvendigvis noe problem, f.eks. hvis billetter blir tilbaketrukket og man ikke har fått utbetalt beløpet enda.</p>
-
-            <table class="table table-condensed table-striped paymentgroup-inbalance">
-                <thead>
-                    <tr>
-                        <th>Ordre</th>
-                        <th>Tid</th>
-                        <th>Billetter solgt</th>
-                        <th>Billetter refundert</th>
-                        <th>Betaling inn</th>
-                        <th>Betaling ut</th>
-                        <th>Utestående</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="order in ctrl.orders_inbalance">
-                        <td>
-                            <a ng-href="a/order/{{::order.id}}">{{::order.order_text_id}}</a>
-                            <span ng-if="order.name">({{::order.name}})</span>
-                        </td>
-                        <td>
-                            {{::order.time|formatdate:'DD.MM.YYYY HH:mm'}}
-                        </td>
-                        <td>{{::-order.paymentgroup_balance['ticket_sales']|price}}</td>
-                        <td>{{::order.paymentgroup_balance['ticket_revoked']|price}}</td>
-                        <td>{{::order.paymentgroup_balance['payments']|price}}</td>
-                        <td>{{::-order.paymentgroup_balance['refunds']|price}}</td>
-                        <td>{{::-order.paymentgroup_balance['total']|price}}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-
-        <div ng-if="ctrl.show_details">
-
-            <h2>Transaksjoner</h2>
-            <table class="table table-condensed table-striped paymentgroup-payments print-page-section">
-                <thead>
-                    <tr>
-                        <th>Ordre</th>
-                        <th>Tid</th>
-                        <th>Beløp innbetalt</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="payment in ctrl.paymentgroup.payments">
-                        <td>
-                            <a ng-href="a/order/{{::payment.order.id}}">{{::payment.order.order_text_id}}</a>
-                            <span ng-if="payment.order.name">({{::payment.order.name}})</span>
-                        </td>
-                        <td>{{::payment.time|formatdate:'DD.MM.YYYY HH:mm'}}</td>
-                        <td>{{::payment.amount|price}}</td>
-                    </tr>
-                </tbody>
-            </table>
-
-
-            <h2>Billetter solgt</h2>
-            <table class="table table-condensed table-striped paymentgroup-tickets print-page-section">
-                <thead>
-                    <tr>
-                        <th>Ordre</th>
-                        <th>Arrangement</th>
-                        <th>Billett</th>
-                        <th>Tid</th>
-                        <th>Verdi</th>
-                        <th>Gebyr</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="ticket in ctrl.paymentgroup.valid_tickets">
-                        <td>
-                            <a ng-href="a/order/{{::ticket.order.id}}">{{::ticket.order.order_text_id}}</a>
-                            <span ng-if="ticket.order.name">({{::ticket.order.name}})</span>
-                        </td>
-                        <td>
-                            <a ng-href="a/event/{{ticket.event.id}}">{{::ticket.event.time_start|formatdate:'D. MMM YYYY HH:mm'}}: {{::ticket.event.title}}</a>
-                        </td>
-                        <td>
-                            {{::ticket.ticketgroup.title}} #{{::ticket.id}}
-                        </td>
-                        <td>{{::ticket.time|formatdate:'D. MMM YYYY HH:mm'}}</td>
-                        <td>{{::(ticket.ticketgroup.price+ticket.ticketgroup.fee|price)}}</td>
-                        <td>{{::ticket.ticketgroup.fee|price}}</td>
-                    </tr>
-                </tbody>
-            </table>
-
-
-            <h2>Billetter refundert</h2>
-            <table class="table table-condensed table-striped paymentgroup-tickets print-page-section">
-                <thead>
-                    <tr>
-                        <th>Ordre</th>
-                        <th>Arrangement</th>
-                        <th>Billett</th>
-                        <th>Tid</th>
-                        <th>Verdi</th>
-                        <th>Gebyr</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="ticket in ctrl.paymentgroup.revoked_tickets">
-                        <td>
-                            <a ng-href="a/order/{{::ticket.order.id}}">{{::ticket.order.order_text_id}}</a>
-                            <span ng-if="ticket.order.name">({{::ticket.order.name}})</span>
-                        </td>
-                        <td>
-                            <a ng-href="a/event/{{ticket.event.id}}">{{::ticket.event.time_start|formatdate:'D. MMM YYYY HH:mm'}}: {{::ticket.event.title}}</a>
-                        </td>
-                        <td>
-                            {{::ticket.ticketgroup.title}} #{{::ticket.id}}
-                        </td>
-                        <td>{{::ticket.time|formatdate:'D. MMM YYYY HH:mm'}}</td>
-                        <td>{{::(ticket.ticketgroup.price+ticket.ticketgroup.fee|price)}}</td>
-                        <td>{{::ticket.ticketgroup.fee|price}}</td>
-                    </tr>
-                </tbody>
-            </table>
-
-        </div>
-
+        <p class="dl-prefix">Opptelling/kontroll:</p>
+        <dl class="dl-horizontal">
+          <dt>Verifiserte transaksjoner</dt>
+          <dd>{{ctrl.ps.sum|price}}</dd>
+          <dt>Kassedifferanse/avvik</dt>
+          <dd>{{ctrl.totals.payments-ctrl.ps. sum|price}}</dd>
+        </dl>
+      </div>
     </div>
 
+    <div class="row">
+      <div class="col-xs-6">
+        <h2>
+          Opptelling/kontroll
+          <span
+            class="pull-right btn btn-primary hidden-print"
+            ng-if="!ctrl.paymentgroup.time_end"
+            ng-click="ctrl.newPaymentsource()"
+            >Registrer opptelling</span
+          >
+        </h2>
+
+        <div
+          ng-if="ctrl.ps.cashgroups.length == 0 && ctrl.ps.other.length == 0"
+        >
+          Ingen opptellinger er registrert.
+        </div>
+
+        <div class="print-page-section" ng-repeat="group in ctrl.ps.cashgroups">
+          <div
+            ng-class="{is_deleted: group.is_deleted}"
+            ng-if="!group.is_deleted || ctrl.show_details"
+          >
+            <h3>
+              {{group.title}}: {{group.total|price}}
+              <span ng-if="group.is_deleted"
+                >(Slettet - teller ikke på oppgjøret)</span
+              >
+            </h3>
+            <table class="table table-condensed table-striped cashgroup">
+              <thead>
+                <tr>
+                  <th rowspan="2">&nbsp;</th>
+                  <th ng-repeat="paymentsource in group.cols">
+                    {{paymentsource.time_created|formatdate:'DD.MM.YYYY HH:mm'}}
+                  </th>
+                  <th colspan="2">Totaler</th>
+                </tr>
+                <tr>
+                  <th ng-repeat="paymentsource in group.cols">
+                    {{paymentsource.user_created}}
+                  </th>
+                  <th>Antall</th>
+                  <th>Beløp</th>
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <th>Sum</th>
+                  <th ng-repeat="paymentsource in group.cols">
+                    {{paymentsource.amount|price}}
+                    <span
+                      ng-if="!group.is_deleted && !ctrl.paymentgroup.time_end"
+                    >
+                      <br />
+                      <a href ng-click="ctrl.deletePaymentsource(paymentsource)"
+                        >Slett</a
+                      >
+                    </span>
+                  </th>
+                  <th>&nbsp;</th>
+                  <th>{{group.total|price}}</th>
+                </tr>
+              </tfoot>
+              <tbody>
+                <tr ng-repeat="row in group.rows">
+                  <th ng-if="row.is_num">{{row.key|price}}</th>
+                  <th ng-if="!row.is_num">
+                    {{row.key == 'other' ? 'Annet' : row.key}}
+                  </th>
+                  <td ng-repeat="item in row.items track by $index">
+                    {{item}}
+                  </td>
+                  <td ng-if="row.is_num">{{row.total}}</td>
+                  <td ng-if="!row.is_num">&nbsp;</td>
+                  <td>{{row.amount|price}}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div ng-repeat="paymentsource in group.cols">
+              <div ng-if="paymentsource.comment">
+                <h4>
+                  Kommentar til
+                  {{paymentsource.time_created|formatdate:'DD.MM.YYYY HH:mm'}}
+                  ({{paymentsource.user_created}},
+                  {{paymentsource.amount|price}})
+                </h4>
+                <div marked="paymentsource.comment"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="print-page-section"
+          ng-repeat="paymentsource in ctrl.ps.other"
+        >
+          <div
+            ng-class="{is_deleted: paymentsource.is_deleted}"
+            ng-if="!paymentsource.is_deleted || ctrl.show_details"
+          >
+            <h3>
+              {{paymentsource.title}}: {{paymentsource.amount|price}}
+              <span ng-if="paymentsource.is_deleted"
+                >(Slettet - teller ikke på oppgjøret)</span
+              >
+            </h3>
+            <p>
+              Registrert {{paymentsource.time_created|formatdate:'DD.MM.YYYY
+              HH:mm'}} av {{paymentsource.user_created}}.
+              <span ng-if="paymentsource.is_deleted"
+                >Slettet {{paymentsource.time_deleted|formatdate:'DD.MM.YYYY
+                HH:mm'}} av {{paymentsource.user_deleted}}.</span
+              >
+              <a
+                href
+                ng-click="ctrl.deletePaymentsource(paymentsource)"
+                ng-if="!paymentsource.is_deleted && !ctrl.paymentgroup.time_end"
+                >Slett</a
+              >
+            </p>
+            <div
+              ng-if="paymentsource.comment"
+              marked="paymentsource.comment"
+            ></div>
+          </div>
+        </div>
+
+        <!-- utestående beløp -->
+        <h3
+          ng-if="-ctrl.totals.valid-ctrl.totals.revoked-ctrl.totals.payments != 0"
+        >
+          {{ctrl.ps.orders_deviation_prefix}}:
+          {{(-ctrl.totals.valid-ctrl.totals.revoked-ctrl.totals.payments)|price}}
+          (ordre i ubalanse)
+        </h3>
+
+        <!-- avvik/svinn -->
+        <h3 ng-if="ctrl.totals.payments-ctrl.ps.sum != 0">
+          {{ctrl.ps.payments_deviation_prefix}}:
+          {{ctrl.totals.payments-ctrl.ps.sum|price}}
+        </h3>
+      </div>
+      <div class="col-xs-6">
+        <h2>Salgsoversikt</h2>
+
+        <div ng-if="ctrl.categories.length == 0">
+          <p>Ingen bevegelser på billetter er utført.</p>
+        </div>
+
+        <div
+          class="print-page-section"
+          ng-repeat="category in ctrl.categories"
+          ng-if="ctrl.categories.length > 0"
+        >
+          <h3>
+            {{::category.name||'Uten kategori'}} - sum salg:
+            {{::-category.total|price}}
+          </h3>
+
+          <div ng-repeat="event in category.events">
+            <table
+              class="table table-condensed table-striped paymentgroup-sales"
+            >
+              <thead>
+                <tr>
+                  <th>
+                    <a ng-href="a/event/{{event.id}}">
+                      {{::event.time_start|formatdate:'D. MMM YYYY HH:mm'}}:
+                      {{::event.title}}
+                    </a>
+                  </th>
+                  <th>Antall</th>
+                  <th>Beløp</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="ticketgroup in event.ticketgroups">
+                  <td>{{::ticketgroup.title}}</td>
+                  <td>{{::-ticketgroup.paymentgroup_count}}</td>
+                  <td>{{::-ticketgroup.paymentgroup_balance|price}}</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Sum</th>
+                  <th>{{::-event.paymentgroup_count}}</th>
+                  <th>{{::-event.paymentgroup_balance|price}}</th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="print-page-section" ng-if="ctrl.orders_inbalance.length > 0">
+      <h2>Ordre i ubalanse</h2>
+      <p>
+        Dette er ordre som er registrert i dette oppgjøret hvor billetter ikke
+        stemmer med betalinger. Dette er ikke nødvendigvis noe problem, f.eks.
+        hvis billetter blir tilbaketrukket og man ikke har fått utbetalt beløpet
+        enda.
+      </p>
+
+      <table class="table table-condensed table-striped paymentgroup-inbalance">
+        <thead>
+          <tr>
+            <th>Ordre</th>
+            <th>Tid</th>
+            <th>Billetter solgt</th>
+            <th>Billetter refundert</th>
+            <th>Betaling inn</th>
+            <th>Betaling ut</th>
+            <th>Utestående</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="order in ctrl.orders_inbalance">
+            <td>
+              <a ng-href="a/order/{{::order.id}}">{{::order.order_text_id}}</a>
+              <span ng-if="order.name">({{::order.name}})</span>
+            </td>
+            <td>{{::order.time|formatdate:'DD.MM.YYYY HH:mm'}}</td>
+            <td>{{::-order.paymentgroup_balance['ticket_sales']|price}}</td>
+            <td>{{::order.paymentgroup_balance['ticket_revoked']|price}}</td>
+            <td>{{::order.paymentgroup_balance['payments']|price}}</td>
+            <td>{{::-order.paymentgroup_balance['refunds']|price}}</td>
+            <td>{{::-order.paymentgroup_balance['total']|price}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div ng-if="ctrl.show_details">
+      <h2>Transaksjoner</h2>
+      <table
+        class="table table-condensed table-striped paymentgroup-payments print-page-section"
+      >
+        <thead>
+          <tr>
+            <th>Ordre</th>
+            <th>Tid</th>
+            <th>Beløp innbetalt</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="payment in ctrl.paymentgroup.payments">
+            <td>
+              <a ng-href="a/order/{{::payment.order.id}}"
+                >{{::payment.order.order_text_id}}</a
+              >
+              <span ng-if="payment.order.name">({{::payment.order.name}})</span>
+            </td>
+            <td>{{::payment.time|formatdate:'DD.MM.YYYY HH:mm'}}</td>
+            <td>{{::payment.amount|price}}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Billetter solgt</h2>
+      <table
+        class="table table-condensed table-striped paymentgroup-tickets print-page-section"
+      >
+        <thead>
+          <tr>
+            <th>Ordre</th>
+            <th>Arrangement</th>
+            <th>Billett</th>
+            <th>Tid</th>
+            <th>Verdi</th>
+            <th>Gebyr</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="ticket in ctrl.paymentgroup.valid_tickets">
+            <td>
+              <a ng-href="a/order/{{::ticket.order.id}}"
+                >{{::ticket.order.order_text_id}}</a
+              >
+              <span ng-if="ticket.order.name">({{::ticket.order.name}})</span>
+            </td>
+            <td>
+              <a ng-href="a/event/{{ticket.event.id}}"
+                >{{::ticket.event.time_start|formatdate:'D. MMM YYYY HH:mm'}}:
+                {{::ticket.event.title}}</a
+              >
+            </td>
+            <td>{{::ticket.ticketgroup.title}} #{{::ticket.id}}</td>
+            <td>{{::ticket.time|formatdate:'D. MMM YYYY HH:mm'}}</td>
+            <td>
+              {{::(ticket.ticketgroup.price+ticket.ticketgroup.fee|price)}}
+            </td>
+            <td>{{::ticket.ticketgroup.fee|price}}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Billetter refundert</h2>
+      <table
+        class="table table-condensed table-striped paymentgroup-tickets print-page-section"
+      >
+        <thead>
+          <tr>
+            <th>Ordre</th>
+            <th>Arrangement</th>
+            <th>Billett</th>
+            <th>Tid</th>
+            <th>Verdi</th>
+            <th>Gebyr</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="ticket in ctrl.paymentgroup.revoked_tickets">
+            <td>
+              <a ng-href="a/order/{{::ticket.order.id}}"
+                >{{::ticket.order.order_text_id}}</a
+              >
+              <span ng-if="ticket.order.name">({{::ticket.order.name}})</span>
+            </td>
+            <td>
+              <a ng-href="a/event/{{ticket.event.id}}"
+                >{{::ticket.event.time_start|formatdate:'D. MMM YYYY HH:mm'}}:
+                {{::ticket.event.title}}</a
+              >
+            </td>
+            <td>{{::ticket.ticketgroup.title}} #{{::ticket.id}}</td>
+            <td>{{::ticket.time|formatdate:'D. MMM YYYY HH:mm'}}</td>
+            <td>
+              {{::(ticket.ticketgroup.price+ticket.ticketgroup.fee|price)}}
+            </td>
+            <td>{{::ticket.ticketgroup.fee|price}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

@@ -1,9 +1,5 @@
-import angular from 'angular';
+import angular from "angular"
 
-import auth from "../auth";
+import auth from "../auth"
 
-angular.module('billett.common', [
-    auth,
-    'ngAnimate',
-    'ngToast'
-]);
+angular.module("billett.common", [auth, "ngAnimate", "ngToast"])

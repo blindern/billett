@@ -1,4 +1,4 @@
-@import '../../common/vars';
+@import "../../common/vars";
 
 .admin-order-list {
   .pagination {
@@ -20,8 +20,8 @@
   }
 
   .unbalance {
-    color: #FFF;
-    background-color: #F00;
+    color: #fff;
+    background-color: #f00;
   }
 
   .order-detail {
@@ -42,7 +42,7 @@
     li.reservation {
       color: red;
       &:after {
-        content: ' (reservasjon)';
+        content: " (reservasjon)";
       }
     }
 
@@ -50,7 +50,7 @@
       opacity: 0.6;
       text-decoration: line-through;
       &:after {
-        content: ' (tilbaketrukket)';
+        content: " (tilbaketrukket)";
       }
     }
 
@@ -62,7 +62,6 @@
       }
     }
   }
-
 }
 
 .admin-order {

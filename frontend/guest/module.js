@@ -1,10 +1,5 @@
-import angular from "angular";
+import angular from "angular"
 
-import common from '../common';
+import common from "../common"
 
-angular.module('billett.guest', [
-    common,
-    'hc.marked',
-    'ui.router',
-    'ngAnimate',
-]);
+angular.module("billett.guest", [common, "hc.marked", "ui.router", "ngAnimate"])
