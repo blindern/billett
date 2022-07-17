@@ -34,6 +34,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Push nginx container
+        id: nginx_docker_build
         if: github.ref == 'refs/heads/master'
         uses: docker/build-push-action@v3
         with:
@@ -43,6 +44,7 @@ jobs:
           tags: blindernuka/billett-proxy:latest
 
       - name: Push fpm container
+        id: fpm_docker_build
         if: github.ref == 'refs/heads/master'
         uses: docker/build-push-action@v3
         with:
@@ -50,3 +52,17 @@ jobs:
           file: Dockerfile.fpm
           push: true
           tags: blindernuka/billett-backend:latest
+
+      - name: Deploy ldap master
+        if: github.ref == 'refs/heads/main'
+        run: |
+          curl --fail -L -i -H "authorization: bearer $DEPLOYER_TOKEN" -H "content-type: application/json" -X POST https://deployer.foreningenbs.no/deploy -d '
+          {
+            "service": "uka-billett",
+            "attributes": {
+              "fpm_image": "blindernuka/billett-backend@${{ steps.fpm_docker_build.outputs.digest }}",
+              "proxy_image": "blindernuka/billett-proxy@${{ steps.nginx_docker_build.outputs.digest }}"
+            }
+          }'
+        env:
+          DEPLOYER_TOKEN: ${{ secrets.DEPLOYER_TOKEN }}
