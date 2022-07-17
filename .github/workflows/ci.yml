@@ -53,7 +53,7 @@ jobs:
           push: true
           tags: blindernuka/billett-backend:latest
 
-      - name: Deploy ldap master
+      - name: Deploy
         if: github.ref == 'refs/heads/main'
         run: |
           curl --fail -L -i -H "authorization: bearer $DEPLOYER_TOKEN" -H "content-type: application/json" -X POST https://deployer.foreningenbs.no/deploy -d '
