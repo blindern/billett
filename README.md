@@ -14,7 +14,6 @@ Open http://localhost:3000/
 
 ## Deploy to production
 
-As of July 2022 this is done manually.
-
-See https://github.com/blindern/drift/tree/master/ansible/roles/service-uka-billett
+This happens on every build. See GitHub Action and
+https://github.com/blindern/drift/tree/master/ansible/roles/service-uka-billett
 for more details.
