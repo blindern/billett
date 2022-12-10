@@ -9,4 +9,3 @@ docker-compose.prod.yaml
 
 .env.*.php
 .env.php
-/backend/app/config/*/dibs.php

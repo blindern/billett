@@ -17,7 +17,8 @@
 		"knight-swarm/laravel-saml": "dev-master",
 		"henrist/laravel-api-query": "dev-master",
 		"doctrine/dbal": "~2.5",
-		"barryvdh/laravel-ide-helper": "~1.11"
+		"barryvdh/laravel-ide-helper": "~1.11",
+		"guzzlehttp/guzzle": "^6"
 	},
 	"autoload": {
 		"classmap": [

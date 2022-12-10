@@ -2,6 +2,7 @@
 
 use \Carbon\Carbon;
 use \Henrist\LaravelApiQuery\ApiQueryInterface;
+use \Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Order extends \Eloquent implements ApiQueryInterface {
     /**
@@ -49,7 +50,7 @@ class Order extends \Eloquent implements ApiQueryInterface {
     {
         if (empty($text_id))
         {
-            throw new \ModelNotFoundException('Missing text id');
+            throw new ModelNotFoundException('Missing text id');
         }
 
         return static::where('order_text_id', $text_id)->firstOrFail();
@@ -174,7 +175,7 @@ class Order extends \Eloquent implements ApiQueryInterface {
 
             if (!empty($text)) {
                 // TODO: move email to eventgroup data
-                $message->bcc(\Config::get('dibs.test') ? 'admin@blindernuka.no' : 'billett@blindernuka.no');
+                $message->bcc(\Config::get('vipps.test') ? 'admin@blindernuka.no' : 'billett@blindernuka.no');
             }
 
             if ($has_valid_tickets) {
@@ -315,7 +316,7 @@ class Order extends \Eloquent implements ApiQueryInterface {
         }
 
         $d = \Carbon\Carbon::createFromTimeStamp($this->time);
-        $orderid = $d->format("y").str_pad($d->format("z"), 3, "0", STR_PAD_LEFT).str_pad($this->id, 4, "0", STR_PAD_LEFT).(\Config::get('dibs.test') ? '-TEST' : '');
+        $orderid = $d->format("y").str_pad($d->format("z"), 3, "0", STR_PAD_LEFT).str_pad($this->id, 4, "0", STR_PAD_LEFT).(\Config::get('vipps.test') ? '-TEST' : '');
 
         $this->order_text_id = $orderid;
         $this->save();
@@ -327,7 +328,6 @@ class Order extends \Eloquent implements ApiQueryInterface {
     public function placeOrder()
     {
         if ($this->isCompleted()) return false;
-        if (empty($this->name) || empty($this->email) || empty($this->phone)) return false;
 
         if (!$this->isReservationLocked()) {
             $this->is_locked = true;
@@ -490,5 +490,22 @@ class Order extends \Eloquent implements ApiQueryInterface {
      */
     public function getApiAllowedRelations() {
         return $this->apiAllowedRelations;
+    }
+
+    /**
+     * Get a pretty string to describe the order for payment.
+     */
+    public function getPaymentDescription()
+    {
+        $events = $this->getEvents();
+
+        $event = count($events) == 1 ? $events[0] : null;
+
+        if (!$event) {
+            return "Billett";
+        }
+
+        $date = \Carbon\Carbon::createFromTimeStamp($event->time_start);
+        return $event->title.' ('.$date->format('Y-m-d H:i').')';
     }
 }

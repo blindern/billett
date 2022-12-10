@@ -2,7 +2,7 @@
 [Tilbake](index.md)
 
 ## Kort om systemet
-* Betalingsløsning integrert mot DIBS
+* Betalingsløsning integrert mot Vipps
 * Kjøp av ett-og-ett arrangement (ingen "handlekurv")
 * Billetter printes ut selv, PDF tilsendes på e-post - kan også bruke mobil
 * Strekkodescanner ved inngang for validering og registrering av billett

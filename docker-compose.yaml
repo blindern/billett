@@ -12,7 +12,6 @@ services:
       LARAVEL_ENV: local
       BILLETT_KEY: KeNd439jeX9n9hqudOxXqCQErFmbApoi
       BILLETT_MYSQL_PASS: uka_billett
-      DIBS_HMAC_KEY: overridden-in-local-configuration
     env_file:
       - backend/.env
   nginx:

@@ -8,16 +8,16 @@ module.controller(
       return $location.path().substring(0, 3) == "/a/"
     }
 
-    $scope.isDevPage =
-      $scope.isDibsTest =
-      $scope.isLoggedIn =
-      $scope.loggedInButNoAccess =
-        false
+    $scope.isDevPage = false
+    $scope.isVippsTest = false
+    $scope.isLoggedIn = false
+    $scope.loggedInButNoAccess = false
+
     AuthService.isDevPage().then((res) => {
       if (res) $scope.isDevPage = true
     })
-    AuthService.isDibsTest().then((res) => {
-      if (res) $scope.isDibsTest = true
+    AuthService.isVippsTest().then((res) => {
+      if (res) $scope.isVippsTest = true
     })
     AuthService.isLoggedIn().then((res) => {
       if (res) $scope.isLoggedIn = true

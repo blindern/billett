@@ -12,7 +12,7 @@ class UserController extends Controller
             'user_roles' => Auth::getRoles(),
             'user' => $user,
             'is_dev' => $is_dev,
-            'is_dibs_test' => \Config::get('dibs.test'),
+            'is_vipps_test' => \Config::get('vipps.test'),
             'csrf_token' => Session::token(),
         ];
     }

@@ -77,6 +77,8 @@ module.controller(
     $scope.newres.count = 0
     $scope.newres.total_amount = 0
 
+    $scope.vipps_checkout = false
+
     // add/remove ticketgroup selection
     $scope.changeTicketgroupNum = function (ticketgroup, num) {
       if (!("order_count" in ticketgroup)) ticketgroup.order_count = 0
@@ -117,20 +119,12 @@ module.controller(
     // update order with contact info
     var step2 = function () {
       var data = {
-        name: $scope.contact.name,
-        email: $scope.contact.email,
-        phone: $scope.contact.phone,
         recruiter: $scope.contact.recruiter,
       }
       return reservation.update(data)
     }
 
     $scope.placeOrder = function (force) {
-      if (!$scope.contact.accept_terms) {
-        alert("Du må godta betingelsene for å fullføre.")
-        return
-      }
-
       // make sure reservation exists, or create it
       step1().then(
         function () {
@@ -146,13 +140,25 @@ module.controller(
                     // completed url
                     $location.path("order/complete")
                   } else {
-                    $scope.checkout = response.data
-                    $scope.checkout_url = $sce.trustAsResourceUrl(response.data.url)
+                    $scope.vipps_checkout = true
 
-                    // FIXME: should not perform DOM call from here
-                    setTimeout(function () {
-                      $("#checkoutForm").submit()
-                    }, 0)
+                    const checkout = () => {
+                      VippsCheckout({
+                        checkoutFrontendUrl: response.data.checkoutFrontendUrl,
+                        iFrameContainerId: "vipps-checkout-frame-container",
+                        language: "no",
+                        token: response.data.token,
+                      })
+                    }
+
+                    if (window.VippsCheckout != null) {
+                      checkout()
+                    } else {
+                      const script = document.createElement("script")
+                      script.src = "https://checkout.vipps.no/vippsCheckoutSDK.js"
+                      script.onload = checkout
+                      document.head.append(script);
+                    }
                   }
                 },
                 function (err) {

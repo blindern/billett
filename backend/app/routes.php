@@ -60,10 +60,9 @@ Route::resource('/api/payment', 'PaymentController', array(
     'only' => array('index', 'store')
 ));
 
-// payment (callback)
-Route::post('/api/dibs/cancel', 'DibsController@cancel');
-Route::post('/api/dibs/callback', 'DibsController@callback');
-Route::post('/api/dibs/accept', 'DibsController@accept');
+// Vipps
+Route::get('/api/vipps/order-return/{orderId}', 'VippsController@returnUrl');
+Route::post('/api/vipps/callback', 'VippsController@callback');
 
 // paymentgroups
 Route::resource('/api/paymentgroup', 'PaymentgroupController', array(

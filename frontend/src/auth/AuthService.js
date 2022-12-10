@@ -55,9 +55,9 @@ export default {
     })
   },
 
-  isDibsTest() {
+  isVippsTest() {
     return new Promise((resolve, reject) => {
-      this.getAuthData().then((res) => resolve(res.is_dibs_test), reject)
+      this.getAuthData().then((res) => resolve(res.is_vipps_test), reject)
     })
   },
 }

@@ -5,7 +5,7 @@ use Blindern\UKA\Billett\Order;
 use Blindern\UKA\Billett\Payment;
 use Blindern\UKA\Billett\Paymentgroup;
 use Blindern\UKA\Billett\Ticketgroup;
-use Blindern\UKA\Billett\Helpers\DibsPaymentModule;
+use Blindern\UKA\Billett\Helpers\VippsPaymentModule;
 use Blindern\UKA\Billett\Helpers\ModelHelper;
 
 class OrderController extends \Controller {
@@ -111,9 +111,9 @@ class OrderController extends \Controller {
                 'recruiter' => '',
                 'comment' => '']
             : [
-                'name' => 'required|min:3',
-                'email' => 'required|email',
-                'phone' => 'required|regex:/\\+?\\d+/',
+                'name' => 'min:3',
+                'email' => 'email',
+                'phone' => 'regex:/\\+?\\d+/',
                 'recruiter' => ''];
 
         $validator = \Validator::make(Input::all(), $fields);
@@ -122,9 +122,13 @@ class OrderController extends \Controller {
             return \Response::json('data validation failed', 400);
         }
 
-        $order->name = Input::get('name');
-        $order->email = Input::get('email');
-        $order->phone = Input::get('phone');
+        // With Vipps these are only sent in admin site.
+        if (Input::exists('name')) {
+            $order->name = Input::get('name');
+            $order->email = Input::get('email');
+            $order->phone = Input::get('phone');
+        }
+
         $order->recruiter = Input::get('recruiter');
 
         if (\Auth::hasRole('billett.admin') && Input::exists('comment')) {
@@ -174,11 +178,13 @@ class OrderController extends \Controller {
             return \Response::json('invalid state', 400);
         }
 
-        $dibs = new DibsPaymentModule;
+        $vipps = new VippsPaymentModule;
+
+        $sessionDetails = $vipps->initiateSession($order);
 
         return array(
-            'url' => $dibs->getCheckoutUrl(),
-            'fields' => $dibs->generateCheckoutFields($order)
+            'checkoutFrontendUrl' => $sessionDetails["checkoutFrontendUrl"],
+            'token' => $sessionDetails["token"],
         );
     }
 
@@ -186,7 +192,7 @@ class OrderController extends \Controller {
      * Pretend the payment succeeds
      */
     public function forceOrder($id) {
-        if (!\Config::get('dibs.test')) {
+        if (!\Config::get('vipps.test')) {
             throw new \Exception("Only available in test mode");
         }
 
@@ -203,14 +209,13 @@ class OrderController extends \Controller {
             return \Response::json('invalid state', 400);
         }
 
-        $data = array(
-            'status' => 'ACCEPTED',
-            'transaction' => 123,
-            'amount' => $order->total_amount*100,
-        );
+        // TODO: implement
+        die("Not implemented for Vipps");
 
-        $dibs = new DibsPaymentModule;
-        $payment = $dibs->processFeedback($order, $data);
+        /*
+        $vipps = new VippsPaymentModule;
+
+        $payment = $vipps->processFeedback($order, $data);
 
         $order->load('tickets.ticketgroup', 'tickets.event');
         unset($payment->order);
@@ -221,6 +226,7 @@ class OrderController extends \Controller {
         ));
 
         return 'OK';
+        */
     }
 
     /**
