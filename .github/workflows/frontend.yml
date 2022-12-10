@@ -1,7 +1,7 @@
-name: ci
+name: frontend
 on: [push]
 jobs:
-  ci:
+  frontend:
     runs-on: ubuntu-latest
 
     defaults:
