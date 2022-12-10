@@ -49,6 +49,10 @@ Normally all that is needed is to run:
 
 ```bash
 make dev
+# to make it proxy for the frontend aswell
+# you might need to run it like this (with the
+# correct IP):
+DOCKER_GATEWAY_HOST=172.18.0.1 make dev
 ```
 
 And the development environment should start and be available

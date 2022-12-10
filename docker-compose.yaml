@@ -13,6 +13,8 @@ services:
       BILLETT_KEY: KeNd439jeX9n9hqudOxXqCQErFmbApoi
       BILLETT_MYSQL_PASS: uka_billett
       DIBS_HMAC_KEY: overridden-in-local-configuration
+    env_file:
+      - backend/.env
   nginx:
     build:
       context: .
@@ -24,4 +26,4 @@ services:
      - fpm:ro
     environment:
       FPM_HOST: fpm:9000
-      FRONTEND_URL: http://uka-billett-frontend
+      FRONTEND_URL: http://${DOCKER_GATEWAY_HOST:-host.docker.internal}:3000

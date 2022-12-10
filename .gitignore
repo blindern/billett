@@ -2,7 +2,6 @@
 *.iml
 .vscode/
 
-composer.phar
 .DS_Store
 Thumbs.db
 .data

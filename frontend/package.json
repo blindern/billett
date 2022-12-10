@@ -29,7 +29,7 @@
     "vite-plugin-babel": "1.1.0"
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build",
     "preview": "vite preview",
     "prettier": "prettier --write ."
