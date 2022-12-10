@@ -180,8 +180,6 @@
                 >
                   <div class="meta">
                     <div class="title">{{ticketgroup.title}}</div>
-                    <!-- white space fix for inline-block
-                                     -->
                     <div class="price">
                       <span class="price-label">Pris:</span>
                       {{ticketgroup.price+ticketgroup.fee|price:true}}
@@ -193,8 +191,6 @@
                       {{ticketgroup.ticket_text}}
                     </div>
                   </div>
-                  <!-- white space fix for inline-block
-                                 -->
                   <div class="count">
                     <span class="value" ng-init="ticketgroup.order_count=0">
                       {{ticketgroup.order_count}}

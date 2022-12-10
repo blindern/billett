@@ -77,9 +77,10 @@
 
   .buy-form {
     .ticketgroup {
+      display: flex;
       margin-bottom: 10px;
       .meta {
-        display: inline-block;
+        display: flex;
         vertical-align: middle;
         width: 70%;
         .title {
