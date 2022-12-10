@@ -3,7 +3,7 @@ version: '2'
 services:
   fpm:
     volumes:
-     - ./src/:/var/www/html/
+     - ./backend/src/:/var/www/html/
     command: /dev.sh
   database:
     image: mysql:5.6
