@@ -1,5 +1,9 @@
 name: frontend
-on: [push]
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "frontend/**"
 jobs:
   frontend:
     runs-on: ubuntu-latest

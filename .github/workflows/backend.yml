@@ -1,5 +1,10 @@
 name: backend
-on: [push]
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "backend/**"
+      - "Dockerfile*"
 jobs:
   backend:
     runs-on: ubuntu-latest
