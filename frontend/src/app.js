@@ -10,7 +10,7 @@ import "angular-sanitize"
 import "angular-bootstrap/ui-bootstrap.js"
 import "angular-bootstrap/ui-bootstrap-tpls.js"
 import "angular-file-upload"
-import "marked"
+import { marked } from "marked"
 import "angular-marked"
 import "ng-toast"
 import "ng-focus-on"
@@ -31,6 +31,8 @@ import angular from "angular"
 import "./app.scss"
 
 import template404 from "./guest/infopages/404.html?raw"
+
+window.marked = marked
 
 moment.locale("nb")
 
