@@ -85,9 +85,11 @@
         width: 70%;
         .title {
           font-weight: bold;
+          flex-grow: 1;
         }
         .price {
           white-space: nowrap;
+          margin-left: 4px;
           .price-label {
           }
           .price-fee {
@@ -121,10 +123,8 @@
       .price {
         display: inline-block;
         vertical-align: middle;
-        width: 55%;
       }
       .price {
-        width: 45%;
         text-align: right;
         .price-label {
           display: none;
