@@ -179,16 +179,18 @@
                   ng-repeat="ticketgroup in event.ticketgroups"
                 >
                   <div class="meta">
-                    <div class="title">{{ticketgroup.title}}</div>
+                    <div class="title">
+                      {{ticketgroup.title}}
+                      <div ng-if="ticketgroup.ticket_text" class="ticket-text">
+                        {{ticketgroup.ticket_text}}
+                      </div>
+                    </div>
                     <div class="price">
                       <span class="price-label">Pris:</span>
                       {{ticketgroup.price+ticketgroup.fee|price:true}}
                       <span class="price-fee"
                         >Hvorav {{ticketgroup.fee|price:true}} i gebyr</span
                       >
-                    </div>
-                    <div ng-if="ticketgroup.ticket_text" class="ticket-text">
-                      {{ticketgroup.ticket_text}}
                     </div>
                   </div>
                   <div class="count">
