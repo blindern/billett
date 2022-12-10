@@ -1,9 +1,3 @@
-# Dependencies from package manager
-node_modules/
-
-# IDEA-project-files
 .idea/
 *.iml
-
-# builds
-dist
+.vscode/
