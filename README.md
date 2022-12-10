@@ -23,10 +23,8 @@ Laravel web page for more details.
 
 ## Production setup
 
-The production setup is managed from
-https://github.com/blindern/drift
-
-As of July 2022 deployment of backend to production is manually.
+Deployments is automated on every build. See GitHub Action and
+https://github.com/blindern/drift/tree/master/ansible/roles/service-uka-billett
 
 Command to run migrations after deploying new version:
 
@@ -34,10 +32,6 @@ Command to run migrations after deploying new version:
 ssh root@fcos-1.nrec.foreningenbs.no
 docker exec -t uka-billett-fpm ./artisan migrate
 ```
-
-The frontend is deployed on every build. See GitHub Action and
-https://github.com/blindern/drift/tree/master/ansible/roles/service-uka-billett
-for more details.
 
 ## Development setup
 
