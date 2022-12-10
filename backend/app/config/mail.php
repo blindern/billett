@@ -28,7 +28,9 @@ return array(
     |
     */
 
-    'host' => 'mail.hsw.no',
+    // NOTE: The IP of the server must be registered in Google Workspace.
+    // See https://github.com/blindern/drift#outgoing-email for details.
+    'host' => 'smtp-relay.gmail.com',
 
     /*
     |--------------------------------------------------------------------------
@@ -121,4 +123,5 @@ return array(
 
     'pretend' => false,
 
+    'local_domain' => 'foreningenbs.no',
 );
