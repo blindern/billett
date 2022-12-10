@@ -1,0 +1,55 @@
+<div>
+  <div class="modal-header">
+    <h3 class="modal-title">Registrer transaksjon</h3>
+  </div>
+  <div class="modal-body" ng-show="!ctrl.sending">
+    <form class="form-horizontal" ng-submit="ctrl.register()">
+      <div class="form-group">
+        <label class="col-sm-4 control-label">Beløp</label>
+        <div class="col-sm-4">
+          <input
+            class="form-control"
+            type="number"
+            ng-model="ctrl.amount"
+            placeholder="beløp i NOK"
+            autofocus
+            required
+          />
+          <span class="help-block">Negativt for utbetaling</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="paymentgroup" class="col-sm-4 control-label"
+          >Oppgjørsgruppe</label
+        >
+        <div class="col-sm-7">
+          <paymentgroup-select
+            eventgroup-id="ctrl.order.eventgroup.id"
+            paymentgroup="ctrl.paymentgroup"
+            id="paymentgroup"
+          ></paymentgroup-select>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-7 col-sm-offset-4">
+          <input
+            class="btn btn-success"
+            type="submit"
+            value="Registrer"
+            ng-disabled="ctrl.amount==0 || !ctrl.paymentgroup"
+          />
+          <button
+            type="button"
+            class="btn btn-default"
+            ng-click="ctrl.cancel()"
+          >
+            Avbryt
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-body text-center" ng-if="ctrl.sending">Utfører ...</div>
+</div>

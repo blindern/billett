@@ -1,0 +1,136 @@
+<div class="admin-ticketgroup-new">
+  <page-property
+    name="title"
+    value="{{event.title}} ({{event.time_start|formatdate:'DD. MMM'}}): Ny billettgruppe"
+  ></page-property>
+
+  <div class="page-header">
+    <h1>{{event.eventgroup.title}}</h1>
+  </div>
+
+  <p><a ng-href="a/event/{{event_id}}">&laquo; Tilbake</a></p>
+
+  <h2>{{event.title}}</h2>
+
+  <h3>Ny billettgruppe</h3>
+
+  <p>
+    Nye billettgrupper kan brukes i billettluke med en gang. Dersom
+    billettgruppen skal være tilgjengelig på nettsiden må dette aktiveres etter
+    billettgruppen er opprettet.
+  </p>
+
+  <form ng-submit="addTicketgroup()" class="form-horizontal" autocomplete="off">
+    <div class="form-group">
+      <label for="title" class="col-sm-3 control-label">Tittel</label>
+      <div class="col-sm-7">
+        <input
+          type="text"
+          class="form-control"
+          ng-model="ticketgroup.title"
+          id="title"
+          placeholder=""
+          required
+          autofocus
+        />
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="ticket_text" class="col-sm-3 control-label"
+        >Billett-tekst</label
+      >
+      <div class="col-sm-7">
+        <input
+          type="text"
+          class="form-control"
+          ng-model="ticketgroup.ticket_text"
+          id="ticket_text"
+          placeholder="(valgfritt)"
+        />
+        <span class="help-block"
+          >Kan f.eks. være gyldighetsinformasjon for studentbillett.</span
+        >
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="price" class="col-sm-3 control-label">Priser</label>
+      <div class="col-sm-3">
+        <input
+          type="number"
+          class="form-control"
+          ng-model="ticketgroup.price"
+          id="price"
+          placeholder=""
+          required
+        />
+      </div>
+      <div class="col-sm-3">
+        <input
+          type="number"
+          class="form-control"
+          ng-model="ticketgroup.fee"
+          id="fee"
+          placeholder="(valgfritt)"
+        />
+        <span class="help-block"
+          >Evt. billettgebyr regnes i tillegg til billettpris</span
+        >
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="max_sales" class="col-sm-3 control-label"
+        >Antall billetter</label
+      >
+      <div class="col-sm-3">
+        <input
+          type="number"
+          class="form-control"
+          ng-model="ticketgroup.limit"
+          id="max_sales"
+          placeholder="(valgfritt)"
+        />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-offset-3 col-sm-9">
+        <label>
+          <input type="checkbox" ng-model="ticketgroup.use_office" />
+          Tilgjengelig for kjøp i billettluke?
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-offset-3 col-sm-9">
+        <label>
+          <input type="checkbox" ng-model="ticketgroup.use_web" /> Tilgjengelig
+          for kjøp på nettside?
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-offset-3 col-sm-9">
+        <label>
+          <input type="checkbox" ng-model="ticketgroup.is_normal" /> Billetter
+          solgt telles som normalt salg
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-8 col-sm-offset-3">
+        <input type="submit" value="Opprett" class="btn btn-primary" />
+      </div>
+    </div>
+  </form>
+
+  <p>
+    <b>NB!</b> Billettgrupper kan i liten grad redigeres når det blir tilegnet
+    billetter til dem. Dette inkluderer pris. Ved behov må man opprette nye
+    billettgrupper så de gamle bevares.
+  </p>
+</div>

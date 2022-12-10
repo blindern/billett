@@ -1,0 +1,64 @@
+<div class="admin-soldTicketsStats">
+  <page-property name="title" value="Billettstatistikk"></page-property>
+
+  <div class="page-header">
+    <h1>
+      <span class="eventgroup">
+        <a href="a">Administrasjon</a>
+      </span>
+      Billettstatistikk
+    </h1>
+  </div>
+
+  <table class="table table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Arrangement</th>
+        <th>Sum</th>
+        <th ng-repeat="day in ctrl.daysDetails">{{day.short}}</th>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr>
+        <th>Sum</th>
+        <th>
+          {{ctrl.topAccum.price+ctrl.topAccum.fee|price}}<br />
+          {{ctrl.topAccum.count-ctrl.topAccum.revoked}} /
+          {{ctrl.max_normal_sales||ctrl.max_sales}}{{ctrl.max_normal_sales !=
+          ctrl.max_sales ? ' (' + ctrl.max_sales + ')' : ''}} stk
+        </th>
+        <td ng-repeat="day in ctrl.daysDetails">
+          {{ctrl.daysAccum[day.day].price+ctrl.daysAccum[day.day].fee|price}}<br />
+          {{ctrl.daysAccum[day.day].count-ctrl.daysAccum[day.day].revoked}} stk
+        </td>
+      </tr>
+    </tfoot>
+    <tbody>
+      <tr ng-repeat="event in ctrl.events">
+        <td>
+          <a ng-href="a/event/{{::event.id}}">{{::event.title}}</a>
+          <span class="event-time"
+            >({{::event.time_start|formatdate:'ddd D. MMMM HH:mm'}})</span
+          >
+        </td>
+        <th>
+          {{event.accum.price+event.accum.fee|price}}<br />
+          {{event.accum.count-event.accum.revoked}} /
+          {{event.max_normal_sales||event.max_sales}}{{event.max_normal_sales ?
+          ' (' + event.max_sales + ')' : ''}} stk
+        </th>
+
+        <td ng-repeat="day in ctrl.daysDetails">
+          <span
+            ng-if="event.daysAccum[day.day].count > 0 || event.daysAccum[day.day].revoked > 0"
+          >
+            {{event.daysAccum[day.day].price+event.daysAccum[day.day].fee|price}}<br />
+            {{event.daysAccum[day.day].count-event.daysAccum[day.day].revoked}}
+            stk
+          </span>
+        </td>
+        <!-- TODO: data for ticketgroups are in .ticketgroups -->
+      </tr>
+    </tbody>
+  </table>
+</div>

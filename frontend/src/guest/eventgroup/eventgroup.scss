@@ -1,0 +1,137 @@
+@import "../../common/vars";
+
+.eventgroup-event-list {
+  ul,
+  li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .day {
+    margin-top: 30px;
+    @media (min-width: $grid-float-breakpoint) {
+      margin-top: 40px;
+    }
+  }
+  .header {
+    margin: 0 0 10px 0;
+    padding: 0 0 5px 0;
+    border-bottom: 2px solid $hr-border;
+    @media (min-width: $grid-float-breakpoint) {
+      font-size: 120%;
+    }
+    a {
+      color: $text-color;
+    }
+    .date {
+      float: right;
+      span {
+        font-weight: bold;
+      }
+    }
+    .theme {
+    }
+
+    &:after {
+      content: "";
+      display: block;
+      clear: both;
+    }
+  }
+
+  .event {
+    display: flex;
+    background-color: #fafafa;
+    border-radius: 3px;
+    padding: 3px;
+    margin: 2px 0;
+    &:nth-child(odd) {
+      background-color: #f5f5f5;
+    }
+
+    &:hover {
+      background-color: #eeeeee;
+    }
+
+    @media (min-width: $grid-float-breakpoint) {
+      padding: 5px;
+    }
+
+    // 1 => time
+    // 2 => location
+    // 3 => title
+    // 4 => ticket info
+
+    // time
+    li:nth-child(1),
+    li:nth-child(4) {
+      flex: none;
+      font-size: 90%;
+      padding-top: 1px;
+      @media (min-width: $grid-float-breakpoint) {
+        font-size: 100%;
+        padding-top: 0;
+      }
+    }
+    li:nth-child(1) {
+      font-weight: bold;
+      margin-right: 5px;
+    }
+    li:nth-child(4) {
+      margin-left: 5px;
+    }
+
+    li:nth-child(2) {
+      display: none;
+      @media (min-width: $grid-float-breakpoint) {
+        display: inherit;
+        flex: none;
+        width: 140px;
+        margin-left: 10px;
+        color: $gray;
+      }
+    }
+
+    li:nth-child(3) {
+      flex: auto;
+    }
+
+    .edit-link-wrap {
+      display: none;
+      .edit-link {
+      }
+    }
+
+    .category {
+      background-color: #62936a;
+      padding: 2px 3px;
+      border-radius: 5px;
+      font-size: 75%;
+      opacity: 0.8;
+      a {
+        color: $text-color;
+      }
+    }
+
+    @for $i from 0 through 8 {
+      .category-#{$i} {
+        background-color: adjust-hue(hsla(0, 100%, 90%, 1), $i * 35);
+      }
+    }
+  }
+  &.eventgroup-upcoming {
+    li:nth-child(1) {
+      font-weight: normal;
+      span {
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.isInIframe .eventgroup-event-list {
+  .header {
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+}

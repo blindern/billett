@@ -1,3 +1,7 @@
+.idea/
+*.iml
+.vscode/
+
 /backend/bootstrap/compiled.php
 /backend/src/vendor
 composer.phar
@@ -6,14 +10,6 @@ Thumbs.db
 .data
 docker-compose.prod.yaml
 
-# Dependencies from package manager
-node_modules/
-
-# IDEA-project-files
-.idea/
-*.iml
-
-# protected files
 .env.*.php
 .env.php
 /backend/app/config/*/dibs.php
