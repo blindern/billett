@@ -2,8 +2,6 @@
 *.iml
 .vscode/
 
-/backend/bootstrap/compiled.php
-/backend/src/vendor
 composer.phar
 .DS_Store
 Thumbs.db
