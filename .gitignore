@@ -1,6 +1,5 @@
 # Dependencies from package manager
-/bower_components/
-/node_modules/
+node_modules/
 
 # IDEA-project-files
 .idea/
