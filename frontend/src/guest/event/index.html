@@ -1,3 +1,9 @@
+<script
+  async
+  type="text/javascript"
+  src="https://checkout.vipps.no/checkout-button/v1/vipps-checkout-button.js"
+></script>
+
 <page-property
   name="title"
   value="{{event.title}} ({{event.time_start|formatdate:'D. MMM \\k\\l HH:mm'}})"
@@ -240,7 +246,17 @@
                 </div>
               </div>
 
-              <section id="vipps-checkout-frame-container"></section>
+              <p class="text-center" ng-if="vipps_checkout">
+                <input
+                  class="btn btn-default"
+                  type="button"
+                  value="Avbryt"
+                  ng-click="abortOrder()"
+                  ng-if="reservation"
+                />
+              </p>
+
+              <section id="vipps-checkout-frame-container" ng-if="vipps_checkout"></section>
 
               <div
                 class="reservation-details"
@@ -268,28 +284,31 @@
                     <span class="help-block">Navn på funksjonær</span>
                   </div>
                 </div>
-                <p class="text-center">
-                  <input
-                    type="submit"
-                    value="Betal med Vipps"
+                <p class="text-center vipps-button-line">
+                  <vipps-checkout-button
+                    variant="orange"
+                    branded="true"
                     ng-click="ctrl.forcePay=false"
-                    class="btn btn-primary"
-                  />
-                  <input
                     type="submit"
-                    value="Overstyr betaling"
-                    ng-click="ctrl.forcePay=true"
-                    class="btn btn-default"
-                    ng-if="isVippsTest"
-                  />
+                  >
+                  </vipps-checkout-button>
                   <input
-                    class="btn btn-danger"
+                    class="btn btn-default"
                     type="button"
                     value="Avbryt"
                     ng-click="abortOrder()"
                     ng-if="reservation"
                   />
                 </p>
+                <p class="text-center" ng-if="isVippsTest">
+                  <input
+                    type="submit"
+                    value="Overstyr betaling"
+                    ng-click="ctrl.forcePay=true"
+                    class="btn btn-default"
+                  />
+                </p>
+
                 <hr />
               </div>
             </form>

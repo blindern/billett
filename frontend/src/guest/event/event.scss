@@ -76,6 +76,12 @@
   }
 
   .buy-form {
+    .vipps-button-line {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+    }
+
     .ticketgroup {
       display: flex;
       margin-bottom: 10px;

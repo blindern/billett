@@ -58,10 +58,22 @@ module.controller(
         Page.set404()
       })
 
+    let reservation
+
+    function reset() {
+      reservation = null
+      $scope.reservation = null
+      $scope.contact = {}
+      $scope.newres = {}
+      $scope.newres.count = 0
+      $scope.newres.total_amount = 0
+      $scope.vipps_checkout = false
+    }
+
+    reset()
+
     // check for reservation
-    var reservation
     $scope.loadingReservation = true
-    $scope.reservation = null
     EventReservation.restoreReservation()
       .then(function (reservationResult) {
         reservation = reservationResult
@@ -71,13 +83,6 @@ module.controller(
       .finally(function () {
         $scope.loadingReservation = false
       })
-
-    $scope.contact = {}
-    $scope.newres = {}
-    $scope.newres.count = 0
-    $scope.newres.total_amount = 0
-
-    $scope.vipps_checkout = false
 
     // add/remove ticketgroup selection
     $scope.changeTicketgroupNum = function (ticketgroup, num) {
@@ -152,12 +157,14 @@ module.controller(
                     }
 
                     if (window.VippsCheckout != null) {
-                      checkout()
+                      // Schedule to after render.
+                      setTimeout(() => void checkout(), 0)
                     } else {
                       const script = document.createElement("script")
-                      script.src = "https://checkout.vipps.no/vippsCheckoutSDK.js"
+                      script.src =
+                        "https://checkout.vipps.no/vippsCheckoutSDK.js"
                       script.onload = checkout
-                      document.head.append(script);
+                      document.head.append(script)
                     }
                   }
                 },
@@ -190,8 +197,7 @@ module.controller(
     $scope.abortOrder = function () {
       reservation.abort().then(
         function () {
-          reservation = null
-          $scope.reservation = null
+          reset()
         },
         function (err) {
           alert("Klarte ikke å avbryte reservasjonen. Ukjent feil: " + err)
