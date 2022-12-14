@@ -9,6 +9,8 @@ class Guard extends \Illuminate\Auth\Guard {
         'vegardan', // web 2017
         'majaft', // billettsjef 2019
         'skbj004', // billettsjef 2023
+        'kjetilk', // IKT-ansvarlig 2023
+        'hcloeven', // Nestsjef Okonomi 2023
 
         // UKEstyret 2023
         'cmnilsen',
