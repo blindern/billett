@@ -4,4 +4,4 @@
  * Exception for the situation when we try to create the same Vipps
  * session another time, which we have not built support for.
  */
-class DuplicateSessionException {}
+class DuplicateSessionException extends \Exception {}
