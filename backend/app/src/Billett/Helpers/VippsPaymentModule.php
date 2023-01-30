@@ -48,12 +48,12 @@ class VippsPaymentModule {
         try {
             $response = $this->client->post($sessionUrl, $opts);
         } catch (\GuzzleHttp\Exception\BadResponseException $e) {
+            $response = $e->getResponse();
             $bodyStr = $response->getBody();
             if ($bodyStr == "The orderId must be valid and unique.") {
                 throw new DuplicateSessionException();
             }
 
-            $response = $e->getResponse();
             $statusCode = $response->getStatusCode();
             \Log::error("Unexpected status from Vipps (order {$order->order_text_id}): $statusCode. Body: $bodyStr");
             throw new \Exception("Unexpected status from Vipps: $statusCode");
