@@ -171,7 +171,8 @@ module.controller(
                 function (err) {
                   // sending to payment failed
                   // TODO: handle error cases
-                  alert("Ukjent feil oppsto ved lagring av ordre: " + err)
+                  const msg = "data" in err ? err.data : err
+                  alert("Ukjent feil oppsto ved lagring av ordre: " + msg)
                 },
               )
             },
@@ -180,7 +181,8 @@ module.controller(
               if (err == "data validation failed") {
                 Page.toast("Ugyldig inndata i skjemaet.", { class: "warning" })
               } else {
-                alert("Ukjent feil oppsto ved lagring av kontaktdata: " + err)
+                const msg = "data" in err ? err.data : err
+                alert("Ukjent feil oppsto ved lagring av kontaktdata: " + msg)
               }
             },
           )
@@ -188,7 +190,8 @@ module.controller(
         function (err) {
           // creating reservation failed
           // TODO: handle error cases
-          alert("Ukjent feil oppsto ved henting av reservasjon: " + err)
+          const msg = "data" in err ? err.data : err
+          alert("Ukjent feil oppsto ved henting av reservasjon: " + msg)
         },
       )
     }
