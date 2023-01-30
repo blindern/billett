@@ -29,7 +29,7 @@ class VippsController extends Controller {
 
             return Redirect::to('order/complete');
         } else {
-            return Redirect::to('event/' . $order->tickets()[0]->event->id);
+            return Redirect::to('event/' . $order->tickets()->with('event')->get()[0]->event->id);
         }
     }
 
