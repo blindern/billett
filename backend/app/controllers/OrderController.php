@@ -5,6 +5,7 @@ use Blindern\UKA\Billett\Order;
 use Blindern\UKA\Billett\Payment;
 use Blindern\UKA\Billett\Paymentgroup;
 use Blindern\UKA\Billett\Ticketgroup;
+use Blindern\UKA\Billett\Helpers\DuplicateSessionException;
 use Blindern\UKA\Billett\Helpers\VippsPaymentModule;
 use Blindern\UKA\Billett\Helpers\ModelHelper;
 
@@ -180,7 +181,11 @@ class OrderController extends \Controller {
 
         $vipps = new VippsPaymentModule;
 
-        $sessionDetails = $vipps->initiateSession($order);
+        try {
+            $sessionDetails = $vipps->initiateSession($order);
+        } catch (DuplicateSessionException $e) {
+            return \Response::json('Reservasjonen må avbrytes og startes på nytt', 400);
+        }
 
         return array(
             'checkoutFrontendUrl' => $sessionDetails["checkoutFrontendUrl"],
