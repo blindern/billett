@@ -247,7 +247,7 @@ class EventController extends Controller {
         }
 
         try {
-            $event->image = \Image::make(\Input::file('file'))->resize(275, null, function($constraint) {
+            $event->image = \Image::make(\Input::file('file'))->resize(500, null, function($constraint) {
                 $constraint->aspectRatio();
             })->encode('jpg', 75);
             $event->save();
