@@ -229,12 +229,13 @@ class Event extends \Eloquent implements ApiQueryInterface {
         if ($this->is_timeout)
             return 'timeout';
 
-        // TODO: check if sold out
+        // TODO: improve check if sold out
         // * total sales reached (event.max_sales - sold - reserved)
         // * or total normal sales reached (event.max_normal_sales - sold(normal) - reserved(normal))
         // * or total sales for all ticketgroups for web reached forall(ticketgroup.limit - sold - reserved)
-        // if (...)
-        //     return 'sold_out';
+        $countinfo = $this->ticket_count;
+        if ($countinfo['totals']['free_normal'] <= 0)
+            return 'sold_out';
 
         return 'sale';
     }
