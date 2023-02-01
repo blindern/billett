@@ -39,8 +39,12 @@ class Event extends \Eloquent implements ApiQueryInterface {
 
     /**
      * When the online selling freezes (how many seconds before event start)
+     *
+     * Note that this is negative as we currently allow buying tickets
+     * after the event has started, to support people coming late to
+     * buy online rather than having to pay in person.
      */
-    const SELL_TIMEOUT = 0;
+    const SELL_TIMEOUT = -3600 * 2;
 
     public function eventgroup()
     {
@@ -74,11 +78,11 @@ class Event extends \Eloquent implements ApiQueryInterface {
     }
 
     /**
-     * Check if event has passed start time
+     * Check if event has passed start time by some amount
      */
     public function getIsOldAttribute()
     {
-        return $this->time_start <= time();
+        return $this->time_start - static::SELL_TIMEOUT <= time();
     }
 
     /**
