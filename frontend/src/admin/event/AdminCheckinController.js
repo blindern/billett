@@ -24,20 +24,20 @@ module.controller(
      */
     ctrl.checkin = function (ticket) {
       performCheckin(ticket, true)
-      $("#keyfield").select()
+      jQuery("#keyfield").select()
     }
     ctrl.checkout = function (ticket) {
       ctrl.keyok = null
       ctrl.keyticket = null
       performCheckin(ticket, false)
-      $("#keyfield").select()
+      jQuery("#keyfield").select()
     }
     ctrl.loadTickets = function () {
       loadTickets()
-      $("#keyfield").select()
+      jQuery("#keyfield").select()
     }
     ctrl.performSearch = function () {
-      $("#keyfield").select()
+      jQuery("#keyfield").select()
     }
 
     /*
@@ -51,7 +51,7 @@ module.controller(
 
       if (ctrl.event) searchForOrders()
       if (ctrl.keysearch) {
-        $("#keyfield").select()
+        jQuery("#keyfield").select()
       }
     })
 
@@ -144,12 +144,10 @@ module.controller(
      * Automatically checkin if possible
      */
     function checkKeySearch() {
-      // TODO
-      return
       ctrl.keyok = null
       ctrl.keyticket = null
 
-      if (ctrl.keysearch && !ctrl.keysearchlast == ctrl.keysearch) {
+      if (ctrl.keysearch && ctrl.keysearchlast != ctrl.keysearch) {
         ctrl.keysearchlast = ctrl.keysearch
         ctrl.orders.result.forEach(function (order) {
           order.tickets.forEach(function (ticket) {
@@ -158,7 +156,7 @@ module.controller(
               ctrl.keyticket = ticket
 
               if (ctrl.keyok) {
-                ctrl.checkin(ticket.id)
+                ctrl.checkin(ticket)
               }
             }
           })
@@ -333,7 +331,7 @@ module.controller(
           ticketsChangedEvent(ticket)
         })
         .catch(function () {
-          delete ticket.isWorking
+          alert("Innsjekking feilet av ukjent årsak - oppdater siden")
         })
     }
   },

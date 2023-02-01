@@ -176,12 +176,16 @@
 
     <div class="col-sm-7">
       <div
-        ng-class="{'alert-success': ctrl.keyok, 'alert-danger': !ctrl.keyok}"
+        ng-class="{'alert-success': ctrl.keyok && !ctrl.keyticket.isWorking, 'alert-danger': !ctrl.keyok, 'alert-info': ctrl.keyok && ctrl.keyticket.isWorking}"
         class="alert"
-        ng-if="ctrl.keysearchticket"
+        ng-if="ctrl.keyticket"
       >
         <h4>Scanning av strekkode</h4>
-        <p>TODO</p>
+        <p ng-if="ctrl.keyticket.isWorking">Sjekker inn billett...</p>
+        <div ng-if="!ctrl.keyticket.isWorking">
+          <p ng-if="ctrl.keyok">Billetten ble innsjekket</p>
+          <p ng-if="!ctrl.keyok">Billetten kan ikke sjekkes inn. Allerede innsjekket eller ugyldig billett?</p>
+        </div>
       </div>
 
       <p>
