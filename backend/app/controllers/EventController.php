@@ -19,7 +19,7 @@ class EventController extends Controller {
     {
         return EventGuest::with('eventgroup')
             ->where('is_published', true)
-            ->where('time_start', '>', time())
+            ->where('time_start', '>', time() - 3600 * 1.5)
             ->orderBy('time_start')->limit(6)->get();
     }
 
