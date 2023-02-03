@@ -79,6 +79,13 @@ h5 {
 
 .page-header {
   margin-top: 30px;
+
+  /* Avoid issues when buttons end up on multiple rows, e.g. on mobile */
+  &::after {
+    display: table;
+    content: "";
+    clear: both;
+  }
 }
 
 /* Responsive: Portrait tablets and up */
