@@ -146,6 +146,9 @@
             <td
               ng-class="{reservation: !ticket.is_valid, revoked: ticket.is_revoked}"
             >
+              <div ng-if="ticket.used" class="checkin-time">
+                Innsjekket {{::ticket.used|formatdate:'HH:mm:ss'}}
+              </div>
               <a ng-href="api/ticket/{{::ticket.id}}/pdf" target="_self"
                 >#{{::ticket.id}}</a
               >
@@ -176,72 +179,73 @@
 
     <div class="col-sm-7">
       <div
-        ng-class="{'alert-success': ctrl.keyok && !ctrl.keyticket.isWorking, 'alert-danger': !ctrl.keyok, 'alert-info': ctrl.keyok && ctrl.keyticket.isWorking}"
-        class="alert"
-        ng-if="ctrl.keyticket"
+        ng-class="{'alert-success': ctrl.keyticket && ctrl.keyok && !ctrl.keyticket.isWorking && !ctrl.ordersLoading, 'alert-danger': ctrl.keyticket && !ctrl.keyok && !ctrl.ordersLoading}"
+        class="alert checkin-form"
       >
-        <h4>Scanning av strekkode</h4>
-        <p ng-if="ctrl.keyticket.isWorking">Sjekker inn billett...</p>
-        <div ng-if="!ctrl.keyticket.isWorking">
-          <p ng-if="ctrl.keyok">Billetten ble innsjekket</p>
-          <p ng-if="!ctrl.keyok">Billetten kan ikke sjekkes inn. Allerede innsjekket eller ugyldig billett?</p>
+        <form class="form-horizontal" ng-submit="ctrl.performSearch()">
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Navn eller strekkode</label>
+            <div class="col-sm-8">
+              <input
+                class="form-control"
+                type="text"
+                id="keyfield"
+                ng-model="ctrl.searchinput.name"
+                ng-model-options="{debounce:300}"
+                autofocus
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">E-post</label>
+            <div class="col-sm-8">
+              <input
+                class="form-control"
+                type="text"
+                ng-model="ctrl.searchinput.email"
+                ng-model-options="{debounce:300}"
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Telefon</label>
+            <div class="col-sm-8">
+              <input
+                class="form-control"
+                type="text"
+                ng-model="ctrl.searchinput.phone"
+                ng-model-options="{debounce:300}"
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Ordrenr</label>
+            <div class="col-sm-8">
+              <input
+                class="form-control"
+                type="text"
+                ng-model="ctrl.searchinput.id"
+                ng-model-options="{debounce:300}"
+              />
+            </div>
+          </div>
+          <input type="submit" value="Søk" style="display: none" />
+        </form>
+
+        <p ng-if="!ctrl.keyticket">
+          Ved scanning av strekkode vil billett automatisk bli markert som
+          benyttet, dersom mulig.
+        </p>
+
+        <div ng-if="ctrl.keyticket">
+          <h4>Scanning av strekkode</h4>
+          <p ng-if="ctrl.keyticket.isWorking">Sjekker inn billett...</p>
+          <div ng-if="!ctrl.keyticket.isWorking">
+            <p ng-if="ctrl.keyok"><b>Billetten ble innsjekket</b></p>
+            <p ng-if="!ctrl.keyok"><b>Billetten kan ikke sjekkes inn. Allerede innsjekket eller ugyldig billett?</b></p>
+          </div>
         </div>
       </div>
-
-      <p>
-        Ved scanning av strekkode vil billett automatisk bli markert som
-        benyttet, dersom mulig.
-      </p>
-
-      <form class="form-horizontal" ng-submit="ctrl.performSearch()">
-        <div class="form-group">
-          <label class="col-sm-4 control-label">Navn eller strekkode</label>
-          <div class="col-sm-8">
-            <input
-              class="form-control"
-              type="text"
-              id="keyfield"
-              ng-model="ctrl.searchinput.name"
-              ng-model-options="{debounce:300}"
-              autofocus
-            />
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-4 control-label">E-post</label>
-          <div class="col-sm-8">
-            <input
-              class="form-control"
-              type="text"
-              ng-model="ctrl.searchinput.email"
-              ng-model-options="{debounce:300}"
-            />
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-4 control-label">Telefon</label>
-          <div class="col-sm-8">
-            <input
-              class="form-control"
-              type="text"
-              ng-model="ctrl.searchinput.phone"
-              ng-model-options="{debounce:300}"
-            />
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-4 control-label">Ordrenr</label>
-          <div class="col-sm-8">
-            <input
-              class="form-control"
-              type="text"
-              ng-model="ctrl.searchinput.id"
-              ng-model-options="{debounce:300}"
-            />
-          </div>
-        </div>
-        <input type="submit" value="Søk" style="display: none" />
-      </form>
 
       <!-- resultat etter ordresøk -->
       <div ng-show="ctrl.orders || ctrl.ordersLoading">

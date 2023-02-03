@@ -101,6 +101,7 @@ module.controller(
       }
 
       ctrl.ordersLoading = true
+      ctrl.orders = null
 
       var limit = 6
       var q = {
