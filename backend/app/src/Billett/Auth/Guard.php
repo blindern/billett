@@ -22,6 +22,16 @@ class Guard extends \Illuminate\Auth\Guard {
         'sindrec',
         'waldemarrg',
 
+        // UKEstyret 2025
+        'annearonsen',
+        'henrikrc',
+        'haakonfrankrig',
+        'haavbro',
+        'jannedahl',
+        'jennybta',
+        'sofiejanilsen',
+        'vvolleng',
+
         // billettgruppa 2023
         // ...
     );
