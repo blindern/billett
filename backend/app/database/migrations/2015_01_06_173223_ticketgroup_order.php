@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
-class TicketgroupOrder extends Migration {
-
+class TicketgroupOrder extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -12,8 +12,7 @@ class TicketgroupOrder extends Migration {
      */
     public function up()
     {
-        Schema::table('ticketgroups', function(Blueprint $table)
-        {
+        Schema::table('ticketgroups', function (Blueprint $table) {
             $table->integer('order')->unsigned();
         });
     }
@@ -25,10 +24,8 @@ class TicketgroupOrder extends Migration {
      */
     public function down()
     {
-        Schema::table('events', function(Blueprint $table)
-        {
+        Schema::table('events', function (Blueprint $table) {
             $table->dropColumn('order');
         });
     }
-
 }

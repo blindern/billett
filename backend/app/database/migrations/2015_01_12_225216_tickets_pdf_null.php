@@ -1,10 +1,9 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class TicketsPdfNull extends Migration {
-
+class TicketsPdfNull extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -25,5 +24,4 @@ class TicketsPdfNull extends Migration {
     {
         DB::statement('ALTER TABLE tickets MODIFY pdf blob');
     }
-
 }

@@ -1,20 +1,23 @@
 <?php
 
 use Blindern\UKA\Billett\Event;
-use Blindern\UKA\Billett\EventGuest;
 use Blindern\UKA\Billett\Eventgroup;
+use Blindern\UKA\Billett\EventGuest;
 use Blindern\UKA\Billett\Helpers\ModelHelper;
 
-class EventController extends Controller {
-    public function __construct() {
+class EventController extends Controller
+{
+    public function __construct()
+    {
         $this->beforeFilter('auth', [
             'only' => [
                 'store',
                 'update',
                 'destroy',
-                'uploadImage'
+                'uploadImage',
             ]]);
     }
+
     public function getUpcoming()
     {
         return EventGuest::with('eventgroup')
@@ -28,19 +31,23 @@ class EventController extends Controller {
         $class = ModelHelper::getModelPath('Event');
         $ev = $class::findByAliasOrFail($id_or_alias);
 
-        if (!$ev->is_published && !\Auth::hasRole('billett.admin')) {
+        if (! $ev->is_published && ! \Auth::hasRole('billett.admin')) {
             App::abort(404);
         }
 
         $show_all = false;
-        if (\Auth::hasRole('billett.admin') && \Input::has('admin')) $show_all = true;
+        if (\Auth::hasRole('billett.admin') && \Input::has('admin')) {
+            $show_all = true;
+        }
 
         $ev->load('eventgroup');
-        $ev->load(array('ticketgroups' => function($query) use ($show_all)
-        {
-            if ($show_all) $query->get();
-            else $query->where('use_web', true);
-        }));
+        $ev->load(['ticketgroups' => function ($query) use ($show_all) {
+            if ($show_all) {
+                $query->get();
+            } else {
+                $query->where('use_web', true);
+            }
+        }]);
 
         if (\Input::exists('checkin')) {
             // make sure checkin-variable gets populated
@@ -50,33 +57,38 @@ class EventController extends Controller {
         return $ev;
     }
 
-    public function createReservation($id) {
+    public function createReservation($id)
+    {
         $class = ModelHelper::getModelPath('Event');
         $event = $class::findOrFail($id);
 
-        if (!$event->is_published && !\Auth::hasRole('billett.admin')) {
+        if (! $event->is_published && ! \Auth::hasRole('billett.admin')) {
             App::abort(404);
         }
 
         if ($event->is_timeout) {
-        	return Response::json('too late to make reservation', 403);
+            return Response::json('too late to make reservation', 403);
         }
 
         $groups = Input::get('ticketgroups');
-        if (!is_array($groups)) {
+        if (! is_array($groups)) {
             return Response::json('error in ticketgroups', 400);
         }
 
         // check the groups
-        $groups_to_add = array();
+        $groups_to_add = [];
         foreach ($event->ticketgroups as $group) {
             if (isset($groups[$group->id])) {
                 $val = $groups[$group->id];
 
-                if (!$group->use_web) continue;
-                if (filter_var($val, FILTER_VALIDATE_INT) === false || $val <= 0) continue;
+                if (! $group->use_web) {
+                    continue;
+                }
+                if (filter_var($val, FILTER_VALIDATE_INT) === false || $val <= 0) {
+                    continue;
+                }
 
-                $groups_to_add[] = array($group, $val);
+                $groups_to_add[] = [$group, $val];
                 unset($groups[$group->id]);
             }
         }
@@ -85,7 +97,7 @@ class EventController extends Controller {
         }
 
         // check count
-        if (!$event->checkIsAvailable($groups_to_add)) {
+        if (! $event->checkIsAvailable($groups_to_add)) {
             return Response::json('tickets not available', 400);
         }
 
@@ -96,11 +108,12 @@ class EventController extends Controller {
         $order->createTickets($groups_to_add);
 
         // store in session so we know which orders belong to this user
-        $orders = \Session::get('billett_reservations', array());
+        $orders = \Session::get('billett_reservations', []);
         $orders[] = $order->id;
         \Session::put('billett_reservations', $orders);
 
         $order->load('tickets.ticketgroup', 'tickets.event');
+
         return $order;
     }
 
@@ -109,7 +122,7 @@ class EventController extends Controller {
      */
     private function validateInputAndUpdate(Event $event, $is_new)
     {
-        $fields = array(
+        $fields = [
             'eventgroup_id' => 'integer',
             'title' => '',
             'alias' => '',
@@ -126,8 +139,8 @@ class EventController extends Controller {
             'description_short' => '',
             'ticket_text' => '',
             'link' => '',
-            'age_restriction' => 'integer'
-        );
+            'age_restriction' => 'integer',
+        ];
 
         if ($is_new) {
             $fields['eventgroup_id'] = 'required|integer';
@@ -145,14 +158,14 @@ class EventController extends Controller {
 
         if (Input::has('eventgroup_id') && (Input::get('eventgroup_id') != $event->eventgroup_id || $is_new)) {
             $group = Eventgroup::find(Input::get('eventgroup_id'));
-            if (!$group) {
+            if (! $group) {
                 return Response::json('eventgroup id not found', 400);
             }
 
             $event->eventgroup()->associate($group);
         }
 
-        $list = array(
+        $list = [
             'title',
             'time_start',
             'time_end',
@@ -167,18 +180,20 @@ class EventController extends Controller {
             'description_short',
             'ticket_text',
             'link',
-            'age_restriction'
-        );
+            'age_restriction',
+        ];
 
         // can only edit alias when not published
-        if (!$event->id || !$event->is_published) {
+        if (! $event->id || ! $event->is_published) {
             $list[] = 'alias';
         }
 
         foreach ($list as $field) {
             if (Input::exists($field) && Input::get($field) !== $event->{$field}) {
                 $val = Input::get($field);
-                if ($val === '') $val = null;
+                if ($val === '') {
+                    $val = null;
+                }
                 $event->{$field} = $val;
             }
         }
@@ -204,9 +219,12 @@ class EventController extends Controller {
     public function store()
     {
         $event = $this->validateInputAndUpdate(new Event, true);
-        if (!($event instanceof Event)) return $event;
+        if (! ($event instanceof Event)) {
+            return $event;
+        }
 
         $event->save();
+
         return $event;
     }
 
@@ -216,9 +234,12 @@ class EventController extends Controller {
     public function update($id)
     {
         $event = $this->validateInputAndUpdate(Event::findOrFail($id), false);
-        if (!($event instanceof Event)) return $event;
+        if (! ($event instanceof Event)) {
+            return $event;
+        }
 
         $event->save();
+
         return $event;
     }
 
@@ -233,21 +254,23 @@ class EventController extends Controller {
         }
 
         $e->delete();
+
         return 'deleted';
     }
 
     /**
      * Image upload
      */
-    public function uploadImage($id) {
+    public function uploadImage($id)
+    {
         $event = Event::findOrFail($id);
 
-        if (!\Input::hasFile('file')) {
+        if (! \Input::hasFile('file')) {
             App::abort(400, 'Missing image');
         }
 
         try {
-            $event->image = \Image::make(\Input::file('file'))->resize(500, null, function($constraint) {
+            $event->image = \Image::make(\Input::file('file'))->resize(500, null, function ($constraint) {
                 $constraint->aspectRatio();
             })->encode('jpg', 75);
             $event->save();
@@ -261,28 +284,30 @@ class EventController extends Controller {
     /**
      * Get event image
      */
-    public function image($id) {
+    public function image($id)
+    {
         $event = Event::findOrFail($id);
 
-        if (!$event->is_published && !\Auth::hasRole('billett.admin')) {
+        if (! $event->is_published && ! \Auth::hasRole('billett.admin')) {
             App::abort(404);
         }
 
         $img = $event->image;
-        if (!$img) {
+        if (! $img) {
             $img = file_get_contents(app_path().'/assets/images/event_no_image.jpg');
         }
 
         // image should be jpeg
-        return Response::make($img, 200, array(
+        return Response::make($img, 200, [
             'Content-Type' => 'image/jpeg',
-            'Content-Length' => strlen($img)));
+            'Content-Length' => strlen($img)]);
     }
 
     /**
      * Change sorting on ticketgroups
      */
-    public function ticketgroupsSetOrder($id) {
+    public function ticketgroupsSetOrder($id)
+    {
         $event = Event::findOrFail($id);
         $groups = $event->ticketgroups;
 

@@ -1,13 +1,18 @@
-<?php namespace Blindern\UKA\Billett;
+<?php
+
+namespace Blindern\UKA\Billett;
 
 use Henrist\LaravelApiQuery\ApiQueryInterface;
 
-class Eventgroup extends \Eloquent implements ApiQueryInterface {
+class Eventgroup extends \Eloquent implements ApiQueryInterface
+{
     protected $model_suffix = '';
+
     protected $table = 'eventgroups';
 
-    protected $apiAllowedFields = array('id', 'is_active', 'title', 'sort_value', 'paymentsources_data');
-    protected $apiAllowedRelations = array('events', 'orders', 'paymentgroups', 'daythemes');
+    protected $apiAllowedFields = ['id', 'is_active', 'title', 'sort_value', 'paymentsources_data'];
+
+    protected $apiAllowedRelations = ['events', 'orders', 'paymentgroups', 'daythemes'];
 
     public function events()
     {
@@ -35,19 +40,19 @@ class Eventgroup extends \Eloquent implements ApiQueryInterface {
 
         // this information might not exist yet
         // we will return a mocked state of the data
-        if (!$data) {
+        if (! $data) {
             // TODO: need a way for the admin user to easily add and change this
             // TODO: we don't really want to have to mocked... it should always exist?
-            $data = array(
+            $data = [
                 'cash_prefix' => 'D 1910 Kontanter',
                 'payments_deviation_prefix' => 'D 1909 Kassedifferanser UKA',
                 'orders_deviation_prefix' => 'D 1941 Oppgjørskonto billetter UKA',
-                'sources' => array(
-                    array('title' => 'D 1940 Oppgjørskonto bet.term. UKA'),
-                    array('title' => 'D 1941 Oppgjørskonto billetter UKA'),
-                    array('title' => 'D 1942 Oppgjørskonto Vipps UKA'),
-                )
-            );
+                'sources' => [
+                    ['title' => 'D 1940 Oppgjørskonto bet.term. UKA'],
+                    ['title' => 'D 1941 Oppgjørskonto billetter UKA'],
+                    ['title' => 'D 1942 Oppgjørskonto Vipps UKA'],
+                ],
+            ];
         }
 
         return $data;
@@ -61,21 +66,24 @@ class Eventgroup extends \Eloquent implements ApiQueryInterface {
     /**
      * Get fields we can search in
      */
-    public function getApiAllowedFields() {
+    public function getApiAllowedFields()
+    {
         return $this->apiAllowedFields;
     }
 
     /**
      * Get fields we can use as relations
      */
-    public function getApiAllowedRelations() {
+    public function getApiAllowedRelations()
+    {
         return $this->apiAllowedRelations;
     }
 
     /**
      * Get list of tickets with recruiter details
      */
-    public function getRecruiterList() {
+    public function getRecruiterList()
+    {
         $q = \DB::select('
             SELECT
                 tickets.id ticket_id,
@@ -89,7 +97,7 @@ class Eventgroup extends \Eloquent implements ApiQueryInterface {
                 JOIN ticketgroups ON ticketgroups.id = tickets.ticketgroup_id
                 JOIN events ON events.id = tickets.event_id
             WHERE events.eventgroup_id = ? AND orders.recruiter IS NOT NULL AND orders.recruiter != ""
-            ORDER BY orders.time DESC', array($this->id));
+            ORDER BY orders.time DESC', [$this->id]);
 
         return $q;
     }

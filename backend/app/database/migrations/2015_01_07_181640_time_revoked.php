@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
-class TimeRevoked extends Migration {
-
+class TimeRevoked extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -12,8 +12,7 @@ class TimeRevoked extends Migration {
      */
     public function up()
     {
-        Schema::table('tickets', function(Blueprint $table)
-        {
+        Schema::table('tickets', function (Blueprint $table) {
             $table->integer('time_revoked')->nullable()->unsigned();
         });
     }
@@ -25,10 +24,8 @@ class TimeRevoked extends Migration {
      */
     public function down()
     {
-        Schema::table('tickets', function(Blueprint $table)
-        {
+        Schema::table('tickets', function (Blueprint $table) {
             $table->dropColumn('time_revoked');
         });
     }
-
 }

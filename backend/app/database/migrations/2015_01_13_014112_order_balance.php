@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
-class OrderBalance extends Migration {
-
+class OrderBalance extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -12,7 +12,7 @@ class OrderBalance extends Migration {
      */
     public function up()
     {
-        Schema::table('orders', function(Blueprint $table) {
+        Schema::table('orders', function (Blueprint $table) {
             $table->decimal('balance', 7, 2);
         });
 
@@ -42,10 +42,8 @@ class OrderBalance extends Migration {
      */
     public function down()
     {
-        Schema::table('orders', function(Blueprint $table)
-        {
+        Schema::table('orders', function (Blueprint $table) {
             $table->dropColumn('balance');
         });
     }
-
 }

@@ -1,10 +1,11 @@
 <?php
 
+use Blindern\UKA\Billett\Order;
 use Blindern\UKA\Billett\Payment;
 use Blindern\UKA\Billett\Paymentgroup;
-use Blindern\UKA\Billett\Order;
 
-class PaymentController extends \Controller {
+class PaymentController extends \Controller
+{
     public function __construct()
     {
         $this->beforeFilter('auth');
@@ -23,7 +24,7 @@ class PaymentController extends \Controller {
         $fields = [
             'order_id' => 'required|integer',
             'paymentgroup_id' => 'required|integer',
-            'amount' => 'required|numeric|not_in:0'
+            'amount' => 'required|numeric|not_in:0',
         ];
         $validator = \Validator::make(Input::all(), $fields);
 
@@ -52,6 +53,7 @@ class PaymentController extends \Controller {
         $payment->save();
 
         $order->modifyBalance($payment->amount);
+
         return $payment;
     }
 }

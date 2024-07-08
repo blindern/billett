@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
-class PaymentTypeToIsWeb extends Migration {
-
+class PaymentTypeToIsWeb extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -12,8 +12,7 @@ class PaymentTypeToIsWeb extends Migration {
      */
     public function up()
     {
-        Schema::table('payments', function(Blueprint $table)
-        {
+        Schema::table('payments', function (Blueprint $table) {
             $table->dropColumn('type');
             $table->boolean('is_web')->default(true)->after('time');
         });
@@ -26,11 +25,9 @@ class PaymentTypeToIsWeb extends Migration {
      */
     public function down()
     {
-        Schema::table('orders', function(Blueprint $table)
-        {
+        Schema::table('orders', function (Blueprint $table) {
             $table->dropColumn('is_web');
             $table->string('type', 20)->default('web')->after('time');
         });
     }
-
 }

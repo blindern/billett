@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
-class PaymentsDeleteFee extends Migration {
-
+class PaymentsDeleteFee extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -12,8 +12,7 @@ class PaymentsDeleteFee extends Migration {
      */
     public function up()
     {
-        Schema::table('payments', function(Blueprint $table)
-        {
+        Schema::table('payments', function (Blueprint $table) {
             $table->dropColumn('fee');
         });
     }
@@ -25,10 +24,8 @@ class PaymentsDeleteFee extends Migration {
      */
     public function down()
     {
-        Schema::table('payments', function(Blueprint $table)
-        {
+        Schema::table('payments', function (Blueprint $table) {
             $table->decimal('fee', 7, 2)->nullable()->after('amount');
         });
     }
-
 }

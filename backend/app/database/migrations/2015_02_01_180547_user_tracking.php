@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
-class UserTracking extends Migration {
-
+class UserTracking extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -12,13 +12,13 @@ class UserTracking extends Migration {
      */
     public function up()
     {
-        Schema::table('orders', function(Blueprint $table) {
+        Schema::table('orders', function (Blueprint $table) {
             $table->string('user_created')->nullable()->after('time');
         });
-        Schema::table('payments', function(Blueprint $table) {
+        Schema::table('payments', function (Blueprint $table) {
             $table->string('user_created')->nullable()->after('time');
         });
-        Schema::table('tickets', function(Blueprint $table) {
+        Schema::table('tickets', function (Blueprint $table) {
             $table->string('user_valid')->nullable()->after('revoked_paymentgroup_id');
             $table->string('user_revoked')->nullable()->after('user_valid');
         });
@@ -31,19 +31,15 @@ class UserTracking extends Migration {
      */
     public function down()
     {
-        Schema::table('orders', function(Blueprint $table)
-        {
+        Schema::table('orders', function (Blueprint $table) {
             $table->dropColumn('user_created');
         });
-        Schema::table('payments', function(Blueprint $table)
-        {
+        Schema::table('payments', function (Blueprint $table) {
             $table->dropColumn('user_created');
         });
-        Schema::table('tickets', function(Blueprint $table)
-        {
+        Schema::table('tickets', function (Blueprint $table) {
             $table->dropColumn('user_valid');
             $table->dropColumn('user_revoked');
         });
     }
-
 }

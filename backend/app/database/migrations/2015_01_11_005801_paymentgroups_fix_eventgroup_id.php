@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
-class PaymentgroupsFixEventgroupId extends Migration {
-
+class PaymentgroupsFixEventgroupId extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -12,7 +12,7 @@ class PaymentgroupsFixEventgroupId extends Migration {
      */
     public function up()
     {
-        Schema::table('paymentgroups', function(Blueprint $table) {
+        Schema::table('paymentgroups', function (Blueprint $table) {
             $table->foreign('eventgroup_id')->references('id')->on('eventgroups');
         });
     }
@@ -24,10 +24,8 @@ class PaymentgroupsFixEventgroupId extends Migration {
      */
     public function down()
     {
-        Schema::table('paymentgroups', function(Blueprint $table)
-        {
+        Schema::table('paymentgroups', function (Blueprint $table) {
             $table->dropForeign('eventgroup_id');
         });
     }
-
 }

@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     /*
     |--------------------------------------------------------------------------
@@ -56,7 +56,7 @@ return array(
     |
     */
 
-    'from' => array('address' => "billett@blindernuka.no", 'name' => "UKA på Blindern"),
+    'from' => ['address' => 'billett@blindernuka.no', 'name' => 'UKA på Blindern'],
 
     /*
     |--------------------------------------------------------------------------
@@ -124,4 +124,4 @@ return array(
     'pretend' => false,
 
     'local_domain' => 'foreningenbs.no',
-);
+];

@@ -1,17 +1,18 @@
-<?php namespace Blindern\UKA\Billett;
+<?php
 
-use \Blindern\UKA\Billett\Eventgroup;
-use \Illuminate\Database\Eloquent\ModelNotFoundException;
-use \Henrist\LaravelApiQuery\ApiQueryInterface;
+namespace Blindern\UKA\Billett;
 
-class Daytheme extends \Eloquent implements ApiQueryInterface {
+use Henrist\LaravelApiQuery\ApiQueryInterface;
 
+class Daytheme extends \Eloquent implements ApiQueryInterface
+{
     protected $model_suffix = '';
+
     protected $table = 'daythemes';
 
-    protected $apiAllowedFields = array('id', 'eventgroup_id', 'title', 'date');
-    protected $apiAllowedRelations = array('eventgroup');
+    protected $apiAllowedFields = ['id', 'eventgroup_id', 'title', 'date'];
 
+    protected $apiAllowedRelations = ['eventgroup'];
 
     public function eventgroup()
     {
@@ -21,15 +22,16 @@ class Daytheme extends \Eloquent implements ApiQueryInterface {
     /**
      * Get fields we can search in
      */
-    public function getApiAllowedFields() {
+    public function getApiAllowedFields()
+    {
         return $this->apiAllowedFields;
     }
 
     /**
      * Get fields we can use as relations
      */
-    public function getApiAllowedRelations() {
+    public function getApiAllowedRelations()
+    {
         return $this->apiAllowedRelations;
     }
 }
-

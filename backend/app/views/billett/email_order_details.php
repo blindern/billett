@@ -1,6 +1,7 @@
 <?php
 
-use \Carbon\Carbon;
+use Carbon\Carbon;
+
 $order_time = Carbon::createFromTimeStamp($order->time)->format('d.m.Y H:i:s');
 
 // ticket list
@@ -8,9 +9,12 @@ $tickets_valid = [];
 $tickets_revoked = [];
 $total = 0;
 foreach ($order->tickets as $ticket) {
-    if (!$ticket->is_valid) continue;
+    if (! $ticket->is_valid) {
+        continue;
+    }
     if ($ticket->is_revoked) {
         $tickets_revoked[] = $ticket;
+
         continue;
     }
     $tickets_valid[] = $ticket;
@@ -19,7 +23,7 @@ foreach ($order->tickets as $ticket) {
 
 $payments = $order->payments()->where('amount', '!=', 0)->get();
 
-echo (!empty($text) ? $text : 'Hei,
+echo (! empty($text) ? $text : 'Hei,
 
 Her følger detaljer om din ordre hos UKA på Blindern.'.(count($tickets_valid) > 0 ? ' Dine billetter er vedlagt.' : '')).(count($tickets_valid) > 0 ? '
 
@@ -58,8 +62,10 @@ Ordren inneholder ingen gyldige billetter.';
     foreach ($tickets_valid as $ticket) {
         $time = Carbon::createFromTimeStamp($ticket->event->time_start)->format('d.m.Y H:i');
 
-        $price = format_nok($ticket->ticketgroup->price+$ticket->ticketgroup->fee);
-        if ($ticket->ticketgroup->fee) $price .= ', hvorav '.format_nok($ticket->ticketgroup->fee).' i billettgebyr';
+        $price = format_nok($ticket->ticketgroup->price + $ticket->ticketgroup->fee);
+        if ($ticket->ticketgroup->fee) {
+            $price .= ', hvorav '.format_nok($ticket->ticketgroup->fee).' i billettgebyr';
+        }
 
         echo '
   '.$time.': '.$ticket->event->title.': '.$ticket->ticketgroup->title.' ('.$price.') (#'.$ticket->number.')';
@@ -84,13 +90,15 @@ echo '
 Merverdiavgift: '.format_nok(0).'
 Totalbeløp: '.format_nok($total);
 
-if ($order->balance < 0) echo '
+if ($order->balance < 0) {
+    echo '
 
-' . format_nok(abs($order->balance)) . ' gjenstår å betale.';
+'.format_nok(abs($order->balance)).' gjenstår å betale.';
+} elseif ($order->balance > 0) {
+    echo '
 
-elseif ($order->balance > 0) echo '
-
-Du har ' . format_nok(abs($order->balance)) . ' til gode.';
+Du har '.format_nok(abs($order->balance)).' til gode.';
+}
 
 echo '
 

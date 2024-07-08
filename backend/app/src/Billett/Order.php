@@ -1,10 +1,13 @@
-<?php namespace Blindern\UKA\Billett;
+<?php
 
-use \Carbon\Carbon;
-use \Henrist\LaravelApiQuery\ApiQueryInterface;
-use \Illuminate\Database\Eloquent\ModelNotFoundException;
+namespace Blindern\UKA\Billett;
 
-class Order extends \Eloquent implements ApiQueryInterface {
+use Carbon\Carbon;
+use Henrist\LaravelApiQuery\ApiQueryInterface;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
+class Order extends \Eloquent implements ApiQueryInterface
+{
     /**
      * How long a incomplete reservation is valid
      */
@@ -18,7 +21,6 @@ class Order extends \Eloquent implements ApiQueryInterface {
     /**
      * Create reservation
      *
-     * @param Eventgroup $eg
      * @param array(array(Ticketgroup, int ticket-count), ...)
      * @param bool by ticket office
      * @return Order
@@ -48,8 +50,7 @@ class Order extends \Eloquent implements ApiQueryInterface {
      */
     public static function findByTextIdOrFail($text_id)
     {
-        if (empty($text_id))
-        {
+        if (empty($text_id)) {
             throw new ModelNotFoundException('Missing text id');
         }
 
@@ -75,7 +76,7 @@ class Order extends \Eloquent implements ApiQueryInterface {
     {
         $p = $order_id ? [$order_id, $order_id] : [];
 
-        \DB::statement("
+        \DB::statement('
             UPDATE
                 orders, (
                     SELECT order_id, SUM(amount) amount
@@ -83,24 +84,26 @@ class Order extends \Eloquent implements ApiQueryInterface {
                         (
                             SELECT t.order_id, -IFNULL(g.price, 0) - IFNULL(g.fee, 0) AS amount
                             FROM tickets t JOIN ticketgroups g ON t.ticketgroup_id = g.id
-                            WHERE ".($order_id ? "t.order_id = ? AND " : "")."t.is_valid = 1 AND t.is_revoked = 0
+                            WHERE '.($order_id ? 't.order_id = ? AND ' : '').'t.is_valid = 1 AND t.is_revoked = 0
                             UNION ALL
                             SELECT order_id, amount AS amount
                             FROM payments
-                            ".($order_id ? "WHERE t.order_id = ?" : "")."
+                            '.($order_id ? 'WHERE t.order_id = ?' : '').'
                         ) ref
                     GROUP BY order_id
                 ) amounts
             SET orders.balance = amounts.amount
-            WHERE orders.id = amounts.order_id", $p);
+            WHERE orders.id = amounts.order_id', $p);
     }
 
     protected $model_suffix = '';
+
     protected $table = 'orders';
     //protected $appends = array('total_amount');
 
-    protected $apiAllowedFields = array('id', 'eventgroup_id', 'order_text_id', 'is_valid', 'is_admin', 'time', 'user_created', 'ip', 'browser', 'name', 'email', 'phone', 'recruiter', 'total_amount', 'comment', 'balance');
-    protected $apiAllowedRelations = array('eventgroup', 'tickets', 'payments');
+    protected $apiAllowedFields = ['id', 'eventgroup_id', 'order_text_id', 'is_valid', 'is_admin', 'time', 'user_created', 'ip', 'browser', 'name', 'email', 'phone', 'recruiter', 'total_amount', 'comment', 'balance'];
+
+    protected $apiAllowedRelations = ['eventgroup', 'tickets', 'payments'];
 
     public function eventgroup()
     {
@@ -124,23 +127,23 @@ class Order extends \Eloquent implements ApiQueryInterface {
     {
         $events = $this->getEvents();
 
-        \Mail::send(array('text' => 'billett.email_order_web_complete'), array('order' => $this), function($message) use ($events)
-        {
+        \Mail::send(['text' => 'billett.email_order_web_complete'], ['order' => $this], function ($message) use ($events) {
             $event = count($events) == 1 ? $events[0] : null;
-            $eventinfo = $event ? " - ".$event->title." (".Carbon::createFromTimeStamp($event->time_start)->format('d.m.Y').")" : '';
+            $eventinfo = $event ? ' - '.$event->title.' ('.Carbon::createFromTimeStamp($event->time_start)->format('d.m.Y').')' : '';
 
             $message->to($this->email, $this->name ?: null);
             $message->subject('Billett'.(count($this->tickets) == 1 ? '' : 'er').' UKA på Blindern #'.$this->order_text_id.$eventinfo);
 
-            $message->attachData($this->generateTicketsPdf(), 'billetter_'.$this->order_text_id.'.pdf', array('mime' => 'application/pdf'));
+            $message->attachData($this->generateTicketsPdf(), 'billetter_'.$this->order_text_id.'.pdf', ['mime' => 'application/pdf']);
         });
     }
 
     /**
      * Send orderdetails to email
      *
-     * @param string $email Override email address
-     * @param string $text Text to write in the email
+     * @param  string  $email  Override email address
+     * @param  string  $text  Text to write in the email
+     *
      * @throws \Exception
      */
     public function sendEmail($email = null, $text = null)
@@ -148,21 +151,20 @@ class Order extends \Eloquent implements ApiQueryInterface {
         $name = $this->name ?: null;
         if (empty($email)) {
             if (empty($this->email)) {
-                throw new \Exception("Cannot send email without receiver");
+                throw new \Exception('Cannot send email without receiver');
             }
             $email = $this->email;
             $name = null;
         }
 
-        \Mail::send(array('text' => 'billett.email_order_details'), array('order' => $this, 'text' => $text), function($message) use ($email, $name, $text)
-        {
+        \Mail::send(['text' => 'billett.email_order_details'], ['order' => $this, 'text' => $text], function ($message) use ($email, $name, $text) {
             $events = $this->getEvents();
             $event = count($events) == 1 ? $events[0] : null;
-            $eventinfo = $event ? " - ".$event->title." (".Carbon::createFromTimeStamp($event->time_start)->format('d.m.Y').")" : '';
+            $eventinfo = $event ? ' - '.$event->title.' ('.Carbon::createFromTimeStamp($event->time_start)->format('d.m.Y').')' : '';
 
             $has_valid_tickets = false;
             foreach ($this->tickets as $ticket) {
-                if ($ticket->is_valid && !$ticket->is_revoked) {
+                if ($ticket->is_valid && ! $ticket->is_revoked) {
                     $has_valid_tickets = true;
                     break;
                 }
@@ -173,13 +175,13 @@ class Order extends \Eloquent implements ApiQueryInterface {
             $message->to($email, $name);
             $message->subject($subj.' UKA på Blindern #'.$this->order_text_id.$eventinfo);
 
-            if (!empty($text)) {
+            if (! empty($text)) {
                 // TODO: move email to eventgroup data
                 $message->bcc(\Config::get('vipps.test') ? 'admin@blindernuka.no' : 'billett@blindernuka.no');
             }
 
             if ($has_valid_tickets) {
-                $message->attachData($this->generateTicketsPdf(), 'billetter_'.$this->order_text_id.'.pdf', array('mime' => 'application/pdf'));
+                $message->attachData($this->generateTicketsPdf(), 'billetter_'.$this->order_text_id.'.pdf', ['mime' => 'application/pdf']);
             }
         });
     }
@@ -190,7 +192,7 @@ class Order extends \Eloquent implements ApiQueryInterface {
     public function generateTicketsPdf()
     {
         return Ticket::generateTicketsPdf(array_filter($this->tickets->all(), function ($ticket) {
-            return $ticket->is_valid && !$ticket->is_revoked;
+            return $ticket->is_valid && ! $ticket->is_revoked;
         }));
     }
 
@@ -200,8 +202,12 @@ class Order extends \Eloquent implements ApiQueryInterface {
     public function getEvents()
     {
         $this->load('tickets.event');
+
         return array_reduce($this->tickets->all(), function ($prev, $ticket) {
-            if (!in_array($ticket->event, $prev)) $prev[] = $ticket->event;
+            if (! in_array($ticket->event, $prev)) {
+                $prev[] = $ticket->event;
+            }
+
             return $prev;
         }, []);
     }
@@ -211,7 +217,7 @@ class Order extends \Eloquent implements ApiQueryInterface {
      */
     public function isReservation()
     {
-        return !$this->isCompleted();
+        return ! $this->isCompleted();
     }
 
     /**
@@ -219,7 +225,10 @@ class Order extends \Eloquent implements ApiQueryInterface {
      */
     public function hasExpired()
     {
-        if (!$this->isReservation() || $this->is_admin) return false;
+        if (! $this->isReservation() || $this->is_admin) {
+            return false;
+        }
+
         return time() > $this->time + $this->getExpireDelay();
     }
 
@@ -228,9 +237,9 @@ class Order extends \Eloquent implements ApiQueryInterface {
      */
     public function getExpireDelay()
     {
-        return ($this->isReservationLocked()
+        return $this->isReservationLocked()
                 ? static::EXPIRE_LOCKED_RESERVATION
-                : static::EXPIRE_INCOMPLETE_RESERVATION);
+                : static::EXPIRE_INCOMPLETE_RESERVATION;
     }
 
     /**
@@ -248,11 +257,13 @@ class Order extends \Eloquent implements ApiQueryInterface {
      */
     public function isOwnerOfReservation()
     {
-        $orders = \Session::get('billett_reservations', array());
+        $orders = \Session::get('billett_reservations', []);
         foreach ($orders as $order_id) {
-            if ($order_id == $this->id)
+            if ($order_id == $this->id) {
                 return true;
+            }
         }
+
         return false;
     }
 
@@ -273,14 +284,17 @@ class Order extends \Eloquent implements ApiQueryInterface {
 
         $amount = 0;
         foreach ($tickets as $ticket) {
-            if ($ticket->is_revoked) continue;
+            if ($ticket->is_revoked) {
+                continue;
+            }
             $amount += $ticket->ticketgroup->price + $ticket->ticketgroup->fee;
         }
 
         return $amount;
     }
 
-    public function getTotalAmountAttribute() {
+    public function getTotalAmountAttribute()
+    {
         return $this->getTotalAmount();
     }
 
@@ -292,10 +306,10 @@ class Order extends \Eloquent implements ApiQueryInterface {
     public function deleteReservation()
     {
         if ($this->isCompleted()) {
-            throw new Exception("Trying to delete a order that is completed!");
+            throw new Exception('Trying to delete a order that is completed!');
         }
 
-        \DB::transaction(function() {
+        \DB::transaction(function () {
             foreach ($this->tickets()->get() as $ticket) {
                 $ticket->delete();
             }
@@ -312,11 +326,11 @@ class Order extends \Eloquent implements ApiQueryInterface {
     protected function generateOrderTextId()
     {
         if ($this->order_text_id != null) {
-            throw new Exception("Trying to create new order text-id, but it exists already!");
+            throw new Exception('Trying to create new order text-id, but it exists already!');
         }
 
         $d = \Carbon\Carbon::createFromTimeStamp($this->time);
-        $orderid = $d->format("y").str_pad($d->format("z"), 3, "0", STR_PAD_LEFT).str_pad($this->id, 4, "0", STR_PAD_LEFT).(\Config::get('vipps.test') ? '-TEST' : '');
+        $orderid = $d->format('y').str_pad($d->format('z'), 3, '0', STR_PAD_LEFT).str_pad($this->id, 4, '0', STR_PAD_LEFT).(\Config::get('vipps.test') ? '-TEST' : '');
 
         $this->order_text_id = $orderid;
         $this->save();
@@ -327,9 +341,11 @@ class Order extends \Eloquent implements ApiQueryInterface {
      */
     public function placeOrder()
     {
-        if ($this->isCompleted()) return false;
+        if ($this->isCompleted()) {
+            return false;
+        }
 
-        if (!$this->isReservationLocked()) {
+        if (! $this->isReservationLocked()) {
             $this->is_locked = true;
             $this->save();
         }
@@ -346,7 +362,7 @@ class Order extends \Eloquent implements ApiQueryInterface {
      */
     public function renew()
     {
-        if (!$this->canRenew()) {
+        if (! $this->canRenew()) {
             return false;
         }
 
@@ -358,7 +374,7 @@ class Order extends \Eloquent implements ApiQueryInterface {
         }
 
         // don't update admin reservations, as they will never expire
-        if (!$this->is_admin) {
+        if (! $this->is_admin) {
             $this->time = time();
             $this->save();
         }
@@ -369,25 +385,30 @@ class Order extends \Eloquent implements ApiQueryInterface {
     /**
      * Check if we can renew the order
      *
+     * @return bool
+     *
      * @throws \Exception
-     * @return boolean
      */
     public function canRenew()
     {
-        if (!$this->isReservation()) throw new \Exception("The order is not a reservation");
+        if (! $this->isReservation()) {
+            throw new \Exception('The order is not a reservation');
+        }
 
-        if (!$this->hasExpired()) return true;
+        if (! $this->hasExpired()) {
+            return true;
+        }
 
         // check if the tickets are still available
         $groups = [];
         foreach ($this->tickets()->where('is_valid', 0)->with('ticketgroup', 'event')->get() as $ticket) {
-            if (!isset($groups[$ticket->ticketgroup->id])) {
-                $groups[$ticket->ticketgroup->id] = array($ticket->ticketgroup, 0);
+            if (! isset($groups[$ticket->ticketgroup->id])) {
+                $groups[$ticket->ticketgroup->id] = [$ticket->ticketgroup, 0];
             }
             $groups[$ticket->ticketgroup->id][1]++;
         }
 
-        if (!Ticketgroup::checkIsAvailable($groups)) {
+        if (! Ticketgroup::checkIsAvailable($groups)) {
             return false;
         }
 
@@ -397,21 +418,26 @@ class Order extends \Eloquent implements ApiQueryInterface {
     /**
      * Mark order as complete, in practise changing from reservation to actual order
      *
-     * @param bool         $skip_tickets Skip convertion of tickets reserved
-     * @param Paymentgroup $paymentgroup Paymentgroup to associate validated tickets
+     * @param  bool  $skip_tickets  Skip convertion of tickets reserved
+     * @param  Paymentgroup  $paymentgroup  Paymentgroup to associate validated tickets
      * @return bool If success
+     *
      * @throws \Exception
      */
     public function markComplete($skip_tickets = null, $paymentgroup = null)
     {
-        if ($this->isCompleted()) throw new \Exception("The order is already marked complete");
+        if ($this->isCompleted()) {
+            throw new \Exception('The order is already marked complete');
+        }
 
-        if (!$this->canRenew()) return false;
+        if (! $this->canRenew()) {
+            return false;
+        }
 
-        if (!$skip_tickets) {
+        if (! $skip_tickets) {
             foreach ($this->tickets as $ticket) {
-                if (!$ticket->is_valid) {
-                    if (!isset($ticket->order)) {
+                if (! $ticket->is_valid) {
+                    if (! isset($ticket->order)) {
                         $ticket->setRelation('order', $this);
                     }
                     $ticket->setValid($paymentgroup);
@@ -443,7 +469,7 @@ class Order extends \Eloquent implements ApiQueryInterface {
                 $ticket->order()->associate($this);
                 $ticket->time = time();
 
-                if (!$this->is_admin) {
+                if (! $this->is_admin) {
                     $ticket->expire = time() + static::EXPIRE_INCOMPLETE_RESERVATION;
                 }
 
@@ -458,7 +484,8 @@ class Order extends \Eloquent implements ApiQueryInterface {
     /**
      * Hard refresh of balance
      */
-    public function refreshBalance() {
+    public function refreshBalance()
+    {
         static::refreshBalances($this->id);
 
         $this->balance = \DB::table('orders')->where('id', $this->id)->pluck('balance');
@@ -481,14 +508,16 @@ class Order extends \Eloquent implements ApiQueryInterface {
     /**
      * Get fields we can search in
      */
-    public function getApiAllowedFields() {
+    public function getApiAllowedFields()
+    {
         return $this->apiAllowedFields;
     }
 
     /**
      * Get fields we can use as relations
      */
-    public function getApiAllowedRelations() {
+    public function getApiAllowedRelations()
+    {
         return $this->apiAllowedRelations;
     }
 
@@ -501,11 +530,12 @@ class Order extends \Eloquent implements ApiQueryInterface {
 
         $event = count($events) == 1 ? $events[0] : null;
 
-        if (!$event) {
-            return "Billett";
+        if (! $event) {
+            return 'Billett';
         }
 
         $date = \Carbon\Carbon::createFromTimeStamp($event->time_start);
+
         return $event->title.' ('.$date->format('Y-m-d H:i').')';
     }
 }

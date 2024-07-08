@@ -3,7 +3,8 @@
 use Blindern\UKA\Billett\Eventgroup;
 use Blindern\UKA\Billett\Paymentgroup;
 
-class PaymentgroupController extends \Controller {
+class PaymentgroupController extends \Controller
+{
     public function __construct()
     {
         $this->beforeFilter('auth');
@@ -27,6 +28,7 @@ class PaymentgroupController extends \Controller {
             'revoked_tickets.event',
             'paymentsources'
         )->findOrFail($id);
+
         return $eg;
     }
 
@@ -35,7 +37,7 @@ class PaymentgroupController extends \Controller {
         $validator = \Validator::make(\Input::all(), [
             'eventgroup_id' => 'required|integer',
             'title' => 'required',
-            'description' => ''
+            'description' => '',
         ]);
 
         if ($validator->fails()) {
@@ -43,7 +45,7 @@ class PaymentgroupController extends \Controller {
         }
 
         $eg = Eventgroup::find(\Input::get('eventgroup_id'));
-        if (!$eg) {
+        if (! $eg) {
             return \Response::json('eventgroup not found', 400);
         }
 
@@ -60,14 +62,15 @@ class PaymentgroupController extends \Controller {
         return $pg;
     }
 
-    public function update($id) {
+    public function update($id)
+    {
         // we allow updated of metadata even if paymentgroup is ended
 
         $pg = Paymentgroup::with('eventgroup')->findOrFail($id);
 
         $validator = \Validator::make(\Input::all(), [
             'title' => 'required',
-            'description' => ''
+            'description' => '',
         ]);
 
         if ($validator->fails()) {
@@ -81,7 +84,8 @@ class PaymentgroupController extends \Controller {
         return $pg;
     }
 
-    public function close($id) {
+    public function close($id)
+    {
         $pg = Paymentgroup::with('eventgroup')->findOrFail($id);
 
         if ($pg->time_end) {

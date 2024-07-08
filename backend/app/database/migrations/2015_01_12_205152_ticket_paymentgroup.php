@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
-class TicketPaymentgroup extends Migration {
-
+class TicketPaymentgroup extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -12,7 +12,7 @@ class TicketPaymentgroup extends Migration {
      */
     public function up()
     {
-        Schema::table('tickets', function(Blueprint $table) {
+        Schema::table('tickets', function (Blueprint $table) {
             $table->integer('valid_paymentgroup_id')->unsigned()->nullable()->after('is_revoked');
             $table->integer('revoked_paymentgroup_id')->unsigned()->nullable()->after('valid_paymentgroup_id');
             $table->foreign('valid_paymentgroup_id')->references('id')->on('eventgroups');
@@ -27,11 +27,9 @@ class TicketPaymentgroup extends Migration {
      */
     public function down()
     {
-        Schema::table('tickets', function(Blueprint $table)
-        {
+        Schema::table('tickets', function (Blueprint $table) {
             $table->dropColumn('valid_paymentgroup_id');
             $table->dropColumn('revoked_paymentgroup_id');
         });
     }
-
 }

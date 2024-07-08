@@ -13,14 +13,11 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 |
 */
 
-App::before(function($request)
-{
+App::before(function ($request) {
     //
 });
 
-
-App::after(function($request, $response)
-{
+App::after(function ($request, $response) {
     // cors for development version of frontend
     if (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'localhost:3000') !== false) {
         $response->headers->set('Access-Control-Allow-Origin', 'http://localhost:3000');
@@ -31,13 +28,11 @@ App::after(function($request, $response)
 });
 
 // handle findOrFail-calls
-App::error(function(ModelNotFoundException $e)
-{
+App::error(function (ModelNotFoundException $e) {
     return Response::json('not found', 404);
 });
 
-App::missing(function($exception)
-{
+App::missing(function ($exception) {
     return Response::json('not found', 404);
 });
 
@@ -52,24 +47,17 @@ App::missing(function($exception)
 |
 */
 
-Route::filter('auth', function()
-{
-    if (Auth::guest())
-    {
-        if (Request::ajax())
-        {
+Route::filter('auth', function () {
+    if (Auth::guest()) {
+        if (Request::ajax()) {
             return Response::make('Unauthorized', 401);
-        }
-        else
-        {
+        } else {
             return Redirect::guest('login');
         }
     }
 });
 
-
-Route::filter('auth.basic', function()
-{
+Route::filter('auth.basic', function () {
     return Auth::basic();
 });
 
@@ -84,9 +72,10 @@ Route::filter('auth.basic', function()
 |
 */
 
-Route::filter('guest', function()
-{
-    if (Auth::check()) return Redirect::to('/');
+Route::filter('guest', function () {
+    if (Auth::check()) {
+        return Redirect::to('/');
+    }
 });
 
 /*
@@ -100,16 +89,18 @@ Route::filter('guest', function()
 |
 */
 
-Route::filter('csrf', function($route, $request)
-{
+Route::filter('csrf', function ($route, $request) {
     // POST for Vipps form don't require csrf
-    if (substr($request->path(), 0, 10) == 'api/vipps/') return;
+    if (substr($request->path(), 0, 10) == 'api/vipps/') {
+        return;
+    }
 
     // POST for ticekt printer don't require csrf
-    if (substr($request->path(), 0, 20) == 'api/printer/announce') return;
+    if (substr($request->path(), 0, 20) == 'api/printer/announce') {
+        return;
+    }
 
-    if (Session::token() != Input::get('_token') && Session::token() != $request->header('X-Csrf-Token'))
-    {
+    if (Session::token() != Input::get('_token') && Session::token() != $request->header('X-Csrf-Token')) {
         throw new Illuminate\Session\TokenMismatchException;
     }
 });

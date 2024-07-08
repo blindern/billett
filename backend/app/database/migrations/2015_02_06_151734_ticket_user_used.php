@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
-class TicketUserUsed extends Migration {
-
+class TicketUserUsed extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -12,7 +12,7 @@ class TicketUserUsed extends Migration {
      */
     public function up()
     {
-        Schema::table('tickets', function(Blueprint $table) {
+        Schema::table('tickets', function (Blueprint $table) {
             $table->string('user_used')->nullable()->after('used');
         });
     }
@@ -24,10 +24,8 @@ class TicketUserUsed extends Migration {
      */
     public function down()
     {
-        Schema::table('tickets', function(Blueprint $table)
-        {
+        Schema::table('tickets', function (Blueprint $table) {
             $table->dropColumn('user_used');
         });
     }
-
 }

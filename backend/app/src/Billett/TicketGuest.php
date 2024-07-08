@@ -1,8 +1,12 @@
-<?php namespace Blindern\UKA\Billett;
+<?php
 
-class TicketGuest extends Ticket {
+namespace Blindern\UKA\Billett;
+
+class TicketGuest extends Ticket
+{
     protected $model_suffix = 'Guest';
-    protected $visible = array(
+
+    protected $visible = [
         'event_id',
         'event',
         'expire',
@@ -11,6 +15,6 @@ class TicketGuest extends Ticket {
         'order_id',
         'order',
         'ticketgroup',
-        'ticketgroup_id'
-    );
+        'ticketgroup_id',
+    ];
 }

@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
     //'driver' => 'memcached',
     'driver' => 'file',
     'lifetime' => 120,
@@ -9,4 +9,4 @@ return array(
     'path' => '/',
     'domain' => null,
     'secure' => false,
-);
+];

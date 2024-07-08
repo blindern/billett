@@ -1,4 +1,6 @@
-<?php namespace Blindern\UKA\Billett\Helpers;
+<?php
+
+namespace Blindern\UKA\Billett\Helpers;
 
 /**
  * Exception for the situation when we try to create the same Vipps

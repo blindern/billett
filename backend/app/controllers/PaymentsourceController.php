@@ -3,7 +3,8 @@
 use Blindern\UKA\Billett\Paymentgroup;
 use Blindern\UKA\Billett\Paymentsource;
 
-class PaymentsourceController extends \Controller {
+class PaymentsourceController extends \Controller
+{
     public function __construct()
     {
         $this->beforeFilter('auth');
@@ -29,7 +30,7 @@ class PaymentsourceController extends \Controller {
             'title' => 'required',
             'comment' => '',
             'amount' => 'numeric',
-            'data' => ''
+            'data' => '',
         ]);
 
         if ($validator->fails()) {
@@ -37,7 +38,7 @@ class PaymentsourceController extends \Controller {
         }
 
         $pg = Paymentgroup::find(\Input::get('paymentgroup_id'));
-        if (!$pg) {
+        if (! $pg) {
             return \Response::json('paymentgroup not found', 400);
         }
 
@@ -64,7 +65,8 @@ class PaymentsourceController extends \Controller {
         return $ps;
     }
 
-    public function update($id) {
+    public function update($id)
+    {
         // only title and comment is allowed updated
         $ps = Paymentsource::findOrFail($id);
 
@@ -77,10 +79,12 @@ class PaymentsourceController extends \Controller {
         }
 
         $ps->save();
+
         return $ps;
     }
 
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $ps = Paymentsource::with('paymentgroup')->findOrFail($id);
 
         if ($ps->is_deleted) {

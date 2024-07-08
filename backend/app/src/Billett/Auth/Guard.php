@@ -1,10 +1,13 @@
-<?php namespace Blindern\UKA\Billett\Auth;
+<?php
 
-class Guard extends \Illuminate\Auth\Guard {
+namespace Blindern\UKA\Billett\Auth;
+
+class Guard extends \Illuminate\Auth\Guard
+{
     /**
      * Temporary solution
      */
-    protected static $allowed = array(
+    protected static $allowed = [
         'henrste', // ikt 2017/systemansvarlig
         'vegardan', // web 2017
         'majaft', // billettsjef 2019
@@ -34,23 +37,22 @@ class Guard extends \Illuminate\Auth\Guard {
 
         // billettgruppa 2023
         // ...
-    );
+    ];
 
     /**
      * Simple ACL check
      *
      * Check if we have access to a specific role
      *
-     * @param string $role Name of role
-     * @return boolean
+     * @param  string  $role  Name of role
+     * @return bool
      */
     public function hasRole($role)
     {
         $user = $this->user();
 
         // TODO: this is only temporary
-        if ($user && in_array($user->username, static::$allowed))
-        {
+        if ($user && in_array($user->username, static::$allowed)) {
             return true;
         }
 
@@ -63,10 +65,9 @@ class Guard extends \Illuminate\Auth\Guard {
     public function getRoles()
     {
         if ($this->hasRole('all')) {
-            return array('all');
+            return ['all'];
         }
 
-        return array();
+        return [];
     }
-
 }

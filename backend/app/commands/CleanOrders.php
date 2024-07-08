@@ -1,11 +1,9 @@
 <?php
 
 use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
 
-class CleanOrders extends Command {
-
+class CleanOrders extends Command
+{
     /**
      * The console command name.
      *
@@ -45,5 +43,4 @@ class CleanOrders extends Command {
 
         $this->info('Removed '.count($res).' reservations');
     }
-
 }

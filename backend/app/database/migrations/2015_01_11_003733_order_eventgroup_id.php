@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
-class OrderEventgroupId extends Migration {
-
+class OrderEventgroupId extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -12,13 +12,13 @@ class OrderEventgroupId extends Migration {
      */
     public function up()
     {
-        Schema::table('orders', function(Blueprint $table) {
+        Schema::table('orders', function (Blueprint $table) {
             $table->integer('eventgroup_id')->unsigned()->after('id');
         });
 
-        DB::table('orders')->update(array('eventgroup_id' => 1));
+        DB::table('orders')->update(['eventgroup_id' => 1]);
 
-        Schema::table('orders', function(Blueprint $table) {
+        Schema::table('orders', function (Blueprint $table) {
             $table->foreign('eventgroup_id')->references('id')->on('eventgroups');
         });
     }
@@ -30,10 +30,8 @@ class OrderEventgroupId extends Migration {
      */
     public function down()
     {
-        Schema::table('orders', function(Blueprint $table)
-        {
+        Schema::table('orders', function (Blueprint $table) {
             $table->dropColumn('eventgroup_id');
         });
     }
-
 }

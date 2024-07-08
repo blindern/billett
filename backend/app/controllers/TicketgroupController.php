@@ -6,11 +6,14 @@ use Blindern\UKA\Billett\Printer;
 use Blindern\UKA\Billett\Ticket;
 use Blindern\UKA\Billett\Ticketgroup;
 
-class TicketgroupController extends Controller {
-    public function __construct() {
+class TicketgroupController extends Controller
+{
+    public function __construct()
+    {
         $this->beforeFilter('auth', [
             'except' => []]);
     }
+
     public function index()
     {
         return \ApiQuery::processCollection(Ticketgroup::query());
@@ -21,7 +24,7 @@ class TicketgroupController extends Controller {
         $g = Ticketgroup::findOrFail($id);
 
         $show_all = \Auth::hasRole('billett.admin');
-        if (!$show_all && !$g->use_web) {
+        if (! $show_all && ! $g->use_web) {
             App::abort(404);
         }
 
@@ -30,6 +33,7 @@ class TicketgroupController extends Controller {
         }
 
         $g->load('event', 'event.eventgroup');
+
         return $g;
     }
 
@@ -38,7 +42,7 @@ class TicketgroupController extends Controller {
      */
     public function store()
     {
-        $validator = \Validator::make(Input::all(), array(
+        $validator = \Validator::make(Input::all(), [
             'event_id' => 'required|integer',
             'title' => 'required',
             'use_office' => '',
@@ -47,15 +51,15 @@ class TicketgroupController extends Controller {
             'ticket_text' => '',
             'price' => 'required|integer',
             'fee' => 'integer',
-            'limit' => 'integer'
-        ));
+            'limit' => 'integer',
+        ]);
 
         if ($validator->fails()) {
             return \Response::json('data validation failed', 400);
         }
 
         $event = Event::find(Input::get('event_id'));
-        if (!$event) {
+        if (! $event) {
             return Response::json('event not found', 404);
         }
 
@@ -68,11 +72,14 @@ class TicketgroupController extends Controller {
         $g->price = Input::get('price');
         $g->fee = Input::get('fee');
         $g->limit = Input::get('limit');
-        if (empty($g->limit)) $g->limit = null;
+        if (empty($g->limit)) {
+            $g->limit = null;
+        }
 
         $g->order = count($event->ticketgroups);
 
         $event->ticketgroups()->save($g);
+
         return $g;
     }
 
@@ -83,18 +90,18 @@ class TicketgroupController extends Controller {
     {
         $g = Ticketgroup::findOrFail($id);
 
-        $locked_fields = array(
+        $locked_fields = [
             'title' => 'required',
             'ticket_text' => '',
             'price' => 'required|integer',
-            'fee' => 'integer'
-        );
-        $other_fields = array(
+            'fee' => 'integer',
+        ];
+        $other_fields = [
             'use_office' => '',
             'use_web' => '',
             'is_normal' => '',
-            'limit' => 'integer'
-        );
+            'limit' => 'integer',
+        ];
 
         $fields = $g->has_tickets ? $other_fields : array_merge($other_fields, $locked_fields);
         $validator = \Validator::make(Input::all(), $fields);
@@ -103,7 +110,7 @@ class TicketgroupController extends Controller {
             return \Response::json('data validation failed', 400);
         }
 
-        if (!$g->has_tickets) {
+        if (! $g->has_tickets) {
             $g->title = Input::get('title');
             $g->ticket_text = Input::get('ticket_text');
             $g->price = Input::get('price');
@@ -114,10 +121,13 @@ class TicketgroupController extends Controller {
         $g->use_web = Input::get('use_web');
         $g->is_normal = Input::get('is_normal');
         $g->limit = Input::get('limit');
-        if (empty($g->limit)) $g->limit = null;
+        if (empty($g->limit)) {
+            $g->limit = null;
+        }
 
         $g->save();
         $g->load('event', 'event.eventgroup');
+
         return $g;
     }
 
@@ -132,6 +142,7 @@ class TicketgroupController extends Controller {
         }
 
         $g->delete();
+
         return 'deleted';
     }
 
@@ -142,10 +153,10 @@ class TicketgroupController extends Controller {
     {
         $ticket = $this->getPreviewTicket($id);
 
-        return Response::make($ticket->getPdfData(true, false), 200, array(
+        return Response::make($ticket->getPdfData(true, false), 200, [
             'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="'.$ticket->getPdfName().'"'
-        ));
+            'Content-Disposition' => 'inline; filename="'.$ticket->getPdfName().'"',
+        ]);
     }
 
     /**
@@ -156,7 +167,7 @@ class TicketgroupController extends Controller {
         $ticket = $this->getPreviewTicket($id);
 
         $printer = Printer::find($printername);
-        if (!$printer) {
+        if (! $printer) {
             return \Response::json('unknown printer', 400);
         }
 
@@ -177,8 +188,8 @@ class TicketgroupController extends Controller {
         $order = new Order;
         $order->time = time();
         $order->order_text_id = 'DUMMY_ID';
-        $order->name = "Ola Normann";
-        $order->email = "billett@blindernuka.no";
+        $order->name = 'Ola Normann';
+        $order->email = 'billett@blindernuka.no';
         $order->phone = 12345678;
         $order->id = 123;
 

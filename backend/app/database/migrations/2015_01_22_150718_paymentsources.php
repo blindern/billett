@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
-class Paymentsources extends Migration {
-
+class Paymentsources extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -12,8 +12,7 @@ class Paymentsources extends Migration {
      */
     public function up()
     {
-        Schema::create('paymentsources', function(Blueprint $table)
-        {
+        Schema::create('paymentsources', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
 
@@ -28,7 +27,7 @@ class Paymentsources extends Migration {
             $table->string('user_created')->nullable()->nullable();
             $table->string('user_deleted')->nullable()->nullable();
 
-            $table->enum('type', array('cash', 'other'))->default('other');
+            $table->enum('type', ['cash', 'other'])->default('other');
 
             $table->string('title');
             $table->text('comment')->nullable();
@@ -46,5 +45,4 @@ class Paymentsources extends Migration {
     {
         Schema::drop('paymentsources');
     }
-
 }

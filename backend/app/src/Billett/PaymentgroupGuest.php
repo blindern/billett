@@ -1,5 +1,8 @@
-<?php namespace Blindern\UKA\Billett;
+<?php
 
-class PaymentgroupGuest extends Paymentgroup {
+namespace Blindern\UKA\Billett;
+
+class PaymentgroupGuest extends Paymentgroup
+{
     protected $model_suffix = 'Guest';
 }

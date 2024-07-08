@@ -1,11 +1,14 @@
-<?php namespace Blindern\UKA\Billett;
+<?php
 
-class TicketgroupGuest extends Ticketgroup {
-    protected $visible = array(
+namespace Blindern\UKA\Billett;
+
+class TicketgroupGuest extends Ticketgroup
+{
+    protected $visible = [
         'id',
         'price',
         'fee',
         'title',
-        'ticket_text'
-    );
+        'ticket_text',
+    ];
 }

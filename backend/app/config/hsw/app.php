@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
     'debug' => false,
     'url' => 'https://billett.blindernuka.no/',
-);
+];

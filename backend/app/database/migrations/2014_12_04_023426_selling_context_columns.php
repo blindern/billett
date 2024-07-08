@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
-class SellingContextColumns extends Migration {
-
+class SellingContextColumns extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -12,8 +12,7 @@ class SellingContextColumns extends Migration {
      */
     public function up()
     {
-        Schema::table('events', function(Blueprint $table)
-        {
+        Schema::table('events', function (Blueprint $table) {
             $table->string('ticket_info', 100)->nullable()->after('location');
             $table->text('selling_text')->nullable()->after('ticket_info');
         });
@@ -26,10 +25,8 @@ class SellingContextColumns extends Migration {
      */
     public function down()
     {
-        Schema::table('events', function(Blueprint $table)
-        {
-            $table->dropColumn(array('ticket_info', 'selling_text'));
+        Schema::table('events', function (Blueprint $table) {
+            $table->dropColumn(['ticket_info', 'selling_text']);
         });
     }
-
 }

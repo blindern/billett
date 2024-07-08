@@ -1,10 +1,12 @@
-<?php namespace Blindern\UKA\Billett\Auth;
+<?php
 
-use Illuminate\Support\Manager;
+namespace Blindern\UKA\Billett\Auth;
+
 use Illuminate\Auth\EloquentUserProvider;
+use Illuminate\Support\Manager;
 
-class AuthManager extends Manager {
-
+class AuthManager extends Manager
+{
     /**
      * Create a new driver instance.
      *
@@ -35,7 +37,9 @@ class AuthManager extends Manager {
     {
         $custom = parent::callCustomCreator($driver);
 
-        if ($custom instanceof Guard) return $custom;
+        if ($custom instanceof Guard) {
+            return $custom;
+        }
 
         return new Guard($custom, $this->app['session.store']);
     }
@@ -73,5 +77,4 @@ class AuthManager extends Manager {
     {
         return $this->app['config']['auth.driver'];
     }
-
 }

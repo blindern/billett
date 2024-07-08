@@ -1,10 +1,11 @@
 <?php
 
-use Blindern\UKA\Billett\Ticket;
 use Blindern\UKA\Billett\Paymentgroup;
 use Blindern\UKA\Billett\Printer;
+use Blindern\UKA\Billett\Ticket;
 
-class TicketController extends \Controller {
+class TicketController extends \Controller
+{
     public function __construct()
     {
         $this->beforeFilter('auth');
@@ -33,7 +34,8 @@ class TicketController extends \Controller {
         }
 
         $ticket->delete();
-        return Response::json(array('result' => 'deleted'));
+
+        return Response::json(['result' => 'deleted']);
     }
 
     /**
@@ -46,10 +48,10 @@ class TicketController extends \Controller {
             return $tickets;
         }
 
-        return Response::make(Ticket::generateTicketsPdf($tickets), 200, array(
+        return Response::make(Ticket::generateTicketsPdf($tickets), 200, [
             'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="tickets.pdf"'
-        ));
+            'Content-Disposition' => 'inline; filename="tickets.pdf"',
+        ]);
     }
 
     /**
@@ -63,7 +65,7 @@ class TicketController extends \Controller {
         }
 
         $printer = Printer::find($printername);
-        if (!$printer) {
+        if (! $printer) {
             return \Response::json('unknown printer', 400);
         }
 
@@ -80,10 +82,11 @@ class TicketController extends \Controller {
     public function pdf($id)
     {
         $ticket = Ticket::findOrFail($id);
-        return Response::make($ticket->getPdfData(), 200, array(
+
+        return Response::make($ticket->getPdfData(), 200, [
             'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="'.$ticket->getPdfName().'"'
-        ));
+            'Content-Disposition' => 'inline; filename="'.$ticket->getPdfName().'"',
+        ]);
     }
 
     /**
@@ -94,7 +97,7 @@ class TicketController extends \Controller {
         $ticket = Ticket::findOrFail($id);
 
         $printer = Printer::find($printername);
-        if (!$printer) {
+        if (! $printer) {
             return \Response::json('unknown printer', 400);
         }
 
@@ -112,11 +115,11 @@ class TicketController extends \Controller {
     {
         $ticket = Ticket::findOrFail($id);
 
-        if (!Input::has('paymentgroup_id')) {
+        if (! Input::has('paymentgroup_id')) {
             return Response::json('missing paymentgroup', 400);
         }
 
-        if (!$ticket->is_valid) {
+        if (! $ticket->is_valid) {
             return Response::json('ticket is not valid', 400);
         }
 
@@ -125,7 +128,7 @@ class TicketController extends \Controller {
         }
 
         $paymentgroup = Paymentgroup::find(Input::get('paymentgroup_id'));
-        if (!$paymentgroup || $paymentgroup->eventgroup_id != $ticket->event->eventgroup->id) {
+        if (! $paymentgroup || $paymentgroup->eventgroup_id != $ticket->event->eventgroup->id) {
             return Response::json('paymentgroup not found', 400);
         }
 
@@ -143,7 +146,7 @@ class TicketController extends \Controller {
     {
         $ticket = Ticket::findOrFail($id);
 
-        if (!Input::has('paymentgroup_id')) {
+        if (! Input::has('paymentgroup_id')) {
             return Response::json('missing paymentgroup', 400);
         }
 
@@ -152,7 +155,7 @@ class TicketController extends \Controller {
         }
 
         $paymentgroup = Paymentgroup::find(Input::get('paymentgroup_id'));
-        if (!$paymentgroup || $paymentgroup->eventgroup_id != $ticket->event->eventgroup->id) {
+        if (! $paymentgroup || $paymentgroup->eventgroup_id != $ticket->event->eventgroup->id) {
             return Response::json('paymentgroup not found', 400);
         }
 
@@ -168,13 +171,13 @@ class TicketController extends \Controller {
      */
     private function getTicketsByIds()
     {
-        if (!\Input::has('ids')) {
+        if (! \Input::has('ids')) {
             return Response::json('missing id list', 400);
         }
 
         $id_list = \Input::get('ids');
-        if (!is_array($id_list)) {
-            $id_list = array_map('trim', explode(",", $id_list));
+        if (! is_array($id_list)) {
+            $id_list = array_map('trim', explode(',', $id_list));
         }
 
         $tickets = [];
@@ -183,12 +186,12 @@ class TicketController extends \Controller {
         }
 
         foreach ($id_list as $id) {
-            if (!isset($tickets[$id])) {
-                return Response::json('ticket with id "' . $id . '" not found', 404);
+            if (! isset($tickets[$id])) {
+                return Response::json('ticket with id "'.$id.'" not found', 404);
             }
 
-            if (!$tickets[$id]->is_valid) {
-                return Response::json('ticket with id "' . $id . '" is not set valid', 404);
+            if (! $tickets[$id]->is_valid) {
+                return Response::json('ticket with id "'.$id.'" is not set valid', 404);
             }
         }
 
@@ -219,13 +222,13 @@ class TicketController extends \Controller {
         $ticket = Ticket::findOrFail($id);
 
         if ($ticket->is_revoked) {
-            throw new \Exception("Ticket is revoked.");
+            throw new \Exception('Ticket is revoked.');
         }
 
         if ($is_checkin && $ticket->used) {
-            throw new \Exception("Ticket is already marked as used.");
-        } elseif (!$is_checkin && !$ticket->used) {
-            throw new \Exception("Ticket is not marked as used.");
+            throw new \Exception('Ticket is already marked as used.');
+        } elseif (! $is_checkin && ! $ticket->used) {
+            throw new \Exception('Ticket is not marked as used.');
         }
 
         $ticket->used = $is_checkin ? time() : null;

@@ -1,19 +1,23 @@
-<?php namespace Blindern\UKA\Billett;
+<?php
 
-class Printer {
+namespace Blindern\UKA\Billett;
+
+class Printer
+{
     const CACHE_NAME = 'printers';
+
     const TIMEOUT = 65; // announce at least every 65 seconds
 
     /**
      * Find a printer
      *
-     * @param string $name
+     * @param  string  $name
      * @return Printer|null
      */
     public static function find($name)
     {
         $cache = \Cache::get(static::CACHE_NAME, []);
-        if (!isset($cache[$name])) {
+        if (! isset($cache[$name])) {
             return null;
         }
 
@@ -22,11 +26,13 @@ class Printer {
         }
 
         $printer = new static($name, $cache[$name]);
+
         return $printer;
     }
 
     /**
      * Get list of all printers
+     *
      * @return array of Printer
      */
     public static function all()
@@ -35,7 +41,9 @@ class Printer {
 
         $cache = \Cache::get(static::CACHE_NAME, []);
         foreach ($cache as $data) {
-            if ($data['last_seen'] < time() - static::TIMEOUT) continue;
+            if ($data['last_seen'] < time() - static::TIMEOUT) {
+                continue;
+            }
             $res[] = new static($data['name'], $data);
         }
 
@@ -43,13 +51,13 @@ class Printer {
     }
 
     public $name;
+
     public $data;
 
     /**
-     * @param string $name
-     * @param array $data
+     * @param  string  $name
      */
-    public function __construct($name, array $data = null)
+    public function __construct($name, ?array $data = null)
     {
         $this->name = $name;
 
@@ -66,10 +74,10 @@ class Printer {
     /**
      * Register printer
      *
-     * @param string $key A secret that will be sent with the prints
-     * @param array $ips
-     * @param integer $port
-     * @param string $originate_ip The IP of the printer sending the request
+     * @param  string  $key  A secret that will be sent with the prints
+     * @param  array  $ips
+     * @param  int  $port
+     * @param  string  $originate_ip  The IP of the printer sending the request
      */
     public function register($key, $ips, $port, $originate_ip = null)
     {
@@ -80,7 +88,9 @@ class Printer {
             $ip = $originate_ip;
         } else {
             foreach ($ips as $curip) {
-                if ($curip == $originate_ip) continue;
+                if ($curip == $originate_ip) {
+                    continue;
+                }
                 if ($this->testConnection($curip, $port)) {
                     $ip = $curip;
                     break;
@@ -96,7 +106,7 @@ class Printer {
             'port' => $port,
             'last_seen' => time(),
             'registered' => $this->data ? $this->data['registered'] : time(),
-            'key' => $key
+            'key' => $key,
         ];
 
         $cache = \Cache::get(static::CACHE_NAME, []);
@@ -107,8 +117,8 @@ class Printer {
     /**
      * Test connection
      *
-     * @param string $ip
-     * @param integer $port
+     * @param  string  $ip
+     * @param  int  $port
      * @return bool success
      */
     private function testConnection($ip, $port)
@@ -119,13 +129,16 @@ class Printer {
     /**
      * Send PDF-document to printer
      *
-     * @param binary $data
+     * @param  binary  $data
      * @return bool
+     *
      * @throws \Exception
      */
     public function printPdf($data)
     {
-        if (!$this->data || !$this->data['ip']) throw new \Exception("Printer metadata missing");
+        if (! $this->data || ! $this->data['ip']) {
+            throw new \Exception('Printer metadata missing');
+        }
 
         return $this->send($data, 'file.pdf', 'application/pdf');
     }
@@ -133,13 +146,16 @@ class Printer {
     /**
      * Send text-document to printer
      *
-     * @param string $data
+     * @param  string  $data
      * @return bool
+     *
      * @throws \Exception
      */
     public function printText($data)
     {
-        if (!$this->data || !$this->data['ip']) throw new \Exception("Printer metadata missing");
+        if (! $this->data || ! $this->data['ip']) {
+            throw new \Exception('Printer metadata missing');
+        }
 
         return $this->send($data, 'file.txt', 'text/plain');
     }
@@ -151,8 +167,9 @@ class Printer {
     {
         $ch = curl_init('http://'.$this->data['ip'].':'.$this->data['port'].'/print');
 
-        if (!function_exists('curl_file_create')) {
-            function curl_file_create($filename, $mimetype = '', $postname = '') {
+        if (! function_exists('curl_file_create')) {
+            function curl_file_create($filename, $mimetype = '', $postname = '')
+            {
                 return "@$filename;filename="
                     .($postname ?: basename($filename))
                     .($mimetype ? ";type=$mimetype" : '');
@@ -162,7 +179,7 @@ class Printer {
         $file = $this->storeFile($data);
         $fields = [
             'file' => curl_file_create($file, $mime, $filename),
-            'key' => $this->data['key']
+            'key' => $this->data['key'],
         ];
 
         curl_setopt($ch, CURLOPT_POST, true);
@@ -181,7 +198,7 @@ class Printer {
     /**
      * Generate a temp file with data
      *
-     * @param binary $data
+     * @param  binary  $data
      * @return string filename
      */
     private function storeFile($data)

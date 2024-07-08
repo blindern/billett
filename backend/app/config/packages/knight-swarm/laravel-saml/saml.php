@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     /*
     |--------------------------------------------------------------------------
@@ -12,7 +12,6 @@ return array(
     |
     */
 
-
     /*
      * The path to the working phpsimplesaml install
      */
@@ -21,7 +20,7 @@ return array(
     /*
      * The service provider name
      */
-    'sp_name' => "default-sp",
+    'sp_name' => 'default-sp',
 
     /*
      * The redirect destination after logging out
@@ -33,7 +32,7 @@ return array(
      */
     'routes' => [
         'login' => 'api/login',
-        'logout' => 'api/logout'
+        'logout' => 'api/logout',
     ],
 
     /*
@@ -77,5 +76,5 @@ return array(
      * 'can_create' => false,
      * 'can_create_error' => 'You can not register on this system.',
      */
-    'can_create' => true
-);
+    'can_create' => true,
+];

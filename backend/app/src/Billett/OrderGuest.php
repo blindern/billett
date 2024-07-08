@@ -1,8 +1,12 @@
-<?php namespace Blindern\UKA\Billett;
+<?php
 
-class OrderGuest extends Order {
+namespace Blindern\UKA\Billett;
+
+class OrderGuest extends Order
+{
     protected $model_suffix = 'Guest';
-    protected $visible = array(
+
+    protected $visible = [
         'id',
         'email',
         'is_valid',
@@ -13,9 +17,10 @@ class OrderGuest extends Order {
         'recruiter',
         'tickets',
         'time',
-        'total_amount'
-    );
-    protected $appends = array(
-        'total_amount'
-    );
+        'total_amount',
+    ];
+
+    protected $appends = [
+        'total_amount',
+    ];
 }

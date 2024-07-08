@@ -1,10 +1,13 @@
-<?php namespace Blindern\UKA\Billett;
+<?php
+
+namespace Blindern\UKA\Billett;
 
 use Blindern\UKA\Billett\Helpers\PdfTicket;
 use Henrist\LaravelApiQuery\ApiQueryInterface;
-use \iio\libmergepdf\Merger;
+use iio\libmergepdf\Merger;
 
-class Ticket extends \Eloquent implements ApiQueryInterface {
+class Ticket extends \Eloquent implements ApiQueryInterface
+{
     /**
      * Get sold stats
      */
@@ -40,18 +43,22 @@ class Ticket extends \Eloquent implements ApiQueryInterface {
                 FROM ticketgroups tg JOIN events e ON e.id = tg.event_id
                 WHERE e.eventgroup_id = ? AND (tg.use_office != 0 OR tg.use_web != 0)
             ) ref
-            GROUP BY day, ticketgroup_id, event_id', array($eventgroup_id, $eventgroup_id, $eventgroup_id));
+            GROUP BY day, ticketgroup_id, event_id', [$eventgroup_id, $eventgroup_id, $eventgroup_id]);
 
-        $ticketgroups = array();
-        $events = array();
+        $ticketgroups = [];
+        $events = [];
 
         foreach ($q as $row) {
-            if (!in_array($row->ticketgroup_id, $ticketgroups)) $ticketgroups[] = $row->ticketgroup_id;
-            if (!in_array($row->event_id, $events)) $events[] = $row->event_id;
+            if (! in_array($row->ticketgroup_id, $ticketgroups)) {
+                $ticketgroups[] = $row->ticketgroup_id;
+            }
+            if (! in_array($row->event_id, $events)) {
+                $events[] = $row->event_id;
+            }
         }
 
         if (count($ticketgroups) > 0) {
-            $qs = implode(",", array_fill(0, count($ticketgroups), "?"));
+            $qs = implode(',', array_fill(0, count($ticketgroups), '?'));
             $ticketgroups = \DB::select("
                 SELECT id, title, price, fee, event_id
                 FROM ticketgroups
@@ -59,7 +66,7 @@ class Ticket extends \Eloquent implements ApiQueryInterface {
         }
 
         if (count($events) > 0) {
-            $qs = implode(",", array_fill(0, count($events), "?"));
+            $qs = implode(',', array_fill(0, count($events), '?'));
             $events = \DB::select("
                 SELECT id, title, time_start, category, max_sales, max_normal_sales
                 FROM events
@@ -67,17 +74,17 @@ class Ticket extends \Eloquent implements ApiQueryInterface {
                 ORDER BY time_start", $events);
         }
 
-        return array(
+        return [
             'tickets' => $q,
             'ticketgroups' => $ticketgroups,
-            'events' => $events
-        );
+            'events' => $events,
+        ];
     }
 
     /**
      * Generate merged PDF with given tickets
      *
-     * @param array $tickets List of Ticket objects
+     * @param  array  $tickets  List of Ticket objects
      * @return blob PDF-data
      */
     public static function generateTicketsPdf(array $tickets)
@@ -91,11 +98,14 @@ class Ticket extends \Eloquent implements ApiQueryInterface {
     }
 
     protected $table = 'tickets';
-    protected $appends = array('number');
-    protected $hidden = array('pdf');
 
-    protected $apiAllowedFields = array('id', 'order_id', 'event_id', 'ticketgroup_id', 'time', 'expire', 'is_valid', 'is_revoked', 'user_valid', 'user_revoked', 'used', 'key');
-    protected $apiAllowedRelations = array('event', 'order', 'ticketgroup', 'valid_paymentgroup', 'revoked_paymentgroup');
+    protected $appends = ['number'];
+
+    protected $hidden = ['pdf'];
+
+    protected $apiAllowedFields = ['id', 'order_id', 'event_id', 'ticketgroup_id', 'time', 'expire', 'is_valid', 'is_revoked', 'user_valid', 'user_revoked', 'used', 'key'];
+
+    protected $apiAllowedRelations = ['event', 'order', 'ticketgroup', 'valid_paymentgroup', 'revoked_paymentgroup'];
 
     public function event()
     {
@@ -124,7 +134,7 @@ class Ticket extends \Eloquent implements ApiQueryInterface {
 
     public function getKeyAttribute($key)
     {
-        if ($key == "") {
+        if ($key == '') {
             $key = $this->generateKey();
             $this->key = $key;
             $this->save();
@@ -141,9 +151,8 @@ class Ticket extends \Eloquent implements ApiQueryInterface {
     public static function generateKey()
     {
         // keys consists of 6 numbers zeropadded
-        do
-        {
-            $key = str_pad(rand(1, 999999), 6, "0", STR_PAD_LEFT);
+        do {
+            $key = str_pad(rand(1, 999999), 6, '0', STR_PAD_LEFT);
 
             // check if it exists
             $ticket = Ticket::where('key', $key)->first();
@@ -160,11 +169,12 @@ class Ticket extends \Eloquent implements ApiQueryInterface {
      */
     public function getPdfData($regenerate = false, $store = true)
     {
-        if (!$this->pdf || $regenerate)
-        {
+        if (! $this->pdf || $regenerate) {
             $p = new PdfTicket($this);
             $this->pdf = $p->getPdfData();
-            if ($store) $this->save();
+            if ($store) {
+                $this->save();
+            }
         }
 
         return $this->pdf;
@@ -178,6 +188,7 @@ class Ticket extends \Eloquent implements ApiQueryInterface {
     public function getPdfName()
     {
         $n = str_pad($this->id, 4, '0', STR_PAD_LEFT);
+
         return 'billett_blindernuka_'.$n.'.pdf';
     }
 
@@ -195,11 +206,14 @@ class Ticket extends \Eloquent implements ApiQueryInterface {
      * Set ticket valid
      *
      * @param Paymentgroup associated paymentgroup
+     *
      * @throws \Exception
      */
-    public function setValid(Paymentgroup $paymentgroup = null)
+    public function setValid(?Paymentgroup $paymentgroup = null)
     {
-        if ($this->is_valid) throw new \Exception("Ticket already valid");
+        if ($this->is_valid) {
+            throw new \Exception('Ticket already valid');
+        }
 
         $this->is_valid = true;
         $this->expire = null;
@@ -219,12 +233,17 @@ class Ticket extends \Eloquent implements ApiQueryInterface {
      * Mark ticket as revoked
      *
      * @param Paymentgroup associated paymentgroup
+     *
      * @throws \Exception
      */
-    public function setRevoked(Paymentgroup $paymentgroup = null)
+    public function setRevoked(?Paymentgroup $paymentgroup = null)
     {
-        if (!$this->is_valid) throw new \Exception("Cannot revoke invalid ticket.");
-        if ($this->is_revoked) throw new \Exception("Ticket already revoked.");
+        if (! $this->is_valid) {
+            throw new \Exception('Cannot revoke invalid ticket.');
+        }
+        if ($this->is_revoked) {
+            throw new \Exception('Ticket already revoked.');
+        }
 
         $this->is_revoked = true;
         $this->time_revoked = time();
@@ -242,14 +261,16 @@ class Ticket extends \Eloquent implements ApiQueryInterface {
     /**
      * Get fields we can search in
      */
-    public function getApiAllowedFields() {
+    public function getApiAllowedFields()
+    {
         return $this->apiAllowedFields;
     }
 
     /**
      * Get fields we can use as relations
      */
-    public function getApiAllowedRelations() {
+    public function getApiAllowedRelations()
+    {
         return $this->apiAllowedRelations;
     }
 }

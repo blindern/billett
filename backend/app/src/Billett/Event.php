@@ -1,10 +1,12 @@
-<?php namespace Blindern\UKA\Billett;
+<?php
 
-use \Blindern\UKA\Billett\Eventgroup;
-use \Illuminate\Database\Eloquent\ModelNotFoundException;
-use \Henrist\LaravelApiQuery\ApiQueryInterface;
+namespace Blindern\UKA\Billett;
 
-class Event extends \Eloquent implements ApiQueryInterface {
+use Henrist\LaravelApiQuery\ApiQueryInterface;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
+class Event extends \Eloquent implements ApiQueryInterface
+{
     /**
      * Get a model by its ID or alias and fail if not found
      *
@@ -14,13 +16,11 @@ class Event extends \Eloquent implements ApiQueryInterface {
     public static function findByAliasOrFail($id_or_alias)
     {
         $ev = static::find($id_or_alias);
-        if (!$ev)
-        {
+        if (! $ev) {
             $ev = static::where('alias', $id_or_alias)->first();
         }
 
-        if (!$ev)
-        {
+        if (! $ev) {
             throw (new ModelNotFoundException)->setModel(get_called_class());
         }
 
@@ -28,14 +28,18 @@ class Event extends \Eloquent implements ApiQueryInterface {
     }
 
     protected $model_suffix = '';
-    protected $table = 'events';
-    protected $appends = array('is_timeout', 'is_old', 'ticket_count', 'has_tickets', 'web_selling_status');
-    protected $hidden = array('image');
 
-    protected $apiAllowedFields = array('id', 'eventgroup_id', 'alias', 'is_admin_hidden', 'is_published', 'is_selling', 'time_start',
+    protected $table = 'events';
+
+    protected $appends = ['is_timeout', 'is_old', 'ticket_count', 'has_tickets', 'web_selling_status'];
+
+    protected $hidden = ['image'];
+
+    protected $apiAllowedFields = ['id', 'eventgroup_id', 'alias', 'is_admin_hidden', 'is_published', 'is_selling', 'time_start',
         'time_end', 'title', 'category', 'location', 'ticket_info', 'selling_text', 'max_each_person', 'max_sales', 'description',
-        'description_short', 'ticket_text', 'link', 'age_restriction');
-    protected $apiAllowedRelations = array('eventgroup', 'ticketgroups', 'tickets');
+        'description_short', 'ticket_text', 'link', 'age_restriction'];
+
+    protected $apiAllowedRelations = ['eventgroup', 'ticketgroups', 'tickets'];
 
     /**
      * When the online selling freezes (how many seconds before event start)
@@ -103,11 +107,11 @@ class Event extends \Eloquent implements ApiQueryInterface {
                 SUM(IF(t.is_valid != 0 AND t.is_revoked = 0, g.fee, 0)) sum_fee
             FROM ticketgroups g JOIN tickets t ON g.id = t.ticketgroup_id
             WHERE g.event_id = ?
-            GROUP BY g.id', array(time(), time(), $this->id));
+            GROUP BY g.id', [time(), time(), $this->id]);
 
         // save array for later use
-        $r = array();
-        $total = array(
+        $r = [];
+        $total = [
             'valid' => 0,
             'pending' => 0,
             'expired' => 0,
@@ -116,10 +120,10 @@ class Event extends \Eloquent implements ApiQueryInterface {
             'free' => 0,
             'free_normal' => 0,
             'sum_price' => 0,
-            'sum_fee' => 0
-        );
+            'sum_fee' => 0,
+        ];
         foreach ($q as $row) {
-            $r[$row->id] = (array)$row;
+            $r[$row->id] = (array) $row;
             $total['valid'] += $row->count_valid;
             $total['pending'] += $row->count_pending;
             $total['expired'] += $row->count_expired;
@@ -128,7 +132,7 @@ class Event extends \Eloquent implements ApiQueryInterface {
             $total['sum_price'] += $row->sum_price;
             $total['sum_fee'] += $row->sum_fee;
 
-            if ($row->is_normal || !$this->max_normal_sales) {
+            if ($row->is_normal || ! $this->max_normal_sales) {
                 $total['free_normal'] -= $row->count_valid + $row->count_pending;
             }
         }
@@ -136,27 +140,27 @@ class Event extends \Eloquent implements ApiQueryInterface {
         $total['free_normal'] = max(0, ($this->max_normal_sales ?: $this->max_sales) + $total['free_normal']);
 
         // create ticket group list
-        $groups = array();
+        $groups = [];
         foreach ($this->ticketgroups as $group) {
             $g = isset($r[$group->id]) ? $r[$group->id] : null;
-            $a = array(
+            $a = [
                 'valid' => $g ? $g['count_valid'] : 0,
                 'pending' => $g ? $g['count_pending'] : 0,
                 'expired' => $g ? $g['count_expired'] : 0,
                 'revoked' => $g ? $g['count_revoked'] : 0,
                 'used' => $g ? $g['count_used'] : 0,
                 'sum_price' => $g ? $g['sum_price'] : 0,
-                'sum_fee' => $g ? $g['sum_fee'] : 0
-            );
-            $tf  = $group->is_normal ? $total['free_normal'] : $total['free'];
+                'sum_fee' => $g ? $g['sum_fee'] : 0,
+            ];
+            $tf = $group->is_normal ? $total['free_normal'] : $total['free'];
             $a['free'] = $group->limit == 0 ? $tf : min($tf, $group->limit - ($a['valid'] + $a['pending']));
             $groups[$group->id] = $a;
         }
 
-        return array(
+        return [
             'totals' => $total,
-            'groups' => $groups
-        );
+            'groups' => $groups,
+        ];
     }
 
     /**
@@ -165,7 +169,7 @@ class Event extends \Eloquent implements ApiQueryInterface {
      * The list of groups must be valid for this event
      *
      * @param array(array(ticketgroup, count), ...)
-     * @return boolean
+     * @return bool
      */
     public function checkIsAvailable($groups)
     {
@@ -178,13 +182,15 @@ class Event extends \Eloquent implements ApiQueryInterface {
             $group = $item[0];
             $count = $item[1];
 
-            if ($count > $countinfo['groups'][$group->id]['free'])
+            if ($count > $countinfo['groups'][$group->id]['free']) {
                 return false;
+            }
             $total += $count;
         }
 
-        if ($total > $countinfo['totals']['free'])
+        if ($total > $countinfo['totals']['free']) {
             return false;
+        }
 
         return true;
     }
@@ -197,7 +203,7 @@ class Event extends \Eloquent implements ApiQueryInterface {
     public function getHasTicketsAttribute()
     {
         // revoked tickets are counted as positive match
-        $res = $this->tickets()->where(function($query) {
+        $res = $this->tickets()->where(function ($query) {
             $query->whereNull('expire')->orWhere('expire', '>=', time())->orWhere('is_valid', true)->orWhere('is_revoked', true);
         })->first();
 
@@ -211,35 +217,43 @@ class Event extends \Eloquent implements ApiQueryInterface {
      */
     public function getWebSellingStatusAttribute()
     {
-        if (!$this->is_selling)
+        if (! $this->is_selling) {
             return 'unknown';
+        }
 
-        if ($this->max_sales == 0)
+        if ($this->max_sales == 0) {
             return 'no_tickets';
+        }
 
-        if ($this->is_old)
+        if ($this->is_old) {
             return 'old';
+        }
 
         // TODO: optimize this (!)
         $groups = 0;
         foreach ($this->ticketgroups as $g) {
-            if (!$g->use_web) continue;
+            if (! $g->use_web) {
+                continue;
+            }
             $groups++;
         }
 
-        if ($groups == 0)
+        if ($groups == 0) {
             return 'no_web_tickets';
+        }
 
-        if ($this->is_timeout)
+        if ($this->is_timeout) {
             return 'timeout';
+        }
 
         // TODO: improve check if sold out
         // * total sales reached (event.max_sales - sold - reserved)
         // * or total normal sales reached (event.max_normal_sales - sold(normal) - reserved(normal))
         // * or total sales for all ticketgroups for web reached forall(ticketgroup.limit - sold - reserved)
         $countinfo = $this->ticket_count;
-        if ($countinfo['totals']['free_normal'] <= 0)
+        if ($countinfo['totals']['free_normal'] <= 0) {
             return 'sold_out';
+        }
 
         return 'sale';
     }
@@ -260,25 +274,25 @@ class Event extends \Eloquent implements ApiQueryInterface {
                 'total' => 0,
                 'admin' => 0,
                 'other' => 0,
-                'groups' => []
+                'groups' => [],
             ],
             'used' => [
                 'total' => 0,
                 'admin' => 0,
                 'other' => 0,
-                'groups' => []
-            ]
+                'groups' => [],
+            ],
         ];
 
-        $addStats = function(&$arr, $row) {
+        $addStats = function (&$arr, $row) {
             $arr['total'] += $row->count;
             $arr[$row->is_admin ? 'admin' : 'other'] += $row->count;
 
-            if (!isset($arr['groups'][$row->ticketgroup_id])) {
+            if (! isset($arr['groups'][$row->ticketgroup_id])) {
                 $arr['groups'][$row->ticketgroup_id] = [
                     'total' => 0,
                     'admin' => 0,
-                    'other' => 0
+                    'other' => 0,
                 ];
             }
 
@@ -299,14 +313,16 @@ class Event extends \Eloquent implements ApiQueryInterface {
     /**
      * Get fields we can search in
      */
-    public function getApiAllowedFields() {
+    public function getApiAllowedFields()
+    {
         return $this->apiAllowedFields;
     }
 
     /**
      * Get fields we can use as relations
      */
-    public function getApiAllowedRelations() {
+    public function getApiAllowedRelations()
+    {
         return $this->apiAllowedRelations;
     }
 }

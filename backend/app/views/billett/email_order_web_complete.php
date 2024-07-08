@@ -1,6 +1,7 @@
 <?php
 
-use \Carbon\Carbon;
+use Carbon\Carbon;
+
 $order_time = Carbon::createFromTimeStamp($order->time)->format('d.m.Y H:i:s');
 
 // ticket list
@@ -8,9 +9,12 @@ $tickets_valid = [];
 $tickets_revoked = [];
 $total = 0;
 foreach ($order->tickets as $ticket) {
-    if (!$ticket->is_valid) continue;
+    if (! $ticket->is_valid) {
+        continue;
+    }
     if ($ticket->is_revoked) {
         $tickets_revoked[] = $ticket;
+
         continue;
     }
     $tickets_valid[] = $ticket;
@@ -27,8 +31,7 @@ if (count($tickets_revoked) == 0) {
     }
 }
 
-echo
-'Hei,
+echo 'Hei,
 
 Takk for at du har kjøpt billetter hos UKA på Blindern. Her er billettene
 dine og kjøpskvittering.
@@ -57,7 +60,7 @@ Vervet av: '.$order->recruiter : '').'
 
 if ($payment) {
     echo '
-Transaksjonsnummer: ' . $payment->transaction_id;
+Transaksjonsnummer: '.$payment->transaction_id;
 }
 
 echo '
@@ -69,13 +72,14 @@ Billettspesifikasjon:';
 foreach ($tickets_valid as $ticket) {
     $time = Carbon::createFromTimeStamp($ticket->event->time_start)->format('d.m.Y H:i');
 
-    $price = format_nok($ticket->ticketgroup->price+$ticket->ticketgroup->fee);
-    if ($ticket->ticketgroup->fee) $price .= ', hvorav '.format_nok($ticket->ticketgroup->fee).' i billettgebyr';
+    $price = format_nok($ticket->ticketgroup->price + $ticket->ticketgroup->fee);
+    if ($ticket->ticketgroup->fee) {
+        $price .= ', hvorav '.format_nok($ticket->ticketgroup->fee).' i billettgebyr';
+    }
 
     echo '
   '.$time.': '.$ticket->event->title.': '.$ticket->ticketgroup->title.' ('.$price.') (#'.$ticket->number.')';
 }
-
 
 if (count($tickets_revoked) > 0) {
     echo '

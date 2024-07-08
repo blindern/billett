@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
-class TicketgroupRenameActive extends Migration {
-
+class TicketgroupRenameActive extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -12,8 +12,7 @@ class TicketgroupRenameActive extends Migration {
      */
     public function up()
     {
-        Schema::table('ticketgroups', function(Blueprint $table)
-        {
+        Schema::table('ticketgroups', function (Blueprint $table) {
             $table->renameColumn('is_active', 'use_office');
             $table->renameColumn('is_published', 'use_web');
         });
@@ -26,11 +25,9 @@ class TicketgroupRenameActive extends Migration {
      */
     public function down()
     {
-        Schema::table('ticketgroups', function(Blueprint $table)
-        {
+        Schema::table('ticketgroups', function (Blueprint $table) {
             $table->renameColumn('use_office', 'is_active');
             $table->renameColumn('use_web', 'is_published');
         });
     }
-
 }

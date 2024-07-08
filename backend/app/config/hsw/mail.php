@@ -1,7 +1,7 @@
 <?php
 
-return array(
+return [
     'driver' => 'sendmail',
-    'from' => array('address' => "billett@blindernuka.no", 'name' => "UKA på Blindern"),
+    'from' => ['address' => 'billett@blindernuka.no', 'name' => 'UKA på Blindern'],
     'sendmail' => '/usr/sbin/sendmail -bs',
-);
+];

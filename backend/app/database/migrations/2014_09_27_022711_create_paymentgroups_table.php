@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
-class CreatePaymentgroupsTable extends Migration {
-
+class CreatePaymentgroupsTable extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -12,8 +12,7 @@ class CreatePaymentgroupsTable extends Migration {
      */
     public function up()
     {
-        Schema::create('paymentgroups', function(Blueprint $table)
-        {
+        Schema::create('paymentgroups', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
 
@@ -32,5 +31,4 @@ class CreatePaymentgroupsTable extends Migration {
     {
         Schema::drop('paymentgroups');
     }
-
 }

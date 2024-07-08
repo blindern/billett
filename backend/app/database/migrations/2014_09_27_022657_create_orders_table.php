@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
-class CreateOrdersTable extends Migration {
-
+class CreateOrdersTable extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -12,8 +12,7 @@ class CreateOrdersTable extends Migration {
      */
     public function up()
     {
-        Schema::create('orders', function(Blueprint $table)
-        {
+        Schema::create('orders', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
 
@@ -39,5 +38,4 @@ class CreateOrdersTable extends Migration {
     {
         Schema::drop('orders');
     }
-
 }

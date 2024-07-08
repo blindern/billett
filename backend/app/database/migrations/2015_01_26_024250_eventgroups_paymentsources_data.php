@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
-class EventgroupsPaymentsourcesData extends Migration {
-
+class EventgroupsPaymentsourcesData extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -12,7 +12,7 @@ class EventgroupsPaymentsourcesData extends Migration {
      */
     public function up()
     {
-        Schema::table('eventgroups', function(Blueprint $table) {
+        Schema::table('eventgroups', function (Blueprint $table) {
             $table->text('paymentsources_data')->nullable();
         });
     }
@@ -24,10 +24,8 @@ class EventgroupsPaymentsourcesData extends Migration {
      */
     public function down()
     {
-        Schema::table('eventgroups', function(Blueprint $table)
-        {
+        Schema::table('eventgroups', function (Blueprint $table) {
             $table->dropColumn('paymentsources_data');
         });
     }
-
 }

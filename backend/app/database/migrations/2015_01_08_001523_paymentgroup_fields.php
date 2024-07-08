@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
-class PaymentgroupFields extends Migration {
-
+class PaymentgroupFields extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -12,8 +12,7 @@ class PaymentgroupFields extends Migration {
      */
     public function up()
     {
-        Schema::table('paymentgroups', function(Blueprint $table)
-        {
+        Schema::table('paymentgroups', function (Blueprint $table) {
             $table->integer('eventgroup_id')->after('id')->unsigned()->references('id')->on('eventgroups');
             $table->string('user_created')->nullable();
             $table->string('user_closed')->nullable();
@@ -28,13 +27,11 @@ class PaymentgroupFields extends Migration {
      */
     public function down()
     {
-        Schema::table('paymentgroups', function(Blueprint $table)
-        {
+        Schema::table('paymentgroups', function (Blueprint $table) {
             $table->dropColumn('eventgroup_id');
             $table->dropColumn('user_created');
             $table->dropColumn('user_closed');
             $table->dropColumn('description');
         });
     }
-
 }

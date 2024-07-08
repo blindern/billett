@@ -1,10 +1,14 @@
-<?php namespace Blindern\UKA\Billett;
+<?php
 
-class DaythemeGuest extends Daytheme {
+namespace Blindern\UKA\Billett;
+
+class DaythemeGuest extends Daytheme
+{
     protected $model_suffix = 'Guest';
-    protected $visible = array(
+
+    protected $visible = [
         'id',
         'title',
-        'date'
-    );
+        'date',
+    ];
 }

@@ -1,10 +1,9 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class PaymentgroupsTimeEndNull extends Migration {
-
+class PaymentgroupsTimeEndNull extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -26,5 +25,4 @@ class PaymentgroupsTimeEndNull extends Migration {
         DB::statement('UPDATE paymentgroups SET time_end = 0 WHERE time_end IS NULL');
         DB::statement('ALTER TABLE paymentgroups MODIFY time_end int(10) unsigned NOT NULL');
     }
-
 }

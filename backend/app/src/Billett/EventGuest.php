@@ -1,10 +1,16 @@
-<?php namespace Blindern\UKA\Billett;
+<?php
 
-class EventGuest extends Event {
+namespace Blindern\UKA\Billett;
+
+class EventGuest extends Event
+{
     protected $model_suffix = 'Guest';
-    protected $appends = array('is_timeout', 'is_old', 'web_selling_status');
-    protected $hidden = array('image');
-    protected $visible = array(
+
+    protected $appends = ['is_timeout', 'is_old', 'web_selling_status'];
+
+    protected $hidden = ['image'];
+
+    protected $visible = [
         'id',
         'alias',
         'is_published',
@@ -22,11 +28,15 @@ class EventGuest extends Event {
         'max_each_person',
         'ticket_info',
         'selling_text',
-        'link'
-    );
+        'link',
+    ];
 
-    public function getSellingTextAttribute($val) {
-        if ($this->is_selling && $this->web_selling_status != 'no_web_tickets') return null;
+    public function getSellingTextAttribute($val)
+    {
+        if ($this->is_selling && $this->web_selling_status != 'no_web_tickets') {
+            return null;
+        }
+
         return $val;
     }
 }

@@ -1,11 +1,14 @@
-<?php namespace Blindern\UKA\Billett;
+<?php
 
-class Ticketgroup extends \Eloquent {
+namespace Blindern\UKA\Billett;
+
+class Ticketgroup extends \Eloquent
+{
     /**
      * Check if list of ticketgroups is available
      *
      * @param array(array(ticketgroup, count), ...)
-     * @return boolean
+     * @return bool
      */
     public static function checkIsAvailable($groups)
     {
@@ -17,7 +20,7 @@ class Ticketgroup extends \Eloquent {
 
         foreach ($groups as $row) {
             $ticketgroup = $row[0];
-            if (!isset($events[$ticketgroup->event->id])) {
+            if (! isset($events[$ticketgroup->event->id])) {
                 $events[$ticketgroup->event->id] = $ticketgroup->event;
                 $events_ticketgroups[$ticketgroup->event->id] = [];
             }
@@ -26,7 +29,7 @@ class Ticketgroup extends \Eloquent {
         }
 
         foreach ($events as $event) {
-            if (!$event->checkIsAvailable($events_ticketgroups[$event->id])) {
+            if (! $event->checkIsAvailable($events_ticketgroups[$event->id])) {
                 return false;
             }
         }
@@ -35,16 +38,20 @@ class Ticketgroup extends \Eloquent {
     }
 
     protected $model_suffix = '';
+
     protected $table = 'ticketgroups';
 
-    protected $apiAllowedFields = array('id', 'event_id', 'use_office', 'use_web', 'is_normal', 'title', 'ticket_text', 'price', 'fee', 'limit', 'order');
-    protected $apiAllowedRelations = array('event', 'tickets');
+    protected $apiAllowedFields = ['id', 'event_id', 'use_office', 'use_web', 'is_normal', 'title', 'ticket_text', 'price', 'fee', 'limit', 'order'];
 
-    public function getPriceAttribute($val) {
+    protected $apiAllowedRelations = ['event', 'tickets'];
+
+    public function getPriceAttribute($val)
+    {
         return (float) $val;
     }
 
-    public function getFeeAttribute($val) {
+    public function getFeeAttribute($val)
+    {
         return (float) $val;
     }
 
@@ -63,7 +70,7 @@ class Ticketgroup extends \Eloquent {
      */
     public function getHasTicketsAttribute()
     {
-        $res = $this->tickets()->where(function($query) {
+        $res = $this->tickets()->where(function ($query) {
             $query->whereNull('expire')->orWhere('expire', '>=', time());
         })->first();
 
@@ -73,14 +80,16 @@ class Ticketgroup extends \Eloquent {
     /**
      * Get fields we can search in
      */
-    public function getApiAllowedFields() {
+    public function getApiAllowedFields()
+    {
         return $this->apiAllowedFields;
     }
 
     /**
      * Get fields we can use as relations
      */
-    public function getApiAllowedRelations() {
+    public function getApiAllowedRelations()
+    {
         return $this->apiAllowedRelations;
     }
 }

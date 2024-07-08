@@ -1,14 +1,13 @@
 <?php
 
 use Blindern\UKA\Billett\Printer;
-use Blindern\UKA\Billett\Ticket;
 
 class PrinterController extends Controller
 {
     public function __construct()
     {
         $this->beforeFilter('auth', [
-            'except' => ['printerAnnounce']
+            'except' => ['printerAnnounce'],
         ]);
     }
 
@@ -23,20 +22,21 @@ class PrinterController extends Controller
                 'ip' => $printer->data['ip'],
                 'port' => $printer->data['port'],
                 'registered' => $printer->data['registered'],
-                'last_seen' => $printer->data['last_seen']
+                'last_seen' => $printer->data['last_seen'],
             ];
         }
 
         return $res;
     }
 
-    public function printText($printername) {
+    public function printText($printername)
+    {
         $printer = Printer::find($printername);
-        if (!$printer) {
+        if (! $printer) {
             return \Response::json('unknown printer', 400);
         }
 
-        if (!\Input::has('text')) {
+        if (! \Input::has('text')) {
             return \Response::json('missing text', 400);
         }
 
@@ -47,12 +47,13 @@ class PrinterController extends Controller
         }
     }
 
-    public function printerAnnounce() {
+    public function printerAnnounce()
+    {
         $validator = \Validator::make(\Input::all(), [
             'name' => 'required',
             'ips' => 'required',
             'port' => 'required|integer',
-            'key' => 'required'
+            'key' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -67,6 +68,7 @@ class PrinterController extends Controller
         $remote_ip = $_SERVER['REMOTE_ADDR'];
 
         $printer->register($key, $ips, $port, $remote_ip);
+
         return \Response::json('OK');
     }
 }
