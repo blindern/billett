@@ -1,1 +1,11 @@
+# 2014-12-09 Changed indents to spaces
+8fd2bbd0f19be3831b909519b9701b48c3148093
+
+# 2022-07-07 Reformat code with Prettier
 9ff4a37d10bb6a4fa0f28958d5c973542a4a20c7
+
+# 2024-07-08 Format code using Laravel Pint
+c909801dec0d960faf7e6971c37ec8f000207846
+
+# 2024-07-08 Convert remaining tabs to spaces
+ed50d8685268d216833e28be7f9193808f744293
