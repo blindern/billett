@@ -54,6 +54,7 @@ module.controller(
     // uploading of image
     $scope.uploader = new FileUploader({
       url: api("event/" + $stateParams["id"] + "/image"),
+      withCredentials: true,
       removeAfterUpload: true,
     })
     // inject the csrf token
