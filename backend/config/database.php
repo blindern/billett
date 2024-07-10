@@ -46,7 +46,7 @@ return [
             'port' => env('DB_PORT', '3306'),
             'database' => env('DB_DATABASE', 'uka_billett'),
             'username' => env('DB_USERNAME', 'uka_billett'),
-            'password' => env('BILLETT_MYSQL_PASS', 'uka_billett'),
+            'password' => env('DB_PASSWORD', 'uka_billett'),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => env('DB_CHARSET', 'utf8mb4'),
             'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
