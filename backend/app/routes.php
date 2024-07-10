@@ -81,7 +81,7 @@ Route::post('/api/printer/announce', 'PrinterController@printerAnnounce');
 Route::post('/api/printer/{printername}/text', 'PrinterController@printText');
 
 /*Route::get('/email', function() {
-    $order = Blindern\UKA\Billett\Order::findOrFail(\Input::get('id'));
+    $order = Blindern\UKA\Billett\Order::findOrFail(\Request::get('id'));
     $order->sendEmail();
     var_dump($order->name);
     die;

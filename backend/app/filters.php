@@ -100,7 +100,7 @@ Route::filter('csrf', function ($route, $request) {
         return;
     }
 
-    if (Session::token() != Input::get('_token') && Session::token() != $request->header('X-Csrf-Token')) {
+    if (Session::token() != Request::get('_token') && Session::token() != $request->header('X-Csrf-Token')) {
         throw new Illuminate\Session\TokenMismatchException;
     }
 });

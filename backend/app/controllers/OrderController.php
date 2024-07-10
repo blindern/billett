@@ -69,19 +69,19 @@ class OrderController extends \Controller
             'recruiter' => '',
             'comment' => '',
         ];
-        $validator = \Validator::make(Input::all(), $fields);
+        $validator = \Validator::make(Request::all(), $fields);
 
         if ($validator->fails()) {
             return \Response::json('data validation failed', 400);
         }
 
-        $eg = Eventgroup::findOrFail(Input::get('eventgroup_id'));
+        $eg = Eventgroup::findOrFail(Request::get('eventgroup_id'));
         $order = Order::createReservation($eg, true);
 
         unset($fields['eventgroup_id']);
         foreach (array_keys($fields) as $field) {
-            if (Input::exists($field)) {
-                $order->$field = Input::get($field);
+            if (Request::exists($field)) {
+                $order->$field = Request::get($field);
             }
         }
 
@@ -122,23 +122,23 @@ class OrderController extends \Controller
                 'phone' => 'regex:/\\+?\\d+/',
                 'recruiter' => ''];
 
-        $validator = \Validator::make(Input::all(), $fields);
+        $validator = \Validator::make(Request::all(), $fields);
 
         if ($validator->fails()) {
             return \Response::json('data validation failed', 400);
         }
 
         // With Vipps these are only sent in admin site.
-        if (Input::exists('name')) {
-            $order->name = Input::get('name');
-            $order->email = Input::get('email');
-            $order->phone = Input::get('phone');
+        if (Request::exists('name')) {
+            $order->name = Request::get('name');
+            $order->email = Request::get('email');
+            $order->phone = Request::get('phone');
         }
 
-        $order->recruiter = Input::get('recruiter');
+        $order->recruiter = Request::get('recruiter');
 
-        if (\Auth::hasRole('billett.admin') && Input::exists('comment')) {
-            $order->comment = Input::get('comment');
+        if (\Auth::hasRole('billett.admin') && Request::exists('comment')) {
+            $order->comment = Request::get('comment');
         }
 
         $order->save();
@@ -274,7 +274,7 @@ class OrderController extends \Controller
     {
         $order = Order::findOrFail($order_id);
 
-        $list = Input::get('ticketgroups');
+        $list = Request::get('ticketgroups');
         $validate = function ($list) {
             if (! is_array($list)) {
                 return false;
@@ -301,7 +301,7 @@ class OrderController extends \Controller
             $grouplist[] = [$ticketgroup, $list[$ticketgroup->id]];
         }
 
-        if (! Input::has('ignore_limits')) {
+        if (! Request::has('ignore_limits')) {
             if (! Ticketgroup::checkIsAvailable($grouplist)) {
                 return \Response::json('tickets not available', 400);
             }
@@ -329,11 +329,11 @@ class OrderController extends \Controller
         $skip_tickets = true;
         $paymentgroup = null;
         $sum = 0;
-        if (\Input::has('paymentgroup')) {
-            $paymentgroup = Paymentgroup::findOrFail(\Input::get('paymentgroup'));
+        if (\Request::has('paymentgroup')) {
+            $paymentgroup = Paymentgroup::findOrFail(\Request::get('paymentgroup'));
             $skip_tickets = false;
 
-            if (! \Input::exists('amount')) {
+            if (! \Request::exists('amount')) {
                 return \Response::json('missing amount', 400);
             }
 
@@ -343,7 +343,7 @@ class OrderController extends \Controller
                 }
             }
 
-            if ($sum != \Input::get('amount')) {
+            if ($sum != \Request::get('amount')) {
                 return \Response::json('amount mismatched', 400);
             }
         }
@@ -365,7 +365,7 @@ class OrderController extends \Controller
             $order->modifyBalance($payment->amount);
         }
 
-        if (\Input::get('sendmail') && $order->email) {
+        if (\Request::get('sendmail') && $order->email) {
             $order->sendEmail();
         }
 
@@ -386,11 +386,11 @@ class OrderController extends \Controller
 
         // manual email?
         $email = null;
-        if (\Input::has('email')) {
-            $email = \Input::get('email');
+        if (\Request::has('email')) {
+            $email = \Request::get('email');
         }
 
-        $order->sendEmail($email, \Input::get('text'));
+        $order->sendEmail($email, \Request::get('text'));
 
         return \Response::json('email sent');
     }

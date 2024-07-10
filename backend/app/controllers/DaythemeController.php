@@ -61,7 +61,7 @@ class DaythemeController extends Controller
         $daytheme->date = strtotime($daytheme->date);
         $daytheme->title = $daytheme->date;
 
-        $validator = \Validator::make(Input::all(), $fields);
+        $validator = \Validator::make(Request::all(), $fields);
         if ($validator->fails()) {
             //            return \Response::json('data validation failed', 400);
         }
@@ -73,8 +73,8 @@ class DaythemeController extends Controller
         ];
 
         foreach ($list as $field) {
-            if (Input::exists($field) && Input::get($field) != $daytheme->{$field}) {
-                $val = Input::get($field);
+            if (Request::exists($field) && Request::get($field) != $daytheme->{$field}) {
+                $val = Request::get($field);
                 if ($val === '') {
                     $val = null;
                 }

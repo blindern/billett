@@ -36,7 +36,7 @@ class EventController extends Controller
         }
 
         $show_all = false;
-        if (\Auth::hasRole('billett.admin') && \Input::has('admin')) {
+        if (\Auth::hasRole('billett.admin') && \Request::has('admin')) {
             $show_all = true;
         }
 
@@ -49,7 +49,7 @@ class EventController extends Controller
             }
         }]);
 
-        if (\Input::exists('checkin')) {
+        if (\Request::exists('checkin')) {
             // make sure checkin-variable gets populated
             $ev->checkin = true;
         }
@@ -70,7 +70,7 @@ class EventController extends Controller
             return Response::json('too late to make reservation', 403);
         }
 
-        $groups = Input::get('ticketgroups');
+        $groups = Request::get('ticketgroups');
         if (! is_array($groups)) {
             return Response::json('error in ticketgroups', 400);
         }
@@ -150,14 +150,14 @@ class EventController extends Controller
             $fields['max_each_person'] = 'required|integer';
         }
 
-        $validator = \Validator::make(Input::all(), $fields);
+        $validator = \Validator::make(Request::all(), $fields);
 
         if ($validator->fails()) {
             return \Response::json('data validation failed', 400);
         }
 
-        if (Input::has('eventgroup_id') && (Input::get('eventgroup_id') != $event->eventgroup_id || $is_new)) {
-            $group = Eventgroup::find(Input::get('eventgroup_id'));
+        if (Request::has('eventgroup_id') && (Request::get('eventgroup_id') != $event->eventgroup_id || $is_new)) {
+            $group = Eventgroup::find(Request::get('eventgroup_id'));
             if (! $group) {
                 return Response::json('eventgroup id not found', 400);
             }
@@ -189,8 +189,8 @@ class EventController extends Controller
         }
 
         foreach ($list as $field) {
-            if (Input::exists($field) && Input::get($field) !== $event->{$field}) {
-                $val = Input::get($field);
+            if (Request::exists($field) && Request::get($field) !== $event->{$field}) {
+                $val = Request::get($field);
                 if ($val === '') {
                     $val = null;
                 }
@@ -198,16 +198,16 @@ class EventController extends Controller
             }
         }
 
-        if (Input::exists('is_admin_hidden')) {
-            $event->is_admin_hidden = (bool) Input::get('is_admin_hidden');
+        if (Request::exists('is_admin_hidden')) {
+            $event->is_admin_hidden = (bool) Request::get('is_admin_hidden');
         }
 
-        if (Input::exists('is_published')) {
-            $event->is_published = (bool) Input::get('is_published');
+        if (Request::exists('is_published')) {
+            $event->is_published = (bool) Request::get('is_published');
         }
 
-        if (Input::exists('is_selling')) {
-            $event->is_selling = (bool) Input::get('is_selling');
+        if (Request::exists('is_selling')) {
+            $event->is_selling = (bool) Request::get('is_selling');
         }
 
         return $event;
@@ -265,12 +265,12 @@ class EventController extends Controller
     {
         $event = Event::findOrFail($id);
 
-        if (! \Input::hasFile('file')) {
+        if (! \Request::hasFile('file')) {
             App::abort(400, 'Missing image');
         }
 
         try {
-            $event->image = \Image::make(\Input::file('file'))->resize(500, null, function ($constraint) {
+            $event->image = \Image::make(\Request::file('file'))->resize(500, null, function ($constraint) {
                 $constraint->aspectRatio();
             })->encode('jpg', 75);
             $event->save();
@@ -313,8 +313,8 @@ class EventController extends Controller
 
         $changed = 0;
         foreach ($groups as $group) {
-            if (\Input::has($group->id)) {
-                $new_order = \Input::get($group->id);
+            if (\Request::has($group->id)) {
+                $new_order = \Request::get($group->id);
                 if ($new_order != $group->order) {
                     $group->order = $new_order;
                     $group->save();

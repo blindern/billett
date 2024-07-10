@@ -26,14 +26,14 @@ class PaymentController extends \Controller
             'paymentgroup_id' => 'required|integer',
             'amount' => 'required|numeric|not_in:0',
         ];
-        $validator = \Validator::make(Input::all(), $fields);
+        $validator = \Validator::make(Request::all(), $fields);
 
         if ($validator->fails()) {
             return \Response::json('data validation failed', 400);
         }
 
-        $order = Order::findOrFail(Input::get('order_id'));
-        $paymentgroup = Paymentgroup::findOrFail(Input::get('paymentgroup_id'));
+        $order = Order::findOrFail(Request::get('order_id'));
+        $paymentgroup = Paymentgroup::findOrFail(Request::get('paymentgroup_id'));
 
         if ($paymentgroup->eventgroup_id != $order->eventgroup_id) {
             return Response::json('paymentgroup and order not in same eventgroup', 400);
@@ -49,7 +49,7 @@ class PaymentController extends \Controller
         $payment->time = time();
         $payment->user_created = \Auth::user()->username;
         $payment->is_web = false;
-        $payment->amount = (float) Input::get('amount');
+        $payment->amount = (float) Request::get('amount');
         $payment->save();
 
         $order->modifyBalance($payment->amount);

@@ -8,7 +8,7 @@ class ModelHelper
     {
         $guest = 'Guest';
 
-        if (\Input::has('admin') && \Auth::hasRole('billett.admin')) {
+        if (\Request::has('admin') && \Auth::hasRole('billett.admin')) {
             $guest = '';
         }
 

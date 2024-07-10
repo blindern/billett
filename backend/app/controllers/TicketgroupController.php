@@ -42,7 +42,7 @@ class TicketgroupController extends Controller
      */
     public function store()
     {
-        $validator = \Validator::make(Input::all(), [
+        $validator = \Validator::make(Request::all(), [
             'event_id' => 'required|integer',
             'title' => 'required',
             'use_office' => '',
@@ -58,20 +58,20 @@ class TicketgroupController extends Controller
             return \Response::json('data validation failed', 400);
         }
 
-        $event = Event::find(Input::get('event_id'));
+        $event = Event::find(Request::get('event_id'));
         if (! $event) {
             return Response::json('event not found', 404);
         }
 
         $g = new Ticketgroup;
-        $g->title = Input::get('title');
-        $g->use_office = (bool) Input::get('use_office');
-        $g->use_web = (bool) Input::get('use_web');
-        $g->is_normal = (bool) Input::get('is_normal');
-        $g->ticket_text = Input::get('ticket_text');
-        $g->price = Input::get('price');
-        $g->fee = Input::get('fee');
-        $g->limit = Input::get('limit');
+        $g->title = Request::get('title');
+        $g->use_office = (bool) Request::get('use_office');
+        $g->use_web = (bool) Request::get('use_web');
+        $g->is_normal = (bool) Request::get('is_normal');
+        $g->ticket_text = Request::get('ticket_text');
+        $g->price = Request::get('price');
+        $g->fee = Request::get('fee');
+        $g->limit = Request::get('limit');
         if (empty($g->limit)) {
             $g->limit = null;
         }
@@ -104,23 +104,23 @@ class TicketgroupController extends Controller
         ];
 
         $fields = $g->has_tickets ? $other_fields : array_merge($other_fields, $locked_fields);
-        $validator = \Validator::make(Input::all(), $fields);
+        $validator = \Validator::make(Request::all(), $fields);
 
         if ($validator->fails()) {
             return \Response::json('data validation failed', 400);
         }
 
         if (! $g->has_tickets) {
-            $g->title = Input::get('title');
-            $g->ticket_text = Input::get('ticket_text');
-            $g->price = Input::get('price');
-            $g->fee = Input::get('fee');
+            $g->title = Request::get('title');
+            $g->ticket_text = Request::get('ticket_text');
+            $g->price = Request::get('price');
+            $g->fee = Request::get('fee');
         }
 
-        $g->use_office = Input::get('use_office');
-        $g->use_web = Input::get('use_web');
-        $g->is_normal = Input::get('is_normal');
-        $g->limit = Input::get('limit');
+        $g->use_office = Request::get('use_office');
+        $g->use_web = Request::get('use_web');
+        $g->is_normal = Request::get('is_normal');
+        $g->limit = Request::get('limit');
         if (empty($g->limit)) {
             $g->limit = null;
         }

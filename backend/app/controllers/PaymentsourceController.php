@@ -24,7 +24,7 @@ class PaymentsourceController extends \Controller
 
     public function store()
     {
-        $validator = \Validator::make(\Input::all(), [
+        $validator = \Validator::make(\Request::all(), [
             'paymentgroup_id' => 'required|integer',
             'type' => 'required|in:cash,other',
             'title' => 'required',
@@ -37,7 +37,7 @@ class PaymentsourceController extends \Controller
             return \Response::json('data validation failed', 400);
         }
 
-        $pg = Paymentgroup::find(\Input::get('paymentgroup_id'));
+        $pg = Paymentgroup::find(\Request::get('paymentgroup_id'));
         if (! $pg) {
             return \Response::json('paymentgroup not found', 400);
         }
@@ -51,13 +51,13 @@ class PaymentsourceController extends \Controller
         $ps->time_created = time();
         $ps->user_created = \Auth::user()->username;
 
-        $ps->type = \Input::get('type');
+        $ps->type = \Request::get('type');
 
-        $ps->title = \Input::get('title');
-        $ps->comment = \Input::get('comment');
-        $ps->amount = \Input::get('amount');
+        $ps->title = \Request::get('title');
+        $ps->comment = \Request::get('comment');
+        $ps->amount = \Request::get('amount');
 
-        $ps->data = \Input::get('data');
+        $ps->data = \Request::get('data');
 
         $ps->paymentgroup()->associate($pg);
         $ps->save();
@@ -70,12 +70,12 @@ class PaymentsourceController extends \Controller
         // only title and comment is allowed updated
         $ps = Paymentsource::findOrFail($id);
 
-        if (\Input::exists('title')) {
-            $ps->title = \Input::get('title');
+        if (\Request::exists('title')) {
+            $ps->title = \Request::get('title');
         }
 
-        if (\Input::exists('comment')) {
-            $ps->comment = \Input::get('comment');
+        if (\Request::exists('comment')) {
+            $ps->comment = \Request::get('comment');
         }
 
         $ps->save();

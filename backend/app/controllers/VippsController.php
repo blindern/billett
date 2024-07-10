@@ -37,11 +37,11 @@ class VippsController extends Controller
     {
         $vipps = new VippsPaymentModule;
 
-        \Log::info('Vipps callback data: '.json_encode(\Input::all()));
+        \Log::info('Vipps callback data: '.json_encode(\Request::all()));
 
         try {
             $class = ModelHelper::getModelPath('Order');
-            $order = $class::findByTextIdOrFail(\Input::get('reference'));
+            $order = $class::findByTextIdOrFail(\Request::get('reference'));
         } catch (ModelNotFoundException $e) {
             // if this case happens, the order did exist some time but has been deleted
             // the order cannot be succeeded, so we should store the information
@@ -51,7 +51,7 @@ class VippsController extends Controller
             // will expire and the user will not have paid for it
 
             // if not accepted, we can silently ignore
-            if (\Input::get('status') != 'PaymentSuccessful') {
+            if (\Request::get('status') != 'PaymentSuccessful') {
                 exit;
             }
 

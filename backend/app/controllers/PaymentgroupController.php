@@ -34,7 +34,7 @@ class PaymentgroupController extends \Controller
 
     public function store()
     {
-        $validator = \Validator::make(\Input::all(), [
+        $validator = \Validator::make(\Request::all(), [
             'eventgroup_id' => 'required|integer',
             'title' => 'required',
             'description' => '',
@@ -44,14 +44,14 @@ class PaymentgroupController extends \Controller
             return \Response::json('data validation failed', 400);
         }
 
-        $eg = Eventgroup::find(\Input::get('eventgroup_id'));
+        $eg = Eventgroup::find(\Request::get('eventgroup_id'));
         if (! $eg) {
             return \Response::json('eventgroup not found', 400);
         }
 
         $pg = new Paymentgroup;
-        $pg->title = \Input::get('title');
-        $pg->description = \Input::get('description');
+        $pg->title = \Request::get('title');
+        $pg->description = \Request::get('description');
 
         $pg->time_start = time();
         $pg->user_created = \Auth::user()->username;
@@ -68,7 +68,7 @@ class PaymentgroupController extends \Controller
 
         $pg = Paymentgroup::with('eventgroup')->findOrFail($id);
 
-        $validator = \Validator::make(\Input::all(), [
+        $validator = \Validator::make(\Request::all(), [
             'title' => 'required',
             'description' => '',
         ]);
@@ -77,8 +77,8 @@ class PaymentgroupController extends \Controller
             return \Response::json('data validation failed', 400);
         }
 
-        $pg->title = \Input::get('title');
-        $pg->description = \Input::get('description');
+        $pg->title = \Request::get('title');
+        $pg->description = \Request::get('description');
         $pg->save();
 
         return $pg;

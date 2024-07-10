@@ -115,7 +115,7 @@ class TicketController extends \Controller
     {
         $ticket = Ticket::findOrFail($id);
 
-        if (! Input::has('paymentgroup_id')) {
+        if (! Request::has('paymentgroup_id')) {
             return Response::json('missing paymentgroup', 400);
         }
 
@@ -127,7 +127,7 @@ class TicketController extends \Controller
             return $ticket;
         }
 
-        $paymentgroup = Paymentgroup::find(Input::get('paymentgroup_id'));
+        $paymentgroup = Paymentgroup::find(Request::get('paymentgroup_id'));
         if (! $paymentgroup || $paymentgroup->eventgroup_id != $ticket->event->eventgroup->id) {
             return Response::json('paymentgroup not found', 400);
         }
@@ -146,7 +146,7 @@ class TicketController extends \Controller
     {
         $ticket = Ticket::findOrFail($id);
 
-        if (! Input::has('paymentgroup_id')) {
+        if (! Request::has('paymentgroup_id')) {
             return Response::json('missing paymentgroup', 400);
         }
 
@@ -154,7 +154,7 @@ class TicketController extends \Controller
             return $ticket;
         }
 
-        $paymentgroup = Paymentgroup::find(Input::get('paymentgroup_id'));
+        $paymentgroup = Paymentgroup::find(Request::get('paymentgroup_id'));
         if (! $paymentgroup || $paymentgroup->eventgroup_id != $ticket->event->eventgroup->id) {
             return Response::json('paymentgroup not found', 400);
         }
@@ -171,11 +171,11 @@ class TicketController extends \Controller
      */
     private function getTicketsByIds()
     {
-        if (! \Input::has('ids')) {
+        if (! \Request::has('ids')) {
             return Response::json('missing id list', 400);
         }
 
-        $id_list = \Input::get('ids');
+        $id_list = \Request::get('ids');
         if (! is_array($id_list)) {
             $id_list = array_map('trim', explode(',', $id_list));
         }

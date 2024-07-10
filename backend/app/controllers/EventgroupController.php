@@ -30,7 +30,7 @@ class EventgroupController extends Controller
         return $class::with([
             'events' => function ($q) {
                 $q->orderBy('time_start');
-                if (! \Auth::hasRole('billett.admin') || ! \Input::has('admin')) {
+                if (! \Auth::hasRole('billett.admin') || ! \Request::has('admin')) {
                     $q->where('is_published', true);
                 }
             },
@@ -80,7 +80,7 @@ class EventgroupController extends Controller
             $fields['title'] = 'required';
         }
 
-        $validator = \Validator::make(Input::all(), $fields);
+        $validator = \Validator::make(Request::all(), $fields);
         if ($validator->fails()) {
             return \Response::json('data validation failed', 400);
         }
@@ -90,8 +90,8 @@ class EventgroupController extends Controller
         ];
 
         foreach ($list as $field) {
-            if (Input::exists($field) && Input::get($field) != $eventgroup->{$field}) {
-                $val = Input::get($field);
+            if (Request::exists($field) && Request::get($field) != $eventgroup->{$field}) {
+                $val = Request::get($field);
                 if ($val === '') {
                     $val = null;
                 }
@@ -99,8 +99,8 @@ class EventgroupController extends Controller
             }
         }
 
-        if (Input::exists('is_active')) {
-            $eventgroup->is_active = (bool) Input::get('is_active');
+        if (Request::exists('is_active')) {
+            $eventgroup->is_active = (bool) Request::get('is_active');
         }
 
         $eventgroup->sort_value = date('Y-m-').explode(' ', $eventgroup->title)[0];
