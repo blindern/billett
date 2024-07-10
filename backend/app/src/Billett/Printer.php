@@ -2,6 +2,8 @@
 
 namespace Blindern\UKA\Billett;
 
+use Illuminate\Support\Facades\Cache;
+
 class Printer
 {
     const CACHE_NAME = 'printers';
@@ -16,7 +18,7 @@ class Printer
      */
     public static function find($name)
     {
-        $cache = \Cache::get(static::CACHE_NAME, []);
+        $cache = Cache::get(static::CACHE_NAME, []);
         if (! isset($cache[$name])) {
             return null;
         }
@@ -39,7 +41,7 @@ class Printer
     {
         $res = [];
 
-        $cache = \Cache::get(static::CACHE_NAME, []);
+        $cache = Cache::get(static::CACHE_NAME, []);
         foreach ($cache as $data) {
             if ($data['last_seen'] < time() - static::TIMEOUT) {
                 continue;
@@ -109,9 +111,9 @@ class Printer
             'key' => $key,
         ];
 
-        $cache = \Cache::get(static::CACHE_NAME, []);
+        $cache = Cache::get(static::CACHE_NAME, []);
         $cache[$this->name] = $this->data;
-        \Cache::put(static::CACHE_NAME, $cache, 10);
+        Cache::put(static::CACHE_NAME, $cache, 10);
     }
 
     /**

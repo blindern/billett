@@ -3,9 +3,11 @@
 namespace Blindern\UKA\Billett;
 
 use Henrist\LaravelApiQuery\ApiQueryInterface;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\DB;
 
-class Event extends \Eloquent implements ApiQueryInterface
+class Event extends Model implements ApiQueryInterface
 {
     /**
      * Get a model by its ID or alias and fail if not found
@@ -95,7 +97,7 @@ class Event extends \Eloquent implements ApiQueryInterface
     public function getTicketCountAttribute()
     {
         // TODO: should be cached somehow (or at least add some indexes to DB)
-        $q = \DB::select('
+        $q = DB::select('
             SELECT g.id,
                 g.is_normal,
                 COUNT(IF(t.is_valid != 0 AND t.is_revoked = 0, 1, NULL)) count_valid,
@@ -263,7 +265,7 @@ class Event extends \Eloquent implements ApiQueryInterface
      */
     public function getCheckinAttribute()
     {
-        $q = \DB::select('
+        $q = DB::select('
             SELECT orders.is_admin, tickets.used IS NOT NULL AS is_used, tickets.ticketgroup_id, COUNT(tickets.id) AS count
             FROM tickets JOIN orders ON tickets.order_id = orders.id
             WHERE tickets.event_id = ? AND tickets.is_revoked = 0

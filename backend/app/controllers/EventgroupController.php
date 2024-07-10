@@ -2,6 +2,11 @@
 
 use Blindern\UKA\Billett\Eventgroup;
 use Blindern\UKA\Billett\Helpers\ModelHelper;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 class EventgroupController extends Controller
 {
@@ -30,7 +35,7 @@ class EventgroupController extends Controller
         return $class::with([
             'events' => function ($q) {
                 $q->orderBy('time_start');
-                if (! \Auth::hasRole('billett.admin') || ! \Request::has('admin')) {
+                if (! Auth::hasRole('billett.admin') || ! Request::has('admin')) {
                     $q->where('is_published', true);
                 }
             },
@@ -80,9 +85,9 @@ class EventgroupController extends Controller
             $fields['title'] = 'required';
         }
 
-        $validator = \Validator::make(Request::all(), $fields);
+        $validator = Validator::make(Request::all(), $fields);
         if ($validator->fails()) {
-            return \Response::json('data validation failed', 400);
+            return Response::json('data validation failed', 400);
         }
 
         $list = [

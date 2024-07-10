@@ -1,8 +1,10 @@
 <?php
 
 use Blindern\UKA\Billett\Daytheme;
-use Blindern\UKA\Billett\Eventgroup;
 use Blindern\UKA\Billett\Helpers\ModelHelper;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Validator;
 
 class DaythemeController extends Controller
 {
@@ -61,9 +63,9 @@ class DaythemeController extends Controller
         $daytheme->date = strtotime($daytheme->date);
         $daytheme->title = $daytheme->date;
 
-        $validator = \Validator::make(Request::all(), $fields);
+        $validator = Validator::make(Request::all(), $fields);
         if ($validator->fails()) {
-            //            return \Response::json('data validation failed', 400);
+            //            return Response::json('data validation failed', 400);
         }
 
         $list = [

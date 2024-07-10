@@ -3,8 +3,9 @@
 namespace Blindern\UKA\Billett;
 
 use Henrist\LaravelApiQuery\ApiQueryInterface;
+use Illuminate\Database\Eloquent\Model;
 
-class Paymentgroup extends \Eloquent implements ApiQueryInterface
+class Paymentgroup extends Model implements ApiQueryInterface
 {
     protected $model_suffix = '';
 

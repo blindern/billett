@@ -1,6 +1,10 @@
 <?php
 
 use Blindern\UKA\Billett\Printer;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 class PrinterController extends Controller
 {
@@ -33,23 +37,23 @@ class PrinterController extends Controller
     {
         $printer = Printer::find($printername);
         if (! $printer) {
-            return \Response::json('unknown printer', 400);
+            return Response::json('unknown printer', 400);
         }
 
-        if (! \Request::has('text')) {
-            return \Response::json('missing text', 400);
+        if (! Request::has('text')) {
+            return Response::json('missing text', 400);
         }
 
-        if ($printer->printText(\Request::get('text'))) {
-            return \Response::json('OK');
+        if ($printer->printText(Request::get('text'))) {
+            return Response::json('OK');
         } else {
-            return \Response::json('Print failed', 503);
+            return Response::json('Print failed', 503);
         }
     }
 
     public function printerAnnounce()
     {
-        $validator = \Validator::make(\Request::all(), [
+        $validator = Validator::make(Request::all(), [
             'name' => 'required',
             'ips' => 'required',
             'port' => 'required|integer',
@@ -57,18 +61,18 @@ class PrinterController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return \Response::json('data validation failed', 400);
+            return Response::json('data validation failed', 400);
         }
 
-        $printer = new Printer(\Request::get('name'));
+        $printer = new Printer(Request::get('name'));
 
-        $key = \Request::get('key');
-        $ips = \Request::get('ips');
-        $port = \Request::get('port');
+        $key = Request::get('key');
+        $ips = Request::get('ips');
+        $port = Request::get('port');
         $remote_ip = $_SERVER['REMOTE_ADDR'];
 
         $printer->register($key, $ips, $port, $remote_ip);
 
-        return \Response::json('OK');
+        return Response::json('OK');
     }
 }

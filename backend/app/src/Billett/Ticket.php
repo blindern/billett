@@ -5,15 +5,18 @@ namespace Blindern\UKA\Billett;
 use Blindern\UKA\Billett\Helpers\PdfTicket;
 use Henrist\LaravelApiQuery\ApiQueryInterface;
 use iio\libmergepdf\Merger;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
-class Ticket extends \Eloquent implements ApiQueryInterface
+class Ticket extends Model implements ApiQueryInterface
 {
     /**
      * Get sold stats
      */
     public static function getStats($eventgroup_id)
     {
-        $q = \DB::select('
+        $q = DB::select('
             SELECT day, ticketgroup_id, event_id, CAST(SUM(num_tickets) AS UNSIGNED) num_tickets, CAST(SUM(num_revoked) AS UNSIGNED) num_revoked
             FROM (
                 /* activated tickets */
@@ -59,7 +62,7 @@ class Ticket extends \Eloquent implements ApiQueryInterface
 
         if (count($ticketgroups) > 0) {
             $qs = implode(',', array_fill(0, count($ticketgroups), '?'));
-            $ticketgroups = \DB::select("
+            $ticketgroups = DB::select("
                 SELECT id, title, price, fee, event_id
                 FROM ticketgroups
                 WHERE id IN ($qs)", $ticketgroups);
@@ -67,7 +70,7 @@ class Ticket extends \Eloquent implements ApiQueryInterface
 
         if (count($events) > 0) {
             $qs = implode(',', array_fill(0, count($events), '?'));
-            $events = \DB::select("
+            $events = DB::select("
                 SELECT id, title, time_start, category, max_sales, max_normal_sales
                 FROM events
                 WHERE id IN ($qs)
@@ -223,7 +226,7 @@ class Ticket extends \Eloquent implements ApiQueryInterface
             $this->valid_paymentgroup()->associate($paymentgroup);
         }
 
-        $this->user_valid = \Auth::check() ? \Auth::user()->username : null;
+        $this->user_valid = Auth::check() ? Auth::user()->username : null;
         $this->save();
 
         $this->order->modifyBalance(-$this->ticketgroup->price - $this->ticketgroup->fee);
@@ -252,7 +255,7 @@ class Ticket extends \Eloquent implements ApiQueryInterface
             $this->revoked_paymentgroup()->associate($paymentgroup);
         }
 
-        $this->user_revoked = \Auth::check() ? \Auth::user()->username : null;
+        $this->user_revoked = Auth::check() ? Auth::user()->username : null;
         $this->save();
 
         $this->order->modifyBalance($this->ticketgroup->price + $this->ticketgroup->fee);

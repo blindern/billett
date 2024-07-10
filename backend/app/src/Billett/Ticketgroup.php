@@ -2,7 +2,9 @@
 
 namespace Blindern\UKA\Billett;
 
-class Ticketgroup extends \Eloquent
+use Illuminate\Database\Eloquent\Model;
+
+class Ticketgroup extends Model
 {
     /**
      * Check if list of ticketgroups is available

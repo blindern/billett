@@ -3,6 +3,14 @@
 use Blindern\UKA\Billett\Helpers\ModelHelper;
 use Blindern\UKA\Billett\Helpers\VippsPaymentModule;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Session;
 
 class VippsController extends Controller
 {
@@ -11,7 +19,7 @@ class VippsController extends Controller
         $class = ModelHelper::getModelPath('Order');
         $order = $class::find($orderId);
         if (! $order || ! $order->isOwnerOfReservation()) {
-            return \Response::json('not found', 404);
+            return Response::json('not found', 404);
         }
 
         $vipps = new VippsPaymentModule;
@@ -37,11 +45,11 @@ class VippsController extends Controller
     {
         $vipps = new VippsPaymentModule;
 
-        \Log::info('Vipps callback data: '.json_encode(\Request::all()));
+        Log::info('Vipps callback data: '.json_encode(Request::all()));
 
         try {
             $class = ModelHelper::getModelPath('Order');
-            $order = $class::findByTextIdOrFail(\Request::get('reference'));
+            $order = $class::findByTextIdOrFail(Request::get('reference'));
         } catch (ModelNotFoundException $e) {
             // if this case happens, the order did exist some time but has been deleted
             // the order cannot be succeeded, so we should store the information
@@ -51,13 +59,13 @@ class VippsController extends Controller
             // will expire and the user will not have paid for it
 
             // if not accepted, we can silently ignore
-            if (\Request::get('status') != 'PaymentSuccessful') {
+            if (Request::get('status') != 'PaymentSuccessful') {
                 exit;
             }
 
             Log::alert('Order not found but processed: '.json_encode($_POST));
             Mail::send(['text' => 'billett.email_payment_order_404'], $_POST, function ($message) {
-                $message->to(\Config::get('vipps.email_reports'));
+                $message->to(Config::get('vipps.email_reports'));
                 $message->subject('Betalingsskjema fullført på slettet ordre');
             });
 

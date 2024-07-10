@@ -3,8 +3,13 @@
 use Blindern\UKA\Billett\Paymentgroup;
 use Blindern\UKA\Billett\Printer;
 use Blindern\UKA\Billett\Ticket;
+use Henrist\LaravelApiQuery\Facades\ApiQuery;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Response;
 
-class TicketController extends \Controller
+class TicketController extends Controller
 {
     public function __construct()
     {
@@ -13,7 +18,7 @@ class TicketController extends \Controller
 
     public function index()
     {
-        return \ApiQuery::processCollection(Ticket::whereHas('order', function ($query) {
+        return ApiQuery::processCollection(Ticket::whereHas('order', function ($query) {
             $query->where(function ($q) {
                 $q->where('is_valid', true)->orWhere('is_admin', true);
             });
@@ -66,13 +71,13 @@ class TicketController extends \Controller
 
         $printer = Printer::find($printername);
         if (! $printer) {
-            return \Response::json('unknown printer', 400);
+            return Response::json('unknown printer', 400);
         }
 
         if ($printer->printPdf(Ticket::generateTicketsPdf($tickets))) {
-            return \Response::json('OK');
+            return Response::json('OK');
         } else {
-            return \Response::json('Print failed', 503);
+            return Response::json('Print failed', 503);
         }
     }
 
@@ -98,13 +103,13 @@ class TicketController extends \Controller
 
         $printer = Printer::find($printername);
         if (! $printer) {
-            return \Response::json('unknown printer', 400);
+            return Response::json('unknown printer', 400);
         }
 
         if ($printer->printPdf($ticket->getPdfData())) {
-            return \Response::json('OK');
+            return Response::json('OK');
         } else {
-            return \Response::json('Print failed', 503);
+            return Response::json('Print failed', 503);
         }
     }
 
@@ -171,11 +176,11 @@ class TicketController extends \Controller
      */
     private function getTicketsByIds()
     {
-        if (! \Request::has('ids')) {
+        if (! Request::has('ids')) {
             return Response::json('missing id list', 400);
         }
 
-        $id_list = \Request::get('ids');
+        $id_list = Request::get('ids');
         if (! is_array($id_list)) {
             $id_list = array_map('trim', explode(',', $id_list));
         }
@@ -232,7 +237,7 @@ class TicketController extends \Controller
         }
 
         $ticket->used = $is_checkin ? time() : null;
-        $ticket->user_used = $is_checkin ? \Auth::user()->username : null;
+        $ticket->user_used = $is_checkin ? Auth::user()->username : null;
         $ticket->save();
 
         return $ticket;

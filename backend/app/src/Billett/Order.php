@@ -4,9 +4,15 @@ namespace Blindern\UKA\Billett;
 
 use Carbon\Carbon;
 use Henrist\LaravelApiQuery\ApiQueryInterface;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
 
-class Order extends \Eloquent implements ApiQueryInterface
+class Order extends Model implements ApiQueryInterface
 {
     /**
      * How long a incomplete reservation is valid
@@ -36,7 +42,7 @@ class Order extends \Eloquent implements ApiQueryInterface
         $order->is_admin = $is_admin;
 
         if ($is_admin) {
-            $order->user_created = \Auth::check() ? \Auth::user()->username : null;
+            $order->user_created = Auth::check() ? Auth::user()->username : null;
         }
 
         $order->save();
@@ -76,7 +82,7 @@ class Order extends \Eloquent implements ApiQueryInterface
     {
         $p = $order_id ? [$order_id, $order_id] : [];
 
-        \DB::statement('
+        DB::statement('
             UPDATE
                 orders, (
                     SELECT order_id, SUM(amount) amount
@@ -127,7 +133,7 @@ class Order extends \Eloquent implements ApiQueryInterface
     {
         $events = $this->getEvents();
 
-        \Mail::send(['text' => 'billett.email_order_web_complete'], ['order' => $this], function ($message) use ($events) {
+        Mail::send(['text' => 'billett.email_order_web_complete'], ['order' => $this], function ($message) use ($events) {
             $event = count($events) == 1 ? $events[0] : null;
             $eventinfo = $event ? ' - '.$event->title.' ('.Carbon::createFromTimeStamp($event->time_start)->format('d.m.Y').')' : '';
 
@@ -157,7 +163,7 @@ class Order extends \Eloquent implements ApiQueryInterface
             $name = null;
         }
 
-        \Mail::send(['text' => 'billett.email_order_details'], ['order' => $this, 'text' => $text], function ($message) use ($email, $name, $text) {
+        Mail::send(['text' => 'billett.email_order_details'], ['order' => $this, 'text' => $text], function ($message) use ($email, $name, $text) {
             $events = $this->getEvents();
             $event = count($events) == 1 ? $events[0] : null;
             $eventinfo = $event ? ' - '.$event->title.' ('.Carbon::createFromTimeStamp($event->time_start)->format('d.m.Y').')' : '';
@@ -177,7 +183,7 @@ class Order extends \Eloquent implements ApiQueryInterface
 
             if (! empty($text)) {
                 // TODO: move email to eventgroup data
-                $message->bcc(\Config::get('vipps.test') ? 'admin@blindernuka.no' : 'billett@blindernuka.no');
+                $message->bcc(Config::get('vipps.test') ? 'admin@blindernuka.no' : 'billett@blindernuka.no');
             }
 
             if ($has_valid_tickets) {
@@ -257,7 +263,7 @@ class Order extends \Eloquent implements ApiQueryInterface
      */
     public function isOwnerOfReservation()
     {
-        $orders = \Session::get('billett_reservations', []);
+        $orders = Session::get('billett_reservations', []);
         foreach ($orders as $order_id) {
             if ($order_id == $this->id) {
                 return true;
@@ -306,10 +312,10 @@ class Order extends \Eloquent implements ApiQueryInterface
     public function deleteReservation()
     {
         if ($this->isCompleted()) {
-            throw new Exception('Trying to delete a order that is completed!');
+            throw new \Exception('Trying to delete a order that is completed!');
         }
 
-        \DB::transaction(function () {
+        DB::transaction(function () {
             foreach ($this->tickets()->get() as $ticket) {
                 $ticket->delete();
             }
@@ -326,11 +332,11 @@ class Order extends \Eloquent implements ApiQueryInterface
     protected function generateOrderTextId()
     {
         if ($this->order_text_id != null) {
-            throw new Exception('Trying to create new order text-id, but it exists already!');
+            throw new \Exception('Trying to create new order text-id, but it exists already!');
         }
 
         $d = \Carbon\Carbon::createFromTimeStamp($this->time);
-        $orderid = $d->format('y').str_pad($d->format('z'), 3, '0', STR_PAD_LEFT).str_pad($this->id, 4, '0', STR_PAD_LEFT).(\Config::get('vipps.test') ? '-TEST' : '');
+        $orderid = $d->format('y').str_pad($d->format('z'), 3, '0', STR_PAD_LEFT).str_pad($this->id, 4, '0', STR_PAD_LEFT).(Config::get('vipps.test') ? '-TEST' : '');
 
         $this->order_text_id = $orderid;
         $this->save();
@@ -488,7 +494,7 @@ class Order extends \Eloquent implements ApiQueryInterface
     {
         static::refreshBalances($this->id);
 
-        $this->balance = \DB::table('orders')->where('id', $this->id)->pluck('balance');
+        $this->balance = DB::table('orders')->where('id', $this->id)->pluck('balance');
     }
 
     /**
@@ -499,7 +505,7 @@ class Order extends \Eloquent implements ApiQueryInterface
         $this->balance += $amount;
 
         // make sure we have no races
-        \DB::statement('
+        DB::statement('
             UPDATE orders
             SET balance = balance + ?
             WHERE id = ?', [$amount, $this->id]);

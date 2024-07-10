@@ -3,8 +3,14 @@
 use Blindern\UKA\Billett\Order;
 use Blindern\UKA\Billett\Payment;
 use Blindern\UKA\Billett\Paymentgroup;
+use Henrist\LaravelApiQuery\Facades\ApiQuery;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
-class PaymentController extends \Controller
+class PaymentController extends Controller
 {
     public function __construct()
     {
@@ -13,7 +19,7 @@ class PaymentController extends \Controller
 
     public function index()
     {
-        return \ApiQuery::processCollection(Payment::query());
+        return ApiQuery::processCollection(Payment::query());
     }
 
     /**
@@ -26,10 +32,10 @@ class PaymentController extends \Controller
             'paymentgroup_id' => 'required|integer',
             'amount' => 'required|numeric|not_in:0',
         ];
-        $validator = \Validator::make(Request::all(), $fields);
+        $validator = Validator::make(Request::all(), $fields);
 
         if ($validator->fails()) {
-            return \Response::json('data validation failed', 400);
+            return Response::json('data validation failed', 400);
         }
 
         $order = Order::findOrFail(Request::get('order_id'));
@@ -47,7 +53,7 @@ class PaymentController extends \Controller
         $payment->order()->associate($order);
         $payment->paymentgroup()->associate($paymentgroup);
         $payment->time = time();
-        $payment->user_created = \Auth::user()->username;
+        $payment->user_created = Auth::user()->username;
         $payment->is_web = false;
         $payment->amount = (float) Request::get('amount');
         $payment->save();

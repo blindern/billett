@@ -3,8 +3,10 @@
 namespace Blindern\UKA\Billett;
 
 use Henrist\LaravelApiQuery\ApiQueryInterface;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
-class Eventgroup extends \Eloquent implements ApiQueryInterface
+class Eventgroup extends Model implements ApiQueryInterface
 {
     protected $model_suffix = '';
 
@@ -84,7 +86,7 @@ class Eventgroup extends \Eloquent implements ApiQueryInterface
      */
     public function getRecruiterList()
     {
-        $q = \DB::select('
+        $q = DB::select('
             SELECT
                 tickets.id ticket_id,
                 orders.order_text_id, orders.id order_id, FROM_UNIXTIME(orders.time) order_time,

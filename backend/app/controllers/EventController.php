@@ -4,6 +4,13 @@ use Blindern\UKA\Billett\Event;
 use Blindern\UKA\Billett\Eventgroup;
 use Blindern\UKA\Billett\EventGuest;
 use Blindern\UKA\Billett\Helpers\ModelHelper;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 class EventController extends Controller
 {
@@ -31,12 +38,12 @@ class EventController extends Controller
         $class = ModelHelper::getModelPath('Event');
         $ev = $class::findByAliasOrFail($id_or_alias);
 
-        if (! $ev->is_published && ! \Auth::hasRole('billett.admin')) {
+        if (! $ev->is_published && ! Auth::hasRole('billett.admin')) {
             App::abort(404);
         }
 
         $show_all = false;
-        if (\Auth::hasRole('billett.admin') && \Request::has('admin')) {
+        if (Auth::hasRole('billett.admin') && Request::has('admin')) {
             $show_all = true;
         }
 
@@ -49,7 +56,7 @@ class EventController extends Controller
             }
         }]);
 
-        if (\Request::exists('checkin')) {
+        if (Request::exists('checkin')) {
             // make sure checkin-variable gets populated
             $ev->checkin = true;
         }
@@ -62,7 +69,7 @@ class EventController extends Controller
         $class = ModelHelper::getModelPath('Event');
         $event = $class::findOrFail($id);
 
-        if (! $event->is_published && ! \Auth::hasRole('billett.admin')) {
+        if (! $event->is_published && ! Auth::hasRole('billett.admin')) {
             App::abort(404);
         }
 
@@ -108,9 +115,9 @@ class EventController extends Controller
         $order->createTickets($groups_to_add);
 
         // store in session so we know which orders belong to this user
-        $orders = \Session::get('billett_reservations', []);
+        $orders = Session::get('billett_reservations', []);
         $orders[] = $order->id;
-        \Session::put('billett_reservations', $orders);
+        Session::put('billett_reservations', $orders);
 
         $order->load('tickets.ticketgroup', 'tickets.event');
 
@@ -150,10 +157,10 @@ class EventController extends Controller
             $fields['max_each_person'] = 'required|integer';
         }
 
-        $validator = \Validator::make(Request::all(), $fields);
+        $validator = Validator::make(Request::all(), $fields);
 
         if ($validator->fails()) {
-            return \Response::json('data validation failed', 400);
+            return Response::json('data validation failed', 400);
         }
 
         if (Request::has('eventgroup_id') && (Request::get('eventgroup_id') != $event->eventgroup_id || $is_new)) {
@@ -265,12 +272,12 @@ class EventController extends Controller
     {
         $event = Event::findOrFail($id);
 
-        if (! \Request::hasFile('file')) {
+        if (! Request::hasFile('file')) {
             App::abort(400, 'Missing image');
         }
 
         try {
-            $event->image = \Image::make(\Request::file('file'))->resize(500, null, function ($constraint) {
+            $event->image = \Image::make(Request::file('file'))->resize(500, null, function ($constraint) {
                 $constraint->aspectRatio();
             })->encode('jpg', 75);
             $event->save();
@@ -288,7 +295,7 @@ class EventController extends Controller
     {
         $event = Event::findOrFail($id);
 
-        if (! $event->is_published && ! \Auth::hasRole('billett.admin')) {
+        if (! $event->is_published && ! Auth::hasRole('billett.admin')) {
             App::abort(404);
         }
 
@@ -313,8 +320,8 @@ class EventController extends Controller
 
         $changed = 0;
         foreach ($groups as $group) {
-            if (\Request::has($group->id)) {
-                $new_order = \Request::get($group->id);
+            if (Request::has($group->id)) {
+                $new_order = Request::get($group->id);
                 if ($new_order != $group->order) {
                     $group->order = $new_order;
                     $group->save();

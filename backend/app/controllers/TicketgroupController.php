@@ -5,6 +5,12 @@ use Blindern\UKA\Billett\Order;
 use Blindern\UKA\Billett\Printer;
 use Blindern\UKA\Billett\Ticket;
 use Blindern\UKA\Billett\Ticketgroup;
+use Henrist\LaravelApiQuery\Facades\ApiQuery;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 class TicketgroupController extends Controller
 {
@@ -16,14 +22,14 @@ class TicketgroupController extends Controller
 
     public function index()
     {
-        return \ApiQuery::processCollection(Ticketgroup::query());
+        return ApiQuery::processCollection(Ticketgroup::query());
     }
 
     public function show($id)
     {
         $g = Ticketgroup::findOrFail($id);
 
-        $show_all = \Auth::hasRole('billett.admin');
+        $show_all = Auth::hasRole('billett.admin');
         if (! $show_all && ! $g->use_web) {
             App::abort(404);
         }
@@ -42,7 +48,7 @@ class TicketgroupController extends Controller
      */
     public function store()
     {
-        $validator = \Validator::make(Request::all(), [
+        $validator = Validator::make(Request::all(), [
             'event_id' => 'required|integer',
             'title' => 'required',
             'use_office' => '',
@@ -55,7 +61,7 @@ class TicketgroupController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return \Response::json('data validation failed', 400);
+            return Response::json('data validation failed', 400);
         }
 
         $event = Event::find(Request::get('event_id'));
@@ -104,10 +110,10 @@ class TicketgroupController extends Controller
         ];
 
         $fields = $g->has_tickets ? $other_fields : array_merge($other_fields, $locked_fields);
-        $validator = \Validator::make(Request::all(), $fields);
+        $validator = Validator::make(Request::all(), $fields);
 
         if ($validator->fails()) {
-            return \Response::json('data validation failed', 400);
+            return Response::json('data validation failed', 400);
         }
 
         if (! $g->has_tickets) {
@@ -168,13 +174,13 @@ class TicketgroupController extends Controller
 
         $printer = Printer::find($printername);
         if (! $printer) {
-            return \Response::json('unknown printer', 400);
+            return Response::json('unknown printer', 400);
         }
 
         if ($printer->printPdf($ticket->getPdfData(true, false))) {
-            return \Response::json('OK');
+            return Response::json('OK');
         } else {
-            return \Response::json('Print failed', 503);
+            return Response::json('Print failed', 503);
         }
     }
 

@@ -8,8 +8,16 @@ use Blindern\UKA\Billett\Order;
 use Blindern\UKA\Billett\Payment;
 use Blindern\UKA\Billett\Paymentgroup;
 use Blindern\UKA\Billett\Ticketgroup;
+use Henrist\LaravelApiQuery\Facades\ApiQuery;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
-class OrderController extends \Controller
+class OrderController extends Controller
 {
     public function __construct()
     {
@@ -27,7 +35,7 @@ class OrderController extends \Controller
 
     public function index()
     {
-        return \ApiQuery::processCollection(Order::where(function ($query) {
+        return ApiQuery::processCollection(Order::where(function ($query) {
             $query->where('is_valid', true)->orWhere('is_admin', true);
         }));
     }
@@ -39,13 +47,13 @@ class OrderController extends \Controller
     {
         $class = ModelHelper::getModelPath('Order');
         $order = $class::find($id);
-        if (! $order || (! $order->isOwnerOfReservation() && ! \Auth::hasRole('billett.admin'))) {
-            return \Response::json('not found', 404);
+        if (! $order || (! $order->isOwnerOfReservation() && ! Auth::hasRole('billett.admin'))) {
+            return Response::json('not found', 404);
         }
 
         if ($order->isReservation()) {
             if (! $order->renew()) {
-                return \Response::json('reservation expired', 404);
+                return Response::json('reservation expired', 404);
             }
         }
 
@@ -69,10 +77,10 @@ class OrderController extends \Controller
             'recruiter' => '',
             'comment' => '',
         ];
-        $validator = \Validator::make(Request::all(), $fields);
+        $validator = Validator::make(Request::all(), $fields);
 
         if ($validator->fails()) {
-            return \Response::json('data validation failed', 400);
+            return Response::json('data validation failed', 400);
         }
 
         $eg = Eventgroup::findOrFail(Request::get('eventgroup_id'));
@@ -101,12 +109,12 @@ class OrderController extends \Controller
     {
         $class = ModelHelper::getModelPath('Order');
         $order = $class::find($id);
-        if (! $order || (! $order->isOwnerOfReservation() && ! \Auth::hasRole('billett.admin'))) {
-            return \Response::json('not found', 404);
+        if (! $order || (! $order->isOwnerOfReservation() && ! Auth::hasRole('billett.admin'))) {
+            return Response::json('not found', 404);
         }
 
-        if (! $order->isReservation() && ! \Auth::hasRole('billett.admin')) {
-            return \Response::json('not a reservation', 400);
+        if (! $order->isReservation() && ! Auth::hasRole('billett.admin')) {
+            return Response::json('not a reservation', 400);
         }
 
         $fields = $order->is_admin
@@ -122,10 +130,10 @@ class OrderController extends \Controller
                 'phone' => 'regex:/\\+?\\d+/',
                 'recruiter' => ''];
 
-        $validator = \Validator::make(Request::all(), $fields);
+        $validator = Validator::make(Request::all(), $fields);
 
         if ($validator->fails()) {
-            return \Response::json('data validation failed', 400);
+            return Response::json('data validation failed', 400);
         }
 
         // With Vipps these are only sent in admin site.
@@ -137,7 +145,7 @@ class OrderController extends \Controller
 
         $order->recruiter = Request::get('recruiter');
 
-        if (\Auth::hasRole('billett.admin') && Request::exists('comment')) {
+        if (Auth::hasRole('billett.admin') && Request::exists('comment')) {
             $order->comment = Request::get('comment');
         }
 
@@ -156,12 +164,12 @@ class OrderController extends \Controller
     public function destroy($id)
     {
         $order = Order::find($id);
-        if (! $order || (! $order->isOwnerOfReservation() && ! \Auth::hasRole('billett.admin'))) {
-            return \Response::json('not found', 404);
+        if (! $order || (! $order->isOwnerOfReservation() && ! Auth::hasRole('billett.admin'))) {
+            return Response::json('not found', 404);
         }
 
         if (! $order->isReservation()) {
-            return \Response::json('not a reservation', 400);
+            return Response::json('not a reservation', 400);
         }
 
         $order->deleteReservation();
@@ -175,16 +183,16 @@ class OrderController extends \Controller
     public function placeOrder($id)
     {
         $order = Order::find($id);
-        if (! $order || (! $order->isOwnerOfReservation() && ! \Auth::hasRole('billett.admin'))) {
-            return \Response::json('not found', 404);
+        if (! $order || (! $order->isOwnerOfReservation() && ! Auth::hasRole('billett.admin'))) {
+            return Response::json('not found', 404);
         }
 
         if (! $order->isReservation()) {
-            return \Response::json('not a reservation', 400);
+            return Response::json('not a reservation', 400);
         }
 
         if (! $order->placeOrder()) {
-            return \Response::json('invalid state', 400);
+            return Response::json('invalid state', 400);
         }
 
         $vipps = new VippsPaymentModule;
@@ -192,7 +200,7 @@ class OrderController extends \Controller
         try {
             $sessionDetails = $vipps->initiateSession($order);
         } catch (DuplicateSessionException $e) {
-            return \Response::json('Reservasjonen må avbrytes og startes på nytt', 400);
+            return Response::json('Reservasjonen må avbrytes og startes på nytt', 400);
         }
 
         return [
@@ -206,21 +214,21 @@ class OrderController extends \Controller
      */
     public function forceOrder($id)
     {
-        if (! \Config::get('vipps.test')) {
+        if (! Config::get('vipps.test')) {
             throw new \Exception('Only available in test mode');
         }
 
         $order = Order::find($id);
         if (! $order || ! $order->isOwnerOfReservation()) {
-            return \Response::json('not found', 404);
+            return Response::json('not found', 404);
         }
 
         if (! $order->isReservation()) {
-            return \Response::json('not a reservation', 400);
+            return Response::json('not a reservation', 400);
         }
 
         if (! $order->placeOrder()) {
-            return \Response::json('invalid state', 400);
+            return Response::json('invalid state', 400);
         }
 
         // TODO: implement
@@ -255,7 +263,7 @@ class OrderController extends \Controller
 
         $ret = Session::get('order_receipt', null);
         if (! $ret) {
-            return \Response::json('no receipt exists', 404);
+            return Response::json('no receipt exists', 404);
         }
 
         return $ret;
@@ -288,12 +296,12 @@ class OrderController extends \Controller
             return true;
         };
         if (! $validate($list)) {
-            return \Response::json('data validation failed', 400);
+            return Response::json('data validation failed', 400);
         }
 
         $ticketgroups = Ticketgroup::with('event')->find(array_keys($list));
         if (count($ticketgroups) != count($list)) {
-            return \Response::json('not all ticketgroups found', 400);
+            return Response::json('not all ticketgroups found', 400);
         }
 
         $grouplist = [];
@@ -303,7 +311,7 @@ class OrderController extends \Controller
 
         if (! Request::has('ignore_limits')) {
             if (! Ticketgroup::checkIsAvailable($grouplist)) {
-                return \Response::json('tickets not available', 400);
+                return Response::json('tickets not available', 400);
             }
         }
 
@@ -323,18 +331,18 @@ class OrderController extends \Controller
         $order = Order::with('tickets.ticketgroup')->findOrFail($id);
 
         if ($order->isCompleted()) {
-            return \Response::json('order is already complete', 400);
+            return Response::json('order is already complete', 400);
         }
 
         $skip_tickets = true;
         $paymentgroup = null;
         $sum = 0;
-        if (\Request::has('paymentgroup')) {
-            $paymentgroup = Paymentgroup::findOrFail(\Request::get('paymentgroup'));
+        if (Request::has('paymentgroup')) {
+            $paymentgroup = Paymentgroup::findOrFail(Request::get('paymentgroup'));
             $skip_tickets = false;
 
-            if (! \Request::exists('amount')) {
-                return \Response::json('missing amount', 400);
+            if (! Request::exists('amount')) {
+                return Response::json('missing amount', 400);
             }
 
             foreach ($order->tickets as $ticket) {
@@ -343,13 +351,13 @@ class OrderController extends \Controller
                 }
             }
 
-            if ($sum != \Request::get('amount')) {
-                return \Response::json('amount mismatched', 400);
+            if ($sum != Request::get('amount')) {
+                return Response::json('amount mismatched', 400);
             }
         }
 
         if (! $order->markComplete($skip_tickets, $paymentgroup)) {
-            return \Response::json('could not convert from reservation to order, renew reservation failed', 400);
+            return Response::json('could not convert from reservation to order, renew reservation failed', 400);
         }
 
         if ($paymentgroup && $sum > 0) {
@@ -357,7 +365,7 @@ class OrderController extends \Controller
             $payment->order()->associate($order);
             $payment->paymentgroup()->associate($paymentgroup);
             $payment->time = time();
-            $payment->user_created = \Auth::user()->username;
+            $payment->user_created = Auth::user()->username;
             $payment->is_web = false;
             $payment->amount = (float) $sum;
             $payment->save();
@@ -365,7 +373,7 @@ class OrderController extends \Controller
             $order->modifyBalance($payment->amount);
         }
 
-        if (\Request::get('sendmail') && $order->email) {
+        if (Request::get('sendmail') && $order->email) {
             $order->sendEmail();
         }
 
@@ -386,13 +394,13 @@ class OrderController extends \Controller
 
         // manual email?
         $email = null;
-        if (\Request::has('email')) {
-            $email = \Request::get('email');
+        if (Request::has('email')) {
+            $email = Request::get('email');
         }
 
-        $order->sendEmail($email, \Request::get('text'));
+        $order->sendEmail($email, Request::get('text'));
 
-        return \Response::json('email sent');
+        return Response::json('email sent');
     }
 
     /**
@@ -402,6 +410,6 @@ class OrderController extends \Controller
     {
         Order::refreshBalances();
 
-        return \Response::json('balances refreshed');
+        return Response::json('balances refreshed');
     }
 }

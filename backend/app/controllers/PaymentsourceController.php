@@ -2,8 +2,14 @@
 
 use Blindern\UKA\Billett\Paymentgroup;
 use Blindern\UKA\Billett\Paymentsource;
+use Henrist\LaravelApiQuery\Facades\ApiQuery;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
-class PaymentsourceController extends \Controller
+class PaymentsourceController extends Controller
 {
     public function __construct()
     {
@@ -12,7 +18,7 @@ class PaymentsourceController extends \Controller
 
     public function index()
     {
-        return \ApiQuery::processCollection(Paymentsource::query());
+        return ApiQuery::processCollection(Paymentsource::query());
     }
 
     public function show($id)
@@ -24,7 +30,7 @@ class PaymentsourceController extends \Controller
 
     public function store()
     {
-        $validator = \Validator::make(\Request::all(), [
+        $validator = Validator::make(Request::all(), [
             'paymentgroup_id' => 'required|integer',
             'type' => 'required|in:cash,other',
             'title' => 'required',
@@ -34,30 +40,30 @@ class PaymentsourceController extends \Controller
         ]);
 
         if ($validator->fails()) {
-            return \Response::json('data validation failed', 400);
+            return Response::json('data validation failed', 400);
         }
 
-        $pg = Paymentgroup::find(\Request::get('paymentgroup_id'));
+        $pg = Paymentgroup::find(Request::get('paymentgroup_id'));
         if (! $pg) {
-            return \Response::json('paymentgroup not found', 400);
+            return Response::json('paymentgroup not found', 400);
         }
 
         if ($pg->time_end) {
-            return \Response::json('paymentgroup is closed', 400);
+            return Response::json('paymentgroup is closed', 400);
         }
 
         $ps = new Paymentsource;
 
         $ps->time_created = time();
-        $ps->user_created = \Auth::user()->username;
+        $ps->user_created = Auth::user()->username;
 
-        $ps->type = \Request::get('type');
+        $ps->type = Request::get('type');
 
-        $ps->title = \Request::get('title');
-        $ps->comment = \Request::get('comment');
-        $ps->amount = \Request::get('amount');
+        $ps->title = Request::get('title');
+        $ps->comment = Request::get('comment');
+        $ps->amount = Request::get('amount');
 
-        $ps->data = \Request::get('data');
+        $ps->data = Request::get('data');
 
         $ps->paymentgroup()->associate($pg);
         $ps->save();
@@ -70,12 +76,12 @@ class PaymentsourceController extends \Controller
         // only title and comment is allowed updated
         $ps = Paymentsource::findOrFail($id);
 
-        if (\Request::exists('title')) {
-            $ps->title = \Request::get('title');
+        if (Request::exists('title')) {
+            $ps->title = Request::get('title');
         }
 
-        if (\Request::exists('comment')) {
-            $ps->comment = \Request::get('comment');
+        if (Request::exists('comment')) {
+            $ps->comment = Request::get('comment');
         }
 
         $ps->save();
@@ -88,16 +94,16 @@ class PaymentsourceController extends \Controller
         $ps = Paymentsource::with('paymentgroup')->findOrFail($id);
 
         if ($ps->is_deleted) {
-            return \Response::json('element is already deleted', 400);
+            return Response::json('element is already deleted', 400);
         }
 
         if ($ps->paymentgroup->time_end) {
-            return \Response::json('paymentgroup is already closed', 400);
+            return Response::json('paymentgroup is already closed', 400);
         }
 
         $ps->is_deleted = true;
         $ps->time_deleted = time();
-        $ps->user_deleted = \Auth::user()->username;
+        $ps->user_deleted = Auth::user()->username;
         $ps->save();
 
         return $ps;
