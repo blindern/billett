@@ -44,6 +44,7 @@ services:
      - PMA_HOST=database
      - PMA_USER=uka_billett
      - PMA_PASSWORD=uka_billett
+     - UPLOAD_LIMIT=300M
     ports:
      - 127.0.0.1:8080:80
     volumes:
