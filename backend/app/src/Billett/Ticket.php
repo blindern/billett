@@ -26,7 +26,7 @@ class Ticket extends Model implements ApiQueryInterface
                 FROM tickets t
                   JOIN events e ON t.event_id = e.id
                 WHERE t.is_valid = 1 AND e.eventgroup_id = ?
-                GROUP BY DATE(FROM_UNIXTIME(t.time)), ticketgroup_id, event_id
+                GROUP BY 1, 2, 3
 
                 UNION ALL
 
@@ -37,7 +37,7 @@ class Ticket extends Model implements ApiQueryInterface
                 FROM tickets t
                   JOIN events e ON t.event_id = e.id
                 WHERE t.is_revoked = 1 AND e.eventgroup_id = ?
-                GROUP BY DATE(FROM_UNIXTIME(t.time)), ticketgroup_id, event_id
+                GROUP BY 1, 2, 3
 
                 UNION ALL
 
@@ -46,7 +46,7 @@ class Ticket extends Model implements ApiQueryInterface
                 FROM ticketgroups tg JOIN events e ON e.id = tg.event_id
                 WHERE e.eventgroup_id = ? AND (tg.use_office != 0 OR tg.use_web != 0)
             ) ref
-            GROUP BY day, ticketgroup_id, event_id', [$eventgroup_id, $eventgroup_id, $eventgroup_id]);
+            GROUP BY 1, 2, 3', [$eventgroup_id, $eventgroup_id, $eventgroup_id]);
 
         $ticketgroups = [];
         $events = [];
