@@ -10,11 +10,9 @@ More documentation: [Documentation (norwegian)](docs/index.md)
 
 This project is run with Docker and mainly consists of:
 
-* PHP backend container running php-fpm serving the backend api as well as simplesamlphp for authentication
+* PHP backend container running php-fpm serving the backend api
 * nginx container that serves the static files and acts as a proxy to the backend
 * mysql container as database
-
-Docker Compose is used to simplify running the containers.
 
 ## Backend API details
 
@@ -35,22 +33,21 @@ docker exec -t uka-billett-fpm ./artisan migrate
 
 ## Development setup
 
+Docker Compose is used to simplify running the containers locally.
+
 ### Running the backend
 
-To ease development, see `Makefile`
-
-Normally all that is needed is to run:
-
 ```bash
-make dev
-# to make it proxy for the frontend aswell
-# you might need to run it like this (with the
-# correct IP):
-DOCKER_GATEWAY_HOST=172.18.0.1 make dev
+docker compose up database
 ```
 
-And the development environment should start and be available
-at http://localhost:8081/
+```bash
+cd backend
+composer install
+php artisan serve --port 8081
+```
+
+http://localhost:8081/
 
 ### Running the frontend
 
@@ -62,10 +59,10 @@ BACKEND_URL=https://billett.blindernuka.no/ npm run dev
 
 Open http://localhost:3000/
 
-## Running phpMyAdmin for development
+### Running phpMyAdmin for development
 
 ```bash
-docker-compose -f docker-compose.admin.yml up
+docker compose up phpmyadmin
 ```
 
 Now go to http://localhost:8080/

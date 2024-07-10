@@ -315,7 +315,7 @@ class Event extends Model implements ApiQueryInterface
     /**
      * Get fields we can search in
      */
-    public function getApiAllowedFields()
+    public function getApiAllowedFields(): array
     {
         return $this->apiAllowedFields;
     }
@@ -323,7 +323,7 @@ class Event extends Model implements ApiQueryInterface
     /**
      * Get fields we can use as relations
      */
-    public function getApiAllowedRelations()
+    public function getApiAllowedRelations(): array
     {
         return $this->apiAllowedRelations;
     }

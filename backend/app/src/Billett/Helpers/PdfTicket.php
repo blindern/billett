@@ -3,14 +3,13 @@
 namespace Blindern\UKA\Billett\Helpers;
 
 use Blindern\UKA\Billett\Ticket;
+use Illuminate\Support\Facades\View;
 
 /**
  * Helper class for creating a PDF-document for a ticket
  */
 class PdfTicket
 {
-    protected $dompdf;
-
     protected $ticket;
 
     public function __construct(Ticket $ticket)
@@ -25,9 +24,7 @@ class PdfTicket
      */
     public function getPdfData()
     {
-        $this->loadDomPdf();
-
-        $this->dompdf = new \DOMPDF();
+        $dompdf = new \Dompdf\Dompdf();
 
         // variable height
         $height = 330;
@@ -39,21 +36,12 @@ class PdfTicket
         }
 
         // 72 mm width (paper is 80 mm, only 72 mm is printable)
-        $this->dompdf->set_paper([0, 0, 204.09, $height]);
+        $dompdf->setPaper([0, 0, 204.09, $height]);
 
-        $this->dompdf->load_html(\View::make('ticket')->with('ticket', $this->ticket)->render());
+        $dompdf->loadHtml(View::make('ticket')->with('ticket', $this->ticket)->render());
 
-        $this->dompdf->render();
+        $dompdf->render();
 
-        return $this->dompdf->output();
-    }
-
-    /**
-     * Load the PDF-library
-     */
-    private function loadDomPdf()
-    {
-        defined('DOMPDF_ENABLE_AUTOLOAD') or define('DOMPDF_ENABLE_AUTOLOAD', false);
-        require_once base_path().'/vendor/dompdf/dompdf/dompdf_config.inc.php';
+        return $dompdf->output();
     }
 }

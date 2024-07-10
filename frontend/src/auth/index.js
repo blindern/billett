@@ -12,7 +12,7 @@ module.config(function ($stateProvider) {
       url: "/login",
       template: "Går til logg inn side",
       controller: function ($location) {
-        window.location.href = api("login?url=a")
+        window.location.href = api("saml2/login?returnTo=a")
       },
     })
     .state("logout", {
@@ -41,8 +41,9 @@ module.factory("AuthRequireResolver", function ($location, $q, AuthService) {
           }
         }, reject)
       } else {
-        window.location.href =
-          "login?url=" + encodeURIComponent($location.path())
+        window.location.href = api(
+          `saml2/login?returnTo=${encodeURIComponent($location.path())}`,
+        )
       }
     }, reject)
   })

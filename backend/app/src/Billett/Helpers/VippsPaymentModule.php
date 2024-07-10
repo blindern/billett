@@ -33,7 +33,7 @@ class VippsPaymentModule
                     // We don't bother with tokens - we don't trust the callback data anyways
                     // as it only triggers a payment check.
                     'callbackAuthorizationToken' => '',
-                    'termsAndConditionsUrl' => url('salgsbetingelser'),
+                    'termsAndConditionsUrl' => 'https://billett.blindernuka.no/salgsbetingelser',
                 ],
                 'transaction' => [
                     'amount' => [

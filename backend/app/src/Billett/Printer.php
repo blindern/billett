@@ -113,7 +113,7 @@ class Printer
 
         $cache = Cache::get(static::CACHE_NAME, []);
         $cache[$this->name] = $this->data;
-        Cache::put(static::CACHE_NAME, $cache, 10);
+        Cache::put(static::CACHE_NAME, $cache, now()->addMinutes(10));
     }
 
     /**
@@ -131,7 +131,7 @@ class Printer
     /**
      * Send PDF-document to printer
      *
-     * @param  binary  $data
+     * @param  string  $data
      * @return bool
      *
      * @throws \Exception
@@ -200,7 +200,7 @@ class Printer
     /**
      * Generate a temp file with data
      *
-     * @param  binary  $data
+     * @param  string  $data
      * @return string filename
      */
     private function storeFile($data)

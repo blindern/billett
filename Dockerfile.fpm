@@ -1,8 +1,4 @@
-FROM php:5.6-fpm
-MAINTAINER Henrik Steen <henrist@henrist.net>
-
-ENV SIMPLESAMLPHP_VERSION 1.14.7
-ENV SIMPLESAMLPHP_SHA256 a7a24d4dc89819f7e53141b38ae36b092a5c1fc9cb2e3cee253c765e5942be52
+FROM php:8.3-fpm
 
 RUN \
     # system packages
@@ -10,19 +6,15 @@ RUN \
     && apt-get install -y --no-install-recommends \
       curl \
       git \
-      gosu \
       libfreetype6-dev \
       libjpeg62-turbo-dev \
-      libmcrypt-dev \
       libpng-dev \
       unzip \
       wget \
     && rm -rf /var/lib/apt/lists/* \
     \
     # php extensions
-    && docker-php-ext-install -j$(nproc) mcrypt pdo_mysql \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include --with-jpeg-dir=/usr/include \
-    && docker-php-ext-install -j$(nproc) gd \
+    && docker-php-ext-install pdo_mysql gd \
     \
     # set up composer
     && EXPECTED_SIGNATURE=$(wget -q -O - https://composer.github.io/installer.sig) \
@@ -36,14 +28,6 @@ RUN \
     && php composer-setup.php --install-dir=/usr/local/bin --filename=composer --quiet \
     && rm composer-setup.php \
     \
-    # simplesamlphp
-    && mkdir /var/simplesamlphp \
-    && cd /var/simplesamlphp \
-    && curl -fSL "https://github.com/simplesamlphp/simplesamlphp/releases/download/v$SIMPLESAMLPHP_VERSION/simplesamlphp-$SIMPLESAMLPHP_VERSION.tar.gz" -o simplesamlphp.tar.gz \
-    && echo "$SIMPLESAMLPHP_SHA256 *simplesamlphp.tar.gz" | sha256sum -c - \
-    && tar --strip-components=1 -zxf simplesamlphp.tar.gz \
-    && rm simplesamlphp.tar.gz \
-    \
     # billett
     && mkdir -p /var/billett/cache \
     && mkdir -p /var/billett/logs \
@@ -52,43 +36,36 @@ RUN \
     && mkdir -p /var/billett/views \
     && chown -R www-data:www-data /var/billett /var/www /var/www/html
 
-# configure simplesamlphp
-COPY simplesamlphp/config.override.php /var/simplesamlphp/config/
-COPY simplesamlphp/authsources.php /var/simplesamlphp/config/
-COPY simplesamlphp/saml20-idp-remote.php /var/simplesamlphp/metadata/
-RUN cd /var/simplesamlphp && tail -n +2 config/config.override.php >>config/config.php
+COPY --chown=www-data:www-data backend/composer.* /var/www/html/
 
-COPY backend/composer.* /var/www/html/
+USER www-data
 
 # create directories that are scanned on composer install
 # this is later replaced with new source, but we need this
 # here to have cache of composer modules to avoid cache miss
 # in case only our code is updated and not dependencies
-USER www-data
-RUN mkdir -p app/commands \
-             app/controllers \
-             app/models \
-             app/database/migrations \
-             app/database/seeds \
-             app/tests \
-             app/src \
-    && echo -e '#!/usr/bin/env php\n<?php' >artisan \
-    && echo -e '#!/usr/bin/env php\n<?php' >app/tests/TestCase.php \
-    && chmod +x artisan \
-    && composer install \
-    && mv vendor /var/www/html-vendor \
-    && ln -s /var/www/html-vendor /var/www/html/vendor
+RUN set -eux; \
+    mkdir -p \
+      app/Console/Commands \
+      app/Helpers \
+      database \
+      tests \
+    ; \
+    echo -e '#!/usr/bin/env php\n<?php' >artisan; \
+    echo -e '#!/usr/bin/env php\n<?php' >tests/TestCase.php; \
+    echo -e '#!/usr/bin/env php\n<?php' >app/Helpers/format.php; \
+    composer install; \
+    mv vendor /var/www/html-vendor; \
+    ln -s /var/www/html-vendor /var/www/html/vendor
 
-COPY backend /var/www/html/
+
+COPY --chown=www-data:www-data backend /var/www/html/
 
 # we run composer install again so the post process commands
 # are run
 RUN composer install
 
 USER root
-COPY backend/container/entrypoint.sh /entrypoint.sh
-COPY backend/container/dev.sh /dev.sh
 
 VOLUME ["/var/billett"]
-ENTRYPOINT ["/entrypoint.sh"]
 CMD ["php-fpm"]

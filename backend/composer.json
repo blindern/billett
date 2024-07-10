@@ -1,7 +1,10 @@
 {
     "name": "blindernuka/billett",
     "description": "Billettsystemet til UKA på Blindern",
-    "keywords": ["blindernuka", "billett"],
+    "keywords": [
+        "blindernuka",
+        "billett"
+    ],
     "repositories": [
         {
             "type": "vcs",
@@ -9,46 +12,71 @@
         }
     ],
     "require": {
-        "laravel/framework": "4.2.*",
-        "dompdf/dompdf" : "0.6.*",
-        "milon/barcode": "~4.2",
-        "intervention/image": "~2.0",
-        "iio/libmergepdf": "~2.4",
-        "knight-swarm/laravel-saml": "dev-master",
+        "php": "^8.2",
+        "dompdf/dompdf": "^3",
+        "guzzlehttp/guzzle": "7.8.1",
         "henrist/laravel-api-query": "dev-master",
-        "doctrine/dbal": "~2.5",
-        "barryvdh/laravel-ide-helper": "~1.11",
-        "guzzlehttp/guzzle": "^6"
+        "iio/libmergepdf": "4.0.4",
+        "intervention/image-laravel": "^1.3",
+        "laravel/framework": "^11.9",
+        "laravel/tinker": "^2.9",
+        "milon/barcode": "^11",
+        "onelogin/php-saml": "4.2.0"
+    },
+    "require-dev": {
+        "fakerphp/faker": "^1.23",
+        "laravel/pint": "^1.13",
+        "laravel/sail": "^1.26",
+        "mockery/mockery": "^1.6",
+        "nunomaduro/collision": "^8.0",
+        "phpunit/phpunit": "^11.0.1"
     },
     "autoload": {
         "classmap": [
-            "app/commands",
-            "app/controllers",
-            "app/models",
-            "app/database/migrations",
-            "app/database/seeds",
-            "app/tests/TestCase.php"
+            "database",
+            "app/Console/Commands"
+        ],
+        "files": [
+            "app/Helpers/format.php"
         ],
         "psr-4": {
-            "Blindern\\UKA\\": "app/src"
+            "App\\": "app/",
+            "Blindern\\UKA\\": "app/src",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/"
         }
     },
     "scripts": {
-        "post-install-cmd": [
-            "php artisan clear-compiled",
-            "php artisan optimize"
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi"
         ],
         "post-update-cmd": [
-            "php artisan clear-compiled",
-            "php artisan ide-helper:generate",
-            "php artisan optimize"
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+        ],
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-create-project-cmd": [
-            "php artisan key:generate"
+            "@php artisan key:generate --ansi",
+            "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
+            "@php artisan migrate --graceful --ansi"
         ]
     },
-    "config": {
-        "preferred-install": "dist"
+    "extra": {
+        "laravel": {
+            "dont-discover": []
+        }
     },
-    "minimum-stability": "stable"
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }

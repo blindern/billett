@@ -2,6 +2,7 @@
 
 namespace Blindern\UKA\Billett\Helpers;
 
+use Blindern\UKA\Billett\Auth\Roles;
 use Illuminate\Support\Facades\Request;
 
 class ModelHelper
@@ -10,7 +11,7 @@ class ModelHelper
     {
         $guest = 'Guest';
 
-        if (Request::has('admin') && Auth::hasRole('billett.admin')) {
+        if (Request::has('admin') && Roles::hasRole('billett.admin')) {
             $guest = '';
         }
 

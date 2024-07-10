@@ -1,4 +1,4 @@
-version: '2'
+# Only used for local development.
 
 services:
   fpm:
@@ -12,6 +12,7 @@ services:
       LARAVEL_ENV: local
       BILLETT_KEY: KeNd439jeX9n9hqudOxXqCQErFmbApoi
       BILLETT_MYSQL_PASS: uka_billett
+      DB_HOST: database
     env_file:
       - backend/.env
   nginx:
@@ -26,3 +27,27 @@ services:
     environment:
       FPM_HOST: fpm:9000
       FRONTEND_URL: http://${DOCKER_GATEWAY_HOST:-host.docker.internal}:3000
+  database:
+    image: mysql:8.1.0
+    volumes:
+      - db:/var/lib/mysql/
+    environment:
+      MYSQL_ROOT_PASSWORD: uka
+      MYSQL_DATABASE: uka_billett
+      MYSQL_USER: uka_billett
+      MYSQL_PASSWORD: uka_billett
+    ports:
+      - "127.0.0.1:3306:3306"
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+     - PMA_HOST=database
+     - PMA_USER=uka_billett
+     - PMA_PASSWORD=uka_billett
+    ports:
+     - 127.0.0.1:8080:80
+    volumes:
+     - /sessions
+
+volumes:
+  db:
