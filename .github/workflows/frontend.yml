@@ -37,13 +37,13 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: frontend
-          push: ${{ github.ref == 'refs/heads/master' }}
+          push: ${{ github.ref == 'refs/heads/main' }}
           tags: blindernuka/billett-frontend:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Deploy
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/main'
         run: |
           curl --fail -L -i -H "authorization: bearer $DEPLOYER_TOKEN" -H "content-type: application/json" -X POST https://deployer.foreningenbs.no/deploy -d '
           {
