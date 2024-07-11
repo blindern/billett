@@ -50,7 +50,7 @@ class OrderController extends Controller
     {
         $class = ModelHelper::getModelPath('Order');
         $order = $class::find($id);
-        if (! $order || (! $order->isOwnerOfReservation() && ! Roles::hasRole('billett.admin'))) {
+        if (! $order || (! $order->isOwnerOfReservation() && ! Roles::isAdmin())) {
             return Response::json('not found', 404);
         }
 
@@ -112,11 +112,11 @@ class OrderController extends Controller
     {
         $class = ModelHelper::getModelPath('Order');
         $order = $class::find($id);
-        if (! $order || (! $order->isOwnerOfReservation() && ! Roles::hasRole('billett.admin'))) {
+        if (! $order || (! $order->isOwnerOfReservation() && ! Roles::isAdmin())) {
             return Response::json('not found', 404);
         }
 
-        if (! $order->isReservation() && ! Roles::hasRole('billett.admin')) {
+        if (! $order->isReservation() && ! Roles::isAdmin()) {
             return Response::json('not a reservation', 400);
         }
 
@@ -148,7 +148,7 @@ class OrderController extends Controller
 
         $order->recruiter = Request::get('recruiter');
 
-        if (Roles::hasRole('billett.admin') && Request::exists('comment')) {
+        if (Roles::isAdmin() && Request::exists('comment')) {
             $order->comment = Request::get('comment');
         }
 
@@ -167,7 +167,7 @@ class OrderController extends Controller
     public function destroy($id)
     {
         $order = Order::find($id);
-        if (! $order || (! $order->isOwnerOfReservation() && ! Roles::hasRole('billett.admin'))) {
+        if (! $order || (! $order->isOwnerOfReservation() && ! Roles::isAdmin())) {
             return Response::json('not found', 404);
         }
 
@@ -186,7 +186,7 @@ class OrderController extends Controller
     public function placeOrder($id)
     {
         $order = Order::find($id);
-        if (! $order || (! $order->isOwnerOfReservation() && ! Roles::hasRole('billett.admin'))) {
+        if (! $order || (! $order->isOwnerOfReservation() && ! Roles::isAdmin())) {
             return Response::json('not found', 404);
         }
 

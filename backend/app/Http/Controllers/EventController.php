@@ -41,12 +41,12 @@ class EventController extends Controller
         $class = ModelHelper::getModelPath('Event');
         $ev = $class::findByAliasOrFail($id_or_alias);
 
-        if (! $ev->is_published && ! Roles::hasRole('billett.admin')) {
+        if (! $ev->is_published && ! Roles::isAdmin()) {
             App::abort(404);
         }
 
         $show_all = false;
-        if (Roles::hasRole('billett.admin') && Request::has('admin')) {
+        if (Roles::isAdmin() && Request::has('admin')) {
             $show_all = true;
         }
 
@@ -72,7 +72,7 @@ class EventController extends Controller
         $class = ModelHelper::getModelPath('Event');
         $event = $class::findOrFail($id);
 
-        if (! $event->is_published && ! Roles::hasRole('billett.admin')) {
+        if (! $event->is_published && ! Roles::isAdmin()) {
             App::abort(404);
         }
 
@@ -296,7 +296,7 @@ class EventController extends Controller
     {
         $event = Event::findOrFail($id);
 
-        if (! $event->is_published && ! Roles::hasRole('billett.admin')) {
+        if (! $event->is_published && ! Roles::isAdmin()) {
             App::abort(404);
         }
 

@@ -32,7 +32,7 @@ class TicketgroupController extends Controller
     {
         $g = Ticketgroup::findOrFail($id);
 
-        $show_all = Roles::hasRole('billett.admin');
+        $show_all = Roles::isAdmin();
         if (! $show_all && ! $g->use_web) {
             App::abort(404);
         }

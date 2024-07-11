@@ -37,7 +37,7 @@ class EventgroupController extends Controller
         return $class::with([
             'events' => function ($q) {
                 $q->orderBy('time_start');
-                if (! Roles::hasRole('billett.admin') || ! Request::has('admin')) {
+                if (! Roles::isAdmin() || ! Request::has('admin')) {
                     $q->where('is_published', true);
                 }
             },

@@ -11,7 +11,7 @@ class ModelHelper
     {
         $guest = 'Guest';
 
-        if (Request::has('admin') && Roles::hasRole('billett.admin')) {
+        if (Request::has('admin') && Roles::isAdmin()) {
             $guest = '';
         }
 

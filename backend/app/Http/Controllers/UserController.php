@@ -16,8 +16,9 @@ class UserController extends Controller
 
         return [
             'logged_in' => (bool) $user,
-            'user_roles' => Roles::getRoles(),
+            'user_roles' => Roles::isAdmin() ? ['all'] : [],
             'user' => $user,
+            'is_admin' => Roles::isAdmin(),
             'is_dev' => $is_dev,
             'is_vipps_test' => Config::get('vipps.test'),
             'csrf_token' => csrf_token(),
