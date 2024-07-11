@@ -1,7 +1,5 @@
 # UKA på Blindern sitt billettsystem
 
-* [Om systemet](om.md)
-
 ## Data attributes/model
 
 ![Entity relation](diagram_er.png)

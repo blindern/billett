@@ -1,68 +1,125 @@
-# UKA på Blindern's ticket system
+# Billettsystemet til UKA på Blindern
 
-This project contains code for running UKA på Blindern's ticket system.
-Even though the code is in production, it currently lacks a few features
-and is probably little of use for others.
+https://billett.blindernuka.no
 
-More documentation: [Documentation (norwegian)](docs/index.md)
+## Kort om systemet
 
-## Architecture
+- Betalingsløsning integrert med Vipps Checkout
+- Kjøp av ett-og-ett arrangement (ingen handlekurv på tvers av arrangementer)
+- Billetter mottas som PDF på e-post og fremvises ved inngang
+- Strekkodescanner ved inngang for enkel validering og registrering av billetter
+- Salg av løse billetter, f.eks. i billettskranke eller på stand
 
-This project is run with Docker and mainly consists of:
+## Historie
 
-* PHP backend container running php-fpm serving the backend api
-* nginx container that serves the static files and acts as a proxy to the backend
-* mysql container as database
+Det ble tatt initiativ til å lage et eget billettsystem til UKA på Blindern 2011,
+da vi ønsket en rimeligere og mer integrert løsning enn det som var alternativene.
+I slutten av november/starten av desember 2010 begynte arbeidet med billettsystemet,
+og det ble satt i drift tidlig januar 2011. Det samme systemet ble benyttet igjen i 2013.
+For festivalen i 2015 ble systemet skrevet på nytt som en separat løsning,
+og det er dette systemet som finnes her.
 
-## Backend API details
+Systemet er utviklet av Henrik Steen som også vedlikeholder det ved behov.
 
-The backend runs Laravel and provides only an API for the frontend. See the
-Laravel web page for more details.
+## Tekniske detaljer
 
-## Production setup
+Systemet bruker [Laravel](https://laravel.com/)-rammeverket som backend i
+kombinasjon med en selvstendig frontend-applikasjon.
 
-Deployments is automated on every build. See GitHub Action and
+[Mer teknisk dokumentasjon](docs/index.md)
+
+## Produksjon
+
+Systemet deployes automatisk for hvert bygg på `main`. Se GitHub Action og
 https://github.com/blindern/drift/tree/master/ansible/roles/service-uka-billett
 
-Command to run migrations after deploying new version:
+Ev. nye databasemigrasjoner må kjøres manuelt:
 
 ```bash
 ssh root@fcos-1.nrec.foreningenbs.no
 docker exec -t uka-billett-fpm ./artisan migrate
 ```
 
-## Development setup
+## Lokal utvikling
 
-Docker Compose is used to simplify running the containers locally.
+For å gjøre lokal utvikling trenger du:
 
-### Running the backend
+- Docker
+- PHP 8.3+ med Composer
+- Node.js 18+
 
-```bash
-docker compose up database
-```
+### Kjøre backend lokalt
 
-```bash
-cd backend
-composer install
-php artisan serve --port 8081
-```
+1. Start databasen i egen terminal:
 
-http://localhost:8081/
+   ```bash
+   docker compose up database phpmyadmin
+   ```
 
-### Running the frontend
+1. Så i backend-mappa:
 
-```bash
-cd frontend
-npm ci
-BACKEND_URL=https://billett.blindernuka.no/ npm run dev
-```
+   ```bash
+   cd backend
+   ```
 
-Open http://localhost:3000/
+1. Installer/oppdater avhengigheter:
 
-### Running phpMyAdmin for development
+   ```bash
+   composer install
+   ```
 
-```bash
-docker compose up phpmyadmin
-```
+1. Kjør migrasjoner:
 
-Now go to http://localhost:8080/
+   ```bash
+   php artisan migrate
+   ```
+
+1. Seed databasen med testdata:
+
+   ```bash
+   php artisan db:seed
+
+1. Start backend:
+
+   ```bash
+   php artisan serve --port 8081
+   ```
+
+1. Du skal nå kunne nå f.eks. http://localhost:8081/api/me
+
+### Kjøre frontend lokalt
+
+Frontend kan utvikles direkte mot backend i produksjon. Tilpass `BACKEND_URL`
+etter hva du ønsker å gå mot.
+
+1. ```bash
+   cd frontend
+   ```
+
+1. Installer/oppdater avhengigheter:
+
+   ```bash
+   npm ci
+   ```
+
+1. Kjør lokal server
+
+   enten mot lokalt:
+
+   ```bash
+   BACKEND_URL=http://localhost:8081/ npm run dev
+   ```
+
+   eller mot produksjon:
+
+   ```bash
+   BACKEND_URL=https://billett.blindernuka.no/ npm run dev
+   ```
+
+1. Åpne http://localhost:3000/
+
+### phpMyAdmin
+
+Kan brukes for å enkelt se og gjøre manuelle endringer i den lokale databasen.
+
+http://localhost:8080/
