@@ -14,14 +14,10 @@ import { marked } from "marked"
 import "angular-marked"
 import "ng-toast"
 import "ng-focus-on"
-import "angular-google-analytics"
 import "@opengovsg/angular-legacy-sortablejs-maintained"
 
 import "bootstrap-sass/assets/javascripts/bootstrap.js"
 
-import AuthService from "./auth/AuthService"
-
-import angularGoogleAnalytics from "angular-google-analytics"
 import auth from "./auth"
 import common from "./common"
 import admin from "./admin"
@@ -38,7 +34,6 @@ moment.locale("nb")
 
 let module = angular.module("billett", [
   "ui.router",
-  angularGoogleAnalytics,
   auth,
   common,
   admin,
@@ -50,7 +45,6 @@ module.config(function (
   $httpProvider,
   $stateProvider,
   $urlRouterProvider,
-  AnalyticsProvider,
   ngToastProvider,
 ) {
   $stateProvider.state("404", {
@@ -72,38 +66,12 @@ module.config(function (
 
   $httpProvider.defaults.withCredentials = true
 
-  AnalyticsProvider.setAccount("UA-19030223-1")
-  AnalyticsProvider.trackPages(false)
-  AnalyticsProvider.trackPrefix("billett")
-  AnalyticsProvider.useAnalytics(true)
-  AnalyticsProvider.useECommerce(true, false)
-
   ngToastProvider.configure({
     horizontalPosition: "center",
   })
 })
 
-module.run(function ($rootScope, $timeout, Analytics, Page) {
-  $rootScope.$on("$stateChangeSuccess", function () {
-    // let it finish page setup
-    $timeout(function () {
-      var loaded = function () {
-        // let the digest run so all states are updated
-        $timeout(function () {
-          AuthService.isDevPage().then((isDevPage) => {
-            if (!isDevPage) {
-              console.log("tracking page view")
-              Analytics.trackPage()
-            }
-          })
-        }, 0)
-      }
-      var p = Page.getPageLoaderPromise()
-      if (p) p.then(loaded)
-      else loaded()
-    }, 0)
-  })
-
+module.run(function ($rootScope) {
   // iframe state
   $rootScope.isInIframe = window.top != window.self
 })

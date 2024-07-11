@@ -14,26 +14,11 @@ module.config(function ($stateProvider) {
 
 module.controller(
   "OrderController",
-  function (Page, $http, $location, $scope, Analytics) {
+  function (Page, $http, $location, $scope) {
     $http.get(api("order/receipt")).then(
       function (res) {
         $scope.order = res.data.order
         $scope.payment = res.data.payment
-
-        // TODO: don't add multiple times if user is reloading page
-
-        var is_test = res.data.order.order_text_id.slice(-5) == "-TEST"
-        Analytics.addTrans(
-          res.data.order.order_text_id,
-          "Billett UKA på Blindern" + (is_test ? " (TEST)" : ""),
-          res.data.payment.amount,
-          0,
-          0,
-          "",
-          "",
-          "",
-          "NOK",
-        )
 
         // group the entries by ticketgroup
         var ticketGroups = {}
@@ -51,11 +36,6 @@ module.controller(
             ]
           }
         })
-        angular.forEach(ticketGroups, function (group) {
-          Analytics.addItem.apply(Analytics, group)
-        })
-
-        Analytics.trackTrans()
       },
       function (err) {
         //$location.path('/');
