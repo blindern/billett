@@ -1,103 +1,90 @@
-<page-property
-  name="description"
-  value="Oversikt over arrangementer for {{group.title}}"
-></page-property>
+<page-property name="description" value="Oversikt over arrangementer for {{group.title}}"></page-property>
 
 <div class="eventgroup-page">
   <div class="page-header">
     <h1>
       {{group.title}}
-      <span ng-if="has_role_admin" class="pull-right">
-        <a ng-href="a/eventgroup/{{group.id}}" class="btn btn-primary">Admin</a>
+      @if (has_role_admin) {
+<span class="pull-right">
+        <a [href]="a/eventgroup/group.id" class="btn btn-primary">Admin</a>
       </span>
+}
     </h1>
   </div>
 
-  <div ng-if="group.events.length == 0">
+  @if (group.events.length == 0) {
+<div>
     <p>Ingen arrangementer eksisterer.</p>
   </div>
+}
 
-  <div ng-if="group.events.length > 0">
-    <p ng-if="isFilter">
-      <a ng-href="eventgroup/{{group.id}}">Vis hele arrangementlista</a>
+  @if (group.events.length > 0) {
+<div>
+    @if (isFilter) {
+<p>
+      <a [href]="eventgroup/group.id">Vis hele arrangementlista</a>
     </p>
+}
 
     <div class="eventgroup-event-list">
       <ul class="days">
-        <li class="day" ng-repeat="(day, events) in days">
+        @for ((day, events) in days; track (day, events) in days) {
+<li class="day">
           <div class="header">
-            <a ng-href="{{::('eventgroup/'+group.id+'/'+day)}}">
+            <a [href]="::('eventgroup/'+group.id+'/'+day)">
               <span class="date">
                 <span>{{::events[0].time_start-21600|formatdate:'dddd'}}</span>
                 {{::events[0].time_start-21600|formatdate:'D. MMMM YYYY'}}
               </span>
-              <span class="theme" ng-if="daythemes[day]"
-                >{{daythemes[day]}}</span
-              >
+              @if (daythemes[day]) {
+<span class="theme">{{daythemes[day]}}</span>
+}
             </a>
           </div>
 
           <!-- each event -->
-          <ul class="event" ng-repeat="event in events">
+          @for (event of events; track event) {
+<ul class="event">
             <li>{{::event.time_start|formatdate:'HH:mm'}}</li>
             <li>{{::event.location}}</li>
 
             <li>
               <!-- admin links -->
-              <div class="edit-link-wrap" ng-show="has_role_admin">
+              <div class="edit-link-wrap" [hidden]="!has_role_admin">
                 <span class="edit-link">
-                  <a ng-href="a/event/{{::event.id}}/edit">Rediger</a>
-                  <a ng-href="a/event/{{::event.id}}">Detaljert</a>
+                  <a [href]="a/event/::event.id/edit">Rediger</a>
+                  <a [href]="a/event/::event.id">Detaljert</a>
                 </span>
               </div>
 
-              <a ng-href="event/{{::event.alias||event.id}}" target="_top"
-                >{{::event.title}}</a
-              >
-              <span
-                class="category"
-                ng-class="'category-'+categoryNum(event.category)"
-                ng-show="::event.category"
-              >
-                <a
-                  ng-href="{{::('eventgroup/'+group.id+'/'+event.category|lowercase)}}"
-                  >{{::event.category}}</a
-                >
+              <a [href]="event/::event.alias||event.id" target="_top">{{::event.title}}</a>
+              <span class="category" [ngClass]="'category-'+categoryNum(event.category)" [hidden]="!::event.category">
+                <a [href]="::('eventgroup/'+group.id+'/'+event.category|lowercase)">{{::event.category}}</a>
               </span>
             </li>
             <li>
-              <div ng-show="::!event.ticket_info">
-                <span ng-show="::event.web_selling_status == 'unknown'"
-                  >TBA</span
-                >
-                <span
-                  ng-show="::event.web_selling_status == 'no_tickets'"
-                ></span>
-                <span ng-show="::event.web_selling_status == 'old'"></span>
-                <span
-                  ng-show="::event.web_selling_status == 'no_web_tickets'"
-                ></span>
-                <span ng-show="::event.web_selling_status == 'timeout'"
-                  >I døra</span
-                >
-                <span ng-show="::event.web_selling_status == 'sold_out'"
-                  >Utsolgt</span
-                >
-                <span ng-show="::event.web_selling_status == 'sale'">
+              <div [hidden]="!::!event.ticket_info">
+                <span [hidden]="!::event.web_selling_status == 'unknown'">TBA</span>
+                <span [hidden]="!::event.web_selling_status == 'no_tickets'"></span>
+                <span [hidden]="!::event.web_selling_status == 'old'"></span>
+                <span [hidden]="!::event.web_selling_status == 'no_web_tickets'"></span>
+                <span [hidden]="!::event.web_selling_status == 'timeout'">I døra</span>
+                <span [hidden]="!::event.web_selling_status == 'sold_out'">Utsolgt</span>
+                <span [hidden]="!::event.web_selling_status == 'sale'">
                   <a href="event/{{::event.alias||event.id}}" target="_top">
-                    <img
-                      src="/assets/graphics/billettgul.png"
-                      alt="Kjøp billett"
-                    />
+                    <img src="/assets/graphics/billettgul.png" alt="Kjøp billett">
                   </a>
                 </span>
               </div>
 
-              <div ng-show="::event.ticket_info">{{::event.ticket_info}}</div>
+              <div [hidden]="!::event.ticket_info">{{::event.ticket_info}}</div>
             </li>
           </ul>
+}
         </li>
+}
       </ul>
     </div>
   </div>
+}
 </div>

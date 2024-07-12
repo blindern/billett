@@ -1,96 +1,92 @@
-<script
-  async
-  type="text/javascript"
-  src="https://checkout.vipps.no/checkout-button/v1/vipps-checkout-button.js"
-></script>
+<script async="" type="text/javascript" src="https://checkout.vipps.no/checkout-button/v1/vipps-checkout-button.js"></script>
 
-<page-property
-  name="title"
-  value="{{event.title}} ({{event.time_start|formatdate:'D. MMM \\k\\l HH:mm'}})"
-></page-property>
-<page-property
-  name="image"
-  value="{{ctrl.api('event/' + event.id + '/image')}}"
-></page-property>
-<page-property
-  name="description"
-  value="{{event.description_short||event.description}}"
-></page-property>
+<page-property name="title" value="{{event.title}} ({{event.time_start|formatdate:'D. MMM \\k\\l HH:mm'}})"></page-property>
+<page-property name="image" value="{{ctrl.api('event/' + event.id + '/image')}}"></page-property>
+<page-property name="description" value="{{event.description_short||event.description}}"></page-property>
 
-<div class="event-page" ng-if="event">
+@if (event) {
+<div class="event-page">
   <div class="page-header">
     <h1>
       <span class="eventgroup">
-        <a href="eventgroup/{{event.eventgroup.id}}"
-          >{{event.eventgroup.title}}</a
-        >
+        <a href="eventgroup/{{event.eventgroup.id}}">{{event.eventgroup.title}}</a>
       </span>
       {{event.title}}
-      <span class="eventdate-header"
-        >({{event.time_start|formatdate:'DD.MM'}})</span
-      >
-      <span ng-if="isLoggedIn" class="pull-right">
-        <a ng-href="a/event/{{event.id}}" class="btn btn-primary">Admin</a>
-        <a ng-href="a/event/{{event.id}}/edit" class="btn btn-primary"
-          >Rediger</a
-        >
+      <span class="eventdate-header">({{event.time_start|formatdate:'DD.MM'}})</span>
+      @if (isLoggedIn) {
+<span class="pull-right">
+        <a [href]="a/event/event.id" class="btn btn-primary">Admin</a>
+        <a [href]="a/event/event.id/edit" class="btn btn-primary">Rediger</a>
       </span>
+}
     </h1>
-    <p ng-if="!event.is_published">
+    @if (!event.is_published) {
+<p>
       Dette arrangementet er ikke publisert. Du er innlogget og kan se.
     </p>
+}
   </div>
 
   <!-- TODO: ics-link -->
 
   <div class="row">
-    <div
-      class="col-sm-5"
-      ng-class="{'no-buy-form': ctrl.event_status == 'no_tickets'}"
-    >
+    <div class="col-sm-5" [ngClass]="{'no-buy-form': ctrl.event_status == 'no_tickets'}">
       <div class="event-image">
-        <img ng-src="{{ctrl.api('event/' + event.id + '/image')}}" alt="" />
+        <img [src]="ctrl.api('event/' + event.id + '/image')" alt="">
       </div>
       <dl class="dl-horizontal">
         <dt>Tidspunkt</dt>
         <dd>
-          {{event.time_start|formatdate:'dddd D. MMMM YYYY'}}<br />
+          {{event.time_start|formatdate:'dddd D. MMMM YYYY'}}<br>
           kl. {{event.time_start|formatdate:'HH:mm'}}
-          <span ng-if="event.time_end"
-            >til {{event.time_end|formatdate:'HH:mm'}}</span
-          >
+          @if (event.time_end) {
+<span>til {{event.time_end|formatdate:'HH:mm'}}</span>
+}
         </dd>
-        <dt ng-if="event.category">Kategori</dt>
-        <dd ng-if="event.category">{{event.category}}</dd>
-        <dt ng-if="event.location">Sted</dt>
-        <dd ng-if="event.location">{{event.location}}</dd>
-        <dt ng-if="event.age_restriction">Aldersgrense</dt>
-        <dd ng-if="event.age_restriction">{{event.age_restriction}} år</dd>
+        @if (event.category) {
+<dt>Kategori</dt>
+}
+        @if (event.category) {
+<dd>{{event.category}}</dd>
+}
+        @if (event.location) {
+<dt>Sted</dt>
+}
+        @if (event.location) {
+<dd>{{event.location}}</dd>
+}
+        @if (event.age_restriction) {
+<dt>Aldersgrense</dt>
+}
+        @if (event.age_restriction) {
+<dd>{{event.age_restriction}} år</dd>
+}
       </dl>
 
-      <div
-        ng-if="event.description"
-        marked="event.description"
-        class="event-description"
-      ></div>
+      @if (event.description) {
+<div marked="event.description" class="event-description"></div>
+}
 
-      <p ng-if="event.link" class="event-link">
-        <a ng-href="{{event.link}}">Gå til arrangementsartikkel &raquo;</a>
+      @if (event.link) {
+<p class="event-link">
+        <a [href]="event.link">Gå til arrangementsartikkel »</a>
       </p>
+}
     </div>
 
     <div class="col-sm-7 event-right-col">
-      <div ng-if="!reservation || ctrl.event_status == 'sale'">
-        <div
-          ng-if="ctrl.event_status == 'selling_text'"
-          class="panel panel-default"
-        >
+      @if (!reservation || ctrl.event_status == 'sale') {
+<div>
+        @if (ctrl.event_status == 'selling_text') {
+<div class="panel panel-default">
           <div class="panel-body">
             <div class="selling-text" marked="event.selling_text"></div>
           </div>
         </div>
+}
 
-        <div ng-if="ctrl.event_status == 'unknown'" class="panel panel-default">
+        @if (ctrl.event_status == 'unknown') {
+<div class="panel panel-default">
           <div class="panel-body">
             <div>
               Informasjon om billetter for dette arrangementet er for øyeblikket
@@ -98,81 +94,74 @@
             </div>
           </div>
         </div>
+}
 
-        <div ng-if="ctrl.event_status == 'old'" class="panel panel-default">
+        @if (ctrl.event_status == 'old') {
+<div class="panel panel-default">
           <div class="panel-body">
             Billettsalg for arrangementet er avsluttet.
           </div>
         </div>
+}
 
-        <div
-          ng-if="ctrl.event_status == 'no_web_tickets'"
-          class="panel panel-default"
-        >
+        @if (ctrl.event_status == 'no_web_tickets') {
+<div class="panel panel-default">
           <div class="panel-body">
             Dette arrangementet selges ikke på nett eller har foreløpig ingen
             tilgjengelige billetter.
           </div>
         </div>
+}
 
-        <div ng-if="ctrl.event_status == 'timeout'" class="panel panel-default">
+        @if (ctrl.event_status == 'timeout') {
+<div class="panel panel-default">
           <div class="panel-body">
             Nettsalget for dette arrangementet har avsluttet. Evt. tilgjengelige
             billetter selges i døra.
           </div>
         </div>
+}
 
-        <div
-          ng-if="ctrl.event_status == 'sold_out'"
-          class="panel panel-default"
-        >
+        @if (ctrl.event_status == 'sold_out') {
+<div class="panel panel-default">
           <div class="panel-body">
             Arrangementet er dessverre utsolgt. Sjekk tilbake senere for se å om
             det kanskje blir gjort nye billetter tilgjengelig.
           </div>
         </div>
+}
       </div>
+}
 
-      <div
-        ng-if="(!reservation && ctrl.event_status == 'sale') || (reservation && !checkout && ctrl.event_status != 'no_tickets')"
-      >
-        <div
-          class="panel panel-warning"
-          ng-if="reservation && reservation.tickets[0].event.id != event.id"
-        >
+      @if ((!reservation && ctrl.event_status == 'sale') || (reservation && !checkout && ctrl.event_status != 'no_tickets')) {
+<div>
+        @if (reservation && reservation.tickets[0].event.id != event.id) {
+<div class="panel panel-warning">
           <div class="panel-heading">Kjøp billetter</div>
           <div class="panel-body">
             Du holder allerede på å bestille billetter til
-            <a
-              ng-href="event/{{reservation.tickets[0].event.alias||reservation.tickets[0].event.id}}"
-              >{{reservation.tickets[0].event.title}}</a
-            >
+            <a [href]="event/reservation.tickets[0].event.alias||reservation.tickets[0].event.id">{{reservation.tickets[0].event.title}}</a>
             og må fullføre/avbryte den bestillingen først.
           </div>
         </div>
+}
 
-        <div
-          class="panel panel-info buy-form"
-          ng-if="(!reservation || reservation.tickets[0].event.id == event.id) && loadingReservation"
-        >
+        @if ((!reservation || reservation.tickets[0].event.id == event.id) && loadingReservation) {
+<div class="panel panel-info buy-form">
           <div class="panel-heading">Kjøp billetter</div>
           <div class="panel-body">
             Ser etter eksisterende ordrereservasjon ...
           </div>
         </div>
+}
 
-        <div
-          class="panel panel-info buy-form"
-          ng-if="(!reservation || reservation.tickets[0].event.id == event.id) && !loadingReservation"
-        >
+        @if ((!reservation || reservation.tickets[0].event.id == event.id) && !loadingReservation) {
+<div class="panel panel-info buy-form">
           <div class="panel-heading">Kjøp billetter</div>
           <div class="panel-body">
-            <form
-              class="form-horizontal"
-              ng-submit="!form.$valid || placeOrder(ctrl.forcePay)"
-              name="form"
-            >
-              <div ng-if="!reservation">
+            <form class="form-horizontal" (ngSubmit)="!form.$valid || placeOrder(ctrl.forcePay)" name="form">
+              @if (!reservation) {
+<div>
                 <p>
                   Ved kjøp av billetter får du tilsendt en elektronisk billett i
                   PDF-format på e-post som printes ut eller tas med på
@@ -180,49 +169,40 @@
                   <a href="hjelp">Informasjon om billetter</a>
                 </p>
 
-                <div
-                  class="ticketgroup"
-                  ng-repeat="ticketgroup in event.ticketgroups"
-                >
+                @for (ticketgroup of event.ticketgroups; track ticketgroup) {
+<div class="ticketgroup">
                   <div class="meta">
                     <div class="title">
                       {{ticketgroup.title}}
-                      <div ng-if="ticketgroup.ticket_text" class="ticket-text">
+                      @if (ticketgroup.ticket_text) {
+<div class="ticket-text">
                         {{ticketgroup.ticket_text}}
                       </div>
+}
                     </div>
                     <div class="price">
                       <span class="price-label">Pris:</span>
                       {{ticketgroup.price+ticketgroup.fee|price:true}}
-                      <span class="price-fee"
-                        >Hvorav {{ticketgroup.fee|price:true}} i gebyr</span
-                      >
+                      <span class="price-fee">Hvorav {{ticketgroup.fee|price:true}} i gebyr</span>
                     </div>
                   </div>
                   <div class="count">
                     <span class="value" ng-init="ticketgroup.order_count=0">
                       {{ticketgroup.order_count}}
                     </span>
-                    <button
-                      type="button"
-                      ng-click="changeTicketgroupNum(ticketgroup, 1)"
-                      class="btn btn-primary btn-sm"
-                      ng-disabled="event.max_each_person<=0"
-                    >
+                    <button type="button" (click)="changeTicketgroupNum(ticketgroup, 1)" class="btn btn-primary btn-sm" ng-disabled="event.max_each_person<=0">
                       <span class="glyphicon glyphicon-plus"></span>
                     </button>
-                    <button
-                      type="button"
-                      ng-click="changeTicketgroupNum(ticketgroup, -1)"
-                      class="btn btn-primary btn-sm"
-                      ng-disabled="ticketgroup.order_count<=0"
-                    >
+                    <button type="button" (click)="changeTicketgroupNum(ticketgroup, -1)" class="btn btn-primary btn-sm" ng-disabled="ticketgroup.order_count<=0">
                       <span class="glyphicon glyphicon-minus"></span>
                     </button>
                   </div>
                 </div>
+}
               </div>
-              <div ng-if="reservation">
+}
+              @if (reservation) {
+<div>
                 <p>
                   Du har nå reservert billetter. For å ikke risikere og miste
                   reservasjonen må du fullføre eller oppdatere skjemaet innen 10
@@ -230,94 +210,77 @@
                 </p>
 
                 <div class="form-group">
-                  <label class="text-right col-sm-4"
-                    >Reserverte billetter</label
-                  >
+                  <label class="text-right col-sm-4">Reserverte billetter</label>
                   <div class="col-sm-8">
-                    <div ng-repeat="ticket in reservation.tickets">
+                    @for (ticket of reservation.tickets; track ticket) {
+<div>
                       {{ticket.ticketgroup.title}} #{{ticket.id}}
-                      <span class="reservation-ticket-price"
-                        >{{ticket.ticketgroup.price+ticket.ticketgroup.fee|price:true}}
+                      <span class="reservation-ticket-price">{{ticket.ticketgroup.price+ticket.ticketgroup.fee|price:true}}
                         (hvorav {{ticket.ticketgroup.fee|price:true}} i
-                        gebyr)</span
-                      >
+                        gebyr)</span>
                     </div>
+}
                   </div>
                 </div>
               </div>
+}
 
-              <p class="text-center" ng-if="vipps_checkout">
-                <input
-                  class="btn btn-default"
-                  type="button"
-                  value="Avbryt"
-                  ng-click="abortOrder()"
-                  ng-if="reservation"
-                />
+              @if (vipps_checkout) {
+<p class="text-center">
+                @if (reservation) {
+<input class="btn btn-default" type="button" value="Avbryt" (click)="abortOrder()">
+}
               </p>
+}
 
-              <section id="vipps-checkout-frame-container" ng-if="vipps_checkout"></section>
+              @if (vipps_checkout) {
+<section id="vipps-checkout-frame-container"></section>
+}
 
-              <div
-                class="reservation-details"
-                ng-if="(reservation || newres.count > 0) && !vipps_checkout"
-              >
-                <hr />
+              @if ((reservation || newres.count > 0) && !vipps_checkout) {
+<div class="reservation-details">
+                <hr>
                 <div class="form-group">
                   <label class="text-right col-sm-4">Totalt å betale</label>
                   <div class="col-sm-8">
-                    <b
-                      >{{(reservation.total_amount||newres.total_amount)|price:true}}</b
-                    >
+                    <b>{{(reservation.total_amount||newres.total_amount)|price:true}}</b>
                   </div>
                 </div>
                 <div class="form-group" form-input-check="form,recruiter">
                   <label class="control-label col-sm-4">Ev. vervet av</label>
                   <div class="col-sm-8">
-                    <input
-                      type="text"
-                      name="recruiter"
-                      ng-model="contact.recruiter"
-                      class="form-control"
-                      placeholder="(valgfritt)"
-                    />
+                    <input type="text" name="recruiter" [(ngModel)]="contact.recruiter" class="form-control" placeholder="(valgfritt)">
                     <span class="help-block">Navn på funksjonær</span>
                   </div>
                 </div>
                 <p class="text-center vipps-button-line">
-                  <vipps-checkout-button
-                    variant="orange"
-                    branded="true"
-                    ng-click="ctrl.forcePay=false"
-                    type="submit"
-                  >
+                  <vipps-checkout-button variant="orange" branded="true" (click)="ctrl.forcePay=false" type="submit">
                   </vipps-checkout-button>
-                  <input
-                    class="btn btn-default"
-                    type="button"
-                    value="Avbryt"
-                    ng-click="abortOrder()"
-                    ng-if="reservation"
-                  />
+                  @if (reservation) {
+<input class="btn btn-default" type="button" value="Avbryt" (click)="abortOrder()">
+}
                 </p>
-                <p class="text-center" ng-if="isVippsTest">
-                  <input
-                    type="submit"
-                    value="Overstyr betaling"
-                    ng-click="ctrl.forcePay=true"
-                    class="btn btn-default"
-                  />
+                @if (isVippsTest) {
+<p class="text-center">
+                  <input type="submit" value="Overstyr betaling" (click)="ctrl.forcePay=true" class="btn btn-default">
                 </p>
+}
 
-                <hr />
+                <hr>
               </div>
+}
             </form>
-            <div class="text-center text-muted" ng-if="!vipps_checkout">
+            @if (!vipps_checkout) {
+<div class="text-center text-muted">
               Billettprisene inkluderer evt. mva og billettgebyr.
             </div>
+}
           </div>
         </div>
+}
       </div>
+}
     </div>
   </div>
 </div>
+}

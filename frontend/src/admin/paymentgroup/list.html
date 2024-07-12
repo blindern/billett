@@ -4,14 +4,10 @@
   <div class="page-header">
     <h1>
       <span class="eventgroup">
-        <a href="a/eventgroup/{{ctrl.eventgroup.id}}"
-          >{{ctrl.eventgroup.title}}</a
-        >
+        <a href="a/eventgroup/{{ctrl.eventgroup.id}}">{{ctrl.eventgroup.title}}</a>
       </span>
       Oppgjør
-      <a class="btn btn-default pull-right" ng-click="ctrl.new()"
-        >Nytt oppgjør</a
-      >
+      <a class="btn btn-default pull-right" (click)="ctrl.new()">Nytt oppgjør</a>
     </h1>
   </div>
 
@@ -23,11 +19,14 @@
     som føres i regnskapet.
   </p>
 
-  <p ng-if="ctrl.paymentgroups.length == 0">
+  @if (ctrl.paymentgroups.length == 0) {
+<p>
     Ingen oppgjør eksisterer for denne arrangementgruppen.
   </p>
+}
 
-  <table class="table" ng-if="ctrl.paymentgroups.length > 0">
+  @if (ctrl.paymentgroups.length > 0) {
+<table class="table">
     <thead>
       <tr>
         <th>Tittel</th>
@@ -36,20 +35,27 @@
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="group in ctrl.paymentgroups">
+      @for (group of ctrl.paymentgroups; track group) {
+<tr>
         <td>
-          <a ng-href="a/paymentgroup/{{::group.id}}">{{::group.title}}</a>
+          <a [href]="a/paymentgroup/::group.id">{{::group.title}}</a>
         </td>
         <td>
           {{::group.time_start|formatdate:'DD.MM.YYYY'}} av
           {{::group.user_created}}
         </td>
-        <td ng-if="::group.time_end">
+        @if (::group.time_end) {
+<td>
           {{::group.time_end|formatdate:'DD.MM.YYYY'}} av
           {{::group.user_closed}}
         </td>
-        <td ng-if="::!group.time_end">Ikke avsluttet</td>
+}
+        @if (::!group.time_end) {
+<td>Ikke avsluttet</td>
+}
       </tr>
+}
     </tbody>
   </table>
+}
 </div>

@@ -1,44 +1,21 @@
 <div class="admin-event">
-  <page-property
-    name="title"
-    value="{{event.title}} ({{event.time_start|formatdate:'DD. MMM'}})"
-  ></page-property>
+  <page-property name="title" value="{{event.title}} ({{event.time_start|formatdate:'DD. MMM'}})"></page-property>
 
   <div class="page-header">
     <h1>
       <span class="eventgroup">
-        <a href="a/eventgroup/{{event.eventgroup.id}}"
-          >{{event.eventgroup.title}}</a
-        >
+        <a href="a/eventgroup/{{event.eventgroup.id}}">{{event.eventgroup.title}}</a>
       </span>
       {{event.title}}
       <span class="pull-right">
-        <a ng-href="event/{{event.id}}" class="btn btn-success">Forhåndsvis</a>
-        <a ng-href="a/event/{{event.id}}/edit" class="btn btn-primary"
-          >Rediger</a
-        >
-        <a
-          href
-          ng-show="!event.has_tickets"
-          class="btn btn-danger"
-          ng-click="deleteEvent()"
-          >Slett arrangement</a
-        >
-        <a
-          ng-href="a/event/{{event.id}}/checkin"
-          ng-show="event.has_tickets"
-          class="btn btn-default"
-          >Innsjekking</a
-        >
-        <a
-          ng-href="a/orders?tickets.event.id={{event.id}}"
-          ng-show="event.has_tickets"
-          class="btn btn-default"
-          >Vis ordre</a
-        >
+        <a [href]="event/event.id" class="btn btn-success">Forhåndsvis</a>
+        <a [href]="a/event/event.id/edit" class="btn btn-primary">Rediger</a>
+        <a href="" [hidden]="!!event.has_tickets" class="btn btn-danger" (click)="deleteEvent()">Slett arrangement</a>
+        <a [href]="a/event/event.id/checkin" [hidden]="!event.has_tickets" class="btn btn-default">Innsjekking</a>
+        <a [href]="a/orders?tickets.event.id=event.id" [hidden]="!event.has_tickets" class="btn btn-default">Vis ordre</a>
       </span>
     </h1>
-    <p ng-show="!event.is_published">
+    <p [hidden]="!!event.is_published">
       Dette arrangementet er ikke publisert. Du er innlogget og kan se.
     </p>
   </div>
@@ -93,46 +70,28 @@
     </div>
 
     <div class="col-md-6">
-      <div
-        class="event-image"
-        nv-file-drop=""
-        nv-file-over=""
-        uploader="uploader"
-      >
-        <span class="upload-tip"
-          >Dra et bilde over her for å laste opp nytt bilde!</span
-        >
-        <img
-          ng-src="{{api('event/' + event.id + '/image?v=' + (image_version||''))}}"
-          alt=""
-          ng-show="!uploadprogress"
-        />
-        <span ng-show="uploadprogress">Laster opp nytt bilde...</span>
+      <div class="event-image" nv-file-drop="" nv-file-over="" uploader="uploader">
+        <span class="upload-tip">Dra et bilde over her for å laste opp nytt bilde!</span>
+        <img [src]="api('event/' + event.id + '/image?v=' + (image_version||''))" alt="" [hidden]="!!uploadprogress">
+        <span [hidden]="!uploadprogress">Laster opp nytt bilde...</span>
       </div>
     </div>
   </div>
 
-  <hr />
+  <hr>
 
   <h3>
     Billettgrupper
-    <a
-      href="a/event/{{event.id}}/ticketgroup/new"
-      class="btn btn-default pull-right"
-      >Ny</a
-    >
+    <a href="a/event/{{event.id}}/ticketgroup/new" class="btn btn-default pull-right">Ny</a>
   </h3>
 
-  <hr />
+  <hr>
 
-  <p ng-show="event.ticketgroups.length == 0">
+  <p [hidden]="!event.ticketgroups.length == 0">
     Ingen billettgrupper eksisterer.
   </p>
 
-  <div
-    ng-show="event.ticketgroups.length > 0"
-    class="table-responsive ticketgroups"
-  >
+  <div [hidden]="!event.ticketgroups.length > 0" class="table-responsive ticketgroups">
     <table class="table table-striped">
       <thead>
         <tr>
@@ -154,21 +113,13 @@
         </tr>
       </thead>
       <tbody ng-sortable="{animation: 100, onUpdate: ctrl.onTicketgroupsOrder}">
-        <tr
-          ng-class="{ 'not-published': !g.use_web, 'not-office': !g.use_office }"
-          ng-repeat="g in event.ticketgroups"
-        >
+        @for (g of event.ticketgroups; track g) {
+<tr [ngClass]="{ 'not-published': !g.use_web, 'not-office': !g.use_office }">
           <td>
-            <a
-              ng-href="{{api('ticketgroup/' + g.id + '/previewticket')}}"
-              target="_blank"
-            >
-              <span
-                class="glyphicon glyphicon-eye-open"
-                title="Forhåndsvis"
-              ></span>
+            <a [href]="api('ticketgroup/' + g.id + '/previewticket')" target="_blank">
+              <span class="glyphicon glyphicon-eye-open" title="Forhåndsvis"></span>
             </a>
-            <a href ng-click="ctrl.previewTicketPrint(g.id)">
+            <a href="" (click)="ctrl.previewTicketPrint(g.id)">
               <span class="glyphicon glyphicon-print" title="Skriv ut"></span>
             </a>
           </td>
@@ -189,13 +140,14 @@
           </td>
           <td>
             {{event.ticket_count.groups[g.id].valid}}
-            <span ng-show="g.limit"> / {{g.limit}} </span>
+            <span [hidden]="!g.limit"> / {{g.limit}} </span>
           </td>
           <td>
             {{event.ticket_count.groups[g.id].sum_price|price}} +
             {{event.ticket_count.groups[g.id].sum_fee|price}}
           </td>
         </tr>
+}
       </tbody>
       <tfoot>
         <tr>
@@ -212,8 +164,8 @@
             {{event.ticket_count.totals.sum_fee|price}}
           </th>
         </tr>
-        <tr ng-show="event.max_normal_sales">
-          <th colspan="8">Kun &laquo;normale&raquo; salg</th>
+        <tr [hidden]="!event.max_normal_sales">
+          <th colspan="8">Kun «normale» salg</th>
           <th>{{event.ticket_count.totals.free_normal}} / - / - / -</th>
           <th>- / {{event.max_normal_sales}}</th>
           <th>&nbsp;</th>

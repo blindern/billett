@@ -3,37 +3,29 @@
     <h3 class="modal-title">Velg billettskriver</h3>
   </div>
   <div class="modal-body">
-    <form class="form-horizontal" ng-submit="ctrl.complete()">
+    <form class="form-horizontal" (ngSubmit)="ctrl.complete()">
       <div class="form-group">
-        <label for="printer" class="col-sm-4 control-label"
-          >Billettskriver</label
-        >
+        <label for="printer" class="col-sm-4 control-label">Billettskriver</label>
         <div class="col-sm-7">
           <printer-list printer="ctrl.printer" id="printer"></printer-list>
         </div>
       </div>
 
-      <div class="row" ng-show="!ctrl.sending">
+      <div class="row" [hidden]="!!ctrl.sending">
         <div class="col-sm-7 col-sm-offset-4">
-          <button
-            class="btn btn-success"
-            type="submit"
-            ng-disabled="!ctrl.printer"
-          >
+          <button class="btn btn-success" type="submit" ng-disabled="!ctrl.printer">
             Skriv ut
           </button>
-          <button
-            class="btn btn-default"
-            type="button"
-            ng-click="ctrl.cancel()"
-          >
+          <button class="btn btn-default" type="button" (click)="ctrl.cancel()">
             Avbryt
           </button>
         </div>
       </div>
-      <p class="text-center" ng-if="ctrl.sending">
+      @if (ctrl.sending) {
+<p class="text-center">
         Sender data til utskrift ...
       </p>
+}
     </form>
   </div>
 </div>

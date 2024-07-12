@@ -1,20 +1,22 @@
 <div>
-  <div class="form-control-static" ng-if="!printers">Laster skrivere ...</div>
-  <div class="form-control-static" ng-if="printers && printers.length == 0">
+  @if (!printers) {
+<div class="form-control-static">Laster skrivere ...</div>
+}
+  @if (printers && printers.length == 0) {
+<div class="form-control-static">
     Ingen skrivere er tilgjengelig
   </div>
-  <div ng-if="printers && printers.length > 0">
-    <select
-      class="form-control"
-      id="{{id}}"
-      ng-options="(p.name + ' (' + (p.ip || 'IKKE TILGJENGELIG') + ':' + p.port + ', oppe '+Math.floor((p.last_seen-p.registered)/60)+' min)') for p in printers"
-      ng-model="t.printer"
-      ng-change="update()"
-    >
+}
+  @if (printers && printers.length > 0) {
+<div>
+    <select class="form-control" id="{{id}}" ng-options="(p.name + ' (' + (p.ip || 'IKKE TILGJENGELIG') + ':' + p.port + ', oppe '+Math.floor((p.last_seen-p.registered)/60)+' min)') for p in printers" [(ngModel)]="t.printer" ng-change="update()">
       <!-- TODO: autofocus required -->
-      <option value="" ng-if="!printer || canDisable">
+      @if (!printer || canDisable) {
+<option value="">
         {{canDisable ? 'Ikke skriv ut' : 'Velg ...'}}
       </option>
+}
     </select>
   </div>
+}
 </div>

@@ -2,11 +2,16 @@
   <div class="modal-header">
     <h3 class="modal-title">Tilordne billetter til ordre</h3>
   </div>
-  <div class="modal-body text-center" ng-if="!ctrl.events">Laster data ...</div>
-  <div class="modal-body text-center" ng-if="ctrl.sending">
+  @if (!ctrl.events) {
+<div class="modal-body text-center">Laster data ...</div>
+}
+  @if (ctrl.sending) {
+<div class="modal-body text-center">
     Registrerer billetter ...
   </div>
-  <div class="modal-body" ng-if="ctrl.events && !ctrl.sending">
+}
+  @if (ctrl.events && !ctrl.sending) {
+<div class="modal-body">
     <div class="row">
       <div class="col-sm-6">
         <dl class="dl-horizontal">
@@ -17,89 +22,68 @@
         </dl>
       </div>
       <div class="col-sm-6">
-        <button
-          class="btn btn-success"
-          ng-click="ctrl.addTickets()"
-          ng-disabled="ctrl.count == 0"
-        >
+        <button class="btn btn-success" (click)="ctrl.addTickets()" ng-disabled="ctrl.count == 0">
           <i class="glyphicon glyphicon-plus"></i> Legg til billetter
         </button>
-        <button class="btn btn-default" ng-click="ctrl.cancel()">Avbryt</button>
+        <button class="btn btn-default" (click)="ctrl.cancel()">Avbryt</button>
       </div>
     </div>
 
     TODO: behandle utsolgt arrangement (tvinge billettkjøp)
 
-    <hr />
+    <hr>
 
     <p class="search-options">
-      <label
-        ><input type="checkbox" ng-model="ctrl.ticketfilter.show_old" /> Vis
-        tidligere arrangementer</label
-      >
-      <label
-        ><input type="checkbox" ng-model="ctrl.ticketfilter.show_inactive" />
-        Vis inaktive billettgrupper</label
-      >
+      <label><input type="checkbox" [(ngModel)]="ctrl.ticketfilter.show_old"> Vis
+        tidligere arrangementer</label>
+      <label><input type="checkbox" [(ngModel)]="ctrl.ticketfilter.show_inactive">
+        Vis inaktive billettgrupper</label>
     </p>
 
     <p>
-      <input
-        class="form-control"
-        type="text"
-        ng-model="ctrl.ticket_search"
-        placeholder="Søk .."
-      />
+      <input class="form-control" type="text" [(ngModel)]="ctrl.ticket_search" placeholder="Søk ..">
     </p>
 
     <div class="event-list">
       <table class="table table-striped table-condensed">
         <!-- tickets: -->
-        <tbody
-          ng-class="{old: event.is_old}"
-          ng-repeat="event in ctrl.events|filter:ctrl.ticket_search"
-        >
+        @for (event of ctrl.events|filter:ctrl.ticket_search; track event) {
+<tbody [ngClass]="{old: event.is_old}">
           <tr>
             <th colspan="3">
               <span class="pull-right count-info">
-                <br />
+                <br>
                 Ledige: {{::event.ticket_count.totals.free}} /
                 {{::event.max_sales}}
               </span>
 
-              <a ng-href="a/event/{{::event.id}}">{{::event.title}}</a>
+              <a [href]="a/event/::event.id">{{::event.title}}</a>
               <span class="event-time">{{::event.dateinfo}}</span>
             </th>
           </tr>
 
           <!-- eventgroups: -->
-          <tr
-            ng-class="{'no-office': !ticketgroup.use_office, 'no-web': !ticketgroup.use_web}"
-            ng-repeat="ticketgroup in event.ticketgroups|filter:{'use_office': ctrl.ticketfilter.show_inactive}:ctrl.ticketgroup_check"
-          >
+          @for (ticketgroup of event.ticketgroups|filter:{'use_office': ctrl.ticketfilter.show_inactive}:ctrl.ticketgroup_check; track ticketgroup) {
+<tr [ngClass]="{'no-office': !ticketgroup.use_office, 'no-web': !ticketgroup.use_web}">
             <td>
               {{ticketgroup.title}}
-              <abbr
-                ng-if="!ticketgroup.use_office"
-                title="NB! Billettgruppen er ikke satt for billettluke"
-                >Ikke luke</abbr
-              >
-              <abbr
-                ng-if="!ticketgroup.use_web"
-                title="Billettgruppen er ikke publisert for nettsalg"
-                >Upub</abbr
-              >
+              @if (!ticketgroup.use_office) {
+<abbr title="NB! Billettgruppen er ikke satt for billettluke">Ikke luke</abbr>
+}
+              @if (!ticketgroup.use_web) {
+<abbr title="Billettgruppen er ikke publisert for nettsalg">Upub</abbr>
+}
 
-              <div ng-if="ticketgroup.ticket_text" class="ticket-text">
+              @if (ticketgroup.ticket_text) {
+<div class="ticket-text">
                 {{ticketgroup.ticket_text}}
               </div>
+}
             </td>
 
             <td>
               {{ticketgroup.price+ticketgroup.fee|price:true}}
-              <span class="price-fee"
-                >(Gebyr: {{ticketgroup.fee|price:true}})</span
-              >
+              <span class="price-fee">(Gebyr: {{ticketgroup.fee|price:true}})</span>
             </td>
 
             <td>
@@ -108,25 +92,19 @@
                 {{event.ticket_count.groups[ticketgroup.id].free}}
               </span>
 
-              <button
-                class="btn btn-primary btn-sm"
-                type="button"
-                ng-click="ctrl.changeTicketgroupNum(ticketgroup, event, 1)"
-              >
+              <button class="btn btn-primary btn-sm" type="button" (click)="ctrl.changeTicketgroupNum(ticketgroup, event, 1)">
                 <span class="glyphicon glyphicon-plus"></span>
               </button>
-              <button
-                class="btn btn-primary btn-sm"
-                type="button"
-                ng-click="ctrl.changeTicketgroupNum(ticketgroup, event, -1)"
-                ng-disabled="(ctrl.ticketgroups_add[ticketgroup.id].num||0)<=0"
-              >
+              <button class="btn btn-primary btn-sm" type="button" (click)="ctrl.changeTicketgroupNum(ticketgroup, event, -1)" ng-disabled="(ctrl.ticketgroups_add[ticketgroup.id].num||0)<=0">
                 <span class="glyphicon glyphicon-minus"></span>
               </button>
             </td>
           </tr>
+}
         </tbody>
+}
       </table>
     </div>
   </div>
+}
 </div>

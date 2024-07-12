@@ -6,7 +6,7 @@
 
 <h2>Verktøy</h2>
 <ul>
-  <li><a href ng-click="printText()">Skriv ut tekst på billettskriver</a></li>
+  <li><a href="" (click)="printText()">Skriv ut tekst på billettskriver</a></li>
 </ul>
 
 <h2>
@@ -14,7 +14,9 @@
   <a href="a/eventgroup/new" class="btn btn-default pull-right">Ny gruppe</a>
 </h2>
 <ul>
-  <li ng-repeat="group in eventgroups">
-    <a ng-href="a/eventgroup/{{group.id}}">{{group.title}}</a>
+  @for (group of eventgroups; track group) {
+<li>
+    <a [href]="a/eventgroup/group.id">{{group.title}}</a>
   </li>
+}
 </ul>
