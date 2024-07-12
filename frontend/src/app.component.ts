@@ -1,5 +1,5 @@
 import { Location } from "@angular/common"
-import { afterRender, Component } from "@angular/core"
+import { afterRender, Component, OnInit } from "@angular/core"
 import { RouterOutlet } from "@angular/router"
 import { authService } from "./auth/AuthService"
 
@@ -9,7 +9,7 @@ import { authService } from "./auth/AuthService"
   imports: [RouterOutlet],
   templateUrl: "./app.component.html",
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = "testbillett" // TODO(migrate)
   realname = ""
   username = ""

@@ -1,7 +1,7 @@
 import moment from "moment"
 import { CommonModule } from "@angular/common"
 import { HttpClient } from "@angular/common/http"
-import { Component, Input } from "@angular/core"
+import { Component, Input, OnInit } from "@angular/core"
 import { EventgroupExpanded, EventgroupService } from "./eventgroup.service"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 
@@ -11,7 +11,7 @@ import { FormatdatePipe } from "../../common/formatdate.pipe"
   imports: [CommonModule, FormatdatePipe],
   templateUrl: "./eventgroup.component.html",
 })
-export class GuestEventgroupComponent {
+export class GuestEventgroupComponent implements OnInit {
   @Input()
   id!: string
 

@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common"
 import { HttpClient } from "@angular/common/http"
-import { Component } from "@angular/core"
+import { Component, OnInit } from "@angular/core"
 import { Observable } from "rxjs"
 import { api } from "../../api"
 import { Eventgroup, EventgroupService } from "../eventgroup/eventgroup.service"
@@ -21,7 +21,7 @@ interface UpcomingItem {
   imports: [CommonModule],
   templateUrl: "./index.component.html",
 })
-export class GuestIndexComponent {
+export class GuestIndexComponent implements OnInit {
   upcoming$!: Observable<UpcomingItem[]>
   eventgroups$!: Observable<Eventgroup[]>
 
