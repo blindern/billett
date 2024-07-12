@@ -26,8 +26,9 @@ export class AppComponent implements OnInit {
 
   constructor(private location: Location) {
     afterRender(() => {
-      // TODO(migrate)
-      // document.body.classList.add("isInIframe")
+      if (window.top != window.self) {
+        document.body.classList.add("isInIframe")
+      }
     })
   }
 

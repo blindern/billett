@@ -51,8 +51,3 @@ module.config(
     })
   },
 )
-
-module.run(function ($rootScope) {
-  // iframe state
-  $rootScope.isInIframe = window.top != window.self
-})
