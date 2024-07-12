@@ -15,7 +15,7 @@ interface AuthInfo {
   is_admin: boolean
 }
 
-let authData: any
+let authData: Promise<AuthInfo> | undefined
 
 // all the functions return promises as we need to
 // fetch details from the server first
@@ -36,14 +36,10 @@ export const authService = {
     return authData.logged_in
   },
 
-  hasRole(role: string) {
+  async hasRole(role: string) {
     // TODO: check for actual role, not 'all'
-    return new Promise((resolve, reject) => {
-      this.getAuthData().then(
-        (res) => resolve(res.user_roles.indexOf("all") != -1),
-        reject,
-      )
-    })
+    const authData = await this.getAuthData()
+    return authData.user_roles.includes("all")
   },
 
   async getUser() {
