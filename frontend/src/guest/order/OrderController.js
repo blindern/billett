@@ -20,7 +20,7 @@ module.controller("OrderController", function (Page, $http, $location, $scope) {
 
       // group the entries by ticketgroup
       var ticketGroups = {}
-      angular.forEach(res.data.order.tickets, function (ticket) {
+      for (const ticket of res.data.order.tickets) {
         if (ticket.ticketgroup.id in ticketGroups) {
           ticketGroups[ticket.ticketgroup.id][5]++
         } else {
@@ -33,7 +33,7 @@ module.controller("OrderController", function (Page, $http, $location, $scope) {
             1,
           ]
         }
-      })
+      }
     },
     function (err) {
       //$location.path('/');

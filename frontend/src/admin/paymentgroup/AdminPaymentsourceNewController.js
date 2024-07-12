@@ -77,7 +77,7 @@ angular
 
         if (ctrl.paymentsource.type == "cash") {
           ctrl.cashvalues = {}
-          angular.forEach(ctrl.cashinputs, function (val, key) {
+          Object.entries(ctrl.cashinputs).forEach(([key, val]) => {
             if (val === "") return
             try {
               ctrl.cashvalues[key] = evaluate(val.replace(",", "."))
@@ -108,16 +108,16 @@ angular
 
         if (ctrl.paymentsource.type == "cash") {
           var s = Math.abs(ctrl.othervalue)
-          angular.forEach(ctrl.cashvalues, function (val, key) {
+          Object.entries(ctrl.cashvalues).forEach(([key, val]) => {
             if (isNaN(val)) {
               Page.toast("Feltet for valør " + key + " er feil utfylt", {
                 class: "danger",
               })
-              return false
+              return
             }
             if (val < 0) {
               errorNeg()
-              return false
+              return
             }
             s += Math.abs(val)
           })
@@ -143,7 +143,7 @@ angular
         if (ctrl.paymentsource.type != "cash") return
 
         ctrl.paymentsource.data = {}
-        angular.forEach(ctrl.cashvalues, function (val, key) {
+        Object.entries(ctrl.cashvalues).forEach(([key, val]) => {
           if (val == 0) return
           ctrl.paymentsource.data[key] = val * ctrl.multiply
         })

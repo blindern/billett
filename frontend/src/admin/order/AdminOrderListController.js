@@ -60,7 +60,7 @@ module.controller(
     ]
     var genFilter = function () {
       var r = []
-      angular.forEach($scope.search, function (val, name) {
+      Object.entries($scope.search).forEach(([name, val]) => {
         $location.search(name, name == "page" && val == 1 ? null : val || null)
 
         if (val == "" || name == "page") return
@@ -83,7 +83,7 @@ module.controller(
       console.log("updating data")
       $scope.search = {}
       $scope.search.page = 1
-      angular.forEach($location.search(), function (val, name) {
+      Object.entries($location.search()).forEach(([name, val]) => {
         $scope.search[name] = val
       })
     }

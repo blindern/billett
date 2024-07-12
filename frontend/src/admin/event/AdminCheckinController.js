@@ -205,7 +205,7 @@ module.controller(
           page: 1,
         }
       } else {
-        angular.forEach(ctrl.searchinput, function (val, key) {
+        Object.keys(ctrl.searchinput).forEach((key) => {
           ctrl.searchinput[key] = ""
         })
         ctrl.searchinput.page = 1

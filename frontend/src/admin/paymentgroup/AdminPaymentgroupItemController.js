@@ -105,9 +105,9 @@ angular
             // convert events to array list
             events = (function (tmp) {
               var list = []
-              angular.forEach(events, function (event) {
+              for (const event of events) {
                 list.push(event)
-              })
+              }
               list.sort(function (left, right) {
                 return left.time_start - right.time_start
               })
@@ -135,20 +135,20 @@ angular
               return prev
             }, {})
             ctrl.categories = []
-            angular.forEach(categories, function (category) {
+            for (const category of categories) {
               ctrl.categories.push(category)
-            })
+            }
             ctrl.categories.sort(function (left, right) {
               return left.name.localeCompare(right.name)
             })
 
             // isolate orders not in balance (only looking at this paymentgroup, not the real balance of the order)
             ctrl.orders_inbalance = []
-            angular.forEach(orders, function (order) {
+            for (const order of orders) {
               if (order.paymentgroup_balance["total"] != 0) {
                 ctrl.orders_inbalance.push(order)
               }
-            })
+            }
             ctrl.orders_inbalance.sort(function (left, right) {
               return left.time - right.time
             })
@@ -279,7 +279,7 @@ angular
 
           var group = cashgroups_link[paymentsource.title]
 
-          angular.forEach(paymentsource.data || {}, function (val, key) {
+          Object.entries(paymentsource.data || {}).forEach(([key, val]) => {
             if (group.cashunique.indexOf(key) === -1) {
               group.cashunique.push(key)
             }

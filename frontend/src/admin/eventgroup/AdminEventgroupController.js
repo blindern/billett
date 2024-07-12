@@ -25,10 +25,10 @@ module.controller(
         $scope.applyFilter()
 
         $scope.categories = []
-        angular.forEach($scope.group.events, function (event) {
-          if ($scope.categories.indexOf(event.category || "") != -1) return
+        for (const event of $scope.group.events) {
+          if ($scope.categories.indexOf(event.category || "") != -1) continue
           $scope.categories.push(event.category || "")
-        })
+        }
         $scope.categories.sort()
       },
       function () {
@@ -42,27 +42,27 @@ module.controller(
     $scope.filter_hidden = "0"
     $scope.applyFilter = function () {
       var r = {}
-      angular.forEach($scope.group.events, function (item) {
+      for (const item of $scope.group.events) {
         if (
           $scope.filter_sale !== "" &&
           $scope.filter_sale != !!item.ticketgroups.length
         )
-          return
+          continue
         if (
           $scope.filter_category !== "-1" &&
           $scope.filter_category != (item.category || "")
         )
-          return
+          continue
         if (
           $scope.filter_hidden != "" &&
           $scope.filter_hidden != item.is_admin_hidden
         )
-          return
+          continue
 
         var k = moment.unix(item.time_start - 3600 * 6).format("YYYY-MM-DD")
         r[k] = r[k] || []
         r[k].push(item)
-      })
+      }
 
       $scope.days = r
     }

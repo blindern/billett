@@ -92,7 +92,7 @@ angular
         ctrl.sending = true
 
         var groups = {}
-        angular.forEach(ctrl.ticketgroups_add, function (group) {
+        Object.values(ctrl.ticketgroups_add).forEach((group) => {
           groups[group.ticketgroup.id] = group.num
         })
 
