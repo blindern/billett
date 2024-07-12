@@ -24,8 +24,6 @@ import admin from "./admin"
 import guest from "./guest"
 import angular from "angular"
 
-import "./app.scss"
-
 import template404 from "./guest/infopages/404.html?raw"
 
 window.marked = marked

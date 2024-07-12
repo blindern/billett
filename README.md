@@ -107,16 +107,14 @@ etter hva du ønsker å gå mot.
    enten mot lokalt:
 
    ```bash
-   BACKEND_URL=http://localhost:8081/ npm run dev
+   BACKEND_URL=http://localhost:8081/ npx ng servce --port 3000 --open
    ```
 
    eller mot produksjon:
 
    ```bash
-   BACKEND_URL=https://billett.blindernuka.no/ npm run dev
+   BACKEND_URL=https://billett.blindernuka.no/ npx ng servce --port 3000 --open
    ```
-
-1. Åpne http://localhost:3000/
 
 ### phpMyAdmin
 

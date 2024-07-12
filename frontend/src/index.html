@@ -1,10 +1,5 @@
 <!DOCTYPE html>
-<html
-  lang="nb"
-  prefix="og: http://ogp.me/ns#"
-  ng-app="billett"
-  ng-controller="PageController"
->
+<html lang="nb" prefix="og: http://ogp.me/ns#">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -34,13 +29,7 @@
 
     <title ng-bind="meta.title">UKA på Blindern</title>
   </head>
-  <body ng-class="{'dev-page': isDevPage, isInIframe: isInIframe}">
-    <div content-wrapper>Laster innhold...</div>
-    <script type="module" src="./src/app.js"></script>
-    <!-- angular-ui-utils not available in npm -->
-    <script
-      type="module"
-      src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-utils/0.1.1/angular-ui-utils.min.js"
-    ></script>
+  <body>
+    <app-root></app-root>
   </body>
 </html>
