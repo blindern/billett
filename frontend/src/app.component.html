@@ -17,18 +17,18 @@
       </a>
     </h3>
     <ul class="nav nav-pills navbar-right">
-      <li ng-class="{ active: isActive('/', '/eventgroup/', '/event/') }">
-        <a href="eventgroup/9"
+      <li [activeFor]="['/', '/eventgroup/*', '/event/*']">
+        <a routerLink="eventgroup/9"
           ><span class="glyphicon glyphicon-list"></span> Arrangementer</a
         >
       </li>
-      <li ng-class="{ active: isActive('/salgsbetingelser') }">
-        <a href="salgsbetingelser"
+      <li [activeFor]="['/salgsbetingelser']">
+        <a routerLink="salgsbetingelser"
           ><span class="glyphicon glyphicon-flash"></span> Salgsbetingelser</a
         >
       </li>
-      <li ng-class="{ active: isActive('/hjelp') }">
-        <a href="hjelp"
+      <li [activeFor]="['/hjelp']">
+        <a routerLink="hjelp"
           ><span class="glyphicon glyphicon-question-sign"></span> Hjelp</a
         >
       </li>
@@ -39,7 +39,8 @@
     <div>
       <p class="text-center">
         <b>NB!</b> Du er innlogget som <u>{{ realname }}</u> men har ikke
-        tilgang til dette systemet. <a href="logout" target="_self">Logg ut</a>
+        tilgang til dette systemet.
+        <a routerLink="logout" target="_self">Logg ut</a>
       </p>
       <hr />
     </div>
@@ -68,13 +69,13 @@
         <a href="http://foreningenbs.no">Foreningen Blindern Studenterhjem</a>
       </li>
       <li>
-        <a href="a">Administrasjon</a>
+        <a routerLink="a">Administrasjon</a>
         @if (isLoggedIn) {
           <span>
             <br />
             {{ username }}
             <br />
-            <a href="logout">[logg ut]</a>
+            <a routerLink="logout">[logg ut]</a>
           </span>
         }
       </li>

@@ -1,12 +1,13 @@
 import { Location } from "@angular/common"
 import { afterRender, Component, OnInit } from "@angular/core"
-import { RouterOutlet } from "@angular/router"
+import { RouterLink, RouterOutlet } from "@angular/router"
 import { authService } from "./auth/AuthService"
+import { ActiveFor } from "./common/active-for"
 
 @Component({
   selector: "app-root",
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, RouterLink, ActiveFor],
   templateUrl: "./app.component.html",
 })
 export class AppComponent implements OnInit {
