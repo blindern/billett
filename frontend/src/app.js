@@ -24,8 +24,6 @@ import admin from "./admin"
 import guest from "./guest"
 import angular from "angular"
 
-import template404 from "./guest/infopages/404.html?raw"
-
 window.marked = marked
 
 moment.locale("nb")
@@ -46,23 +44,6 @@ module.config(
     $urlRouterProvider,
     ngToastProvider,
   ) {
-    $stateProvider.state("404", {
-      template: template404,
-    })
-
-    $urlRouterProvider.otherwise(function ($injector, $location) {
-      console.log("404 found")
-      $injector.invoke([
-        "$state",
-        function ($state) {
-          $state.go("404")
-        },
-      ])
-    })
-
-    // use HTML5 history API for nice urls
-    $locationProvider.html5Mode(true)
-
     $httpProvider.defaults.withCredentials = true
 
     ngToastProvider.configure({
