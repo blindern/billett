@@ -9,7 +9,6 @@ module.controller(
   function (
     $http,
     $modal,
-    $q,
     $state,
     $stateParams,
     Page,
@@ -163,28 +162,20 @@ module.controller(
           return ctrl.order.eventgroup.id
         },
         getOrder: function () {
-          return function () {
-            return $q(function (resolve) {
-              resolve(ctrl.order)
-            })
+          return async function () {
+            return ctrl.order
           }
         },
         addHandler: function () {
-          return function (ticketgroups) {
-            return $q(function (resolve, reject) {
+          return async function (ticketgroups) {
+            try {
               // reload order with new data
-              loadOrder().then(
-                function () {
-                  resolve()
-                },
-                function () {
-                  alert(
-                    "Ukjent feil oppsto ved forsøk på å laste ordren på nytt",
-                  )
-                  resolve() // consider it a success anyways
-                },
-              )
-            })
+              const data = await loadOrder()
+            } catch (e) {
+              console.error(e)
+              alert("Ukjent feil oppsto ved forsøk på å laste ordren på nytt")
+              // consider it a success anyways
+            }
           }
         },
       })
@@ -255,36 +246,26 @@ module.controller(
     }
 
     ctrl.printTickets = function () {
-      AdminPrinter.printSelectModal(function (printername) {
-        return $q(function (resolve, reject) {
-          AdminPrinter.printTickets(printername, ctrl.validtickets).then(
-            function () {
-              Page.toast("Utskrift lagt i kø", { class: "success" })
-              resolve()
-            },
-            function () {
-              Page.toast("Ukjent feil oppsto!", { class: "warning" })
-              reject()
-            },
-          )
-        })
+      AdminPrinter.printSelectModal(async (printername) => {
+        try {
+          await AdminPrinter.printTickets(printername, ctrl.validtickets)
+          Page.toast("Utskrift lagt i kø", { class: "success" })
+        } catch (e) {
+          Page.toast("Ukjent feil oppsto!", { class: "warning" })
+          throw e
+        }
       })
     }
 
     ctrl.printTicket = function (ticketid) {
-      AdminPrinter.printSelectModal(function (printername) {
-        return $q(function (resolve, reject) {
-          AdminPrinter.printTicket(printername, ticketid).then(
-            function () {
-              Page.toast("Utskrift lagt i kø", { class: "success" })
-              resolve()
-            },
-            function () {
-              Page.toast("Ukjent feil oppsto!", { class: "warning" })
-              reject()
-            },
-          )
-        })
+      AdminPrinter.printSelectModal(async (printername) => {
+        try {
+          await AdminPrinter.printTicket(printername, ticketid)
+          Page.toast("Utskrift lagt i kø", { class: "success" })
+        } catch (e) {
+          Page.toast("Ukjent feil oppsto!", { class: "warning" })
+          throw e
+        }
       })
     }
   },

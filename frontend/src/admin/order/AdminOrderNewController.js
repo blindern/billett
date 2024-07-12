@@ -8,7 +8,6 @@ angular
       $http,
       $location,
       $modal,
-      $q,
       $scope,
       $state,
       $stateParams,
@@ -148,55 +147,39 @@ angular
       }
 
       // get the order by using promise (create if not exists)
-      var getOrder = function (reload) {
-        return $q(function (resolve, reject) {
-          // if id is set, the order exists already
-          if (ctrl.order.id) {
-            if (reload) {
-              AdminOrder.get(
-                { id: ctrl.order.id },
-                function (order) {
-                  ctrl.order = order
-
-                  buildTicketgroupList()
-                  resolve(ctrl.order)
-                },
-                function (err) {
-                  reject(err)
-                },
-              )
-            } else {
-              resolve(ctrl.order)
-            }
-
-            return
+      var getOrder = async (reload) => {
+        // if id is set, the order exists already
+        if (ctrl.order.id) {
+          if (reload) {
+            const order = await AdminOrder.get({ id: ctrl.order.id })
+            ctrl.order = order
+            buildTicketgroupList()
+            return order
+          } else {
+            return ctrl.order
           }
+        }
 
-          // create new order
-          var order = new AdminOrder({
-            eventgroup_id: ctrl.eventgroup.id,
-            name: ctrl.order.name,
-            email: ctrl.order.email,
-            phone: ctrl.order.phone,
-            recruiter: ctrl.order.recruiter,
-            comment: ctrl.order.comment,
-          })
-
-          order.$save(
-            function (res) {
-              ctrl.order = res
-
-              localStorage["billett.neworder.id"] = ctrl.order.id
-
-              buildTicketgroupList()
-              resolve(ctrl.order)
-            },
-            function (res) {
-              alert("Ukjent feil oppsto ved opprettelse av ordre")
-              reject(res)
-            },
-          )
+        // create new order
+        var order = new AdminOrder({
+          eventgroup_id: ctrl.eventgroup.id,
+          name: ctrl.order.name,
+          email: ctrl.order.email,
+          phone: ctrl.order.phone,
+          recruiter: ctrl.order.recruiter,
+          comment: ctrl.order.comment,
         })
+
+        try {
+          ctrl.order = await order.$save()
+        } catch (e) {
+          alert("Ukjent feil oppsto ved opprettelse av ordre")
+          throw e
+        }
+
+        localStorage["billett.neworder.id"] = ctrl.order.id
+        buildTicketgroupList()
+        return ctrl.order
       }
 
       // -------------------------------------------------------------------------
@@ -272,21 +255,14 @@ angular
             return getOrder
           },
           addHandler: function () {
-            return function () {
-              return $q(function (resolve) {
-                // reload order with new data
-                getOrder(true).then(
-                  function () {
-                    resolve()
-                  },
-                  function () {
-                    alert(
-                      "Ukjent feil oppsto ved forsøk på å laste ordren på nytt",
-                    )
-                    resolve() // consider it a success anyways
-                  },
-                )
-              })
+            return async function () {
+              // reload order with new data
+              try {
+                await getOrder(true)
+              } catch (e) {
+                alert("Ukjent feil oppsto ved forsøk på å laste ordren på nytt")
+                // consider it a success anyways
+              }
             }
           },
         }).result.then(function () {

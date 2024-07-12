@@ -6,7 +6,6 @@ module.controller(
   "AdminEventController",
   function (
     Page,
-    $q,
     $stateParams,
     AdminEvent,
     AdminPrinter,
@@ -79,19 +78,14 @@ module.controller(
     }
 
     this.previewTicketPrint = function (ticketgroupid) {
-      AdminPrinter.printSelectModal(function (printername) {
-        return $q(function (resolve, reject) {
-          AdminPrinter.printPreviewTicket(printername, ticketgroupid).then(
-            function () {
-              Page.toast("Utskrift lagt i kø", { class: "success" })
-              resolve()
-            },
-            function () {
-              Page.toast("Ukjent feil oppsto!", { class: "warning" })
-              reject()
-            },
-          )
-        })
+      AdminPrinter.printSelectModal(async (printername) => {
+        try {
+          await AdminPrinter.printPreviewTicket(printername, ticketgroupid)
+          Page.toast("Utskrift lagt i kø", { class: "success" })
+        } catch (e) {
+          Page.toast("Ukjent feil oppsto!", { class: "warning" })
+          throw e
+        }
       })
     }
   },

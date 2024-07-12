@@ -1,6 +1,6 @@
 var module = angular.module("billett.common")
 
-module.factory("Page", function ($rootScope, $q, ngToast) {
+module.factory("Page", function ($rootScope, ngToast) {
   var activeLoader
   $rootScope.$on("$routeChangeStart", function () {
     $rootScope.loading = false
@@ -101,7 +101,7 @@ module.factory("Page", function ($rootScope, $q, ngToast) {
      * Set page as loading and return function to call when loading completes
      */
     setLoading: function () {
-      var thisLoader = (activeLoader = $q.defer())
+      var thisLoader = (activeLoader = Promise.withResolvers())
 
       $rootScope.loading = true
       return function () {
