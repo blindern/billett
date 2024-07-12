@@ -3,6 +3,7 @@ import { GuestIndexComponent } from "./guest/index/index.component"
 import { GuestEventgroupComponent } from "./guest/eventgroup/eventgroup.component"
 import { NotFoundComponent } from "./guest/infopages/not-found.component"
 import { SalgsbetingelserComponent } from "./guest/infopages/salgsbetingelser.component"
+import { HjelpComponent } from "./guest/infopages/hjelp.component"
 
 export const routes: Routes = [
   {
@@ -13,6 +14,11 @@ export const routes: Routes = [
     path: "salgsbetingelser",
     component: SalgsbetingelserComponent,
     title: "Salgsbetingelser",
+  },
+  {
+    path: "hjelp",
+    component: HjelpComponent,
+    title: "Hjelp",
   },
   {
     path: "eventgroup/:id",
