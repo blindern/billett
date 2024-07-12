@@ -3,6 +3,7 @@ import { HttpClient } from "@angular/common/http"
 import { Component } from "@angular/core"
 import { Observable } from "rxjs"
 import { api } from "../../api"
+import { Eventgroup, EventgroupService } from "../eventgroup/eventgroup.service"
 
 interface UpcomingItem {
   id: number
@@ -12,11 +13,6 @@ interface UpcomingItem {
   category: string | null
   ticket_info: string | null
   web_selling_status: string
-}
-
-interface Eventgroup {
-  id: number
-  title: string
 }
 
 @Component({
@@ -35,13 +31,16 @@ export class GuestIndexComponent {
   categories: string[] = []
   categoryNum!: (category: string) => number
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private eventgroupService: EventgroupService,
+  ) {}
 
   // TODO: Page.setTitle("Arrangementer")
 
   ngOnInit(): void {
     this.upcoming$ = this.http.get<UpcomingItem[]>(api("event/get_upcoming"))
-    this.eventgroups$ = this.http.get<Eventgroup[]>(api("eventgroup"))
+    this.eventgroups$ = this.eventgroupService.getList()
 
     this.categories = []
     this.categoryNum = (category) => {

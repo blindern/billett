@@ -1,12 +1,4 @@
-import moment from "moment"
-
 var module = angular.module("billett.common")
-
-module.filter("formatdate", function () {
-  return function (datetime, format) {
-    return moment.unix(datetime).format(format)
-  }
-})
 
 module.filter("price", function () {
   return function (amount, decimals, in_nok) {
