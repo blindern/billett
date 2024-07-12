@@ -111,19 +111,19 @@ export class PageService implements OnDestroy {
   }
 
   /**
-   * Set page property, optionally connected to scope so it will be removed when scope is destroyed
+   * Set page property
    *
-   * Call the return value to remove it manually
+   * Call the return value to remove it
    */
-  set(name, value, bind_scope?) {
-    var x = { val: value }
+  set(name: string, value: string) {
+    const x = { val: value }
 
     if (!this.attrs[name]) this.attrs[name] = []
     this.attrs[name].push(x)
     this.#setActive(name)
 
-    var removeMe = () => {
-      for (var i = 0; i < this.attrs[name].length; i++) {
+    const cleanup = () => {
+      for (let i = 0; i < this.attrs[name].length; i++) {
         if (this.attrs[name][i] == x) {
           this.attrs[name].splice(i, 1)
           this.#setActive(name)
@@ -132,17 +132,13 @@ export class PageService implements OnDestroy {
       }
     }
 
-    if (bind_scope) {
-      bind_scope.$on("$destroy", removeMe)
-    }
-
-    return removeMe
+    return cleanup
   }
 
   /**
    * Set default page property which will be used if no other property is set
    */
-  setDefault(name, value) {
+  setDefault(name: string, value: string) {
     if (!(name in this.attrs)) this.attrs[name] = []
     if (
       this.attrs[name].length == 0 ||
@@ -209,7 +205,7 @@ export class PageService implements OnDestroy {
    */
   set404() {
     this.page404 = true
-    var title = this.set("title", "404 Page not found")
+    const title = this.set("title", "404 Page not found")
 
     const sub = this.router.events.subscribe((s: Event) => {
       if (s instanceof NavigationStart) {

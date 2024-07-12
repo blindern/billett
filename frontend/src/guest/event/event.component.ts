@@ -5,13 +5,14 @@ import { RouterLink } from "@angular/router"
 import { api } from "../../api"
 import { authService } from "../../auth/AuthService"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
+import { PagePropertyComponent } from "../../common/page-property.component"
+import { PageService } from "../../common/page.service"
 import { PricePipe } from "../../common/price.pipe"
 import {
   EventReservationItem,
   EventReservationService,
 } from "./event-reservation.service"
 import { Event, EventService } from "./event.service"
-import { PageService } from "../../common/page.service"
 
 declare global {
   interface Window {
@@ -22,7 +23,13 @@ declare global {
 @Component({
   selector: "guest-event",
   standalone: true,
-  imports: [FormatdatePipe, RouterLink, PricePipe, FormsModule],
+  imports: [
+    FormatdatePipe,
+    RouterLink,
+    PricePipe,
+    FormsModule,
+    PagePropertyComponent,
+  ],
   templateUrl: "./event.component.html",
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -87,7 +94,9 @@ export class GuestEventComponent implements OnInit {
   async placeOrder(force) {
     if (!this.reservation) {
       if (this.newres.count == 0) {
-        this.pageService.toast("Du må velge noen billetter.", { class: "warning" })
+        this.pageService.toast("Du må velge noen billetter.", {
+          class: "warning",
+        })
         alert("Du må velge noen billetter.")
         return
       }
@@ -123,7 +132,9 @@ export class GuestEventComponent implements OnInit {
     } catch (err: any) {
       // TODO(migrate): error object structure
       if (err == "data validation failed") {
-        this.pageService.toast("Ugyldig inndata i skjemaet.", { class: "warning" })
+        this.pageService.toast("Ugyldig inndata i skjemaet.", {
+          class: "warning",
+        })
       } else {
         const msg = "data" in err ? err.data : err
         alert("Ukjent feil oppsto ved lagring av kontaktdata: " + msg)

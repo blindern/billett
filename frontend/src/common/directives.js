@@ -52,18 +52,6 @@ module.directive("autofocus", ($timeout) => {
   }
 })
 
-// adding page properties
-module.directive("pageProperty", (Page, $timeout) => {
-  return {
-    restrict: "E",
-    link: (scope, element, attr) => {
-      attr.$observe("value", (value) => {
-        Page.set(attr["name"], attr["value"], scope)
-      })
-    },
-  }
-})
-
 // showing page as 404
 module.directive("pageNotFound", (Page) => {
   return {
