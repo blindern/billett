@@ -1,5 +1,3 @@
-import "./ContentWrapper.js"
-
 import template404 from "../guest/infopages/404.html?raw"
 import templatePaginationDirective from "./paginationDirective.html?raw"
 
