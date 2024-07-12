@@ -50,15 +50,11 @@
 
   <router-outlet></router-outlet>
 
-  @if (loading) {
+  @if (page.loading) {
     <div class="page-loading">Laster innhold...</div>
   }
-  @if (page404) {
-    <div>
-      <!--
-      <page-not-found></page-not-found>
-      -->
-    </div>
+  @if (page.page404) {
+    <page-not-found></page-not-found>
   }
 
   <footer>

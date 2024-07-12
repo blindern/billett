@@ -1,9 +1,9 @@
-import moment from "moment"
-import { CommonModule } from "@angular/common"
-import { HttpClient } from "@angular/common/http"
+import { CommonModule, Location } from "@angular/common"
 import { Component, Input, OnInit } from "@angular/core"
-import { EventgroupExpanded, EventgroupService } from "./eventgroup.service"
+import moment from "moment"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
+import { PageService } from "../../common/page.service"
+import { EventgroupExpanded, EventgroupService } from "./eventgroup.service"
 
 @Component({
   selector: "app-guest-eventgroup",
@@ -36,13 +36,13 @@ export class GuestEventgroupComponent implements OnInit {
   }
 
   constructor(
-    private http: HttpClient,
     private eventgroupService: EventgroupService,
+    private location: Location,
+    private page: PageService,
   ) {}
 
-  // TODO(migrate): Page.setTitle("Arrangementgruppe")
-
   ngOnInit(): void {
+    this.page.set("title", "Arrangementgruppe")
     this.daythemes = {}
 
     const filter: any = {
@@ -60,10 +60,10 @@ export class GuestEventgroupComponent implements OnInit {
       this.isFilter = true
     }
 
-    // const loader = Page.setLoading()
+    const loader = this.page.setLoading()
     this.eventgroupService.get(this.id).subscribe((eventgroup) => {
-      // loader()
-      // Page.setTitle(response.data.title)
+      loader()
+      this.page.set("title", eventgroup.title)
       this.group = eventgroup
 
       const r: any = {}
@@ -90,8 +90,8 @@ export class GuestEventgroupComponent implements OnInit {
 
       // if blank page on filter
       if (c == 0 && (filter.date || filter.category)) {
-        // Page.set404() // TODO
-        //$location.path('eventgroup/' + ret.id);
+        this.page.set404()
+        this.location.go("eventgroup/" + eventgroup.id)
       }
 
       this.days = r

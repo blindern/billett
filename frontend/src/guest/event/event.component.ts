@@ -11,6 +11,7 @@ import {
   EventReservationService,
 } from "./event-reservation.service"
 import { Event, EventService } from "./event.service"
+import { PageService } from "../../common/page.service"
 
 declare global {
   interface Window {
@@ -50,6 +51,7 @@ export class GuestEventComponent implements OnInit {
     private eventService: EventService,
     private eventReservationService: EventReservationService,
     private location: Location,
+    private pageService: PageService,
   ) {}
 
   private reset() {
@@ -85,7 +87,7 @@ export class GuestEventComponent implements OnInit {
   async placeOrder(force) {
     if (!this.reservation) {
       if (this.newres.count == 0) {
-        // TODO(migrate): Page.toast("Du må velge noen billetter.", { class: "warning" })
+        this.pageService.toast("Du må velge noen billetter.", { class: "warning" })
         alert("Du må velge noen billetter.")
         return
       }
@@ -121,7 +123,7 @@ export class GuestEventComponent implements OnInit {
     } catch (err: any) {
       // TODO(migrate): error object structure
       if (err == "data validation failed") {
-        // TODO(migrate): Page.toast("Ugyldig inndata i skjemaet.", { class: "warning" })
+        this.pageService.toast("Ugyldig inndata i skjemaet.", { class: "warning" })
       } else {
         const msg = "data" in err ? err.data : err
         alert("Ukjent feil oppsto ved lagring av kontaktdata: " + msg)
@@ -175,9 +177,9 @@ export class GuestEventComponent implements OnInit {
       "https://checkout.vipps.no/checkout-button/v1/vipps-checkout-button.js"
     document.head.append(script)
 
-    // var loader = Page.setLoading()
+    const loader = this.pageService.setLoading()
     this.eventService.get(this.id).subscribe((event) => {
-      // loader()
+      loader()
       this.event = event
 
       for (const ticketgroup of event.ticketgroups) {

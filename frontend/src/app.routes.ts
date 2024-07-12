@@ -5,7 +5,7 @@ import { GuestEventComponent } from "./guest/event/event.component"
 import { GuestEventgroupComponent } from "./guest/eventgroup/eventgroup.component"
 import { GuestIndexComponent } from "./guest/index/index.component"
 import { HjelpComponent } from "./guest/infopages/hjelp.component"
-import { NotFoundComponent } from "./guest/infopages/not-found.component"
+import { PageNotFoundComponent } from "./guest/infopages/page-not-found.component"
 import { SalgsbetingelserComponent } from "./guest/infopages/salgsbetingelser.component"
 
 export const routes: Routes = [
@@ -49,6 +49,6 @@ export const routes: Routes = [
   },
   {
     path: "**",
-    component: NotFoundComponent,
+    component: PageNotFoundComponent,
   },
 ]

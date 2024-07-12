@@ -3,15 +3,16 @@ import { afterRender, Component, OnInit } from "@angular/core"
 import { RouterLink, RouterOutlet } from "@angular/router"
 import { authService } from "./auth/AuthService"
 import { ActiveFor } from "./common/active-for"
+import { PageService } from "./common/page.service"
+import { PageNotFoundComponent } from "./guest/infopages/page-not-found.component"
 
 @Component({
   selector: "app-root",
   standalone: true,
-  imports: [RouterOutlet, RouterLink, ActiveFor],
+  imports: [RouterOutlet, RouterLink, ActiveFor, PageNotFoundComponent],
   templateUrl: "./app.component.html",
 })
 export class AppComponent implements OnInit {
-  title = "testbillett" // TODO(migrate)
   realname = ""
   username = ""
   isDevPage = false
@@ -21,10 +22,10 @@ export class AppComponent implements OnInit {
     return this.location.path().substring(0, 3) == "/a/"
   }
 
-  loading = true // TODO(migrate)
-  page404 = false // TODO(migrate)
-
-  constructor(private location: Location) {
+  constructor(
+    private location: Location,
+    public page: PageService,
+  ) {
     afterRender(() => {
       if (window.top != window.self) {
         document.body.classList.add("isInIframe")
