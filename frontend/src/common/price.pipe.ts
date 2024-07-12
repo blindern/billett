@@ -1,13 +1,17 @@
-var module = angular.module("billett.common")
+import { Pipe, PipeTransform } from "@angular/core"
 
-module.filter("price", function () {
-  return function (amount, decimals, in_nok) {
+@Pipe({
+  name: "price",
+  standalone: true,
+})
+export class PricePipe implements PipeTransform {
+  transform(amount: string, decimals?: number | boolean, in_nok?: boolean): string {
     if (typeof decimals == "boolean") {
       in_nok = decimals
       decimals = 0
     }
 
-    var formatNumber = function (number, decimals) {
+    function formatNumber(number, decimals) {
       number = number.toFixed(decimals) + ""
       var x = number.split(".")
       var x1 = x[0]
@@ -24,4 +28,4 @@ module.filter("price", function () {
       (in_nok ? "NOK " : "kr ") + formatNumber(parseFloat(amount), decimals)
     )
   }
-})
+}

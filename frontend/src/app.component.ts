@@ -16,7 +16,6 @@ export class AppComponent implements OnInit {
   username = ""
   isDevPage = false
   isLoggedIn = false
-  isVippsTest = false
   loggedInButNoAccess = false
   isAdminPage = () => {
     return this.location.path().substring(0, 3) == "/a/"
@@ -39,9 +38,6 @@ export class AppComponent implements OnInit {
         this.isDevPage = true
         document.body.classList.add("dev-page")
       }
-    })
-    authService.isVippsTest().then((res) => {
-      if (res) this.isVippsTest = true
     })
     authService.isLoggedIn().then((res) => {
       if (res) this.isLoggedIn = true

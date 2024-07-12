@@ -1,9 +1,4 @@
-<script
-  async=""
-  type="text/javascript"
-  src="https://checkout.vipps.no/checkout-button/v1/vipps-checkout-button.js"
-></script>
-
+<!--
 <page-property
   name="title"
   value="{{ event.title }} ({{
@@ -18,6 +13,7 @@
   name="description"
   value="{{ event.description_short || event.description }}"
 ></page-property>
+-->
 
 @if (event) {
   <div class="event-page">
@@ -34,8 +30,10 @@
         >
         @if (isLoggedIn) {
           <span class="pull-right">
-            <a [href]="a / event / event.id" class="btn btn-primary">Admin</a>
-            <a [href]="a / event / event.id / edit" class="btn btn-primary"
+            <a routerLink="a/event/{{ event.id }}" class="btn btn-primary"
+              >Admin</a
+            >
+            <a routerLink="a/event/{{ event.id }}/edit" class="btn btn-primary"
               >Rediger</a
             >
           </span>
@@ -49,12 +47,9 @@
     <!-- TODO: ics-link -->
 
     <div class="row">
-      <div
-        class="col-sm-5"
-        [ngClass]="{ 'no-buy-form': ctrl.event_status == 'no_tickets' }"
-      >
+      <div class="col-sm-5" [class.no-buy-form]="event_status == 'no_tickets'">
         <div class="event-image">
-          <img [src]="ctrl.api('event/' + event.id + '/image')" alt="" />
+          <img [src]="api('event/' + event.id + '/image')" alt="" />
         </div>
         <dl class="dl-horizontal">
           <dt>Tidspunkt</dt>
@@ -97,9 +92,9 @@
       </div>
 
       <div class="col-sm-7 event-right-col">
-        @if (!reservation || ctrl.event_status == "sale") {
+        @if (!reservation || event_status == "sale") {
           <div>
-            @if (ctrl.event_status == "selling_text") {
+            @if (event_status == "selling_text") {
               <div class="panel panel-default">
                 <div class="panel-body">
                   <div class="selling-text" marked="event.selling_text"></div>
@@ -107,7 +102,7 @@
               </div>
             }
 
-            @if (ctrl.event_status == "unknown") {
+            @if (event_status == "unknown") {
               <div class="panel panel-default">
                 <div class="panel-body">
                   <div>
@@ -118,7 +113,7 @@
               </div>
             }
 
-            @if (ctrl.event_status == "old") {
+            @if (event_status == "old") {
               <div class="panel panel-default">
                 <div class="panel-body">
                   Billettsalg for arrangementet er avsluttet.
@@ -126,7 +121,7 @@
               </div>
             }
 
-            @if (ctrl.event_status == "no_web_tickets") {
+            @if (event_status == "no_web_tickets") {
               <div class="panel panel-default">
                 <div class="panel-body">
                   Dette arrangementet selges ikke på nett eller har foreløpig
@@ -135,7 +130,7 @@
               </div>
             }
 
-            @if (ctrl.event_status == "timeout") {
+            @if (event_status == "timeout") {
               <div class="panel panel-default">
                 <div class="panel-body">
                   Nettsalget for dette arrangementet har avsluttet. Evt.
@@ -144,7 +139,7 @@
               </div>
             }
 
-            @if (ctrl.event_status == "sold_out") {
+            @if (event_status == "sold_out") {
               <div class="panel panel-default">
                 <div class="panel-body">
                   Arrangementet er dessverre utsolgt. Sjekk tilbake senere for
@@ -156,21 +151,23 @@
         }
 
         @if (
-          (!reservation && ctrl.event_status == "sale") ||
-          (reservation && !checkout && ctrl.event_status != "no_tickets")
+          (!reservation && event_status == "sale") ||
+          (reservation && event_status != "no_tickets")
         ) {
           <div>
-            @if (reservation && reservation.tickets[0].event.id != event.id) {
+            @if (
+              reservation && reservation.data.tickets[0].event.id != event.id
+            ) {
               <div class="panel panel-warning">
                 <div class="panel-heading">Kjøp billetter</div>
                 <div class="panel-body">
                   Du holder allerede på å bestille billetter til
                   <a
-                    [href]="
-                      event / reservation.tickets[0].event.alias ||
-                      reservation.tickets[0].event.id
-                    "
-                    >{{ reservation.tickets[0].event.title }}</a
+                    href="event/{{
+                      reservation.data.tickets[0].event.alias ||
+                        reservation.data.tickets[0].event.id
+                    }}"
+                    >{{ reservation.data.tickets[0].event.title }}</a
                   >
                   og må fullføre/avbryte den bestillingen først.
                 </div>
@@ -178,7 +175,8 @@
             }
 
             @if (
-              (!reservation || reservation.tickets[0].event.id == event.id) &&
+              (!reservation ||
+                reservation.data.tickets[0].event.id == event.id) &&
               loadingReservation
             ) {
               <div class="panel panel-info buy-form">
@@ -190,7 +188,8 @@
             }
 
             @if (
-              (!reservation || reservation.tickets[0].event.id == event.id) &&
+              (!reservation ||
+                reservation.data.tickets[0].event.id == event.id) &&
               !loadingReservation
             ) {
               <div class="panel panel-info buy-form">
@@ -198,8 +197,9 @@
                 <div class="panel-body">
                   <form
                     class="form-horizontal"
-                    (ngSubmit)="!form.$valid || placeOrder(ctrl.forcePay)"
+                    (ngSubmit)="!form.valid || placeOrder(forcePay)"
                     name="form"
+                    #form="ngForm"
                   >
                     @if (!reservation) {
                       <div>
@@ -212,7 +212,7 @@
 
                         @for (
                           ticketgroup of event.ticketgroups;
-                          track ticketgroup
+                          track ticketgroup.id
                         ) {
                           <div class="ticketgroup">
                             <div class="meta">
@@ -255,7 +255,7 @@
                                 type="button"
                                 (click)="changeTicketgroupNum(ticketgroup, -1)"
                                 class="btn btn-primary btn-sm"
-                                ng-disabled="ticketgroup.order_count<=0"
+                                [disabled]="ticketgroup.order_count <= 0"
                               >
                                 <span class="glyphicon glyphicon-minus"></span>
                               </button>
@@ -277,7 +277,10 @@
                             >Reserverte billetter</label
                           >
                           <div class="col-sm-8">
-                            @for (ticket of reservation.tickets; track ticket) {
+                            @for (
+                              ticket of reservation.data.tickets;
+                              track ticket
+                            ) {
                               <div>
                                 {{ ticket.ticketgroup.title }} #{{ ticket.id }}
                                 <span class="reservation-ticket-price"
@@ -322,8 +325,10 @@
                           >
                           <div class="col-sm-8">
                             <b>{{
-                              reservation.total_amount || newres.total_amount
-                                | price: true
+                              (reservation
+                                ? reservation!.data.total_amount
+                                : newres.total_amount
+                              ) | price: true
                             }}</b>
                           </div>
                         </div>
@@ -349,7 +354,7 @@
                           <vipps-checkout-button
                             variant="orange"
                             branded="true"
-                            (click)="ctrl.forcePay = false"
+                            (click)="forcePay = false"
                             type="submit"
                           >
                           </vipps-checkout-button>
@@ -367,7 +372,7 @@
                             <input
                               type="submit"
                               value="Overstyr betaling"
-                              (click)="ctrl.forcePay = true"
+                              (click)="forcePay = true"
                               class="btn btn-default"
                             />
                           </p>

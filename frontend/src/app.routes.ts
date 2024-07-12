@@ -1,6 +1,7 @@
 import { Routes } from "@angular/router"
 import { LoginComponent } from "./auth/login.controller"
 import { LogoutComponent } from "./auth/logout.controller"
+import { GuestEventComponent } from "./guest/event/event.component"
 import { GuestEventgroupComponent } from "./guest/eventgroup/eventgroup.component"
 import { GuestIndexComponent } from "./guest/index/index.component"
 import { HjelpComponent } from "./guest/infopages/hjelp.component"
@@ -40,6 +41,11 @@ export const routes: Routes = [
   {
     path: "eventgroup/:id/:query",
     component: GuestEventgroupComponent,
+  },
+  {
+    path: "event/:id",
+    component: GuestEventComponent,
+    title: "Arrangement",
   },
   {
     path: "**",
