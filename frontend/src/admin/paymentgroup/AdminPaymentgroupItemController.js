@@ -47,8 +47,8 @@ angular
                   ? "payments"
                   : "refunds"
                 : value >= 0
-                ? "ticket_revoked"
-                : "ticket_sales"
+                  ? "ticket_revoked"
+                  : "ticket_sales"
 
               order.paymentgroup_balance[t] += value
               order.paymentgroup_balance["total"] += value
@@ -124,11 +124,11 @@ angular
                 }
               }
 
-              event.ticketgroups = event.ticketgroups.filter(function (
-                ticketgroup,
-              ) {
-                return ticketgroup.paymentgroup_balance != 0
-              })
+              event.ticketgroups = event.ticketgroups.filter(
+                function (ticketgroup) {
+                  return ticketgroup.paymentgroup_balance != 0
+                },
+              )
 
               prev[event.category].events.push(event)
               prev[event.category].total += event.paymentgroup_balance

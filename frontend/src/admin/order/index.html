@@ -9,10 +9,15 @@
       Ordreliste
 
       @if (search.eventgroup_id) {
-<span class="pull-right">
-        <a class="btn btn-success" [href]="a/order/new/search.eventgroup_id" accesskey="n">Ny ordre</a>
-      </span>
-}
+        <span class="pull-right">
+          <a
+            class="btn btn-success"
+            [href]="a / order / new / search.eventgroup_id"
+            accesskey="n"
+            >Ny ordre</a
+          >
+        </span>
+      }
     </h1>
   </div>
 
@@ -21,37 +26,67 @@
       <div class="form-group">
         <label class="col-sm-4 control-label">Ordrenr</label>
         <div class="col-sm-8">
-          <input class="form-control" type="text" [(ngModel)]="search.id" ng-model-options="{debounce:300}">
+          <input
+            class="form-control"
+            type="text"
+            [(ngModel)]="search.id"
+            ng-model-options="{debounce:300}"
+          />
         </div>
       </div>
       <div class="form-group">
         <label class="col-sm-4 control-label">Ordretekstnr</label>
         <div class="col-sm-8">
-          <input class="form-control" type="text" [(ngModel)]="search.order_text_id" ng-model-options="{debounce:300}">
+          <input
+            class="form-control"
+            type="text"
+            [(ngModel)]="search.order_text_id"
+            ng-model-options="{debounce:300}"
+          />
         </div>
       </div>
       <div class="form-group">
         <label class="col-sm-4 control-label">Billettnr</label>
         <div class="col-sm-8">
-          <input class="form-control" type="text" [(ngModel)]="search['tickets.id']" ng-model-options="{debounce:300}">
+          <input
+            class="form-control"
+            type="text"
+            [(ngModel)]="search['tickets.id']"
+            ng-model-options="{debounce:300}"
+          />
         </div>
       </div>
       <div class="form-group">
         <label class="col-sm-4 control-label">Strekkode</label>
         <div class="col-sm-8">
-          <input class="form-control" type="text" [(ngModel)]="search['tickets.key']" ng-model-options="{debounce:300}">
+          <input
+            class="form-control"
+            type="text"
+            [(ngModel)]="search['tickets.key']"
+            ng-model-options="{debounce:300}"
+          />
         </div>
       </div>
       <div class="form-group">
         <label class="col-sm-4 control-label">Arrangement (ID)</label>
         <div class="col-sm-8">
-          <input class="form-control" type="text" [(ngModel)]="search['tickets.event.id']" ng-model-options="{debounce:300}">
+          <input
+            class="form-control"
+            type="text"
+            [(ngModel)]="search['tickets.event.id']"
+            ng-model-options="{debounce:300}"
+          />
         </div>
       </div>
       <div class="form-group">
         <label class="col-sm-4 control-label">Arrangement (tittel)</label>
         <div class="col-sm-8">
-          <input class="form-control" type="text" [(ngModel)]="search['tickets.event.title']" ng-model-options="{debounce:300}">
+          <input
+            class="form-control"
+            type="text"
+            [(ngModel)]="search['tickets.event.title']"
+            ng-model-options="{debounce:300}"
+          />
         </div>
       </div>
     </div>
@@ -59,37 +94,61 @@
       <div class="form-group">
         <label class="col-sm-4 control-label">Transaksjonsnr</label>
         <div class="col-sm-8">
-          <input class="form-control" type="text" [(ngModel)]="search['payments.transaction_id']" ng-model-options="{debounce:300}">
+          <input
+            class="form-control"
+            type="text"
+            [(ngModel)]="search['payments.transaction_id']"
+            ng-model-options="{debounce:300}"
+          />
         </div>
       </div>
       <div class="form-group">
         <label class="col-sm-4 control-label">Navn</label>
         <div class="col-sm-8">
-          <input class="form-control" type="text" [(ngModel)]="search.name" ng-model-options="{debounce:300}">
+          <input
+            class="form-control"
+            type="text"
+            [(ngModel)]="search.name"
+            ng-model-options="{debounce:300}"
+          />
         </div>
       </div>
       <div class="form-group">
         <label class="col-sm-4 control-label">E-post</label>
         <div class="col-sm-8">
-          <input class="form-control" type="text" [(ngModel)]="search.email" ng-model-options="{debounce:300}">
+          <input
+            class="form-control"
+            type="text"
+            [(ngModel)]="search.email"
+            ng-model-options="{debounce:300}"
+          />
         </div>
       </div>
       <div class="form-group">
         <label class="col-sm-4 control-label">Telefon</label>
         <div class="col-sm-8">
-          <input class="form-control" type="text" [(ngModel)]="search.phone" ng-model-options="{debounce:300}">
+          <input
+            class="form-control"
+            type="text"
+            [(ngModel)]="search.phone"
+            ng-model-options="{debounce:300}"
+          />
         </div>
       </div>
       <div class="form-group">
         <label class="col-sm-4 control-label">Status</label>
         <div class="col-sm-8">
-          <select class="form-control" [(ngModel)]="search.status" ng-options="x.id as x.val for x in search_status"></select>
+          <select
+            class="form-control"
+            [(ngModel)]="search.status"
+            ng-options="x.id as x.val for x in search_status"
+          ></select>
         </div>
       </div>
     </div>
   </div>
 
-  <hr>
+  <hr />
 
   <div class="page-loading" [hidden]="!!orders.result">Søker...</div>
 
@@ -110,70 +169,98 @@
       </thead>
       <tbody>
         @for (order of orders.result; track order) {
-<tr [ngClass]="{invalid: !order.is_valid}">
-          <td>
-            <a [href]="a/order/::order.id">{{::order.order_text_id}}</a><br>
-            {{::order.time|formatdate:'dd. DD.MM.YYYY HH:mm'}}
-            @if (!order.is_valid) {
-<span><br>(kun reservasjon)</span>
-}
-            @if (::order.is_admin) {
-<span class="order-detail"><span class="is_admin">Billettluke</span></span>
-}
-          </td>
-          <td>
-            @if (::order.name) {
-<span class="order-detail">{{::order.name}}</span>
-}
-            @if (::order.email) {
-<span class="order-detail">{{::order.email}}</span>
-}
-            @if (::order.phone) {
-<span class="order-detail">{{::order.phone}}</span>
-}
-            @if (::order.recruiter) {
-<span class="order-detail">Vervet av: {{::order.recruiter}}</span>
-}
-            @if (::(!order.name && !order.email && !order.phone && !order.recruiter)) {
-<span class="order-detail"><i>Ingen detaljer</i></span>
-}
-          </td>
-          <td>
-            {{order.total_valid|price}}
-            @if (order.total_reserved) {
-<span><br>(reservert: {{order.total_reserved|price}})</span>
-}
-            @if (order.balance != 0) {
-<span class="unbalance"><br>(ubalanse: {{order.balance|price}})</span>
-}
+          <tr [ngClass]="{ invalid: !order.is_valid }">
+            <td>
+              <a [href]="a/order/::order.id">{{::order.order_text_id}}</a
+              ><br />
+              {{::order.time|formatdate:'dd. DD.MM.YYYY HH:mm'}}
+              @if (!order.is_valid) {
+                <span><br />(kun reservasjon)</span>
+              }
+              @if (::order.is_admin) {
+                <span class="order-detail"
+                  ><span class="is_admin">Billettluke</span></span
+                >
+              }
+            </td>
+            <td>
+              @if (::order.name) {
+                <span class="order-detail">{{::order.name}}</span>
+              }
+              @if (::order.email) {
+                <span class="order-detail">{{::order.email}}</span>
+              }
+              @if (::order.phone) {
+                <span class="order-detail">{{::order.phone}}</span>
+              }
+              @if (::order.recruiter) {
+                <span class="order-detail"
+                  >Vervet av: {{::order.recruiter}}</span
+                >
+              }
+              @if (
+                ::(!order.name && !order.email && !order.phone && !order.recruiter)
+              ) {
+                <span class="order-detail"><i>Ingen detaljer</i></span>
+              }
+            </td>
+            <td>
+              {{ order.total_valid | price }}
+              @if (order.total_reserved) {
+                <span
+                  ><br />(reservert: {{ order.total_reserved | price }})</span
+                >
+              }
+              @if (order.balance != 0) {
+                <span class="unbalance"
+                  ><br />(ubalanse: {{ order.balance | price }})</span
+                >
+              }
 
-            <!--<div ng-repeat="payment in order.payments">
+              <!--<div ng-repeat="payment in order.payments">
                             {{payment.time|formatdate:'DD.MM.YYYY'}}<br>
                             {{payment.is_web ? 'web: ' + payment.transaction_id : 'manual payment'}}<br>
                             {{payment.amount|price:0:true}}
                         </div>-->
-          </td>
-          <td>
-            <ul>
-              @for (ticket of order.tickets; track ticket) {
-<li [ngClass]="{reservation: !ticket.is_valid, revoked: ticket.is_revoked}">
-                <a [href]="::api('ticket/' + ticket.id + '/pdf')" target="_self">#{{::ticket.id}}</a>
-                <a [href]="a/event/::ticket.event.id">{{::ticket.event.title}}
-                  ({{::ticket.event.time_start|formatdate:'DD.MM \\k\\l
-                  HH'}})</a>
-                ({{::ticket.ticketgroup.title}})
-                {{::(ticket.ticketgroup.price+ticket.ticketgroup.fee)|price:0:true}}
-              </li>
-}
-            </ul>
-          </td>
-        </tr>
-}
+            </td>
+            <td>
+              <ul>
+                @for (ticket of order.tickets; track ticket) {
+                  <li
+                    [ngClass]="{
+                      reservation: !ticket.is_valid,
+                      revoked: ticket.is_revoked,
+                    }"
+                  >
+                    <a
+                      [href]="::api('ticket/' + ticket.id + '/pdf')"
+                      target="_self"
+                      >#{{::ticket.id}}</a
+                    >
+                    <a [href]="a/event/::ticket.event.id"
+                      >{{::ticket.event.title}}
+                      ({{::ticket.event.time_start|formatdate:'DD.MM \\k\\l
+                  HH'
+
+                      }})</a
+                    >
+                    ({{::ticket.ticketgroup.title}})
+                    {{::(ticket.ticketgroup.price+ticket.ticketgroup.fee)|price:0:true}}
+                  </li>
+                }
+              </ul>
+            </td>
+          </tr>
+        }
       </tbody>
     </table>
 
     <div class="text-center">
-      <pagination page-active="search.page" page-total="orders.pagination.total" page-limit="orders.pagination.limit"></pagination>
+      <pagination
+        page-active="search.page"
+        page-total="orders.pagination.total"
+        page-limit="orders.pagination.limit"
+      ></pagination>
     </div>
   </div>
 </div>

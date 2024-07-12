@@ -3,10 +3,10 @@
 -->
 
 @if (isDevPage) {
-<div class="dev-page-bar">
-  NB! Du er nå på utviklersia!
-  <span>Endringene her blir ikke oppdatert på blindernuka.no.</span>
-</div>
+  <div class="dev-page-bar">
+    NB! Du er nå på utviklersia!
+    <span>Endringene her blir ikke oppdatert på blindernuka.no.</span>
+  </div>
 }
 
 <div class="container" [class.noadmin]="!isAdminPage">
@@ -70,12 +70,12 @@
       <li>
         <a href="a">Administrasjon</a>
         @if (isLoggedIn) {
-        <span>
-          <br />
-          {{ username }}
-          <br />
-          <a href="logout">[logg ut]</a>
-        </span>
+          <span>
+            <br />
+            {{ username }}
+            <br />
+            <a href="logout">[logg ut]</a>
+          </span>
         }
       </li>
     </ul>

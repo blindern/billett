@@ -5,7 +5,9 @@
   <div class="modal-body">
     <form class="form-horizontal" (ngSubmit)="ctrl.complete()">
       <div class="form-group">
-        <label for="printer" class="col-sm-4 control-label">Billettskriver</label>
+        <label for="printer" class="col-sm-4 control-label"
+          >Billettskriver</label
+        >
         <div class="col-sm-7">
           <printer-list printer="ctrl.printer" id="printer"></printer-list>
         </div>
@@ -13,13 +15,25 @@
       <div class="form-group">
         <label class="col-sm-4 control-label" for="text">Tekst</label>
         <div class="col-sm-7">
-          <textarea class="form-control" [(ngModel)]="ctrl.text" id="text" rows="10" required="" ng-disabled="ctrl.sending" autofocus=""></textarea>
+          <textarea
+            class="form-control"
+            [(ngModel)]="ctrl.text"
+            id="text"
+            rows="10"
+            required=""
+            ng-disabled="ctrl.sending"
+            autofocus=""
+          ></textarea>
         </div>
       </div>
 
       <div class="row" [hidden]="!!ctrl.sending">
         <div class="col-sm-7 col-sm-offset-4">
-          <button class="btn btn-success" type="submit" ng-disabled="!ctrl.printer">
+          <button
+            class="btn btn-success"
+            type="submit"
+            ng-disabled="!ctrl.printer"
+          >
             Skriv ut
           </button>
           <button class="btn btn-default" type="button" (click)="ctrl.cancel()">
@@ -28,10 +42,8 @@
         </div>
       </div>
       @if (ctrl.sending) {
-<p class="text-center">
-        Sender data til utskrift ...
-      </p>
-}
+        <p class="text-center">Sender data til utskrift ...</p>
+      }
     </form>
   </div>
 </div>

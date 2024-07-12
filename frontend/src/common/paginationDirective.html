@@ -1,7 +1,9 @@
 <ul class="pagination">
   <li><a href="" (click)="changePage(1)">«</a></li>
-  <li><a href="" (click)="changePage(page-1)">‹</a></li>
-  <li><a>{{page}}/{{numPages}}</a></li>
-  <li><a href="" (click)="changePage(page+1)">›</a></li>
+  <li><a href="" (click)="changePage(page - 1)">‹</a></li>
+  <li>
+    <a>{{ page }}/{{ numPages }}</a>
+  </li>
+  <li><a href="" (click)="changePage(page + 1)">›</a></li>
   <li><a href="" (click)="changePage(numPages)">»</a></li>
 </ul>

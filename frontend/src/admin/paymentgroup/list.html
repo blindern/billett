@@ -4,10 +4,14 @@
   <div class="page-header">
     <h1>
       <span class="eventgroup">
-        <a href="a/eventgroup/{{ctrl.eventgroup.id}}">{{ctrl.eventgroup.title}}</a>
+        <a href="a/eventgroup/{{ ctrl.eventgroup.id }}">{{
+          ctrl.eventgroup.title
+        }}</a>
       </span>
       Oppgjør
-      <a class="btn btn-default pull-right" (click)="ctrl.new()">Nytt oppgjør</a>
+      <a class="btn btn-default pull-right" (click)="ctrl.new()"
+        >Nytt oppgjør</a
+      >
     </h1>
   </div>
 
@@ -20,42 +24,40 @@
   </p>
 
   @if (ctrl.paymentgroups.length == 0) {
-<p>
-    Ingen oppgjør eksisterer for denne arrangementgruppen.
-  </p>
-}
+    <p>Ingen oppgjør eksisterer for denne arrangementgruppen.</p>
+  }
 
   @if (ctrl.paymentgroups.length > 0) {
-<table class="table">
-    <thead>
-      <tr>
-        <th>Tittel</th>
-        <th>Opprettet</th>
-        <th>Avsluttet</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (group of ctrl.paymentgroups; track group) {
-<tr>
-        <td>
-          <a [href]="a/paymentgroup/::group.id">{{::group.title}}</a>
-        </td>
-        <td>
-          {{::group.time_start|formatdate:'DD.MM.YYYY'}} av
-          {{::group.user_created}}
-        </td>
-        @if (::group.time_end) {
-<td>
-          {{::group.time_end|formatdate:'DD.MM.YYYY'}} av
-          {{::group.user_closed}}
-        </td>
-}
-        @if (::!group.time_end) {
-<td>Ikke avsluttet</td>
-}
-      </tr>
-}
-    </tbody>
-  </table>
-}
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Tittel</th>
+          <th>Opprettet</th>
+          <th>Avsluttet</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (group of ctrl.paymentgroups; track group) {
+          <tr>
+            <td>
+              <a [href]="a/paymentgroup/::group.id">{{::group.title}}</a>
+            </td>
+            <td>
+              {{::group.time_start|formatdate:'DD.MM.YYYY'}} av
+              {{::group.user_created}}
+            </td>
+            @if (::group.time_end) {
+              <td>
+                {{::group.time_end|formatdate:'DD.MM.YYYY'}} av
+                {{::group.user_closed}}
+              </td>
+            }
+            @if (::!group.time_end) {
+              <td>Ikke avsluttet</td>
+            }
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
 </div>

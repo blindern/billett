@@ -38,36 +38,38 @@ let module = angular.module("billett", [
   guest,
 ])
 
-module.config(function (
-  $locationProvider,
-  $httpProvider,
-  $stateProvider,
-  $urlRouterProvider,
-  ngToastProvider,
-) {
-  $stateProvider.state("404", {
-    template: template404,
-  })
+module.config(
+  function (
+    $locationProvider,
+    $httpProvider,
+    $stateProvider,
+    $urlRouterProvider,
+    ngToastProvider,
+  ) {
+    $stateProvider.state("404", {
+      template: template404,
+    })
 
-  $urlRouterProvider.otherwise(function ($injector, $location) {
-    console.log("404 found")
-    $injector.invoke([
-      "$state",
-      function ($state) {
-        $state.go("404")
-      },
-    ])
-  })
+    $urlRouterProvider.otherwise(function ($injector, $location) {
+      console.log("404 found")
+      $injector.invoke([
+        "$state",
+        function ($state) {
+          $state.go("404")
+        },
+      ])
+    })
 
-  // use HTML5 history API for nice urls
-  $locationProvider.html5Mode(true)
+    // use HTML5 history API for nice urls
+    $locationProvider.html5Mode(true)
 
-  $httpProvider.defaults.withCredentials = true
+    $httpProvider.defaults.withCredentials = true
 
-  ngToastProvider.configure({
-    horizontalPosition: "center",
-  })
-})
+    ngToastProvider.configure({
+      horizontalPosition: "center",
+    })
+  },
+)
 
 module.run(function ($rootScope) {
   // iframe state

@@ -5,135 +5,193 @@
     <h3 class="modal-title">Registrer ny betalingskilde</h3>
   </div>
   @if (ctrl.sending) {
-<div class="modal-body text-center">
-    Registrerer data ...
-  </div>
-}
+    <div class="modal-body text-center">Registrerer data ...</div>
+  }
   @if (!ctrl.sending) {
-<div class="modal-body">
-    @if (!ctrl.paymentsource.type) {
-<div class="row text-center">
-      <div class="col-sm-6">
-        <h4>Ved start/påfylling</h4>
-        <p>
-          <button class="btn btn-primary" (click)="ctrl.multiply = -1; ctrl.paymentsource.type = 'cash'">
-            Kontantopptelling
-          </button>
-        </p>
-        <p>
-          <button class="btn btn-primary" (click)="ctrl.multiply = -1; ctrl.paymentsource.type = 'other'">
-            Annen opptelling
-          </button>
-        </p>
-      </div>
-      <div class="col-sm-6">
-        <h4>Ved slutt/uttak</h4>
-        <p>
-          <button class="btn btn-primary" (click)="ctrl.multiply = 1; ctrl.paymentsource.type = 'cash'">
-            Kontantopptelling
-          </button>
-        </p>
-        <p>
-          <button class="btn btn-primary" (click)="ctrl.multiply = 1; ctrl.paymentsource.type = 'other'">
-            Annen opptelling
-          </button>
-        </p>
-      </div>
+    <div class="modal-body">
+      @if (!ctrl.paymentsource.type) {
+        <div class="row text-center">
+          <div class="col-sm-6">
+            <h4>Ved start/påfylling</h4>
+            <p>
+              <button
+                class="btn btn-primary"
+                (click)="ctrl.multiply = -1; ctrl.paymentsource.type = 'cash'"
+              >
+                Kontantopptelling
+              </button>
+            </p>
+            <p>
+              <button
+                class="btn btn-primary"
+                (click)="ctrl.multiply = -1; ctrl.paymentsource.type = 'other'"
+              >
+                Annen opptelling
+              </button>
+            </p>
+          </div>
+          <div class="col-sm-6">
+            <h4>Ved slutt/uttak</h4>
+            <p>
+              <button
+                class="btn btn-primary"
+                (click)="ctrl.multiply = 1; ctrl.paymentsource.type = 'cash'"
+              >
+                Kontantopptelling
+              </button>
+            </p>
+            <p>
+              <button
+                class="btn btn-primary"
+                (click)="ctrl.multiply = 1; ctrl.paymentsource.type = 'other'"
+              >
+                Annen opptelling
+              </button>
+            </p>
+          </div>
+        </div>
+      }
+
+      @if (ctrl.paymentsource.type) {
+        <div>
+          @if (ctrl.multiply == 1) {
+            <p class="text-muted text-center">
+              Du register nå opptelling ved slutt.
+            </p>
+          }
+          @if (ctrl.multiply != 1) {
+            <p class="text-muted text-center">
+              Du register nå opptelling ved start.
+            </p>
+          }
+
+          <form
+            class="form-horizontal"
+            (ngSubmit)="ctrl.complete()"
+            autocomplete="off"
+          >
+            @if (ctrl.paymentsource.type == "cash") {
+              <div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"
+                    >Kontantopptelling</label
+                  >
+                  <div class="col-sm-8">
+                    <table class="table table-striped table-condensed">
+                      <thead>
+                        <tr>
+                          <th class="col-xs-4">Valør</th>
+                          <th class="col-xs-4">Antall</th>
+                          <th class="col-xs-4">Verdi</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @for (item of ctrl.cashitems; track item) {
+                          <tr>
+                            <th>{{ item | price }}</th>
+                            <td>
+                              <input
+                                class="form-control"
+                                type="text"
+                                [(ngModel)]="ctrl.cashinputs[item]"
+                              />
+                            </td>
+                            <td>
+                              {{ item * ctrl.cashvalues[item] || 0 | price }}
+                            </td>
+                          </tr>
+                        }
+                        <tr>
+                          <th>Annet</th>
+                          <td>
+                            <input
+                              class="form-control"
+                              type="text"
+                              [(ngModel)]="ctrl.other"
+                            />
+                          </td>
+                          <td>{{ ctrl.other || 0 | price }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label">Sum</label>
+                  <div class="col-sm-7 form-control-static">
+                    {{ ctrl.paymentsource.amount * ctrl.multiply | price }}
+                  </div>
+                </div>
+              </div>
+            }
+
+            @if (ctrl.paymentsource.type == "other") {
+              <div>
+                <div class="form-group">
+                  <label for="title" class="col-sm-4 control-label"
+                    >Forklaring</label
+                  >
+                  <div class="col-sm-7">
+                    <input
+                      type="text"
+                      class="form-control"
+                      [(ngModel)]="ctrl.paymentsource.title"
+                      id="title"
+                      placeholder=""
+                      typeahead="item for item in ctrl.titles"
+                      required=""
+                      autofocus=""
+                    />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="amount" class="col-sm-4 control-label"
+                    >Beløp</label
+                  >
+                  <div class="col-sm-7">
+                    <input
+                      type="text"
+                      class="form-control"
+                      [(ngModel)]="ctrl.other"
+                      id="amount"
+                      placeholder=""
+                      required=""
+                    />
+                  </div>
+                </div>
+              </div>
+            }
+
+            <div class="form-group">
+              <label for="comment" class="col-sm-4 control-label"
+                >Kommentar</label
+              >
+              <div class="col-sm-7">
+                <textarea
+                  class="form-control"
+                  [(ngModel)]="ctrl.paymentsource.comment"
+                  id="comment"
+                  rows="5"
+                  placeholder="(valgfritt)"
+                ></textarea>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-sm-7 col-sm-offset-4">
+                <button class="btn btn-success" type="submit">Registrer</button>
+                <button
+                  class="btn btn-default"
+                  type="button"
+                  (click)="ctrl.cancel()"
+                >
+                  Avbryt
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      }
     </div>
-}
-
-    @if (ctrl.paymentsource.type) {
-<div>
-      @if (ctrl.multiply == 1) {
-<p class="text-muted text-center">
-        Du register nå opptelling ved slutt.
-      </p>
-}
-      @if (ctrl.multiply != 1) {
-<p class="text-muted text-center">
-        Du register nå opptelling ved start.
-      </p>
-}
-
-      <form class="form-horizontal" (ngSubmit)="ctrl.complete()" autocomplete="off">
-        @if (ctrl.paymentsource.type == 'cash') {
-<div>
-          <div class="form-group">
-            <label class="col-sm-4 control-label">Kontantopptelling</label>
-            <div class="col-sm-8">
-              <table class="table table-striped table-condensed">
-                <thead>
-                  <tr>
-                    <th class="col-xs-4">Valør</th>
-                    <th class="col-xs-4">Antall</th>
-                    <th class="col-xs-4">Verdi</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (item of ctrl.cashitems; track item) {
-<tr>
-                    <th>{{item|price}}</th>
-                    <td>
-                      <input class="form-control" type="text" [(ngModel)]="ctrl.cashinputs[item]">
-                    </td>
-                    <td>{{(item*ctrl.cashvalues[item]||0)|price}}</td>
-                  </tr>
-}
-                  <tr>
-                    <th>Annet</th>
-                    <td>
-                      <input class="form-control" type="text" [(ngModel)]="ctrl.other">
-                    </td>
-                    <td>{{(ctrl.other||0)|price}}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-4 control-label">Sum</label>
-            <div class="col-sm-7 form-control-static">
-              {{ctrl.paymentsource.amount*ctrl.multiply|price}}
-            </div>
-          </div>
-        </div>
-}
-
-        @if (ctrl.paymentsource.type == 'other') {
-<div>
-          <div class="form-group">
-            <label for="title" class="col-sm-4 control-label">Forklaring</label>
-            <div class="col-sm-7">
-              <input type="text" class="form-control" [(ngModel)]="ctrl.paymentsource.title" id="title" placeholder="" typeahead="item for item in ctrl.titles" required="" autofocus="">
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="amount" class="col-sm-4 control-label">Beløp</label>
-            <div class="col-sm-7">
-              <input type="text" class="form-control" [(ngModel)]="ctrl.other" id="amount" placeholder="" required="">
-            </div>
-          </div>
-        </div>
-}
-
-        <div class="form-group">
-          <label for="comment" class="col-sm-4 control-label">Kommentar</label>
-          <div class="col-sm-7">
-            <textarea class="form-control" [(ngModel)]="ctrl.paymentsource.comment" id="comment" rows="5" placeholder="(valgfritt)"></textarea>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <div class="col-sm-7 col-sm-offset-4">
-            <button class="btn btn-success" type="submit">Registrer</button>
-            <button class="btn btn-default" type="button" (click)="ctrl.cancel()">
-              Avbryt
-            </button>
-          </div>
-        </div>
-      </form>
-    </div>
-}
-  </div>
-}
+  }
 </div>

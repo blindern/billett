@@ -31,13 +31,13 @@ angular
         scope.t = {}
 
         scope.new = function () {
-          AdminPaymentgroup.newModal(scope.eventgroupId).result.then(function (
-            paymentgroup,
-          ) {
-            scope.t.paymentgroup = paymentgroup
-            scope.update()
-            reload()
-          })
+          AdminPaymentgroup.newModal(scope.eventgroupId).result.then(
+            function (paymentgroup) {
+              scope.t.paymentgroup = paymentgroup
+              scope.update()
+              reload()
+            },
+          )
         }
 
         scope.update = function () {

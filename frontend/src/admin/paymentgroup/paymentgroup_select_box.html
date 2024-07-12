@@ -1,20 +1,24 @@
 <div>
   @if (!paymentgroups) {
-<div class="form-control-static">
-    Laster oppgjørsgrupper ...
-  </div>
-}
+    <div class="form-control-static">Laster oppgjørsgrupper ...</div>
+  }
   @if (paymentgroups) {
-<div>
-    <select class="form-control" id="{{id}}" ng-options="(g.time_start|formatdate:'DD.MM.YYYY HH:mm ') + '(' + g.user_created + '): ' + g.title for g in paymentgroups" [(ngModel)]="t.paymentgroup" ng-change="update()">
-      <!-- TODO: autofocus required -->
-      @if (!paymentgroup) {
-<option value="">Velg ...</option>
-}
-    </select>
-    <span class="help-block">
-      <a href="" (click)="new()">Opprett ny</a>
-    </span>
-  </div>
-}
+    <div>
+      <select
+        class="form-control"
+        id="{{ id }}"
+        ng-options="(g.time_start|formatdate:'DD.MM.YYYY HH:mm ') + '(' + g.user_created + '): ' + g.title for g in paymentgroups"
+        [(ngModel)]="t.paymentgroup"
+        ng-change="update()"
+      >
+        <!-- TODO: autofocus required -->
+        @if (!paymentgroup) {
+          <option value="">Velg ...</option>
+        }
+      </select>
+      <span class="help-block">
+        <a href="" (click)="new()">Opprett ny</a>
+      </span>
+    </div>
+  }
 </div>

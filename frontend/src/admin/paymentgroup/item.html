@@ -4,478 +4,601 @@
   <div class="page-header">
     <h1>
       <span class="eventgroup">
-        <a href="a/eventgroup/{{ctrl.paymentgroup.eventgroup.id}}/paymentgroups">{{ctrl.paymentgroup.eventgroup.title}}</a>
+        <a
+          href="a/eventgroup/{{
+            ctrl.paymentgroup.eventgroup.id
+          }}/paymentgroups"
+          >{{ ctrl.paymentgroup.eventgroup.title }}</a
+        >
       </span>
-      Oppgjør: {{ctrl.paymentgroup.title}}
+      Oppgjør: {{ ctrl.paymentgroup.title }}
 
       <span class="pull-right hidden-print">
         @if (!ctrl.paymentgroup.time_end && !ctrl.edit) {
-<button class="btn btn-default" (click)="ctrl.startEdit()">
-          Rediger
-        </button>
-}
-        <button class="btn btn-default" (click)="ctrl.show_details = !ctrl.show_details">
-          {{ctrl.show_details ? 'Skjul detaljer' : 'Vis detaljer'}}
+          <button class="btn btn-default" (click)="ctrl.startEdit()">
+            Rediger
+          </button>
+        }
+        <button
+          class="btn btn-default"
+          (click)="ctrl.show_details = !ctrl.show_details"
+        >
+          {{ ctrl.show_details ? "Skjul detaljer" : "Vis detaljer" }}
         </button>
         @if (!ctrl.paymentgroup.time_end) {
-<button class="btn btn-primary" (click)="ctrl.close()">
-          Avslutt/ta oppgjør
-        </button>
-}
+          <button class="btn btn-primary" (click)="ctrl.close()">
+            Avslutt/ta oppgjør
+          </button>
+        }
       </span>
     </h1>
   </div>
 
   @if (ctrl.edit) {
-<form (ngSubmit)="ctrl.save()" class="form-horizontal" autocomplete="off">
-    <div class="form-group">
-      <label for="title" class="col-sm-2 control-label">Tittel</label>
-      <div class="col-sm-6">
-        <input type="text" class="form-control" [(ngModel)]="ctrl.edit.title" id="title" placeholder="" required="" autofocus="">
+    <form (ngSubmit)="ctrl.save()" class="form-horizontal" autocomplete="off">
+      <div class="form-group">
+        <label for="title" class="col-sm-2 control-label">Tittel</label>
+        <div class="col-sm-6">
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="ctrl.edit.title"
+            id="title"
+            placeholder=""
+            required=""
+            autofocus=""
+          />
+        </div>
       </div>
-    </div>
-    <div class="form-group">
-      <label for="description" class="col-sm-2 control-label">Beskrivelse</label>
-      <div class="col-sm-6">
-        <textarea class="form-control" [(ngModel)]="ctrl.edit.description" id="description" rows="5" placeholder="(valgfritt)"></textarea>
+      <div class="form-group">
+        <label for="description" class="col-sm-2 control-label"
+          >Beskrivelse</label
+        >
+        <div class="col-sm-6">
+          <textarea
+            class="form-control"
+            [(ngModel)]="ctrl.edit.description"
+            id="description"
+            rows="5"
+            placeholder="(valgfritt)"
+          ></textarea>
+        </div>
       </div>
-    </div>
-    <div class="form-group">
-      <div class="col-sm-6 col-sm-offset-2">
-        <input type="submit" value="Oppdater" class="btn btn-primary">
-        <a class="btn" (click)="ctrl.abortEdit()">Avbryt</a>
+      <div class="form-group">
+        <div class="col-sm-6 col-sm-offset-2">
+          <input type="submit" value="Oppdater" class="btn btn-primary" />
+          <a class="btn" (click)="ctrl.abortEdit()">Avbryt</a>
+        </div>
       </div>
-    </div>
-  </form>
-}
+    </form>
+  }
 
   @if (!ctrl.edit) {
-<div>
-    @if (!ctrl.paymentgroup.time_end) {
-<div class="alert alert-warning">
-      <b>NB!</b> Oppgjøret er ikke avsluttet!
-    </div>
-}
-
-    <div class="row">
-      <div class="col-xs-6">
-        <dl class="dl-horizontal">
-          <dt>Tittel</dt>
-          <dd>{{ctrl.paymentgroup.title}}</dd>
-          <dt>Opprettet</dt>
-          <dd>
-            {{ctrl.paymentgroup.time_start|formatdate:'DD.MM.YYYY HH:mm'}} av
-            {{ctrl.paymentgroup.user_created}}
-          </dd>
-          <dt>Avsluttet</dt>
-          @if (ctrl.paymentgroup.time_end) {
-<dd>
-            {{ctrl.paymentgroup.time_end|formatdate:'DD.MM.YYYY HH:mm'}} av
-            {{ctrl.paymentgroup.user_closed}}
-          </dd>
-}
-          @if (!ctrl.paymentgroup.time_end) {
-<dd>Ikke avsluttet</dd>
-}
-        </dl>
-
-        @if (ctrl.paymentgroup.description) {
-<div class="alert alert-info" marked="ctrl.paymentgroup.description"></div>
-}
-      </div>
-      <div class="col-xs-6">
-        <p class="dl-prefix">Registrerte salg og transaksjoner:</p>
-        <dl class="dl-horizontal">
-          <dt>Solgte billetter</dt>
-          @if (ctrl.totals.revoked != 0) {
-<dd>
-            {{-ctrl.totals.valid|price}} (registrerte) -
-            {{ctrl.totals.revoked|price}} (refunderte) =
-            {{-ctrl.totals.valid-ctrl.totals.revoked|price}} (netto)
-          </dd>
-}
-          @if (ctrl.totals.revoked == 0) {
-<dd>
-            {{-ctrl.totals.valid-ctrl.totals.revoked|price}}
-          </dd>
-}
-          <dt>Registrerte transaksjoner</dt>
-          <dd>{{ctrl.totals.payments|price}}</dd>
-          <dt>Utestående beløp</dt>
-          <dd>
-            {{(-ctrl.totals.valid-ctrl.totals.revoked-ctrl.totals.payments)|price}}
-          </dd>
-        </dl>
-
-        <p class="dl-prefix">Opptelling/kontroll:</p>
-        <dl class="dl-horizontal">
-          <dt>Verifiserte transaksjoner</dt>
-          <dd>{{ctrl.ps.sum|price}}</dd>
-          <dt>Kassedifferanse/avvik</dt>
-          <dd>{{ctrl.totals.payments-ctrl.ps. sum|price}}</dd>
-        </dl>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-xs-6">
-        <h2>
-          Opptelling/kontroll
-          @if (!ctrl.paymentgroup.time_end) {
-<span class="pull-right btn btn-primary hidden-print" (click)="ctrl.newPaymentsource()">Registrer opptelling</span>
-}
-        </h2>
-
-        @if (ctrl.ps.cashgroups.length == 0 && ctrl.ps.other.length == 0) {
-<div>
-          Ingen opptellinger er registrert.
+    <div>
+      @if (!ctrl.paymentgroup.time_end) {
+        <div class="alert alert-warning">
+          <b>NB!</b> Oppgjøret er ikke avsluttet!
         </div>
-}
+      }
 
-        @for (group of ctrl.ps.cashgroups; track group) {
-<div class="print-page-section">
-          @if (!group.is_deleted || ctrl.show_details) {
-<div [ngClass]="{is_deleted: group.is_deleted}">
-            <h3>
-              {{group.title}}: {{group.total|price}}
-              @if (group.is_deleted) {
-<span>(Slettet - teller ikke på oppgjøret)</span>
-}
-            </h3>
-            <table class="table table-condensed table-striped cashgroup">
-              <thead>
-                <tr>
-                  <th rowspan="2">&nbsp;</th>
-                  @for (paymentsource of group.cols; track paymentsource) {
-<th>
-                    {{paymentsource.time_created|formatdate:'DD.MM.YYYY HH:mm'}}
-                  </th>
-}
-                  <th colspan="2">Totaler</th>
-                </tr>
-                <tr>
-                  @for (paymentsource of group.cols; track paymentsource) {
-<th>
-                    {{paymentsource.user_created}}
-                  </th>
-}
-                  <th>Antall</th>
-                  <th>Beløp</th>
-                </tr>
-              </thead>
-              <tfoot>
-                <tr>
-                  <th>Sum</th>
-                  @for (paymentsource of group.cols; track paymentsource) {
-<th>
-                    {{paymentsource.amount|price}}
-                    @if (!group.is_deleted && !ctrl.paymentgroup.time_end) {
-<span>
-                      <br>
-                      <a href="" (click)="ctrl.deletePaymentsource(paymentsource)">Slett</a>
-                    </span>
-}
-                  </th>
-}
-                  <th>&nbsp;</th>
-                  <th>{{group.total|price}}</th>
-                </tr>
-              </tfoot>
-              <tbody>
-                @for (row of group.rows; track row) {
-<tr>
-                  @if (row.is_num) {
-<th>{{row.key|price}}</th>
-}
-                  @if (!row.is_num) {
-<th>
-                    {{row.key == 'other' ? 'Annet' : row.key}}
-                  </th>
-}
-                  @for (item of row.items track by $index; track item) {
-<td>
-                    {{item}}
-                  </td>
-}
-                  @if (row.is_num) {
-<td>{{row.total}}</td>
-}
-                  @if (!row.is_num) {
-<td>&nbsp;</td>
-}
-                  <td>{{row.amount|price}}</td>
-                </tr>
-}
-              </tbody>
-            </table>
+      <div class="row">
+        <div class="col-xs-6">
+          <dl class="dl-horizontal">
+            <dt>Tittel</dt>
+            <dd>{{ ctrl.paymentgroup.title }}</dd>
+            <dt>Opprettet</dt>
+            <dd>
+              {{
+                ctrl.paymentgroup.time_start | formatdate: "DD.MM.YYYY HH:mm"
+              }}
+              av
+              {{ ctrl.paymentgroup.user_created }}
+            </dd>
+            <dt>Avsluttet</dt>
+            @if (ctrl.paymentgroup.time_end) {
+              <dd>
+                {{
+                  ctrl.paymentgroup.time_end | formatdate: "DD.MM.YYYY HH:mm"
+                }}
+                av
+                {{ ctrl.paymentgroup.user_closed }}
+              </dd>
+            }
+            @if (!ctrl.paymentgroup.time_end) {
+              <dd>Ikke avsluttet</dd>
+            }
+          </dl>
 
-            @for (paymentsource of group.cols; track paymentsource) {
-<div>
-              @if (paymentsource.comment) {
-<div>
-                <h4>
-                  Kommentar til
-                  {{paymentsource.time_created|formatdate:'DD.MM.YYYY HH:mm'}}
-                  ({{paymentsource.user_created}},
-                  {{paymentsource.amount|price}})
-                </h4>
-                <div marked="paymentsource.comment"></div>
-              </div>
-}
+          @if (ctrl.paymentgroup.description) {
+            <div
+              class="alert alert-info"
+              marked="ctrl.paymentgroup.description"
+            ></div>
+          }
+        </div>
+        <div class="col-xs-6">
+          <p class="dl-prefix">Registrerte salg og transaksjoner:</p>
+          <dl class="dl-horizontal">
+            <dt>Solgte billetter</dt>
+            @if (ctrl.totals.revoked != 0) {
+              <dd>
+                {{ -ctrl.totals.valid | price }} (registrerte) -
+                {{ ctrl.totals.revoked | price }} (refunderte) =
+                {{ -ctrl.totals.valid - ctrl.totals.revoked | price }} (netto)
+              </dd>
+            }
+            @if (ctrl.totals.revoked == 0) {
+              <dd>
+                {{ -ctrl.totals.valid - ctrl.totals.revoked | price }}
+              </dd>
+            }
+            <dt>Registrerte transaksjoner</dt>
+            <dd>{{ ctrl.totals.payments | price }}</dd>
+            <dt>Utestående beløp</dt>
+            <dd>
+              {{
+                -ctrl.totals.valid - ctrl.totals.revoked - ctrl.totals.payments
+                  | price
+              }}
+            </dd>
+          </dl>
+
+          <p class="dl-prefix">Opptelling/kontroll:</p>
+          <dl class="dl-horizontal">
+            <dt>Verifiserte transaksjoner</dt>
+            <dd>{{ ctrl.ps.sum | price }}</dd>
+            <dt>Kassedifferanse/avvik</dt>
+            <dd>{{ ctrl.totals.payments - ctrl.ps.sum | price }}</dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-6">
+          <h2>
+            Opptelling/kontroll
+            @if (!ctrl.paymentgroup.time_end) {
+              <span
+                class="pull-right btn btn-primary hidden-print"
+                (click)="ctrl.newPaymentsource()"
+                >Registrer opptelling</span
+              >
+            }
+          </h2>
+
+          @if (ctrl.ps.cashgroups.length == 0 && ctrl.ps.other.length == 0) {
+            <div>Ingen opptellinger er registrert.</div>
+          }
+
+          @for (group of ctrl.ps.cashgroups; track group) {
+            <div class="print-page-section">
+              @if (!group.is_deleted || ctrl.show_details) {
+                <div [ngClass]="{ is_deleted: group.is_deleted }">
+                  <h3>
+                    {{ group.title }}: {{ group.total | price }}
+                    @if (group.is_deleted) {
+                      <span>(Slettet - teller ikke på oppgjøret)</span>
+                    }
+                  </h3>
+                  <table class="table table-condensed table-striped cashgroup">
+                    <thead>
+                      <tr>
+                        <th rowspan="2">&nbsp;</th>
+                        @for (
+                          paymentsource of group.cols;
+                          track paymentsource
+                        ) {
+                          <th>
+                            {{
+                              paymentsource.time_created
+                                | formatdate: "DD.MM.YYYY HH:mm"
+                            }}
+                          </th>
+                        }
+                        <th colspan="2">Totaler</th>
+                      </tr>
+                      <tr>
+                        @for (
+                          paymentsource of group.cols;
+                          track paymentsource
+                        ) {
+                          <th>
+                            {{ paymentsource.user_created }}
+                          </th>
+                        }
+                        <th>Antall</th>
+                        <th>Beløp</th>
+                      </tr>
+                    </thead>
+                    <tfoot>
+                      <tr>
+                        <th>Sum</th>
+                        @for (
+                          paymentsource of group.cols;
+                          track paymentsource
+                        ) {
+                          <th>
+                            {{ paymentsource.amount | price }}
+                            @if (
+                              !group.is_deleted && !ctrl.paymentgroup.time_end
+                            ) {
+                              <span>
+                                <br />
+                                <a
+                                  href=""
+                                  (click)="
+                                    ctrl.deletePaymentsource(paymentsource)
+                                  "
+                                  >Slett</a
+                                >
+                              </span>
+                            }
+                          </th>
+                        }
+                        <th>&nbsp;</th>
+                        <th>{{ group.total | price }}</th>
+                      </tr>
+                    </tfoot>
+                    <tbody>
+                      @for (row of group.rows; track row) {
+                        <tr>
+                          @if (row.is_num) {
+                            <th>{{ row.key | price }}</th>
+                          }
+                          @if (!row.is_num) {
+                            <th>
+                              {{ row.key == "other" ? "Annet" : row.key }}
+                            </th>
+                          }
+                          @for (item of row.items track by $index; track item) {
+                            <td>
+                              {{ item }}
+                            </td>
+                          }
+                          @if (row.is_num) {
+                            <td>{{ row.total }}</td>
+                          }
+                          @if (!row.is_num) {
+                            <td>&nbsp;</td>
+                          }
+                          <td>{{ row.amount | price }}</td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+
+                  @for (paymentsource of group.cols; track paymentsource) {
+                    <div>
+                      @if (paymentsource.comment) {
+                        <div>
+                          <h4>
+                            Kommentar til
+                            {{
+                              paymentsource.time_created
+                                | formatdate: "DD.MM.YYYY HH:mm"
+                            }}
+                            ({{ paymentsource.user_created }},
+                            {{ paymentsource.amount | price }})
+                          </h4>
+                          <div marked="paymentsource.comment"></div>
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+              }
             </div>
-}
-          </div>
-}
-        </div>
-}
+          }
 
-        @for (paymentsource of ctrl.ps.other; track paymentsource) {
-<div class="print-page-section">
-          @if (!paymentsource.is_deleted || ctrl.show_details) {
-<div [ngClass]="{is_deleted: paymentsource.is_deleted}">
+          @for (paymentsource of ctrl.ps.other; track paymentsource) {
+            <div class="print-page-section">
+              @if (!paymentsource.is_deleted || ctrl.show_details) {
+                <div [ngClass]="{ is_deleted: paymentsource.is_deleted }">
+                  <h3>
+                    {{ paymentsource.title }}:
+                    {{ paymentsource.amount | price }}
+                    @if (paymentsource.is_deleted) {
+                      <span>(Slettet - teller ikke på oppgjøret)</span>
+                    }
+                  </h3>
+                  <p>
+                    Registrert
+                    {{
+                      paymentsource.time_created
+                        | formatdate
+                          : "DD.MM.YYYY
+              HH:mm"
+                    }}
+                    av {{ paymentsource.user_created }}.
+                    @if (paymentsource.is_deleted) {
+                      <span
+                        >Slettet
+                        {{
+                          paymentsource.time_deleted
+                            | formatdate
+                              : "DD.MM.YYYY
+                HH:mm"
+                        }}
+                        av {{ paymentsource.user_deleted }}.</span
+                      >
+                    }
+                    @if (
+                      !paymentsource.is_deleted && !ctrl.paymentgroup.time_end
+                    ) {
+                      <a
+                        href=""
+                        (click)="ctrl.deletePaymentsource(paymentsource)"
+                        >Slett</a
+                      >
+                    }
+                  </p>
+                  @if (paymentsource.comment) {
+                    <div marked="paymentsource.comment"></div>
+                  }
+                </div>
+              }
+            </div>
+          }
+
+          <!-- utestående beløp -->
+          @if (
+            -ctrl.totals.valid - ctrl.totals.revoked - ctrl.totals.payments != 0
+          ) {
             <h3>
-              {{paymentsource.title}}: {{paymentsource.amount|price}}
-              @if (paymentsource.is_deleted) {
-<span>(Slettet - teller ikke på oppgjøret)</span>
-}
+              {{ ctrl.ps.orders_deviation_prefix }}:
+              {{
+                -ctrl.totals.valid - ctrl.totals.revoked - ctrl.totals.payments
+                  | price
+              }}
+              (ordre i ubalanse)
             </h3>
-            <p>
-              Registrert {{paymentsource.time_created|formatdate:'DD.MM.YYYY
-              HH:mm'}} av {{paymentsource.user_created}}.
-              @if (paymentsource.is_deleted) {
-<span>Slettet {{paymentsource.time_deleted|formatdate:'DD.MM.YYYY
-                HH:mm'}} av {{paymentsource.user_deleted}}.</span>
-}
-              @if (!paymentsource.is_deleted && !ctrl.paymentgroup.time_end) {
-<a href="" (click)="ctrl.deletePaymentsource(paymentsource)">Slett</a>
-}
-            </p>
-            @if (paymentsource.comment) {
-<div marked="paymentsource.comment"></div>
-}
-          </div>
-}
+          }
+
+          <!-- avvik/svinn -->
+          @if (ctrl.totals.payments - ctrl.ps.sum != 0) {
+            <h3>
+              {{ ctrl.ps.payments_deviation_prefix }}:
+              {{ ctrl.totals.payments - ctrl.ps.sum | price }}
+            </h3>
+          }
         </div>
-}
+        <div class="col-xs-6">
+          <h2>Salgsoversikt</h2>
 
-        <!-- utestående beløp -->
-        @if (-ctrl.totals.valid-ctrl.totals.revoked-ctrl.totals.payments != 0) {
-<h3>
-          {{ctrl.ps.orders_deviation_prefix}}:
-          {{(-ctrl.totals.valid-ctrl.totals.revoked-ctrl.totals.payments)|price}}
-          (ordre i ubalanse)
-        </h3>
-}
+          @if (ctrl.categories.length == 0) {
+            <div>
+              <p>Ingen bevegelser på billetter er utført.</p>
+            </div>
+          }
 
-        <!-- avvik/svinn -->
-        @if (ctrl.totals.payments-ctrl.ps.sum != 0) {
-<h3>
-          {{ctrl.ps.payments_deviation_prefix}}:
-          {{ctrl.totals.payments-ctrl.ps.sum|price}}
-        </h3>
-}
+          @if (ctrl.categories.length > 0) {
+            @for (category of ctrl.categories; track category) {
+              <div class="print-page-section">
+                <h3>
+                  {{::category.name||'Uten kategori'}} - sum salg:
+                  {{::-category.total|price}}
+                </h3>
+
+                @for (event of category.events; track event) {
+                  <div>
+                    <table
+                      class="table table-condensed table-striped paymentgroup-sales"
+                    >
+                      <thead>
+                        <tr>
+                          <th>
+                            <a [href]="a / event / event.id">
+                              {{::event.time_start|formatdate:'D. MMM YYYY HH:mm'
+
+                              }}:
+                              {{::event.title}}
+                            </a>
+                          </th>
+                          <th>Antall</th>
+                          <th>Beløp</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @for (
+                          ticketgroup of event.ticketgroups;
+                          track ticketgroup
+                        ) {
+                          <tr>
+                            <td>{{::ticketgroup.title}}</td>
+                            <td>{{::-ticketgroup.paymentgroup_count}}</td>
+                            <td>
+                              {{::-ticketgroup.paymentgroup_balance|price}}
+                            </td>
+                          </tr>
+                        }
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <th>Sum</th>
+                          <th>{{::-event.paymentgroup_count}}</th>
+                          <th>{{::-event.paymentgroup_balance|price}}</th>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                }
+              </div>
+            }
+          }
+        </div>
       </div>
-      <div class="col-xs-6">
-        <h2>Salgsoversikt</h2>
 
-        @if (ctrl.categories.length == 0) {
-<div>
-          <p>Ingen bevegelser på billetter er utført.</p>
-        </div>
-}
+      @if (ctrl.orders_inbalance.length > 0) {
+        <div class="print-page-section">
+          <h2>Ordre i ubalanse</h2>
+          <p>
+            Dette er ordre som er registrert i dette oppgjøret hvor billetter
+            ikke stemmer med betalinger. Dette er ikke nødvendigvis noe problem,
+            f.eks. hvis billetter blir tilbaketrukket og man ikke har fått
+            utbetalt beløpet enda.
+          </p>
 
-        @if (ctrl.categories.length > 0) {
-@for (category of ctrl.categories; track category) {
-<div class="print-page-section">
-          <h3>
-            {{::category.name||'Uten kategori'}} - sum salg:
-            {{::-category.total|price}}
-          </h3>
-
-          @for (event of category.events; track event) {
-<div>
-            <table class="table table-condensed table-striped paymentgroup-sales">
-              <thead>
+          <table
+            class="table table-condensed table-striped paymentgroup-inbalance"
+          >
+            <thead>
+              <tr>
+                <th>Ordre</th>
+                <th>Tid</th>
+                <th>Billetter solgt</th>
+                <th>Billetter refundert</th>
+                <th>Betaling inn</th>
+                <th>Betaling ut</th>
+                <th>Utestående</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (order of ctrl.orders_inbalance; track order) {
                 <tr>
-                  <th>
-                    <a [href]="a/event/event.id">
-                      {{::event.time_start|formatdate:'D. MMM YYYY HH:mm'}}:
-                      {{::event.title}}
-                    </a>
-                  </th>
-                  <th>Antall</th>
-                  <th>Beløp</th>
+                  <td>
+                    <a [href]="a/order/::order.id">{{::order.order_text_id}}</a>
+                    @if (order.name) {
+                      <span>({{::order.name}})</span>
+                    }
+                  </td>
+                  <td>{{::order.time|formatdate:'DD.MM.YYYY HH:mm'}}</td>
+                  <td>
+                    {{::-order.paymentgroup_balance['ticket_sales']|price}}
+                  </td>
+                  <td>
+                    {{::order.paymentgroup_balance['ticket_revoked']|price}}
+                  </td>
+                  <td>{{::order.paymentgroup_balance['payments']|price}}</td>
+                  <td>{{::-order.paymentgroup_balance['refunds']|price}}</td>
+                  <td>{{::-order.paymentgroup_balance['total']|price}}</td>
                 </tr>
-              </thead>
-              <tbody>
-                @for (ticketgroup of event.ticketgroups; track ticketgroup) {
-<tr>
-                  <td>{{::ticketgroup.title}}</td>
-                  <td>{{::-ticketgroup.paymentgroup_count}}</td>
-                  <td>{{::-ticketgroup.paymentgroup_balance|price}}</td>
-                </tr>
-}
-              </tbody>
-              <tfoot>
-                <tr>
-                  <th>Sum</th>
-                  <th>{{::-event.paymentgroup_count}}</th>
-                  <th>{{::-event.paymentgroup_balance|price}}</th>
-                </tr>
-              </tfoot>
-            </table>
-          </div>
-}
+              }
+            </tbody>
+          </table>
         </div>
-}
-}
-      </div>
+      }
+
+      @if (ctrl.show_details) {
+        <div>
+          <h2>Transaksjoner</h2>
+          <table
+            class="table table-condensed table-striped paymentgroup-payments print-page-section"
+          >
+            <thead>
+              <tr>
+                <th>Ordre</th>
+                <th>Tid</th>
+                <th>Beløp innbetalt</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (payment of ctrl.paymentgroup.payments; track payment) {
+                <tr>
+                  <td>
+                    <a
+                      [href]="a/order/::payment.order.id"
+                      >{{::payment.order.order_text_id}}</a
+                    >
+                    @if (payment.order.name) {
+                      <span>({{::payment.order.name}})</span>
+                    }
+                  </td>
+                  <td>{{::payment.time|formatdate:'DD.MM.YYYY HH:mm'}}</td>
+                  <td>{{::payment.amount|price}}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+
+          <h2>Billetter solgt</h2>
+          <table
+            class="table table-condensed table-striped paymentgroup-tickets print-page-section"
+          >
+            <thead>
+              <tr>
+                <th>Ordre</th>
+                <th>Arrangement</th>
+                <th>Billett</th>
+                <th>Tid</th>
+                <th>Verdi</th>
+                <th>Gebyr</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (ticket of ctrl.paymentgroup.valid_tickets; track ticket) {
+                <tr>
+                  <td>
+                    <a
+                      [href]="a/order/::ticket.order.id"
+                      >{{::ticket.order.order_text_id}}</a
+                    >
+                    @if (ticket.order.name) {
+                      <span>({{::ticket.order.name}})</span>
+                    }
+                  </td>
+                  <td>
+                    <a [href]="a / event / ticket.event.id"
+                      >{{::ticket.event.time_start|formatdate:'D. MMM YYYY HH:mm'
+
+                      }}: {{::ticket.event.title}}</a
+                    >
+                  </td>
+                  <td>{{::ticket.ticketgroup.title}} #{{::ticket.id}}</td>
+                  <td>{{::ticket.time|formatdate:'D. MMM YYYY HH:mm'}}</td>
+                  <td>
+                    {{::(ticket.ticketgroup.price+ticket.ticketgroup.fee|price)}}
+                  </td>
+                  <td>{{::ticket.ticketgroup.fee|price}}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+
+          <h2>Billetter refundert</h2>
+          <table
+            class="table table-condensed table-striped paymentgroup-tickets print-page-section"
+          >
+            <thead>
+              <tr>
+                <th>Ordre</th>
+                <th>Arrangement</th>
+                <th>Billett</th>
+                <th>Tid</th>
+                <th>Verdi</th>
+                <th>Gebyr</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (ticket of ctrl.paymentgroup.revoked_tickets; track ticket) {
+                <tr>
+                  <td>
+                    <a
+                      [href]="a/order/::ticket.order.id"
+                      >{{::ticket.order.order_text_id}}</a
+                    >
+                    @if (ticket.order.name) {
+                      <span>({{::ticket.order.name}})</span>
+                    }
+                  </td>
+                  <td>
+                    <a [href]="a / event / ticket.event.id"
+                      >{{::ticket.event.time_start|formatdate:'D. MMM YYYY HH:mm'
+
+                      }}: {{::ticket.event.title}}</a
+                    >
+                  </td>
+                  <td>{{::ticket.ticketgroup.title}} #{{::ticket.id}}</td>
+                  <td>{{::ticket.time|formatdate:'D. MMM YYYY HH:mm'}}</td>
+                  <td>
+                    {{::(ticket.ticketgroup.price+ticket.ticketgroup.fee|price)}}
+                  </td>
+                  <td>{{::ticket.ticketgroup.fee|price}}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
     </div>
-
-    @if (ctrl.orders_inbalance.length > 0) {
-<div class="print-page-section">
-      <h2>Ordre i ubalanse</h2>
-      <p>
-        Dette er ordre som er registrert i dette oppgjøret hvor billetter ikke
-        stemmer med betalinger. Dette er ikke nødvendigvis noe problem, f.eks.
-        hvis billetter blir tilbaketrukket og man ikke har fått utbetalt beløpet
-        enda.
-      </p>
-
-      <table class="table table-condensed table-striped paymentgroup-inbalance">
-        <thead>
-          <tr>
-            <th>Ordre</th>
-            <th>Tid</th>
-            <th>Billetter solgt</th>
-            <th>Billetter refundert</th>
-            <th>Betaling inn</th>
-            <th>Betaling ut</th>
-            <th>Utestående</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (order of ctrl.orders_inbalance; track order) {
-<tr>
-            <td>
-              <a [href]="a/order/::order.id">{{::order.order_text_id}}</a>
-              @if (order.name) {
-<span>({{::order.name}})</span>
-}
-            </td>
-            <td>{{::order.time|formatdate:'DD.MM.YYYY HH:mm'}}</td>
-            <td>{{::-order.paymentgroup_balance['ticket_sales']|price}}</td>
-            <td>{{::order.paymentgroup_balance['ticket_revoked']|price}}</td>
-            <td>{{::order.paymentgroup_balance['payments']|price}}</td>
-            <td>{{::-order.paymentgroup_balance['refunds']|price}}</td>
-            <td>{{::-order.paymentgroup_balance['total']|price}}</td>
-          </tr>
-}
-        </tbody>
-      </table>
-    </div>
-}
-
-    @if (ctrl.show_details) {
-<div>
-      <h2>Transaksjoner</h2>
-      <table class="table table-condensed table-striped paymentgroup-payments print-page-section">
-        <thead>
-          <tr>
-            <th>Ordre</th>
-            <th>Tid</th>
-            <th>Beløp innbetalt</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (payment of ctrl.paymentgroup.payments; track payment) {
-<tr>
-            <td>
-              <a [href]="a/order/::payment.order.id">{{::payment.order.order_text_id}}</a>
-              @if (payment.order.name) {
-<span>({{::payment.order.name}})</span>
-}
-            </td>
-            <td>{{::payment.time|formatdate:'DD.MM.YYYY HH:mm'}}</td>
-            <td>{{::payment.amount|price}}</td>
-          </tr>
-}
-        </tbody>
-      </table>
-
-      <h2>Billetter solgt</h2>
-      <table class="table table-condensed table-striped paymentgroup-tickets print-page-section">
-        <thead>
-          <tr>
-            <th>Ordre</th>
-            <th>Arrangement</th>
-            <th>Billett</th>
-            <th>Tid</th>
-            <th>Verdi</th>
-            <th>Gebyr</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (ticket of ctrl.paymentgroup.valid_tickets; track ticket) {
-<tr>
-            <td>
-              <a [href]="a/order/::ticket.order.id">{{::ticket.order.order_text_id}}</a>
-              @if (ticket.order.name) {
-<span>({{::ticket.order.name}})</span>
-}
-            </td>
-            <td>
-              <a [href]="a/event/ticket.event.id">{{::ticket.event.time_start|formatdate:'D. MMM YYYY HH:mm'}}:
-                {{::ticket.event.title}}</a>
-            </td>
-            <td>{{::ticket.ticketgroup.title}} #{{::ticket.id}}</td>
-            <td>{{::ticket.time|formatdate:'D. MMM YYYY HH:mm'}}</td>
-            <td>
-              {{::(ticket.ticketgroup.price+ticket.ticketgroup.fee|price)}}
-            </td>
-            <td>{{::ticket.ticketgroup.fee|price}}</td>
-          </tr>
-}
-        </tbody>
-      </table>
-
-      <h2>Billetter refundert</h2>
-      <table class="table table-condensed table-striped paymentgroup-tickets print-page-section">
-        <thead>
-          <tr>
-            <th>Ordre</th>
-            <th>Arrangement</th>
-            <th>Billett</th>
-            <th>Tid</th>
-            <th>Verdi</th>
-            <th>Gebyr</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (ticket of ctrl.paymentgroup.revoked_tickets; track ticket) {
-<tr>
-            <td>
-              <a [href]="a/order/::ticket.order.id">{{::ticket.order.order_text_id}}</a>
-              @if (ticket.order.name) {
-<span>({{::ticket.order.name}})</span>
-}
-            </td>
-            <td>
-              <a [href]="a/event/ticket.event.id">{{::ticket.event.time_start|formatdate:'D. MMM YYYY HH:mm'}}:
-                {{::ticket.event.title}}</a>
-            </td>
-            <td>{{::ticket.ticketgroup.title}} #{{::ticket.id}}</td>
-            <td>{{::ticket.time|formatdate:'D. MMM YYYY HH:mm'}}</td>
-            <td>
-              {{::(ticket.ticketgroup.price+ticket.ticketgroup.fee|price)}}
-            </td>
-            <td>{{::ticket.ticketgroup.fee|price}}</td>
-          </tr>
-}
-        </tbody>
-      </table>
-    </div>
-}
-  </div>
-}
+  }
 </div>

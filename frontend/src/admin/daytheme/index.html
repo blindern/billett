@@ -1,35 +1,43 @@
 <div class="admin-eventgroup">
-  <page-property name="title" value="{{group.title}}"></page-property>
+  <page-property name="title" value="{{ group.title }}"></page-property>
 
   <div class="page-header">
     <h1>
       <span class="eventgroup">
         <a href="a">Administrasjon</a>
       </span>
-      {{group.title}}
+      {{ group.title }}
 
       <span class="pull-right">
-        <a class="btn btn-success" [href]="a/order/new/group.id">Ny ordre</a>
-        <a class="btn btn-default" [href]="a/orders?eventgroup_id=group.id">Ordreliste</a>
+        <a class="btn btn-success" [href]="a / order / new / group.id"
+          >Ny ordre</a
+        >
+        <a class="btn btn-default" [href]="a/orders?eventgroup_id=group.id"
+          >Ordreliste</a
+        >
       </span>
     </h1>
   </div>
 
   <ul>
     <li>
-      <a [href]="a/eventgroup/group.id/sold_tickets_stats">Billettstatistikk (salgsoversikt)</a>
+      <a [href]="a / eventgroup / group.id / sold_tickets_stats"
+        >Billettstatistikk (salgsoversikt)</a
+      >
     </li>
     <li>
-      <a [href]="a/eventgroup/group.id/paymentgroups">Oppgjørsoversikt</a>
+      <a [href]="a / eventgroup / group.id / paymentgroups">Oppgjørsoversikt</a>
     </li>
   </ul>
 
-  <hr>
+  <hr />
 
   <h2>
     Arrangementliste
     <span class="pull-right">
-      <a href="a/eventgroup/{{group.id}}/new_event" class="btn btn-default">Nytt arrangement</a>
+      <a href="a/eventgroup/{{ group.id }}/new_event" class="btn btn-default"
+        >Nytt arrangement</a
+      >
     </span>
   </h2>
 
@@ -39,20 +47,32 @@
 
   <div [hidden]="!group.events.length > 0">
     <div class="form-inline">
-      <select class="form-control" [(ngModel)]="filter_sale" ng-change="applyFilter()">
+      <select
+        class="form-control"
+        [(ngModel)]="filter_sale"
+        ng-change="applyFilter()"
+      >
         <option value="">Vis alle salgsmodus</option>
         <option value="1">Kun med billettgrupper</option>
         <option value="0">Kun uten billettgrupper</option>
       </select>
-      <select class="form-control" [(ngModel)]="filter_category" ng-change="applyFilter()">
+      <select
+        class="form-control"
+        [(ngModel)]="filter_category"
+        ng-change="applyFilter()"
+      >
         <option value="-1">Vis alle kategorier</option>
         @for (opt of categories; track opt) {
-<option value="{{opt}}">
-          {{opt||'Tom kategori'}}
-        </option>
-}
+          <option value="{{ opt }}">
+            {{ opt || "Tom kategori" }}
+          </option>
+        }
       </select>
-      <select class="form-control" [(ngModel)]="filter_hidden" ng-change="applyFilter()">
+      <select
+        class="form-control"
+        [(ngModel)]="filter_hidden"
+        ng-change="applyFilter()"
+      >
         <option value="0">Ikke vis skjulte oppføringer</option>
         <option value="1">Vis kun sjulte oppføringer</option>
         <option value="">Vis alle oppføringer</option>
@@ -70,58 +90,93 @@
           <th>Tilg.</th>
           <th>Omsatt</th>
           <th>Pub</th>
-          <th>Billett-<br>info</th>
+          <th>Billett-<br />info</th>
         </tr>
       </thead>
       @for ((day, events) in days; track (day, events) in days) {
-<tbody>
-        <tr>
-          <th colspan="9">
-            {{events[0].time_start-21600|formatdate:'dddd D. MMMM YYYY'}}
-          </th>
-        </tr>
-        @for (event of events; track event) {
-<tr [ngClass]="{ 'event-not-published': !event.is_published, 'event-no-selling': !event.is_selling }">
-          <td>
-            <b>{{event.time_start|formatdate:'HH:mm'}}</b>
-            <span [hidden]="!event.time_end &amp;&amp; event.time_end != event.time_start">
-              - {{event.time_end|formatdate:'HH:mm'}}
-            </span>
-          </td>
-          <td>{{event.category}}</td>
-          <td>{{event.location}}</td>
-          <td class="edit-link-container">
-            <div class="edit-link-wrap">
-              <span class="edit-link">
-                <a [href]="a/event/event.id/edit">Rediger</a>
-                <a [href]="event/event.id">Forhåndsvis</a>
-              </span>
-            </div>
-            <a [href]="a/event/event.id">{{event.title}}</a>
-          </td>
-          <td>
-            <span [hidden]="!event.max_sales != 0 || event.ticket_count.totals.valid != 0">
-              <a [href]="a/orders?tickets.event.id=::event.id">{{::event.ticket_count.totals.valid}}</a>
-            </span>
-          </td>
-          <td>
-            {{event.max_sales == 0 ? '' : event.ticket_count.totals.free}}
-          </td>
-          <td>
-            {{event.max_sales == 0 &amp;&amp; event.ticket_count.totals.valid == 0 ? ''
+        <tbody>
+          <tr>
+            <th colspan="9">
+              {{
+                events[0].time_start - 21600 | formatdate: "dddd D. MMMM YYYY"
+              }}
+            </th>
+          </tr>
+          @for (event of events; track event) {
+            <tr
+              [ngClass]="{
+                'event-not-published': !event.is_published,
+                'event-no-selling': !event.is_selling,
+              }"
+            >
+              <td>
+                <b>{{ event.time_start | formatdate: "HH:mm" }}</b>
+                <span
+                  [hidden]="!event.time_end &amp;&amp; event.time_end != event.time_start"
+                >
+                  - {{ event.time_end | formatdate: "HH:mm" }}
+                </span>
+              </td>
+              <td>{{ event.category }}</td>
+              <td>{{ event.location }}</td>
+              <td class="edit-link-container">
+                <div class="edit-link-wrap">
+                  <span class="edit-link">
+                    <a [href]="a / event / event.id / edit">Rediger</a>
+                    <a [href]="event / event.id">Forhåndsvis</a>
+                  </span>
+                </div>
+                <a [href]="a / event / event.id">{{ event.title }}</a>
+              </td>
+              <td>
+                <span
+                  [hidden]="
+                    !event.max_sales != 0 ||
+                    event.ticket_count.totals.valid != 0
+                  "
+                >
+                  <a
+                    [href]="a/orders?tickets.event.id=::event.id"
+                    >{{::event.ticket_count.totals.valid}}</a
+                  >
+                </span>
+              </td>
+              <td>
+                {{ event.max_sales == 0 ? "" : event.ticket_count.totals.free }}
+              </td>
+              <td>
+                {{event.max_sales == 0 &amp;&amp; event.ticket_count.totals.valid == 0 ? ''
             :
             (event.ticket_count.totals.sum_price+event.ticket_count.totals.sum_fee|price)}}
-          </td>
-          <td class="eventgroup-event-action" (click)="eventTogglePublish(event)">
-            <i class="glyphicon" [ngClass]="event.is_published ? 'glyphicon-ok' : 'glyphicon-remove'"></i>
-          </td>
-          <td class="eventgroup-event-action" (click)="eventToggleSelling(event)">
-            <i class="glyphicon" [ngClass]="{'event-not-selling': !event.is_selling, 'glyphicon-bullhorn': event.is_selling, 'glyphicon-question-sign': !event.is_selling}"></i>
-          </td>
-        </tr>
-}
-      </tbody>
-}
+              </td>
+              <td
+                class="eventgroup-event-action"
+                (click)="eventTogglePublish(event)"
+              >
+                <i
+                  class="glyphicon"
+                  [ngClass]="
+                    event.is_published ? 'glyphicon-ok' : 'glyphicon-remove'
+                  "
+                ></i>
+              </td>
+              <td
+                class="eventgroup-event-action"
+                (click)="eventToggleSelling(event)"
+              >
+                <i
+                  class="glyphicon"
+                  [ngClass]="{
+                    'event-not-selling': !event.is_selling,
+                    'glyphicon-bullhorn': event.is_selling,
+                    'glyphicon-question-sign': !event.is_selling,
+                  }"
+                ></i>
+              </td>
+            </tr>
+          }
+        </tbody>
+      }
     </table>
   </div>
 </div>

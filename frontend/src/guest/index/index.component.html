@@ -6,74 +6,90 @@
   <h2>Kommende arrangementer</h2>
 
   @if (!(upcoming$ | async)) {
-  <p>Laster data..</p>
+    <p>Laster data..</p>
   } @else if ((upcoming$ | async)!.length == 0) {
-  <p>Ingen arrangementer ble funnet.</p>
+    <p>Ingen arrangementer ble funnet.</p>
   } @else {
-  <div class="eventgroup-event-list eventgroup-upcoming">
-    @for (event of (upcoming$ | async); track event.id) {
-    <ul class="event">
-      <li>
-        <!--
+    <div class="eventgroup-event-list eventgroup-upcoming">
+      @for (event of upcoming$ | async; track event.id) {
+        <ul class="event">
+          <li>
+            <!--
         {{ event.time_start | formatdate : "DD.MM" }}
         <span>{{::event.time_start|formatdate:'HH:mm'}}</span>
         -->
-        start
-      </li>
-      <li>{{ event.location }}</li>
-      <li>
-        @if (has_role_admin) {
-        <div class="edit-link-wrap">
-          <span class="edit-link">
-            <a href="a/event/{{ event.id }}/edit">Rediger</a>
-            <a href="a/event/{{ event.id }}">Detaljert</a>
-          </span>
-        </div>
-        }
+            start
+          </li>
+          <li>{{ event.location }}</li>
+          <li>
+            @if (has_role_admin) {
+              <div class="edit-link-wrap">
+                <span class="edit-link">
+                  <a href="a/event/{{ event.id }}/edit">Rediger</a>
+                  <a href="a/event/{{ event.id }}">Detaljert</a>
+                </span>
+              </div>
+            }
 
-        <a href="event/{{ event.alias || event.id }}">{{ event.title }}</a>
-        @if (event.category) {
-        <span
-          class="category"
-          [class.category-{{
-          categoryNum(event.category)
-          }}]
-          >{{ event.category }}</span
-        >
-        }
-      </li>
-      <li>
-        @if (!event.ticket_info) {
-        <div>
-          @if (event.web_selling_status == 'unknown') { <span>TBA</span> } @if
-          (event.web_selling_status == 'no_tickets') { <span></span> } @if
-          (event.web_selling_status == 'old') { <span></span> } @if
-          (event.web_selling_status == 'no_web_tickets') { <span></span> } @if
-          (event.web_selling_status == 'timeout') { <span>I døra</span> } @if
-          (event.web_selling_status == 'sold_out') { <span>Utsolgt</span> } @if
-          (event.web_selling_status == 'sale') {
-          <span>
-            <a href="event/{{ event.alias || event.id }}">
-              <img src="/assets/graphics/billettgul.png" alt="Kjøp billett" />
-            </a>
-          </span>
-          }
-        </div>
-        } @if (event.ticket_info) {
-        <div>{{ event.ticket_info }}</div>
-        }
-      </li>
-    </ul>
-    }
-  </div>
+            <a href="event/{{ event.alias || event.id }}">{{ event.title }}</a>
+            @if (event.category) {
+              <span
+                class="category"
+                [class.category-{{
+                categoryNum(event.category)
+                }}]
+                >{{ event.category }}</span
+              >
+            }
+          </li>
+          <li>
+            @if (!event.ticket_info) {
+              <div>
+                @if (event.web_selling_status == "unknown") {
+                  <span>TBA</span>
+                }
+                @if (event.web_selling_status == "no_tickets") {
+                  <span></span>
+                }
+                @if (event.web_selling_status == "old") {
+                  <span></span>
+                }
+                @if (event.web_selling_status == "no_web_tickets") {
+                  <span></span>
+                }
+                @if (event.web_selling_status == "timeout") {
+                  <span>I døra</span>
+                }
+                @if (event.web_selling_status == "sold_out") {
+                  <span>Utsolgt</span>
+                }
+                @if (event.web_selling_status == "sale") {
+                  <span>
+                    <a href="event/{{ event.alias || event.id }}">
+                      <img
+                        src="/assets/graphics/billettgul.png"
+                        alt="Kjøp billett"
+                      />
+                    </a>
+                  </span>
+                }
+              </div>
+            }
+            @if (event.ticket_info) {
+              <div>{{ event.ticket_info }}</div>
+            }
+          </li>
+        </ul>
+      }
+    </div>
   }
 
   <h2>Arrangementgrupper</h2>
   <ul>
     @for (group of eventgroups$ | async; track group.id) {
-    <li>
-      <a href="eventgroup/{{ group.id }}">{{ group.title }}</a>
-    </li>
+      <li>
+        <a href="eventgroup/{{ group.id }}">{{ group.title }}</a>
+      </li>
     }
   </ul>
 </div>
