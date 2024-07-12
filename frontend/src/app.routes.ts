@@ -9,6 +9,7 @@ export const routes: Routes = [
   {
     path: "",
     component: GuestIndexComponent,
+    title: "Arrangementer",
   },
   {
     path: "salgsbetingelser",

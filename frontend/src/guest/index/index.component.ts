@@ -36,8 +36,6 @@ export class GuestIndexComponent implements OnInit {
     private eventgroupService: EventgroupService,
   ) {}
 
-  // TODO: Page.setTitle("Arrangementer")
-
   ngOnInit(): void {
     this.upcoming$ = this.http.get<UpcomingItem[]>(api("event/get_upcoming"))
     this.eventgroups$ = this.eventgroupService.getList()
