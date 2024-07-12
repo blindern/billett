@@ -4,12 +4,12 @@ var module = angular.module("billett.admin")
 
 module.controller(
   "AdminOrderListController",
-  function (AdminOrder, Page, $scope, $location) {
+  (AdminOrder, Page, $scope, $location) => {
     $scope.api = api
 
     $scope.curPage = 1
     var limit = 20
-    var get = function () {
+    var get = () => {
       var q = {
         order: "-time",
         with: "tickets.event,tickets.ticketgroup,payments",
@@ -17,11 +17,11 @@ module.controller(
         offset: limit * ($scope.search.page - 1),
         filter: genFilter(),
       }
-      $scope.orders = AdminOrder.query(q, function () {
-        $scope.orders.result.forEach(function (order) {
+      $scope.orders = AdminOrder.query(q, () => {
+        $scope.orders.result.forEach((order) => {
           order.total_valid = 0
           order.total_reserved = 0
-          order.tickets.forEach(function (ticket) {
+          order.tickets.forEach((ticket) => {
             if (ticket.is_revoked) return
             order[ticket.is_valid ? "total_valid" : "total_reserved"] +=
               ticket.ticketgroup.price + ticket.ticketgroup.fee
@@ -58,7 +58,7 @@ module.controller(
       "tickets.event.id",
       "payments.transaction_id",
     ]
-    var genFilter = function () {
+    var genFilter = () => {
       var r = []
       Object.entries($scope.search).forEach(([name, val]) => {
         $location.search(name, name == "page" && val == 1 ? null : val || null)
@@ -79,7 +79,7 @@ module.controller(
       return r.join(",")
     }
 
-    var updateFromLocation = function () {
+    var updateFromLocation = () => {
       console.log("updating data")
       $scope.search = {}
       $scope.search.page = 1
@@ -91,7 +91,7 @@ module.controller(
     updateFromLocation()
     $scope.$on("$routeUpdate", updateFromLocation)
 
-    $scope.$watchCollection("search", function (oldVal, newVal) {
+    $scope.$watchCollection("search", (oldVal, newVal) => {
       if (oldVal.page == newVal.page && newVal.page != 1) {
         $scope.search.page = 1
         return

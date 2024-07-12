@@ -17,9 +17,9 @@ var module = angular.module("billett.admin", [
   "focusOn",
 ])
 
-module.run(function ($modalStack, $rootScope) {
+module.run(($modalStack, $rootScope) => {
   // make sure modals close on state change
-  $rootScope.$on("$stateChangeSuccess", function () {
+  $rootScope.$on("$stateChangeSuccess", () => {
     var topModal = $modalStack.getTop()
     while (topModal) {
       $modalStack.dismiss(topModal.key, "$locationChangeSuccess")

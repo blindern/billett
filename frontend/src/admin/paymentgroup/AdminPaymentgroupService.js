@@ -5,7 +5,7 @@ import paymentgroupSelectTemplate from "./paymentgroup_select.html?raw"
 
 angular
   .module("billett.admin")
-  .factory("AdminPaymentgroup", function ($http, $modal, $resource) {
+  .factory("AdminPaymentgroup", ($http, $modal, $resource) => {
     var r = $resource(
       api("paymentgroup/:id"),
       {
@@ -18,29 +18,29 @@ angular
       },
     )
 
-    r.prototype.close = function () {
+    r.prototype.close = () => {
       return $http.post(api("paymentgroup/" + this.id + "/close"))
     }
 
-    r.getValid = function (eventgroup_id) {
+    r.getValid = (eventgroup_id) => {
       return this.query({
         filter: "eventgroup_id=" + parseInt(eventgroup_id) + ",time_end:NULL",
       })
     }
 
-    r.setPreferredGroup = function (group) {
+    r.setPreferredGroup = (group) => {
       if (group) {
         sessionStorage.lastPaymentgroup = group.id
       }
     }
 
-    r.getPreferredGroup = function (grouplist, override_id) {
+    r.getPreferredGroup = (grouplist, override_id) => {
       var group = null
       var last_id = sessionStorage.lastPaymentgroup
         ? sessionStorage.lastPaymentgroup
         : null
 
-      grouplist.forEach(function (row) {
+      grouplist.forEach((row) => {
         if (row.id == override_id) {
           group = row
         } else if (row.id == last_id && !group) {
@@ -51,19 +51,19 @@ angular
       return group
     }
 
-    r.newModal = function (eventgroupId) {
+    r.newModal = (eventgroupId) => {
       return $modal.open({
         template: newTemplate,
         controller: "AdminPaymentgroupNewController as ctrl",
         resolve: {
-          eventgroupId: function () {
+          eventgroupId: () => {
             return eventgroupId
           },
         },
       })
     }
 
-    r.selectModal = function (resolve) {
+    r.selectModal = (resolve) => {
       return $modal.open({
         template: paymentgroupSelectTemplate,
         controller: "AdminPaymentgroupSelectController as ctrl",

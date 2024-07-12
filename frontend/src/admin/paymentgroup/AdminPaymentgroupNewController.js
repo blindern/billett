@@ -2,26 +2,26 @@ angular
   .module("billett.admin")
   .controller(
     "AdminPaymentgroupNewController",
-    function ($modalInstance, eventgroupId, AdminPaymentgroup) {
+    ($modalInstance, eventgroupId, AdminPaymentgroup) => {
       var ctrl = this
 
       ctrl.paymentgroup = new AdminPaymentgroup()
       ctrl.paymentgroup.eventgroup_id = eventgroupId
 
-      ctrl.complete = function () {
+      ctrl.complete = () => {
         ctrl.sending = true
         ctrl.paymentgroup.$save(
-          function (paymentgroup) {
+          (paymentgroup) => {
             $modalInstance.close(paymentgroup)
           },
-          function (ret) {
+          (ret) => {
             ctrl.sending = false
             alert(ret)
           },
         )
       }
 
-      ctrl.cancel = function () {
+      ctrl.cancel = () => {
         $modalInstance.dismiss("cancel")
       }
     },

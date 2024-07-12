@@ -4,7 +4,7 @@ angular
   .module("billett.admin")
   .controller(
     "AdminOrderNewController",
-    function (
+    (
       $http,
       $location,
       $modal,
@@ -18,7 +18,7 @@ angular
       AdminPaymentgroup,
       AdminPrinter,
       AdminOrder,
-    ) {
+    ) => {
       var ctrl = this
       Page.setTitle("Ny ordre")
 
@@ -27,19 +27,19 @@ angular
       var loader = Page.setLoading()
       AdminEventgroup.get(
         { id: $stateParams["id"] },
-        function (res) {
+        (res) => {
           ctrl.eventgroup = res
 
           // if page is reloaded, check if we are in progress of a order
           if (localStorage["billett.neworder.id"]) {
             AdminOrder.get(
               { id: localStorage["billett.neworder.id"] },
-              function (order) {
+              (order) => {
                 ctrl.order = order
                 buildTicketgroupList()
                 loader()
               },
-              function () {
+              () => {
                 delete localStorage["billett.neworder.id"]
                 loader()
                 ctrl.addTickets()
@@ -50,7 +50,7 @@ angular
             ctrl.addTickets()
           }
         },
-        function () {
+        () => {
           $location.path("a")
         },
       )
@@ -59,7 +59,7 @@ angular
       // actual order handling
 
       // reset order details
-      var resetOrder = function () {
+      var resetOrder = () => {
         ctrl.order = {}
         ctrl.total = 0
         ctrl.ticketgroups = null
@@ -67,22 +67,22 @@ angular
       }
 
       // create a blank order
-      ctrl.createBlank = function () {
+      ctrl.createBlank = () => {
         getOrder()
       }
 
       // convert to actual order and mark as paid
-      ctrl.completeOrder = function () {
+      ctrl.completeOrder = () => {
         var loader = Page.setLoading()
         ctrl.saveEdit().then(
-          function () {
+          () => {
             $http
               .post(api("order/" + ctrl.order.id + "/validate"), {
                 paymentgroup: ctrl.paymentgroup.id,
                 amount: ctrl.total,
                 sendmail: true,
               })
-              .then(function (response) {
+              .then((response) => {
                 const ret = response.data
                 loader()
 
@@ -102,7 +102,7 @@ angular
                 delete localStorage["billett.neworder.id"]
                 resetOrder()
               })
-              .catch(function (err) {
+              .catch((err) => {
                 loader()
                 if (err.data == "amount mismatched") {
                   alert(
@@ -114,33 +114,33 @@ angular
                 }
               })
           },
-          function (err) {
+          (err) => {
             alert("Ukjent feil ved lagring av endringer: " + err)
           },
         )
       }
 
       // save edits to order
-      ctrl.saveEdit = function () {
+      ctrl.saveEdit = () => {
         return ctrl.order.$update()
       }
 
       // save as permanent reservation
-      ctrl.saveOrder = function () {
-        ctrl.order.$update(function () {
+      ctrl.saveOrder = () => {
+        ctrl.order.$update(() => {
           delete localStorage["billett.neworder.id"]
           $state.go("admin-order", { id: ctrl.order.id })
         })
       }
 
       // abort new order (delete reservation and initialize new order)
-      ctrl.abortOrder = function () {
+      ctrl.abortOrder = () => {
         ctrl.order.$delete(
-          function () {
+          () => {
             delete localStorage["billett.neworder.id"]
             resetOrder()
           },
-          function () {
+          () => {
             alert("Feil ved sletting av ordre")
           },
         )
@@ -187,7 +187,7 @@ angular
 
       // rebuild ticketgroup list (call when order changes)
       // also update order total
-      var buildTicketgroupList = function () {
+      var buildTicketgroupList = () => {
         ctrl.ticketgroups = null
         ctrl.total = 0
         if (!ctrl.order.tickets || ctrl.order.tickets.length == 0) return
@@ -199,7 +199,7 @@ angular
 
         ctrl.ticketgroups = []
         var ticketgroups = {}
-        ctrl.order.tickets.forEach(function (ticket) {
+        ctrl.order.tickets.forEach((ticket) => {
           if (!(ticket.ticketgroup.id in ticketgroups)) {
             ctrl.ticketgroups.push(
               (ticketgroups[ticket.ticketgroup.id] = {
@@ -218,27 +218,27 @@ angular
           ctrl.total += ticket.ticketgroup.price + ticket.ticketgroup.fee
         })
 
-        ctrl.ticketgroups.sort(function (left, right) {
+        ctrl.ticketgroups.sort((left, right) => {
           return left.event.time_start - right.event.time_start
         })
       }
 
       // delete a reserved ticket
-      ctrl.deleteTicket = function (ticketgroup) {
+      ctrl.deleteTicket = (ticketgroup) => {
         ticketgroup.working = true
         $http
           .delete(api("ticket/" + ticketgroup.tickets[0].id))
-          .then(function () {
+          .then(() => {
             getOrder(true).then(
-              function () {
+              () => {
                 ticketgroup.working = false
               },
-              function () {
+              () => {
                 alert("Error reloading order")
               },
             )
           })
-          .catch(function () {
+          .catch(() => {
             alert("Unknown error deleting order")
           })
       }
@@ -246,16 +246,16 @@ angular
       // -------------------------------------------------------------------------
       // adding tickets to reservation
 
-      ctrl.addTickets = function () {
+      ctrl.addTickets = () => {
         AdminOrder.addTicketsModal({
-          eventgroup_id: function () {
+          eventgroup_id: () => {
             return ctrl.eventgroup.id
           },
-          getOrder: function () {
+          getOrder: () => {
             return getOrder
           },
-          addHandler: function () {
-            return async function () {
+          addHandler: () => {
+            return async () => {
               // reload order with new data
               try {
                 await getOrder(true)
@@ -265,7 +265,7 @@ angular
               }
             }
           },
-        }).result.then(function () {
+        }).result.then(() => {
           focus("namefocus")
         })
       }
@@ -273,7 +273,7 @@ angular
       // -------------------------------------------------------------------------
       // list of previous orders
 
-      var reloadHistory = function () {
+      var reloadHistory = () => {
         ctrl.previousOrders = null
 
         AdminOrder.query(
@@ -283,11 +283,11 @@ angular
             limit: 3,
             filter: "eventgroup_id=" + $stateParams["id"] + ",is_admin=1",
           },
-          function (data) {
-            ctrl.previousOrders = data.result.map(function (order) {
+          (data) => {
+            ctrl.previousOrders = data.result.map((order) => {
               order.total_valid = 0
               order.total_reserved = 0
-              order.tickets.forEach(function (ticket) {
+              order.tickets.forEach((ticket) => {
                 if (ticket.is_revoked) return
                 order[ticket.is_valid ? "total_valid" : "total_reserved"] +=
                   ticket.ticketgroup.price + ticket.ticketgroup.fee
@@ -304,7 +304,7 @@ angular
         if (!ctrl.printer) return
 
         var list = []
-        ctrl.order.tickets.forEach(function (ticket) {
+        ctrl.order.tickets.forEach((ticket) => {
           if (ticket.is_revoked || !ticket.is_valid) return
           list.push(ticket.id)
         })
@@ -312,10 +312,10 @@ angular
         if (list.length == 0) return
 
         AdminPrinter.printTickets(ctrl.printer.name, list).then(
-          function () {
+          () => {
             Page.toast("Utskrift lagt i kø", { class: "success" })
           },
-          function () {
+          () => {
             Page.toast("Ukjent feil oppsto!", { class: "warning" })
           },
         )

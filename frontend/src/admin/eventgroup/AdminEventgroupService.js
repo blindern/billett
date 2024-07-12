@@ -2,7 +2,7 @@ import { api } from "../../api"
 
 var module = angular.module("billett.admin")
 
-module.factory("AdminEventgroup", function ($http, $resource) {
+module.factory("AdminEventgroup", ($http, $resource) => {
   var r = $resource(
     api("eventgroup/:id"),
     {
@@ -14,7 +14,7 @@ module.factory("AdminEventgroup", function ($http, $resource) {
     },
   )
 
-  r.getSoldTicketsStats = function (id) {
+  r.getSoldTicketsStats = (id) => {
     return $http.get(api("eventgroup/" + id + "/sold_tickets_stats"))
   }
 

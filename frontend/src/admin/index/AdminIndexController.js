@@ -2,7 +2,7 @@ import template from "./index.html?raw"
 
 var module = angular.module("billett.admin")
 
-module.config(function ($stateProvider) {
+module.config(($stateProvider) => {
   $stateProvider.state("admin-index", {
     url: "/a",
     template,
@@ -13,12 +13,12 @@ module.config(function ($stateProvider) {
 
 module.controller(
   "AdminIndexController",
-  function (Page, $http, $scope, AdminEventgroup, AdminPrinter) {
-    AdminEventgroup.query(function (ret) {
+  (Page, $http, $scope, AdminEventgroup, AdminPrinter) => {
+    AdminEventgroup.query((ret) => {
       $scope.eventgroups = ret
     })
 
-    $scope.printText = function () {
+    $scope.printText = () => {
       AdminPrinter.printTextModal()
     }
   },

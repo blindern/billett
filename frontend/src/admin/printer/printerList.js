@@ -2,7 +2,7 @@ import template from "./select_box.html?raw"
 
 angular
   .module("billett.admin")
-  .directive("printerList", function (AdminPrinter) {
+  .directive("printerList", (AdminPrinter) => {
     return {
       restrict: "E",
       template,
@@ -12,11 +12,11 @@ angular
         canDisable: "=",
       },
       replace: true,
-      link: function (scope) {
+      link: (scope) => {
         scope.t = {}
         scope.Math = window.Math
 
-        AdminPrinter.getList().then(function (response) {
+        AdminPrinter.getList().then((response) => {
           scope.printers = response.data
           scope.printer = scope.t.printer = AdminPrinter.getPreferred(
             response.data,
@@ -24,7 +24,7 @@ angular
           )
         })
 
-        scope.update = function () {
+        scope.update = () => {
           scope.printer = scope.t.printer
           AdminPrinter.setPreferred(scope.printer, true)
         }

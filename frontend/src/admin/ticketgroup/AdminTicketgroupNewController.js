@@ -2,14 +2,14 @@ var module = angular.module("billett.admin")
 
 module.controller(
   "AdminTicketgroupNewController",
-  function (
+  (
     Page,
     $stateParams,
     AdminTicketgroup,
     AdminEvent,
     $scope,
     $location,
-  ) {
+  ) => {
     $scope.event_id = $stateParams["id"]
     $scope.ticketgroup = {
       price: 0,
@@ -19,24 +19,24 @@ module.controller(
     var loader = Page.setLoading()
     AdminEvent.get(
       { id: $stateParams["id"] },
-      function (ret) {
+      (ret) => {
         loader()
         $scope.event = ret
       },
-      function () {
+      () => {
         loader()
         Page.set404()
       },
     )
 
-    $scope.addTicketgroup = function () {
+    $scope.addTicketgroup = () => {
       var g = new AdminTicketgroup($scope.ticketgroup)
       g.event_id = $scope.event_id
       g.$save(
-        function (res) {
+        (res) => {
           $location.path("/a/event/" + g.event_id)
         },
-        function (err) {
+        (err) => {
           alert(err.data)
         },
       )

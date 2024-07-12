@@ -5,7 +5,7 @@ import paymentsourceNewTemplate from "./paymentsource_new.html?raw"
 
 angular
   .module("billett.admin")
-  .factory("AdminPaymentsource", function ($http, $modal, $resource) {
+  .factory("AdminPaymentsource", ($http, $modal, $resource) => {
     var r = $resource(
       api("paymentsource/:id"),
       {
@@ -18,19 +18,19 @@ angular
       },
     )
 
-    r.newModal = function (paymentgroup) {
+    r.newModal = (paymentgroup) => {
       return $modal.open({
         template: paymentsourceNewTemplate,
         controller: "AdminPaymentsourceNewController as ctrl",
         resolve: {
-          paymentgroup: function () {
+          paymentgroup: () => {
             return paymentgroup
           },
         },
       })
     }
 
-    r.selectModal = function (resolve) {
+    r.selectModal = (resolve) => {
       return $modal.open({
         template: paymentgroupSelectTemplate,
         controller: "AdminPaymentgroupSelectController as ctrl",

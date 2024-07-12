@@ -2,17 +2,17 @@ angular
   .module("billett.admin")
   .controller(
     "AdminPaymentgroupSelectController",
-    function ($http, $modalInstance, amount, order, actionText) {
+    ($http, $modalInstance, amount, order, actionText) => {
       var ctrl = this
       ctrl.order = order
       ctrl.actionText = actionText
       ctrl.amount = amount
 
-      ctrl.complete = function () {
+      ctrl.complete = () => {
         $modalInstance.close(ctrl.paymentgroup)
       }
 
-      ctrl.cancel = function () {
+      ctrl.cancel = () => {
         $modalInstance.dismiss("cancel")
       }
     },

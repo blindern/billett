@@ -2,7 +2,7 @@ import { api } from "../../api"
 
 var module = angular.module("billett.admin")
 
-module.factory("AdminDaytheme", function ($http, $resource) {
+module.factory("AdminDaytheme", ($http, $resource) => {
   var r = $resource(
     api("daytheme/:id"),
     {

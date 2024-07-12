@@ -4,7 +4,7 @@ var module = angular.module("billett.admin")
 
 module.controller(
   "AdminEventgroupController",
-  function (
+  (
     Page,
     $stateParams,
     $http,
@@ -12,13 +12,13 @@ module.controller(
     AdminEventgroup,
     AdminEvent,
     $location,
-  ) {
+  ) => {
     Page.setTitle("Arrangementgruppe")
 
     var loader = Page.setLoading()
     AdminEventgroup.get(
       { id: $stateParams["id"] },
-      function (ret) {
+      (ret) => {
         loader()
 
         $scope.group = ret
@@ -31,7 +31,7 @@ module.controller(
         }
         $scope.categories.sort()
       },
-      function () {
+      () => {
         loader()
         Page.set404()
       },
@@ -40,7 +40,7 @@ module.controller(
     $scope.filter_sale = ""
     $scope.filter_category = "-1"
     $scope.filter_hidden = "0"
-    $scope.applyFilter = function () {
+    $scope.applyFilter = () => {
       var r = {}
       for (const item of $scope.group.events) {
         if (
@@ -67,19 +67,19 @@ module.controller(
       $scope.days = r
     }
 
-    $scope.eventTogglePublish = function (event) {
+    $scope.eventTogglePublish = (event) => {
       new AdminEvent(event)
         .setPublish(!event.is_published)
-        .then(function (response) {
+        .then((response) => {
           const ret = response.data
           event.is_published = ret.is_published
         })
     }
 
-    $scope.eventToggleSelling = function (event) {
+    $scope.eventToggleSelling = (event) => {
       new AdminEvent(event)
         .setSelling(!event.is_selling)
-        .then(function (response) {
+        .then((response) => {
           const ret = response.data
           event.is_selling = ret.is_selling
         })

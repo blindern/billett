@@ -4,7 +4,7 @@ angular
   .module("billett.admin")
   .controller(
     "AdminPaymentsourceNewController",
-    function ($modalInstance, $scope, paymentgroup, AdminPaymentsource, Page) {
+    ($modalInstance, $scope, paymentgroup, AdminPaymentsource, Page) => {
       var ctrl = this
 
       ctrl.paymentsource = new AdminPaymentsource()
@@ -21,7 +21,7 @@ angular
 
       ctrl.titles = getDefaultTitles()
 
-      $scope.$watch("ctrl.paymentsource.type", function (val) {
+      $scope.$watch("ctrl.paymentsource.type", (val) => {
         if (val == "cash") {
           setCashTitle()
         }
@@ -31,7 +31,7 @@ angular
       $scope.$watch("ctrl.other", parseInputs)
       $scope.$watchCollection("ctrl.cashinputs", parseInputs)
 
-      ctrl.complete = function () {
+      ctrl.complete = () => {
         if (!isInputOk()) {
           return
         }
@@ -40,25 +40,25 @@ angular
 
         ctrl.sending = true
         ctrl.paymentsource.$save(
-          function (paymentsource) {
+          (paymentsource) => {
             Page.toast("Registrering vellykket", { class: "success" })
             $modalInstance.close(paymentsource)
           },
-          function (ret) {
+          (ret) => {
             ctrl.sending = false
             alert(ret)
           },
         )
       }
 
-      ctrl.cancel = function () {
+      ctrl.cancel = () => {
         $modalInstance.dismiss("cancel")
       }
 
       function getDefaultTitles() {
         var list = []
         ;(paymentgroup.eventgroup.paymentsources_data["sources"] || []).forEach(
-          function (obj) {
+          (obj) => {
             list.push(obj.title)
           },
         )

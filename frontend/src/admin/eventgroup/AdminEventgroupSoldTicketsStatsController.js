@@ -2,34 +2,34 @@ angular
   .module("billett.admin")
   .controller(
     "AdminEventgroupSoldTicketsStatsController",
-    function (Page, $stateParams, AdminEventgroup) {
+    (Page, $stateParams, AdminEventgroup) => {
       var self = this
       Page.setTitle("Billettstatistikk for arrangementgruppe")
 
       var loader = Page.setLoading()
       AdminEventgroup.getSoldTicketsStats($stateParams["id"]).then(
-        function (response) {
+        (response) => {
           const ret = response.data
           loader()
 
-          var accum = function () {
+          var accum = () => {
             var self = this
             this.parents = []
             this.count = 0
             this.revoked = 0
             this.price = 0
             this.fee = 0
-            this.add = function (count, revoked, price, fee) {
+            this.add = (count, revoked, price, fee) => {
               self.count += count
               self.revoked += revoked
               self.price += price * (count - revoked)
               self.fee += fee * (count - revoked)
-              self.parents.forEach(function (parent) {
+              self.parents.forEach((parent) => {
                 parent.add(count, revoked, price, fee)
               })
               return self
             }
-            this.parent = function (parent) {
+            this.parent = (parent) => {
               self.parents.push(parent)
               return self
             }
@@ -41,7 +41,7 @@ angular
           self.max_normal_sales = 0
 
           self.days = ret.tickets
-            .reduce(function (prev, cur) {
+            .reduce((prev, cur) => {
               if (cur.day && prev.indexOf(cur.day) == -1) {
                 prev.push(cur.day)
                 self.daysAccum[cur.day] = new accum()
@@ -52,7 +52,7 @@ angular
             .reverse()
 
           var lastDay
-          self.daysDetails = self.days.map(function (day) {
+          self.daysDetails = self.days.map((day) => {
             var tmp = lastDay
             lastDay = day
 
@@ -67,10 +67,10 @@ angular
 
           var events = {}
           self.events = []
-          ret.events.forEach(function (event) {
+          ret.events.forEach((event) => {
             event.ticketgroups = []
             event.accum = new accum().parent(self.topAccum)
-            event.daysAccum = self.days.reduce(function (prev, cur) {
+            event.daysAccum = self.days.reduce((prev, cur) => {
               prev[cur] = new accum()
               return prev
             }, {})
@@ -82,19 +82,19 @@ angular
           })
 
           var ticketgroups = {}
-          ret.ticketgroups.forEach(function (ticketgroup) {
+          ret.ticketgroups.forEach((ticketgroup) => {
             ticketgroup.days = {}
             ticketgroup.accum = new accum().parent(
               events[ticketgroup.event_id].accum,
             )
-            self.days.forEach(function (day) {
+            self.days.forEach((day) => {
               ticketgroup.days[day] = null
             })
             events[ticketgroup.event_id].ticketgroups.push(ticketgroup)
             ticketgroups[ticketgroup.id] = ticketgroup
           })
 
-          ret.tickets.forEach(function (ticket) {
+          ret.tickets.forEach((ticket) => {
             if (!ticket.day) return
             var ticketgroup = ticketgroups[ticket.ticketgroup_id]
             var event = events[ticket.event_id]

@@ -2,7 +2,7 @@ angular
   .module("billett.admin")
   .controller(
     "AdminPaymentgroupItemController",
-    function ($stateParams, AdminPaymentgroup, AdminPaymentsource, Page) {
+    ($stateParams, AdminPaymentgroup, AdminPaymentsource, Page) => {
       var ctrl = this
       ctrl.show_details = false
 
@@ -16,7 +16,7 @@ angular
         var loader = Page.setLoading()
         return AdminPaymentgroup.get(
           { id: $stateParams["id"] },
-          function (ret) {
+          (ret) => {
             loader()
             ctrl.paymentgroup = ret
 
@@ -29,7 +29,7 @@ angular
             var events = {}
             var orders = {}
 
-            var addOrderBalance = function (order, value, is_payment) {
+            var addOrderBalance = (order, value, is_payment) => {
               if (!(order.id in orders)) {
                 order.paymentgroup_balance = {
                   ticket_sales: 0,
@@ -55,9 +55,9 @@ angular
             }
 
             var ticketgroups = {}
-            var getEvent = function (event) {
+            var getEvent = (event) => {
               if (!(event.id in events)) {
-                event.ticketgroups.forEach(function (g) {
+                event.ticketgroups.forEach((g) => {
                   g.paymentgroup_balance = 0
                   g.paymentgroup_count = 0
                   ticketgroups[g.id] = g
@@ -69,7 +69,7 @@ angular
               return events[event.id]
             }
 
-            var addTicket = function (ticket, multiply) {
+            var addTicket = (ticket, multiply) => {
               var p = ticket.ticketgroup.price + ticket.ticketgroup.fee
               var ev = getEvent(ticket.event)
               ev.paymentgroup_balance += p * multiply
@@ -79,11 +79,11 @@ angular
               ticketgroups[ticket.ticketgroup.id].paymentgroup_count += multiply
             }
 
-            ctrl.paymentgroup.payments.forEach(function (payment) {
+            ctrl.paymentgroup.payments.forEach((payment) => {
               ctrl.totals.payments += payment.amount * 1
               addOrderBalance(payment.order, payment.amount * 1, true)
             })
-            ctrl.paymentgroup.valid_tickets.forEach(function (ticket) {
+            ctrl.paymentgroup.valid_tickets.forEach((ticket) => {
               ctrl.totals.valid -=
                 ticket.ticketgroup.price + ticket.ticketgroup.fee
               addOrderBalance(
@@ -92,7 +92,7 @@ angular
               )
               addTicket(ticket, -1)
             })
-            ctrl.paymentgroup.revoked_tickets.forEach(function (ticket) {
+            ctrl.paymentgroup.revoked_tickets.forEach((ticket) => {
               ctrl.totals.revoked +=
                 ticket.ticketgroup.price + ticket.ticketgroup.fee
               addOrderBalance(
@@ -103,19 +103,19 @@ angular
             })
 
             // convert events to array list
-            events = (function (tmp) {
+            events = ((tmp) => {
               var list = []
               for (const event of events) {
                 list.push(event)
               }
-              list.sort(function (left, right) {
+              list.sort((left, right) => {
                 return left.time_start - right.time_start
               })
               return list
             })(events)
 
             // group events by category
-            var categories = events.reduce(function (prev, event) {
+            var categories = events.reduce((prev, event) => {
               if (!(event.category in prev)) {
                 prev[event.category] = {
                   name: event.category,
@@ -125,7 +125,7 @@ angular
               }
 
               event.ticketgroups = event.ticketgroups.filter(
-                function (ticketgroup) {
+                (ticketgroup) => {
                   return ticketgroup.paymentgroup_balance != 0
                 },
               )
@@ -138,7 +138,7 @@ angular
             for (const category of categories) {
               ctrl.categories.push(category)
             }
-            ctrl.categories.sort(function (left, right) {
+            ctrl.categories.sort((left, right) => {
               return left.name.localeCompare(right.name)
             })
 
@@ -149,7 +149,7 @@ angular
                 ctrl.orders_inbalance.push(order)
               }
             }
-            ctrl.orders_inbalance.sort(function (left, right) {
+            ctrl.orders_inbalance.sort((left, right) => {
               return left.time - right.time
             })
 
@@ -158,57 +158,57 @@ angular
         )
       }
 
-      ctrl.startEdit = function () {
+      ctrl.startEdit = () => {
         ctrl.edit = {
           title: ctrl.paymentgroup.title,
           description: ctrl.paymentgroup.description,
         }
       }
 
-      ctrl.abortEdit = function () {
+      ctrl.abortEdit = () => {
         delete ctrl.edit
       }
 
-      ctrl.save = function () {
+      ctrl.save = () => {
         ctrl.paymentgroup.title = ctrl.edit.title
         ctrl.paymentgroup.description = ctrl.edit.description
-        ctrl.paymentgroup.$update(function (ret) {
+        ctrl.paymentgroup.$update((ret) => {
           ctrl.paymentgroup = ret
           delete ctrl.edit
         })
       }
 
-      ctrl.close = function () {
+      ctrl.close = () => {
         if (
           !ctrl.paymentgroup.time_end &&
           confirm(
             "Er du sikker på at du vil lukke betalingsgruppen? Dette gjøres kun ved oppgjør av økonomi. Kontroller evt. avvik først. Handlingen kan ikke angres.",
           )
         ) {
-          ctrl.paymentgroup.close().then(function (response) {
+          ctrl.paymentgroup.close().then((response) => {
             ctrl.paymentgroup = response.data
           })
         }
       }
 
-      ctrl.newPaymentsource = function () {
-        AdminPaymentsource.newModal(ctrl.paymentgroup).result.then(function () {
+      ctrl.newPaymentsource = () => {
+        AdminPaymentsource.newModal(ctrl.paymentgroup).result.then(() => {
           loadPaymentgroup()
         })
       }
 
-      ctrl.deletePaymentsource = function (paymentsource) {
+      ctrl.deletePaymentsource = (paymentsource) => {
         if (
           confirm(
             "Er du sikker på at du vil slette registreringen? Du kan senere hente den frem igjen på den detaljerte visningen.",
           )
         ) {
           new AdminPaymentsource(paymentsource).$delete(
-            function () {
+            () => {
               Page.toast("Registeringen ble slettet", { class: "success" })
               loadPaymentgroup()
             },
-            function () {
+            () => {
               Page.toast("Ukjent feil ved sletting av registering", {
                 class: "warning",
               })
@@ -237,7 +237,7 @@ angular
             "orders_deviation_prefix"
           ] || "Utestående beløp"
 
-        ctrl.paymentgroup.paymentsources.forEach(function (paymentsource) {
+        ctrl.paymentgroup.paymentsources.forEach((paymentsource) => {
           if (!paymentsource.is_deleted) ctrl.ps.sum += paymentsource.amount
 
           if (paymentsource.type == "cash") {
@@ -291,11 +291,11 @@ angular
         }
 
         function buildCashTable() {
-          ctrl.ps.cashgroups.forEach(function (group) {
-            group.cashunique.sort(function (a, b) {
+          ctrl.ps.cashgroups.forEach((group) => {
+            group.cashunique.sort((a, b) => {
               return a - b
             })
-            group.rows = group.cashunique.map(function (key) {
+            group.rows = group.cashunique.map((key) => {
               var is_num = /^\d+(\.\d+)?/.test(key)
               var m = is_num ? parseFloat(key) : 1
               var total = group.cashuniquesum[key] || 0
@@ -309,9 +309,9 @@ angular
               }
             })
 
-            group.cols.forEach(function (paymentsource) {
+            group.cols.forEach((paymentsource) => {
               var i = 0
-              group.cashunique.forEach(function (key) {
+              group.cashunique.forEach((key) => {
                 group.rows[i].items.push(paymentsource.data[key] || "")
                 i++
               })

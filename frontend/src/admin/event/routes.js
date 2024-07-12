@@ -2,7 +2,7 @@ import editTemplate from "./edit.html?raw"
 import checkinTemplate from "./checkin.html?raw"
 import template from "./index.html?raw"
 
-angular.module("billett.admin").config(function ($stateProvider) {
+angular.module("billett.admin").config(($stateProvider) => {
   $stateProvider
     .state("admin-event-new", {
       url: "/a/eventgroup/:eventgroup_id/new_event",

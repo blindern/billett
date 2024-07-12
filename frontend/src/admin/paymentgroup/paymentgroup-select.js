@@ -2,7 +2,7 @@ import paymentgroupSelectBoxTemplate from "./paymentgroup_select_box.html?raw"
 
 angular
   .module("billett.admin")
-  .directive("paymentgroupSelect", function (AdminPaymentgroup) {
+  .directive("paymentgroupSelect", (AdminPaymentgroup) => {
     return {
       restrict: "E",
       template: paymentgroupSelectBoxTemplate,
@@ -12,11 +12,11 @@ angular
         id: "@",
       },
       replace: true,
-      link: function (scope) {
-        var reload = function () {
+      link: (scope) => {
+        var reload = () => {
           delete scope.paymentgroups
           AdminPaymentgroup.getValid(scope.eventgroupId).$promise.then(
-            function (ret) {
+            (ret) => {
               scope.paymentgroups = ret
               scope.paymentgroup = scope.t.paymentgroup =
                 AdminPaymentgroup.getPreferredGroup(
@@ -30,9 +30,9 @@ angular
         reload()
         scope.t = {}
 
-        scope.new = function () {
+        scope.new = () => {
           AdminPaymentgroup.newModal(scope.eventgroupId).result.then(
-            function (paymentgroup) {
+            (paymentgroup) => {
               scope.t.paymentgroup = paymentgroup
               scope.update()
               reload()
@@ -40,7 +40,7 @@ angular
           )
         }
 
-        scope.update = function () {
+        scope.update = () => {
           scope.paymentgroup = scope.t.paymentgroup
           AdminPaymentgroup.setPreferredGroup(scope.paymentgroup)
         }

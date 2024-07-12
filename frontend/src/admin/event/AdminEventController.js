@@ -4,7 +4,7 @@ var module = angular.module("billett.admin")
 
 module.controller(
   "AdminEventController",
-  function (
+  (
     Page,
     $stateParams,
     AdminEvent,
@@ -13,7 +13,7 @@ module.controller(
     $scope,
     FileUploader,
     AuthService,
-  ) {
+  ) => {
     Page.setTitle("Arrangement")
 
     $scope.api = api
@@ -21,17 +21,17 @@ module.controller(
     var loader = Page.setLoading()
     AdminEvent.get(
       { id: $stateParams["id"] },
-      function (ret) {
+      (ret) => {
         loader()
         $scope.event = ret
       },
-      function (err) {
+      (err) => {
         loader()
         Page.set404()
       },
     )
 
-    $scope.deleteEvent = function () {
+    $scope.deleteEvent = () => {
       if ($scope.event.ticketgroups.length > 0) {
         Page.toast("Du må først slette billettgruppene som er tilegnet.", {
           class: "danger",
@@ -41,10 +41,10 @@ module.controller(
 
       var group = $scope.event.eventgroup.id
       $scope.event.$delete(
-        function () {
+        () => {
           $location.path("/a/eventgroup/" + group)
         },
-        function (err) {
+        (err) => {
           alert(err)
         },
       )
@@ -60,24 +60,24 @@ module.controller(
     AuthService.getCsrfToken().then((csrfToken) => {
       $scope.uploader.headers["X-Csrf-Token"] = csrfToken
     })
-    $scope.uploader.onAfterAddingFile = function (fileItem) {
+    $scope.uploader.onAfterAddingFile = (fileItem) => {
       $scope.uploadprogress = true
-      fileItem.onSuccess = function (res) {
+      fileItem.onSuccess = (res) => {
         $scope.uploadprogress = null
         $scope.image_version = new Date().getTime()
       }
-      fileItem.onError = function () {
+      fileItem.onError = () => {
         alert("Ukjent feil ved opplasting!")
       }
       fileItem.upload()
     }
 
     // sorting of ticket groups
-    this.onTicketgroupsOrder = function (ev) {
+    this.onTicketgroupsOrder = (ev) => {
       $scope.event.setTicketgroupsOrder(ev.models)
     }
 
-    this.previewTicketPrint = function (ticketgroupid) {
+    this.previewTicketPrint = (ticketgroupid) => {
       AdminPrinter.printSelectModal(async (printername) => {
         try {
           await AdminPrinter.printPreviewTicket(printername, ticketgroupid)

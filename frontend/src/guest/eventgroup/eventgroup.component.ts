@@ -99,7 +99,7 @@ export class GuestEventgroupComponent implements OnInit {
 
     // TODO(migrate)
     /*
-      .catch(function () {
+      .catch(() => {
         loader()
         Page.set404()
       })

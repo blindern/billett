@@ -37,13 +37,13 @@ let module = angular.module("billett", [
 ])
 
 module.config(
-  function (
+  (
     $locationProvider,
     $httpProvider,
     $stateProvider,
     $urlRouterProvider,
     ngToastProvider,
-  ) {
+  ) => {
     $httpProvider.defaults.withCredentials = true
 
     ngToastProvider.configure({

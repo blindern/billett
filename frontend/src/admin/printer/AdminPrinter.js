@@ -5,37 +5,37 @@ import textModalTemplate from "./text_modal.html?raw"
 
 angular
   .module("billett.admin")
-  .factory("AdminPrinter", function ($http, $modal) {
+  .factory("AdminPrinter", ($http, $modal) => {
     return {
-      getList: function () {
+      getList: () => {
         return $http.get(api("printer"))
       },
-      printSelectModal: function (addHandler) {
+      printSelectModal: (addHandler) => {
         return $modal.open({
           template: selectModalTemplate,
           controller: "AdminPrinterSelectController as ctrl",
           resolve: {
-            addHandler: function () {
+            addHandler: () => {
               return addHandler
             },
           },
         })
       },
-      printTextModal: function () {
+      printTextModal: () => {
         return $modal.open({
           template: textModalTemplate,
           controller: "AdminPrinterTextController as ctrl",
         })
       },
-      printTickets: function (printername, ticketids) {
+      printTickets: (printername, ticketids) => {
         return $http.post(api("ticket/print/" + printername), {
           ids: ticketids,
         })
       },
-      printTicket: function (printername, ticketid) {
+      printTicket: (printername, ticketid) => {
         return $http.post(api("ticket/" + ticketid + "/print/" + printername))
       },
-      printPreviewTicket: function (printername, ticketgroupid) {
+      printPreviewTicket: (printername, ticketgroupid) => {
         return $http.post(
           api(
             "ticketgroup/" +
@@ -45,23 +45,23 @@ angular
           ),
         )
       },
-      printText: function (printername, text) {
+      printText: (printername, text) => {
         return $http.post(api("printer/" + printername + "/text"), {
           text: text,
         })
       },
-      setPreferred: function (printer, forceEmpty) {
+      setPreferred: (printer, forceEmpty) => {
         if (printer || forceEmpty) {
           sessionStorage["billett.printer.default"] = printer
             ? printer.name
             : null
         }
       },
-      getPreferred: function (list, override_name) {
+      getPreferred: (list, override_name) => {
         var printer = null
         var last_name = sessionStorage["billett.printer.default"] || null
 
-        list.forEach(function (row) {
+        list.forEach((row) => {
           if (row.name == override_name) {
             printer = row
           } else if (row.name == last_name && !printer) {

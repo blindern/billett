@@ -6,7 +6,7 @@ var module = angular.module("billett.admin")
 
 module.controller(
   "AdminOrderController",
-  function (
+  (
     $http,
     $modal,
     $state,
@@ -17,14 +17,14 @@ module.controller(
     AdminPrinter,
     AdminTicket,
     AdminPayment,
-  ) {
+  ) => {
     var ctrl = this
     Page.setTitle("Ordre")
 
     ctrl.api = api
 
-    var loadOrder = function () {
-      return AdminOrder.get({ id: $stateParams["id"] }, function (ret) {
+    var loadOrder = () => {
+      return AdminOrder.get({ id: $stateParams["id"] }, (ret) => {
         ctrl.order = ret
 
         // calc order total and generate list of valid tickets
@@ -36,7 +36,7 @@ module.controller(
           revoked: 0,
           valid: 0,
         }
-        ctrl.order.tickets.forEach(function (ticket) {
+        ctrl.order.tickets.forEach((ticket) => {
           if (!ticket.is_valid) {
             ctrl.total_reserved +=
               ticket.ticketgroup.price + ticket.ticketgroup.fee
@@ -52,7 +52,7 @@ module.controller(
 
         // total paid amount
         ctrl.total_paid = 0
-        ctrl.order.payments.forEach(function (payment) {
+        ctrl.order.payments.forEach((payment) => {
           ctrl.total_paid += 1 * payment.amount
         })
       }).$promise
@@ -60,21 +60,21 @@ module.controller(
 
     var loader = Page.setLoading()
     loadOrder().then(
-      function () {
+      () => {
         loader()
       },
-      function () {
+      () => {
         loader()
         Page.set404()
       },
     )
 
-    var thenReloadOrError = function (q) {
+    var thenReloadOrError = (q) => {
       q.then(
-        function () {
+        () => {
           loadOrder()
         },
-        function (err) {
+        (err) => {
           alert(err)
         },
       )
@@ -83,64 +83,64 @@ module.controller(
     var editFields = ["name", "email", "phone", "recruiter", "comment"]
 
     // start edit mode (order details)
-    ctrl.startEdit = function () {
-      ctrl.edit = editFields.reduce(function (prev, cur) {
+    ctrl.startEdit = () => {
+      ctrl.edit = editFields.reduce((prev, cur) => {
         prev[cur] = ctrl.order[cur]
         return prev
       }, {})
     }
 
     // abort edit mode (order details)
-    ctrl.abortEdit = function () {
+    ctrl.abortEdit = () => {
       delete ctrl.edit
     }
 
     // save order details when editing
-    ctrl.save = function () {
-      editFields.forEach(function (field) {
+    ctrl.save = () => {
+      editFields.forEach((field) => {
         ctrl.order[field] = ctrl.edit[field]
       })
-      ctrl.order.$update(function (ret) {
+      ctrl.order.$update((ret) => {
         ctrl.order = ret
         delete ctrl.edit
       })
     }
 
     // delete reservation (of order)
-    ctrl.deleteReservation = function () {
+    ctrl.deleteReservation = () => {
       var eventgroup_id = ctrl.order.eventgroup.id
       ctrl.order.$delete(
-        function () {
+        () => {
           $state.go("admin-orders", { eventgroup_id: eventgroup_id })
         },
-        function () {
+        () => {
           alert("Feil ved sletting av ordre")
         },
       )
     }
 
-    ctrl.completeOrder = function () {
+    ctrl.completeOrder = () => {
       AdminPaymentgroup.selectModal({
-        order: function () {
+        order: () => {
           return ctrl.order
         },
-        actionText: function () {
+        actionText: () => {
           return "Marker som betalt"
         },
-        amount: function () {
+        amount: () => {
           return ctrl.total_reserved
         },
-      }).result.then(function (paymentgroup) {
+      }).result.then((paymentgroup) => {
         $http
           .post(api("order/" + ctrl.order.id + "/validate"), {
             paymentgroup: paymentgroup.id,
             amount: ctrl.total_reserved,
             sendmail: false,
           })
-          .then(function () {
+          .then(() => {
             loadOrder()
           })
-          .catch(function (err) {
+          .catch((err) => {
             if (err.data == "amount mismatched") {
               alert("Noe i ordren ser ut til å ha endret seg. Prøv på nytt.")
               loadOrder()
@@ -151,23 +151,23 @@ module.controller(
       })
     }
 
-    ctrl.convertOrder = function () {
+    ctrl.convertOrder = () => {
       thenReloadOrError($http.post(api("order/" + ctrl.order.id + "/validate")))
     }
 
     // start new tickets form
-    ctrl.addTickets = function () {
+    ctrl.addTickets = () => {
       AdminOrder.addTicketsModal({
-        eventgroup_id: function () {
+        eventgroup_id: () => {
           return ctrl.order.eventgroup.id
         },
-        getOrder: function () {
-          return async function () {
+        getOrder: () => {
+          return async () => {
             return ctrl.order
           }
         },
-        addHandler: function () {
-          return async function (ticketgroups) {
+        addHandler: () => {
+          return async (ticketgroups) => {
             try {
               // reload order with new data
               const data = await loadOrder()
@@ -182,25 +182,25 @@ module.controller(
     }
 
     // revoke specific ticket
-    ctrl.revokeTicket = function (ticket) {
-      AdminTicket.revokeModal(ctrl.order, ticket).result.then(function () {
+    ctrl.revokeTicket = (ticket) => {
+      AdminTicket.revokeModal(ctrl.order, ticket).result.then(() => {
         loadOrder()
       })
     }
 
     // validate specific ticket
-    ctrl.validateTicket = function (ticket) {
+    ctrl.validateTicket = (ticket) => {
       AdminPaymentgroup.selectModal({
-        order: function () {
+        order: () => {
           return ctrl.order
         },
-        actionText: function () {
+        actionText: () => {
           return "Inntektsfør"
         },
-        amount: function () {
+        amount: () => {
           return ticket.ticketgroup.price + ticket.ticketgroup.fee
         },
-      }).result.then(function (paymentgroup) {
+      }).result.then((paymentgroup) => {
         thenReloadOrError(
           $http.post(api("ticket/" + ticket.id + "/validate"), {
             paymentgroup_id: paymentgroup.id,
@@ -210,42 +210,42 @@ module.controller(
     }
 
     // delete ticket reservation
-    ctrl.deleteTicket = function (ticket) {
+    ctrl.deleteTicket = (ticket) => {
       $http
         .delete(api("ticket/" + ticket.id))
-        .then(function () {
+        .then(() => {
           console.log("ticket deleted")
         })
-        .finally(function () {
+        .finally(() => {
           loadOrder()
         })
     }
 
     // start new payment form
-    ctrl.newPayment = function () {
-      AdminPayment.newModal(ctrl.order).result.then(function () {
+    ctrl.newPayment = () => {
+      AdminPayment.newModal(ctrl.order).result.then(() => {
         loadOrder()
       })
     }
 
     // send email
-    ctrl.email = function () {
+    ctrl.email = () => {
       var modal = $modal.open({
         template: emailModalTemplate,
         controller: "AdminOrderEmailController as ctrl",
         resolve: {
-          order: function () {
+          order: () => {
             return ctrl.order
           },
         },
       })
 
-      modal.result.then(function () {
+      modal.result.then(() => {
         Page.toast("E-post ble sendt", { class: "success" })
       })
     }
 
-    ctrl.printTickets = function () {
+    ctrl.printTickets = () => {
       AdminPrinter.printSelectModal(async (printername) => {
         try {
           await AdminPrinter.printTickets(printername, ctrl.validtickets)
@@ -257,7 +257,7 @@ module.controller(
       })
     }
 
-    ctrl.printTicket = function (ticketid) {
+    ctrl.printTicket = (ticketid) => {
       AdminPrinter.printSelectModal(async (printername) => {
         try {
           await AdminPrinter.printTicket(printername, ticketid)

@@ -2,22 +2,22 @@ angular
   .module("billett.admin")
   .controller(
     "AdminPrinterSelectController",
-    function ($modalInstance, AdminPrinter, Page, addHandler) {
+    ($modalInstance, AdminPrinter, Page, addHandler) => {
       var ctrl = this
 
-      ctrl.complete = function () {
+      ctrl.complete = () => {
         ctrl.sending = true
         addHandler(ctrl.printer.name).then(
-          function () {
+          () => {
             $modalInstance.close()
           },
-          function () {
+          () => {
             delete ctrl.sending
           },
         )
       }
 
-      ctrl.cancel = function () {
+      ctrl.cancel = () => {
         $modalInstance.dismiss("cancel")
       }
     },

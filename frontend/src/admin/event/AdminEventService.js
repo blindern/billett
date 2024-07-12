@@ -2,7 +2,7 @@ import { api } from "../../api"
 
 var module = angular.module("billett.admin")
 
-module.factory("AdminEvent", function ($resource, $http) {
+module.factory("AdminEvent", ($resource, $http) => {
   var r = $resource(
     api("event/:id"),
     {
@@ -14,27 +14,27 @@ module.factory("AdminEvent", function ($resource, $http) {
     },
   )
 
-  r.prototype.setPublish = function (state) {
+  r.prototype.setPublish = (state) => {
     return $http.patch(api("event/" + this.id), {
       is_published: state,
       admin: 1,
     })
   }
 
-  r.prototype.setSelling = function (state) {
+  r.prototype.setSelling = (state) => {
     return $http.patch(api("event/" + this.id), {
       is_selling: state,
       admin: 1,
     })
   }
 
-  r.prototype.setTicketgroupsOrder = function (groups) {
+  r.prototype.setTicketgroupsOrder = (groups) => {
     var opts = {
       admin: 1,
     }
 
     var i = 0
-    groups.forEach(function (group) {
+    groups.forEach((group) => {
       opts[group.id] = i++
     })
 

@@ -4,7 +4,7 @@ var module = angular.module("billett.admin")
 
 module.controller(
   "AdminCheckinController",
-  function (AdminEvent, AdminOrder, Page, $http, $stateParams, $scope) {
+  (AdminEvent, AdminOrder, Page, $http, $stateParams, $scope) => {
     var ctrl = this
 
     /*
@@ -22,28 +22,28 @@ module.controller(
     /*
      * Export functions to view
      */
-    ctrl.checkin = function (ticket) {
+    ctrl.checkin = (ticket) => {
       performCheckin(ticket, true)
       jQuery("#keyfield").select()
     }
-    ctrl.checkout = function (ticket) {
+    ctrl.checkout = (ticket) => {
       ctrl.keyok = null
       ctrl.keyticket = null
       performCheckin(ticket, false)
       jQuery("#keyfield").select()
     }
-    ctrl.loadTickets = function () {
+    ctrl.loadTickets = () => {
       loadTickets()
       jQuery("#keyfield").select()
     }
-    ctrl.performSearch = function () {
+    ctrl.performSearch = () => {
       jQuery("#keyfield").select()
     }
 
     /*
      * Watch changes to variables in view
      */
-    $scope.$watchCollection("ctrl.searchinput", function (oldVal, newVal) {
+    $scope.$watchCollection("ctrl.searchinput", (oldVal, newVal) => {
       if (oldVal.page == newVal.page && newVal.page != 1) {
         ctrl.searchinput.page = 1
         return
@@ -70,7 +70,7 @@ module.controller(
     function loadEvent(isFirstRun) {
       AdminEvent.get(
         { id: $stateParams["id"], checkin: true },
-        function (ret) {
+        (ret) => {
           ctrl.event = ret
 
           if (isFirstRun) {
@@ -78,7 +78,7 @@ module.controller(
             eventLoadedFirstTimeEvent()
           }
         },
-        function () {
+        () => {
           if (isFirstRun) {
             loader()
           }
@@ -112,7 +112,7 @@ module.controller(
         filter: filter,
       }
 
-      AdminOrder.query(q, function (res) {
+      AdminOrder.query(q, (res) => {
         ctrl.orders = parseOrdersList(res)
         delete ctrl.ordersLoading
         checkKeySearch()
@@ -126,10 +126,10 @@ module.controller(
      */
     function parseOrdersList(list) {
       ticketLinks = {}
-      list.result.forEach(function (order) {
+      list.result.forEach((order) => {
         order.total_valid = 0
         order.total_reserved = 0
-        order.tickets.forEach(function (ticket) {
+        order.tickets.forEach((ticket) => {
           ticketLinks[ticket.id] = ticket
 
           if (ticket.is_revoked) return
@@ -150,8 +150,8 @@ module.controller(
 
       if (ctrl.keysearch && ctrl.keysearchlast != ctrl.keysearch) {
         ctrl.keysearchlast = ctrl.keysearch
-        ctrl.orders.result.forEach(function (order) {
-          order.tickets.forEach(function (ticket) {
+        ctrl.orders.result.forEach((order) => {
+          order.tickets.forEach((ticket) => {
             if (ctrl.keysearch == ticket.key) {
               ctrl.keyok = ticket.is_valid && !ticket.is_revoked && !ticket.used
               ctrl.keyticket = ticket
@@ -185,7 +185,7 @@ module.controller(
         r.push(x + "=" + ctrl.searchinput.id)
       }
 
-      ;["email", "phone"].forEach(function (x) {
+      ;["email", "phone"].forEach((x) => {
         if (ctrl.searchinput[x]) {
           r.push(x + ":like:" + ctrl.searchinput[x] + "%")
         }
@@ -241,11 +241,11 @@ module.controller(
             with: "order,ticketgroup",
           },
         })
-        .then(function (response) {
+        .then((response) => {
           ctrl.tickets = parseTicketsList(response.data)
           delete ctrl.ticketsLoading
         })
-        .catch(function () {
+        .catch(() => {
           alert("Ukjent feil ved lasting av billetter.")
         })
     }
@@ -260,7 +260,7 @@ module.controller(
       var orders_link = {}
       ticketLinks = {}
 
-      list.forEach(function (row) {
+      list.forEach((row) => {
         ticketLinks[row.id] = row
         if (row.order.id in orders_link) {
           orders_link[row.order.id].tickets.push(row)
@@ -290,12 +290,12 @@ module.controller(
             with: "order,ticketgroup",
           },
         })
-        .then(function (response) {
+        .then((response) => {
           const ret = response.data
           delete ctrl.lastUsedTicketsLoading
           ctrl.lastUsedTickets = ret.result
         })
-        .catch(function () {
+        .catch(() => {
           alert("Ukjent feil ved lasting av siste innsjekkede billetter")
         })
     }
@@ -322,7 +322,7 @@ module.controller(
             "ticket/" + ticket.id + "/" + (isCheckin ? "checkin" : "checkout"),
           ),
         )
-        .then(function (response) {
+        .then((response) => {
           const newTicket = response.data
           delete ticket.isWorking
           newTicket.event = ticket.event
@@ -331,7 +331,7 @@ module.controller(
           angular.copy(newTicket, ticket)
           ticketsChangedEvent(ticket)
         })
-        .catch(function () {
+        .catch(() => {
           alert("Innsjekking feilet av ukjent årsak - oppdater siden")
         })
     }

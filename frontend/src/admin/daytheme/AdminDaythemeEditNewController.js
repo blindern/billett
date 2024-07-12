@@ -2,7 +2,7 @@ var module = angular.module("billett.admin")
 
 module.controller(
   "AdminDaythemeEditNewController",
-  function (
+  (
     Page,
     AdminDaytheme,
     $stateParams,
@@ -11,7 +11,7 @@ module.controller(
     $location,
     $window,
     $timeout,
-  ) {
+  ) => {
     var is_new = ($scope.is_new = !("id" in $stateParams))
 
     var loader = Page.setLoading()
@@ -26,19 +26,19 @@ module.controller(
 
       AdminDaytheme.get(
         { id: $stateParams["id"] },
-        function (ret) {
+        (ret) => {
           loader()
 
           $scope.daytheme = ret
         },
-        function () {
+        () => {
           loader()
           Page.set404()
         },
       )
     }
 
-    $scope.storeDaytheme = function () {
+    $scope.storeDaytheme = () => {
       if (!$scope.daytheme.title || !$scope.daytheme.date) return
 
       $scope.daytheme.date = moment($scope.daytheme.date, "YYYY-MM-DD").unix()
@@ -49,30 +49,30 @@ module.controller(
         var eg = new AdminDaytheme($scope.daytheme)
 
         eg.$save(
-          function (res) {
+          (res) => {
             $location.path("/a/eventgroup/" + res.eventgroup_id)
           },
-          function (err) {
+          (err) => {
             alert(err.data)
           },
         )
       } else {
         $scope.daytheme.$update(
-          function (res) {
+          (res) => {
             // go to previous page or redirect to daytheme admin page
-            var timer = $timeout(function () {
+            var timer = $timeout(() => {
               $location.path("/a/eventgroup/" + res.eventgroup_id)
             }, 100)
             var ev = $rootScope.$on(
               "$routeChangeStart",
-              function (event, next, current) {
+              (event, next, current) => {
                 ev()
                 $timeout.cancel(timer)
               },
             )
             $window.history.back()
           },
-          function (err) {
+          (err) => {
             alert(err.data)
           },
         )

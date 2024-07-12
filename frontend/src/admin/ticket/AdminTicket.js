@@ -1,16 +1,16 @@
 import ticketRevokeModalTemplate from "./ticket_revoke_modal.html?raw"
 
-angular.module("billett.admin").factory("AdminTicket", function ($modal) {
+angular.module("billett.admin").factory("AdminTicket", ($modal) => {
   return {
-    revokeModal: function (order, ticket) {
+    revokeModal: (order, ticket) => {
       return $modal.open({
         template: ticketRevokeModalTemplate,
         controller: "AdminTicketRevokeController as ctrl",
         resolve: {
-          order: function () {
+          order: () => {
             return order
           },
-          ticket: function () {
+          ticket: () => {
             return ticket
           },
         },

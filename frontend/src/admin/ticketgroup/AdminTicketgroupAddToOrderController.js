@@ -6,7 +6,7 @@ angular
   .module("billett.admin")
   .controller(
     "AdminTicketgroupAddToOrderController",
-    function (
+    (
       $http,
       $modalInstance,
       $scope,
@@ -14,39 +14,39 @@ angular
       getOrder,
       AdminEventgroup,
       addHandler,
-    ) {
+    ) => {
       var ctrl = this
       ctrl.count = 0 // num tickets to add
       ctrl.amount = 0 // price to pay
 
       AdminEventgroup.get(
         { id: eventgroup_id },
-        function (eventgroup) {
+        (eventgroup) => {
           ctrl.eventgroup = eventgroup
 
           generateEventList()
         },
-        function () {
+        () => {
           $modalInstance.dismiss("eventgroup error")
         },
       )
 
-      ctrl.cancel = function () {
+      ctrl.cancel = () => {
         $modalInstance.dismiss("cancel")
       }
 
       // build list of possible events
-      var generateEventList = function () {
+      var generateEventList = () => {
         if (!ctrl.eventgroup) return
 
         // build list of ticketgroups
-        ctrl.events = ctrl.eventgroup.events.filter(function (event) {
+        ctrl.events = ctrl.eventgroup.events.filter((event) => {
           if (event.is_old && !ctrl.ticketfilter.show_old) return false
           return event.is_selling && event.ticketgroups.length > 0
         })
 
         // add fields for later filtering
-        ctrl.events.forEach(function (event) {
+        ctrl.events.forEach((event) => {
           event.dateinfo = moment
             .unix(event.time_start)
             .format("ddd D. MMM YYYY HH:mm")
@@ -55,13 +55,13 @@ angular
 
       // filtering of events
       ctrl.ticketfilter = {}
-      $scope.$watchCollection("ctrl.ticketfilter", function () {
+      $scope.$watchCollection("ctrl.ticketfilter", () => {
         generateEventList()
       })
 
       // add/remove ticketgroup selection
       ctrl.ticketgroups_add = {}
-      ctrl.changeTicketgroupNum = function (ticketgroup, event, num) {
+      ctrl.changeTicketgroupNum = (ticketgroup, event, num) => {
         if (!(ticketgroup.id in ctrl.ticketgroups_add)) {
           ctrl.ticketgroups_add[ticketgroup.id] = {
             ticketgroup: ticketgroup,
@@ -82,13 +82,13 @@ angular
       }
 
       // helper for filtering ticketgroups
-      ctrl.ticketgroup_check = function (actual, expected) {
+      ctrl.ticketgroup_check = (actual, expected) => {
         if (expected) return true
         return actual
       }
 
       // add selected tickets
-      ctrl.addTickets = function () {
+      ctrl.addTickets = () => {
         ctrl.sending = true
 
         var groups = {}
@@ -96,17 +96,17 @@ angular
           groups[group.ticketgroup.id] = group.num
         })
 
-        getOrder().then(function (order) {
+        getOrder().then((order) => {
           $http
             .post(api("order/" + order.id + "/create_tickets"), {
               ticketgroups: groups,
             })
-            .then(function (response) {
-              addHandler().finally(function () {
+            .then((response) => {
+              addHandler().finally(() => {
                 $modalInstance.close(response.data)
               })
             })
-            .catch(function (err) {
+            .catch((err) => {
               alert("Ukjent feil oppsto ved registrering av billetter")
               delete ctrl.sending
             })

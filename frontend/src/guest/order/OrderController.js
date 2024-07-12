@@ -4,7 +4,7 @@ import receiptTemplate from "./receipt.html?raw"
 
 var module = angular.module("billett.guest")
 
-module.config(function ($stateProvider) {
+module.config(($stateProvider) => {
   $stateProvider.state("order-complete", {
     url: "/order/complete",
     template: receiptTemplate,
@@ -12,9 +12,9 @@ module.config(function ($stateProvider) {
   })
 })
 
-module.controller("OrderController", function (Page, $http, $location, $scope) {
+module.controller("OrderController", (Page, $http, $location, $scope) => {
   $http.get(api("order/receipt")).then(
-    function (res) {
+    (res) => {
       $scope.order = res.data.order
       $scope.payment = res.data.payment
 
@@ -35,7 +35,7 @@ module.controller("OrderController", function (Page, $http, $location, $scope) {
         }
       }
     },
-    function (err) {
+    (err) => {
       //$location.path('/');
       console.log("err", err)
     },

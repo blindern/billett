@@ -4,7 +4,7 @@ import addTicketgroupToOrderTemplate from "../ticketgroup/add_ticketgroup_to_ord
 
 var module = angular.module("billett.admin")
 
-module.factory("AdminOrder", function ($http, $modal, $resource) {
+module.factory("AdminOrder", ($http, $modal, $resource) => {
   var r = $resource(
     api("order/:id"),
     {
@@ -26,14 +26,14 @@ module.factory("AdminOrder", function ($http, $modal, $resource) {
     },
   )
 
-  r.prototype.sendEmail = function (email, text) {
+  r.prototype.sendEmail = (email, text) => {
     var params = {}
     if (email) params.email = email
     if (text) params.text = text
     return $http.post(api("order/" + this.id + "/email"), params)
   }
 
-  r.addTicketsModal = function (resolve) {
+  r.addTicketsModal = (resolve) => {
     return $modal.open({
       template: addTicketgroupToOrderTemplate,
       controller: "AdminTicketgroupAddToOrderController as ctrl",

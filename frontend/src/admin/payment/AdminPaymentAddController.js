@@ -4,12 +4,12 @@ angular
   .module("billett.admin")
   .controller(
     "AdminPaymentAddController",
-    function ($http, $modalInstance, order) {
+    ($http, $modalInstance, order) => {
       var ctrl = this
       ctrl.order = order
       ctrl.amount = -parseFloat(ctrl.order.balance)
 
-      ctrl.register = function () {
+      ctrl.register = () => {
         ctrl.sending = true
         $http
           .post(api("payment"), {
@@ -18,17 +18,17 @@ angular
             amount: ctrl.amount,
           })
           .then(
-            function (res) {
+            (res) => {
               $modalInstance.close(res)
             },
-            function () {
+            () => {
               alert("Ukjent feil oppsto")
               delete ctrl.sending
             },
           )
       }
 
-      ctrl.cancel = function () {
+      ctrl.cancel = () => {
         $modalInstance.dismiss("cancel")
       }
     },

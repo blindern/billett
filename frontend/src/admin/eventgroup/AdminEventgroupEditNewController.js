@@ -1,9 +1,9 @@
 var module = angular.module("billett.admin")
 
-//module.controller('AdminEventgroupEditNewController', function (Page, $stateParams){
+//module.controller('AdminEventgroupEditNewController', (Page, $stateParams) => {
 module.controller(
   "AdminEventgroupEditNewController",
-  function (
+  (
     Page,
     AdminEventgroup,
     $stateParams,
@@ -12,7 +12,7 @@ module.controller(
     $location,
     $window,
     $timeout,
-  ) {
+  ) => {
     var is_new = ($scope.is_new = !("id" in $stateParams))
 
     var loader = Page.setLoading()
@@ -26,49 +26,49 @@ module.controller(
 
       AdminEventgroup.get(
         { id: $stateParams["id"] },
-        function (ret) {
+        (ret) => {
           loader()
 
           $scope.eventgroup = ret
         },
-        function () {
+        () => {
           loader()
           Page.set404()
         },
       )
     }
 
-    $scope.storeEventgroup = function () {
+    $scope.storeEventgroup = () => {
       if (is_new) {
         if (!$scope.eventgroup.title) return
 
         var eg = new AdminEventgroup($scope.eventgroup)
 
         eg.$save(
-          function (res) {
+          (res) => {
             $location.path("/a/eventgroup/" + res.id)
           },
-          function (err) {
+          (err) => {
             alert(err.data)
           },
         )
       } else {
         $scope.eventgroup.$update(
-          function (res) {
+          (res) => {
             // go to previous page or redirect to eventgroup admin page
-            var timer = $timeout(function () {
+            var timer = $timeout(() => {
               $location.path("/a/eventgroup/" + res.id)
             }, 100)
             var ev = $rootScope.$on(
               "$routeChangeStart",
-              function (event, next, current) {
+              (event, next, current) => {
                 ev()
                 $timeout.cancel(timer)
               },
             )
             $window.history.back()
           },
-          function (err) {
+          (err) => {
             alert(err.data)
           },
         )
