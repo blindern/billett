@@ -5,7 +5,11 @@ import { Pipe, PipeTransform } from "@angular/core"
   standalone: true,
 })
 export class PricePipe implements PipeTransform {
-  transform(amount: string, decimals?: number | boolean, in_nok?: boolean): string {
+  transform(
+    amount: number | string,
+    decimals?: number | boolean,
+    in_nok?: boolean,
+  ): string {
     if (typeof decimals == "boolean") {
       in_nok = decimals
       decimals = 0
@@ -25,7 +29,11 @@ export class PricePipe implements PipeTransform {
 
     if (typeof decimals != "number") decimals = 0
     return (
-      (in_nok ? "NOK " : "kr ") + formatNumber(parseFloat(amount), decimals)
+      (in_nok ? "NOK " : "kr ") +
+      formatNumber(
+        typeof amount === "number" ? amount : parseFloat(amount),
+        decimals,
+      )
     )
   }
 }

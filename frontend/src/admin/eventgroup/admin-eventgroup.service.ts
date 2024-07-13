@@ -8,6 +8,10 @@ export interface AdminEventgroupData {
   [k: string]: any
 }
 
+export interface AdminSoldTicketsStatsData {
+  [k: string]: any
+}
+
 @Injectable({
   providedIn: "root",
 })
@@ -16,6 +20,12 @@ export class AdminEventgroupService {
 
   query() {
     return this.http.get<AdminEventgroupData[]>(api("eventgroup"), {
+      params: { admin: "1" },
+    })
+  }
+
+  create(data: { title: string; is_active: boolean }) {
+    return this.http.post<AdminEventgroupData>(api("eventgroup"), data, {
       params: { admin: "1" },
     })
   }
@@ -29,16 +39,16 @@ export class AdminEventgroupService {
     )
   }
 
-  update(id: string, data: AdminEventgroupData) {
+  update(data: AdminEventgroupData) {
     return this.http.put<AdminEventgroupData>(
-      api(`eventgroup/${encodeURIComponent(id)}`),
+      api(`eventgroup/${encodeURIComponent(data.id)}`),
       data,
       { params: { admin: "1" } },
     )
   }
 
   getSoldTicketsStats(id: string) {
-    return this.http.get(
+    return this.http.get<AdminSoldTicketsStatsData>(
       api(`eventgroup/${encodeURIComponent(id)}/sold_tickets_stats`),
       { params: { admin: "1" } },
     )
