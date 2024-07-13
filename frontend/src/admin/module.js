@@ -13,7 +13,6 @@ var module = angular.module("billett.admin", [
   "ui.bootstrap.typeahead",
   "ui.bootstrap.tpls",
   "ui.unique",
-  "ng-sortable",
   "focusOn",
 ])
 

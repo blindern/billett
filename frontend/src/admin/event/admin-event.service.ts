@@ -7,6 +7,8 @@ export interface AdminEventData {
   [k: string]: any
 }
 
+export type AdminEventCreateData = Omit<AdminEventData, "id">
+
 @Injectable({
   providedIn: "root",
 })
@@ -28,15 +30,27 @@ export class AdminEventService {
     )
   }
 
-  update(id: string, data: AdminEventData) {
+  create(data: AdminEventCreateData) {
+    return this.http.post<AdminEventData>(api("event"), data, {
+      params: { admin: "1" },
+    })
+  }
+
+  update(data: AdminEventData) {
     return this.http.put<AdminEventData>(
-      api(`event/${encodeURIComponent(id)}`),
+      api(`event/${encodeURIComponent(data.id)}`),
       data,
       { params: { admin: "1" } },
     )
   }
 
-  setPublish(id: string, is_published: boolean) {
+  delete(id: number) {
+    return this.http.delete(api(`event/${encodeURIComponent(id)}`), {
+      responseType: "text",
+    })
+  }
+
+  setPublish(id: number, is_published: boolean) {
     return this.http.patch<AdminEventData>(
       api(`event/${encodeURIComponent(id)}`),
       {
@@ -46,7 +60,7 @@ export class AdminEventService {
     )
   }
 
-  setSelling(id: string, is_selling: boolean) {
+  setSelling(id: number, is_selling: boolean) {
     return this.http.patch<AdminEventData>(
       api(`event/${encodeURIComponent(id)}`),
       {
@@ -56,19 +70,19 @@ export class AdminEventService {
     )
   }
 
-  setTicketgroupsOrder(id: string, groups) {
-    let data = {
-      admin: 1,
-    }
-
-    let i = 0
-    groups.forEach((group) => {
-      data[group.id] = i++
-    })
-
+  setTicketgroupsOrder(id: number, idToPos: Record<number, number>) {
     return this.http.post(
       api(`event/${encodeURIComponent(id)}/ticketgroups_order`),
-      data,
+      {
+        admin: 1,
+        ...idToPos,
+      },
     )
+  }
+
+  uploadImage(id: number, file: FormData) {
+    return this.http.post(api(`event/${encodeURIComponent(id)}/image`), file, {
+      responseType: "text",
+    })
   }
 }

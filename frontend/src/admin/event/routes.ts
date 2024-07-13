@@ -1,20 +1,19 @@
 import { Routes } from "@angular/router"
 import { requireAdmin } from "../../auth/require-admin"
 import { TodoComponent } from "../todo.component"
+import { AdminEventCreateComponent } from "./admin-event-create.component"
+import { AdminEventEditComponent } from "./admin-event-edit.component"
+import { AdminEventComponent } from "./admin-event.component"
 
 export const routes: Routes = [
   {
-    path: "a/eventgroup/:eventgroup_id/new_event",
-    // edit.html
-    // component: AdminEventEditNewComponent,
-    component: TodoComponent,
+    path: "a/eventgroup/:eventgroupId/new_event",
+    component: AdminEventCreateComponent,
     canActivate: [requireAdmin],
   },
   {
     path: "a/event/:id/edit",
-    // edit.html
-    // component: AdminEventEditNewComponent,
-    component: TodoComponent,
+    component: AdminEventEditComponent,
     canActivate: [requireAdmin],
   },
   {
@@ -26,9 +25,7 @@ export const routes: Routes = [
   },
   {
     path: "a/event/:id",
-    // index.html
-    // component: AdminEventComponent,
-    component: TodoComponent,
+    component: AdminEventComponent,
     canActivate: [requireAdmin],
   },
 ]
