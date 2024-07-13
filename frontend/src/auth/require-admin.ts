@@ -1,11 +1,14 @@
+import { inject } from "@angular/core"
 import { CanActivateFn } from "@angular/router"
-import { authService } from "./AuthService"
+import { firstValueFrom } from "rxjs"
 import { api } from "../api"
+import { AuthService } from "./AuthService"
 
 // TODO(migrate): Map all AuthRequireResolver to this
 
-export const requireAdmin: CanActivateFn = async (next, state) => {
-  const isLoggedIn = await authService.isLoggedIn()
+export const requireAdmin: CanActivateFn = async (_route, state) => {
+  const auth = inject(AuthService)
+  const isLoggedIn = await firstValueFrom(auth.isLoggedIn$)
   if (!isLoggedIn) {
     window.location.href = api(
       `saml2/login?returnTo=${encodeURIComponent(state.url)}`,
@@ -13,6 +16,5 @@ export const requireAdmin: CanActivateFn = async (next, state) => {
     return false
   }
 
-  const hasRole = authService.hasRole("billett.admin")
-  return hasRole
+  return await firstValueFrom(auth.isAdmin$)
 }

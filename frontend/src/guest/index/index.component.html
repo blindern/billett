@@ -22,7 +22,7 @@
           </li>
           <li>{{ event.location }}</li>
           <li>
-            @if (has_role_admin) {
+            @if (auth.isAdmin$ | async) {
               <div class="edit-link-wrap">
                 <span class="edit-link">
                   <a href="a/event/{{ event.id }}/edit">Rediger</a>

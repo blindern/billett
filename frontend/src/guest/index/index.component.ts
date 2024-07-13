@@ -3,6 +3,7 @@ import { HttpClient } from "@angular/common/http"
 import { Component, OnInit } from "@angular/core"
 import { Observable } from "rxjs"
 import { api } from "../../api"
+import { AuthService } from "../../auth/AuthService"
 import { Eventgroup, EventgroupService } from "../eventgroup/eventgroup.service"
 
 interface UpcomingItem {
@@ -25,15 +26,13 @@ export class GuestIndexComponent implements OnInit {
   upcoming$!: Observable<UpcomingItem[]>
   eventgroups$!: Observable<Eventgroup[]>
 
-  // TODO: AuthService.hasRole("billett.admin")
-  has_role_admin = false
-
   categories: string[] = []
   categoryNum!: (category: string) => number
 
   constructor(
     private http: HttpClient,
     private eventgroupService: EventgroupService,
+    public auth: AuthService,
   ) {}
 
   ngOnInit(): void {

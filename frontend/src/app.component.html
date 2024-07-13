@@ -2,7 +2,7 @@
 <toast></toast>
 -->
 
-@if (isDevPage) {
+@if (auth.isDevPage$ | async) {
   <div class="dev-page-bar">
     NB! Du er nå på utviklersia!
     <span>Endringene her blir ikke oppdatert på blindernuka.no.</span>
@@ -38,8 +38,9 @@
   @if (loggedInButNoAccess) {
     <div>
       <p class="text-center">
-        <b>NB!</b> Du er innlogget som <u>{{ realname }}</u> men har ikke
-        tilgang til dette systemet.
+        <b>NB!</b> Du er innlogget som
+        <u>{{ (this.auth.user$ | async)?.realname }}</u> men har ikke tilgang
+        til dette systemet.
         <a routerLink="logout" target="_self">Logg ut</a>
       </p>
       <hr />
@@ -66,10 +67,10 @@
       </li>
       <li>
         <a routerLink="a">Administrasjon</a>
-        @if (isLoggedIn) {
+        @if (auth.user$ | async; as user) {
           <span>
             <br />
-            {{ username }}
+            {{ user.username }}
             <br />
             <a routerLink="logout">[logg ut]</a>
           </span>

@@ -1,6 +1,7 @@
 import { CommonModule, Location } from "@angular/common"
 import { Component, Input, OnInit } from "@angular/core"
 import moment from "moment"
+import { AuthService } from "../../auth/AuthService"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { PageService } from "../../common/page.service"
 import { EventgroupExpanded, EventgroupService } from "./eventgroup.service"
@@ -17,9 +18,6 @@ export class GuestEventgroupComponent implements OnInit {
 
   @Input()
   query!: string
-
-  // TODO(migrate): AuthService.hasRole("billett.admin")
-  has_role_admin = false
 
   daythemes!: Record<string, any>
   days!: Record<string, EventgroupExpanded["events"]>
@@ -39,6 +37,7 @@ export class GuestEventgroupComponent implements OnInit {
     private eventgroupService: EventgroupService,
     private location: Location,
     private page: PageService,
+    public auth: AuthService,
   ) {}
 
   ngOnInit(): void {

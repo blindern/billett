@@ -1,3 +1,4 @@
+import { firstValueFrom } from "rxjs"
 import { api } from "../../api"
 
 var module = angular.module("billett.admin")
@@ -57,7 +58,7 @@ module.controller(
       removeAfterUpload: true,
     })
     // inject the csrf token
-    AuthService.getCsrfToken().then((csrfToken) => {
+    firstValueFrom(AuthService.csrfToken$).then((csrfToken) => {
       $scope.uploader.headers["X-Csrf-Token"] = csrfToken
     })
     $scope.uploader.onAfterAddingFile = (fileItem) => {

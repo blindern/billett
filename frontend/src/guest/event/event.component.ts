@@ -1,9 +1,9 @@
-import { Location } from "@angular/common"
+import { CommonModule, Location } from "@angular/common"
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Input, OnInit } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { RouterLink } from "@angular/router"
 import { api } from "../../api"
-import { authService } from "../../auth/AuthService"
+import { AuthService } from "../../auth/AuthService"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageService } from "../../common/page.service"
@@ -29,6 +29,7 @@ declare global {
     PricePipe,
     FormsModule,
     PagePropertyComponent,
+    CommonModule,
   ],
   templateUrl: "./event.component.html",
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -48,17 +49,14 @@ export class GuestEventComponent implements OnInit {
 
   forcePay = false
 
-  isVippsTest = false
-
   api = api
-
-  isLoggedIn = false // TODO(migrate)
 
   constructor(
     private eventService: EventService,
     private eventReservationService: EventReservationService,
     private location: Location,
     private pageService: PageService,
+    public auth: AuthService,
   ) {}
 
   private reset() {
@@ -227,9 +225,5 @@ export class GuestEventComponent implements OnInit {
       })
 
     this.reset()
-
-    authService.isVippsTest().then((res) => {
-      if (res) this.isVippsTest = true
-    })
   }
 }

@@ -10,7 +10,7 @@
     <div class="page-header">
       <h1>
         {{ group.title }}
-        @if (has_role_admin) {
+        @if (auth.isAdmin$ | async) {
           <span class="pull-right">
             <a href="a/eventgroup/{{ group.id }}" class="btn btn-primary"
               >Admin</a
@@ -63,7 +63,10 @@
 
                     <li>
                       <!-- admin links -->
-                      <div class="edit-link-wrap" [hidden]="!has_role_admin">
+                      <div
+                        class="edit-link-wrap"
+                        [hidden]="!(auth.isAdmin$ | async)"
+                      >
                         <span class="edit-link">
                           <a href="a/event/{{ event.id }}/edit">Rediger</a>
                           <a href="a/event/{{ event.id }}">Detaljert</a>

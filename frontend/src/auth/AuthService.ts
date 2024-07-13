@@ -1,3 +1,6 @@
+import { HttpClient } from "@angular/common/http"
+import { Injectable } from "@angular/core"
+import { firstValueFrom, map, Observable, ReplaySubject } from "rxjs"
 import { api } from "../api"
 
 interface AuthInfo {
@@ -8,57 +11,54 @@ interface AuthInfo {
     username: string
     email: string
     realname: string
-  }
+  } | null
   csrf_token: string
   is_dev: boolean
   is_vipps_test: boolean
   is_admin: boolean
 }
 
-let authData: Promise<AuthInfo> | undefined
+@Injectable({
+  providedIn: "root",
+})
+export class AuthService {
+  #authData$ = new ReplaySubject<AuthInfo>(1)
 
-// all the functions return promises as we need to
-// fetch details from the server first
+  constructor(private http: HttpClient) {
+    this.refreshAuthData()
+  }
 
-export const authService = {
-  async getAuthData(renew = false) {
-    if (!authData || renew) {
-      authData = fetch(api("me"), {
-        credentials: "include",
-      }).then((response) => response.json() as unknown as AuthInfo)
-    }
+  get authData$(): Observable<AuthInfo> {
+    return this.#authData$
+  }
 
-    return await authData
-  },
+  async refreshAuthData() {
+    const authData = await firstValueFrom(this.http.get<AuthInfo>(api("me")))
+    this.#authData$.next(authData)
+    return authData
+  }
 
-  async isLoggedIn() {
-    const authData = await this.getAuthData()
-    return authData.logged_in
-  },
+  get isLoggedIn$() {
+    return this.authData$.pipe(map((it) => it.logged_in))
+  }
 
-  async hasRole(role: string) {
-    // TODO: check for actual role, not 'all'
-    const authData = await this.getAuthData()
-    return authData.user_roles.includes("all")
-  },
+  get isAdmin$() {
+    return this.authData$.pipe(map((it) => it.is_admin))
+  }
 
-  async getUser() {
-    const authData = await this.getAuthData()
-    return authData.user
-  },
+  get user$() {
+    return this.authData$.pipe(map((it) => it.user))
+  }
 
-  async getCsrfToken() {
-    const authData = await this.getAuthData()
-    return authData.csrf_token
-  },
+  get csrfToken$() {
+    return this.authData$.pipe(map((it) => it.csrf_token))
+  }
 
-  async isDevPage() {
-    const authData = await this.getAuthData()
-    return authData.is_dev
-  },
+  get isDevPage$() {
+    return this.authData$.pipe(map((it) => it.is_dev))
+  }
 
-  async isVippsTest() {
-    const authData = await this.getAuthData()
-    return authData.is_vipps_test
-  },
+  get isVippsTest$() {
+    return this.authData$.pipe(map((it) => it.is_vipps_test))
+  }
 }

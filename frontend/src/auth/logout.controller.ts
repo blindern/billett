@@ -1,16 +1,17 @@
 import { Component, OnInit } from "@angular/core"
+import { firstValueFrom } from "rxjs"
 import { api } from "../api"
-import { authService } from "./AuthService"
+import { AuthService } from "./AuthService"
 
 @Component({
   standalone: true,
   template: "Logger ut",
 })
 export class LogoutComponent implements OnInit {
-  constructor() {}
+  constructor(private auth: AuthService) {}
 
   ngOnInit(): void {
-    authService.getCsrfToken().then((csrfToken) => {
+    firstValueFrom(this.auth.csrfToken$).then((csrfToken) => {
       const form = document.createElement("form")
       form.method = "post"
       form.action = api(

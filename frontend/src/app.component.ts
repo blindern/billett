@@ -1,7 +1,7 @@
-import { Location } from "@angular/common"
+import { AsyncPipe, Location } from "@angular/common"
 import { afterRender, Component, OnInit } from "@angular/core"
 import { RouterLink, RouterOutlet } from "@angular/router"
-import { authService } from "./auth/AuthService"
+import { AuthService } from "./auth/AuthService"
 import { ActiveFor } from "./common/active-for"
 import { PageService } from "./common/page.service"
 import { PageNotFoundComponent } from "./guest/infopages/page-not-found.component"
@@ -9,14 +9,16 @@ import { PageNotFoundComponent } from "./guest/infopages/page-not-found.componen
 @Component({
   selector: "app-root",
   standalone: true,
-  imports: [RouterOutlet, RouterLink, ActiveFor, PageNotFoundComponent],
+  imports: [
+    RouterOutlet,
+    RouterLink,
+    ActiveFor,
+    PageNotFoundComponent,
+    AsyncPipe,
+  ],
   templateUrl: "./app.component.html",
 })
 export class AppComponent implements OnInit {
-  realname = ""
-  username = ""
-  isDevPage = false
-  isLoggedIn = false
   loggedInButNoAccess = false
   isAdminPage = () => {
     return this.location.path().substring(0, 3) == "/a/"
@@ -25,6 +27,7 @@ export class AppComponent implements OnInit {
   constructor(
     private location: Location,
     public page: PageService,
+    public auth: AuthService,
   ) {
     afterRender(() => {
       if (window.top != window.self) {
@@ -34,27 +37,20 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    authService.isDevPage().then((res) => {
+    this.auth.isDevPage$.subscribe((res) => {
       if (res) {
-        this.isDevPage = true
         document.body.classList.add("dev-page")
+      } else {
+        document.body.classList.remove("dev-page")
       }
     })
-    authService.isLoggedIn().then((res) => {
-      if (res) this.isLoggedIn = true
+    this.auth.isLoggedIn$.subscribe((res) => {
       if (res) {
-        authService.hasRole("billett.admin").then((hasRole) => {
-          if (!hasRole) {
+        this.auth.isAdmin$.subscribe((isAdmin) => {
+          if (!isAdmin) {
             this.loggedInButNoAccess = true
           }
         })
-      }
-    })
-    this.username = this.realname = ""
-    authService.getUser().then((user) => {
-      if (user) {
-        this.username = user.username
-        this.realname = user.realname
       }
     })
   }
