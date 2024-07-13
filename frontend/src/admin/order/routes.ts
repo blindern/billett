@@ -18,7 +18,8 @@ export const routes: Routes = [
     canActivate: [requireAdmin],
   },
   {
-    path: "a/orders?eventgroup_id",
+    path: "a/orders",
+    // ?eventgroup_id
     // index.html
     // component: AdminOrderListComponent,
     component: TodoComponent,

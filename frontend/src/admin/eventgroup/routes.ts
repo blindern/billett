@@ -1,6 +1,7 @@
 import { Routes } from "@angular/router"
 import { requireAdmin } from "../../auth/require-admin"
 import { TodoComponent } from "../todo.component"
+import { AdminEventgroupComponent } from "./admin-eventgroup.component"
 
 export const routes: Routes = [
   {
@@ -19,9 +20,7 @@ export const routes: Routes = [
   },
   {
     path: "a/eventgroup/:id",
-    // index.html
-    // component: AdminEventgroupComponent,
-    component: TodoComponent,
+    component: AdminEventgroupComponent,
     canActivate: [requireAdmin],
   },
   {
