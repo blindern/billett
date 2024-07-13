@@ -4,6 +4,7 @@ import { api } from "../../api"
 
 export interface AdminEventgroupData {
   id: number
+  title: string
   [k: string]: any
 }
 
