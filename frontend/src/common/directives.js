@@ -24,20 +24,6 @@ module.directive("formInputCheck", () => {
   }
 })
 
-// add tags to head
-module.directive("viewHead", () => {
-  return {
-    restrict: "A",
-    link: (scope, element) => {
-      //element.removeAttr('view-head');
-      angular.element("head").append(element)
-      scope.$on("$destroy", () => {
-        element.remove()
-      })
-    },
-  }
-})
-
 // add 'autofocus' as an attribute to a tag
 // source: http://stackoverflow.com/a/20865048
 module.directive("autofocus", ($timeout) => {
