@@ -7,6 +7,7 @@ import { GuestIndexComponent } from "./guest/index/index.component"
 import { HjelpComponent } from "./guest/infopages/hjelp.component"
 import { PageNotFoundComponent } from "./guest/infopages/page-not-found.component"
 import { SalgsbetingelserComponent } from "./guest/infopages/salgsbetingelser.component"
+import { GuestOrderComponent } from "./guest/order/order.component"
 
 export const routes: Routes = [
   {
@@ -46,6 +47,10 @@ export const routes: Routes = [
     path: "event/:id",
     component: GuestEventComponent,
     title: "Arrangement",
+  },
+  {
+    path: "order/complete",
+    component: GuestOrderComponent,
   },
   {
     path: "**",

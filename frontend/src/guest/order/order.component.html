@@ -13,11 +13,14 @@
   ></page-property>
 
   <div class="page-header">
-    <h1 [hidden]="!payment.status == 'ACCEPTED'">Kvittering</h1>
-    <h1 [hidden]="!payment.status != 'ACCEPTED'">Ordrebekreftelse</h1>
+    @if (payment.status != "ACCEPTED") {
+      <h1>Kvittering</h1>
+    } @else {
+      <h1>Ordrebekreftelse</h1>
+    }
   </div>
 
-  <div [hidden]="!payment.status == 'ACCEPTED'">
+  @if (payment.status != "ACCEPTED") {
     <p>
       Din bestilling har blitt <b>vellykket gjennomført</b>. Du vil motta
       billett og kvittering på e-post. Kontroller at e-postadressen nedenfor er
@@ -25,13 +28,12 @@
       <a href="mailto:billett@blindernuka.no">billett&#64;blindernuka.no</a>
       hvis du ikke mottar e-posten.
     </p>
-  </div>
-  <div [hidden]="!payment.status != 'ACCEPTED'">
+  } @else {
     <p>
       Din ordre er registrert og du vil motta e-post så fort betalingen blir
       registrert.
     </p>
-  </div>
+  }
 
   <h2>Ordreinformasjon</h2>
   <dl class="dl-horizontal">
@@ -54,13 +56,13 @@
   </dl>
   <dl class="dl-horizontal">
     <dt>Merverdiavgift</dt>
-    <dd>{{ 0 | price: true }}</dd>
+    <dd>{{ "0" | price: true }}</dd>
     <dt>Totalbeløp</dt>
     <dd>
-      {{ payment.amount | price: true
-      }}<span [hidden]="!payment.status == 'ACCEPTED'">
-        har blitt belastet ditt kort</span
-      >
+      {{ payment.amount | price: true }}
+      @if (payment.status != "ACCEPTED") {
+        <span> har blitt belastet ditt kort</span>
+      }
     </dd>
   </dl>
 
@@ -71,9 +73,12 @@
       {{ ticket.event.title }}: {{ ticket.ticketgroup.title }} ({{
         ticket.ticketgroup.price + ticket.ticketgroup.fee | price: true
       }}<!--
-        --><span [hidden]="!ticket.ticketgroup.fee">
-        hvorav {{ ticket.ticketgroup.fee | price: true }} i billettgebyr</span
-      >) (#{{ ticket.number }})
+      -->
+      @if (ticket.ticketgroup.fee) {
+        hvorav {{ ticket.ticketgroup.fee | price: true }} i billettgebyr
+      }
+      <!--
+      -->) (#{{ ticket.number }})
     </li>
   </ul>
 
