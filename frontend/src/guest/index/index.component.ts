@@ -4,7 +4,7 @@ import { Component, OnInit } from "@angular/core"
 import { RouterLink } from "@angular/router"
 import { Observable } from "rxjs"
 import { api } from "../../api"
-import { AuthService } from "../../auth/AuthService"
+import { AuthService } from "../../auth/auth.service"
 import { Eventgroup, EventgroupService } from "../eventgroup/eventgroup.service"
 
 interface UpcomingItem {

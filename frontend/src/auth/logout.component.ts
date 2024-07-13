@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core"
 import { firstValueFrom } from "rxjs"
 import { api } from "../api"
-import { AuthService } from "./AuthService"
+import { AuthService } from "./auth.service"
 
 @Component({
   standalone: true,

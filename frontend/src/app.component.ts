@@ -1,7 +1,7 @@
 import { AsyncPipe, Location } from "@angular/common"
 import { afterRender, Component, OnInit } from "@angular/core"
 import { RouterLink, RouterOutlet } from "@angular/router"
-import { AuthService } from "./auth/AuthService"
+import { AuthService } from "./auth/auth.service"
 import { ActiveFor } from "./common/active-for"
 import { PageService } from "./common/page.service"
 import { PageNotFoundComponent } from "./guest/infopages/page-not-found.component"

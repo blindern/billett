@@ -2,7 +2,7 @@ import { HttpEvent, HttpHandlerFn, HttpRequest } from "@angular/common/http"
 import { inject } from "@angular/core"
 import { mergeMap, Observable, take } from "rxjs"
 import { backendUrl } from "../api"
-import { AuthService } from "../auth/AuthService"
+import { AuthService } from "../auth/auth.service"
 
 export function csrfInterceptor(
   req: HttpRequest<unknown>,
