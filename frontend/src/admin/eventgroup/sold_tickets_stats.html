@@ -4,7 +4,7 @@
   <div class="page-header">
     <h1>
       <span class="eventgroup">
-        <a routerLink="a">Administrasjon</a>
+        <a routerLink="/a">Administrasjon</a>
       </span>
       Billettstatistikk
     </h1>
@@ -52,7 +52,7 @@
       @for (event of ctrl.events; track event) {
         <tr>
           <td>
-            <a routerLink="a/event/{{ event.id }}">{{::event.title}}</a>
+            <a routerLink="/a/event/{{ event.id }}">{{::event.title}}</a>
             <span class="event-time"
               >({{::event.time_start|formatdate:'ddd D. MMMM HH:mm'}})</span
             >

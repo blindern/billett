@@ -10,11 +10,11 @@
     <div class="page-header">
       <h1>
         <span class="eventgroup">
-          <a routerLink="a/eventgroup/{{ ctrl.event.eventgroup.id }}">{{
+          <a routerLink="/a/eventgroup/{{ ctrl.event.eventgroup.id }}">{{
             ctrl.event.eventgroup.title
           }}</a>
         </span>
-        <a routerLink="a/event/{{ ctrl.event.id }}"
+        <a routerLink="/a/event/{{ ctrl.event.id }}"
           >{{ ctrl.event.title }} ({{
             ctrl.event.time_start
               | formatdate
@@ -28,7 +28,7 @@
           </button>
           <a
             class="btn btn-default"
-            routerLink="a/orders?eventgroup_id={{ ctrl.event.eventgroup.id }}"
+            routerLink="/a/orders?eventgroup_id={{ ctrl.event.eventgroup.id }}"
             target="_blank"
             >Avansert ordresøk</a
           >
@@ -150,7 +150,7 @@
               <tr>
                 <td>
                   <a
-                  routerLink="a/order/{{ ticket.order.id }}"
+                  routerLink="/a/order/{{ ticket.order.id }}"
                     >{{::ticket.order.order_text_id}}</a
                   ><br />
                   {{::ticket.order.time|formatdate:'dd. DD.MM.YYYY HH:mm'}}
@@ -181,7 +181,7 @@
                       Innsjekket {{::ticket.used|formatdate:'HH:mm:ss'}}
                     </div>
                   }
-                  <a routerLink="api/ticket/{{ ticket.id }}/pdf" target="_self"
+                  <a routerLink="/api/ticket/{{ ticket.id }}/pdf" target="_self"
                     >#{{::ticket.id}}</a
                   >
                   @if (ticket.is_valid && !ticket.is_revoked) {
@@ -327,7 +327,7 @@
                   <tr [ngClass]="{ invalid: !order.is_valid }">
                     <td>
                       <a
-                        routerLink="a/order/{{ order.id }}"
+                        routerLink="/a/order/{{ order.id }}"
                         >{{::order.order_text_id}}</a
                       ><br />
                       {{::order.time|formatdate:'dd. DD.MM.YYYY HH:mm'}}
@@ -365,7 +365,7 @@
                             }"
                           >
                             <a
-                              routerLink="api/ticket/{{ ticket.id }}/pdf"
+                              routerLink="/api/ticket/{{ ticket.id }}/pdf"
                               target="_self"
                               >#{{::ticket.id}}</a
                             >
@@ -400,7 +400,7 @@
                             @if (ticket.event.id != ctrl.event.id) {
                               <span>
                                 @if (ticket.event.id != ctrl.event.id) {
-                                  <a routerLink="a/event/{{ ticket.event.id }}">
+                                  <a routerLink="/a/event/{{ ticket.event.id }}">
                                     {{::ticket.event.title}}
                                     ({{::ticket.event.time_start|formatdate:'DD.MM \\k\\l
                           HH'
@@ -459,7 +459,7 @@
                   <tr [ngClass]="{ invalid: !order.is_valid }">
                     <td>
                       <a
-                      routerLink="a/order/{{ order.id }}"
+                      routerLink="/a/order/{{ order.id }}"
                         >{{::order.order_text_id}}</a
                       ><br />
                       {{::order.time|formatdate:'dd. DD.MM.YYYY HH:mm'}}
@@ -496,7 +496,7 @@
                             }"
                           >
                             <a
-                              routerLink="api/ticket/{{ ticket.id }}/pdf"
+                              routerLink="/api/ticket/{{ ticket.id }}/pdf"
                               target="_self"
                               >#{{::ticket.id}}</a
                             >

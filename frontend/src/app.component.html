@@ -18,17 +18,17 @@
     </h3>
     <ul class="nav nav-pills navbar-right">
       <li [activeFor]="['/', '/eventgroup/*', '/event/*']">
-        <a routerLink="eventgroup/9"
+        <a routerLink="/eventgroup/9"
           ><span class="glyphicon glyphicon-list"></span> Arrangementer</a
         >
       </li>
       <li [activeFor]="['/salgsbetingelser']">
-        <a routerLink="salgsbetingelser"
+        <a routerLink="/salgsbetingelser"
           ><span class="glyphicon glyphicon-flash"></span> Salgsbetingelser</a
         >
       </li>
       <li [activeFor]="['/hjelp']">
-        <a routerLink="hjelp"
+        <a routerLink="/hjelp"
           ><span class="glyphicon glyphicon-question-sign"></span> Hjelp</a
         >
       </li>
@@ -41,7 +41,7 @@
         <b>NB!</b> Du er innlogget som
         <u>{{ (this.auth.user$ | async)?.realname }}</u> men har ikke tilgang
         til dette systemet.
-        <a routerLink="logout" target="_self">Logg ut</a>
+        <a routerLink="/logout" target="_self">Logg ut</a>
       </p>
       <hr />
     </div>
@@ -66,13 +66,13 @@
         <a href="http://foreningenbs.no">Foreningen Blindern Studenterhjem</a>
       </li>
       <li>
-        <a routerLink="a">Administrasjon</a>
+        <a routerLink="/a">Administrasjon</a>
         @if (auth.user$ | async; as user) {
           <span>
             <br />
             {{ user.username }}
             <br />
-            <a routerLink="logout">[logg ut]</a>
+            <a routerLink="/logout">[logg ut]</a>
           </span>
         }
       </li>

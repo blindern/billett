@@ -9,10 +9,10 @@
   <div class="page-header">
     <h1>
       <span class="eventgroup">
-        <a [hidden]="!is_new" routerLink="a/eventgroup/{{ eventgroup_id }}">{{
+        <a [hidden]="!is_new" routerLink="/a/eventgroup/{{ eventgroup_id }}">{{
           group.title
         }}</a>
-        <a [hidden]="!!is_new" routerLink="a/event/{{ event.id }}">{{
+        <a [hidden]="!!is_new" routerLink="/a/event/{{ event.id }}">{{
           group.title
         }}</a>
       </span>
@@ -357,13 +357,13 @@
     <div [hidden]="!!is_new" class="form-group">
       <div class="col-sm-9 col-md-6 col-sm-offset-3">
         <input type="submit" value="Oppdater" class="btn btn-primary" />
-        <a routerLink="a/event/{{ event.id }}">Avbryt</a>
+        <a routerLink="/a/event/{{ event.id }}">Avbryt</a>
       </div>
     </div>
     <div [hidden]="!is_new" class="form-group">
       <div class="col-sm-9 col-md-6 col-sm-offset-3">
         <input type="submit" value="Opprett" class="btn btn-primary" />
-        <a routerLink="a/event/{{ event.id }}">Avbryt</a>
+        <a routerLink="/a/event/{{ event.id }}">Avbryt</a>
       </div>
     </div>
   </form>

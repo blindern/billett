@@ -387,7 +387,7 @@
                       <thead>
                         <tr>
                           <th>
-                            <a routerLink="a/event/{{ event.id }}">
+                            <a routerLink="/a/event/{{ event.id }}">
                               {{::event.time_start|formatdate:'D. MMM YYYY HH:mm'
 
                               }}:
@@ -456,7 +456,7 @@
               @for (order of ctrl.orders_inbalance; track order) {
                 <tr>
                   <td>
-                    <a routerLink="a/order/{{ order.id }}">{{::order.order_text_id}}</a>
+                    <a routerLink="/a/order/{{ order.id }}">{{::order.order_text_id}}</a>
                     @if (order.name) {
                       <span>({{::order.name}})</span>
                     }
@@ -496,7 +496,7 @@
                 <tr>
                   <td>
                     <a
-                      routerLink="a/order/{{ payment.order.id }}"
+                      routerLink="/a/order/{{ payment.order.id }}"
                       >{{::payment.order.order_text_id}}</a
                     >
                     @if (payment.order.name) {
@@ -529,7 +529,7 @@
                 <tr>
                   <td>
                     <a
-                      routerLink="a/order/{{ ticket.order.id }}"
+                      routerLink="/a/order/{{ ticket.order.id }}"
                       >{{::ticket.order.order_text_id}}</a
                     >
                     @if (ticket.order.name) {
@@ -537,7 +537,7 @@
                     }
                   </td>
                   <td>
-                    <a routerLink="a/event/{{ ticket.event.id }}"
+                    <a routerLink="/a/event/{{ ticket.event.id }}"
                       >{{::ticket.event.time_start|formatdate:'D. MMM YYYY HH:mm'
 
                       }}: {{::ticket.event.title}}</a
@@ -573,7 +573,7 @@
                 <tr>
                   <td>
                     <a
-                      routerLink="a/order/{{ ticket.order.id }}"
+                      routerLink="/a/order/{{ ticket.order.id }}"
                       >{{::ticket.order.order_text_id}}</a
                     >
                     @if (ticket.order.name) {
@@ -581,7 +581,7 @@
                     }
                   </td>
                   <td>
-                    <a routerLink="a/event/{{ ticket.event.id }}"
+                    <a routerLink="/a/event/{{ ticket.event.id }}"
                       >{{::ticket.event.time_start|formatdate:'D. MMM YYYY HH:mm'
 
                       }}: {{::ticket.event.title}}</a
