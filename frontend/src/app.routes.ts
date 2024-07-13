@@ -1,4 +1,5 @@
 import { Routes } from "@angular/router"
+import { routes as adminRoutes } from "./admin/routes"
 import { LoginComponent } from "./auth/login.controller"
 import { LogoutComponent } from "./auth/logout.controller"
 import { GuestEventComponent } from "./guest/event/event.component"
@@ -52,6 +53,7 @@ export const routes: Routes = [
     path: "order/complete",
     component: GuestOrderComponent,
   },
+  ...adminRoutes,
   {
     path: "**",
     component: PageNotFoundComponent,
