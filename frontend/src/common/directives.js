@@ -1,4 +1,3 @@
-import template404 from "../guest/infopages/404.html?raw"
 import templatePaginationDirective from "./paginationDirective.html?raw"
 
 var module = angular.module("billett.common")
@@ -48,17 +47,6 @@ module.directive("autofocus", ($timeout) => {
       $timeout(() => {
         _element[0].focus()
       }, 100)
-    },
-  }
-})
-
-// showing page as 404
-module.directive("pageNotFound", (Page) => {
-  return {
-    restrict: "E",
-    template: template404,
-    link: (scope, element, attr) => {
-      console.log("linked 404")
     },
   }
 })
