@@ -12,7 +12,7 @@
         <a class="btn btn-success" routerLink="/a/order/new/{{ group.id }}"
           >Ny ordre</a
         >
-        <a class="btn btn-default" routerLink="/a/orders?eventgroup_id={{ group.id }}"
+        <a class="btn btn-default" routerLink="/a/orders" [queryParams]="{ eventgroup_id: group.id }"
           >Ordreliste</a
         >
       </span>
@@ -136,7 +136,8 @@
                   "
                 >
                   <a
-                    routerLink="/a/orders?tickets.event.id={{ event.id }}"
+                    routerLink="/a/orders"
+                    [queryParams]="{ 'tickets.event.id': event.id }"
                     >{{::event.ticket_count.totals.valid}}</a
                   >
                 </span>

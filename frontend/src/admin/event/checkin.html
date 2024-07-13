@@ -28,7 +28,8 @@
           </button>
           <a
             class="btn btn-default"
-            routerLink="/a/orders?eventgroup_id={{ ctrl.event.eventgroup.id }}"
+            routerLink="/a/orders"
+            [queryParams]="{ eventgroup_id: ctrl.event.eventgroup.id }"
             target="_blank"
             >Avansert ordresøk</a
           >

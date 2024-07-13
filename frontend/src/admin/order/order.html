@@ -7,7 +7,7 @@
   <div class="page-header">
     <h1>
       <span class="eventgroup">
-        <a routerLink="/a/orders?eventgroup_id={{ ctrl.order.eventgroup.id }}">{{
+        <a routerLink="/a/orders" [queryParams]="{ eventgroup_id: ctrl.order.eventgroup.id }">{{
           ctrl.order.eventgroup.title
         }}</a>
       </span>

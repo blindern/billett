@@ -149,7 +149,8 @@
                     ) {
                       <span>
                         <a
-                          routerLink="/a/orders?tickets.event.id={{ event.id }}"
+                          routerLink="/a/orders"
+                          [queryParams]="{ 'tickets.event.id': event.id }"
                           >{{ event.ticket_count.totals.valid }}</a
                         >
                       </span>

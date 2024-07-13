@@ -13,7 +13,8 @@
       <span class="pull-right">
         <a
           class="btn btn-default"
-          routerLink="/a/orders?eventgroup_id={{ ctrl.eventgroup.id }}"
+          routerLink="/a/orders"
+          [queryParams]="{ eventgroup_id: ctrl.eventgroup.id }"
           >Ordreliste</a
         >
       </span>
@@ -272,7 +273,7 @@
     <div>
       <p>
         Dette er en liste over de siste ordrene opprettet i en billettluke.
-        <a routerLink="/a/orders?eventgroup_id={{ ctrl.eventgroup.id }}">Full liste</a>
+        <a routerLink="/a/orders" [queryParams]="{ eventgroup_id: ctrl.eventgroup.id }">Full liste</a>
       </p>
 
       <table class="table table-striped table-condensed order-list-table">

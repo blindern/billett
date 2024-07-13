@@ -31,7 +31,8 @@
           >Innsjekking</a
         >
         <a
-          routerLink="/a/orders?tickets.event.id={{ event.id }}"
+          routerLink="/a/orders"
+          [queryParams]="{ 'tickets.event.id': event.id }"
           [hidden]="!event.has_tickets"
           class="btn btn-default"
           >Vis ordre</a
