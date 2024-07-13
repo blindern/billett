@@ -1,7 +1,5 @@
 import templatePaginationDirective from "./paginationDirective.html?raw"
 
-var module = angular.module("billett.common")
-
 // helper directive to mark a form input with has-error class
 // usage: <div form-input-check="form-name,input-name">
 module.directive("formInputCheck", () => {
