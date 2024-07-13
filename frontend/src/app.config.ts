@@ -1,14 +1,18 @@
-import { ApplicationConfig, provideZoneChangeDetection } from "@angular/core"
-import { provideRouter, withComponentInputBinding } from "@angular/router"
+import moment from "moment"
+import "moment/locale/nb.js"
 
 import {
   provideHttpClient,
   withFetch,
   withInterceptors,
 } from "@angular/common/http"
+import { ApplicationConfig, provideZoneChangeDetection } from "@angular/core"
+import { provideRouter, withComponentInputBinding } from "@angular/router"
 import { routes } from "./app.routes"
 import { csrfInterceptor } from "./common/csrf-interceptor"
 import { withCredentials } from "./common/with-credentials"
+
+moment.locale("nb")
 
 export const appConfig: ApplicationConfig = {
   providers: [

@@ -1,6 +1,3 @@
-import moment from "moment"
-import "moment/dist/locale/nb.js"
-
 import "./jquery"
 import "angular"
 import "angular-ui-router"
@@ -25,8 +22,6 @@ import guest from "./guest"
 import angular from "angular"
 
 window.marked = marked
-
-moment.locale("nb")
 
 let module = angular.module("billett", [
   "ui.router",
