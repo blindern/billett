@@ -12,7 +12,7 @@
         {{ group.title }}
         @if (auth.isAdmin$ | async) {
           <span class="pull-right">
-            <a href="a/eventgroup/{{ group.id }}" class="btn btn-primary"
+            <a routerLink="a/eventgroup/{{ group.id }}" class="btn btn-primary"
               >Admin</a
             >
           </span>
@@ -30,7 +30,7 @@
       <div>
         @if (isFilter) {
           <p>
-            <a href="eventgroup/{{ group.id }}">Vis hele arrangementlista</a>
+            <a routerLink="eventgroup/{{ group.id }}">Vis hele arrangementlista</a>
           </p>
         }
 
@@ -39,7 +39,7 @@
             @for (item of days | keyvalue; track item.key) {
               <li class="day">
                 <div class="header">
-                  <a [href]="'eventgroup/' + group.id + '/' + item.key">
+                  <a routerLink="eventgroup/{{ group.id }}/{{ item.key }}">
                     <span class="date">
                       <span>{{
                         item.value[0].time_start - 21600 | formatdate: "dddd"
@@ -68,8 +68,8 @@
                         [hidden]="!(auth.isAdmin$ | async)"
                       >
                         <span class="edit-link">
-                          <a href="a/event/{{ event.id }}/edit">Rediger</a>
-                          <a href="a/event/{{ event.id }}">Detaljert</a>
+                          <a routerLink="a/event/{{ event.id }}/edit">Rediger</a>
+                          <a routerLink="a/event/{{ event.id }}">Detaljert</a>
                         </span>
                       </div>
 
@@ -84,13 +84,9 @@
                         [ngClass]="'category-' + categoryNum(event.category)"
                         [hidden]="!event.category"
                       >
-                        <a
-                          [href]="
-                            'eventgroup/' + group.id + '/' + event.category
-                              | lowercase
-                          "
-                          >{{ event.category }}</a
-                        >
+                        <a routerLink="eventgroup/{{ group.id }}/{{ event.category | lowercase }}">
+                          {{ event.category }}
+                        </a>
                       </span>
                     </li>
                     <li>

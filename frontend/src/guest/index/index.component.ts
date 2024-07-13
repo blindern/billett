@@ -1,6 +1,7 @@
 import { CommonModule } from "@angular/common"
 import { HttpClient } from "@angular/common/http"
 import { Component, OnInit } from "@angular/core"
+import { RouterLink } from "@angular/router"
 import { Observable } from "rxjs"
 import { api } from "../../api"
 import { AuthService } from "../../auth/AuthService"
@@ -19,7 +20,7 @@ interface UpcomingItem {
 @Component({
   selector: "app-guest-index",
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: "./index.component.html",
 })
 export class GuestIndexComponent implements OnInit {

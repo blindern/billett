@@ -12,7 +12,7 @@
       <div class="row">
         <label class="col-sm-4 control-label">Billett</label>
         <div class="col-sm-7 form-control-static">
-          <a [href]="a / event / ctrl.ticket.event.id"
+          <a routerLink="a/event/{{ ctrl.ticket.event.id }}"
             >{{
               ctrl.ticket.event.time_start | formatdate: "D. MMM YYYY HH:mm"
             }}: {{ ctrl.ticket.event.title }}</a

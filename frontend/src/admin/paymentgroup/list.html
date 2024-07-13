@@ -4,7 +4,7 @@
   <div class="page-header">
     <h1>
       <span class="eventgroup">
-        <a href="a/eventgroup/{{ ctrl.eventgroup.id }}">{{
+        <a routerLink="a/eventgroup/{{ ctrl.eventgroup.id }}">{{
           ctrl.eventgroup.title
         }}</a>
       </span>
@@ -40,7 +40,7 @@
         @for (group of ctrl.paymentgroups; track group) {
           <tr>
             <td>
-              <a [href]="a/paymentgroup/::group.id">{{::group.title}}</a>
+              <a routerLink="a/paymentgroup/{{ group.id }}">{{::group.title}}</a>
             </td>
             <td>
               {{::group.time_start|formatdate:'DD.MM.YYYY'}} av

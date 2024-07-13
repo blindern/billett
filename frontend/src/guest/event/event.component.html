@@ -18,7 +18,7 @@
     <div class="page-header">
       <h1>
         <span class="eventgroup">
-          <a href="eventgroup/{{ event.eventgroup.id }}">{{
+          <a routerLink="eventgroup/{{ event.eventgroup.id }}">{{
             event.eventgroup.title
           }}</a>
         </span>
@@ -205,7 +205,7 @@
                           Ved kjøp av billetter får du tilsendt en elektronisk
                           billett i PDF-format på e-post som printes ut eller
                           tas med på mobiltelefon til arrangementet.
-                          <a href="hjelp">Informasjon om billetter</a>
+                          <a routerLink="hjelp">Informasjon om billetter</a>
                         </p>
 
                         @for (

@@ -4,7 +4,7 @@
   <div class="page-header">
     <h1>
       <span class="eventgroup">
-        <a href="a/eventgroup/{{ ctrl.eventgroup.id }}">{{
+        <a routerLink="a/eventgroup/{{ ctrl.eventgroup.id }}">{{
           ctrl.eventgroup.title
         }}</a>
       </span>
@@ -13,7 +13,7 @@
       <span class="pull-right">
         <a
           class="btn btn-default"
-          [href]="a/orders?eventgroup_id=ctrl.eventgroup.id"
+          routerLink="a/orders?eventgroup_id={{ ctrl.eventgroup.id }}"
           >Ordreliste</a
         >
       </span>
@@ -207,7 +207,7 @@
               @for (group of ctrl.ticketgroups; track group) {
                 <tr>
                   <td>
-                    <a [href]="a / event / group.event.id" target="_blank"
+                    <a routerLink="a/event/{{ group.event.id }}" target="_blank"
                       >{{
                         group.event.time_start
                           | formatdate: "D. MMM YYYY HH:mm"
@@ -272,7 +272,7 @@
     <div>
       <p>
         Dette er en liste over de siste ordrene opprettet i en billettluke.
-        <a [href]="a/orders?eventgroup_id=ctrl.eventgroup.id">Full liste</a>
+        <a routerLink="a/orders?eventgroup_id={{ ctrl.eventgroup.id }}">Full liste</a>
       </p>
 
       <table class="table table-striped table-condensed order-list-table">
@@ -288,7 +288,7 @@
           @for (order of ctrl.previousOrders; track order) {
             <tr [ngClass]="{ invalid: !order.is_valid }">
               <td>
-                <a [href]="a/order/::order.id">{{::order.order_text_id}}</a
+                <a routerLink="a/order/{{ order.id }}">{{::order.order_text_id}}</a
                 ><br />
                 {{::order.time|formatdate:'dd. DD.MM.YYYY HH:mm'}}
                 @if (!order.is_valid) {
@@ -343,7 +343,7 @@
                         target="_self"
                         >#{{::ticket.id}}</a
                       >
-                      <a [href]="a/event/::ticket.event.id"
+                      <a routerLink="a/event/{{ ticket.event.id }}"
                         >{{::ticket.event.title}}
                         ({{::ticket.event.time_start|formatdate:'DD.MM \\k\\l
                   HH'

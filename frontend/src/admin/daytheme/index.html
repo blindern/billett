@@ -4,15 +4,15 @@
   <div class="page-header">
     <h1>
       <span class="eventgroup">
-        <a href="a">Administrasjon</a>
+        <a routerLink="a">Administrasjon</a>
       </span>
       {{ group.title }}
 
       <span class="pull-right">
-        <a class="btn btn-success" [href]="a / order / new / group.id"
+        <a class="btn btn-success" routerLink="a/order/new/{{ group.id }}"
           >Ny ordre</a
         >
-        <a class="btn btn-default" [href]="a/orders?eventgroup_id=group.id"
+        <a class="btn btn-default" routerLink="a/orders?eventgroup_id={{ group.id }}"
           >Ordreliste</a
         >
       </span>
@@ -21,12 +21,12 @@
 
   <ul>
     <li>
-      <a [href]="a / eventgroup / group.id / sold_tickets_stats"
+      <a routerLink="a/eventgroup/{{ group.id }}/sold_tickets_stats"
         >Billettstatistikk (salgsoversikt)</a
       >
     </li>
     <li>
-      <a [href]="a / eventgroup / group.id / paymentgroups">Oppgjørsoversikt</a>
+      <a routerLink="a/eventgroup/{{ group.id }}/paymentgroups">Oppgjørsoversikt</a>
     </li>
   </ul>
 
@@ -35,7 +35,7 @@
   <h2>
     Arrangementliste
     <span class="pull-right">
-      <a href="a/eventgroup/{{ group.id }}/new_event" class="btn btn-default"
+      <a routerLink="a/eventgroup/{{ group.id }}/new_event" class="btn btn-default"
         >Nytt arrangement</a
       >
     </span>
@@ -122,11 +122,11 @@
               <td class="edit-link-container">
                 <div class="edit-link-wrap">
                   <span class="edit-link">
-                    <a [href]="a / event / event.id / edit">Rediger</a>
-                    <a [href]="event / event.id">Forhåndsvis</a>
+                    <a routerLink="a/event/{{ event.id }}/edit">Rediger</a>
+                    <a routerLink="event/{{ event.id }}">Forhåndsvis</a>
                   </span>
                 </div>
-                <a [href]="a / event / event.id">{{ event.title }}</a>
+                <a routerLink="a/event/{{ event.id }}">{{ event.title }}</a>
               </td>
               <td>
                 <span
@@ -136,7 +136,7 @@
                   "
                 >
                   <a
-                    [href]="a/orders?tickets.event.id=::event.id"
+                    routerLink="a/orders?tickets.event.id={{ event.id }}"
                     >{{::event.ticket_count.totals.valid}}</a
                   >
                 </span>

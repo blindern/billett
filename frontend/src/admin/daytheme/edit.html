@@ -45,13 +45,13 @@
     <div [hidden]="!!is_new" class="form-group">
       <div class="col-sm-9 col-md-6 col-sm-offset-3">
         <input type="submit" value="Oppdater" class="btn btn-primary" />
-        <a [href]="a / daytheme / daytheme.id">Avbryt</a>
+        <a routerLink="a/daytheme/{{ daytheme.id }}">Avbryt</a>
       </div>
     </div>
     <div [hidden]="!is_new" class="form-group">
       <div class="col-sm-9 col-md-6 col-sm-offset-3">
         <input type="submit" value="Opprett" class="btn btn-primary" />
-        <a [href]="a / daytheme / daytheme.id">Avbryt</a>
+        <a routerLink="a/daytheme/{{ daytheme.id }}">Avbryt</a>
       </div>
     </div>
   </form>

@@ -7,7 +7,7 @@
   <div class="page-header">
     <h1>
       <span class="eventgroup">
-        <a [href]="a/orders?eventgroup_id=ctrl.order.eventgroup.id">{{
+        <a routerLink="a/orders?eventgroup_id={{ ctrl.order.eventgroup.id }}">{{
           ctrl.order.eventgroup.title
         }}</a>
       </span>
@@ -16,7 +16,7 @@
       <span class="pull-right">
         <a
           class="btn btn-success"
-          [href]="a / order / new / ctrl.order.eventgroup.id"
+          routerLink="a/order/new/{{ ctrl.order.eventgroup.id }}"
           accesskey="n"
           >Ny ordre</a
         >
@@ -293,7 +293,7 @@
                     </td>
                     <td>{{ ticket.id }}</td>
                     <td>
-                      <a [href]="a / event / ticket.event.id"
+                      <a routerLink="a/event/{{ ticket.event.id }}"
                         >{{
                           ticket.event.time_start
                             | formatdate: "D. MMM YYYY HH:mm"
@@ -438,7 +438,7 @@
                       <td>
                         Oppgjør:
                         <a
-                          [href]="a / paymentgroup / payment.paymentgroup.id"
+                          routerLink="a/paymentgroup/{{ payment.paymentgroup.id }}"
                           >{{ payment.paymentgroup.title }}</a
                         >
                         @if (payment.user_created) {

@@ -1,5 +1,6 @@
 import { CommonModule, Location } from "@angular/common"
 import { Component, Input, OnInit } from "@angular/core"
+import { RouterLink } from "@angular/router"
 import moment from "moment"
 import { AuthService } from "../../auth/AuthService"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
@@ -9,7 +10,7 @@ import { EventgroupExpanded, EventgroupService } from "./eventgroup.service"
 @Component({
   selector: "app-guest-eventgroup",
   standalone: true,
-  imports: [CommonModule, FormatdatePipe],
+  imports: [CommonModule, FormatdatePipe, RouterLink],
   templateUrl: "./eventgroup.component.html",
 })
 export class GuestEventgroupComponent implements OnInit {

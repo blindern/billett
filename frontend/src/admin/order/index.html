@@ -4,7 +4,7 @@
   <div class="page-header">
     <h1>
       <span class="eventgroup">
-        <a href="a">Administrasjon</a>
+        <a routerLink="a">Administrasjon</a>
       </span>
       Ordreliste
 
@@ -12,7 +12,7 @@
         <span class="pull-right">
           <a
             class="btn btn-success"
-            [href]="a / order / new / search.eventgroup_id"
+            routerLink="a/order/new/{{ search.eventgroup_id }}"
             accesskey="n"
             >Ny ordre</a
           >
@@ -171,7 +171,7 @@
         @for (order of orders.result; track order) {
           <tr [ngClass]="{ invalid: !order.is_valid }">
             <td>
-              <a [href]="a/order/::order.id">{{::order.order_text_id}}</a
+              <a routerLink="a/order/{{ order.id }}">{{::order.order_text_id}}</a
               ><br />
               {{::order.time|formatdate:'dd. DD.MM.YYYY HH:mm'}}
               @if (!order.is_valid) {
@@ -233,11 +233,11 @@
                     }"
                   >
                     <a
-                      [href]="::api('ticket/' + ticket.id + '/pdf')"
+                      routerLink="::api('ticket/' + ticket.id + '/pdf')"
                       target="_self"
                       >#{{::ticket.id}}</a
                     >
-                    <a [href]="a/event/::ticket.event.id"
+                    <a routerLink="a/event/{{ ticket.event.id }}"
                       >{{::ticket.event.title}}
                       ({{::ticket.event.time_start|formatdate:'DD.MM \\k\\l
                   HH'

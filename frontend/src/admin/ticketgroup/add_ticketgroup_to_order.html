@@ -76,7 +76,7 @@
                     {{::event.max_sales}}
                   </span>
 
-                  <a [href]="a/event/::event.id">{{::event.title}}</a>
+                  <a routerLink="a/event/{{ event.id }}">{{::event.title}}</a>
                   <span class="event-time">{{::event.dateinfo}}</span>
                 </th>
               </tr>
