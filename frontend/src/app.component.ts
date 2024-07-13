@@ -3,19 +3,11 @@ import { afterRender, Component, OnInit } from "@angular/core"
 import { RouterLink, RouterOutlet } from "@angular/router"
 import { AuthService } from "./auth/auth.service"
 import { ActiveFor } from "./common/active-for"
-import { PageService } from "./common/page.service"
-import { PageNotFoundComponent } from "./guest/infopages/page-not-found.component"
 
 @Component({
   selector: "app-root",
   standalone: true,
-  imports: [
-    RouterOutlet,
-    RouterLink,
-    ActiveFor,
-    PageNotFoundComponent,
-    AsyncPipe,
-  ],
+  imports: [RouterOutlet, RouterLink, ActiveFor, AsyncPipe],
   templateUrl: "./app.component.html",
 })
 export class AppComponent implements OnInit {
@@ -26,7 +18,6 @@ export class AppComponent implements OnInit {
 
   constructor(
     private location: Location,
-    public page: PageService,
     public auth: AuthService,
   ) {
     afterRender(() => {

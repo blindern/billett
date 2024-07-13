@@ -9,11 +9,8 @@ import { Subscription } from "rxjs"
 export class PageService implements OnDestroy {
   private routerEventsSubscription: Subscription
 
-  private activeLoader?: PromiseWithResolvers<any>
   private attrs = {}
   public meta = {}
-  public loading = false
-  public page404 = false
 
   constructor(
     private router: Router,
@@ -24,7 +21,6 @@ export class PageService implements OnDestroy {
     this.setDefault("url", router.url)
     this.routerEventsSubscription = router.events.subscribe((s: Event) => {
       if (s instanceof NavigationStart) {
-        this.loading = false
         this.setDefault("url", s.url)
       }
     })
@@ -168,51 +164,6 @@ export class PageService implements OnDestroy {
     console.log("toast", {
       ...params,
       content: text,
-    })
-  }
-
-  /**
-   * Set page as loading and return function to call when loading completes
-   */
-  setLoading() {
-    const thisLoader = (this.activeLoader = Promise.withResolvers())
-
-    this.loading = true
-    return () => {
-      if (thisLoader == this.activeLoader) {
-        console.log("correct loader")
-        thisLoader.resolve(null)
-        this.activeLoader = undefined
-        this.loading = false
-      } else {
-        console.log("incorrect loader")
-        thisLoader.reject()
-      }
-    }
-  }
-
-  /**
-   * Get loader promise if it exists
-   */
-  getPageLoaderPromise() {
-    return this.activeLoader?.promise
-  }
-
-  /**
-   * Set current page as 404
-   *
-   * Used on matched routes where the controller don't find it's resources
-   */
-  set404() {
-    this.page404 = true
-    const title = this.set("title", "404 Page not found")
-
-    const sub = this.router.events.subscribe((s: Event) => {
-      if (s instanceof NavigationStart) {
-        this.page404 = false
-        title() // remove title from stack
-        sub.unsubscribe()
-      }
     })
   }
 }

@@ -6,7 +6,7 @@ import { GuestEventComponent } from "./guest/event/event.component"
 import { GuestEventgroupComponent } from "./guest/eventgroup/eventgroup.component"
 import { GuestIndexComponent } from "./guest/index/index.component"
 import { HjelpComponent } from "./guest/infopages/hjelp.component"
-import { PageNotFoundComponent } from "./guest/infopages/page-not-found.component"
+import { PageNotFoundComponent } from "./common/page-not-found.component"
 import { SalgsbetingelserComponent } from "./guest/infopages/salgsbetingelser.component"
 import { GuestOrderComponent } from "./guest/order/order.component"
 

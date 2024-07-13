@@ -47,16 +47,7 @@
     </div>
   }
 
-  <div ng-show="!loading" ng-if="!page404" ui-view class="main-view"></div>
-
   <router-outlet></router-outlet>
-
-  @if (page.loading) {
-    <div class="page-loading">Laster innhold...</div>
-  }
-  @if (page.page404) {
-    <page-not-found></page-not-found>
-  }
 
   <footer>
     <ul>

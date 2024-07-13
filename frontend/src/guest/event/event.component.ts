@@ -9,6 +9,10 @@ import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageService } from "../../common/page.service"
 import { PricePipe } from "../../common/price.pipe"
 import {
+  handleResourceLoadingStates,
+  ResourceLoadingState,
+} from "../../common/resource-loading"
+import {
   EventReservationItem,
   EventReservationService,
 } from "./event-reservation.service"
@@ -37,6 +41,8 @@ declare global {
 export class GuestEventComponent implements OnInit {
   @Input()
   id!: string
+
+  pageState = new ResourceLoadingState()
 
   event: Event | undefined
   event_status: string | null | undefined
@@ -186,31 +192,30 @@ export class GuestEventComponent implements OnInit {
       "https://checkout.vipps.no/checkout-button/v1/vipps-checkout-button.js"
     document.head.append(script)
 
-    const loader = this.pageService.setLoading()
-    this.eventService.get(this.id).subscribe((event) => {
-      loader()
-      this.event = event
+    this.eventService
+      .get(this.id)
+      .pipe(handleResourceLoadingStates(this.pageState))
+      .subscribe((event) => {
+        this.event = event
 
-      for (const ticketgroup of event.ticketgroups) {
-        ticketgroup.order_count = 0
-      }
+        for (const ticketgroup of event.ticketgroups) {
+          ticketgroup.order_count = 0
+        }
 
-      this.event_status = event.web_selling_status
-      if (
-        event.selling_text &&
-        (event.web_selling_status == "unknown" ||
-          event.web_selling_status == "no_web_tickets")
-      ) {
-        this.event_status = "selling_text"
-      }
+        this.event_status = event.web_selling_status
+        if (
+          event.selling_text &&
+          (event.web_selling_status == "unknown" ||
+            event.web_selling_status == "no_web_tickets")
+        ) {
+          this.event_status = "selling_text"
+        }
 
-      // do we have an alias not being used?
-      if (event.alias != null && this.id != event.alias) {
-        this.location.replaceState("/event/" + event.alias)
-      }
-    })
-
-    // TODO(migrate): 404
+        // do we have an alias not being used?
+        if (event.alias != null && this.id != event.alias) {
+          this.location.replaceState("/event/" + event.alias)
+        }
+      })
 
     // check for reservation
     this.loadingReservation = true

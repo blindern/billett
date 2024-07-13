@@ -4,13 +4,25 @@ import { RouterLink } from "@angular/router"
 import moment from "moment"
 import { AuthService } from "../../auth/auth.service"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
+import { PagePropertyComponent } from "../../common/page-property.component"
+import { PageStatesComponent } from "../../common/page-states.component"
 import { PageService } from "../../common/page.service"
+import {
+  handleResourceLoadingStates,
+  ResourceLoadingState,
+} from "../../common/resource-loading"
 import { EventgroupExpanded, EventgroupService } from "./eventgroup.service"
 
 @Component({
   selector: "app-guest-eventgroup",
   standalone: true,
-  imports: [CommonModule, FormatdatePipe, RouterLink],
+  imports: [
+    CommonModule,
+    FormatdatePipe,
+    RouterLink,
+    PagePropertyComponent,
+    PageStatesComponent,
+  ],
   templateUrl: "./eventgroup.component.html",
 })
 export class GuestEventgroupComponent implements OnInit {
@@ -19,6 +31,8 @@ export class GuestEventgroupComponent implements OnInit {
 
   @Input()
   query!: string
+
+  pageState = new ResourceLoadingState()
 
   daythemes!: Record<string, any>
   days!: Record<string, EventgroupExpanded["events"]>
@@ -60,49 +74,42 @@ export class GuestEventgroupComponent implements OnInit {
       this.isFilter = true
     }
 
-    const loader = this.page.setLoading()
-    this.eventgroupService.get(this.id).subscribe((eventgroup) => {
-      loader()
-      this.page.set("title", eventgroup.title)
-      this.group = eventgroup
+    this.eventgroupService
+      .get(this.id)
+      .pipe(handleResourceLoadingStates(this.pageState))
+      .subscribe((eventgroup) => {
+        this.page.set("title", eventgroup.title)
+        this.group = eventgroup
 
-      const r: any = {}
-      let c = 0
-      for (const item of this.group.events) {
-        if (
-          filter.category &&
-          filter.category != (item.category || "").toLowerCase()
-        )
-          continue
+        const r: any = {}
+        let c = 0
+        for (const item of this.group.events) {
+          if (
+            filter.category &&
+            filter.category != (item.category || "").toLowerCase()
+          )
+            continue
 
-        const k = moment.unix(item.time_start - 3600 * 6).format("YYYY-MM-DD")
-        if (filter.date && filter.date != k) continue
+          const k = moment.unix(item.time_start - 3600 * 6).format("YYYY-MM-DD")
+          if (filter.date && filter.date != k) continue
 
-        r[k] = r[k] || []
-        r[k].push(item)
-        c++
-      }
+          r[k] = r[k] || []
+          r[k].push(item)
+          c++
+        }
 
-      for (const item of this.group.daythemes) {
-        const day = moment.unix(item.date).format("YYYY-MM-DD")
-        this.daythemes[day] = item.title
-      }
+        for (const item of this.group.daythemes) {
+          const day = moment.unix(item.date).format("YYYY-MM-DD")
+          this.daythemes[day] = item.title
+        }
 
-      // if blank page on filter
-      if (c == 0 && (filter.date || filter.category)) {
-        this.page.set404()
-        this.location.go("eventgroup/" + eventgroup.id)
-      }
+        // if blank page on filter
+        if (c == 0 && (filter.date || filter.category)) {
+          this.pageState.notfound = true
+          this.location.go("eventgroup/" + eventgroup.id)
+        }
 
-      this.days = r
-    })
-
-    // TODO(migrate)
-    /*
-      .catch(() => {
-        loader()
-        Page.set404()
+        this.days = r
       })
-      */
   }
 }
