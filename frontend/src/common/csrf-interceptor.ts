@@ -19,7 +19,6 @@ export function csrfInterceptor(
             "X-Csrf-Token": csrfToken,
           },
         })
-        console.log({ newReq })
         return next(newReq)
       }),
     )
