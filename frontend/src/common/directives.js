@@ -1,5 +1,3 @@
-import templatePaginationDirective from "./paginationDirective.html?raw"
-
 // helper directive to mark a form input with has-error class
 // usage: <div form-input-check="form-name,input-name">
 module.directive("formInputCheck", () => {
@@ -31,30 +29,6 @@ module.directive("autofocus", ($timeout) => {
       $timeout(() => {
         _element[0].focus()
       }, 100)
-    },
-  }
-})
-
-// simple pagination
-module.directive("pagination", ($parse) => {
-  return {
-    restrict: "E",
-    template: templatePaginationDirective,
-    scope: {
-      total: "=pageTotal",
-      limit: "=pageLimit",
-      page: "=pageActive",
-    },
-    replace: true,
-    link: (scope) => {
-      scope.$watchGroup(["total", "limit"], () => {
-        scope.numPages = Math.ceil(scope.total / scope.limit)
-      })
-
-      scope.changePage = (to) => {
-        if (to < 1 || to > scope.numPages) return
-        scope.page = to
-      }
     },
   }
 })

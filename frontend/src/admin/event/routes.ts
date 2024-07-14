@@ -1,6 +1,6 @@
 import { Routes } from "@angular/router"
 import { requireAdmin } from "../../auth/require-admin"
-import { TodoComponent } from "../todo.component"
+import { AdminEventCheckinComponent } from "./admin-event-checkin.component"
 import { AdminEventCreateComponent } from "./admin-event-create.component"
 import { AdminEventEditComponent } from "./admin-event-edit.component"
 import { AdminEventComponent } from "./admin-event.component"
@@ -18,9 +18,7 @@ export const routes: Routes = [
   },
   {
     path: "a/event/:id/checkin",
-    // checkin.html
-    // component: AdminCheckinComponent,
-    component: TodoComponent,
+    component: AdminEventCheckinComponent,
     canActivate: [requireAdmin],
   },
   {
