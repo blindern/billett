@@ -1,7 +1,7 @@
 import { CommonModule, Location } from "@angular/common"
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Input, OnInit } from "@angular/core"
 import { FormsModule } from "@angular/forms"
-import { RouterLink } from "@angular/router"
+import { Router, RouterLink } from "@angular/router"
 import { api } from "../../api"
 import { AuthService } from "../../auth/auth.service"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
@@ -65,7 +65,7 @@ export class GuestEventComponent implements OnInit {
   constructor(
     private eventService: EventService,
     private eventReservationService: EventReservationService,
-    private location: Location,
+    private router: Router,
     private pageService: PageService,
     public auth: AuthService,
   ) {}
@@ -164,7 +164,7 @@ export class GuestEventComponent implements OnInit {
     if (force) {
       // details about the order is fetched at the
       // completed url
-      this.location.go("order/complete")
+      this.router.navigateByUrl("order/complete")
       return
     } else {
       this.vipps_checkout = true
@@ -220,7 +220,9 @@ export class GuestEventComponent implements OnInit {
 
         // do we have an alias not being used?
         if (event.alias != null && this.id != event.alias) {
-          this.location.replaceState("/event/" + event.alias)
+          this.router.navigateByUrl("/event/" + event.alias, {
+            replaceUrl: true,
+          })
         }
       })
 

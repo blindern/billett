@@ -1,6 +1,6 @@
-import { CommonModule, Location } from "@angular/common"
+import { CommonModule } from "@angular/common"
 import { Component, Input, OnInit } from "@angular/core"
-import { RouterLink } from "@angular/router"
+import { Router, RouterLink } from "@angular/router"
 import moment from "moment"
 import { AuthService } from "../../auth/auth.service"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
@@ -50,7 +50,7 @@ export class GuestEventgroupComponent implements OnInit {
 
   constructor(
     private eventgroupService: EventgroupService,
-    private location: Location,
+    private router: Router,
     private page: PageService,
     public auth: AuthService,
   ) {}
@@ -106,7 +106,7 @@ export class GuestEventgroupComponent implements OnInit {
         // if blank page on filter
         if (c == 0 && (filter.date || filter.category)) {
           this.pageState.notfound = true
-          this.location.go("eventgroup/" + eventgroup.id)
+          this.router.navigateByUrl("eventgroup/" + eventgroup.id)
         }
 
         this.days = r
