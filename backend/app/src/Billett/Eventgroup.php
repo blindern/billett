@@ -12,6 +12,10 @@ class Eventgroup extends Model implements ApiQueryInterface
 
     protected $table = 'eventgroups';
 
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
+
     protected $apiAllowedFields = ['id', 'is_active', 'title', 'sort_value', 'paymentsources_data'];
 
     protected $apiAllowedRelations = ['events', 'orders', 'paymentgroups', 'daythemes'];

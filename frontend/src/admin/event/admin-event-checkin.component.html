@@ -465,7 +465,7 @@
                         <span class="order-detail"><i>Ingen detaljer</i></span>
                       }
 
-                      @if (order.balance != 0) {
+                      @if (parseFloat(order.balance) != 0) {
                         <span class="unbalance"
                           ><br />(ubalanse: {{ order.balance | price }})</span
                         >

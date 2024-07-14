@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from "@angular/core"
 import { RouterLink } from "@angular/router"
+import { ApiSoldTicketsStats } from "../../apitypes"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
@@ -9,10 +10,7 @@ import {
   handleResourceLoadingStates,
   ResourceLoadingState,
 } from "../../common/resource-loading"
-import {
-  AdminEventgroupService,
-  AdminSoldTicketsStatsData,
-} from "./admin-eventgroup.service"
+import { AdminEventgroupService } from "./admin-eventgroup.service"
 
 class Accum {
   parents: Accum[] = []
@@ -71,7 +69,7 @@ export class AdminEventgroupSoldTicketsStatsComponent implements OnInit {
       })
   }
 
-  deriveStats(data: AdminSoldTicketsStatsData) {
+  deriveStats(data: ApiSoldTicketsStats) {
     const days = Array.from(
       new Set<string>(data.tickets.map((ticket) => ticket.day)),
     )
@@ -97,49 +95,56 @@ export class AdminEventgroupSoldTicketsStatsComponent implements OnInit {
       }
     })
 
-    const events2 = {}
-    const events: any[] = []
-    for (const event of data.events) {
-      event.ticketgroups = []
-      event.accum = new Accum().parent(topAccum)
-      event.daysAccum = Object.fromEntries(
-        days.map((day) => [day, new Accum()]),
-      )
-      events2[event.id] = event
-      events.push(event)
-
+    const events = data.events.map((event) => {
       max_sales += event.max_sales
       max_normal_sales += event.max_normal_sales || event.max_sales
-    }
 
-    const ticketgroups = {}
-    for (const ticketgroup of data.ticketgroups) {
-      ticketgroup.days = {}
-      ticketgroup.accum = new Accum().parent(
-        events2[ticketgroup.event_id].accum,
-      )
-      days.forEach((day) => {
-        ticketgroup.days[day] = null
-      })
-      events2[ticketgroup.event_id].ticketgroups.push(ticketgroup)
-      ticketgroups[ticketgroup.id] = ticketgroup
-    }
+      return {
+        ...event,
+        ticketgroups: [] as ApiSoldTicketsStats["ticketgroups"][0][],
+        accum: new Accum().parent(topAccum),
+        daysAccum: Object.fromEntries(days.map((day) => [day, new Accum()])),
+      }
+    })
+
+    const eventsById = Object.fromEntries(
+      events.map((event) => [event.id, event]),
+    )
+
+    const ticketgroups = Object.fromEntries(
+      data.ticketgroups.map((ticketgroup) => {
+        const updated = {
+          ...ticketgroup,
+          days: Object.fromEntries(days.map((day) => [day, null])) as Record<
+            string,
+            null | (ApiSoldTicketsStats["tickets"][0] & { accum: Accum })
+          >,
+          accum: new Accum().parent(eventsById[ticketgroup.event_id].accum),
+        }
+
+        eventsById[ticketgroup.event_id].ticketgroups.push(ticketgroup)
+
+        return [ticketgroup.id, updated]
+      }),
+    )
 
     for (const ticket of data.tickets) {
       if (!ticket.day) continue
       const ticketgroup = ticketgroups[ticket.ticketgroup_id]
-      const event = events2[ticket.event_id]
-      ticketgroup.days[ticket.day] = ticket
-      ticket.accum = new Accum()
-        .parent(ticketgroup.accum)
-        .parent(daysAccum[ticket.day])
-        .parent(event.daysAccum[ticket.day])
-        .add(
-          ticket.num_tickets,
-          ticket.num_revoked,
-          ticketgroup.price,
-          ticketgroup.fee,
-        )
+      const event = eventsById[ticket.event_id]
+      ticketgroup.days[ticket.day] = {
+        ...ticket,
+        accum: new Accum()
+          .parent(ticketgroup.accum)
+          .parent(daysAccum[ticket.day])
+          .parent(event.daysAccum[ticket.day])
+          .add(
+            ticket.num_tickets,
+            ticket.num_revoked,
+            Number(ticketgroup.price),
+            Number(ticketgroup.fee),
+          ),
+      }
     }
 
     return {

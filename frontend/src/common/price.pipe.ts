@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from "@angular/core"
 })
 export class PricePipe implements PipeTransform {
   transform(
-    amount: number | string,
+    amount: null | number | string,
     decimals?: number | boolean,
     in_nok?: boolean,
   ): string {
@@ -31,7 +31,7 @@ export class PricePipe implements PipeTransform {
     return (
       (in_nok ? "NOK " : "kr ") +
       formatNumber(
-        typeof amount === "number" ? amount : parseFloat(amount),
+        typeof amount === "string" ? parseFloat(amount) : Number(amount),
         decimals,
       )
     )

@@ -51,11 +51,12 @@ export class AdminEventCheckinComponent implements OnInit {
   id!: string
 
   api = api
+  parseFloat = parseFloat
 
   pageState = new ResourceLoadingState()
   event?: AdminEventData
 
-  tickets?: AdminTicketForCheckinData[]
+  tickets?: ReturnType<AdminEventCheckinComponent["parseTicketsList"]>
   ticketsLoading = false
   ticketLinks = {}
 
@@ -251,13 +252,15 @@ export class AdminEventCheckinComponent implements OnInit {
     this.resetSearchInput()
 
     this.checkinService.getAllTickets(this.event!.id).subscribe((data) => {
-      this.tickets = this.#parseTicketsList(data)
+      this.tickets = this.parseTicketsList(data)
       this.ticketsLoading = false
     })
   }
 
-  #parseTicketsList(list: AdminTicketForCheckinData[]) {
-    const orders: any[] = []
+  private parseTicketsList(list: AdminTicketForCheckinData[]) {
+    const orders: (AdminTicketForCheckinData["order"] & {
+      tickets: AdminTicketForCheckinData[]
+    })[] = []
     const orders_link = {}
     this.ticketLinks = {}
 
@@ -268,9 +271,10 @@ export class AdminEventCheckinComponent implements OnInit {
       } else {
         const order = row.order
         orders_link[order.id] = order
-        orders.push(order)
-
-        order.tickets = [row]
+        orders.push({
+          ...order,
+          tickets: [row],
+        })
       }
     })
 

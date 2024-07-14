@@ -7,15 +7,6 @@ import {
   SimpleChanges,
 } from "@angular/core"
 
-export interface Paginated<T> {
-  pagination: {
-    offset: number
-    limit: number
-    total: number
-  }
-  result: T
-}
-
 @Component({
   selector: "pagination",
   standalone: true,

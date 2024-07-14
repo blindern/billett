@@ -2,38 +2,24 @@ import { HttpClient } from "@angular/common/http"
 import { Injectable } from "@angular/core"
 import { firstValueFrom, map, Observable, ReplaySubject } from "rxjs"
 import { api } from "../api"
-
-interface AuthInfo {
-  logged_in: boolean
-  user_roles: string[]
-  user: {
-    id: number
-    username: string
-    email: string
-    realname: string
-  } | null
-  csrf_token: string
-  is_dev: boolean
-  is_vipps_test: boolean
-  is_admin: boolean
-}
+import { ApiAuthInfo } from "../apitypes"
 
 @Injectable({
   providedIn: "root",
 })
 export class AuthService {
-  #authData$ = new ReplaySubject<AuthInfo>(1)
+  #authData$ = new ReplaySubject<ApiAuthInfo>(1)
 
   constructor(private http: HttpClient) {
     this.refreshAuthData()
   }
 
-  get authData$(): Observable<AuthInfo> {
+  get authData$(): Observable<ApiAuthInfo> {
     return this.#authData$
   }
 
   async refreshAuthData() {
-    const authData = await firstValueFrom(this.http.get<AuthInfo>(api("me")))
+    const authData = await firstValueFrom(this.http.get<ApiAuthInfo>(api("me")))
     this.#authData$.next(authData)
     return authData
   }

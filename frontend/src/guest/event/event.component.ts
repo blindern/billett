@@ -44,7 +44,12 @@ export class GuestEventComponent implements OnInit {
 
   pageState = new ResourceLoadingState()
 
-  event: Event | undefined
+  event?: Event & {
+    ticketgroups: {
+      order_count: number
+    }[]
+  }
+
   event_status: string | null | undefined
 
   loadingReservation = false
@@ -107,7 +112,7 @@ export class GuestEventComponent implements OnInit {
 
       var groups = {}
       for (const g of this.event!.ticketgroups) {
-        var c = parseInt(g.order_count)
+        var c = g.order_count ?? 0
         if (c <= 0) continue
         groups[g.id] = c
       }
@@ -196,10 +201,12 @@ export class GuestEventComponent implements OnInit {
       .get(this.id)
       .pipe(handleResourceLoadingStates(this.pageState))
       .subscribe((event) => {
-        this.event = event
-
-        for (const ticketgroup of event.ticketgroups) {
-          ticketgroup.order_count = 0
+        this.event = {
+          ...event,
+          ticketgroups: event.ticketgroups.map((ticketgroup) => ({
+            ...ticketgroup,
+            order_count: 0,
+          })),
         }
 
         this.event_status = event.web_selling_status

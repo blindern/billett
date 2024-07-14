@@ -1,13 +1,14 @@
 import { HttpClient } from "@angular/common/http"
 import { Injectable } from "@angular/core"
 import { api } from "../../api"
+import { ApiEventAdmin, ApiEventgroupAdmin, ApiTicketgroupAdmin } from "../../apitypes"
 
-export interface AdminEventData {
-  id: number
-  [k: string]: any
+export type AdminEventData = ApiEventAdmin & {
+  eventgroup: ApiEventgroupAdmin
+  ticketgroups: ApiTicketgroupAdmin[]
 }
 
-export type AdminEventCreateData = Omit<AdminEventData, "id">
+export type AdminEventCreateData = Partial<Omit<ApiEventAdmin, "id">>
 
 @Injectable({
   providedIn: "root",

@@ -1,16 +1,9 @@
 import { HttpClient } from "@angular/common/http"
 import { Injectable } from "@angular/core"
 import { api } from "../../api"
+import { ApiEventgroupAdmin, ApiSoldTicketsStats } from "../../apitypes"
 
-export interface AdminEventgroupData {
-  id: number
-  title: string
-  [k: string]: any
-}
-
-export interface AdminSoldTicketsStatsData {
-  [k: string]: any
-}
+export type AdminEventgroupData = ApiEventgroupAdmin
 
 @Injectable({
   providedIn: "root",
@@ -48,7 +41,7 @@ export class AdminEventgroupService {
   }
 
   getSoldTicketsStats(id: string) {
-    return this.http.get<AdminSoldTicketsStatsData>(
+    return this.http.get<ApiSoldTicketsStats>(
       api(`eventgroup/${encodeURIComponent(id)}/sold_tickets_stats`),
       { params: { admin: "1" } },
     )

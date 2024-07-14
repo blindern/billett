@@ -191,7 +191,7 @@
                     >{{ g.title }}</a
                   >
                 </td>
-                <td>{{ g.price + g.fee | price }}</td>
+                <td>{{ plus(g.price, g.fee) | price }}</td>
                 <td>{{ g.fee | price }}</td>
                 <td>{{ g.use_office ? "Ja" : "Nei" }}</td>
                 <td>{{ g.use_web ? "Ja" : "Nei" }}</td>

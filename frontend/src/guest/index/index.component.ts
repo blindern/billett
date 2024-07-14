@@ -4,8 +4,9 @@ import { Component, OnInit } from "@angular/core"
 import { RouterLink } from "@angular/router"
 import { Observable } from "rxjs"
 import { api } from "../../api"
+import { ApiEventgroup } from "../../apitypes"
 import { AuthService } from "../../auth/auth.service"
-import { Eventgroup, EventgroupService } from "../eventgroup/eventgroup.service"
+import { EventgroupService } from "../eventgroup/eventgroup.service"
 
 interface UpcomingItem {
   id: number
@@ -25,7 +26,7 @@ interface UpcomingItem {
 })
 export class GuestIndexComponent implements OnInit {
   upcoming$!: Observable<UpcomingItem[]>
-  eventgroups$!: Observable<Eventgroup[]>
+  eventgroups$!: Observable<ApiEventgroup[]>
 
   categories: string[] = []
   categoryNum!: (category: string) => number

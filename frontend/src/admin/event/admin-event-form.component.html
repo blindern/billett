@@ -134,7 +134,7 @@
 
   <h3>Mer informasjon</h3>
 
-  @if (!event.id) {
+  @if (!eventId) {
     <div class="form-group">
       <label for="alias" class="col-sm-3 control-label">Alias</label>
       <div class="col-sm-9 col-md-6">
@@ -327,11 +327,11 @@
     </div>
   </div>
 
-  @if (event.id) {
+  @if (eventId) {
     <div class="form-group">
       <div class="col-sm-9 col-md-6 col-sm-offset-3">
         <input type="submit" value="Oppdater" class="btn btn-primary" />
-        <a routerLink="/a/event/{{ event.id }}">Avbryt</a>
+        <a routerLink="/a/event/{{ eventId }}">Avbryt</a>
       </div>
     </div>
   } @else {

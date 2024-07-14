@@ -1,48 +1,28 @@
 import { HttpClient } from "@angular/common/http"
 import { Injectable } from "@angular/core"
 import { api } from "../../api"
-import { Paginated } from "../../common/pagination.component"
+import {
+  ApiEventAdmin,
+  ApiOrderAdmin,
+  ApiPaymentAdmin,
+  ApiTicketAdmin,
+  ApiTicketgroupAdmin,
+  Paginated,
+} from "../../apitypes"
 
-export interface AdminTicketForCheckinData {
-  id: number
-  order: {
-    id: number
-    [k: string]: any
-  }
-  ticketgroup: {
-    id: number
-    [k: string]: any
-  }
-  [k: string]: any
+export type AdminTicketForCheckinData = ApiTicketAdmin & {
+  order: ApiOrderAdmin
+  ticketgroup: ApiTicketgroupAdmin
 }
 
 export type AdminOrderSearchData = Paginated<
-  {
-    id: number
-    tickets: {
-      id: number
-      event: {
-        id: number
-        [k: string]: any
-      }
-      ticketgroup: {
-        id: number
-        [k: string]: any
-      }
-      [k: string]: any
-    }[]
-    payments: {
-      id: number
-      [k: string]: any
-    }[]
-    is_valid: boolean
-    order_text_id: string
-    time: number
-    name: string | null
-    email: string | null
-    phone: string | null
-    balance: string
-  }[]
+  ApiOrderAdmin & {
+    tickets: (ApiTicketAdmin & {
+      event: ApiEventAdmin
+      ticketgroup: ApiTicketgroupAdmin
+    })[]
+    payments: ApiPaymentAdmin[]
+  }
 >
 
 export interface CheckinOrCheckoutData {
@@ -67,7 +47,7 @@ export class AdminEventCheckinService {
   }
 
   getLastUsedTickets(eventId: number) {
-    return this.http.get<Paginated<AdminTicketForCheckinData[]>>(
+    return this.http.get<Paginated<AdminTicketForCheckinData>>(
       api("ticket"),
       {
         params: {

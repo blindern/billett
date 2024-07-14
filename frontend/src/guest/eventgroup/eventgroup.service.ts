@@ -1,30 +1,11 @@
 import { HttpClient } from "@angular/common/http"
 import { Injectable } from "@angular/core"
 import { api } from "../../api"
+import { ApiDaytheme, ApiEvent, ApiEventgroup } from "../../apitypes"
 
-export interface Eventgroup {
-  id: number
-  title: string
-}
-
-export interface EventgroupExpanded {
-  id: number
-  title: string
-  events: {
-    id: number
-    alias: string | null
-    title: string
-    category: string | null
-    time_start: number
-    location: string | null
-    web_selling_status: string
-    ticket_info: string | null
-  }[]
-  daythemes: {
-    id: number
-    title: string
-    date: number
-  }[]
+export type EventgroupExpanded = ApiEventgroup & {
+  events: ApiEvent[]
+  daythemes: ApiDaytheme[]
 }
 
 @Injectable({
@@ -34,7 +15,7 @@ export class EventgroupService {
   constructor(private http: HttpClient) {}
 
   getList() {
-    return this.http.get<Eventgroup[]>(api("eventgroup"))
+    return this.http.get<ApiEventgroup[]>(api("eventgroup"))
   }
 
   get(id: string) {

@@ -47,6 +47,10 @@ export class AdminEventFormComponent implements OnChanges {
     this.time_end_text = parseTime(this.event.time_end)
   }
 
+  get eventId() {
+    return "id" in this.event ? this.event.id : null
+  }
+
   updateTime(which: "start" | "end") {
     var x = moment(
       this[which == "start" ? "time_start_text" : "time_end_text"],

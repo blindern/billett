@@ -1,37 +1,23 @@
 import { HttpClient } from "@angular/common/http"
 import { Injectable } from "@angular/core"
 import { api } from "../../api"
-import { Paginated } from "../../common/pagination.component"
+import {
+  ApiEventAdmin,
+  ApiOrderAdmin,
+  ApiPaymentAdmin,
+  ApiTicketAdmin,
+  ApiTicketgroupAdmin,
+  Paginated,
+} from "../../apitypes"
 
 export type AdminOrderData = Paginated<
-  {
-    id: number
-    tickets: {
-      id: number
-      event: {
-        id: number
-        [k: string]: any
-      }
-      ticketgroup: {
-        id: number
-        [k: string]: any
-      }
-      [k: string]: any
-    }[]
-    payments: {
-      id: number
-      [k: string]: any
-    }[]
-    is_valid: boolean
-    order_text_id: string
-    time: number
-    name: string | null
-    email: string | null
-    phone: string | null
-    balance: string
-    is_admin: boolean
-    recruiter: string | null
-  }[]
+  ApiOrderAdmin & {
+    tickets: (ApiTicketAdmin & {
+      event: ApiEventAdmin
+      ticketgroup: ApiTicketgroupAdmin
+    })[]
+    payments: ApiPaymentAdmin[]
+  }
 >
 
 @Injectable({

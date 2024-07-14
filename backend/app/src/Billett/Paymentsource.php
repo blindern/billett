@@ -11,6 +11,11 @@ class Paymentsource extends Model implements ApiQueryInterface
 
     protected $table = 'paymentsources';
 
+    protected $casts = [
+        'is_deleted' => 'boolean',
+        'amount' => 'float',
+    ];
+
     protected $apiAllowedFields = ['id', 'paymentgroup_id', 'is_deleted', 'time_created', 'time_deleted', 'user_created', 'user_deleted', 'type', 'title', 'comment', 'amount', 'data'];
 
     protected $apiAllowedRelations = ['paymentgroup'];
@@ -28,11 +33,6 @@ class Paymentsource extends Model implements ApiQueryInterface
     public function setDataAttribute($val)
     {
         $this->attributes['data'] = json_encode($val);
-    }
-
-    public function getAmountAttribute($val)
-    {
-        return (float) $val;
     }
 
     /**

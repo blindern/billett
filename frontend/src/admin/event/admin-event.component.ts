@@ -57,6 +57,10 @@ export class AdminEventComponent implements OnInit {
       })
   }
 
+  plus(a: string | number, b: string | number | null) {
+    return Number(a) + Number(b)
+  }
+
   deleteEvent(event: MouseEvent) {
     event.preventDefault()
 

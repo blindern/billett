@@ -37,6 +37,12 @@ class Event extends Model implements ApiQueryInterface
 
     protected $hidden = ['image'];
 
+    protected $casts = [
+        'is_admin_hidden' => 'boolean',
+        'is_published' => 'boolean',
+        'is_selling' => 'boolean',
+    ];
+
     protected $apiAllowedFields = ['id', 'eventgroup_id', 'alias', 'is_admin_hidden', 'is_published', 'is_selling', 'time_start',
         'time_end', 'title', 'category', 'location', 'ticket_info', 'selling_text', 'max_each_person', 'max_sales', 'description',
         'description_short', 'ticket_text', 'link', 'age_restriction'];
@@ -151,8 +157,8 @@ class Event extends Model implements ApiQueryInterface
                 'expired' => $g ? $g['count_expired'] : 0,
                 'revoked' => $g ? $g['count_revoked'] : 0,
                 'used' => $g ? $g['count_used'] : 0,
-                'sum_price' => $g ? $g['sum_price'] : 0,
-                'sum_fee' => $g ? $g['sum_fee'] : 0,
+                'sum_price' => $g ? (float) $g['sum_price'] : 0,
+                'sum_fee' => $g ? (float) $g['sum_fee'] : 0,
             ];
             $tf = $group->is_normal ? $total['free_normal'] : $total['free'];
             $a['free'] = $group->limit == 0 ? $tf : min($tf, $group->limit - ($a['valid'] + $a['pending']));

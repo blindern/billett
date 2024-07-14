@@ -54,7 +54,8 @@ export class AdminEventCreateComponent implements OnInit {
   }
 
   storeEvent() {
-    if (!this.event || isNaN(this.event.time_start)) return
+    if (!this.event || !this.event.time_start || isNaN(this.event.time_start))
+      return
 
     this.adminEventService.create(this.event).subscribe((data) => {
       this.router.navigateByUrl(`/a/event/${data.id}`)
