@@ -1,7 +1,4 @@
-<page-property
-  name="title"
-  value="Ordre: {{ ctrl.order.order_text_id }}"
-></page-property>
+<page-property name="title" value="Ordre: {{ ctrl.order.order_text_id }}"></page-property>
 
 <div class="admin-order">
   <div class="page-header">
@@ -14,15 +11,8 @@
       Ordre: {{ ctrl.order.order_text_id }}
 
       <span class="pull-right">
-        <a
-          class="btn btn-success"
-          routerLink="/a/order/new/{{ ctrl.order.eventgroup.id }}"
-          accesskey="n"
-          >Ny ordre</a
-        >
-        <a class="btn btn-primary" (click)="ctrl.startEdit()" accesskey="e"
-          >Rediger</a
-        >
+        <a class="btn btn-success" routerLink="/a/order/new/{{ ctrl.order.eventgroup.id }}" accesskey="n">Ny ordre</a>
+        <a class="btn btn-primary" (click)="ctrl.startEdit()" accesskey="e">Rediger</a>
         @if (ctrl.order.is_valid) {
           <a class="btn btn-default" (click)="ctrl.email()">Send e-post</a>
         }
@@ -48,13 +38,7 @@
       <div class="form-group">
         <label for="email" class="col-sm-2 control-label">E-postadresse</label>
         <div class="col-sm-6">
-          <input
-            type="email"
-            class="form-control"
-            [(ngModel)]="ctrl.edit.email"
-            id="email"
-            placeholder="(valgfritt)"
-          />
+          <input type="email" class="form-control" [(ngModel)]="ctrl.edit.email" id="email" placeholder="(valgfritt)" />
         </div>
       </div>
       <div class="form-group">
@@ -109,23 +93,18 @@
       @if (!ctrl.order.is_valid) {
         <div class="alert alert-warning">
           <p>
-            Dette er kun en reservasjon og ikke endelig ordre. For å lage
-            gyldige billetter eller tilordne transaksjonen, må reservasjonen
-            lagres som en endelig ordre.
+            Dette er kun en reservasjon og ikke endelig ordre. For å lage gyldige billetter eller tilordne
+            transaksjonen, må reservasjonen lagres som en endelig ordre.
           </p>
 
           <p>
             @if (ctrl.order.tickets.length > 0) {
-              <button class="btn btn-success" (click)="ctrl.completeOrder()">
-                Marker som betalt og fullfør ordre
-              </button>
+              <button class="btn btn-success" (click)="ctrl.completeOrder()">Marker som betalt og fullfør ordre</button>
             }
             <button class="btn btn-primary" (click)="ctrl.convertOrder()">
               Konverter, men ikke valider billetter enda
             </button>
-            <button class="btn btn-danger" (click)="ctrl.deleteReservation()">
-              Slett reservasjon
-            </button>
+            <button class="btn btn-danger" (click)="ctrl.deleteReservation()">Slett reservasjon</button>
           </p>
         </div>
       }
@@ -186,9 +165,7 @@
             <dt>Tidspunkt</dt>
             <dd>{{ ctrl.order.time | formatdate: "D. MMMM YYYY HH:mm" }}</dd>
             @if (ctrl.order.user_created) {
-              <dd class="text-muted">
-                (Opprettet av {{ ctrl.order.user_created }})
-              </dd>
+              <dd class="text-muted">(Opprettet av {{ ctrl.order.user_created }})</dd>
             }
             <dt>Ordretotal</dt>
             <dd>
@@ -201,8 +178,7 @@
                 <i>
                   <br />
                   Reserverte billetter:
-                  {{ ctrl.total_reserved | price }} (totalt
-                  {{ ctrl.total + ctrl.total_reserved | price }})
+                  {{ ctrl.total_reserved | price }} (totalt {{ ctrl.total + ctrl.total_reserved | price }})
                 </i>
               }
             </dd>
@@ -226,23 +202,17 @@
           <h2>
             Billetter
             <span class="pull-right">
-              <a class="btn btn-default" (click)="ctrl.addTickets()"
-                >Tilorde nye billetter</a
-              >
+              <a class="btn btn-default" (click)="ctrl.addTickets()">Tilorde nye billetter</a>
               @if (ctrl.validtickets.length > 0) {
                 <a
                   class="btn btn-default"
-                  [href]="
-                    ctrl.api('ticket/pdf?ids=' + ctrl.validtickets.join(','))
-                  "
+                  [href]="ctrl.api('ticket/pdf?ids=' + ctrl.validtickets.join(','))"
                   target="_self"
                   >Last ned billetter</a
                 >
               }
               @if (ctrl.validtickets.length > 0) {
-                <a class="btn btn-default" (click)="ctrl.printTickets()"
-                  >Skriv ut billetter</a
-                >
+                <a class="btn btn-default" (click)="ctrl.printTickets()">Skriv ut billetter</a>
               }
             </span>
           </h2>
@@ -274,30 +244,18 @@
                   >
                     <td>
                       @if (ticket.is_valid && !ticket.is_revoked) {
-                        <a
-                          [href]="ctrl.api('ticket/' + ticket.id + '/pdf')"
-                          target="_blank"
-                        >
-                          <span
-                            class="glyphicon glyphicon-eye-open"
-                            title="Last ned PDF"
-                          ></span>
+                        <a [href]="ctrl.api('ticket/' + ticket.id + '/pdf')" target="_blank">
+                          <span class="glyphicon glyphicon-eye-open" title="Last ned PDF"></span>
                         </a>
                       }
                       <a href="" (click)="ctrl.printTicket(ticket.id)">
-                        <span
-                          class="glyphicon glyphicon-print"
-                          title="Skriv ut billett"
-                        ></span>
+                        <span class="glyphicon glyphicon-print" title="Skriv ut billett"></span>
                       </a>
                     </td>
                     <td>{{ ticket.id }}</td>
                     <td>
                       <a routerLink="/a/event/{{ ticket.event.id }}"
-                        >{{
-                          ticket.event.time_start
-                            | formatdate: "D. MMM YYYY HH:mm"
-                        }}: {{ ticket.event.title }}</a
+                        >{{ ticket.event.time_start | formatdate: "D. MMM YYYY HH:mm" }}: {{ ticket.event.title }}</a
                       >
                       <span class="text-muted"
                         ><br />(registrert
@@ -333,10 +291,7 @@
                     </td>
                     <td>{{ ticket.ticketgroup.title }}</td>
                     <td>
-                      {{
-                        ticket.ticketgroup.price + ticket.ticketgroup.fee
-                          | price
-                      }}
+                      {{ ticket.ticketgroup.price + ticket.ticketgroup.fee | price }}
                     </td>
                     <td>{{ ticket.ticketgroup.fee | price }}</td>
                     <td>
@@ -357,10 +312,7 @@
                         ></a>
                       }
                       @if (!ticket.is_valid) {
-                        <a
-                          class="btn btn-sm btn-danger"
-                          (click)="ctrl.deleteTicket(ticket)"
-                          title="Slett reservasjon"
+                        <a class="btn btn-sm btn-danger" (click)="ctrl.deleteTicket(ticket)" title="Slett reservasjon"
                           ><i class="glyphicon glyphicon-remove"></i
                         ></a>
                       }
@@ -374,19 +326,16 @@
           @if (ctrl.order.tickets.length > 1) {
             <div>
               <b>{{ ctrl.ticketcount.valid }}</b>
-              gyldig{{ ctrl.ticketcount.valid == 1 ? "" : "e" }} billett{{
-                ctrl.ticketcount.valid == 1 ? "" : "er"
-              }},
+              gyldig{{ ctrl.ticketcount.valid == 1 ? "" : "e" }} billett{{ ctrl.ticketcount.valid == 1 ? "" : "er" }},
               <b>{{ ctrl.ticketcount.reserved }}</b>
               reservert{{ ctrl.ticketcount.reserved == 1 ? "" : "e" }} billett{{
                 ctrl.ticketcount.reserved == 1 ? "" : "er"
               }}
               og
               <b>{{ ctrl.ticketcount.revoked }}</b>
-              tilbaketruk{{
-                ctrl.ticketcount.revoked == 1 ? "ket" : "ne"
-              }}
-              billett{{ ctrl.ticketcount.revoked ? "" : "er" }}.
+              tilbaketruk{{ ctrl.ticketcount.revoked == 1 ? "ket" : "ne" }} billett{{
+                ctrl.ticketcount.revoked ? "" : "er"
+              }}.
             </div>
           }
         </div>
@@ -397,9 +346,7 @@
           <h2>
             Transaksjoner
             @if (ctrl.order.is_valid) {
-              <a class="pull-right btn btn-default" (click)="ctrl.newPayment()"
-                >Ny transaksjon</a
-              >
+              <a class="pull-right btn btn-default" (click)="ctrl.newPayment()">Ny transaksjon</a>
             }
           </h2>
           @if (ctrl.order.payments.length == 0) {
@@ -407,8 +354,7 @@
           }
           @if (!ctrl.order.is_valid) {
             <p class="alert alert-warning">
-              Ingen transaksjoner kan tilordnes før reservasjonen er konvertert
-              til ordre.
+              Ingen transaksjoner kan tilordnes før reservasjonen er konvertert til ordre.
             </p>
           }
           @if (ctrl.order.payments.length > 0) {
@@ -437,15 +383,11 @@
                     @if (!payment.is_web) {
                       <td>
                         Oppgjør:
-                        <a
-                          routerLink="/a/paymentgroup/{{ payment.paymentgroup.id }}"
-                          >{{ payment.paymentgroup.title }}</a
-                        >
+                        <a routerLink="/a/paymentgroup/{{ payment.paymentgroup.id }}">{{
+                          payment.paymentgroup.title
+                        }}</a>
                         @if (payment.user_created) {
-                          <span class="text-muted"
-                            ><br />Registrert av
-                            {{ payment.user_created }}</span
-                          >
+                          <span class="text-muted"><br />Registrert av {{ payment.user_created }}</span>
                         }
                       </td>
                     }

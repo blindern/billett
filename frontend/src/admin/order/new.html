@@ -4,17 +4,12 @@
   <div class="page-header">
     <h1>
       <span class="eventgroup">
-        <a routerLink="/a/eventgroup/{{ ctrl.eventgroup.id }}">{{
-          ctrl.eventgroup.title
-        }}</a>
+        <a routerLink="/a/eventgroup/{{ ctrl.eventgroup.id }}">{{ ctrl.eventgroup.title }}</a>
       </span>
       Ny ordre
 
       <span class="pull-right">
-        <a
-          class="btn btn-default"
-          routerLink="/a/orders"
-          [queryParams]="{ eventgroup_id: ctrl.eventgroup.id }"
+        <a class="btn btn-default" routerLink="/a/orders" [queryParams]="{ eventgroup_id: ctrl.eventgroup.id }"
           >Ordreliste</a
         >
       </span>
@@ -26,11 +21,7 @@
       <div class="col-md-6">
         <h2>Ordredetaljer</h2>
 
-        <form
-          class="form-horizontal"
-          (ngSubmit)="!form.$valid || ctrl.completeOrder()"
-          name="form"
-        >
+        <form class="form-horizontal" (ngSubmit)="!form.$valid || ctrl.completeOrder()" name="form">
           @if (ctrl.order.id) {
             <div class="form-group">
               <label class="text-right col-sm-4">Ordrenr</label>
@@ -60,9 +51,7 @@
                 class="form-control"
                 placeholder="(valgfritt)"
               />
-              <span class="help-block"
-                >Vi sender kopi av ordre hvis e-post fylles ut</span
-              >
+              <span class="help-block">Vi sender kopi av ordre hvis e-post fylles ut</span>
             </div>
           </div>
           <div class="form-group" form-input-check="form,phone">
@@ -88,15 +77,11 @@
                 class="form-control"
                 placeholder="(valgfritt)"
               />
-              <span class="help-block"
-                >Navn på beboer ved Blindern Studenterhjem</span
-              >
+              <span class="help-block">Navn på beboer ved Blindern Studenterhjem</span>
             </div>
           </div>
           <div class="form-group">
-            <label for="comment" class="col-sm-4 control-label"
-              >Kommentar</label
-            >
+            <label for="comment" class="col-sm-4 control-label">Kommentar</label>
             <div class="col-sm-8">
               <textarea
                 class="form-control"
@@ -105,9 +90,7 @@
                 rows="3"
                 placeholder="(valgfritt)"
               ></textarea>
-              <span class="help-block"
-                >Kommentar er ikke synlig for kunden.</span
-              >
+              <span class="help-block">Kommentar er ikke synlig for kunden.</span>
             </div>
           </div>
           <div class="form-group">
@@ -118,24 +101,16 @@
           </div>
           @if (ctrl.order.tickets && ctrl.order.tickets.length > 0) {
             <div class="form-group">
-              <label class="col-sm-4 control-label" for="printer"
-                >Skriv ut billetter</label
-              >
+              <label class="col-sm-4 control-label" for="printer">Skriv ut billetter</label>
               <div class="col-sm-8">
-                <printer-list
-                  id="printer"
-                  printer="ctrl.printer"
-                  can-disable="true"
-                ></printer-list>
+                <printer-list id="printer" printer="ctrl.printer" can-disable="true"></printer-list>
               </div>
             </div>
           }
 
           @if (ctrl.order.tickets && ctrl.order.tickets.length > 0) {
             <div class="form-group">
-              <label class="col-sm-4 control-label" for="paymentgroup"
-                >Oppgjør</label
-              >
+              <label class="col-sm-4 control-label" for="paymentgroup">Oppgjør</label>
               <div class="col-sm-8">
                 <paymentgroup-select
                   eventgroup-id="ctrl.eventgroup.id"
@@ -158,28 +133,13 @@
                       ng-disabled="!ctrl.paymentgroup"
                     />
                   }
-                  <input
-                    class="btn btn-default"
-                    type="button"
-                    value="Lagre reservasjon"
-                    (click)="ctrl.saveOrder()"
-                  />
-                  <input
-                    class="btn btn-danger"
-                    type="button"
-                    value="Slett"
-                    (click)="ctrl.abortOrder()"
-                  />
+                  <input class="btn btn-default" type="button" value="Lagre reservasjon" (click)="ctrl.saveOrder()" />
+                  <input class="btn btn-danger" type="button" value="Slett" (click)="ctrl.abortOrder()" />
                 </div>
               }
               @if (!ctrl.order.id) {
                 <div>
-                  <input
-                    class="btn btn-primary"
-                    type="button"
-                    value="Registrer"
-                    (click)="ctrl.createBlank()"
-                  />
+                  <input class="btn btn-primary" type="button" value="Registrer" (click)="ctrl.createBlank()" />
                 </div>
               }
             </div>
@@ -209,20 +169,13 @@
                 <tr>
                   <td>
                     <a routerLink="/a/event/{{ group.event.id }}" target="_blank"
-                      >{{
-                        group.event.time_start
-                          | formatdate: "D. MMM YYYY HH:mm"
-                      }}: {{ group.event.title }}</a
+                      >{{ group.event.time_start | formatdate: "D. MMM YYYY HH:mm" }}: {{ group.event.title }}</a
                     >
                   </td>
                   <td>{{ group.ticketgroup.title }}</td>
                   <td>{{ group.num }}</td>
                   <td>
-                    {{
-                      group.num *
-                        (group.ticketgroup.price + group.ticketgroup.fee)
-                        | price
-                    }}
+                    {{ group.num * (group.ticketgroup.price + group.ticketgroup.fee) | price }}
                   </td>
                   <td>
                     <button
@@ -254,10 +207,7 @@
         }
 
         <a class="btn btn-primary" (click)="ctrl.addTickets()"
-          >Legg til{{
-            ctrl.order.tickets.length == 0 ? "" : " flere"
-          }}
-          billetter</a
+          >Legg til{{ ctrl.order.tickets.length == 0 ? "" : " flere" }} billetter</a
         >
       </div>
     </div>
@@ -307,27 +257,19 @@
                   <span class="order-detail">{{::order.phone}}</span>
                 }
                 @if (::order.recruiter) {
-                  <span class="order-detail"
-                    >Vervet av: {{::order.recruiter}}</span
-                  >
+                  <span class="order-detail">Vervet av: {{::order.recruiter}}</span>
                 }
-                @if (
-                  ::(!order.name && !order.email && !order.phone && !order.recruiter)
-                ) {
+                @if (::(!order.name && !order.email && !order.phone && !order.recruiter)) {
                   <span class="order-detail"><i>Ingen detaljer</i></span>
                 }
               </td>
               <td>
                 {{ order.total_valid | price }}
                 @if (order.total_reserved) {
-                  <span
-                    ><br />(reservert: {{ order.total_reserved | price }})</span
-                  >
+                  <span><br />(reservert: {{ order.total_reserved | price }})</span>
                 }
                 @if (order.balance != 0) {
-                  <span class="unbalance"
-                    ><br />(ubalanse: {{ order.balance | price }})</span
-                  >
+                  <span class="unbalance"><br />(ubalanse: {{ order.balance | price }})</span>
                 }
               </td>
               <td>
@@ -339,18 +281,10 @@
                         revoked: ticket.is_revoked,
                       }"
                     >
-                      <a
-                        [href]="::api('ticket/' + ticket.id + '/pdf')"
-                        target="_self"
-                        >#{{::ticket.id}}</a
-                      >
-                      <a routerLink="/a/event/{{ ticket.event.id }}"
-                        >{{::ticket.event.title}}
-                        ({{::ticket.event.time_start|formatdate:'DD.MM \\k\\l
-                  HH'
-
-                        }})</a
-                      >
+                      <a [href]="::api('ticket/' + ticket.id + '/pdf')" target="_self">#{{::ticket.id}}</a>
+                      <a routerLink="/a/event/{{ ticket.event.id }}">
+                        {{::ticket.event.title}} ({{::ticket.event.time_start|formatdate:'DD.MM \\k\\l HH'}})
+                      </a>
                       ({{::ticket.ticketgroup.title}})
                       {{::(ticket.ticketgroup.price+ticket.ticketgroup.fee)|price:0:true}}
                     </li>

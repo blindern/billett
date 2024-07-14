@@ -3,15 +3,7 @@
   <div class="form-group">
     <label for="title" class="col-sm-3 control-label">Tittel</label>
     <div class="col-sm-9 col-md-6">
-      <input
-        type="text"
-        class="form-control"
-        [(ngModel)]="event.title"
-        id="title"
-        name="title"
-        required
-        autofocus
-      />
+      <input type="text" class="form-control" [(ngModel)]="event.title" id="title" name="title" required autofocus />
     </div>
   </div>
   <div class="form-group">
@@ -28,9 +20,7 @@
         required
       />
       @if (event.time_start) {
-        <span class="help-block">{{
-          event.time_start | formatdate: "DD.MM.YYYY HH:mm"
-        }}</span>
+        <span class="help-block">{{ event.time_start | formatdate: "DD.MM.YYYY HH:mm" }}</span>
       } @else if (time_start_text) {
         <span class="help-block">Manglende inndata</span>
       }
@@ -46,9 +36,7 @@
         placeholder="Slutt (DD.MM.YYYY HH:MM)"
       />
       @if (event.time_end) {
-        <span class="help-block">{{
-          event.time_end | formatdate: "DD.MM.YYYY HH:mm"
-        }}</span>
+        <span class="help-block">{{ event.time_end | formatdate: "DD.MM.YYYY HH:mm" }}</span>
       } @else if (time_end_text) {
         <span class="help-block">Manglende inndata</span>
       }
@@ -84,9 +72,7 @@
 
   <h3>Billettbegrensninger</h3>
   <div class="form-group">
-    <label for="max_sales" class="col-sm-3 control-label"
-      >Totalbegrensning</label
-    >
+    <label for="max_sales" class="col-sm-3 control-label">Totalbegrensning</label>
     <div class="col-sm-3">
       <input
         type="number"
@@ -96,15 +82,11 @@
         name="max_sales"
         required
       />
-      <span class="help-block"
-        >Sett 0 dersom det ikke skal være billettsalg.</span
-      >
+      <span class="help-block">Sett 0 dersom det ikke skal være billettsalg.</span>
     </div>
   </div>
   <div class="form-group">
-    <label for="max_normal_sales" class="col-sm-3 control-label"
-      >Normale billetter</label
-    >
+    <label for="max_normal_sales" class="col-sm-3 control-label">Normale billetter</label>
     <div class="col-sm-3">
       <input
         type="number"
@@ -117,9 +99,7 @@
     </div>
   </div>
   <div class="form-group">
-    <label for="max_each_person" class="col-sm-3 control-label"
-      >Per person</label
-    >
+    <label for="max_each_person" class="col-sm-3 control-label">Per person</label>
     <div class="col-sm-3">
       <input
         type="number"
@@ -147,9 +127,8 @@
           placeholder="(valgfritt)"
         />
         <span class="help-block"
-          >Hvis dette feltet fylles ut, vil adresselinja inneholde denne teksten
-          i stedet for nummeret for arrangementet. Kan ikke endres etter det er
-          satt!</span
+          >Hvis dette feltet fylles ut, vil adresselinja inneholde denne teksten i stedet for nummeret for
+          arrangementet. Kan ikke endres etter det er satt!</span
         >
       </div>
     </div>
@@ -168,18 +147,12 @@
       ></textarea>
       <span class="help-block"
         >Tekst på arrangementsiden. Formatteres med
-        <a
-          href="http://daringfireball.net/projects/markdown/syntax"
-          target="_blank"
-          >Markdown</a
-        ></span
+        <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown</a></span
       >
     </div>
   </div>
   <div class="form-group">
-    <label for="description_short" class="col-sm-3 control-label"
-      >Kort beskrivelse</label
-    >
+    <label for="description_short" class="col-sm-3 control-label">Kort beskrivelse</label>
     <div class="col-sm-9 col-md-6">
       <textarea
         class="form-control"
@@ -189,15 +162,11 @@
         placeholder="(valgfritt)"
         rows="2"
       ></textarea>
-      <span class="help-block"
-        >Tekst som kommer ved deling på f.eks. Facebook.</span
-      >
+      <span class="help-block">Tekst som kommer ved deling på f.eks. Facebook.</span>
     </div>
   </div>
   <div class="form-group">
-    <label for="ticket_info" class="col-sm-3 control-label"
-      >Billettinfotekst</label
-    >
+    <label for="ticket_info" class="col-sm-3 control-label">Billettinfotekst</label>
     <div class="col-sm-9 col-md-6">
       <input
         type="text"
@@ -207,15 +176,11 @@
         name="ticket_info"
         placeholder="(valgfritt)"
       />
-      <span class="help-block"
-        >Blir synlig på arrangementlisten i stedet for standardteksten.</span
-      >
+      <span class="help-block">Blir synlig på arrangementlisten i stedet for standardteksten.</span>
     </div>
   </div>
   <div class="form-group">
-    <label for="selling_text" class="col-sm-3 control-label"
-      >Salgsbeskrivelse</label
-    >
+    <label for="selling_text" class="col-sm-3 control-label">Salgsbeskrivelse</label>
     <div class="col-sm-9 col-md-6">
       <textarea
         class="form-control"
@@ -226,21 +191,14 @@
         rows="8"
       ></textarea>
       <span class="help-block"
-        >Tekst i salgsboksen dersom billettinformasjon ikke er annonsert eller
-        hvis ingen billetter er tilgjengelig. Erstatter standardteksten om at
-        informasjon er utilgjengelig. Formatteres med
-        <a
-          href="http://daringfireball.net/projects/markdown/syntax"
-          target="_blank"
-          >Markdown</a
-        ></span
+        >Tekst i salgsboksen dersom billettinformasjon ikke er annonsert eller hvis ingen billetter er tilgjengelig.
+        Erstatter standardteksten om at informasjon er utilgjengelig. Formatteres med
+        <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown</a></span
       >
     </div>
   </div>
   <div class="form-group">
-    <label for="ticket_text" class="col-sm-3 control-label"
-      >Tekst på billettene</label
-    >
+    <label for="ticket_text" class="col-sm-3 control-label">Tekst på billettene</label>
     <div class="col-sm-9 col-md-6">
       <input
         type="text"
@@ -251,8 +209,8 @@
         placeholder="(valgfritt)"
       />
       <span class="help-block"
-        >Dette er tekst som vil stå på alle billettene. Det er også mulig å
-        legge til tekst per billettgruppe i tillegg til denne teksten.</span
+        >Dette er tekst som vil stå på alle billettene. Det er også mulig å legge til tekst per billettgruppe i tillegg
+        til denne teksten.</span
       >
     </div>
   </div>
@@ -267,16 +225,11 @@
         name="link"
         placeholder="(valgfritt)"
       />
-      <span class="help-block"
-        >Dette må være full adresse (lenke) til side hvor man finner mer
-        informasjon.</span
-      >
+      <span class="help-block">Dette må være full adresse (lenke) til side hvor man finner mer informasjon.</span>
     </div>
   </div>
   <div class="form-group">
-    <label for="age_restriction" class="col-sm-3 control-label"
-      >Aldersgrense</label
-    >
+    <label for="age_restriction" class="col-sm-3 control-label">Aldersgrense</label>
     <div class="col-sm-3">
       <input
         type="number"
@@ -292,11 +245,7 @@
   <div class="form-group">
     <div class="col-sm-9 col-sm-offset-3">
       <label>
-        <input
-          type="checkbox"
-          [(ngModel)]="event.is_published"
-          name="is_published"
-        />
+        <input type="checkbox" [(ngModel)]="event.is_published" name="is_published" />
         Publiser arrangementet
       </label>
     </div>
@@ -304,11 +253,7 @@
   <div class="form-group">
     <div class="col-sm-9 col-sm-offset-3">
       <label>
-        <input
-          type="checkbox"
-          [(ngModel)]="event.is_selling"
-          name="is_selling"
-        />
+        <input type="checkbox" [(ngModel)]="event.is_selling" name="is_selling" />
         Annonser informasjon om billetter, inkl. om det ikke er billettsalg
       </label>
     </div>
@@ -316,12 +261,7 @@
   <div class="form-group">
     <div class="col-sm-9 col-sm-offset-3">
       <label for="is_admin_hidden">
-        <input
-          type="checkbox"
-          [(ngModel)]="event.is_admin_hidden"
-          id="is_admin_hidden"
-          name="is_admin_hidden"
-        />
+        <input type="checkbox" [(ngModel)]="event.is_admin_hidden" id="is_admin_hidden" name="is_admin_hidden" />
         Skjult som standard i arrangementlista i admin?
       </label>
     </div>

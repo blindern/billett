@@ -12,29 +12,18 @@
         {{ group.title }}
 
         <span class="pull-right">
-          <a class="btn btn-success" routerLink="/a/order/new/{{ group.id }}"
-            >Ny ordre</a
-          >
-          <a
-            class="btn btn-default"
-            routerLink="/a/orders"
-            [queryParams]="{ eventgroup_id: group.id }"
-            >Ordreliste</a
-          >
+          <a class="btn btn-success" routerLink="/a/order/new/{{ group.id }}">Ny ordre</a>
+          <a class="btn btn-default" routerLink="/a/orders" [queryParams]="{ eventgroup_id: group.id }">Ordreliste</a>
         </span>
       </h1>
     </div>
 
     <ul>
       <li>
-        <a routerLink="/a/eventgroup/{{ group.id }}/sold_tickets_stats"
-          >Billettstatistikk (salgsoversikt)</a
-        >
+        <a routerLink="/a/eventgroup/{{ group.id }}/sold_tickets_stats">Billettstatistikk (salgsoversikt)</a>
       </li>
       <li>
-        <a routerLink="/a/eventgroup/{{ group.id }}/paymentgroups"
-          >Oppgjørsoversikt</a
-        >
+        <a routerLink="/a/eventgroup/{{ group.id }}/paymentgroups">Oppgjørsoversikt</a>
       </li>
     </ul>
 
@@ -43,11 +32,7 @@
     <h2>
       Arrangementliste
       <span class="pull-right">
-        <a
-          routerLink="/a/eventgroup/{{ group.id }}/new_event"
-          class="btn btn-default"
-          >Nytt arrangement</a
-        >
+        <a routerLink="/a/eventgroup/{{ group.id }}/new_event" class="btn btn-default">Nytt arrangement</a>
       </span>
     </h2>
 
@@ -58,20 +43,12 @@
     } @else {
       <div>
         <div class="form-inline">
-          <select
-            class="form-control"
-            [(ngModel)]="filter_sale"
-            ng-change="applyFilter()"
-          >
+          <select class="form-control" [(ngModel)]="filter_sale" ng-change="applyFilter()">
             <option value="">Vis alle salgsmodus</option>
             <option value="1">Kun med billettgrupper</option>
             <option value="0">Kun uten billettgrupper</option>
           </select>
-          <select
-            class="form-control"
-            [(ngModel)]="filter_category"
-            ng-change="applyFilter()"
-          >
+          <select class="form-control" [(ngModel)]="filter_category" ng-change="applyFilter()">
             <option value="-1">Vis alle kategorier</option>
             @for (opt of categories; track opt) {
               <option value="{{ opt }}">
@@ -79,11 +56,7 @@
               </option>
             }
           </select>
-          <select
-            class="form-control"
-            [(ngModel)]="filter_hidden"
-            ng-change="applyFilter()"
-          >
+          <select class="form-control" [(ngModel)]="filter_hidden" ng-change="applyFilter()">
             <option value="0">Ikke vis skjulte oppføringer</option>
             <option value="1">Vis kun sjulte oppføringer</option>
             <option value="">Vis alle oppføringer</option>
@@ -108,10 +81,7 @@
             <tbody>
               <tr>
                 <th colspan="9">
-                  {{
-                    item.value![0].time_start - 21600
-                      | formatdate: "dddd D. MMMM YYYY"
-                  }}
+                  {{ item.value![0].time_start - 21600 | formatdate: "dddd D. MMMM YYYY" }}
                 </th>
               </tr>
               @for (event of item.value; track event) {
@@ -124,9 +94,7 @@
                   <td>
                     <b>{{ event.time_start | formatdate: "HH:mm" }}</b>
                     @if (event.time_end && event.time_end != event.time_start) {
-                      <span>
-                        - {{ event.time_end | formatdate: "HH:mm" }}
-                      </span>
+                      <span> - {{ event.time_end | formatdate: "HH:mm" }} </span>
                     }
                   </td>
                   <td>{{ event.category }}</td>
@@ -138,53 +106,31 @@
                         <a routerLink="/event/{{ event.id }}">Forhåndsvis</a>
                       </span>
                     </div>
-                    <a routerLink="/a/event/{{ event.id }}">{{
-                      event.title
-                    }}</a>
+                    <a routerLink="/a/event/{{ event.id }}">{{ event.title }}</a>
                   </td>
                   <td>
-                    @if (
-                      event.max_sales != 0 ||
-                      event.ticket_count.totals.valid != 0
-                    ) {
+                    @if (event.max_sales != 0 || event.ticket_count.totals.valid != 0) {
                       <span>
-                        <a
-                          routerLink="/a/orders"
-                          [queryParams]="{ 'tickets.event.id': event.id }"
-                          >{{ event.ticket_count.totals.valid }}</a
-                        >
+                        <a routerLink="/a/orders" [queryParams]="{ 'tickets.event.id': event.id }">{{
+                          event.ticket_count.totals.valid
+                        }}</a>
                       </span>
                     }
                   </td>
                   <td>
-                    {{
-                      event.max_sales == 0 ? "" : event.ticket_count.totals.free
-                    }}
+                    {{ event.max_sales == 0 ? "" : event.ticket_count.totals.free }}
                   </td>
                   <td>
                     {{
-                      event.max_sales == 0 &&
-                      event.ticket_count.totals.valid == 0
+                      event.max_sales == 0 && event.ticket_count.totals.valid == 0
                         ? ""
-                        : (event.ticket_count.totals.sum_price +
-                            event.ticket_count.totals.sum_fee | price)
+                        : (event.ticket_count.totals.sum_price + event.ticket_count.totals.sum_fee | price)
                     }}
                   </td>
-                  <td
-                    class="eventgroup-event-action"
-                    (click)="eventTogglePublish(event)"
-                  >
-                    <i
-                      class="glyphicon"
-                      [ngClass]="
-                        event.is_published ? 'glyphicon-ok' : 'glyphicon-remove'
-                      "
-                    ></i>
+                  <td class="eventgroup-event-action" (click)="eventTogglePublish(event)">
+                    <i class="glyphicon" [ngClass]="event.is_published ? 'glyphicon-ok' : 'glyphicon-remove'"></i>
                   </td>
-                  <td
-                    class="eventgroup-event-action"
-                    (click)="eventToggleSelling(event)"
-                  >
+                  <td class="eventgroup-event-action" (click)="eventToggleSelling(event)">
                     <i
                       class="glyphicon"
                       [ngClass]="{

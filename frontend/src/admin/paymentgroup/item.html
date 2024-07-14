@@ -4,31 +4,21 @@
   <div class="page-header">
     <h1>
       <span class="eventgroup">
-        <a
-          href="a/eventgroup/{{
-            ctrl.paymentgroup.eventgroup.id
-          }}/paymentgroups"
-          >{{ ctrl.paymentgroup.eventgroup.title }}</a
-        >
+        <a href="a/eventgroup/{{ ctrl.paymentgroup.eventgroup.id }}/paymentgroups">{{
+          ctrl.paymentgroup.eventgroup.title
+        }}</a>
       </span>
       Oppgjør: {{ ctrl.paymentgroup.title }}
 
       <span class="pull-right hidden-print">
         @if (!ctrl.paymentgroup.time_end && !ctrl.edit) {
-          <button class="btn btn-default" (click)="ctrl.startEdit()">
-            Rediger
-          </button>
+          <button class="btn btn-default" (click)="ctrl.startEdit()">Rediger</button>
         }
-        <button
-          class="btn btn-default"
-          (click)="ctrl.show_details = !ctrl.show_details"
-        >
+        <button class="btn btn-default" (click)="ctrl.show_details = !ctrl.show_details">
           {{ ctrl.show_details ? "Skjul detaljer" : "Vis detaljer" }}
         </button>
         @if (!ctrl.paymentgroup.time_end) {
-          <button class="btn btn-primary" (click)="ctrl.close()">
-            Avslutt/ta oppgjør
-          </button>
+          <button class="btn btn-primary" (click)="ctrl.close()">Avslutt/ta oppgjør</button>
         }
       </span>
     </h1>
@@ -51,9 +41,7 @@
         </div>
       </div>
       <div class="form-group">
-        <label for="description" class="col-sm-2 control-label"
-          >Beskrivelse</label
-        >
+        <label for="description" class="col-sm-2 control-label">Beskrivelse</label>
         <div class="col-sm-6">
           <textarea
             class="form-control"
@@ -76,9 +64,7 @@
   @if (!ctrl.edit) {
     <div>
       @if (!ctrl.paymentgroup.time_end) {
-        <div class="alert alert-warning">
-          <b>NB!</b> Oppgjøret er ikke avsluttet!
-        </div>
+        <div class="alert alert-warning"><b>NB!</b> Oppgjøret er ikke avsluttet!</div>
       }
 
       <div class="row">
@@ -88,18 +74,14 @@
             <dd>{{ ctrl.paymentgroup.title }}</dd>
             <dt>Opprettet</dt>
             <dd>
-              {{
-                ctrl.paymentgroup.time_start | formatdate: "DD.MM.YYYY HH:mm"
-              }}
+              {{ ctrl.paymentgroup.time_start | formatdate: "DD.MM.YYYY HH:mm" }}
               av
               {{ ctrl.paymentgroup.user_created }}
             </dd>
             <dt>Avsluttet</dt>
             @if (ctrl.paymentgroup.time_end) {
               <dd>
-                {{
-                  ctrl.paymentgroup.time_end | formatdate: "DD.MM.YYYY HH:mm"
-                }}
+                {{ ctrl.paymentgroup.time_end | formatdate: "DD.MM.YYYY HH:mm" }}
                 av
                 {{ ctrl.paymentgroup.user_closed }}
               </dd>
@@ -110,10 +92,7 @@
           </dl>
 
           @if (ctrl.paymentgroup.description) {
-            <div
-              class="alert alert-info"
-              marked="ctrl.paymentgroup.description"
-            ></div>
+            <div class="alert alert-info" marked="ctrl.paymentgroup.description"></div>
           }
         </div>
         <div class="col-xs-6">
@@ -122,8 +101,7 @@
             <dt>Solgte billetter</dt>
             @if (ctrl.totals.revoked != 0) {
               <dd>
-                {{ -ctrl.totals.valid | price }} (registrerte) -
-                {{ ctrl.totals.revoked | price }} (refunderte) =
+                {{ -ctrl.totals.valid | price }} (registrerte) - {{ ctrl.totals.revoked | price }} (refunderte) =
                 {{ -ctrl.totals.valid - ctrl.totals.revoked | price }} (netto)
               </dd>
             }
@@ -136,10 +114,7 @@
             <dd>{{ ctrl.totals.payments | price }}</dd>
             <dt>Utestående beløp</dt>
             <dd>
-              {{
-                -ctrl.totals.valid - ctrl.totals.revoked - ctrl.totals.payments
-                  | price
-              }}
+              {{ -ctrl.totals.valid - ctrl.totals.revoked - ctrl.totals.payments | price }}
             </dd>
           </dl>
 
@@ -158,9 +133,7 @@
           <h2>
             Opptelling/kontroll
             @if (!ctrl.paymentgroup.time_end) {
-              <span
-                class="pull-right btn btn-primary hidden-print"
-                (click)="ctrl.newPaymentsource()"
+              <span class="pull-right btn btn-primary hidden-print" (click)="ctrl.newPaymentsource()"
                 >Registrer opptelling</span
               >
             }
@@ -184,24 +157,15 @@
                     <thead>
                       <tr>
                         <th rowspan="2">&nbsp;</th>
-                        @for (
-                          paymentsource of group.cols;
-                          track paymentsource
-                        ) {
+                        @for (paymentsource of group.cols; track paymentsource) {
                           <th>
-                            {{
-                              paymentsource.time_created
-                                | formatdate: "DD.MM.YYYY HH:mm"
-                            }}
+                            {{ paymentsource.time_created | formatdate: "DD.MM.YYYY HH:mm" }}
                           </th>
                         }
                         <th colspan="2">Totaler</th>
                       </tr>
                       <tr>
-                        @for (
-                          paymentsource of group.cols;
-                          track paymentsource
-                        ) {
+                        @for (paymentsource of group.cols; track paymentsource) {
                           <th>
                             {{ paymentsource.user_created }}
                           </th>
@@ -213,24 +177,13 @@
                     <tfoot>
                       <tr>
                         <th>Sum</th>
-                        @for (
-                          paymentsource of group.cols;
-                          track paymentsource
-                        ) {
+                        @for (paymentsource of group.cols; track paymentsource) {
                           <th>
                             {{ paymentsource.amount | price }}
-                            @if (
-                              !group.is_deleted && !ctrl.paymentgroup.time_end
-                            ) {
+                            @if (!group.is_deleted && !ctrl.paymentgroup.time_end) {
                               <span>
                                 <br />
-                                <a
-                                  href=""
-                                  (click)="
-                                    ctrl.deletePaymentsource(paymentsource)
-                                  "
-                                  >Slett</a
-                                >
+                                <a href="" (click)="ctrl.deletePaymentsource(paymentsource)">Slett</a>
                               </span>
                             }
                           </th>
@@ -273,12 +226,8 @@
                         <div>
                           <h4>
                             Kommentar til
-                            {{
-                              paymentsource.time_created
-                                | formatdate: "DD.MM.YYYY HH:mm"
-                            }}
-                            ({{ paymentsource.user_created }},
-                            {{ paymentsource.amount | price }})
+                            {{ paymentsource.time_created | formatdate: "DD.MM.YYYY HH:mm" }}
+                            ({{ paymentsource.user_created }}, {{ paymentsource.amount | price }})
                           </h4>
                           <div marked="paymentsource.comment"></div>
                         </div>
@@ -322,14 +271,8 @@
                         av {{ paymentsource.user_deleted }}.</span
                       >
                     }
-                    @if (
-                      !paymentsource.is_deleted && !ctrl.paymentgroup.time_end
-                    ) {
-                      <a
-                        href=""
-                        (click)="ctrl.deletePaymentsource(paymentsource)"
-                        >Slett</a
-                      >
+                    @if (!paymentsource.is_deleted && !ctrl.paymentgroup.time_end) {
+                      <a href="" (click)="ctrl.deletePaymentsource(paymentsource)">Slett</a>
                     }
                   </p>
                   @if (paymentsource.comment) {
@@ -341,15 +284,10 @@
           }
 
           <!-- utestående beløp -->
-          @if (
-            -ctrl.totals.valid - ctrl.totals.revoked - ctrl.totals.payments != 0
-          ) {
+          @if (-ctrl.totals.valid - ctrl.totals.revoked - ctrl.totals.payments != 0) {
             <h3>
               {{ ctrl.ps.orders_deviation_prefix }}:
-              {{
-                -ctrl.totals.valid - ctrl.totals.revoked - ctrl.totals.payments
-                  | price
-              }}
+              {{ -ctrl.totals.valid - ctrl.totals.revoked - ctrl.totals.payments | price }}
               (ordre i ubalanse)
             </h3>
           }
@@ -381,16 +319,12 @@
 
                 @for (event of category.events; track event) {
                   <div>
-                    <table
-                      class="table table-condensed table-striped paymentgroup-sales"
-                    >
+                    <table class="table table-condensed table-striped paymentgroup-sales">
                       <thead>
                         <tr>
                           <th>
                             <a routerLink="/a/event/{{ event.id }}">
-                              {{::event.time_start|formatdate:'D. MMM YYYY HH:mm'
-
-                              }}:
+                              {{::event.time_start|formatdate:'D. MMM YYYY HH:mm'}}:
                               {{::event.title}}
                             </a>
                           </th>
@@ -399,10 +333,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                        @for (
-                          ticketgroup of event.ticketgroups;
-                          track ticketgroup
-                        ) {
+                        @for (ticketgroup of event.ticketgroups; track ticketgroup) {
                           <tr>
                             <td>{{::ticketgroup.title}}</td>
                             <td>{{::-ticketgroup.paymentgroup_count}}</td>
@@ -432,15 +363,12 @@
         <div class="print-page-section">
           <h2>Ordre i ubalanse</h2>
           <p>
-            Dette er ordre som er registrert i dette oppgjøret hvor billetter
-            ikke stemmer med betalinger. Dette er ikke nødvendigvis noe problem,
-            f.eks. hvis billetter blir tilbaketrukket og man ikke har fått
-            utbetalt beløpet enda.
+            Dette er ordre som er registrert i dette oppgjøret hvor billetter ikke stemmer med betalinger. Dette er ikke
+            nødvendigvis noe problem, f.eks. hvis billetter blir tilbaketrukket og man ikke har fått utbetalt beløpet
+            enda.
           </p>
 
-          <table
-            class="table table-condensed table-striped paymentgroup-inbalance"
-          >
+          <table class="table table-condensed table-striped paymentgroup-inbalance">
             <thead>
               <tr>
                 <th>Ordre</th>
@@ -481,9 +409,7 @@
       @if (ctrl.show_details) {
         <div>
           <h2>Transaksjoner</h2>
-          <table
-            class="table table-condensed table-striped paymentgroup-payments print-page-section"
-          >
+          <table class="table table-condensed table-striped paymentgroup-payments print-page-section">
             <thead>
               <tr>
                 <th>Ordre</th>
@@ -495,10 +421,7 @@
               @for (payment of ctrl.paymentgroup.payments; track payment) {
                 <tr>
                   <td>
-                    <a
-                      routerLink="/a/order/{{ payment.order.id }}"
-                      >{{::payment.order.order_text_id}}</a
-                    >
+                    <a routerLink="/a/order/{{ payment.order.id }}">{{::payment.order.order_text_id}}</a>
                     @if (payment.order.name) {
                       <span>({{::payment.order.name}})</span>
                     }
@@ -511,9 +434,7 @@
           </table>
 
           <h2>Billetter solgt</h2>
-          <table
-            class="table table-condensed table-striped paymentgroup-tickets print-page-section"
-          >
+          <table class="table table-condensed table-striped paymentgroup-tickets print-page-section">
             <thead>
               <tr>
                 <th>Ordre</th>
@@ -528,19 +449,14 @@
               @for (ticket of ctrl.paymentgroup.valid_tickets; track ticket) {
                 <tr>
                   <td>
-                    <a
-                      routerLink="/a/order/{{ ticket.order.id }}"
-                      >{{::ticket.order.order_text_id}}</a
-                    >
+                    <a routerLink="/a/order/{{ ticket.order.id }}">{{::ticket.order.order_text_id}}</a>
                     @if (ticket.order.name) {
                       <span>({{::ticket.order.name}})</span>
                     }
                   </td>
                   <td>
                     <a routerLink="/a/event/{{ ticket.event.id }}"
-                      >{{::ticket.event.time_start|formatdate:'D. MMM YYYY HH:mm'
-
-                      }}: {{::ticket.event.title}}</a
+                      >{{::ticket.event.time_start|formatdate:'D. MMM YYYY HH:mm'}}: {{::ticket.event.title}}</a
                     >
                   </td>
                   <td>{{::ticket.ticketgroup.title}} #{{::ticket.id}}</td>
@@ -555,9 +471,7 @@
           </table>
 
           <h2>Billetter refundert</h2>
-          <table
-            class="table table-condensed table-striped paymentgroup-tickets print-page-section"
-          >
+          <table class="table table-condensed table-striped paymentgroup-tickets print-page-section">
             <thead>
               <tr>
                 <th>Ordre</th>
@@ -572,19 +486,14 @@
               @for (ticket of ctrl.paymentgroup.revoked_tickets; track ticket) {
                 <tr>
                   <td>
-                    <a
-                      routerLink="/a/order/{{ ticket.order.id }}"
-                      >{{::ticket.order.order_text_id}}</a
-                    >
+                    <a routerLink="/a/order/{{ ticket.order.id }}">{{::ticket.order.order_text_id}}</a>
                     @if (ticket.order.name) {
                       <span>({{::ticket.order.name}})</span>
                     }
                   </td>
                   <td>
                     <a routerLink="/a/event/{{ ticket.event.id }}"
-                      >{{::ticket.event.time_start|formatdate:'D. MMM YYYY HH:mm'
-
-                      }}: {{::ticket.event.title}}</a
+                      >{{::ticket.event.time_start|formatdate:'D. MMM YYYY HH:mm'}}: {{::ticket.event.title}}</a
                     >
                   </td>
                   <td>{{::ticket.ticketgroup.title}} #{{::ticket.id}}</td>

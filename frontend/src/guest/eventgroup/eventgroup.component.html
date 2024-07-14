@@ -1,10 +1,7 @@
 <page-states [state]="pageState"></page-states>
 
 @if (group) {
-  <page-property
-    name="description"
-    value="Oversikt over arrangementer for {{ group.title }}"
-  ></page-property>
+  <page-property name="description" value="Oversikt over arrangementer for {{ group.title }}"></page-property>
 
   <div class="eventgroup-page">
     <div class="page-header">
@@ -12,9 +9,7 @@
         {{ group.title }}
         @if (auth.isAdmin$ | async) {
           <span class="pull-right">
-            <a routerLink="/a/eventgroup/{{ group.id }}" class="btn btn-primary"
-              >Admin</a
-            >
+            <a routerLink="/a/eventgroup/{{ group.id }}" class="btn btn-primary">Admin</a>
           </span>
         }
       </h1>
@@ -30,9 +25,7 @@
       <div>
         @if (isFilter) {
           <p>
-            <a routerLink="/eventgroup/{{ group.id }}"
-              >Vis hele arrangementlista</a
-            >
+            <a routerLink="/eventgroup/{{ group.id }}">Vis hele arrangementlista</a>
           </p>
         }
 
@@ -43,13 +36,8 @@
                 <div class="header">
                   <a routerLink="/eventgroup/{{ group.id }}/{{ item.key }}">
                     <span class="date">
-                      <span>{{
-                        item.value[0].time_start - 21600 | formatdate: "dddd"
-                      }}</span>
-                      {{
-                        item.value[0].time_start - 21600
-                          | formatdate: "D. MMMM YYYY"
-                      }}
+                      <span>{{ item.value[0].time_start - 21600 | formatdate: "dddd" }}</span>
+                      {{ item.value[0].time_start - 21600 | formatdate: "D. MMMM YYYY" }}
                     </span>
                     @if (daythemes[item.key]) {
                       <span class="theme">{{ daythemes[item.key] }}</span>
@@ -65,22 +53,14 @@
 
                     <li>
                       <!-- admin links -->
-                      <div
-                        class="edit-link-wrap"
-                        [hidden]="!(auth.isAdmin$ | async)"
-                      >
+                      <div class="edit-link-wrap" [hidden]="!(auth.isAdmin$ | async)">
                         <span class="edit-link">
-                          <a routerLink="/a/event/{{ event.id }}/edit"
-                            >Rediger</a
-                          >
+                          <a routerLink="/a/event/{{ event.id }}/edit">Rediger</a>
                           <a routerLink="/a/event/{{ event.id }}">Detaljert</a>
                         </span>
                       </div>
 
-                      <a
-                        href="event/{{ event.alias || event.id }}"
-                        target="_top"
-                      >
+                      <a href="event/{{ event.alias || event.id }}" target="_top">
                         {{ event.title }}
                       </a>
                       <span
@@ -88,46 +68,22 @@
                         [ngClass]="'category-' + categoryNum(event.category)"
                         [hidden]="!event.category"
                       >
-                        <a
-                          routerLink="/eventgroup/{{ group.id }}/{{
-                            event.category | lowercase
-                          }}"
-                        >
+                        <a routerLink="/eventgroup/{{ group.id }}/{{ event.category | lowercase }}">
                           {{ event.category }}
                         </a>
                       </span>
                     </li>
                     <li>
                       <div [hidden]="!!event.ticket_info">
-                        <span [hidden]="event.web_selling_status != 'unknown'"
-                          >TBA</span
-                        >
-                        <span
-                          [hidden]="event.web_selling_status != 'no_tickets'"
-                        ></span>
-                        <span
-                          [hidden]="event.web_selling_status != 'old'"
-                        ></span>
-                        <span
-                          [hidden]="
-                            event.web_selling_status != 'no_web_tickets'
-                          "
-                        ></span>
-                        <span [hidden]="event.web_selling_status != 'timeout'"
-                          >I døra</span
-                        >
-                        <span [hidden]="event.web_selling_status != 'sold_out'"
-                          >Utsolgt</span
-                        >
+                        <span [hidden]="event.web_selling_status != 'unknown'">TBA</span>
+                        <span [hidden]="event.web_selling_status != 'no_tickets'"></span>
+                        <span [hidden]="event.web_selling_status != 'old'"></span>
+                        <span [hidden]="event.web_selling_status != 'no_web_tickets'"></span>
+                        <span [hidden]="event.web_selling_status != 'timeout'">I døra</span>
+                        <span [hidden]="event.web_selling_status != 'sold_out'">Utsolgt</span>
                         <span [hidden]="event.web_selling_status != 'sale'">
-                          <a
-                            href="event/{{ event.alias || event.id }}"
-                            target="_top"
-                          >
-                            <img
-                              src="/assets/graphics/billettgul.png"
-                              alt="Kjøp billett"
-                            />
+                          <a href="event/{{ event.alias || event.id }}" target="_top">
+                            <img src="/assets/graphics/billettgul.png" alt="Kjøp billett" />
                           </a>
                         </span>
                       </div>

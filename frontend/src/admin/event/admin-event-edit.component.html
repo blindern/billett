@@ -4,31 +4,20 @@
   <div class="admin-event-edit">
     <page-property
       name="title"
-      value="Rediger: {{ event.title }} ({{
-        event.time_start | formatdate: 'DD. MMM'
-      }})"
+      value="Rediger: {{ event.title }} ({{ event.time_start | formatdate: 'DD. MMM' }})"
     ></page-property>
 
     <div class="page-header">
       <h1>
         <span class="eventgroup">
-          <a routerLink="/a/event/{{ event.id }}">{{
-            event.eventgroup.title
-          }}</a>
+          <a routerLink="/a/event/{{ event.id }}">{{ event.eventgroup.title }}</a>
         </span>
         <span>{{ event.title }}</span>
       </h1>
     </div>
 
-    <p>
-      Bilde for arrangementet endres på infosiden for arrangementet (holder musa
-      over bildet).
-    </p>
+    <p>Bilde for arrangementet endres på infosiden for arrangementet (holder musa over bildet).</p>
 
-    <admin-event-form
-      [event]="event"
-      [eventgroupId]="event.eventgroup.id"
-      (submitForm)="storeEvent()"
-    />
+    <admin-event-form [event]="event" [eventgroupId]="event.eventgroup.id" (submitForm)="storeEvent()" />
   </div>
 }

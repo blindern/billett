@@ -4,9 +4,7 @@
   <div class="admin-event-checkin">
     <page-property
       name="title"
-      value="Innsjekking: {{ event.title }} ({{
-        event.time_start | formatdate: 'DD. MMM'
-      }})"
+      value="Innsjekking: {{ event.title }} ({{ event.time_start | formatdate: 'DD. MMM' }})"
     ></page-property>
 
     <div class="page-header">
@@ -17,14 +15,10 @@
           </a>
         </span>
         <a routerLink="/a/event/{{ event.id }}">
-          {{ event.title }} ({{
-            event.time_start | formatdate: "ddd D. MMM YYYY HH.mm"
-          }})
+          {{ event.title }} ({{ event.time_start | formatdate: "ddd D. MMM YYYY HH.mm" }})
         </a>
         <span class="pull-right">
-          <button class="btn btn-primary" (click)="loadAllTickets()">
-            Last inn hele billettlista
-          </button>
+          <button class="btn btn-primary" (click)="loadAllTickets()">Last inn hele billettlista</button>
           <a
             class="btn btn-default"
             routerLink="/a/orders"
@@ -54,13 +48,8 @@
             @for (g of event.ticketgroups; track g.id) {
               <tr>
                 <td>
-                  #{{ g.id }}
-                  <a href="a/event/{{ event.id }}/ticketgroup/{{ g.id }}">{{
-                    g.title
-                  }}</a
-                  >&nbsp;<abbr title="Pris inkl. avgift">{{
-                    g.price + g.fee | price
-                  }}</abbr>
+                  #{{ g.id }} <a href="a/event/{{ event.id }}/ticketgroup/{{ g.id }}">{{ g.title }}</a
+                  >&nbsp;<abbr title="Pris inkl. avgift">{{ g.price + g.fee | price }}</abbr>
                   @if (!g.is_normal) {
                     (teller ikke som normal)
                   }
@@ -72,10 +61,7 @@
                 <td>
                   {{ event.ticket_count.groups[g.id].used }} /
                   {{ event.ticket_count.groups[g.id].valid }}
-                  ({{
-                    event.ticket_count.groups[g.id].valid -
-                      event.ticket_count.groups[g.id].used
-                  }}
+                  ({{ event.ticket_count.groups[g.id].valid - event.ticket_count.groups[g.id].used }}
                   gjenstår)
                 </td>
               </tr>
@@ -90,29 +76,18 @@
               </th>
               <th>
                 {{ event.ticket_count.totals.used }} /
-                <abbr title="Gyldige billetter">{{
-                  event.ticket_count.totals.valid
-                }}</abbr>
+                <abbr title="Gyldige billetter">{{ event.ticket_count.totals.valid }}</abbr>
                 /
                 @if (event.max_normal_sales) {
-                  <abbr title="Billetter lagt ut for salg">{{
-                    event.max_normal_sales
-                  }}</abbr>
-                  (<abbr title="Øvre billettbegrensning">{{
-                    event.max_sales
-                  }}</abbr
+                  <abbr title="Billetter lagt ut for salg">{{ event.max_normal_sales }}</abbr>
+                  (<abbr title="Øvre billettbegrensning">{{ event.max_sales }}</abbr
                   >)
                 }
                 @if (!event.max_normal_sales) {
-                  <abbr title="Billetter lagt ut for salg">{{
-                    event.max_sales
-                  }}</abbr>
+                  <abbr title="Billetter lagt ut for salg">{{ event.max_sales }}</abbr>
                 }
                 <br />
-                ({{
-                  event.ticket_count.totals.valid -
-                    event.ticket_count.totals.used
-                }}
+                ({{ event.ticket_count.totals.valid - event.ticket_count.totals.used }}
                 gjenstår)
               </th>
             </tr>
@@ -125,11 +100,7 @@
         @if (!lastUsedTickets && lastUsedTicketsLoading) {
           <p>Laster data...</p>
         }
-        @if (
-          lastUsedTickets &&
-          lastUsedTickets.length == 0 &&
-          !lastUsedTicketsLoading
-        ) {
+        @if (lastUsedTickets && lastUsedTickets.length == 0 && !lastUsedTicketsLoading) {
           <p>Ingen billetter er innsjekket.</p>
         }
         @if (lastUsedTickets && lastUsedTickets.length > 0) {
@@ -147,9 +118,7 @@
               @for (ticket of lastUsedTickets; track ticket.id) {
                 <tr>
                   <td>
-                    <a routerLink="/a/order/{{ ticket.order.id }}">{{
-                      ticket.order.order_text_id
-                    }}</a
+                    <a routerLink="/a/order/{{ ticket.order.id }}">{{ ticket.order.order_text_id }}</a
                     ><br />
                     {{ ticket.order.time | formatdate: "dd. DD.MM.YYYY HH:mm" }}
 
@@ -162,11 +131,7 @@
                     @if (ticket.order.phone) {
                       <span class="order-detail">{{ ticket.order.phone }}</span>
                     }
-                    @if (
-                      !ticket.order.name &&
-                      !ticket.order.email &&
-                      !ticket.order.phone
-                    ) {
+                    @if (!ticket.order.name && !ticket.order.email && !ticket.order.phone) {
                       <span class="order-detail"><i>Ingen detaljer</i></span>
                     }
                   </td>
@@ -177,29 +142,15 @@
                     }"
                   >
                     @if (ticket.used) {
-                      <div class="checkin-time">
-                        Innsjekket {{ ticket.used | formatdate: "HH:mm:ss" }}
-                      </div>
+                      <div class="checkin-time">Innsjekket {{ ticket.used | formatdate: "HH:mm:ss" }}</div>
                     }
-                    <a href="/api/ticket/{{ ticket.id }}/pdf" target="_self"
-                      >#{{ ticket.id }}</a
-                    >
+                    <a href="/api/ticket/{{ ticket.id }}/pdf" target="_self">#{{ ticket.id }}</a>
                     @if (ticket.is_valid && !ticket.is_revoked) {
                       @if (ticket.used) {
-                        <button
-                          class="btn btn-danger"
-                          (click)="checkout(ticket)"
-                        >
-                          Utsjekk
-                        </button>
+                        <button class="btn btn-danger" (click)="checkout(ticket)">Utsjekk</button>
                       }
                       @if (!ticket.used) {
-                        <button
-                          class="btn btn-success"
-                          (click)="checkin(ticket)"
-                        >
-                          Innsjekk
-                        </button>
+                        <button class="btn btn-success" (click)="checkin(ticket)">Innsjekk</button>
                       }
                     }
                     ({{ ticket.ticketgroup.title }})
@@ -214,18 +165,12 @@
       <div class="col-sm-7">
         <div
           [ngClass]="{
-            'alert-success':
-              keyticket && keyok && !keyticket.isWorking && !ordersLoading,
+            'alert-success': keyticket && keyok && !keyticket.isWorking && !ordersLoading,
             'alert-danger': keyticket && !keyok && !ordersLoading,
           }"
           class="alert checkin-form"
         >
-          <form
-            class="form-horizontal"
-            (ngSubmit)="performSearch()"
-            (input)="queueSearch()"
-            autocomplete="off"
-          >
+          <form class="form-horizontal" (ngSubmit)="performSearch()" (input)="queueSearch()" autocomplete="off">
             <div class="form-group">
               <label class="col-sm-4 control-label">Navn eller strekkode</label>
               <div class="col-sm-8">
@@ -242,44 +187,26 @@
             <div class="form-group">
               <label class="col-sm-4 control-label">E-post</label>
               <div class="col-sm-8">
-                <input
-                  class="form-control"
-                  type="text"
-                  name="email"
-                  [(ngModel)]="searchinput.email"
-                />
+                <input class="form-control" type="text" name="email" [(ngModel)]="searchinput.email" />
               </div>
             </div>
             <div class="form-group">
               <label class="col-sm-4 control-label">Telefon</label>
               <div class="col-sm-8">
-                <input
-                  class="form-control"
-                  type="text"
-                  name="phone"
-                  [(ngModel)]="searchinput.phone"
-                />
+                <input class="form-control" type="text" name="phone" [(ngModel)]="searchinput.phone" />
               </div>
             </div>
             <div class="form-group">
               <label class="col-sm-4 control-label">Ordrenr</label>
               <div class="col-sm-8">
-                <input
-                  class="form-control"
-                  type="text"
-                  name="id"
-                  [(ngModel)]="searchinput.id"
-                />
+                <input class="form-control" type="text" name="id" [(ngModel)]="searchinput.id" />
               </div>
             </div>
             <input type="submit" value="Søk" style="display: none" />
           </form>
 
           @if (!keyticket) {
-            <p>
-              Ved scanning av strekkode vil billett automatisk bli markert som
-              benyttet, dersom mulig.
-            </p>
+            <p>Ved scanning av strekkode vil billett automatisk bli markert som benyttet, dersom mulig.</p>
           }
 
           @if (keyticket) {
@@ -293,10 +220,7 @@
               }
               @if (!keyok) {
                 <p>
-                  <b
-                    >Billetten kan ikke sjekkes inn. Allerede innsjekket eller
-                    ugyldig billett?</b
-                  >
+                  <b>Billetten kan ikke sjekkes inn. Allerede innsjekket eller ugyldig billett?</b>
                 </p>
               }
             }
@@ -322,9 +246,7 @@
                 @for (order of orders.result; track order.id) {
                   <tr [ngClass]="{ invalid: !order.is_valid }">
                     <td>
-                      <a routerLink="/a/order/{{ order.id }}">{{
-                        order.order_text_id
-                      }}</a
+                      <a routerLink="/a/order/{{ order.id }}">{{ order.order_text_id }}</a
                       ><br />
                       {{ order.time | formatdate: "dd. DD.MM.YYYY HH:mm" }}
                       @if (!order.is_valid) {
@@ -345,9 +267,7 @@
                       }
 
                       @if (order.balance != "0.00") {
-                        <span class="unbalance"
-                          ><br />(ubalanse: {{ order.balance | price }})</span
-                        >
+                        <span class="unbalance"><br />(ubalanse: {{ order.balance | price }})</span>
                       }
                     </td>
                     <td>
@@ -360,41 +280,20 @@
                               keyresult: ticket.key == keysearch,
                             }"
                           >
-                            <a
-                              href="/api/ticket/{{ ticket.id }}/pdf"
-                              target="_self"
-                              >#{{ ticket.id }}</a
-                            >
-                            @if (
-                              ticket.event.id == event.id &&
-                              ticket.is_valid &&
-                              !ticket.is_revoked
-                            ) {
+                            <a href="/api/ticket/{{ ticket.id }}/pdf" target="_self">#{{ ticket.id }}</a>
+                            @if (ticket.event.id == event.id && ticket.is_valid && !ticket.is_revoked) {
                               @if (ticket.used) {
-                                <button
-                                  class="btn btn-danger"
-                                  (click)="checkout(ticket)"
-                                >
-                                  Utsjekk
-                                </button>
+                                <button class="btn btn-danger" (click)="checkout(ticket)">Utsjekk</button>
                               }
                               @if (!ticket.used) {
-                                <button
-                                  class="btn btn-success"
-                                  (click)="checkin(ticket)"
-                                >
-                                  Innsjekk
-                                </button>
+                                <button class="btn btn-success" (click)="checkin(ticket)">Innsjekk</button>
                               }
                             }
                             @if (ticket.event.id != event.id) {
                               @if (ticket.event.id != event.id) {
                                 <a routerLink="/a/event/{{ ticket.event.id }}">
                                   {{ ticket.event.title }}
-                                  ({{
-                                    ticket.event.time_start
-                                      | formatdate: "DD.MM \\k\\l HH"
-                                  }})
+                                  ({{ ticket.event.time_start | formatdate: "DD.MM \\k\\l HH" }})
                                 </a>
                               }
                             }
@@ -430,9 +329,7 @@
           } @else if (tickets.length == 0) {
             <p class="text-center">Ingen billetter ble funnet.</p>
           } @else if (tickets.length > 0) {
-            <table
-              class="table table-striped table-condensed ticket-list-table"
-            >
+            <table class="table table-striped table-condensed ticket-list-table">
               <thead>
                 <tr>
                   <th>Ordre</th>
@@ -443,9 +340,7 @@
                 @for (order of tickets; track order.id) {
                   <tr [ngClass]="{ invalid: !order.is_valid }">
                     <td>
-                      <a routerLink="/a/order/{{ order.id }}">{{
-                        order.order_text_id
-                      }}</a
+                      <a routerLink="/a/order/{{ order.id }}">{{ order.order_text_id }}</a
                       ><br />
                       {{ order.time | formatdate: "dd. DD.MM.YYYY HH:mm" }}
                       @if (!order.is_valid) {
@@ -466,9 +361,7 @@
                       }
 
                       @if (parseFloat(order.balance) != 0) {
-                        <span class="unbalance"
-                          ><br />(ubalanse: {{ order.balance | price }})</span
-                        >
+                        <span class="unbalance"><br />(ubalanse: {{ order.balance | price }})</span>
                       }
                     </td>
                     <td>
@@ -480,27 +373,13 @@
                               revoked: ticket.is_revoked,
                             }"
                           >
-                            <a
-                              href="/api/ticket/{{ ticket.id }}/pdf"
-                              target="_self"
-                              >#{{ ticket.id }}</a
-                            >
+                            <a href="/api/ticket/{{ ticket.id }}/pdf" target="_self">#{{ ticket.id }}</a>
                             @if (ticket.is_valid && !ticket.is_revoked) {
                               @if (ticket.used) {
-                                <button
-                                  class="btn btn-danger"
-                                  (click)="checkout(ticket)"
-                                >
-                                  Utsjekk
-                                </button>
+                                <button class="btn btn-danger" (click)="checkout(ticket)">Utsjekk</button>
                               }
                               @if (!ticket.used) {
-                                <button
-                                  class="btn btn-success"
-                                  (click)="checkin(ticket)"
-                                >
-                                  Innsjekk
-                                </button>
+                                <button class="btn btn-success" (click)="checkin(ticket)">Innsjekk</button>
                               }
                             }
                             ({{ ticket.ticketgroup.title }})

@@ -3,39 +3,23 @@
 @if (event) {
   <page-property
     name="title"
-    value="{{ event.title }} ({{
-      event.time_start | formatdate: 'D. MMM \\k\\l HH:mm'
-    }})"
+    value="{{ event.title }} ({{ event.time_start | formatdate: 'D. MMM \\k\\l HH:mm' }})"
   ></page-property>
-  <page-property
-    name="image"
-    value="{{ api('event/' + event.id + '/image') }}"
-  ></page-property>
-  <page-property
-    name="description"
-    value="{{ event.description_short || event.description }}"
-  ></page-property>
+  <page-property name="image" value="{{ api('event/' + event.id + '/image') }}"></page-property>
+  <page-property name="description" value="{{ event.description_short || event.description }}"></page-property>
 
   <div class="event-page">
     <div class="page-header">
       <h1>
         <span class="eventgroup">
-          <a routerLink="/eventgroup/{{ event.eventgroup.id }}">{{
-            event.eventgroup.title
-          }}</a>
+          <a routerLink="/eventgroup/{{ event.eventgroup.id }}">{{ event.eventgroup.title }}</a>
         </span>
         {{ event.title }}
-        <span class="eventdate-header"
-          >({{ event.time_start | formatdate: "DD.MM" }})</span
-        >
+        <span class="eventdate-header">({{ event.time_start | formatdate: "DD.MM" }})</span>
         @if (auth.isLoggedIn$ | async) {
           <span class="pull-right">
-            <a routerLink="/a/event/{{ event.id }}" class="btn btn-primary"
-              >Admin</a
-            >
-            <a routerLink="/a/event/{{ event.id }}/edit" class="btn btn-primary"
-              >Rediger</a
-            >
+            <a routerLink="/a/event/{{ event.id }}" class="btn btn-primary">Admin</a>
+            <a routerLink="/a/event/{{ event.id }}/edit" class="btn btn-primary">Rediger</a>
           </span>
         }
       </h1>
@@ -106,8 +90,8 @@
               <div class="panel panel-default">
                 <div class="panel-body">
                   <div>
-                    Informasjon om billetter for dette arrangementet er for
-                    øyeblikket ikke tilgjengelig. Sjekk tilbake senere.
+                    Informasjon om billetter for dette arrangementet er for øyeblikket ikke tilgjengelig. Sjekk tilbake
+                    senere.
                   </div>
                 </div>
               </div>
@@ -115,17 +99,14 @@
 
             @if (event_status == "old") {
               <div class="panel panel-default">
-                <div class="panel-body">
-                  Billettsalg for arrangementet er avsluttet.
-                </div>
+                <div class="panel-body">Billettsalg for arrangementet er avsluttet.</div>
               </div>
             }
 
             @if (event_status == "no_web_tickets") {
               <div class="panel panel-default">
                 <div class="panel-body">
-                  Dette arrangementet selges ikke på nett eller har foreløpig
-                  ingen tilgjengelige billetter.
+                  Dette arrangementet selges ikke på nett eller har foreløpig ingen tilgjengelige billetter.
                 </div>
               </div>
             }
@@ -133,8 +114,7 @@
             @if (event_status == "timeout") {
               <div class="panel panel-default">
                 <div class="panel-body">
-                  Nettsalget for dette arrangementet har avsluttet. Evt.
-                  tilgjengelige billetter selges i døra.
+                  Nettsalget for dette arrangementet har avsluttet. Evt. tilgjengelige billetter selges i døra.
                 </div>
               </div>
             }
@@ -142,31 +122,23 @@
             @if (event_status == "sold_out") {
               <div class="panel panel-default">
                 <div class="panel-body">
-                  Arrangementet er dessverre utsolgt. Sjekk tilbake senere for
-                  se å om det kanskje blir gjort nye billetter tilgjengelig.
+                  Arrangementet er dessverre utsolgt. Sjekk tilbake senere for se å om det kanskje blir gjort nye
+                  billetter tilgjengelig.
                 </div>
               </div>
             }
           </div>
         }
 
-        @if (
-          (!reservation && event_status == "sale") ||
-          (reservation && event_status != "no_tickets")
-        ) {
+        @if ((!reservation && event_status == "sale") || (reservation && event_status != "no_tickets")) {
           <div>
-            @if (
-              reservation && reservation.data.tickets[0].event.id != event.id
-            ) {
+            @if (reservation && reservation.data.tickets[0].event.id != event.id) {
               <div class="panel panel-warning">
                 <div class="panel-heading">Kjøp billetter</div>
                 <div class="panel-body">
                   Du holder allerede på å bestille billetter til
                   <a
-                    href="event/{{
-                      reservation.data.tickets[0].event.alias ||
-                        reservation.data.tickets[0].event.id
-                    }}"
+                    href="event/{{ reservation.data.tickets[0].event.alias || reservation.data.tickets[0].event.id }}"
                     >{{ reservation.data.tickets[0].event.title }}</a
                   >
                   og må fullføre/avbryte den bestillingen først.
@@ -174,24 +146,14 @@
               </div>
             }
 
-            @if (
-              (!reservation ||
-                reservation.data.tickets[0].event.id == event.id) &&
-              loadingReservation
-            ) {
+            @if ((!reservation || reservation.data.tickets[0].event.id == event.id) && loadingReservation) {
               <div class="panel panel-info buy-form">
                 <div class="panel-heading">Kjøp billetter</div>
-                <div class="panel-body">
-                  Ser etter eksisterende ordrereservasjon ...
-                </div>
+                <div class="panel-body">Ser etter eksisterende ordrereservasjon ...</div>
               </div>
             }
 
-            @if (
-              (!reservation ||
-                reservation.data.tickets[0].event.id == event.id) &&
-              !loadingReservation
-            ) {
+            @if ((!reservation || reservation.data.tickets[0].event.id == event.id) && !loadingReservation) {
               <div class="panel panel-info buy-form">
                 <div class="panel-heading">Kjøp billetter</div>
                 <div class="panel-body">
@@ -204,16 +166,12 @@
                     @if (!reservation) {
                       <div>
                         <p>
-                          Ved kjøp av billetter får du tilsendt en elektronisk
-                          billett i PDF-format på e-post som printes ut eller
-                          tas med på mobiltelefon til arrangementet.
+                          Ved kjøp av billetter får du tilsendt en elektronisk billett i PDF-format på e-post som
+                          printes ut eller tas med på mobiltelefon til arrangementet.
                           <a routerLink="/hjelp">Informasjon om billetter</a>
                         </p>
 
-                        @for (
-                          ticketgroup of event.ticketgroups;
-                          track ticketgroup.id
-                        ) {
+                        @for (ticketgroup of event.ticketgroups; track ticketgroup.id) {
                           <div class="ticketgroup">
                             <div class="meta">
                               <div class="title">
@@ -226,21 +184,12 @@
                               </div>
                               <div class="price">
                                 <span class="price-label">Pris:</span>
-                                {{
-                                  ticketgroup.price + ticketgroup.fee
-                                    | price: true
-                                }}
-                                <span class="price-fee"
-                                  >Hvorav {{ ticketgroup.fee | price: true }} i
-                                  gebyr</span
-                                >
+                                {{ ticketgroup.price + ticketgroup.fee | price: true }}
+                                <span class="price-fee">Hvorav {{ ticketgroup.fee | price: true }} i gebyr</span>
                               </div>
                             </div>
                             <div class="count">
-                              <span
-                                class="value"
-                                ng-init="ticketgroup.order_count=0"
-                              >
+                              <span class="value" ng-init="ticketgroup.order_count=0">
                                 {{ ticketgroup.order_count }}
                               </span>
                               <button
@@ -267,30 +216,20 @@
                     @if (reservation) {
                       <div>
                         <p>
-                          Du har nå reservert billetter. For å ikke risikere og
-                          miste reservasjonen må du fullføre eller oppdatere
-                          skjemaet innen 10 minutter.
+                          Du har nå reservert billetter. For å ikke risikere og miste reservasjonen må du fullføre eller
+                          oppdatere skjemaet innen 10 minutter.
                         </p>
 
                         <div class="form-group">
-                          <label class="text-right col-sm-4"
-                            >Reserverte billetter</label
-                          >
+                          <label class="text-right col-sm-4">Reserverte billetter</label>
                           <div class="col-sm-8">
-                            @for (
-                              ticket of reservation.data.tickets;
-                              track ticket
-                            ) {
+                            @for (ticket of reservation.data.tickets; track ticket) {
                               <div>
                                 {{ ticket.ticketgroup.title }} #{{ ticket.id }}
                                 <span class="reservation-ticket-price"
-                                  >{{
-                                    ticket.ticketgroup.price +
-                                      ticket.ticketgroup.fee | price: true
-                                  }}
+                                  >{{ ticket.ticketgroup.price + ticket.ticketgroup.fee | price: true }}
                                   (hvorav
-                                  {{ ticket.ticketgroup.fee | price: true }} i
-                                  gebyr)</span
+                                  {{ ticket.ticketgroup.fee | price: true }} i gebyr)</span
                                 >
                               </div>
                             }
@@ -302,12 +241,7 @@
                     @if (vipps_checkout) {
                       <p class="text-center">
                         @if (reservation) {
-                          <input
-                            class="btn btn-default"
-                            type="button"
-                            value="Avbryt"
-                            (click)="abortOrder()"
-                          />
+                          <input class="btn btn-default" type="button" value="Avbryt" (click)="abortOrder()" />
                         }
                       </p>
                     }
@@ -320,25 +254,15 @@
                       <div class="reservation-details">
                         <hr />
                         <div class="form-group">
-                          <label class="text-right col-sm-4"
-                            >Totalt å betale</label
-                          >
+                          <label class="text-right col-sm-4">Totalt å betale</label>
                           <div class="col-sm-8">
                             <b>{{
-                              (reservation
-                                ? reservation!.data.total_amount
-                                : newres.total_amount
-                              ) | price: true
+                              (reservation ? reservation!.data.total_amount : newres.total_amount) | price: true
                             }}</b>
                           </div>
                         </div>
-                        <div
-                          class="form-group"
-                          form-input-check="form,recruiter"
-                        >
-                          <label class="control-label col-sm-4"
-                            >Ev. vervet av</label
-                          >
+                        <div class="form-group" form-input-check="form,recruiter">
+                          <label class="control-label col-sm-4">Ev. vervet av</label>
                           <div class="col-sm-8">
                             <input
                               type="text"
@@ -359,12 +283,7 @@
                           >
                           </vipps-checkout-button>
                           @if (reservation) {
-                            <input
-                              class="btn btn-default"
-                              type="button"
-                              value="Avbryt"
-                              (click)="abortOrder()"
-                            />
+                            <input class="btn btn-default" type="button" value="Avbryt" (click)="abortOrder()" />
                           }
                         </p>
                         @if (auth.isVippsTest$ | async) {
@@ -383,9 +302,7 @@
                     }
                   </form>
                   @if (!vipps_checkout) {
-                    <div class="text-center text-muted">
-                      Billettprisene inkluderer evt. mva og billettgebyr.
-                    </div>
+                    <div class="text-center text-muted">Billettprisene inkluderer evt. mva og billettgebyr.</div>
                   }
                 </div>
               </div>

@@ -10,88 +10,48 @@
 
       @if (search.eventgroup_id) {
         <span class="pull-right">
-          <a
-            class="btn btn-success"
-            routerLink="/a/order/new/{{ search.eventgroup_id }}"
-            accesskey="n"
-          >
-            Ny ordre
-          </a>
+          <a class="btn btn-success" routerLink="/a/order/new/{{ search.eventgroup_id }}" accesskey="n"> Ny ordre </a>
         </span>
       }
     </h1>
   </div>
 
-  <form
-    class="row form-horizontal"
-    autocomplete="off"
-    (input)="formChanged($event)"
-  >
+  <form class="row form-horizontal" autocomplete="off" (input)="formChanged($event)">
     <div class="col-sm-6">
       <div class="form-group">
         <label class="col-sm-4 control-label">Ordrenr</label>
         <div class="col-sm-8">
-          <input
-            class="form-control"
-            type="text"
-            name="id"
-            [(ngModel)]="search.id"
-          />
+          <input class="form-control" type="text" name="id" [(ngModel)]="search.id" />
         </div>
       </div>
       <div class="form-group">
         <label class="col-sm-4 control-label">Ordretekstnr</label>
         <div class="col-sm-8">
-          <input
-            class="form-control"
-            type="text"
-            name="order_text_id"
-            [(ngModel)]="search.order_text_id"
-          />
+          <input class="form-control" type="text" name="order_text_id" [(ngModel)]="search.order_text_id" />
         </div>
       </div>
       <div class="form-group">
         <label class="col-sm-4 control-label">Billettnr</label>
         <div class="col-sm-8">
-          <input
-            class="form-control"
-            type="text"
-            name="ticket_id"
-            [(ngModel)]="search['tickets.id']"
-          />
+          <input class="form-control" type="text" name="ticket_id" [(ngModel)]="search['tickets.id']" />
         </div>
       </div>
       <div class="form-group">
         <label class="col-sm-4 control-label">Strekkode</label>
         <div class="col-sm-8">
-          <input
-            class="form-control"
-            type="text"
-            name="ticket_key"
-            [(ngModel)]="search['tickets.key']"
-          />
+          <input class="form-control" type="text" name="ticket_key" [(ngModel)]="search['tickets.key']" />
         </div>
       </div>
       <div class="form-group">
         <label class="col-sm-4 control-label">Arrangement (ID)</label>
         <div class="col-sm-8">
-          <input
-            class="form-control"
-            type="text"
-            name="event_id"
-            [(ngModel)]="search['tickets.event.id']"
-          />
+          <input class="form-control" type="text" name="event_id" [(ngModel)]="search['tickets.event.id']" />
         </div>
       </div>
       <div class="form-group">
         <label class="col-sm-4 control-label">Arrangement (tittel)</label>
         <div class="col-sm-8">
-          <input
-            class="form-control"
-            type="text"
-            name="event_title"
-            [(ngModel)]="search['tickets.event.title']"
-          />
+          <input class="form-control" type="text" name="event_title" [(ngModel)]="search['tickets.event.title']" />
         </div>
       </div>
     </div>
@@ -110,44 +70,25 @@
       <div class="form-group">
         <label class="col-sm-4 control-label">Navn</label>
         <div class="col-sm-8">
-          <input
-            class="form-control"
-            type="text"
-            name="name"
-            [(ngModel)]="search.name"
-          />
+          <input class="form-control" type="text" name="name" [(ngModel)]="search.name" />
         </div>
       </div>
       <div class="form-group">
         <label class="col-sm-4 control-label">E-post</label>
         <div class="col-sm-8">
-          <input
-            class="form-control"
-            type="text"
-            name="email"
-            [(ngModel)]="search.email"
-          />
+          <input class="form-control" type="text" name="email" [(ngModel)]="search.email" />
         </div>
       </div>
       <div class="form-group">
         <label class="col-sm-4 control-label">Telefon</label>
         <div class="col-sm-8">
-          <input
-            class="form-control"
-            type="text"
-            name="phone"
-            [(ngModel)]="search.phone"
-          />
+          <input class="form-control" type="text" name="phone" [(ngModel)]="search.phone" />
         </div>
       </div>
       <div class="form-group">
         <label class="col-sm-4 control-label">Status</label>
         <div class="col-sm-8">
-          <select
-            class="form-control"
-            name="status"
-            [(ngModel)]="search.status"
-          >
+          <select class="form-control" name="status" [(ngModel)]="search.status">
             @for (status of search_status; track status.id) {
               <option [value]="status.id">{{ status.val }}</option>
             }
@@ -178,8 +119,7 @@
         @for (order of orders.result; track order) {
           <tr [ngClass]="{ invalid: !order.is_valid }">
             <td>
-              <a routerLink="/a/order/{{ order.id }}">
-                {{ order.order_text_id }}</a
+              <a routerLink="/a/order/{{ order.id }}"> {{ order.order_text_id }}</a
               ><br />
               {{ order.time | formatdate: "dd. DD.MM.YYYY HH:mm" }}
               @if (!order.is_valid) {
@@ -202,27 +142,19 @@
                 <span class="order-detail">{{ order.phone }}</span>
               }
               @if (order.recruiter) {
-                <span class="order-detail">
-                  Vervet av: {{ order.recruiter }}
-                </span>
+                <span class="order-detail"> Vervet av: {{ order.recruiter }} </span>
               }
-              @if (
-                !order.name && !order.email && !order.phone && !order.recruiter
-              ) {
+              @if (!order.name && !order.email && !order.phone && !order.recruiter) {
                 <span class="order-detail"><i>Ingen detaljer</i></span>
               }
             </td>
             <td>
               {{ order.total_valid | price }}
               @if (order.total_reserved) {
-                <span>
-                  <br />(reservert: {{ order.total_reserved | price }})
-                </span>
+                <span> <br />(reservert: {{ order.total_reserved | price }}) </span>
               }
               @if (order.balance !== "0.00") {
-                <span class="unbalance">
-                  <br />(ubalanse: {{ order.balance | price }})
-                </span>
+                <span class="unbalance"> <br />(ubalanse: {{ order.balance | price }}) </span>
               }
 
               <!--<div ng-repeat="payment in order.payments">
@@ -240,22 +172,12 @@
                       revoked: ticket.is_revoked,
                     }"
                   >
-                    <a
-                      [href]="api('ticket/' + ticket.id + '/pdf')"
-                      target="_self"
-                    >
-                      #{{ ticket.id }}
-                    </a>
+                    <a [href]="api('ticket/' + ticket.id + '/pdf')" target="_self"> #{{ ticket.id }} </a>
                     <a routerLink="/a/event/{{ ticket.event.id }}">
-                      {{ ticket.event.title }} ({{
-                        ticket.event.time_start | formatdate: "DD.MM \\k\\l HH"
-                      }})
+                      {{ ticket.event.title }} ({{ ticket.event.time_start | formatdate: "DD.MM \\k\\l HH" }})
                     </a>
                     ({{ ticket.ticketgroup.title }})
-                    {{
-                      ticket.ticketgroup.price + ticket.ticketgroup.fee
-                        | price: 0 : true
-                    }}
+                    {{ ticket.ticketgroup.price + ticket.ticketgroup.fee | price: 0 : true }}
                   </li>
                 }
               </ul>

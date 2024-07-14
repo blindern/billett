@@ -33,13 +33,7 @@
 
             <a routerLink="/event/{{ event.alias || event.id }}">{{ event.title }}</a>
             @if (event.category) {
-              <span
-                class="category"
-                [class.category-{{
-                categoryNum(event.category)
-                }}]
-                >{{ event.category }}</span
-              >
+              <span class="category" [class.category-{{ categoryNum(event.category) }}]>{{ event.category }}</span>
             }
           </li>
           <li>
@@ -66,10 +60,7 @@
                 @if (event.web_selling_status == "sale") {
                   <span>
                     <a routerLink="/event/{{ event.alias || event.id }}">
-                      <img
-                        src="/assets/graphics/billettgul.png"
-                        alt="Kjøp billett"
-                      />
+                      <img src="/assets/graphics/billettgul.png" alt="Kjøp billett" />
                     </a>
                   </span>
                 }

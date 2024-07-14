@@ -12,25 +12,17 @@
 <div class="container" [class.noadmin]="!isAdminPage()">
   <header class="header navbar" ng-controller="HeaderController">
     <h3 class="navbar-left">
-      <a routerLink="/" class="text-muted">
-        <img src="/assets/graphics/uka_gul_pikto.gif" alt="" />UKA på Blindern
-      </a>
+      <a routerLink="/" class="text-muted"> <img src="/assets/graphics/uka_gul_pikto.gif" alt="" />UKA på Blindern </a>
     </h3>
     <ul class="nav nav-pills navbar-right">
       <li [activeFor]="['/', '/eventgroup/*', '/event/*']">
-        <a routerLink="/eventgroup/9"
-          ><span class="glyphicon glyphicon-list"></span> Arrangementer</a
-        >
+        <a routerLink="/eventgroup/9"><span class="glyphicon glyphicon-list"></span> Arrangementer</a>
       </li>
       <li [activeFor]="['/salgsbetingelser']">
-        <a routerLink="/salgsbetingelser"
-          ><span class="glyphicon glyphicon-flash"></span> Salgsbetingelser</a
-        >
+        <a routerLink="/salgsbetingelser"><span class="glyphicon glyphicon-flash"></span> Salgsbetingelser</a>
       </li>
       <li [activeFor]="['/hjelp']">
-        <a routerLink="/hjelp"
-          ><span class="glyphicon glyphicon-question-sign"></span> Hjelp</a
-        >
+        <a routerLink="/hjelp"><span class="glyphicon glyphicon-question-sign"></span> Hjelp</a>
       </li>
     </ul>
   </header>
@@ -38,9 +30,8 @@
   @if (loggedInButNoAccess) {
     <div>
       <p class="text-center">
-        <b>NB!</b> Du er innlogget som
-        <u>{{ (this.auth.user$ | async)?.realname }}</u> men har ikke tilgang
-        til dette systemet.
+        <b>NB!</b> Du er innlogget som <u>{{ (this.auth.user$ | async)?.realname }}</u> men har ikke tilgang til dette
+        systemet.
         <a routerLink="/logout" target="_self">Logg ut</a>
       </p>
       <hr />

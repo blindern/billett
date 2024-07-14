@@ -1,16 +1,8 @@
 <div *ngIf="!order">Vennligst vent...</div>
 
 <div *ngIf="order">
-  <page-property
-    name="title"
-    value="Kvittering"
-    *ngIf="payment.status == 'ACCEPTED'"
-  ></page-property>
-  <page-property
-    name="title"
-    value="Ordrebekreftelse"
-    *ngIf="payment.status != 'ACCEPTED'"
-  ></page-property>
+  <page-property name="title" value="Kvittering" *ngIf="payment.status == 'ACCEPTED'"></page-property>
+  <page-property name="title" value="Ordrebekreftelse" *ngIf="payment.status != 'ACCEPTED'"></page-property>
 
   <div class="page-header">
     @if (payment.status != "ACCEPTED") {
@@ -22,17 +14,13 @@
 
   @if (payment.status != "ACCEPTED") {
     <p>
-      Din bestilling har blitt <b>vellykket gjennomført</b>. Du vil motta
-      billett og kvittering på e-post. Kontroller at e-postadressen nedenfor er
-      riktig. Kontakt
+      Din bestilling har blitt <b>vellykket gjennomført</b>. Du vil motta billett og kvittering på e-post. Kontroller at
+      e-postadressen nedenfor er riktig. Kontakt
       <a href="mailto:billett@blindernuka.no">billett&#64;blindernuka.no</a>
       hvis du ikke mottar e-posten.
     </p>
   } @else {
-    <p>
-      Din ordre er registrert og du vil motta e-post så fort betalingen blir
-      registrert.
-    </p>
+    <p>Din ordre er registrert og du vil motta e-post så fort betalingen blir registrert.</p>
   }
 
   <h2>Ordreinformasjon</h2>
@@ -69,9 +57,8 @@
   <h3>Billettspesifikasjon</h3>
   <ul>
     <li *ngFor="let ticket of order.tickets">
-      {{ ticket.event.time_start | formatdate: "DD.MM.YYYY HH:mm" }}:
-      {{ ticket.event.title }}: {{ ticket.ticketgroup.title }} ({{
-        ticket.ticketgroup.price + ticket.ticketgroup.fee | price: true
+      {{ ticket.event.time_start | formatdate: "DD.MM.YYYY HH:mm" }}: {{ ticket.event.title }}:
+      {{ ticket.ticketgroup.title }} ({{ ticket.ticketgroup.price + ticket.ticketgroup.fee | price: true
       }}<!--
       -->
       @if (ticket.ticketgroup.fee) {

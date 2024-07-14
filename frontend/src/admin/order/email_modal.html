@@ -3,16 +3,11 @@
     <h3 class="modal-title">Send ordredetaljer på e-post</h3>
   </div>
   <div class="modal-body">
-    <p>
-      E-posten som sendes inneholder ordredetaljer, billettinformasjon,
-      betalingsoversikt og billetter i PDF.
-    </p>
+    <p>E-posten som sendes inneholder ordredetaljer, billettinformasjon, betalingsoversikt og billetter i PDF.</p>
     @if (!ctrl.sending) {
       <form class="form-horizontal" (ngSubmit)="ctrl.send()">
         <div class="form-group">
-          <label for="email" class="col-sm-4 control-label"
-            >E-postadresse</label
-          >
+          <label for="email" class="col-sm-4 control-label">E-postadresse</label>
           <div class="col-sm-7">
             <input
               type="email"
@@ -23,9 +18,7 @@
               autofocus=""
             />
             @if (ctrl.order.email) {
-              <span class="help-block"
-                >Fyll inn feltet hvis annen adresse ønskes</span
-              >
+              <span class="help-block">Fyll inn feltet hvis annen adresse ønskes</span>
             }
           </div>
         </div>
@@ -40,8 +33,8 @@
               placeholder="(valgfritt)"
             ></textarea>
             <span class="help-block"
-              >Skriv gjerne under så mottaker kan forstå hvem som har sendt
-              e-posten ved f.eks. ytterligere henvendelser.</span
+              >Skriv gjerne under så mottaker kan forstå hvem som har sendt e-posten ved f.eks. ytterligere
+              henvendelser.</span
             >
           </div>
         </div>
@@ -53,13 +46,7 @@
               value="Send e-post"
               ng-disabled="!ctrl.email &amp;&amp; !ctrl.order.email"
             />
-            <button
-              type="button"
-              class="btn btn-default"
-              (click)="ctrl.cancel()"
-            >
-              Avbryt
-            </button>
+            <button type="button" class="btn btn-default" (click)="ctrl.cancel()">Avbryt</button>
           </div>
         </div>
       </form>

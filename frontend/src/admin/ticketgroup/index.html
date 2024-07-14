@@ -1,9 +1,7 @@
 <div class="admin-ticketgroup-item">
   <page-property
     name="title"
-    value="{{ ticketgroup.event.title }} ({{
-      event.time_start | formatdate: 'DD. MMM'
-    }}): {{ ticketgroup.title }}"
+    value="{{ ticketgroup.event.title }} ({{ event.time_start | formatdate: 'DD. MMM' }}): {{ ticketgroup.title }}"
   ></page-property>
 
   <div class="page-header">
@@ -17,15 +15,11 @@
   <h3>Billettgruppe</h3>
 
   <p [hidden]="!ticketgroup.has_tickets">
-    Billettgruppen har enten reserverte eller tilknyttede billetter. Derfor er
-    en del av feltene utilgjengelig for endringer.
+    Billettgruppen har enten reserverte eller tilknyttede billetter. Derfor er en del av feltene utilgjengelig for
+    endringer.
   </p>
 
-  <form
-    (ngSubmit)="updateTicketgroup()"
-    class="form-horizontal"
-    autocomplete="off"
-  >
+  <form (ngSubmit)="updateTicketgroup()" class="form-horizontal" autocomplete="off">
     <div class="form-group">
       <label for="title" class="col-sm-3 control-label">Tittel</label>
       <div class="col-sm-7">
@@ -42,9 +36,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="ticket_text" class="col-sm-3 control-label"
-        >Billett-tekst</label
-      >
+      <label for="ticket_text" class="col-sm-3 control-label">Billett-tekst</label>
       <div class="col-sm-7">
         <input
           type="text"
@@ -54,9 +46,7 @@
           placeholder="(valgfritt)"
           ng-disabled="ticketgroup.has_tickets"
         />
-        <span class="help-block"
-          >Kan f.eks. være gyldighetsinformasjon for studentbillett.</span
-        >
+        <span class="help-block">Kan f.eks. være gyldighetsinformasjon for studentbillett.</span>
       </div>
     </div>
 
@@ -82,16 +72,12 @@
           placeholder="(valgfritt)"
           ng-disabled="ticketgroup.has_tickets"
         />
-        <span class="help-block"
-          >Evt. billettgebyr regnes i tillegg til billettpris</span
-        >
+        <span class="help-block">Evt. billettgebyr regnes i tillegg til billettpris</span>
       </div>
     </div>
 
     <div class="form-group">
-      <label for="max_sales" class="col-sm-3 control-label"
-        >Antall billetter</label
-      >
+      <label for="max_sales" class="col-sm-3 control-label">Antall billetter</label>
       <div class="col-sm-3">
         <input
           type="number"
@@ -105,10 +91,7 @@
 
     <div class="form-group">
       <div class="col-sm-offset-3 col-sm-9">
-        <label>
-          <input type="checkbox" [(ngModel)]="ticketgroup.use_office" /> Aktiv
-          for salg i billettluke?
-        </label>
+        <label> <input type="checkbox" [(ngModel)]="ticketgroup.use_office" /> Aktiv for salg i billettluke? </label>
       </div>
     </div>
 
@@ -133,13 +116,7 @@
     <div class="form-group">
       <div class="col-sm-8 col-sm-offset-3">
         <button type="submit" class="btn btn-success">Oppdater</button>
-        <button
-          type="button"
-          class="btn btn-danger"
-          (click)="deleteTicketgroup()"
-        >
-          Slett
-        </button>
+        <button type="button" class="btn btn-danger" (click)="deleteTicketgroup()">Slett</button>
       </div>
     </div>
   </form>

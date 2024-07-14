@@ -28,25 +28,14 @@
           <th>Sum</th>
           <th>
             {{ stats.topAccum.price + stats.topAccum.fee | price }}<br />
-            {{ stats.topAccum.count - stats.topAccum.revoked }} /
-            {{ stats.max_normal_sales || stats.max_sales
-            }}{{
-              stats.max_normal_sales != stats.max_sales
-                ? " (" + stats.max_sales + ")"
-                : ""
-            }}
+            {{ stats.topAccum.count - stats.topAccum.revoked }} / {{ stats.max_normal_sales || stats.max_sales
+            }}{{ stats.max_normal_sales != stats.max_sales ? " (" + stats.max_sales + ")" : "" }}
             stk
           </th>
           @for (day of stats.daysDetails; track day) {
             <td>
-              {{
-                stats.daysAccum[day.day].price + stats.daysAccum[day.day].fee
-                  | price
-              }}<br />
-              {{
-                stats.daysAccum[day.day].count -
-                  stats.daysAccum[day.day].revoked
-              }}
+              {{ stats.daysAccum[day.day].price + stats.daysAccum[day.day].fee | price }}<br />
+              {{ stats.daysAccum[day.day].count - stats.daysAccum[day.day].revoked }}
               stk
             </td>
           }
@@ -57,35 +46,21 @@
           <tr>
             <td>
               <a routerLink="/a/event/{{ event.id }}">{{ event.title }}</a>
-              <span class="event-time"
-                >({{
-                  event.time_start | formatdate: "ddd D. MMMM HH:mm"
-                }})</span
-              >
+              <span class="event-time">({{ event.time_start | formatdate: "ddd D. MMMM HH:mm" }})</span>
             </td>
             <th>
               {{ event.accum.price + event.accum.fee | price }}<br />
-              {{ event.accum.count - event.accum.revoked }} /
-              {{ event.max_normal_sales || event.max_sales
+              {{ event.accum.count - event.accum.revoked }} / {{ event.max_normal_sales || event.max_sales
               }}{{ event.max_normal_sales ? " (" + event.max_sales + ")" : "" }}
               stk
             </th>
 
             @for (day of stats.daysDetails; track day) {
               <td>
-                @if (
-                  event.daysAccum[day.day].count > 0 ||
-                  event.daysAccum[day.day].revoked > 0
-                ) {
+                @if (event.daysAccum[day.day].count > 0 || event.daysAccum[day.day].revoked > 0) {
                   <span>
-                    {{
-                      event.daysAccum[day.day].price +
-                        event.daysAccum[day.day].fee | price
-                    }}<br />
-                    {{
-                      event.daysAccum[day.day].count -
-                        event.daysAccum[day.day].revoked
-                    }}
+                    {{ event.daysAccum[day.day].price + event.daysAccum[day.day].fee | price }}<br />
+                    {{ event.daysAccum[day.day].count - event.daysAccum[day.day].revoked }}
                     stk
                   </span>
                 }
