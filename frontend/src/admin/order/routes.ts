@@ -1,6 +1,7 @@
 import { Routes } from "@angular/router"
 import { requireAdmin } from "../../auth/require-admin"
 import { TodoComponent } from "../todo.component"
+import { AdminOrderListComponent } from "./admin-order-list.component"
 
 export const routes: Routes = [
   {
@@ -21,8 +22,7 @@ export const routes: Routes = [
     path: "a/orders",
     // ?eventgroup_id
     // index.html
-    // component: AdminOrderListComponent,
-    component: TodoComponent,
+    component: AdminOrderListComponent,
     canActivate: [requireAdmin],
     // reloadOnSearch: false,
   },

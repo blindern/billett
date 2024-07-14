@@ -1,15 +1,7 @@
 import { HttpClient } from "@angular/common/http"
 import { Injectable } from "@angular/core"
 import { api } from "../../api"
-
-interface Paginated<T> {
-  pagination: {
-    offset: number
-    limit: number
-    total: number
-  }
-  result: T
-}
+import { Paginated } from "../../common/pagination.component"
 
 export interface AdminTicketForCheckinData {
   id: number

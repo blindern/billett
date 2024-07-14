@@ -14,14 +14,15 @@
             class="btn btn-success"
             routerLink="/a/order/new/{{ search.eventgroup_id }}"
             accesskey="n"
-            >Ny ordre</a
           >
+            Ny ordre
+          </a>
         </span>
       }
     </h1>
   </div>
 
-  <div class="row form-horizontal">
+  <form class="row form-horizontal" autocomplete="off" (input)="formChanged($event)">
     <div class="col-sm-6">
       <div class="form-group">
         <label class="col-sm-4 control-label">Ordrenr</label>
@@ -29,8 +30,8 @@
           <input
             class="form-control"
             type="text"
+            name="id"
             [(ngModel)]="search.id"
-            ng-model-options="{debounce:300}"
           />
         </div>
       </div>
@@ -40,8 +41,8 @@
           <input
             class="form-control"
             type="text"
+            name="order_text_id"
             [(ngModel)]="search.order_text_id"
-            ng-model-options="{debounce:300}"
           />
         </div>
       </div>
@@ -51,8 +52,8 @@
           <input
             class="form-control"
             type="text"
+            name="ticket_id"
             [(ngModel)]="search['tickets.id']"
-            ng-model-options="{debounce:300}"
           />
         </div>
       </div>
@@ -62,8 +63,8 @@
           <input
             class="form-control"
             type="text"
+            name="ticket_key"
             [(ngModel)]="search['tickets.key']"
-            ng-model-options="{debounce:300}"
           />
         </div>
       </div>
@@ -73,8 +74,8 @@
           <input
             class="form-control"
             type="text"
+            name="event_id"
             [(ngModel)]="search['tickets.event.id']"
-            ng-model-options="{debounce:300}"
           />
         </div>
       </div>
@@ -84,8 +85,8 @@
           <input
             class="form-control"
             type="text"
+            name="event_title"
             [(ngModel)]="search['tickets.event.title']"
-            ng-model-options="{debounce:300}"
           />
         </div>
       </div>
@@ -97,8 +98,8 @@
           <input
             class="form-control"
             type="text"
+            name="transaction_id"
             [(ngModel)]="search['payments.transaction_id']"
-            ng-model-options="{debounce:300}"
           />
         </div>
       </div>
@@ -108,8 +109,8 @@
           <input
             class="form-control"
             type="text"
+            name="name"
             [(ngModel)]="search.name"
-            ng-model-options="{debounce:300}"
           />
         </div>
       </div>
@@ -119,8 +120,8 @@
           <input
             class="form-control"
             type="text"
+            name="email"
             [(ngModel)]="search.email"
-            ng-model-options="{debounce:300}"
           />
         </div>
       </div>
@@ -130,8 +131,8 @@
           <input
             class="form-control"
             type="text"
+            name="phone"
             [(ngModel)]="search.phone"
-            ng-model-options="{debounce:300}"
           />
         </div>
       </div>
@@ -140,23 +141,25 @@
         <div class="col-sm-8">
           <select
             class="form-control"
+            name="status"
             [(ngModel)]="search.status"
-            ng-options="x.id as x.val for x in search_status"
-          ></select>
+          >
+            @for (status of search_status; track status.id) {
+              <option [value]="status.id">{{ status.val }}</option>
+            }
+          </select>
         </div>
       </div>
     </div>
-  </div>
+  </form>
 
   <hr />
 
-  <div class="page-loading" [hidden]="!!orders.result">Søker...</div>
-
-  <div [hidden]="!orders.result.length == 0">
+  @if (!orders || !orders.result) {
+    <div class="page-loading">Søker...</div>
+  } @else if (orders.result.length == 0) {
     <p class="text-center">Ingen ordrer ble funnet.</p>
-  </div>
-
-  <div [hidden]="!orders.result.length > 0">
+  } @else {
     <h2>Søkeresultat</h2>
     <table class="table table-striped table-condensed order-list-table">
       <thead>
@@ -171,35 +174,36 @@
         @for (order of orders.result; track order) {
           <tr [ngClass]="{ invalid: !order.is_valid }">
             <td>
-              <a routerLink="/a/order/{{ order.id }}">{{::order.order_text_id}}</a
+              <a routerLink="/a/order/{{ order.id }}">
+                {{ order.order_text_id }}</a
               ><br />
-              {{::order.time|formatdate:'dd. DD.MM.YYYY HH:mm'}}
+              {{ order.time | formatdate: "dd. DD.MM.YYYY HH:mm" }}
               @if (!order.is_valid) {
                 <span><br />(kun reservasjon)</span>
               }
-              @if (::order.is_admin) {
-                <span class="order-detail"
-                  ><span class="is_admin">Billettluke</span></span
-                >
+              @if (order.is_admin) {
+                <span class="order-detail">
+                  <span class="is_admin">Billettluke</span>
+                </span>
               }
             </td>
             <td>
-              @if (::order.name) {
-                <span class="order-detail">{{::order.name}}</span>
+              @if (order.name) {
+                <span class="order-detail">{{ order.name }}</span>
               }
-              @if (::order.email) {
-                <span class="order-detail">{{::order.email}}</span>
+              @if (order.email) {
+                <span class="order-detail">{{ order.email }}</span>
               }
-              @if (::order.phone) {
-                <span class="order-detail">{{::order.phone}}</span>
+              @if (order.phone) {
+                <span class="order-detail">{{ order.phone }}</span>
               }
-              @if (::order.recruiter) {
-                <span class="order-detail"
-                  >Vervet av: {{::order.recruiter}}</span
-                >
+              @if (order.recruiter) {
+                <span class="order-detail">
+                  Vervet av: {{ order.recruiter }}
+                </span>
               }
               @if (
-                ::(!order.name && !order.email && !order.phone && !order.recruiter)
+                !order.name && !order.email && !order.phone && !order.recruiter
               ) {
                 <span class="order-detail"><i>Ingen detaljer</i></span>
               }
@@ -207,14 +211,14 @@
             <td>
               {{ order.total_valid | price }}
               @if (order.total_reserved) {
-                <span
-                  ><br />(reservert: {{ order.total_reserved | price }})</span
-                >
+                <span>
+                  <br />(reservert: {{ order.total_reserved | price }})
+                </span>
               }
-              @if (order.balance != 0) {
-                <span class="unbalance"
-                  ><br />(ubalanse: {{ order.balance | price }})</span
-                >
+              @if (order.balance !== "0.00") {
+                <span class="unbalance">
+                  <br />(ubalanse: {{ order.balance | price }})
+                </span>
               }
 
               <!--<div ng-repeat="payment in order.payments">
@@ -233,19 +237,21 @@
                     }"
                   >
                     <a
-                      routerLink="/::api('ticket/' + ticket.id + '/pdf')"
+                      [href]="api('ticket/' + ticket.id + '/pdf')"
                       target="_self"
-                      >#{{::ticket.id}}</a
                     >
-                    <a routerLink="/a/event/{{ ticket.event.id }}"
-                      >{{::ticket.event.title}}
-                      ({{::ticket.event.time_start|formatdate:'DD.MM \\k\\l
-                  HH'
-
-                      }})</a
-                    >
-                    ({{::ticket.ticketgroup.title}})
-                    {{::(ticket.ticketgroup.price+ticket.ticketgroup.fee)|price:0:true}}
+                      #{{ ticket.id }}
+                    </a>
+                    <a routerLink="/a/event/{{ ticket.event.id }}">
+                      {{ ticket.event.title }} ({{
+                        ticket.event.time_start | formatdate: "DD.MM \\k\\l HH"
+                      }})
+                    </a>
+                    ({{ ticket.ticketgroup.title }})
+                    {{
+                      ticket.ticketgroup.price + ticket.ticketgroup.fee
+                        | price: 0 : true
+                    }}
                   </li>
                 }
               </ul>
@@ -255,12 +261,15 @@
       </tbody>
     </table>
 
-    <div class="text-center">
-      <pagination
-        page-active="search.page"
-        page-total="orders.pagination.total"
-        page-limit="orders.pagination.limit"
-      ></pagination>
-    </div>
-  </div>
+    @if (orders) {
+      <div class="text-center">
+        <pagination
+          [page]="search.page"
+          [total]="orders.pagination.total"
+          [limit]="orders.pagination.limit"
+          (changePage)="search.page = $event; immediateSearch()"
+        ></pagination>
+      </div>
+    }
+  }
 </div>
