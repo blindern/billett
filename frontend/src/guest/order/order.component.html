@@ -1,8 +1,11 @@
-<div *ngIf="!order">Vennligst vent...</div>
-
-<div *ngIf="order">
-  <page-property name="title" value="Kvittering" *ngIf="payment.status == 'ACCEPTED'"></page-property>
-  <page-property name="title" value="Ordrebekreftelse" *ngIf="payment.status != 'ACCEPTED'"></page-property>
+@if (!order) {
+  <div>Vennligst vent...</div>
+} @else {
+  @if (payment.status == "ACCEPTED") {
+    <page-property name="title" value="Kvittering"></page-property>
+  } @else {
+    <page-property name="title" value="Ordrebekreftelse"></page-property>
+  }
 
   <div class="page-header">
     @if (payment.status != "ACCEPTED") {
@@ -56,18 +59,20 @@
 
   <h3>Billettspesifikasjon</h3>
   <ul>
-    <li *ngFor="let ticket of order.tickets">
-      {{ ticket.event.time_start | formatdate: "DD.MM.YYYY HH:mm" }}: {{ ticket.event.title }}:
-      {{ ticket.ticketgroup.title }} ({{ ticket.ticketgroup.price + ticket.ticketgroup.fee | price: true
-      }}<!--
+    @for (ticket of order.tickets; track ticket.id) {
+      <li>
+        {{ ticket.event.time_start | formatdate: "DD.MM.YYYY HH:mm" }}: {{ ticket.event.title }}:
+        {{ ticket.ticketgroup.title }} ({{ ticket.ticketgroup.price + ticket.ticketgroup.fee | price: true
+        }}<!--
       -->
-      @if (ticket.ticketgroup.fee) {
-        hvorav {{ ticket.ticketgroup.fee | price: true }} i billettgebyr
-      }
-      <!--
+        @if (ticket.ticketgroup.fee) {
+          hvorav {{ ticket.ticketgroup.fee | price: true }} i billettgebyr
+        }
+        <!--
       -->) (#{{ ticket.number }})
-    </li>
+      </li>
+    }
   </ul>
 
   <p>Vi håper du får en flott opplevelse på UKA på Blindern!</p>
-</div>
+}
