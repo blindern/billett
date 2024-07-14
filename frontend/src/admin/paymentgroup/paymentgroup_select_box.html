@@ -4,16 +4,16 @@
   }
   @if (paymentgroups) {
     <div>
-      <select
-        class="form-control"
-        id="{{ id }}"
-        ng-options="(g.time_start|formatdate:'DD.MM.YYYY HH:mm ') + '(' + g.user_created + '): ' + g.title for g in paymentgroups"
-        [(ngModel)]="t.paymentgroup"
-        ng-change="update()"
-      >
+      <select class="form-control" id="{{ id }}" [(ngModel)]="t.paymentgroup" (change)="update()">
         <!-- TODO: autofocus required -->
         @if (!paymentgroup) {
           <option value="">Velg ...</option>
+        } @else {
+          @for (g of paymentgroups; track g.id) {
+            <option [value]="g.id">
+              {{ g.time_start | formatdate: "DD.MM.YYYY HH:mm" }} ({{ g.user_created }}): {{ g.title }}
+            </option>
+          }
         }
       </select>
       <span class="help-block">

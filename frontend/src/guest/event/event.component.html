@@ -189,14 +189,14 @@
                               </div>
                             </div>
                             <div class="count">
-                              <span class="value" ng-init="ticketgroup.order_count=0">
+                              <span class="value">
                                 {{ ticketgroup.order_count }}
                               </span>
                               <button
                                 type="button"
                                 (click)="changeTicketgroupNum(ticketgroup, 1)"
                                 class="btn btn-primary btn-sm"
-                                ng-disabled="event.max_each_person<=0"
+                                [disabled]="event.max_each_person <= 0"
                               >
                                 <span class="glyphicon glyphicon-plus"></span>
                               </button>

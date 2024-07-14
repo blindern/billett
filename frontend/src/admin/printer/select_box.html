@@ -7,17 +7,17 @@
   }
   @if (printers && printers.length > 0) {
     <div>
-      <select
-        class="form-control"
-        id="{{ id }}"
-        ng-options="(p.name + ' (' + (p.ip || 'IKKE TILGJENGELIG') + ':' + p.port + ', oppe '+Math.floor((p.last_seen-p.registered)/60)+' min)') for p in printers"
-        [(ngModel)]="t.printer"
-        ng-change="update()"
-      >
+      <select class="form-control" id="{{ id }}" [(ngModel)]="t.printer" (change)="update()">
         <!-- TODO: autofocus required -->
         @if (!printer || canDisable) {
           <option value="">
             {{ canDisable ? "Ikke skriv ut" : "Velg ..." }}
+          </option>
+        }
+        @for (p of printers; track p.name) {
+          <option [value]="p.name">
+            {{ p.name }} ({{ p.ip || "IKKE TILGJENGELIG" }}:{{ p.port }}, oppe
+            {{ Math.floor((p.last_seen - p.registered) / 60) }} min)
           </option>
         }
       </select>

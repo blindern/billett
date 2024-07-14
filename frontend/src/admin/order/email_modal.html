@@ -44,7 +44,7 @@
               class="btn btn-primary"
               type="submit"
               value="Send e-post"
-              ng-disabled="!ctrl.email &amp;&amp; !ctrl.order.email"
+              [disabled]="!ctrl.email && !ctrl.order.email"
             />
             <button type="button" class="btn btn-default" (click)="ctrl.cancel()">Avbryt</button>
           </div>

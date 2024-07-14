@@ -39,7 +39,7 @@
               class="btn btn-success"
               type="submit"
               value="Registrer"
-              ng-disabled="ctrl.amount==0 || !ctrl.paymentgroup"
+              [disabled]="ctrl.amount == 0 || !ctrl.paymentgroup"
             />
             <button type="button" class="btn btn-default" (click)="ctrl.cancel()">Avbryt</button>
           </div>

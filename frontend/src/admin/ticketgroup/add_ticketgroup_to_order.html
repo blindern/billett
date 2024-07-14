@@ -20,7 +20,7 @@
           </dl>
         </div>
         <div class="col-sm-6">
-          <button class="btn btn-success" (click)="ctrl.addTickets()" ng-disabled="ctrl.count == 0">
+          <button class="btn btn-success" (click)="ctrl.addTickets()" [disabled]="ctrl.count == 0">
             <i class="glyphicon glyphicon-plus"></i> Legg til billetter
           </button>
           <button class="btn btn-default" (click)="ctrl.cancel()">Avbryt</button>
@@ -94,7 +94,7 @@
                   </td>
 
                   <td>
-                    <span class="value" ng-init="ticketgroup.order_count=0">
+                    <span class="value">
                       {{ ctrl.ticketgroups_add[ticketgroup.id].num || 0 }} /
                       {{ event.ticket_count.groups[ticketgroup.id].free }}
                     </span>
@@ -110,7 +110,7 @@
                       class="btn btn-primary btn-sm"
                       type="button"
                       (click)="ctrl.changeTicketgroupNum(ticketgroup, event, -1)"
-                      ng-disabled="(ctrl.ticketgroups_add[ticketgroup.id].num||0)<=0"
+                      [disabled]="(ctrl.ticketgroups_add[ticketgroup.id].num || 0) <= 0"
                     >
                       <span class="glyphicon glyphicon-minus"></span>
                     </button>

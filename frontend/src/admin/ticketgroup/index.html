@@ -33,7 +33,7 @@
           placeholder=""
           required=""
           autofocus=""
-          ng-disabled="ticketgroup.has_tickets"
+          [disabled]="ticketgroup.has_tickets"
         />
       </div>
     </div>
@@ -46,7 +46,7 @@
           [(ngModel)]="ticketgroup.ticket_text"
           id="ticket_text"
           placeholder="(valgfritt)"
-          ng-disabled="ticketgroup.has_tickets"
+          [disabled]="ticketgroup.has_tickets"
         />
         <span class="help-block">Kan f.eks. være gyldighetsinformasjon for studentbillett.</span>
       </div>
@@ -62,7 +62,7 @@
           id="price"
           placeholder=""
           required=""
-          ng-disabled="ticketgroup.has_tickets"
+          [disabled]="ticketgroup.has_tickets"
         />
       </div>
       <div class="col-sm-3">
@@ -72,7 +72,7 @@
           [(ngModel)]="ticketgroup.fee"
           id="fee"
           placeholder="(valgfritt)"
-          ng-disabled="ticketgroup.has_tickets"
+          [disabled]="ticketgroup.has_tickets"
         />
         <span class="help-block">Evt. billettgebyr regnes i tillegg til billettpris</span>
       </div>

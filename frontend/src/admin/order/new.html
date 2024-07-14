@@ -62,7 +62,7 @@
                 name="phone"
                 [(ngModel)]="ctrl.order.phone"
                 class="form-control"
-                ng-pattern="/^\+?\d+$/"
+                pattern="\+?\d+"
                 placeholder="(valgfritt)"
               />
             </div>
@@ -130,7 +130,7 @@
                       class="btn btn-success"
                       type="submit"
                       value="Marker som betalt"
-                      ng-disabled="!ctrl.paymentgroup"
+                      [disabled]="!ctrl.paymentgroup"
                     />
                   }
                   <input class="btn btn-default" type="button" value="Lagre reservasjon" (click)="ctrl.saveOrder()" />
@@ -182,7 +182,7 @@
                       class="btn btn-sm btn-danger"
                       (click)="ctrl.deleteTicket(group)"
                       title="Slett én reservasjon"
-                      ng-disabled="group.working"
+                      [disabled]="group.working"
                     >
                       @if (!group.working) {
                         <i class="glyphicon glyphicon-remove"></i>

@@ -19,7 +19,7 @@
             id="text"
             rows="10"
             required=""
-            ng-disabled="ctrl.sending"
+            [disabled]="ctrl.sending"
             autofocus=""
           ></textarea>
         </div>
@@ -30,7 +30,7 @@
       } @else {
         <div class="row">
           <div class="col-sm-7 col-sm-offset-4">
-            <button class="btn btn-success" type="submit" ng-disabled="!ctrl.printer">Skriv ut</button>
+            <button class="btn btn-success" type="submit" [disabled]="!ctrl.printer">Skriv ut</button>
             <button class="btn btn-default" type="button" (click)="ctrl.cancel()">Avbryt</button>
           </div>
         </div>
