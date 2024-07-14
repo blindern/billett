@@ -25,14 +25,15 @@
         </div>
       </div>
 
-      <div class="row" [hidden]="!!ctrl.sending">
-        <div class="col-sm-7 col-sm-offset-4">
-          <button class="btn btn-success" type="submit" ng-disabled="!ctrl.printer">Skriv ut</button>
-          <button class="btn btn-default" type="button" (click)="ctrl.cancel()">Avbryt</button>
-        </div>
-      </div>
       @if (ctrl.sending) {
         <p class="text-center">Sender data til utskrift ...</p>
+      } @else {
+        <div class="row">
+          <div class="col-sm-7 col-sm-offset-4">
+            <button class="btn btn-success" type="submit" ng-disabled="!ctrl.printer">Skriv ut</button>
+            <button class="btn btn-default" type="button" (click)="ctrl.cancel()">Avbryt</button>
+          </div>
+        </div>
       }
     </form>
   </div>

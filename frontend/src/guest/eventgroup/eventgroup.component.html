@@ -53,44 +53,50 @@
 
                     <li>
                       <!-- admin links -->
-                      <div class="edit-link-wrap" [hidden]="!(auth.isAdmin$ | async)">
-                        <span class="edit-link">
-                          <a routerLink="/a/event/{{ event.id }}/edit">Rediger</a>
-                          <a routerLink="/a/event/{{ event.id }}">Detaljert</a>
-                        </span>
-                      </div>
+                      @if (auth.isAdmin$ | async) {
+                        <div class="edit-link-wrap">
+                          <span class="edit-link">
+                            <a routerLink="/a/event/{{ event.id }}/edit">Rediger</a>
+                            <a routerLink="/a/event/{{ event.id }}">Detaljert</a>
+                          </span>
+                        </div>
+                      }
 
                       <a href="event/{{ event.alias || event.id }}" target="_top">
                         {{ event.title }}
                       </a>
-                      <span
-                        class="category"
-                        [ngClass]="'category-' + categoryNum(event.category)"
-                        [hidden]="!event.category"
-                      >
-                        <a routerLink="/eventgroup/{{ group.id }}/{{ event.category | lowercase }}">
-                          {{ event.category }}
-                        </a>
-                      </span>
-                    </li>
-                    <li>
-                      <div [hidden]="!!event.ticket_info">
-                        <span [hidden]="event.web_selling_status != 'unknown'">TBA</span>
-                        <span [hidden]="event.web_selling_status != 'no_tickets'"></span>
-                        <span [hidden]="event.web_selling_status != 'old'"></span>
-                        <span [hidden]="event.web_selling_status != 'no_web_tickets'"></span>
-                        <span [hidden]="event.web_selling_status != 'timeout'">I døra</span>
-                        <span [hidden]="event.web_selling_status != 'sold_out'">Utsolgt</span>
-                        <span [hidden]="event.web_selling_status != 'sale'">
-                          <a href="event/{{ event.alias || event.id }}" target="_top">
-                            <img src="/assets/graphics/billettgul.png" alt="Kjøp billett" />
+                      @if (event.category) {
+                        <span class="category" [ngClass]="'category-' + categoryNum(event.category)">
+                          <a routerLink="/eventgroup/{{ group.id }}/{{ event.category | lowercase }}">
+                            {{ event.category }}
                           </a>
                         </span>
-                      </div>
-
-                      <div [hidden]="!event.ticket_info">
+                      }
+                    </li>
+                    <li>
+                      @if (event.ticket_info) {
                         {{ event.ticket_info }}
-                      </div>
+                      } @else {
+                        @switch (event.web_selling_status) {
+                          @case ("unknown") {
+                            TBA
+                          }
+                          @case ("no_tickets") {}
+                          @case ("old") {}
+                          @case ("no_web_tickets") {}
+                          @case ("timeout") {
+                            I døra
+                          }
+                          @case ("sold_out") {
+                            Utsolgt
+                          }
+                          @case ("sale") {
+                            <a href="event/{{ event.alias || event.id }}" target="_top">
+                              <img src="/assets/graphics/billettgul.png" alt="Kjøp billett" />
+                            </a>
+                          }
+                        }
+                      }
                     </li>
                   </ul>
                 }

@@ -14,10 +14,12 @@
 
   <h3>Billettgruppe</h3>
 
-  <p [hidden]="!ticketgroup.has_tickets">
-    Billettgruppen har enten reserverte eller tilknyttede billetter. Derfor er en del av feltene utilgjengelig for
-    endringer.
-  </p>
+  @if (ticketgroup.has_tickets) {
+    <p>
+      Billettgruppen har enten reserverte eller tilknyttede billetter. Derfor er en del av feltene utilgjengelig for
+      endringer.
+    </p>
+  }
 
   <form (ngSubmit)="updateTicketgroup()" class="form-horizontal" autocomplete="off">
     <div class="form-group">
