@@ -313,8 +313,8 @@
             @for (category of ctrl.categories; track category) {
               <div class="print-page-section">
                 <h3>
-                  {{::category.name||'Uten kategori'}} - sum salg:
-                  {{::-category.total|price}}
+                  {{ category.name || "Uten kategori" }} - sum salg:
+                  {{ -category.total | price }}
                 </h3>
 
                 @for (event of category.events; track event) {
@@ -324,8 +324,8 @@
                         <tr>
                           <th>
                             <a routerLink="/a/event/{{ event.id }}">
-                              {{::event.time_start|formatdate:'D. MMM YYYY HH:mm'}}:
-                              {{::event.title}}
+                              {{ event.time_start | formatdate: "D. MMM YYYY HH:mm" }}:
+                              {{ event.title }}
                             </a>
                           </th>
                           <th>Antall</th>
@@ -335,10 +335,10 @@
                       <tbody>
                         @for (ticketgroup of event.ticketgroups; track ticketgroup) {
                           <tr>
-                            <td>{{::ticketgroup.title}}</td>
-                            <td>{{::-ticketgroup.paymentgroup_count}}</td>
+                            <td>{{ ticketgroup.title }}</td>
+                            <td>{{ -ticketgroup.paymentgroup_count }}</td>
                             <td>
-                              {{::-ticketgroup.paymentgroup_balance|price}}
+                              {{ -ticketgroup.paymentgroup_balance | price }}
                             </td>
                           </tr>
                         }
@@ -346,8 +346,8 @@
                       <tfoot>
                         <tr>
                           <th>Sum</th>
-                          <th>{{::-event.paymentgroup_count}}</th>
-                          <th>{{::-event.paymentgroup_balance|price}}</th>
+                          <th>{{ -event.paymentgroup_count }}</th>
+                          <th>{{ -event.paymentgroup_balance | price }}</th>
                         </tr>
                       </tfoot>
                     </table>
@@ -384,21 +384,21 @@
               @for (order of ctrl.orders_inbalance; track order) {
                 <tr>
                   <td>
-                    <a routerLink="/a/order/{{ order.id }}">{{::order.order_text_id}}</a>
+                    <a routerLink="/a/order/{{ order.id }}">{{ order.order_text_id }}</a>
                     @if (order.name) {
-                      <span>({{::order.name}})</span>
+                      <span>({{ order.name }})</span>
                     }
                   </td>
-                  <td>{{::order.time|formatdate:'DD.MM.YYYY HH:mm'}}</td>
+                  <td>{{ order.time | formatdate: "DD.MM.YYYY HH:mm" }}</td>
                   <td>
-                    {{::-order.paymentgroup_balance['ticket_sales']|price}}
+                    {{ -order.paymentgroup_balance["ticket_sales"] | price }}
                   </td>
                   <td>
-                    {{::order.paymentgroup_balance['ticket_revoked']|price}}
+                    {{ order.paymentgroup_balance["ticket_revoked"] | price }}
                   </td>
-                  <td>{{::order.paymentgroup_balance['payments']|price}}</td>
-                  <td>{{::-order.paymentgroup_balance['refunds']|price}}</td>
-                  <td>{{::-order.paymentgroup_balance['total']|price}}</td>
+                  <td>{{ order.paymentgroup_balance["payments"] | price }}</td>
+                  <td>{{ -order.paymentgroup_balance["refunds"] | price }}</td>
+                  <td>{{ -order.paymentgroup_balance["total"] | price }}</td>
                 </tr>
               }
             </tbody>
@@ -421,13 +421,13 @@
               @for (payment of ctrl.paymentgroup.payments; track payment) {
                 <tr>
                   <td>
-                    <a routerLink="/a/order/{{ payment.order.id }}">{{::payment.order.order_text_id}}</a>
+                    <a routerLink="/a/order/{{ payment.order.id }}">{{ payment.order.order_text_id }}</a>
                     @if (payment.order.name) {
-                      <span>({{::payment.order.name}})</span>
+                      <span>({{ payment.order.name }})</span>
                     }
                   </td>
-                  <td>{{::payment.time|formatdate:'DD.MM.YYYY HH:mm'}}</td>
-                  <td>{{::payment.amount|price}}</td>
+                  <td>{{ payment.time | formatdate: "DD.MM.YYYY HH:mm" }}</td>
+                  <td>{{ payment.amount | price }}</td>
                 </tr>
               }
             </tbody>
@@ -449,22 +449,22 @@
               @for (ticket of ctrl.paymentgroup.valid_tickets; track ticket) {
                 <tr>
                   <td>
-                    <a routerLink="/a/order/{{ ticket.order.id }}">{{::ticket.order.order_text_id}}</a>
+                    <a routerLink="/a/order/{{ ticket.order.id }}">{{ ticket.order.order_text_id }}</a>
                     @if (ticket.order.name) {
-                      <span>({{::ticket.order.name}})</span>
+                      <span>({{ ticket.order.name }})</span>
                     }
                   </td>
                   <td>
                     <a routerLink="/a/event/{{ ticket.event.id }}"
-                      >{{::ticket.event.time_start|formatdate:'D. MMM YYYY HH:mm'}}: {{::ticket.event.title}}</a
+                      >{{ ticket.event.time_start | formatdate: "D. MMM YYYY HH:mm" }}: {{ ticket.event.title }}</a
                     >
                   </td>
-                  <td>{{::ticket.ticketgroup.title}} #{{::ticket.id}}</td>
-                  <td>{{::ticket.time|formatdate:'D. MMM YYYY HH:mm'}}</td>
+                  <td>{{ ticket.ticketgroup.title }} #{{ ticket.id }}</td>
+                  <td>{{ ticket.time | formatdate: "D. MMM YYYY HH:mm" }}</td>
                   <td>
-                    {{::(ticket.ticketgroup.price+ticket.ticketgroup.fee|price)}}
+                    {{ ticket.ticketgroup.price + ticket.ticketgroup.fee | price }}
                   </td>
-                  <td>{{::ticket.ticketgroup.fee|price}}</td>
+                  <td>{{ ticket.ticketgroup.fee | price }}</td>
                 </tr>
               }
             </tbody>
@@ -486,22 +486,22 @@
               @for (ticket of ctrl.paymentgroup.revoked_tickets; track ticket) {
                 <tr>
                   <td>
-                    <a routerLink="/a/order/{{ ticket.order.id }}">{{::ticket.order.order_text_id}}</a>
+                    <a routerLink="/a/order/{{ ticket.order.id }}">{{ ticket.order.order_text_id }}</a>
                     @if (ticket.order.name) {
-                      <span>({{::ticket.order.name}})</span>
+                      <span>({{ ticket.order.name }})</span>
                     }
                   </td>
                   <td>
                     <a routerLink="/a/event/{{ ticket.event.id }}"
-                      >{{::ticket.event.time_start|formatdate:'D. MMM YYYY HH:mm'}}: {{::ticket.event.title}}</a
+                      >{{ ticket.event.time_start | formatdate: "D. MMM YYYY HH:mm" }}: {{ ticket.event.title }}</a
                     >
                   </td>
-                  <td>{{::ticket.ticketgroup.title}} #{{::ticket.id}}</td>
-                  <td>{{::ticket.time|formatdate:'D. MMM YYYY HH:mm'}}</td>
+                  <td>{{ ticket.ticketgroup.title }} #{{ ticket.id }}</td>
+                  <td>{{ ticket.time | formatdate: "D. MMM YYYY HH:mm" }}</td>
                   <td>
-                    {{::(ticket.ticketgroup.price+ticket.ticketgroup.fee|price)}}
+                    {{ ticket.ticketgroup.price + ticket.ticketgroup.fee | price }}
                   </td>
-                  <td>{{::ticket.ticketgroup.fee|price}}</td>
+                  <td>{{ ticket.ticketgroup.fee | price }}</td>
                 </tr>
               }
             </tbody>

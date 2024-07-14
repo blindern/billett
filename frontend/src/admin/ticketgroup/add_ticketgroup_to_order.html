@@ -51,12 +51,12 @@
                 <th colspan="3">
                   <span class="pull-right count-info">
                     <br />
-                    Ledige: {{::event.ticket_count.totals.free}} /
-                    {{::event.max_sales}}
+                    Ledige: {{ event.ticket_count.totals.free }} /
+                    {{ event.max_sales }}
                   </span>
 
-                  <a routerLink="/a/event/{{ event.id }}">{{::event.title}}</a>
-                  <span class="event-time">{{::event.dateinfo}}</span>
+                  <a routerLink="/a/event/{{ event.id }}">{{ event.title }}</a>
+                  <span class="event-time">{{ event.dateinfo }}</span>
                 </th>
               </tr>
 

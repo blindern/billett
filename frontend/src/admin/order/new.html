@@ -239,27 +239,27 @@
           @for (order of ctrl.previousOrders; track order) {
             <tr [ngClass]="{ invalid: !order.is_valid }">
               <td>
-                <a routerLink="/a/order/{{ order.id }}">{{::order.order_text_id}}</a
+                <a routerLink="/a/order/{{ order.id }}">{{ order.order_text_id }}</a
                 ><br />
-                {{::order.time|formatdate:'dd. DD.MM.YYYY HH:mm'}}
+                {{ order.time | formatdate: "dd. DD.MM.YYYY HH:mm" }}
                 @if (!order.is_valid) {
                   <span><br />(kun reservasjon)</span>
                 }
               </td>
               <td>
-                @if (::order.name) {
-                  <span class="order-detail">{{::order.name}}</span>
+                @if (order.name) {
+                  <span class="order-detail">{{ order.name }}</span>
                 }
-                @if (::order.email) {
-                  <span class="order-detail">{{::order.email}}</span>
+                @if (order.email) {
+                  <span class="order-detail">{{ order.email }}</span>
                 }
-                @if (::order.phone) {
-                  <span class="order-detail">{{::order.phone}}</span>
+                @if (order.phone) {
+                  <span class="order-detail">{{ order.phone }}</span>
                 }
-                @if (::order.recruiter) {
-                  <span class="order-detail">Vervet av: {{::order.recruiter}}</span>
+                @if (order.recruiter) {
+                  <span class="order-detail">Vervet av: {{ order.recruiter }}</span>
                 }
-                @if (::(!order.name && !order.email && !order.phone && !order.recruiter)) {
+                @if (!order.name && !order.email && !order.phone && !order.recruiter) {
                   <span class="order-detail"><i>Ingen detaljer</i></span>
                 }
               </td>
@@ -281,12 +281,12 @@
                         revoked: ticket.is_revoked,
                       }"
                     >
-                      <a [href]="::api('ticket/' + ticket.id + '/pdf')" target="_self">#{{::ticket.id}}</a>
+                      <a [href]="api('ticket/' + ticket.id + '/pdf')" target="_self">#{{ ticket.id }}</a>
                       <a routerLink="/a/event/{{ ticket.event.id }}">
-                        {{::ticket.event.title}} ({{::ticket.event.time_start|formatdate:'DD.MM \\k\\l HH'}})
+                        {{ ticket.event.title }} ({{ ticket.event.time_start | formatdate: "DD.MM \\k\\l HH" }})
                       </a>
-                      ({{::ticket.ticketgroup.title}})
-                      {{::(ticket.ticketgroup.price+ticket.ticketgroup.fee)|price:0:true}}
+                      ({{ ticket.ticketgroup.title }})
+                      {{ ticket.ticketgroup.price + ticket.ticketgroup.fee | price: 0 : true }}
                     </li>
                   }
                 </ul>
