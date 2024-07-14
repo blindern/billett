@@ -21,7 +21,7 @@ module.directive("formInputCheck", () => {
 })
 
 // add 'autofocus' as an attribute to a tag
-// source: http://stackoverflow.com/a/20865048
+// source: https://stackoverflow.com/a/20865048
 module.directive("autofocus", ($timeout) => {
   return {
     restrict: "AC",
