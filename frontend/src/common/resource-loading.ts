@@ -28,3 +28,13 @@ export function handleResourceLoadingStates<T>(state: ResourceLoadingState) {
       }),
     )
 }
+
+export function composeResourceLoadingStates(
+  ...states: [ResourceLoadingState, ...ResourceLoadingState[]]
+): ResourceLoadingState {
+  return {
+    loading: states.some((s) => s.loading),
+    notfound: states.some((s) => s.notfound),
+    error: states.find((s) => s.error)?.error,
+  }
+}

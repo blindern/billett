@@ -1,20 +1,17 @@
 import { Routes } from "@angular/router"
 import { requireAdmin } from "../../auth/require-admin"
-import { TodoComponent } from "../todo.component"
+import { AdminPaymentgroupItemComponent } from "./admin-paymentgroup-item.component"
+import { AdminPaymentgroupListComponent } from "./admin-paymentgroup-list.component"
 
 export const routes: Routes = [
   {
     path: "a/paymentgroup/:id",
-    // item.html
-    // component: AdminPaymentgroupItemComponent,
-    component: TodoComponent,
+    component: AdminPaymentgroupItemComponent,
     canActivate: [requireAdmin],
   },
   {
-    path: "a/eventgroup/:eventgroup_id/paymentgroups",
-    // list.html
-    // component: AdminPaymentgroupListComponent,
-    component: TodoComponent,
+    path: "a/eventgroup/:eventgroupId/paymentgroups",
+    component: AdminPaymentgroupListComponent,
     canActivate: [requireAdmin],
   },
 ]

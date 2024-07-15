@@ -6,28 +6,6 @@ import paymentgroupSelectTemplate from "./paymentgroup_select.html?raw"
 angular
   .module("billett.admin")
   .factory("AdminPaymentgroup", ($http, $modal, $resource) => {
-    var r = $resource(
-      api("paymentgroup/:id"),
-      {
-        id: "@id",
-      },
-      {
-        update: {
-          method: "PUT",
-        },
-      },
-    )
-
-    r.prototype.close = () => {
-      return $http.post(api("paymentgroup/" + this.id + "/close"))
-    }
-
-    r.getValid = (eventgroup_id) => {
-      return this.query({
-        filter: "eventgroup_id=" + parseInt(eventgroup_id) + ",time_end:NULL",
-      })
-    }
-
     r.setPreferredGroup = (group) => {
       if (group) {
         sessionStorage.lastPaymentgroup = group.id
