@@ -1,3 +1,5 @@
+@use "@angular/cdk" as cdk;
+
 @import "./common/bootstrap";
 @import "./common/template";
 @import "./common/events";
@@ -6,8 +8,15 @@
 @import "./admin/eventgroup/eventgroup.scss";
 @import "./admin/order/new.scss";
 @import "./admin/order/order.scss";
-@import "./admin/paymentgroup/paymentgroup.scss";
 @import "./admin/ticketgroup/add_ticketgroup_to_order.scss";
 
 @import "./guest/event/event.scss";
 @import "./guest/eventgroup/eventgroup.scss";
+
+@include cdk.overlay();
+
+@media (min-width: 630px) {
+  .modal-content {
+    width:600px;
+  }
+}

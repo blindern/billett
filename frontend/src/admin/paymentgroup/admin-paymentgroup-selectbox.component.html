@@ -1,0 +1,17 @@
+@if (!paymentgroups) {
+  <div class="form-control-static">Laster oppgjørsgrupper ...</div>
+} @else {
+  <select class="form-control" [(ngModel)]="selectedPaymentgroupId" (change)="update()">
+    @if (!paymentgroup) {
+      <option value="">Velg ...</option>
+    }
+    @for (g of paymentgroups; track g.id) {
+      <option [value]="g.id">
+        {{ g.time_start | formatdate: "DD.MM.YYYY HH:mm" }} ({{ g.user_created }}): {{ g.title }}
+      </option>
+    }
+  </select>
+  <span class="help-block">
+    <a href="" (click)="createNew(); $event.preventDefault()">Opprett ny</a>
+  </span>
+}

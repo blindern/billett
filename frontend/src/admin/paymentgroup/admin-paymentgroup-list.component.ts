@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core"
+import { Component, inject, Input, OnInit } from "@angular/core"
 import { RouterLink } from "@angular/router"
 import { ApiEventgroupAdmin, ApiPaymentgroupAdmin } from "../../apitypes"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
@@ -24,6 +24,9 @@ import { AdminPaymentgroupService } from "./admin-paymentgroup.service"
   templateUrl: "./admin-paymentgroup-list.component.html",
 })
 export class AdminPaymentgroupListComponent implements OnInit {
+  private adminEventgroupService = inject(AdminEventgroupService)
+  private adminPaymentgroupService = inject(AdminPaymentgroupService)
+
   @Input()
   eventgroupId!: string
 
@@ -32,11 +35,6 @@ export class AdminPaymentgroupListComponent implements OnInit {
 
   eventgroup?: ApiEventgroupAdmin
   paymentgroups?: ApiPaymentgroupAdmin[]
-
-  constructor(
-    private adminEventgroupService: AdminEventgroupService,
-    private adminPaymentgroupService: AdminPaymentgroupService,
-  ) {}
 
   get pageState() {
     return composeResourceLoadingStates(
@@ -65,10 +63,12 @@ export class AdminPaymentgroupListComponent implements OnInit {
   }
 
   createNew() {
-    /* TODO(migrate)
-    AdminPaymentgroup.newModal(ctrl.eventgroup.id).result.then(() => {
-      loadPaymentgroups()
-    })
-    */
+    this.adminPaymentgroupService
+      .createModal(this.eventgroup!.id)
+      .subscribe((paymentgroup) => {
+        if (paymentgroup) {
+          this.#loadPaymentGroups(this.eventgroup!.id)
+        }
+      })
   }
 }

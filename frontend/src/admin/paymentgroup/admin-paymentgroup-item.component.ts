@@ -1,8 +1,9 @@
+import { Dialog, DialogModule } from "@angular/cdk/dialog"
 import { NgClass } from "@angular/common"
 import { Component, inject, Input, OnInit } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { RouterLink } from "@angular/router"
-import { ApiOrderAdmin } from "../../apitypes"
+import { ApiOrderAdmin, ApiPaymentsourceAdmin } from "../../apitypes"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { MarkdownComponent } from "../../common/markdown.component"
 import { PagePropertyComponent } from "../../common/page-property.component"
@@ -17,6 +18,10 @@ import {
   AdminPaymentgroupData,
   AdminPaymentgroupService,
 } from "./admin-paymentgroup.service"
+import {
+  AdminPaymentsourceCreateComponent,
+  AdminPaymentsourceCreateComponentInput,
+} from "./admin-paymentsource-create.component"
 import { AdminPaymentsourceService } from "./admin-paymentsource.service"
 
 @Component({
@@ -31,16 +36,18 @@ import { AdminPaymentsourceService } from "./admin-paymentsource.service"
     PricePipe,
     NgClass,
     MarkdownComponent,
+    DialogModule,
   ],
   templateUrl: "./admin-paymentgroup-item.component.html",
 })
 export class AdminPaymentgroupItemComponent implements OnInit {
-  @Input()
-  id!: string
-
   private pageService = inject(PageService)
   private adminPaymentgroupService = inject(AdminPaymentgroupService)
   private adminPaymentsourceService = inject(AdminPaymentsourceService)
+  private dialog = inject(Dialog)
+
+  @Input()
+  id!: string
 
   // note:
   // payments are registered as debet, so a payment for 100 means 100, while -100 means refund
@@ -60,6 +67,23 @@ export class AdminPaymentgroupItemComponent implements OnInit {
 
   // isolate orders not in balance (only looking at this paymentgroup, not the real balance of the order)
   orders_inbalance: ApiOrderAdmin[] = []
+
+  private refresh() {
+    this.adminPaymentgroupService.get(this.id).subscribe((paymentgroup) => {
+      this.paymentgroup = paymentgroup
+      this.derived = this.deriveData(paymentgroup)
+    })
+  }
+
+  ngOnInit(): void {
+    this.adminPaymentgroupService
+      .get(this.id)
+      .pipe(handleResourceLoadingStates(this.pageState))
+      .subscribe((paymentgroup) => {
+        this.paymentgroup = paymentgroup
+        this.derived = this.deriveData(paymentgroup)
+      })
+  }
 
   #deriveEvents(paymentgroup: AdminPaymentgroupData) {
     const eventStats = new Map<
@@ -221,10 +245,7 @@ export class AdminPaymentgroupItemComponent implements OnInit {
       ),
     ).sort((a, b) => a.time_start - b.time_start)
 
-    const eventsByCategory = Map.groupBy(
-      events,
-      (it) => it.category ?? "",
-    )
+    const eventsByCategory = Map.groupBy(events, (it) => it.category ?? "")
 
     const categoryTotals = this.#deriveCategoryTotals(paymentgroup, eventStats)
 
@@ -271,18 +292,8 @@ export class AdminPaymentgroupItemComponent implements OnInit {
       )
         .filter((it) => orderStats.get(it.id)!.total !== 0)
         .sort((a, b) => a.time - b.time),
-      ps: this.#derivePaymentsources(paymentgroup),
+      ps: this.derivePaymentsources(paymentgroup),
     }
-  }
-
-  ngOnInit(): void {
-    this.adminPaymentgroupService
-      .get(this.id)
-      .pipe(handleResourceLoadingStates(this.pageState))
-      .subscribe((paymentgroup) => {
-        this.paymentgroup = paymentgroup
-        this.derived = this.deriveData(paymentgroup)
-      })
   }
 
   startEdit() {
@@ -322,21 +333,30 @@ export class AdminPaymentgroupItemComponent implements OnInit {
       this.adminPaymentgroupService
         .close(this.paymentgroup!.id)
         .subscribe(() => {
-          // TODO(migrate)
-          // this.paymentgroup = response.data
+          this.refresh()
         })
     }
   }
 
   newPaymentsource() {
-    /* TODO(migrate)
-    AdminPaymentsource.newModal(this.paymentgroup).result.then(() => {
-      loadPaymentgroup()
-    })
-    */
+    this.dialog
+      .open<ApiPaymentsourceAdmin, AdminPaymentsourceCreateComponentInput>(
+        AdminPaymentsourceCreateComponent,
+        {
+          data: {
+            eventgroup: this.paymentgroup!.eventgroup,
+            paymentgroup: this.paymentgroup!,
+          },
+        },
+      )
+      .closed.subscribe((paymentsource) => {
+        if (paymentsource) {
+          this.refresh()
+        }
+      })
   }
 
-  deletePaymentsource(paymentsource) {
+  public deletePaymentsource(paymentsource: ApiPaymentsourceAdmin) {
     if (
       confirm(
         "Er du sikker på at du vil slette registreringen? Du kan senere hente den frem igjen på den detaljerte visningen.",
@@ -347,8 +367,7 @@ export class AdminPaymentgroupItemComponent implements OnInit {
           this.pageService.toast("Registeringen ble slettet", {
             class: "success",
           })
-          // TODO(migrate)
-          // loadPaymentgroup()
+          this.refresh()
         },
         error: () => {
           this.pageService.toast("Ukjent feil ved sletting av registering", {
@@ -359,7 +378,7 @@ export class AdminPaymentgroupItemComponent implements OnInit {
     }
   }
 
-  #derivePaymentsources(paymentgroup: AdminPaymentgroupData) {
+  private derivePaymentsources(paymentgroup: AdminPaymentgroupData) {
     const ps = {
       sum: 0,
       cashgroups: [] as any[],

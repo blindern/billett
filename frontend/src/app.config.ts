@@ -1,6 +1,7 @@
 import moment from "moment"
 import "moment/locale/nb.js"
 
+import { DEFAULT_DIALOG_CONFIG } from "@angular/cdk/dialog"
 import {
   provideHttpClient,
   withFetch,
@@ -22,5 +23,12 @@ export const appConfig: ApplicationConfig = {
       withFetch(),
       withInterceptors([withCredentials, csrfInterceptor]),
     ),
+    {
+      provide: DEFAULT_DIALOG_CONFIG,
+      useValue: {
+        panelClass: "modal-content",
+        hasBackdrop: true,
+      },
+    },
   ],
 }

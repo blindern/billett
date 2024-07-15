@@ -1,5 +1,6 @@
+import { Dialog } from "@angular/cdk/dialog"
 import { HttpClient } from "@angular/common/http"
-import { Injectable } from "@angular/core"
+import { inject, Injectable } from "@angular/core"
 import { api } from "../../api"
 import {
   ApiEventAdmin,
@@ -11,6 +12,14 @@ import {
   ApiTicketAdmin,
   ApiTicketgroupAdmin,
 } from "../../apitypes"
+import {
+  AdminPaymentgroupCreateComponent,
+  AdminPaymentgroupCreateComponentInput,
+} from "./admin-paymentgroup-create.component"
+import {
+  AdminPaymentgroupSelectComponent,
+  AdminPaymentgroupSelectComponentInput,
+} from "./admin-paymentgroup-select.component"
 
 export type AdminPaymentgroupData = ApiPaymentgroupAdmin & {
   eventgroup: ApiEventgroupAdmin
@@ -40,7 +49,8 @@ export type AdminEventCreateData = Partial<Omit<ApiEventAdmin, "id">>
   providedIn: "root",
 })
 export class AdminPaymentgroupService {
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient)
+  private dialog = inject(Dialog)
 
   get(id: string) {
     return this.http.get<AdminPaymentgroupData>(
@@ -72,6 +82,16 @@ export class AdminPaymentgroupService {
     })
   }
 
+  create(
+    data: Pick<ApiPaymentgroupAdmin, "eventgroup_id" | "title" | "description">,
+  ) {
+    return this.http.post<
+      ApiPaymentgroupAdmin & {
+        eventgroup: ApiEventgroupAdmin
+      }
+    >(api(`paymentgroup`), data)
+  }
+
   update(data: { id: number; title: string; description: string | null }) {
     return this.http.put<
       ApiPaymentgroupAdmin & {
@@ -86,5 +106,51 @@ export class AdminPaymentgroupService {
         eventgroup: ApiEventgroupAdmin
       }
     >(api(`paymentgroup/${id}/close`), null)
+  }
+
+  setPreferredGroup(group?: ApiPaymentgroupAdmin) {
+    if (group) {
+      sessionStorage.setItem("lastPaymentgroup", String(group.id))
+    }
+  }
+
+  getPreferredGroup(groups: ApiPaymentgroupAdmin[], overrideId?: number) {
+    if (overrideId) {
+      const found = groups.find((it) => it.id === overrideId)
+      if (found) {
+        return found
+      }
+    }
+
+    const lastId = sessionStorage.getItem("lastPaymentgroup")
+    if (!lastId) {
+      return undefined
+    }
+
+    return groups.find((it) => it.id === Number(lastId)) ?? undefined
+  }
+
+  createModal(eventgroupId: number) {
+    return this.dialog.open<
+      ApiPaymentgroupAdmin,
+      AdminPaymentgroupCreateComponentInput
+    >(AdminPaymentgroupCreateComponent, {
+      data: {
+        eventgroupId,
+      },
+    }).closed
+  }
+
+  selectModal(data: {
+    eventgroupId: number
+    actionText: string
+    amount: number
+  }) {
+    return this.dialog.open<
+      ApiPaymentgroupAdmin,
+      AdminPaymentgroupSelectComponentInput
+    >(AdminPaymentgroupSelectComponent, {
+      data,
+    }).closed
   }
 }

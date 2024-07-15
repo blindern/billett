@@ -220,7 +220,7 @@ export interface ApiPaymentsourceAdmin {
   title: string
   comment: string | null
   amount: number
-  data: Record<string, number>
+  data: Record<string, number> | null
 }
 
 export interface ApiTicketgroupAdmin {

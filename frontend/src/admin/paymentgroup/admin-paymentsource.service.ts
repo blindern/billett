@@ -1,51 +1,26 @@
 import { HttpClient } from "@angular/common/http"
-import { Injectable } from "@angular/core"
+import { inject, Injectable } from "@angular/core"
 import { api } from "../../api"
+import { ApiPaymentsourceAdmin } from "../../apitypes"
 
 @Injectable({
   providedIn: "root",
 })
 export class AdminPaymentsourceService {
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient)
+
+  create(
+    data: Pick<
+      ApiPaymentsourceAdmin,
+      "paymentgroup_id" | "amount" | "title" | "comment" | "type" | "data"
+    >,
+  ) {
+    return this.http.post<ApiPaymentsourceAdmin>(api("paymentsource"), data)
+  }
 
   delete(id: number) {
     return this.http.delete(api(`paymentsource/${encodeURIComponent(id)}`), {
       responseType: "text",
     })
   }
-
-  /*
-  get(id: string) {
-    return this.http.get<ApiPaymentgroupAdmin>(
-      api(`paymentsource/${encodeURIComponent(id)}`),
-      {
-        params: {
-          admin: "1",
-        },
-      },
-    )
-  }
-  */
-
-  /* TODO(migrate)
-  r.newModal = (paymentgroup) => {
-    return $modal.open({
-      template: paymentsourceNewTemplate,
-      controller: "AdminPaymentsourceNewController as ctrl",
-      resolve: {
-        paymentgroup: () => {
-          return paymentgroup
-        },
-      },
-    })
-  }
-
-  r.selectModal = (resolve) => {
-    return $modal.open({
-      template: paymentgroupSelectTemplate,
-      controller: "AdminPaymentgroupSelectController as ctrl",
-      resolve: resolve,
-    })
-  }
-  */
 }
