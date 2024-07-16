@@ -90,7 +90,10 @@ export class AdminOrderListComponent implements OnInit {
         }
 
         this.adminOrderService
-          .query(this.search.page, this.genFilter())
+          .query({
+            page: this.search.page,
+            filter: this.genFilter(),
+          })
           .subscribe((data) => {
             this.orders = this.parseOrdersList(data)
           })

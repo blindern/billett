@@ -3,11 +3,7 @@ import { NgClass } from "@angular/common"
 import { Component, inject, Inject, OnInit } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { RouterLink } from "@angular/router"
-import {
-  ApiEventAdmin,
-  ApiOrderAdmin,
-  ApiTicketgroupAdmin,
-} from "../../apitypes"
+import { ApiEventAdmin, ApiTicketgroupAdmin } from "../../apitypes"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PricePipe } from "../../common/price.pipe"
@@ -19,7 +15,7 @@ import { AdminOrderService } from "../order/admin-order.service"
 
 export interface AdminTicketgroupAddToOrderComponentInput {
   eventgroupId: number
-  order: ApiOrderAdmin
+  getOrderId: () => Promise<number>
 }
 
 @Component({
@@ -95,27 +91,29 @@ export class AdminTicketgroupAddToOrderComponent implements OnInit {
 
   submit() {
     this.sending = true
-    this.adminOrderService
-      .createTickets(
-        this.data.order.id,
-        Object.fromEntries(
-          Object.values(this.ticketgroupsToAdd).map((group) => [
-            group.ticketgroup.id,
-            group.num,
-          ]),
-        ),
-      )
-      .subscribe({
-        next: (paymentgroup) => {
-          this.sending = false
-          this.dialogRef.close(paymentgroup)
-        },
-        error: (err) => {
-          this.sending = false
-          console.error(err)
-          alert("Ukjent feil oppsto ved registrering av billetter")
-        },
-      })
+    this.data.getOrderId().then((orderId) => {
+      this.adminOrderService
+        .createTickets(
+          orderId,
+          Object.fromEntries(
+            Object.values(this.ticketgroupsToAdd).map((group) => [
+              group.ticketgroup.id,
+              group.num,
+            ]),
+          ),
+        )
+        .subscribe({
+          next: (tickets) => {
+            this.sending = false
+            this.dialogRef.close(tickets)
+          },
+          error: (err) => {
+            this.sending = false
+            console.error(err)
+            alert("Ukjent feil oppsto ved registrering av billetter")
+          },
+        })
+    })
   }
 
   cancel() {

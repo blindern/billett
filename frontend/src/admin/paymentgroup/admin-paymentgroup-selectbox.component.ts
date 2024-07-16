@@ -48,6 +48,7 @@ export class AdminPaymentgroupSelectboxComponent implements OnInit {
           paymentgroups,
           this.paymentgroup ? this.paymentgroup.id : undefined,
         )
+        this.selectedPaymentgroupId = updated?.id.toString() ?? ""
 
         if (this.paymentgroup?.id !== updated?.id) {
           this.paymentgroup = updated
@@ -63,6 +64,7 @@ export class AdminPaymentgroupSelectboxComponent implements OnInit {
         if (paymentgroup) {
           this.paymentgroup = paymentgroup
           this.paymentgroupChange.emit(paymentgroup)
+          this.selectedPaymentgroupId = paymentgroup.id.toString()
           this.paymentgroupService.setPreferredGroup(paymentgroup)
         }
       })

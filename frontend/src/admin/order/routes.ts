@@ -1,14 +1,13 @@
 import { Routes } from "@angular/router"
 import { requireAdmin } from "../../auth/require-admin"
 import { TodoComponent } from "../todo.component"
+import { AdminOrderCreateComponent } from "./admin-order-create.component"
 import { AdminOrderListComponent } from "./admin-order-list.component"
 
 export const routes: Routes = [
   {
-    path: "a/order/new/:id",
-    // new.html
-    // component: AdminOrderNewComponent,
-    component: TodoComponent,
+    path: "a/order/new/:eventgroupId",
+    component: AdminOrderCreateComponent,
     canActivate: [requireAdmin],
   },
   {
