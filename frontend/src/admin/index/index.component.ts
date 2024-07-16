@@ -1,10 +1,8 @@
 import { Component, OnInit } from "@angular/core"
 import { RouterLink } from "@angular/router"
+import { ApiEventgroupAdmin } from "../../apitypes"
 import { PagePropertyComponent } from "../../common/page-property.component"
-import {
-  AdminEventgroupData,
-  AdminEventgroupService,
-} from "../eventgroup/admin-eventgroup.service"
+import { AdminEventgroupService } from "../eventgroup/admin-eventgroup.service"
 
 @Component({
   selector: "admin-index",
@@ -13,7 +11,7 @@ import {
   templateUrl: "./index.component.html",
 })
 export class AdminIndexComponent implements OnInit {
-  eventgroups?: AdminEventgroupData[]
+  eventgroups?: ApiEventgroupAdmin[]
 
   constructor(private adminEventgroupService: AdminEventgroupService) {}
 

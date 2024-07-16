@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { Router, RouterLink } from "@angular/router"
 import { catchError, NEVER } from "rxjs"
+import { ApiEventgroupAdmin } from "../../apitypes"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
 import { PageService } from "../../common/page.service"
@@ -10,10 +11,7 @@ import {
   handleResourceLoadingStates,
   ResourceLoadingState,
 } from "../../common/resource-loading"
-import {
-  AdminEventgroupData,
-  AdminEventgroupService,
-} from "./admin-eventgroup.service"
+import { AdminEventgroupService } from "./admin-eventgroup.service"
 
 @Component({
   selector: "admin-eventgroup-edit",
@@ -31,7 +29,7 @@ export class AdminEventgroupEditComponent implements OnInit {
   id!: string
 
   pageState = new ResourceLoadingState()
-  eventgroup?: AdminEventgroupData
+  eventgroup?: ApiEventgroupAdmin
 
   constructor(
     private adminEventgroupService: AdminEventgroupService,

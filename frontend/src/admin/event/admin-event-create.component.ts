@@ -1,16 +1,14 @@
 import { Component, Input, OnInit } from "@angular/core"
 import { Router, RouterLink } from "@angular/router"
 import { api } from "../../api"
+import { ApiEventgroupAdmin } from "../../apitypes"
 import { PageStatesComponent } from "../../common/page-states.component"
 import { PageService } from "../../common/page.service"
 import {
   handleResourceLoadingStates,
   ResourceLoadingState,
 } from "../../common/resource-loading"
-import {
-  AdminEventgroupData,
-  AdminEventgroupService,
-} from "../eventgroup/admin-eventgroup.service"
+import { AdminEventgroupService } from "../eventgroup/admin-eventgroup.service"
 import { AdminEventFormComponent } from "./admin-event-form.component"
 import { AdminEventCreateData, AdminEventService } from "./admin-event.service"
 
@@ -27,7 +25,7 @@ export class AdminEventCreateComponent implements OnInit {
   api = api
 
   pageState = new ResourceLoadingState()
-  eventgroup?: AdminEventgroupData
+  eventgroup?: ApiEventgroupAdmin
   event?: AdminEventCreateData
 
   constructor(

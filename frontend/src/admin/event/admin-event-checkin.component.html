@@ -48,7 +48,7 @@
             @for (g of event.ticketgroups; track g.id) {
               <tr>
                 <td>
-                  #{{ g.id }} <a href="a/event/{{ event.id }}/ticketgroup/{{ g.id }}">{{ g.title }}</a
+                  #{{ g.id }} <a routerLink="/a/event/{{ event.id }}/ticketgroup/{{ g.id }}">{{ g.title }}</a
                   >&nbsp;<abbr title="Pris inkl. avgift">{{ g.price + g.fee | price }}</abbr>
                   @if (!g.is_normal) {
                     (teller ikke som normal)

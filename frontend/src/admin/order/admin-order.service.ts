@@ -47,14 +47,12 @@ export class AdminOrderService {
     return this.http.post(api(`order/${orderId}/email`), params)
   }
 
-  /* TODO(migrate)
-  addTicketsModal(resolve) {
-    return $modal.open({
-      // "../ticketgroup/add_ticketgroup_to_order.html?raw"
-      template: addTicketgroupToOrderTemplate,
-      controller: "AdminTicketgroupAddToOrderController as ctrl",
-      resolve: resolve,
-    })
+  createTickets(orderId: number, ticketgroupToCount: Record<number, number>) {
+    return this.http.post<ApiTicketAdmin[]>(
+      api(`order/${orderId}/create_tickets`),
+      {
+        ticketgroups: ticketgroupToCount,
+      },
+    )
   }
-  */
 }

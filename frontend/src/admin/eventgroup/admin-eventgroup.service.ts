@@ -1,9 +1,20 @@
 import { HttpClient } from "@angular/common/http"
 import { Injectable } from "@angular/core"
 import { api } from "../../api"
-import { ApiEventgroupAdmin, ApiSoldTicketsStats } from "../../apitypes"
+import {
+  ApiDaytheme,
+  ApiEventAdmin,
+  ApiEventgroupAdmin,
+  ApiSoldTicketsStats,
+  ApiTicketgroupAdmin,
+} from "../../apitypes"
 
-export type AdminEventgroupData = ApiEventgroupAdmin
+export type AdminEventgroupData = ApiEventgroupAdmin & {
+  events: (ApiEventAdmin & {
+    ticketgroups: ApiTicketgroupAdmin[]
+  })[]
+  daythemes: ApiDaytheme[]
+}
 
 @Injectable({
   providedIn: "root",
@@ -12,13 +23,13 @@ export class AdminEventgroupService {
   constructor(private http: HttpClient) {}
 
   query() {
-    return this.http.get<AdminEventgroupData[]>(api("eventgroup"), {
+    return this.http.get<ApiEventgroupAdmin[]>(api("eventgroup"), {
       params: { admin: "1" },
     })
   }
 
   create(data: { title: string; is_active: boolean }) {
-    return this.http.post<AdminEventgroupData>(api("eventgroup"), data, {
+    return this.http.post<ApiEventgroupAdmin>(api("eventgroup"), data, {
       params: { admin: "1" },
     })
   }
@@ -32,8 +43,8 @@ export class AdminEventgroupService {
     )
   }
 
-  update(data: AdminEventgroupData) {
-    return this.http.put<AdminEventgroupData>(
+  update(data: ApiEventgroupAdmin) {
+    return this.http.put<ApiEventgroupAdmin>(
       api(`eventgroup/${encodeURIComponent(data.id)}`),
       data,
       { params: { admin: "1" } },

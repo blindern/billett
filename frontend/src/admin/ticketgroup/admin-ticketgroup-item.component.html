@@ -1,25 +1,30 @@
-<div class="admin-ticketgroup-new">
+<page-states [state]="pageState"></page-states>
+
+@if (ticketgroup) {
   <page-property
     name="title"
-    value="{{ event.title }} ({{ event.time_start | formatdate: 'DD. MMM' }}): Ny billettgruppe"
+    value="{{ ticketgroup.event.title }} ({{ ticketgroup.event.time_start | formatdate: 'DD. MMM' }}): {{
+      ticketgroup.title
+    }}"
   ></page-property>
 
   <div class="page-header">
-    <h1>{{ event.eventgroup.title }}</h1>
+    <h1>
+      <span class="eventgroup">
+        <a routerLink="/a/event/{{ ticketgroup.event.id }}">{{ ticketgroup.event.title }}</a>
+      </span>
+      Rediger billettgruppe
+    </h1>
   </div>
 
-  <p><a routerLink="/a/event/{{ event_id }}">« Tilbake</a></p>
+  @if (ticketgroup.has_tickets) {
+    <p>
+      Billettgruppen har enten reserverte eller tilknyttede billetter. Derfor er en del av feltene utilgjengelig for
+      endringer.
+    </p>
+  }
 
-  <h2>{{ event.title }}</h2>
-
-  <h3>Ny billettgruppe</h3>
-
-  <p>
-    Nye billettgrupper kan brukes i billettluke med en gang. Dersom billettgruppen skal være tilgjengelig på nettsiden
-    må dette aktiveres etter billettgruppen er opprettet.
-  </p>
-
-  <form (ngSubmit)="addTicketgroup()" class="form-horizontal" autocomplete="off">
+  <form (ngSubmit)="updateTicketgroup()" class="form-horizontal" autocomplete="off">
     <div class="form-group">
       <label for="title" class="col-sm-3 control-label">Tittel</label>
       <div class="col-sm-7">
@@ -28,9 +33,11 @@
           class="form-control"
           [(ngModel)]="ticketgroup.title"
           id="title"
+          name="title"
           placeholder=""
           required=""
           autofocus=""
+          [disabled]="ticketgroup.has_tickets"
         />
       </div>
     </div>
@@ -42,7 +49,9 @@
           class="form-control"
           [(ngModel)]="ticketgroup.ticket_text"
           id="ticket_text"
+          name="ticket_text"
           placeholder="(valgfritt)"
+          [disabled]="ticketgroup.has_tickets"
         />
         <span class="help-block">Kan f.eks. være gyldighetsinformasjon for studentbillett.</span>
       </div>
@@ -56,12 +65,22 @@
           class="form-control"
           [(ngModel)]="ticketgroup.price"
           id="price"
+          name="price"
           placeholder=""
           required=""
+          [disabled]="ticketgroup.has_tickets"
         />
       </div>
       <div class="col-sm-3">
-        <input type="number" class="form-control" [(ngModel)]="ticketgroup.fee" id="fee" placeholder="(valgfritt)" />
+        <input
+          type="number"
+          class="form-control"
+          [(ngModel)]="ticketgroup.fee"
+          id="fee"
+          name="fee"
+          placeholder="(valgfritt)"
+          [disabled]="ticketgroup.has_tickets"
+        />
         <span class="help-block">Evt. billettgebyr regnes i tillegg til billettpris</span>
       </div>
     </div>
@@ -74,6 +93,7 @@
           class="form-control"
           [(ngModel)]="ticketgroup.limit"
           id="max_sales"
+          name="max_sales"
           placeholder="(valgfritt)"
         />
       </div>
@@ -82,8 +102,7 @@
     <div class="form-group">
       <div class="col-sm-offset-3 col-sm-9">
         <label>
-          <input type="checkbox" [(ngModel)]="ticketgroup.use_office" />
-          Tilgjengelig for kjøp i billettluke?
+          <input type="checkbox" [(ngModel)]="ticketgroup.use_office" name="use_office" /> Aktiv for salg i billettluke?
         </label>
       </div>
     </div>
@@ -91,7 +110,7 @@
     <div class="form-group">
       <div class="col-sm-offset-3 col-sm-9">
         <label>
-          <input type="checkbox" [(ngModel)]="ticketgroup.use_web" />
+          <input type="checkbox" [(ngModel)]="ticketgroup.use_web" name="use_web" />
           Tilgjengelig for kjøp på nettside?
         </label>
       </div>
@@ -100,7 +119,7 @@
     <div class="form-group">
       <div class="col-sm-offset-3 col-sm-9">
         <label>
-          <input type="checkbox" [(ngModel)]="ticketgroup.is_normal" />
+          <input type="checkbox" [(ngModel)]="ticketgroup.is_normal" name="is_normal" />
           Billetter solgt telles som normalt salg
         </label>
       </div>
@@ -108,13 +127,11 @@
 
     <div class="form-group">
       <div class="col-sm-8 col-sm-offset-3">
-        <input type="submit" value="Opprett" class="btn btn-primary" />
+        <button type="submit" class="btn btn-success">Oppdater</button>
+        <button type="button" class="btn btn-danger" [disabled]="ticketgroup.has_tickets" (click)="deleteTicketgroup()">
+          Slett
+        </button>
       </div>
     </div>
   </form>
-
-  <p>
-    <b>NB!</b> Billettgrupper kan i liten grad redigeres når det blir tilegnet billetter til dem. Dette inkluderer pris.
-    Ved behov må man opprette nye billettgrupper så de gamle bevares.
-  </p>
-</div>
+}

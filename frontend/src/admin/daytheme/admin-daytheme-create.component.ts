@@ -3,16 +3,14 @@ import { FormsModule } from "@angular/forms"
 import { Router, RouterLink } from "@angular/router"
 import moment from "moment"
 import { catchError, of } from "rxjs"
+import { ApiEventgroupAdmin } from "../../apitypes"
 import { PageStatesComponent } from "../../common/page-states.component"
 import { PageService } from "../../common/page.service"
 import {
   handleResourceLoadingStates,
   ResourceLoadingState,
 } from "../../common/resource-loading"
-import {
-  AdminEventgroupData,
-  AdminEventgroupService,
-} from "../eventgroup/admin-eventgroup.service"
+import { AdminEventgroupService } from "../eventgroup/admin-eventgroup.service"
 import { AdminDaythemeService } from "./admin-daytheme.service"
 
 @Component({
@@ -26,7 +24,7 @@ export class AdminDaythemeCreateComponent implements OnInit {
   eventgroupId!: string
 
   pageState = new ResourceLoadingState()
-  eventgroup?: AdminEventgroupData
+  eventgroup?: ApiEventgroupAdmin
   form = {
     title: "",
     date: "",

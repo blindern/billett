@@ -237,6 +237,7 @@ export interface ApiTicketgroupAdmin {
   fee: number
   limit: number | null
   order: number
+  has_tickets: boolean
 }
 
 export type ApiTicketgroup = Pick<
