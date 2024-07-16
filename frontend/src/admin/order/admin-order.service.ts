@@ -1,5 +1,6 @@
+import { Dialog } from "@angular/cdk/dialog"
 import { HttpClient } from "@angular/common/http"
-import { Injectable } from "@angular/core"
+import { inject, Injectable } from "@angular/core"
 import { api } from "../../api"
 import {
   ApiEventAdmin,
@@ -11,6 +12,10 @@ import {
   ApiTicketgroupAdmin,
   Paginated,
 } from "../../apitypes"
+import {
+  AdminOrderEmailComponent,
+  AdminOrderEmailComponentInput,
+} from "./admin-order-email.component"
 
 export type AdminOrderData = Paginated<
   ApiOrderAdmin & {
@@ -37,7 +42,8 @@ export type AdminOrderGetData = ApiOrderAdmin & {
   providedIn: "root",
 })
 export class AdminOrderService {
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient)
+  private dialog = inject(Dialog)
 
   query(options: { page?: number; filter: string; limit?: number }) {
     const limit = options.limit ?? 20
@@ -68,6 +74,11 @@ export class AdminOrderService {
     return this.http.put<AdminOrderGetData>(
       api(`order/${encodeURIComponent(data.id)}`),
       data,
+      {
+        params: {
+          admin: "1",
+        },
+      },
     )
   }
 
@@ -81,11 +92,11 @@ export class AdminOrderService {
     })
   }
 
-  sendEmail(orderId: number, email: string, text: string) {
+  sendEmail(options: { orderId: number; email: string; text: string }) {
     const params: Record<string, string> = {}
-    if (email) params.email = email
-    if (text) params.text = text
-    return this.http.post(api(`order/${orderId}/email`), params)
+    if (options.email) params.email = options.email
+    if (options.text) params.text = options.text
+    return this.http.post(api(`order/${options.orderId}/email`), params)
   }
 
   createTickets(orderId: number, ticketgroupToCount: Record<number, number>) {
@@ -97,15 +108,56 @@ export class AdminOrderService {
     )
   }
 
-  validate(
+  validateAndConvert(
     orderId: number,
     paymentgroup: ApiPaymentgroupAdmin,
     amount: number,
   ) {
     return this.http.post<ApiOrderAdmin>(api(`order/${orderId}/validate`), {
-      paymentgroup: paymentgroup.id,
+      paymentgroup_id: paymentgroup.id,
       amount,
       sendmail: true,
     })
+  }
+
+  validate(orderId: number) {
+    return this.http.post<ApiOrderAdmin>(api(`order/${orderId}/validate`), null)
+  }
+
+  getTotalValid(
+    order: ApiOrderAdmin & {
+      tickets: (ApiTicketAdmin & { ticketgroup: ApiTicketgroupAdmin })[]
+    },
+  ) {
+    return order.tickets
+      .filter((it) => it.is_valid && !it.is_revoked)
+      .reduce(
+        (acc, ticket) =>
+          acc + ticket.ticketgroup.price + ticket.ticketgroup.fee,
+        0,
+      )
+  }
+
+  getTotalReserved(
+    order: ApiOrderAdmin & {
+      tickets: (ApiTicketAdmin & { ticketgroup: ApiTicketgroupAdmin })[]
+    },
+  ) {
+    return order.tickets
+      .filter((it) => !it.is_valid && !it.is_revoked)
+      .reduce(
+        (acc, ticket) =>
+          acc + ticket.ticketgroup.price + ticket.ticketgroup.fee,
+        0,
+      )
+  }
+
+  emailModal(data: AdminOrderEmailComponentInput) {
+    return this.dialog.open<boolean, AdminOrderEmailComponentInput>(
+      AdminOrderEmailComponent,
+      {
+        data,
+      },
+    ).closed
   }
 }

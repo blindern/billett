@@ -1,7 +1,7 @@
 import { Routes } from "@angular/router"
 import { requireAdmin } from "../../auth/require-admin"
-import { TodoComponent } from "../todo.component"
 import { AdminOrderCreateComponent } from "./admin-order-create.component"
+import { AdminOrderItemComponent } from "./admin-order-item.component"
 import { AdminOrderListComponent } from "./admin-order-list.component"
 
 export const routes: Routes = [
@@ -12,9 +12,7 @@ export const routes: Routes = [
   },
   {
     path: "a/order/:id",
-    // order.html
-    // component: AdminOrderComponent,
-    component: TodoComponent,
+    component: AdminOrderItemComponent,
     canActivate: [requireAdmin],
   },
   {

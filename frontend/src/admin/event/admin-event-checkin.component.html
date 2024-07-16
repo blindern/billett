@@ -1,7 +1,13 @@
+<style>
+  .isLoading {
+    opacity: 0.4;
+  }
+</style>
+
 <page-states [state]="pageState"></page-states>
 
 @if (event) {
-  <div class="admin-event-checkin">
+  <div>
     <page-property
       name="title"
       value="Innsjekking: {{ event.title }} ({{ event.time_start | formatdate: 'DD. MMM' }})"

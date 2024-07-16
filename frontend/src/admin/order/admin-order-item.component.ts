@@ -1,0 +1,297 @@
+import { NgClass } from "@angular/common"
+import { Component, inject, Input, OnInit } from "@angular/core"
+import { FormsModule } from "@angular/forms"
+import { Router, RouterLink } from "@angular/router"
+import { api } from "../../api"
+import { ApiTicketAdmin, ApiTicketgroupAdmin } from "../../apitypes"
+import { FormatdatePipe } from "../../common/formatdate.pipe"
+import { MarkdownComponent } from "../../common/markdown.component"
+import { PagePropertyComponent } from "../../common/page-property.component"
+import { PageStatesComponent } from "../../common/page-states.component"
+import { PageService } from "../../common/page.service"
+import { PricePipe } from "../../common/price.pipe"
+import {
+  handleResourceLoadingStates,
+  ResourceLoadingState,
+} from "../../common/resource-loading"
+import { AdminPaymentService } from "../payment/admin-payment.service"
+import { AdminPaymentgroupService } from "../paymentgroup/admin-paymentgroup.service"
+import { AdminTicketRevokeComponentInput } from "../ticket/admin-ticket-revoke.component"
+import { AdminTicketService } from "../ticket/admin-ticket.service"
+import { AdminTicketgroupService } from "../ticketgroup/admin-ticketgroup.service"
+import { AdminOrderGetData, AdminOrderService } from "./admin-order.service"
+
+@Component({
+  selector: "admin-order-item",
+  standalone: true,
+  imports: [
+    PageStatesComponent,
+    PagePropertyComponent,
+    RouterLink,
+    FormsModule,
+    PricePipe,
+    FormatdatePipe,
+    NgClass,
+    MarkdownComponent,
+  ],
+  templateUrl: "./admin-order-item.component.html",
+})
+export class AdminOrderItemComponent implements OnInit {
+  private adminOrderService = inject(AdminOrderService)
+  private adminPaymentgroupService = inject(AdminPaymentgroupService)
+  private adminTicketgroupService = inject(AdminTicketgroupService)
+  private adminTicketService = inject(AdminTicketService)
+  private adminPaymentService = inject(AdminPaymentService)
+  private pageService = inject(PageService)
+  private router = inject(Router)
+
+  api = api
+
+  @Input()
+  id!: string
+
+  pageState = new ResourceLoadingState()
+  order?: AdminOrderGetData
+
+  #editFields = ["name", "email", "phone", "recruiter", "comment"]
+  edit?: AdminOrderGetData
+
+  ngOnInit(): void {
+    this.pageService.set("title", "Ordre")
+
+    this.adminOrderService
+      .get(this.id)
+      .pipe(handleResourceLoadingStates(this.pageState))
+      .subscribe((data) => {
+        this.order = data
+      })
+  }
+
+  refreshOrder() {
+    this.adminOrderService.get(this.id).subscribe((data) => {
+      this.order = data
+    })
+  }
+
+  get balance() {
+    return Number(this.order!.balance)
+  }
+
+  get totalValid() {
+    return this.adminOrderService.getTotalValid(this.order!)
+  }
+
+  get totalReserved() {
+    return this.adminOrderService.getTotalReserved(this.order!)
+  }
+
+  get countReserved() {
+    return this.order!.tickets.reduce(
+      (acc, ticket) => acc + (!ticket.is_valid ? 1 : 0),
+      0,
+    )
+  }
+
+  get countValid() {
+    return this.order!.tickets.reduce(
+      (acc, ticket) => acc + (ticket.is_valid && !ticket.is_revoked ? 1 : 0),
+      0,
+    )
+  }
+
+  get countRevoked() {
+    return this.order!.tickets.reduce(
+      (acc, ticket) => acc + (ticket.is_valid && ticket.is_revoked ? 1 : 0),
+      0,
+    )
+  }
+
+  get validTickets() {
+    return this.order!.tickets.filter(
+      (ticket) => ticket.is_valid && !ticket.is_revoked,
+    )
+  }
+
+  get totalPaid() {
+    return this.order!.payments.reduce(
+      (acc, payment) => acc + Number(payment.amount),
+      0,
+    )
+  }
+
+  startEdit() {
+    this.edit = this.order
+  }
+
+  abortEdit() {
+    this.edit = undefined
+  }
+
+  save() {
+    this.#editFields.forEach((field) => {
+      this.order![field] = this.edit![field]
+    })
+    this.adminOrderService.update(this.order!).subscribe((order) => {
+      this.order = order
+      this.edit = undefined
+    })
+  }
+
+  deleteReservation() {
+    const eventgroupId = this.order!.eventgroup.id
+    this.adminOrderService.delete(this.order!.id).subscribe({
+      next: () => {
+        this.router.navigateByUrl(`/a/orders?eventgroup_id=${eventgroupId}`)
+      },
+      error: (err) => {
+        console.error(err)
+        alert("Feil ved sletting av ordre")
+      },
+    })
+  }
+
+  completeOrder() {
+    this.adminPaymentgroupService
+      .selectModal({
+        eventgroupId: this.order!.eventgroup.id,
+        actionText: "Marker som betalt",
+        amount: this.totalReserved,
+      })
+      .subscribe((paymentgroup) => {
+        if (!paymentgroup) return
+
+        this.adminOrderService
+          .validateAndConvert(this.order!.id, paymentgroup, this.totalReserved)
+          .subscribe({
+            next: (order) => {
+              this.refreshOrder()
+            },
+            error: (err) => {
+              // TODO(migrate): response body error handling
+              // if (err.data == "amount mismatched") {
+              //   alert(
+              //     "Noe i reservasjonen ser ut til å ha endret seg. Prøv på nytt.",
+              //   )
+              //   this.getOrCreateOrder(true)
+              // } else {
+              console.error(err)
+              alert(err.data)
+              this.refreshOrder()
+              // }
+            },
+          })
+      })
+  }
+
+  convertOrder() {
+    this.adminOrderService.validate(this.order!.id).subscribe({
+      next: () => {
+        this.refreshOrder()
+      },
+    })
+  }
+
+  addTickets() {
+    this.adminTicketgroupService
+      .addTicketsModal({
+        eventgroupId: this.order!.eventgroup.id,
+        getOrderId: async () => this.order!.id,
+      })
+      .subscribe((tickets) => {
+        if (!tickets) return
+        this.refreshOrder()
+      })
+  }
+
+  revokeTicket(ticket: AdminTicketRevokeComponentInput["ticket"]) {
+    this.adminTicketService
+      .revokeModal({
+        order: this.order!,
+        ticket,
+      })
+      .subscribe((result) => {
+        if (!result) return
+        this.refreshOrder()
+      })
+  }
+
+  validateTicket(
+    ticket: ApiTicketAdmin & {
+      ticketgroup: ApiTicketgroupAdmin
+    },
+  ) {
+    this.adminPaymentgroupService
+      .selectModal({
+        eventgroupId: this.order!.eventgroup.id,
+        actionText: "Inntekstfør",
+        amount: ticket.ticketgroup.price + ticket.ticketgroup.fee,
+      })
+      .subscribe((paymentgroup) => {
+        if (!paymentgroup) return
+
+        this.adminTicketService
+          .validateAndConvert(ticket.id, paymentgroup)
+          .subscribe(() => {
+            this.refreshOrder()
+          })
+      })
+  }
+
+  deleteTicket(ticket: ApiTicketAdmin) {
+    this.adminTicketService.delete(ticket.id).subscribe({
+      next: () => {
+        this.refreshOrder()
+      },
+      error: () => {
+        this.refreshOrder()
+      },
+    })
+  }
+
+  newPayment() {
+    this.adminPaymentService
+      .createModal({
+        order: this.order!,
+      })
+      .subscribe(() => {
+        this.refreshOrder()
+      })
+  }
+
+  sendEmail() {
+    this.adminOrderService
+      .emailModal({
+        order: this.order!,
+      })
+      .subscribe((sent) => {
+        if (!sent) return
+        this.pageService.toast("E-post ble sendt", { class: "success" })
+      })
+  }
+
+  printTickets() {
+    // TODO(migrate)
+    // AdminPrinter.printSelectModal(async (printername) => {
+    //   try {
+    //     await AdminPrinter.printTickets(printername, this.validtickets)
+    //     Page.toast("Utskrift lagt i kø", { class: "success" })
+    //   } catch (e) {
+    //     Page.toast("Ukjent feil oppsto!", { class: "warning" })
+    //     throw e
+    //   }
+    // })
+  }
+
+  printTicket(ticketid) {
+    // TODO(migrate)
+    // AdminPrinter.printSelectModal(async (printername) => {
+    //   try {
+    //     await AdminPrinter.printTicket(printername, ticketid)
+    //     Page.toast("Utskrift lagt i kø", { class: "success" })
+    //   } catch (e) {
+    //     Page.toast("Ukjent feil oppsto!", { class: "warning" })
+    //     throw e
+    //   }
+    // })
+  }
+}

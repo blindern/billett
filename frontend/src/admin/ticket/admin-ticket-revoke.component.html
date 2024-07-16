@@ -1,0 +1,44 @@
+<div class="modal-header">
+  <h3 class="modal-title">Tilbaketrekk billett</h3>
+</div>
+
+@if (sending) {
+  <div class="modal-body text-center">Utfører ...</div>
+} @else {
+  <div class="modal-body">
+    <p>En billett som tilbaketrekkes kan ikke aktiveres igjen. I så fall må ny billett opprettes.</p>
+
+    <form class="form-horizontal" (ngSubmit)="submit()">
+      <div class="row">
+        <label class="col-sm-4 control-label">Billett</label>
+        <div class="col-sm-7 form-control-static">
+          <a routerLink="/a/event/{{ data.ticket.event.id }}"
+            >{{ data.ticket.event.time_start | formatdate: "D. MMM YYYY HH:mm" }}: {{ data.ticket.event.title }}</a
+          >
+          ({{ data.ticket.ticketgroup.title }}) #{{ data.ticket.id }}
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-4 control-label">Pris</label>
+        <div class="col-sm-7 form-control-static">
+          {{ data.ticket.ticketgroup.price + data.ticket.ticketgroup.fee | price }}
+          (hvorav {{ data.ticket.ticketgroup.fee | price }} i avgift)
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="paymentgroup" class="col-sm-4 control-label">Oppgjørsgruppe</label>
+        <div class="col-sm-7">
+          <admin-paymentgroup-selectbox [eventgroupId]="data.order.eventgroup.id" [(paymentgroup)]="paymentgroup" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-7 col-sm-offset-4">
+          <input class="btn btn-danger" type="submit" value="Tilbaketrekk billett" [disabled]="!paymentgroup" />
+          <button type="button" class="btn btn-default" (click)="cancel()">Avbryt</button>
+        </div>
+      </div>
+    </form>
+  </div>
+}

@@ -90,25 +90,8 @@ export class AdminOrderCreateComponent implements OnInit {
     })[]
   })[] = []
 
-  getTotalValid(order: (typeof this)["order"]) {
-    return order.tickets
-      .filter((it) => it.is_valid && !it.is_revoked)
-      .reduce(
-        (acc, ticket) =>
-          acc + ticket.ticketgroup.price + ticket.ticketgroup.fee,
-        0,
-      )
-  }
-
-  getTotalReserved(order: (typeof this)["order"]) {
-    return order.tickets
-      .filter((it) => !it.is_valid && !it.is_revoked)
-      .reduce(
-        (acc, ticket) =>
-          acc + ticket.ticketgroup.price + ticket.ticketgroup.fee,
-        0,
-      )
-  }
+  getTotalValid = this.adminOrderService.getTotalValid
+  getTotalReserved = this.adminOrderService.getTotalReserved
 
   // TODO(migrate)
   // if (this.order.is_valid) {
@@ -158,7 +141,7 @@ export class AdminOrderCreateComponent implements OnInit {
     this.saveEdit().then(
       () => {
         this.adminOrderService
-          .validate(this.order.id!, this.paymentgroup!, this.total)
+          .validateAndConvert(this.order.id!, this.paymentgroup!, this.total)
           .subscribe({
             next: (order) => {
               this.pageService.toast(
@@ -353,6 +336,8 @@ export class AdminOrderCreateComponent implements OnInit {
 
   private printTickets() {
     if (!this.printer) return
+
+    // TODO(migrate)
 
     // var list = []
     // this.order.tickets.forEach((ticket) => {
