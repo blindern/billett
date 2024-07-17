@@ -1,7 +1,7 @@
 import { Component } from "@angular/core"
 
 @Component({
-  selector: "salgsbetingelser",
+  selector: "billett-salgsbetingelser",
   standalone: true,
   imports: [],
   templateUrl: "./salgsbetingelser.component.html",

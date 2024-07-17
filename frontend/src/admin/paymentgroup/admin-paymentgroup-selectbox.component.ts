@@ -12,7 +12,7 @@ import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { AdminPaymentgroupService } from "./admin-paymentgroup.service"
 
 @Component({
-  selector: "admin-paymentgroup-selectbox",
+  selector: "billett-admin-paymentgroup-selectbox",
   standalone: true,
   imports: [FormsModule, FormatdatePipe],
   templateUrl: "./admin-paymentgroup-selectbox.component.html",

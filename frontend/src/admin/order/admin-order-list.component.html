@@ -4,7 +4,7 @@
   }
 </style>
 
-<page-property name="title" value="Ordreliste"></page-property>
+<billett-page-property name="title" value="Ordreliste" />
 
 <div class="admin-order-list">
   <div class="page-header">
@@ -195,12 +195,12 @@
 
     @if (orders) {
       <div class="text-center">
-        <pagination
+        <billett-pagination
           [page]="search.page"
           [total]="orders.pagination.total"
           [limit]="orders.pagination.limit"
           (changePage)="search.page = $event; immediateSearch()"
-        ></pagination>
+        />
       </div>
     }
   }

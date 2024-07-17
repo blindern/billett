@@ -8,7 +8,7 @@ import {
 } from "@angular/core"
 
 @Component({
-  selector: "pagination",
+  selector: "billett-pagination",
   standalone: true,
   imports: [],
   templateUrl: "./pagination.component.html",

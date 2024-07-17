@@ -1,8 +1,8 @@
-<page-states [state]="pageState"></page-states>
+<billett-page-states [state]="pageState" />
 
 @if (group) {
   <div class="admin-eventgroup">
-    <page-property name="title" value="{{ group.title }}"></page-property>
+    <billett-page-property name="title" value="{{ group.title }}" />
 
     <div class="page-header">
       <h1>

@@ -1,11 +1,11 @@
-<page-states [state]="pageState"></page-states>
+<billett-page-states [state]="pageState" />
 
 @if (event) {
   <div class="admin-event-edit">
-    <page-property
+    <billett-page-property
       name="title"
       value="Rediger: {{ event.title }} ({{ event.time_start | formatdate: 'DD. MMM' }})"
-    ></page-property>
+    />
 
     <div class="page-header">
       <h1>
@@ -18,6 +18,6 @@
 
     <p>Bilde for arrangementet endres på infosiden for arrangementet (holder musa over bildet).</p>
 
-    <admin-event-form [event]="event" [eventgroupId]="event.eventgroup.id" (submitForm)="storeEvent()" />
+    <billett-admin-event-form [event]="event" [eventgroupId]="event.eventgroup.id" (submitForm)="storeEvent()" />
   </div>
 }

@@ -7,7 +7,7 @@ import { AdminPrinterSelectboxComponent } from "./admin-printer-selectbox.compon
 import { AdminPrinterService } from "./admin-printer.service"
 
 @Component({
-  selector: "admin-printer-text",
+  selector: "billett-admin-printer-text",
   standalone: true,
   imports: [AdminPrinterSelectboxComponent, FormsModule],
   templateUrl: "./admin-printer-text.component.html",

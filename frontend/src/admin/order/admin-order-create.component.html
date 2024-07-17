@@ -15,10 +15,10 @@
   }
 </style>
 
-<page-states [state]="pageState"></page-states>
+<billett-page-states [state]="pageState" />
 
 @if (eventgroup && order) {
-  <page-property name="title" value="Ny ordre"></page-property>
+  <billett-page-property name="title" value="Ny ordre" />
 
   <div class="page-header">
     <h1>
@@ -125,7 +125,7 @@
           <div class="form-group">
             <label class="col-sm-4 control-label" for="printer">Skriv ut billetter</label>
             <div class="col-sm-8">
-              <admin-printer-selectbox [(printer)]="printer" [canDisable]="true" id="printer" />
+              <billett-admin-printer-selectbox [(printer)]="printer" [canDisable]="true" id="printer" />
             </div>
           </div>
         }
@@ -134,10 +134,7 @@
           <div class="form-group">
             <label class="col-sm-4 control-label" for="paymentgroup">Oppgjør</label>
             <div class="col-sm-8">
-              <admin-paymentgroup-selectbox
-                [eventgroupId]="eventgroup.id"
-                [(paymentgroup)]="paymentgroup"
-              ></admin-paymentgroup-selectbox>
+              <billett-admin-paymentgroup-selectbox [eventgroupId]="eventgroup.id" [(paymentgroup)]="paymentgroup" />
             </div>
           </div>
         }

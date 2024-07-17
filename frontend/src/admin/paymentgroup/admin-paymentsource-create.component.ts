@@ -19,7 +19,7 @@ export interface AdminPaymentsourceCreateComponentInput {
 }
 
 @Component({
-  selector: "admin-paymentsource-create",
+  selector: "billett-admin-paymentsource-create",
   standalone: true,
   imports: [
     PagePropertyComponent,

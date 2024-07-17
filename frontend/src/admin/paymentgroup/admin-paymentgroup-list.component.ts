@@ -13,7 +13,7 @@ import { AdminEventgroupService } from "../eventgroup/admin-eventgroup.service"
 import { AdminPaymentgroupService } from "./admin-paymentgroup.service"
 
 @Component({
-  selector: "admin-paymentgroup-list",
+  selector: "billett-admin-paymentgroup-list",
   standalone: true,
   imports: [
     PagePropertyComponent,

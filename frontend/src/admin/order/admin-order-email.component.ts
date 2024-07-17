@@ -11,7 +11,7 @@ export interface AdminOrderEmailComponentInput {
 }
 
 @Component({
-  selector: "admin-order-email",
+  selector: "billett-admin-order-email",
   standalone: true,
   imports: [FormsModule],
   templateUrl: "./admin-order-email.component.html",

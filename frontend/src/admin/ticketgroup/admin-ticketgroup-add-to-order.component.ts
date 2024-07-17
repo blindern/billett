@@ -19,7 +19,7 @@ export interface AdminTicketgroupAddToOrderComponentInput {
 }
 
 @Component({
-  selector: "admin-ticketgroup-add-to-order",
+  selector: "billett-admin-ticketgroup-add-to-order",
   standalone: true,
   imports: [
     PagePropertyComponent,

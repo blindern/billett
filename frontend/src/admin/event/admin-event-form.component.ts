@@ -13,7 +13,7 @@ import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { AdminEventCreateData, AdminEventData } from "./admin-event.service"
 
 @Component({
-  selector: "admin-event-form",
+  selector: "billett-admin-event-form",
   standalone: true,
   imports: [FormsModule, RouterLink, FormatdatePipe],
   templateUrl: "./admin-event-form.component.html",

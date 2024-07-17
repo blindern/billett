@@ -14,7 +14,7 @@ import {
 import { EventgroupExpanded, EventgroupService } from "./eventgroup.service"
 
 @Component({
-  selector: "app-guest-eventgroup",
+  selector: "billett-guest-eventgroup",
   standalone: true,
   imports: [
     CommonModule,

@@ -4,6 +4,7 @@ import { api } from "../api"
 import { AuthService } from "./auth.service"
 
 @Component({
+  selector: "billett-logout",
   standalone: true,
   template: "Logger ut",
 })

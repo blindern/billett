@@ -16,7 +16,7 @@ import {
 import { AdminTicketgroupService } from "./admin-ticketgroup.service"
 
 @Component({
-  selector: "admin-ticketgroup-item",
+  selector: "billett-admin-ticketgroup-item",
   standalone: true,
   imports: [
     PagePropertyComponent,

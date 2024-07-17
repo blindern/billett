@@ -1,11 +1,11 @@
-<page-states [state]="pageState"></page-states>
+<billett-page-states [state]="pageState" />
 
 @if (event) {
   <div class="admin-ticketgroup-new">
-    <page-property
+    <billett-page-property
       name="title"
       value="{{ event.title }} ({{ event.time_start | formatdate: 'DD. MMM' }}): Ny billettgruppe"
-    ></page-property>
+    />
 
     <div class="page-header">
       <h1>

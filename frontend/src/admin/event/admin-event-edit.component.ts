@@ -13,7 +13,7 @@ import { AdminEventFormComponent } from "./admin-event-form.component"
 import { AdminEventData, AdminEventService } from "./admin-event.service"
 
 @Component({
-  selector: "admin-event-edit",
+  selector: "billett-admin-event-edit",
   standalone: true,
   imports: [
     PageStatesComponent,

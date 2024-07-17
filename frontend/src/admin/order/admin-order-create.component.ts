@@ -37,7 +37,7 @@ import { AdminTicketgroupService } from "../ticketgroup/admin-ticketgroup.servic
 import { AdminOrderGetData, AdminOrderService } from "./admin-order.service"
 
 @Component({
-  selector: "admin-order-create",
+  selector: "billett-admin-order-create",
   standalone: true,
   imports: [
     PageStatesComponent,

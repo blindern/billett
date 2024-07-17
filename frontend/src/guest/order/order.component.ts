@@ -8,7 +8,7 @@ import { PagePropertyComponent } from "../../common/page-property.component"
 import { PricePipe } from "../../common/price.pipe"
 
 @Component({
-  selector: "guest-order",
+  selector: "billett-guest-order",
   standalone: true,
   imports: [
     CommonModule,

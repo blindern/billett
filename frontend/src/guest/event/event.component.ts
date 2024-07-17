@@ -31,7 +31,7 @@ declare global {
 }
 
 @Component({
-  selector: "guest-event",
+  selector: "billett-guest-event",
   standalone: true,
   imports: [
     FormatdatePipe,

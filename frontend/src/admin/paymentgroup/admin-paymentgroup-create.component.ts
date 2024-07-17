@@ -9,7 +9,7 @@ export interface AdminPaymentgroupCreateComponentInput {
 }
 
 @Component({
-  selector: "admin-paymentgroup-create",
+  selector: "billett-admin-paymentgroup-create",
   standalone: true,
   imports: [PagePropertyComponent, FormsModule],
   templateUrl: "./admin-paymentgroup-create.component.html",

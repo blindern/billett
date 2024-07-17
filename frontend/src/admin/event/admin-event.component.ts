@@ -18,7 +18,7 @@ import { AdminPrinterService } from "../printer/admin-printer.service"
 import { AdminEventData, AdminEventService } from "./admin-event.service"
 
 @Component({
-  selector: "admin-event",
+  selector: "billett-admin-event",
   standalone: true,
   imports: [
     FormsModule,

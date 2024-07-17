@@ -4,7 +4,7 @@ import { PageNotFoundComponent } from "./page-not-found.component"
 import { ResourceLoadingState } from "./resource-loading"
 
 @Component({
-  selector: "page-states",
+  selector: "billett-page-states",
   standalone: true,
   imports: [PageLoadingComponent, PageNotFoundComponent],
   templateUrl: "./page-states.component.html",

@@ -16,7 +16,7 @@ import { AdminEventService } from "../event/admin-event.service"
 import { AdminEventgroupService } from "./admin-eventgroup.service"
 
 @Component({
-  selector: "admin-eventgroup",
+  selector: "billett-admin-eventgroup",
   standalone: true,
   imports: [
     PagePropertyComponent,

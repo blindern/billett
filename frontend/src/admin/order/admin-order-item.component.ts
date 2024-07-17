@@ -24,7 +24,7 @@ import { AdminTicketgroupService } from "../ticketgroup/admin-ticketgroup.servic
 import { AdminOrderGetData, AdminOrderService } from "./admin-order.service"
 
 @Component({
-  selector: "admin-order-item",
+  selector: "billett-admin-order-item",
   standalone: true,
   imports: [
     PageStatesComponent,

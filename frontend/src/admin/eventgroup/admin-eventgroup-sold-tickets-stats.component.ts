@@ -35,7 +35,7 @@ class Accum {
 }
 
 @Component({
-  selector: "admin-eventgroup-sold-tickets-stats",
+  selector: "billett-admin-eventgroup-sold-tickets-stats",
   standalone: true,
   imports: [
     PageStatesComponent,

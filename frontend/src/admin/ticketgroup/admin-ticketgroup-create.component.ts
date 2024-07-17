@@ -13,7 +13,7 @@ import { AdminEventService } from "../event/admin-event.service"
 import { AdminTicketgroupService } from "./admin-ticketgroup.service"
 
 @Component({
-  selector: "admin-ticketgroup-create",
+  selector: "billett-admin-ticketgroup-create",
   standalone: true,
   imports: [
     PagePropertyComponent,

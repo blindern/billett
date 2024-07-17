@@ -1,7 +1,7 @@
 import { Component } from "@angular/core"
 
 @Component({
-  selector: "hjelp",
+  selector: "billett-hjelp",
   standalone: true,
   imports: [],
   templateUrl: "./hjelp.component.html",

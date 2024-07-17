@@ -10,7 +10,7 @@ export interface AdminPrinterSelectComponentInput {
 }
 
 @Component({
-  selector: "admin-printer-select",
+  selector: "billett-admin-printer-select",
   standalone: true,
   imports: [AdminPrinterSelectboxComponent, FormsModule],
   templateUrl: "./admin-printer-select.component.html",

@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core"
 import { api } from "../api"
 
 @Component({
+  selector: "billett-login",
   standalone: true,
   template: "Går til logg inn side",
 })

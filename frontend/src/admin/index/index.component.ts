@@ -6,7 +6,7 @@ import { AdminEventgroupService } from "../eventgroup/admin-eventgroup.service"
 import { AdminPrinterService } from "../printer/admin-printer.service"
 
 @Component({
-  selector: "admin-index",
+  selector: "billett-admin-index",
   standalone: true,
   imports: [PagePropertyComponent, RouterLink],
   templateUrl: "./index.component.html",

@@ -13,7 +13,7 @@ import { AdminEventFormComponent } from "./admin-event-form.component"
 import { AdminEventCreateData, AdminEventService } from "./admin-event.service"
 
 @Component({
-  selector: "admin-event-create",
+  selector: "billett-admin-event-create",
   standalone: true,
   imports: [PageStatesComponent, RouterLink, AdminEventFormComponent],
   templateUrl: "./admin-event-create.component.html",

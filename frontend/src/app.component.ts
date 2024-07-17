@@ -12,7 +12,7 @@ import { AuthService } from "./auth/auth.service"
 import { ActiveFor } from "./common/active-for"
 
 @Component({
-  selector: "app-root",
+  selector: "billett-app",
   standalone: true,
   imports: [RouterOutlet, RouterLink, ActiveFor, AsyncPipe],
   templateUrl: "./app.component.html",

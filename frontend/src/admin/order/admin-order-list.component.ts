@@ -27,7 +27,7 @@ const searchInit = {
 }
 
 @Component({
-  selector: "admin-order-list",
+  selector: "billett-admin-order-list",
   standalone: true,
   imports: [
     FormsModule,

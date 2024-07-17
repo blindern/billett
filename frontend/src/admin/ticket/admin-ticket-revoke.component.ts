@@ -26,7 +26,7 @@ export interface AdminTicketRevokeComponentInput {
 }
 
 @Component({
-  selector: "admin-ticket-revoke",
+  selector: "billett-admin-ticket-revoke",
   standalone: true,
   imports: [
     FormsModule,

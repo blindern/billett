@@ -9,7 +9,7 @@ import {
 import { PageService } from "./page.service"
 
 @Component({
-  selector: "page-property",
+  selector: "billett-page-property",
   standalone: true,
   imports: [],
   template: "",

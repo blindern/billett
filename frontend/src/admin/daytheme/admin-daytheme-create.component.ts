@@ -14,7 +14,7 @@ import { AdminEventgroupService } from "../eventgroup/admin-eventgroup.service"
 import { AdminDaythemeService } from "./admin-daytheme.service"
 
 @Component({
-  selector: "admin-daytheme",
+  selector: "billett-admin-daytheme-create",
   standalone: true,
   imports: [PageStatesComponent, RouterLink, FormsModule],
   templateUrl: "./admin-daytheme-create.component.html",

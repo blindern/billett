@@ -4,14 +4,14 @@
   }
 </style>
 
-<page-states [state]="pageState"></page-states>
+<billett-page-states [state]="pageState" />
 
 @if (event) {
   <div>
-    <page-property
+    <billett-page-property
       name="title"
       value="Innsjekking: {{ event.title }} ({{ event.time_start | formatdate: 'DD. MMM' }})"
-    ></page-property>
+    />
 
     <div class="page-header">
       <h1>
@@ -317,12 +317,12 @@
             </table>
 
             <div class="text-center">
-              <pagination
+              <billett-pagination
                 [page]="searchinput.page"
                 [total]="orders.pagination.total"
                 [limit]="orders.pagination.limit"
                 (changePage)="searchinput.page = $event"
-              ></pagination>
+              />
             </div>
           }
         }

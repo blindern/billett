@@ -1,11 +1,8 @@
-<page-states [state]="pageState"></page-states>
+<billett-page-states [state]="pageState" />
 
 @if (event) {
   <div class="admin-event">
-    <page-property
-      name="title"
-      value="{{ event.title }} ({{ event.time_start | formatdate: 'DD. MMM' }})"
-    ></page-property>
+    <billett-page-property name="title" value="{{ event.title }} ({{ event.time_start | formatdate: 'DD. MMM' }})" />
 
     <div class="page-header">
       <h1>

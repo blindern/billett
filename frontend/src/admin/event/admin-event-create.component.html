@@ -1,4 +1,4 @@
-<page-states [state]="pageState"></page-states>
+<billett-page-states [state]="pageState" />
 
 @if (eventgroup && event) {
   <div class="admin-event-edit">
@@ -16,6 +16,6 @@
       m.v.
     </p>
 
-    <admin-event-form [event]="event" [eventgroupId]="eventgroup.id" (submitForm)="storeEvent()" />
+    <billett-admin-event-form [event]="event" [eventgroupId]="eventgroup.id" (submitForm)="storeEvent()" />
   </div>
 }

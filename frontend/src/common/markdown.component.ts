@@ -3,7 +3,7 @@ import DOMPurify from "dompurify"
 import { marked } from "marked"
 
 @Component({
-  selector: "markdown",
+  selector: "billett-markdown",
   standalone: true,
   template: `<div [innerHTML]="convertedData"></div>`,
 })

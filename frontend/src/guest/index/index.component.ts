@@ -19,7 +19,7 @@ interface UpcomingItem {
 }
 
 @Component({
-  selector: "app-guest-index",
+  selector: "billett-guest-index",
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: "./index.component.html",

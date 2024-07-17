@@ -16,7 +16,7 @@ export interface AdminPaymentCreateComponentInput {
 }
 
 @Component({
-  selector: "admin-payment-create",
+  selector: "billett-admin-payment-create",
   standalone: true,
   imports: [FormsModule, AdminPaymentgroupSelectboxComponent],
   templateUrl: "./admin-payment-create.component.html",

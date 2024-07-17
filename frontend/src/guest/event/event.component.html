@@ -1,12 +1,12 @@
-<page-states [state]="pageState"></page-states>
+<billett-page-states [state]="pageState" />
 
 @if (event) {
-  <page-property
+  <billett-page-property
     name="title"
     value="{{ event.title }} ({{ event.time_start | formatdate: 'D. MMM \\k\\l HH:mm' }})"
-  ></page-property>
-  <page-property name="image" value="{{ api('event/' + event.id + '/image') }}"></page-property>
-  <page-property name="description" value="{{ event.description_short || event.description }}"></page-property>
+  />
+  <billett-page-property name="image" value="{{ api('event/' + event.id + '/image') }}" />
+  <billett-page-property name="description" value="{{ event.description_short || event.description }}" />
 
   <div class="event-page">
     <div class="page-header">

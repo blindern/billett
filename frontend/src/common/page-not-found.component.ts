@@ -2,7 +2,7 @@ import { Component, inject, OnDestroy, OnInit } from "@angular/core"
 import { Meta } from "@angular/platform-browser"
 
 @Component({
-  selector: "page-not-found",
+  selector: "billett-page-not-found",
   standalone: true,
   imports: [],
   templateUrl: "./page-not-found.component.html",

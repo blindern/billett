@@ -12,7 +12,7 @@ export interface AdminPaymentgroupSelectComponentInput {
 }
 
 @Component({
-  selector: "admin-paymentgroup-select",
+  selector: "billett-admin-paymentgroup-select",
   standalone: true,
   imports: [AdminPaymentgroupSelectboxComponent, PricePipe, FormsModule],
   templateUrl: "./admin-paymentgroup-select.component.html",

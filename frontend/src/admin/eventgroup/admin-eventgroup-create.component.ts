@@ -6,7 +6,7 @@ import { PageService } from "../../common/page.service"
 import { AdminEventgroupService } from "./admin-eventgroup.service"
 
 @Component({
-  selector: "admin-eventgroup-create",
+  selector: "billett-admin-eventgroup-create",
   standalone: true,
   imports: [FormsModule],
   templateUrl: "./admin-eventgroup-create.component.html",
