@@ -269,12 +269,12 @@ export class AdminEventCheckinComponent implements OnInit {
       if (row.order.id in orders_link) {
         orders_link[row.order.id].tickets.push(row)
       } else {
-        const order = row.order
-        orders_link[order.id] = order
-        orders.push({
-          ...order,
+        const order = {
+          ...row.order,
           tickets: [row],
-        })
+        }
+        orders_link[order.id] = order
+        orders.push(order)
       }
     })
 
