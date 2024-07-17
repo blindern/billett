@@ -46,12 +46,12 @@
             <div class="col-sm-8">{{ order.order_text_id }}</div>
           </div>
         }
-        <div class="form-group" form-input-check="form,username">
+        <div class="form-group" [ngClass]="{ 'has-error': username.invalid && (username.dirty || form.submitted) }">
           <label class="control-label col-sm-4">Fullt navn</label>
           <div class="col-sm-8">
             <input
               type="text"
-              #username
+              #username="ngModel"
               name="username"
               [(ngModel)]="order.name"
               class="form-control"
@@ -59,18 +59,26 @@
             />
           </div>
         </div>
-        <div class="form-group" form-input-check="form,email">
+        <div class="form-group" [ngClass]="{ 'has-error': email.invalid && (email.dirty || form.submitted) }">
           <label class="control-label col-sm-4">E-postadresse</label>
           <div class="col-sm-8">
-            <input type="email" name="email" [(ngModel)]="order.email" class="form-control" placeholder="(valgfritt)" />
+            <input
+              type="email"
+              #email="ngModel"
+              name="email"
+              [(ngModel)]="order.email"
+              class="form-control"
+              placeholder="(valgfritt)"
+            />
             <span class="help-block">Vi sender kopi av ordre hvis e-post fylles ut</span>
           </div>
         </div>
-        <div class="form-group" form-input-check="form,phone">
+        <div class="form-group" [ngClass]="{ 'has-error': phone.invalid && (phone.dirty || form.submitted) }">
           <label class="control-label col-sm-4">Telefonnummer</label>
           <div class="col-sm-8">
             <input
               type="tel"
+              #phone="ngModel"
               name="phone"
               [(ngModel)]="order.phone"
               class="form-control"
@@ -79,11 +87,12 @@
             />
           </div>
         </div>
-        <div class="form-group" form-input-check="form,recruiter">
+        <div class="form-group" [ngClass]="{ 'has-error': recruiter.invalid && (recruiter.dirty || form.submitted) }">
           <label class="control-label col-sm-4">Evt. vervet av</label>
           <div class="col-sm-8">
             <input
               type="tel"
+              #recruiter="ngModel"
               name="recruiter"
               [(ngModel)]="order.recruiter"
               class="form-control"
