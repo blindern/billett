@@ -294,7 +294,7 @@
                         <span class="glyphicon glyphicon-eye-open" title="Last ned PDF"></span>
                       </a>
                     }
-                    <a href="" (click)="printTicket(ticket.id)">
+                    <a href="" (click)="$event.preventDefault(); printTicket(ticket)">
                       <span class="glyphicon glyphicon-print" title="Skriv ut billett"></span>
                     </a>
                   </td>

@@ -50,6 +50,14 @@ export interface ApiSoldTicketsStats {
   }[]
 }
 
+export interface ApiPrinterAdmin {
+  name: string
+  ip: string | null
+  port: number
+  registered: number
+  last_seen: number
+}
+
 export interface ApiDaytheme {
   id: number
   title: string

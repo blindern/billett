@@ -116,9 +116,7 @@
           <div class="form-group">
             <label class="col-sm-4 control-label" for="printer">Skriv ut billetter</label>
             <div class="col-sm-8">
-              <!-- TODO(migrate)
-                <printer-list id="printer" printer="printer" can-disable="true"></printer-list>
-                -->
+              <admin-printer-selectbox [(printer)]="printer" [canDisable]="true" id="printer" />
             </div>
           </div>
         }

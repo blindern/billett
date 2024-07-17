@@ -7,14 +7,9 @@ import {
   Output,
 } from "@angular/core"
 import { FormsModule } from "@angular/forms"
-import { ApiEventgroupAdmin, ApiPaymentgroupAdmin } from "../../apitypes"
+import { ApiPaymentgroupAdmin } from "../../apitypes"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { AdminPaymentgroupService } from "./admin-paymentgroup.service"
-
-export interface AdminPaymentgroupSelectboxComponentInput {
-  paymentgroup: ApiPaymentgroupAdmin
-  eventgroup: ApiEventgroupAdmin
-}
 
 @Component({
   selector: "admin-paymentgroup-selectbox",

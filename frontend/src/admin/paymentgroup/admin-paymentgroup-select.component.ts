@@ -1,5 +1,6 @@
 import { DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
 import { Component, inject, Inject } from "@angular/core"
+import { FormsModule } from "@angular/forms"
 import { ApiPaymentgroupAdmin } from "../../apitypes"
 import { PricePipe } from "../../common/price.pipe"
 import { AdminPaymentgroupSelectboxComponent } from "./admin-paymentgroup-selectbox.component"
@@ -13,7 +14,7 @@ export interface AdminPaymentgroupSelectComponentInput {
 @Component({
   selector: "admin-paymentgroup-select",
   standalone: true,
-  imports: [AdminPaymentgroupSelectboxComponent, PricePipe],
+  imports: [AdminPaymentgroupSelectboxComponent, PricePipe, FormsModule],
   templateUrl: "./admin-paymentgroup-select.component.html",
 })
 export class AdminPaymentgroupSelectComponent {

@@ -2,6 +2,7 @@ import { NgClass } from "@angular/common"
 import { Component, inject, Input, OnInit } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { Router, RouterLink } from "@angular/router"
+import { catchError, tap } from "rxjs"
 import { api } from "../../api"
 import { ApiTicketAdmin, ApiTicketgroupAdmin } from "../../apitypes"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
@@ -16,6 +17,7 @@ import {
 } from "../../common/resource-loading"
 import { AdminPaymentService } from "../payment/admin-payment.service"
 import { AdminPaymentgroupService } from "../paymentgroup/admin-paymentgroup.service"
+import { AdminPrinterService } from "../printer/admin-printer.service"
 import { AdminTicketRevokeComponentInput } from "../ticket/admin-ticket-revoke.component"
 import { AdminTicketService } from "../ticket/admin-ticket.service"
 import { AdminTicketgroupService } from "../ticketgroup/admin-ticketgroup.service"
@@ -42,6 +44,7 @@ export class AdminOrderItemComponent implements OnInit {
   private adminTicketgroupService = inject(AdminTicketgroupService)
   private adminTicketService = inject(AdminTicketService)
   private adminPaymentService = inject(AdminPaymentService)
+  private adminPrinterService = inject(AdminPrinterService)
   private pageService = inject(PageService)
   private router = inject(Router)
 
@@ -270,28 +273,42 @@ export class AdminOrderItemComponent implements OnInit {
   }
 
   printTickets() {
-    // TODO(migrate)
-    // AdminPrinter.printSelectModal(async (printername) => {
-    //   try {
-    //     await AdminPrinter.printTickets(printername, this.validtickets)
-    //     Page.toast("Utskrift lagt i kø", { class: "success" })
-    //   } catch (e) {
-    //     Page.toast("Ukjent feil oppsto!", { class: "warning" })
-    //     throw e
-    //   }
-    // })
+    this.adminPrinterService.printSelectModal({
+      handler: (printer) =>
+        this.adminPrinterService.printTickets(printer, this.validTickets).pipe(
+          tap(() => {
+            this.pageService.toast("Utskrift lagt i kø", {
+              class: "success",
+            })
+          }),
+          catchError((e) => {
+            this.pageService.toast("Ukjent feil oppsto!", {
+              class: "warning",
+            })
+            throw e
+          }),
+        ),
+    })
   }
 
-  printTicket(ticketid) {
-    // TODO(migrate)
-    // AdminPrinter.printSelectModal(async (printername) => {
-    //   try {
-    //     await AdminPrinter.printTicket(printername, ticketid)
-    //     Page.toast("Utskrift lagt i kø", { class: "success" })
-    //   } catch (e) {
-    //     Page.toast("Ukjent feil oppsto!", { class: "warning" })
-    //     throw e
-    //   }
-    // })
+  printTicket(ticket: ApiTicketAdmin) {
+    this.adminPrinterService.printSelectModal({
+      handler: (printer) => {
+        console.log("print!")
+        return this.adminPrinterService.printTicket(printer, ticket).pipe(
+          tap(() => {
+            this.pageService.toast("Utskrift lagt i kø", {
+              class: "success",
+            })
+          }),
+          catchError((e) => {
+            this.pageService.toast("Ukjent feil oppsto!", {
+              class: "warning",
+            })
+            throw e
+          }),
+        )
+      },
+    })
   }
 }

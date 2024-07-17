@@ -1,8 +1,9 @@
-import { Component, OnInit } from "@angular/core"
+import { Component, inject, OnInit } from "@angular/core"
 import { RouterLink } from "@angular/router"
 import { ApiEventgroupAdmin } from "../../apitypes"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { AdminEventgroupService } from "../eventgroup/admin-eventgroup.service"
+import { AdminPrinterService } from "../printer/admin-printer.service"
 
 @Component({
   selector: "admin-index",
@@ -13,12 +14,12 @@ import { AdminEventgroupService } from "../eventgroup/admin-eventgroup.service"
 export class AdminIndexComponent implements OnInit {
   eventgroups?: ApiEventgroupAdmin[]
 
-  constructor(private adminEventgroupService: AdminEventgroupService) {}
+  private adminEventgroupService = inject(AdminEventgroupService)
+  private adminPrinterService = inject(AdminPrinterService)
 
   printText(e: MouseEvent) {
     e.preventDefault()
-    // TODO(migrate)
-    // AdminPrinter.printTextModal()
+    this.adminPrinterService.printTextModal()
   }
 
   ngOnInit(): void {

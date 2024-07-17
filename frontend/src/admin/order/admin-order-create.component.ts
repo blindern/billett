@@ -30,6 +30,8 @@ import {
 } from "../../common/resource-loading"
 import { AdminEventgroupService } from "../eventgroup/admin-eventgroup.service"
 import { AdminPaymentgroupSelectboxComponent } from "../paymentgroup/admin-paymentgroup-selectbox.component"
+import { AdminPrinterSelectboxComponent } from "../printer/admin-printer-selectbox.component"
+import { AdminPrinterService } from "../printer/admin-printer.service"
 import { AdminTicketService } from "../ticket/admin-ticket.service"
 import { AdminTicketgroupService } from "../ticketgroup/admin-ticketgroup.service"
 import { AdminOrderGetData, AdminOrderService } from "./admin-order.service"
@@ -46,6 +48,7 @@ import { AdminOrderGetData, AdminOrderService } from "./admin-order.service"
     FormatdatePipe,
     FormsModule,
     AdminPaymentgroupSelectboxComponent,
+    AdminPrinterSelectboxComponent,
   ],
   templateUrl: "./admin-order-create.component.html",
 })
@@ -54,6 +57,7 @@ export class AdminOrderCreateComponent implements OnInit {
   private adminOrderService = inject(AdminOrderService)
   private adminTicketgroupService = inject(AdminTicketgroupService)
   private adminTicketService = inject(AdminTicketService)
+  private adminPrinterService = inject(AdminPrinterService)
   private pageService = inject(PageService)
   private router = inject(Router)
 
@@ -337,23 +341,19 @@ export class AdminOrderCreateComponent implements OnInit {
   private printTickets() {
     if (!this.printer) return
 
-    // TODO(migrate)
+    const list = this.order.tickets.filter(
+      (ticket) => ticket.is_valid && !ticket.is_revoked,
+    )
+    if (list.length == 0) return
 
-    // var list = []
-    // this.order.tickets.forEach((ticket) => {
-    //   if (ticket.is_revoked || !ticket.is_valid) return
-    //   list.push(ticket.id)
-    // })
-
-    // if (list.length == 0) return
-
-    // AdminPrinter.printTickets(this.printer.name, list).then(
-    //   () => {
-    //     Page.toast("Utskrift lagt i kø", { class: "success" })
-    //   },
-    //   () => {
-    //     Page.toast("Ukjent feil oppsto!", { class: "warning" })
-    //   },
-    // )
+    this.adminPrinterService.printTickets(this.printer.name, list).subscribe({
+      next: () => {
+        this.pageService.toast("Utskrift lagt i kø", { class: "success" })
+      },
+      error: (err) => {
+        console.error(err)
+        this.pageService.toast("Ukjent feil oppsto!", { class: "warning" })
+      },
+    })
   }
 }

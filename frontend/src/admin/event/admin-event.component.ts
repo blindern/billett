@@ -1,8 +1,10 @@
 import { CommonModule } from "@angular/common"
-import { Component, Input, OnInit } from "@angular/core"
+import { Component, inject, Input, OnInit } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { Router, RouterLink } from "@angular/router"
+import { catchError, tap } from "rxjs"
 import { api } from "../../api"
+import { ApiTicketgroupAdmin } from "../../apitypes"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
@@ -12,6 +14,7 @@ import {
   handleResourceLoadingStates,
   ResourceLoadingState,
 } from "../../common/resource-loading"
+import { AdminPrinterService } from "../printer/admin-printer.service"
 import { AdminEventData, AdminEventService } from "./admin-event.service"
 
 @Component({
@@ -29,6 +32,11 @@ import { AdminEventData, AdminEventService } from "./admin-event.service"
   templateUrl: "./admin-event.component.html",
 })
 export class AdminEventComponent implements OnInit {
+  private adminEventService = inject(AdminEventService)
+  private pageService = inject(PageService)
+  private router = inject(Router)
+  private adminPrinterService = inject(AdminPrinterService)
+
   @Input()
   id!: string
 
@@ -39,12 +47,6 @@ export class AdminEventComponent implements OnInit {
 
   image_version = ""
   uploadprogress = undefined
-
-  constructor(
-    private adminEventService: AdminEventService,
-    private pageService: PageService,
-    private router: Router,
-  ) {}
 
   ngOnInit(): void {
     this.pageService.set("title", "Arrangement")
@@ -106,18 +108,23 @@ export class AdminEventComponent implements OnInit {
       .subscribe()
   }
 
-  previewTicketPrint(ticketgroupId: number) {
-    /* TODO(migrate)
-    AdminPrinter.printSelectModal(async (printername) => {
-      try {
-        await AdminPrinter.printPreviewTicket(printername, ticketgroupid)
-        Page.toast("Utskrift lagt i kø", { class: "success" })
-      } catch (e) {
-        Page.toast("Ukjent feil oppsto!", { class: "warning" })
-        throw e
-      }
+  previewTicketPrint(ticketgroup: ApiTicketgroupAdmin) {
+    this.adminPrinterService.printSelectModal({
+      handler: (printer) =>
+        this.adminPrinterService.printPreviewTicket(printer, ticketgroup).pipe(
+          tap(() => {
+            this.pageService.toast("Utskrift lagt i kø", {
+              class: "success",
+            })
+          }),
+          catchError((e) => {
+            this.pageService.toast("Ukjent feil oppsto!", {
+              class: "warning",
+            })
+            throw e
+          }),
+        ),
     })
-    */
   }
 
   uploadImage(event: Event) {
