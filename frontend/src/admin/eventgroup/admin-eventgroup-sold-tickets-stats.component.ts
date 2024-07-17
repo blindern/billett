@@ -18,7 +18,7 @@ class Accum {
   revoked = 0
   price = 0
   fee = 0
-  add = (count: number, revoked: number, price: number, fee: number) => {
+  add(count: number, revoked: number, price: number, fee: number) {
     this.count += count
     this.revoked += revoked
     this.price += price * (count - revoked)

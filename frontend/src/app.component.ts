@@ -24,7 +24,8 @@ export class AppComponent implements OnInit {
   private dialog = inject(Dialog)
 
   loggedInButNoAccess = false
-  isAdminPage = () => {
+
+  isAdminPage() {
     return this.location.path().substring(0, 3) == "/a/"
   }
 

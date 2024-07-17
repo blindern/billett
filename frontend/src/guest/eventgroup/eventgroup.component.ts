@@ -40,7 +40,8 @@ export class GuestEventgroupComponent implements OnInit {
   group: EventgroupExpanded | undefined
 
   #categories: (string | null)[] = []
-  categoryNum = (category: string | null) => {
+
+  categoryNum(category: string | null) {
     let i = this.#categories.indexOf(category)
     if (i == -1) {
       i = this.#categories.push(category) - 1
