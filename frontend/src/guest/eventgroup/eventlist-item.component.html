@@ -7,9 +7,7 @@
   </li>
   <li>{{ event.location }}</li>
   <li>
-    <a routerLink="/event/{{ event.alias || event.id }}" [target]="framed ? '_top' : undefined">
-      {{ event.title }}
-    </a>
+    <a routerLink="/event/{{ event.alias || event.id }}" [target]="framed ? '_top' : undefined">{{ event.title }}</a>
     @if (event.category) {
       <span class="category" [ngClass]="'category-' + categoryNum(event.category)">
         <a
