@@ -2,26 +2,20 @@ import { CommonModule } from "@angular/common"
 import { HttpClient } from "@angular/common/http"
 import { Component, inject, OnInit } from "@angular/core"
 import { RouterLink } from "@angular/router"
-import { Observable } from "rxjs"
 import { api } from "../../api"
-import { ApiEventgroup } from "../../apitypes"
+import { ApiEvent, ApiEventgroup } from "../../apitypes"
 import { AuthService } from "../../auth/auth.service"
+import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { EventgroupService } from "../eventgroup/eventgroup.service"
 
-interface UpcomingItem {
-  id: number
-  location: string | null
-  title: string
-  alias: string | null
-  category: string | null
-  ticket_info: string | null
-  web_selling_status: string
+type UpcomingItem = ApiEvent & {
+  eventgroup: ApiEventgroup
 }
 
 @Component({
   selector: "billett-guest-index",
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, FormatdatePipe],
   templateUrl: "./index.component.html",
 })
 export class GuestIndexComponent implements OnInit {
@@ -29,15 +23,22 @@ export class GuestIndexComponent implements OnInit {
   private eventgroupService = inject(EventgroupService)
   public authService = inject(AuthService)
 
-  upcoming$!: Observable<UpcomingItem[]>
-  eventgroups$!: Observable<ApiEventgroup[]>
+  upcoming?: UpcomingItem[]
+  eventgroups?: ApiEventgroup[]
 
   categories: string[] = []
   categoryNum!: (category: string) => number
 
   ngOnInit(): void {
-    this.upcoming$ = this.http.get<UpcomingItem[]>(api("event/get_upcoming"))
-    this.eventgroups$ = this.eventgroupService.getList()
+    this.http
+      .get<UpcomingItem[]>(api("event/get_upcoming"))
+      .subscribe((data) => {
+        this.upcoming = data
+      })
+
+    this.eventgroupService.getList().subscribe((data) => {
+      this.eventgroups = data
+    })
 
     this.categories = []
     this.categoryNum = (category) => {

@@ -5,20 +5,17 @@
 
   <h2>Kommende arrangementer</h2>
 
-  @if (!(upcoming$ | async)) {
+  @if (!upcoming) {
     <p>Laster data..</p>
-  } @else if ((upcoming$ | async)!.length == 0) {
+  } @else if (upcoming.length == 0) {
     <p>Ingen arrangementer ble funnet.</p>
   } @else {
     <div class="eventgroup-event-list eventgroup-upcoming">
-      @for (event of upcoming$ | async; track event.id) {
+      @for (event of upcoming; track event.id) {
         <ul class="event">
           <li>
-            <!--
-        {{ event.time_start | formatdate : "DD.MM" }}
-        <span>{{event.time_start|formatdate:'HH:mm'}}</span>
-        -->
-            start
+            {{ event.time_start | formatdate: "DD.MM" }}
+            <span>{{ event.time_start | formatdate: "HH:mm" }}</span>
           </li>
           <li>{{ event.location }}</li>
           <li>
@@ -77,7 +74,7 @@
 
   <h2>Arrangementgrupper</h2>
   <ul>
-    @for (group of eventgroups$ | async; track group.id) {
+    @for (group of eventgroups; track group.id) {
       <li>
         <a routerLink="/eventgroup/{{ group.id }}">{{ group.title }}</a>
       </li>
