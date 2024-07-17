@@ -142,18 +142,13 @@
         <div class="row">
           <div class="col-sm-offset-4 col-sm-8">
             @if (order.id) {
-              <div>
-                @if (order.tickets && order.tickets.length > 0) {
-                  <input class="btn btn-success" type="submit" value="Marker som betalt" [disabled]="!paymentgroup" />
-                }
-                <input class="btn btn-default" type="button" value="Lagre reservasjon" (click)="saveOrder()" />
-                <input class="btn btn-danger" type="button" value="Slett" (click)="abortOrder()" />
-              </div>
-            }
-            @if (!order.id) {
-              <div>
-                <input class="btn btn-primary" type="button" value="Registrer" (click)="createBlank()" />
-              </div>
+              @if (order.tickets && order.tickets.length > 0) {
+                <input class="btn btn-success" type="submit" value="Marker som betalt" [disabled]="!paymentgroup" />
+              }
+              <input class="btn btn-default" type="button" value="Lagre reservasjon" (click)="saveOrder()" />
+              <input class="btn btn-danger" type="button" value="Slett" (click)="abortOrder()" />
+            } @else {
+              <input class="btn btn-primary" type="button" value="Registrer" (click)="createBlank()" />
             }
           </div>
         </div>
@@ -227,84 +222,81 @@
 
   <h2>Ordrehistorikk</h2>
   @if (!previousOrders) {
-    <div>Laster data ...</div>
-  }
-  @if (previousOrders) {
-    <div>
-      <p>
-        Dette er en liste over de siste ordrene opprettet i en billettluke.
-        <a routerLink="/a/orders" [queryParams]="{ eventgroup_id: eventgroup.id }">Full liste</a>
-      </p>
+    <p>Laster data ...</p>
+  } @else {
+    <p>
+      Dette er en liste over de siste ordrene opprettet i en billettluke.
+      <a routerLink="/a/orders" [queryParams]="{ eventgroup_id: eventgroup.id }">Full liste</a>
+    </p>
 
-      <table class="table table-striped table-condensed order-list-table">
-        <thead>
-          <tr>
-            <th>Ordre</th>
-            <th>Detaljer</th>
-            <th>Ordretotal</th>
-            <th>Billetter</th>
+    <table class="table table-striped table-condensed order-list-table">
+      <thead>
+        <tr>
+          <th>Ordre</th>
+          <th>Detaljer</th>
+          <th>Ordretotal</th>
+          <th>Billetter</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (order of previousOrders; track order.id) {
+          <tr [ngClass]="{ invalid: !order.is_valid }">
+            <td>
+              <a routerLink="/a/order/{{ order.id }}">{{ order.order_text_id }}</a
+              ><br />
+              {{ order.time | formatdate: "dd. DD.MM.YYYY HH:mm" }}
+              @if (!order.is_valid) {
+                <span><br />(kun reservasjon)</span>
+              }
+            </td>
+            <td>
+              @if (order.name) {
+                <span class="order-detail">{{ order.name }}</span>
+              }
+              @if (order.email) {
+                <span class="order-detail">{{ order.email }}</span>
+              }
+              @if (order.phone) {
+                <span class="order-detail">{{ order.phone }}</span>
+              }
+              @if (order.recruiter) {
+                <span class="order-detail">Vervet av: {{ order.recruiter }}</span>
+              }
+              @if (!order.name && !order.email && !order.phone && !order.recruiter) {
+                <span class="order-detail"><i>Ingen detaljer</i></span>
+              }
+            </td>
+            <td>
+              {{ getTotalValid(order) | price }}
+              @if (getTotalReserved(order)) {
+                <span><br />(reservert: {{ getTotalReserved(order) | price }})</span>
+              }
+              @if (parseFloat(order.balance) != 0) {
+                <span class="unbalance"><br />(ubalanse: {{ order.balance | price }})</span>
+              }
+            </td>
+            <td>
+              <ul>
+                @for (ticket of order.tickets; track ticket.id) {
+                  <li
+                    [ngClass]="{
+                      reservation: !ticket.is_valid,
+                      revoked: ticket.is_revoked,
+                    }"
+                  >
+                    <a [href]="api('ticket/' + ticket.id + '/pdf')" target="_self">#{{ ticket.id }}</a>
+                    <a routerLink="/a/event/{{ ticket.event.id }}">
+                      {{ ticket.event.title }} ({{ ticket.event.time_start | formatdate: "DD.MM \\k\\l HH" }})
+                    </a>
+                    ({{ ticket.ticketgroup.title }})
+                    {{ ticket.ticketgroup.price + ticket.ticketgroup.fee | price: 0 : true }}
+                  </li>
+                }
+              </ul>
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          @for (order of previousOrders; track order.id) {
-            <tr [ngClass]="{ invalid: !order.is_valid }">
-              <td>
-                <a routerLink="/a/order/{{ order.id }}">{{ order.order_text_id }}</a
-                ><br />
-                {{ order.time | formatdate: "dd. DD.MM.YYYY HH:mm" }}
-                @if (!order.is_valid) {
-                  <span><br />(kun reservasjon)</span>
-                }
-              </td>
-              <td>
-                @if (order.name) {
-                  <span class="order-detail">{{ order.name }}</span>
-                }
-                @if (order.email) {
-                  <span class="order-detail">{{ order.email }}</span>
-                }
-                @if (order.phone) {
-                  <span class="order-detail">{{ order.phone }}</span>
-                }
-                @if (order.recruiter) {
-                  <span class="order-detail">Vervet av: {{ order.recruiter }}</span>
-                }
-                @if (!order.name && !order.email && !order.phone && !order.recruiter) {
-                  <span class="order-detail"><i>Ingen detaljer</i></span>
-                }
-              </td>
-              <td>
-                {{ getTotalValid(order) | price }}
-                @if (getTotalReserved(order)) {
-                  <span><br />(reservert: {{ getTotalReserved(order) | price }})</span>
-                }
-                @if (parseFloat(order.balance) != 0) {
-                  <span class="unbalance"><br />(ubalanse: {{ order.balance | price }})</span>
-                }
-              </td>
-              <td>
-                <ul>
-                  @for (ticket of order.tickets; track ticket.id) {
-                    <li
-                      [ngClass]="{
-                        reservation: !ticket.is_valid,
-                        revoked: ticket.is_revoked,
-                      }"
-                    >
-                      <a [href]="api('ticket/' + ticket.id + '/pdf')" target="_self">#{{ ticket.id }}</a>
-                      <a routerLink="/a/event/{{ ticket.event.id }}">
-                        {{ ticket.event.title }} ({{ ticket.event.time_start | formatdate: "DD.MM \\k\\l HH" }})
-                      </a>
-                      ({{ ticket.ticketgroup.title }})
-                      {{ ticket.ticketgroup.price + ticket.ticketgroup.fee | price: 0 : true }}
-                    </li>
-                  }
-                </ul>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
+        }
+      </tbody>
+    </table>
   }
 }

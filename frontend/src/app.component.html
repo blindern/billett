@@ -28,14 +28,12 @@
   </header>
 
   @if (loggedInButNoAccess) {
-    <div>
-      <p class="text-center">
-        <b>NB!</b> Du er innlogget som <u>{{ (this.authService.user$ | async)?.realname }}</u> men har ikke tilgang til
-        dette systemet.
-        <a routerLink="/logout" target="_self">Logg ut</a>
-      </p>
-      <hr />
-    </div>
+    <p class="text-center">
+      <b>NB!</b> Du er innlogget som <u>{{ (this.authService.user$ | async)?.realname }}</u> men har ikke tilgang til
+      dette systemet.
+      <a routerLink="/logout" target="_self">Logg ut</a>
+    </p>
+    <hr />
   }
 
   <router-outlet></router-outlet>

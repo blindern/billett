@@ -16,94 +16,90 @@
     </div>
 
     @if (group.events.length == 0) {
-      <div>
-        <p>Ingen arrangementer eksisterer.</p>
-      </div>
+      <p>Ingen arrangementer eksisterer.</p>
     }
 
     @if (group.events.length > 0) {
-      <div>
-        @if (isFilter) {
-          <p>
-            <a routerLink="/eventgroup/{{ group.id }}">Vis hele arrangementlista</a>
-          </p>
-        }
+      @if (isFilter) {
+        <p>
+          <a routerLink="/eventgroup/{{ group.id }}">Vis hele arrangementlista</a>
+        </p>
+      }
 
-        <div class="eventgroup-event-list">
-          <ul class="days">
-            @for (item of days | keyvalue; track item.key) {
-              <li class="day">
-                <div class="header">
-                  <a routerLink="/eventgroup/{{ group.id }}/{{ item.key }}">
-                    <span class="date">
-                      <span>{{ item.value[0].time_start - 21600 | formatdate: "dddd" }}</span>
-                      {{ item.value[0].time_start - 21600 | formatdate: "D. MMMM YYYY" }}
-                    </span>
-                    @if (daythemes[item.key]) {
-                      <span class="theme">{{ daythemes[item.key] }}</span>
-                    }
-                  </a>
-                </div>
+      <div class="eventgroup-event-list">
+        <ul class="days">
+          @for (item of days | keyvalue; track item.key) {
+            <li class="day">
+              <div class="header">
+                <a routerLink="/eventgroup/{{ group.id }}/{{ item.key }}">
+                  <span class="date">
+                    <span>{{ item.value[0].time_start - 21600 | formatdate: "dddd" }}</span>
+                    {{ item.value[0].time_start - 21600 | formatdate: "D. MMMM YYYY" }}
+                  </span>
+                  @if (daythemes[item.key]) {
+                    <span class="theme">{{ daythemes[item.key] }}</span>
+                  }
+                </a>
+              </div>
 
-                <!-- each event -->
-                @for (event of item.value; track event.id) {
-                  <ul class="event">
-                    <li>{{ event.time_start | formatdate: "HH:mm" }}</li>
-                    <li>{{ event.location }}</li>
+              <!-- each event -->
+              @for (event of item.value; track event.id) {
+                <ul class="event">
+                  <li>{{ event.time_start | formatdate: "HH:mm" }}</li>
+                  <li>{{ event.location }}</li>
 
-                    <li>
-                      <!-- admin links -->
-                      @if (authService.isAdmin$ | async) {
-                        <div class="edit-link-wrap">
-                          <span class="edit-link">
-                            <a routerLink="/a/event/{{ event.id }}/edit">Rediger</a>
-                            <a routerLink="/a/event/{{ event.id }}">Detaljert</a>
-                          </span>
-                        </div>
-                      }
-
-                      <a href="event/{{ event.alias || event.id }}" target="_top">
-                        {{ event.title }}
-                      </a>
-                      @if (event.category) {
-                        <span class="category" [ngClass]="'category-' + categoryNum(event.category)">
-                          <a routerLink="/eventgroup/{{ group.id }}/{{ event.category | lowercase }}">
-                            {{ event.category }}
-                          </a>
+                  <li>
+                    <!-- admin links -->
+                    @if (authService.isAdmin$ | async) {
+                      <div class="edit-link-wrap">
+                        <span class="edit-link">
+                          <a routerLink="/a/event/{{ event.id }}/edit">Rediger</a>
+                          <a routerLink="/a/event/{{ event.id }}">Detaljert</a>
                         </span>
-                      }
-                    </li>
-                    <li>
-                      @if (event.ticket_info) {
-                        {{ event.ticket_info }}
-                      } @else {
-                        @switch (event.web_selling_status) {
-                          @case ("unknown") {
-                            TBA
-                          }
-                          @case ("no_tickets") {}
-                          @case ("old") {}
-                          @case ("no_web_tickets") {}
-                          @case ("timeout") {
-                            I døra
-                          }
-                          @case ("sold_out") {
-                            Utsolgt
-                          }
-                          @case ("sale") {
-                            <a href="event/{{ event.alias || event.id }}" target="_top">
-                              <img src="/assets/graphics/billettgul.png" alt="Kjøp billett" />
-                            </a>
-                          }
+                      </div>
+                    }
+
+                    <a href="event/{{ event.alias || event.id }}" target="_top">
+                      {{ event.title }}
+                    </a>
+                    @if (event.category) {
+                      <span class="category" [ngClass]="'category-' + categoryNum(event.category)">
+                        <a routerLink="/eventgroup/{{ group.id }}/{{ event.category | lowercase }}">
+                          {{ event.category }}
+                        </a>
+                      </span>
+                    }
+                  </li>
+                  <li>
+                    @if (event.ticket_info) {
+                      {{ event.ticket_info }}
+                    } @else {
+                      @switch (event.web_selling_status) {
+                        @case ("unknown") {
+                          TBA
+                        }
+                        @case ("no_tickets") {}
+                        @case ("old") {}
+                        @case ("no_web_tickets") {}
+                        @case ("timeout") {
+                          I døra
+                        }
+                        @case ("sold_out") {
+                          Utsolgt
+                        }
+                        @case ("sale") {
+                          <a href="event/{{ event.alias || event.id }}" target="_top">
+                            <img src="/assets/graphics/billettgul.png" alt="Kjøp billett" />
+                          </a>
                         }
                       }
-                    </li>
-                  </ul>
-                }
-              </li>
-            }
-          </ul>
-        </div>
+                    }
+                  </li>
+                </ul>
+              }
+            </li>
+          }
+        </ul>
       </div>
     }
   </div>

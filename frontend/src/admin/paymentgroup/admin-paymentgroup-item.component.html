@@ -246,7 +246,7 @@
         </h2>
 
         @if (derived.ps.cashgroups.length == 0 && derived.ps.other.length == 0) {
-          <div>Ingen opptellinger er registrert.</div>
+          <p>Ingen opptellinger er registrert.</p>
         }
 
         @for (group of derived.ps.cashgroups; track group) {

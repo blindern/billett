@@ -35,36 +35,33 @@
           </li>
           <li>
             @if (!event.ticket_info) {
-              <div>
-                @if (event.web_selling_status == "unknown") {
-                  <span>TBA</span>
-                }
-                @if (event.web_selling_status == "no_tickets") {
-                  <span></span>
-                }
-                @if (event.web_selling_status == "old") {
-                  <span></span>
-                }
-                @if (event.web_selling_status == "no_web_tickets") {
-                  <span></span>
-                }
-                @if (event.web_selling_status == "timeout") {
-                  <span>I døra</span>
-                }
-                @if (event.web_selling_status == "sold_out") {
-                  <span>Utsolgt</span>
-                }
-                @if (event.web_selling_status == "sale") {
-                  <span>
-                    <a routerLink="/event/{{ event.alias || event.id }}">
-                      <img src="/assets/graphics/billettgul.png" alt="Kjøp billett" />
-                    </a>
-                  </span>
-                }
-              </div>
-            }
-            @if (event.ticket_info) {
-              <div>{{ event.ticket_info }}</div>
+              @if (event.web_selling_status == "unknown") {
+                <span>TBA</span>
+              }
+              @if (event.web_selling_status == "no_tickets") {
+                <span></span>
+              }
+              @if (event.web_selling_status == "old") {
+                <span></span>
+              }
+              @if (event.web_selling_status == "no_web_tickets") {
+                <span></span>
+              }
+              @if (event.web_selling_status == "timeout") {
+                <span>I døra</span>
+              }
+              @if (event.web_selling_status == "sold_out") {
+                <span>Utsolgt</span>
+              }
+              @if (event.web_selling_status == "sale") {
+                <span>
+                  <a routerLink="/event/{{ event.alias || event.id }}">
+                    <img src="/assets/graphics/billettgul.png" alt="Kjøp billett" />
+                  </a>
+                </span>
+              }
+            } @else {
+              {{ event.ticket_info }}
             }
           </li>
         </ul>
