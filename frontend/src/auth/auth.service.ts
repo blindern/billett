@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http"
-import { Injectable } from "@angular/core"
+import { inject, Injectable } from "@angular/core"
 import { firstValueFrom, map, Observable, ReplaySubject } from "rxjs"
 import { api } from "../api"
 import { ApiAuthInfo } from "../apitypes"
@@ -8,9 +8,11 @@ import { ApiAuthInfo } from "../apitypes"
   providedIn: "root",
 })
 export class AuthService {
+  private http = inject(HttpClient)
+
   #authData$ = new ReplaySubject<ApiAuthInfo>(1)
 
-  constructor(private http: HttpClient) {
+  constructor() {
     this.refreshAuthData()
   }
 

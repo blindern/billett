@@ -1,9 +1,11 @@
 import {
   Directive,
   ElementRef,
+  inject,
   Input,
   OnChanges,
   OnDestroy,
+  OnInit,
   Renderer2,
   SimpleChanges,
 } from "@angular/core"
@@ -15,25 +17,25 @@ import { Subscription } from "rxjs"
   exportAs: "activeFor",
   standalone: true,
 })
-export class ActiveFor implements OnChanges, OnDestroy {
-  private paths: string[] = []
-  private routerEventsSubscription: Subscription
+export class ActiveFor implements OnInit, OnChanges, OnDestroy {
+  private router = inject(Router)
+  private element = inject(ElementRef)
+  private renderer = inject(Renderer2)
 
-  constructor(
-    private router: Router,
-    private element: ElementRef,
-    private renderer: Renderer2,
-  ) {
-    this.routerEventsSubscription = router.events.subscribe((s: Event) => {
-      if (s instanceof NavigationEnd) {
-        this.update()
-      }
-    })
-  }
+  private paths: string[] = []
+  private routerEventsSubscription!: Subscription
 
   @Input()
   set activeFor(data: string[]) {
     this.paths = data
+  }
+
+  ngOnInit() {
+    this.routerEventsSubscription = this.router.events.subscribe((s: Event) => {
+      if (s instanceof NavigationEnd) {
+        this.update()
+      }
+    })
   }
 
   ngOnChanges(changes: SimpleChanges): void {

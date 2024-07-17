@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core"
+import { Component, inject, OnInit } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { Router } from "@angular/router"
 import { catchError, NEVER } from "rxjs"
@@ -12,16 +12,14 @@ import { AdminEventgroupService } from "./admin-eventgroup.service"
   templateUrl: "./admin-eventgroup-create.component.html",
 })
 export class AdminEventgroupCreateComponent implements OnInit {
+  private adminEventgroupService = inject(AdminEventgroupService)
+  private pageService = inject(PageService)
+  private router = inject(Router)
+
   form = {
     title: "",
     is_active: false,
   }
-
-  constructor(
-    private adminEventgroupService: AdminEventgroupService,
-    private pageService: PageService,
-    private router: Router,
-  ) {}
 
   ngOnInit(): void {
     this.pageService.set("title", "Ny arrangementgruppe")

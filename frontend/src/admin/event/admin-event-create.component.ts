@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core"
+import { Component, inject, Input, OnInit } from "@angular/core"
 import { Router, RouterLink } from "@angular/router"
 import { api } from "../../api"
 import { ApiEventgroupAdmin } from "../../apitypes"
@@ -19,6 +19,11 @@ import { AdminEventCreateData, AdminEventService } from "./admin-event.service"
   templateUrl: "./admin-event-create.component.html",
 })
 export class AdminEventCreateComponent implements OnInit {
+  private adminEventgroupService = inject(AdminEventgroupService)
+  private adminEventService = inject(AdminEventService)
+  private pageService = inject(PageService)
+  private router = inject(Router)
+
   @Input()
   eventgroupId!: string
 
@@ -27,13 +32,6 @@ export class AdminEventCreateComponent implements OnInit {
   pageState = new ResourceLoadingState()
   eventgroup?: ApiEventgroupAdmin
   event?: AdminEventCreateData
-
-  constructor(
-    private adminEventgroupService: AdminEventgroupService,
-    private adminEventService: AdminEventService,
-    private pageService: PageService,
-    private router: Router,
-  ) {}
 
   ngOnInit(): void {
     this.pageService.set("title", "Nytt arrangement")

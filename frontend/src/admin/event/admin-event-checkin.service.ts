@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http"
-import { Injectable } from "@angular/core"
+import { inject, Injectable } from "@angular/core"
 import { api } from "../../api"
 import {
   ApiEventAdmin,
@@ -34,7 +34,7 @@ export interface CheckinOrCheckoutData {
   providedIn: "root",
 })
 export class AdminEventCheckinService {
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient)
 
   getAllTickets(eventId: number) {
     return this.http.get<AdminTicketForCheckinData[]>(api("ticket"), {
@@ -47,17 +47,14 @@ export class AdminEventCheckinService {
   }
 
   getLastUsedTickets(eventId: number) {
-    return this.http.get<Paginated<AdminTicketForCheckinData>>(
-      api("ticket"),
-      {
-        params: {
-          filter: `event_id=${eventId},used:NOTNULL`,
-          limit: 10,
-          order: "-used",
-          with: "order,ticketgroup",
-        },
+    return this.http.get<Paginated<AdminTicketForCheckinData>>(api("ticket"), {
+      params: {
+        filter: `event_id=${eventId},used:NOTNULL`,
+        limit: 10,
+        order: "-used",
+        with: "order,ticketgroup",
       },
-    )
+    })
   }
 
   searchForOrders(page: number, filter: string) {

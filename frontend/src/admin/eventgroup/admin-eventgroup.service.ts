@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http"
-import { Injectable } from "@angular/core"
+import { inject, Injectable } from "@angular/core"
 import { api } from "../../api"
 import {
   ApiDaytheme,
@@ -20,7 +20,7 @@ export type AdminEventgroupData = ApiEventgroupAdmin & {
   providedIn: "root",
 })
 export class AdminEventgroupService {
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient)
 
   query() {
     return this.http.get<ApiEventgroupAdmin[]>(api("eventgroup"), {

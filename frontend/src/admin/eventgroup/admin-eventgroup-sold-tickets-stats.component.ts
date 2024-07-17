@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core"
+import { Component, inject, Input, OnInit } from "@angular/core"
 import { RouterLink } from "@angular/router"
 import { ApiSoldTicketsStats } from "../../apitypes"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
@@ -47,16 +47,14 @@ class Accum {
   templateUrl: "./admin-eventgroup-sold-tickets-stats.component.html",
 })
 export class AdminEventgroupSoldTicketsStatsComponent implements OnInit {
+  private adminEventgroupService = inject(AdminEventgroupService)
+  private pageService = inject(PageService)
+
   @Input()
   id!: string
 
   pageState = new ResourceLoadingState()
   stats?: ReturnType<AdminEventgroupSoldTicketsStatsComponent["deriveStats"]>
-
-  constructor(
-    private adminEventgroupService: AdminEventgroupService,
-    private pageService: PageService,
-  ) {}
 
   ngOnInit(): void {
     this.pageService.set("title", "Billettstatistikk for arrangementgruppe")

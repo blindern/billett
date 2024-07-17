@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http"
-import { Injectable } from "@angular/core"
+import { inject, Injectable } from "@angular/core"
 import { api } from "../../api"
 import { ApiDaytheme, ApiEvent, ApiEventgroup } from "../../apitypes"
 
@@ -12,7 +12,7 @@ export type EventgroupExpanded = ApiEventgroup & {
   providedIn: "root",
 })
 export class EventgroupService {
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient)
 
   getList() {
     return this.http.get<ApiEventgroup[]>(api("eventgroup"))

@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from "@angular/core"
+import { inject, Injectable, OnDestroy, OnInit } from "@angular/core"
 import { Meta, Title } from "@angular/platform-browser"
 import { Event, NavigationStart, Router } from "@angular/router"
 import { Subscription } from "rxjs"
@@ -6,20 +6,20 @@ import { Subscription } from "rxjs"
 @Injectable({
   providedIn: "root",
 })
-export class PageService implements OnDestroy {
-  private routerEventsSubscription: Subscription
+export class PageService implements OnInit, OnDestroy {
+  private router = inject(Router)
+  private metaService = inject(Meta)
+  private titleService = inject(Title)
+
+  private routerEventsSubscription!: Subscription
 
   private attrs = {}
   public meta = {}
 
-  constructor(
-    private router: Router,
-    private metaService: Meta,
-    private titleService: Title,
-  ) {
+  ngOnInit(): void {
     // TODO(migrate): absolute urls
-    this.setDefault("url", router.url)
-    this.routerEventsSubscription = router.events.subscribe((s: Event) => {
+    this.setDefault("url", this.router.url)
+    this.routerEventsSubscription = this.router.events.subscribe((s: Event) => {
       if (s instanceof NavigationStart) {
         this.setDefault("url", s.url)
       }

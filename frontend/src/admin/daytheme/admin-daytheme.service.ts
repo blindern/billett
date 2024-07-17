@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http"
-import { Injectable } from "@angular/core"
+import { inject, Injectable } from "@angular/core"
 import { api } from "../../api"
 
 export interface AdminDaythemeCreateData {
@@ -12,7 +12,7 @@ export interface AdminDaythemeCreateData {
   providedIn: "root",
 })
 export class AdminDaythemeService {
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient)
 
   create(data: AdminDaythemeCreateData) {
     return this.http.post<AdminDaythemeCreateData>(api("daytheme"), data, {

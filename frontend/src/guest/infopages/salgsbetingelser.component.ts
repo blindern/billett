@@ -6,6 +6,4 @@ import { Component } from "@angular/core"
   imports: [],
   templateUrl: "./salgsbetingelser.component.html",
 })
-export class SalgsbetingelserComponent {
-  constructor() {}
-}
+export class SalgsbetingelserComponent {}

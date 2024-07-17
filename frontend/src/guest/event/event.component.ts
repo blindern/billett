@@ -1,5 +1,11 @@
-import { CommonModule, Location } from "@angular/common"
-import { Component, CUSTOM_ELEMENTS_SCHEMA, Input, OnInit } from "@angular/core"
+import { CommonModule } from "@angular/common"
+import {
+  Component,
+  CUSTOM_ELEMENTS_SCHEMA,
+  inject,
+  Input,
+  OnInit,
+} from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { Router, RouterLink } from "@angular/router"
 import { api } from "../../api"
@@ -39,6 +45,12 @@ declare global {
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class GuestEventComponent implements OnInit {
+  private eventService = inject(EventService)
+  private eventReservationService = inject(EventReservationService)
+  private router = inject(Router)
+  private pageService = inject(PageService)
+  public auth = inject(AuthService)
+
   @Input()
   id!: string
 
@@ -61,14 +73,6 @@ export class GuestEventComponent implements OnInit {
   forcePay = false
 
   api = api
-
-  constructor(
-    private eventService: EventService,
-    private eventReservationService: EventReservationService,
-    private router: Router,
-    private pageService: PageService,
-    public auth: AuthService,
-  ) {}
 
   private reset() {
     this.reservation = null

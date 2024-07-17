@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common"
 import { HttpClient } from "@angular/common/http"
-import { Component, OnInit } from "@angular/core"
+import { Component, inject, OnInit } from "@angular/core"
 import { RouterLink } from "@angular/router"
 import { Observable } from "rxjs"
 import { api } from "../../api"
@@ -25,17 +25,15 @@ interface UpcomingItem {
   templateUrl: "./index.component.html",
 })
 export class GuestIndexComponent implements OnInit {
+  private http = inject(HttpClient)
+  private eventgroupService = inject(EventgroupService)
+  public auth = inject(AuthService)
+
   upcoming$!: Observable<UpcomingItem[]>
   eventgroups$!: Observable<ApiEventgroup[]>
 
   categories: string[] = []
   categoryNum!: (category: string) => number
-
-  constructor(
-    private http: HttpClient,
-    private eventgroupService: EventgroupService,
-    public auth: AuthService,
-  ) {}
 
   ngOnInit(): void {
     this.upcoming$ = this.http.get<UpcomingItem[]>(api("event/get_upcoming"))

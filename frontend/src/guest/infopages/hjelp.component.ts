@@ -6,6 +6,4 @@ import { Component } from "@angular/core"
   imports: [],
   templateUrl: "./hjelp.component.html",
 })
-export class HjelpComponent {
-  constructor() {}
-}
+export class HjelpComponent {}

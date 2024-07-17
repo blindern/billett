@@ -1,7 +1,11 @@
 import { HttpClient } from "@angular/common/http"
-import { Injectable } from "@angular/core"
+import { inject, Injectable } from "@angular/core"
 import { api } from "../../api"
-import { ApiEventAdmin, ApiEventgroupAdmin, ApiTicketgroupAdmin } from "../../apitypes"
+import {
+  ApiEventAdmin,
+  ApiEventgroupAdmin,
+  ApiTicketgroupAdmin,
+} from "../../apitypes"
 
 export type AdminEventData = ApiEventAdmin & {
   eventgroup: ApiEventgroupAdmin
@@ -14,7 +18,7 @@ export type AdminEventCreateData = Partial<Omit<ApiEventAdmin, "id">>
   providedIn: "root",
 })
 export class AdminEventService {
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient)
 
   query() {
     return this.http.get<AdminEventData[]>(api("event"), {

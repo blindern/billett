@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common"
 import { HttpClient } from "@angular/common/http"
-import { Component, OnInit } from "@angular/core"
+import { Component, inject, OnInit } from "@angular/core"
 import { RouterLink } from "@angular/router"
 import { api } from "../../api"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
@@ -20,7 +20,7 @@ import { PricePipe } from "../../common/price.pipe"
   templateUrl: "./order.component.html",
 })
 export class GuestOrderComponent implements OnInit {
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient)
 
   order: any
   payment: any

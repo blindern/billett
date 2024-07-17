@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common"
-import { Component, Input, OnInit } from "@angular/core"
+import { Component, inject, Input, OnInit } from "@angular/core"
 import { FormsModule } from "@angular/forms"
-import { Router, RouterLink } from "@angular/router"
+import { RouterLink } from "@angular/router"
 import { debounceTime, Subject } from "rxjs"
 import { api } from "../../api"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
@@ -47,6 +47,10 @@ const searchinputInit = {
   templateUrl: "./admin-event-checkin.component.html",
 })
 export class AdminEventCheckinComponent implements OnInit {
+  private adminEventService = inject(AdminEventService)
+  private pageService = inject(PageService)
+  private checkinService = inject(AdminEventCheckinService)
+
   @Input()
   id!: string
 
@@ -74,13 +78,6 @@ export class AdminEventCheckinComponent implements OnInit {
   searchinput = structuredClone(searchinputInit)
 
   #searchqueue = new Subject()
-
-  constructor(
-    private adminEventService: AdminEventService,
-    private pageService: PageService,
-    private router: Router,
-    private checkinService: AdminEventCheckinService,
-  ) {}
 
   ngOnInit(): void {
     this.pageService.set("title", "Innsjekking av billetter")

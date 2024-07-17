@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core"
+import { Component, inject, OnInit } from "@angular/core"
 import { firstValueFrom } from "rxjs"
 import { api } from "../api"
 import { AuthService } from "./auth.service"
@@ -8,7 +8,7 @@ import { AuthService } from "./auth.service"
   template: "Logger ut",
 })
 export class LogoutComponent implements OnInit {
-  constructor(private auth: AuthService) {}
+  private auth = inject(AuthService)
 
   ngOnInit(): void {
     firstValueFrom(this.auth.csrfToken$).then((csrfToken) => {

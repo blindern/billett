@@ -31,8 +31,6 @@ export class AdminEventFormComponent implements OnChanges {
   time_start_text!: string
   time_end_text!: string
 
-  constructor() {}
-
   submit() {
     this.submitForm.emit()
   }

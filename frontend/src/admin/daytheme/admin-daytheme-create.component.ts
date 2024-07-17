@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core"
+import { Component, inject, Input, OnInit } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { Router, RouterLink } from "@angular/router"
 import moment from "moment"
@@ -20,6 +20,11 @@ import { AdminDaythemeService } from "./admin-daytheme.service"
   templateUrl: "./admin-daytheme-create.component.html",
 })
 export class AdminDaythemeCreateComponent implements OnInit {
+  private adminDaythemeService = inject(AdminDaythemeService)
+  private adminEventgroupService = inject(AdminEventgroupService)
+  private pageService = inject(PageService)
+  private router = inject(Router)
+
   @Input()
   eventgroupId!: string
 
@@ -29,13 +34,6 @@ export class AdminDaythemeCreateComponent implements OnInit {
     title: "",
     date: "",
   }
-
-  constructor(
-    private adminDaythemeService: AdminDaythemeService,
-    private adminEventgroupService: AdminEventgroupService,
-    private pageService: PageService,
-    private router: Router,
-  ) {}
 
   ngOnInit(): void {
     this.pageService.set("title", "Ny temadag")

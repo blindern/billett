@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common"
-import { Component, OnInit } from "@angular/core"
+import { Component, inject, OnInit } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { ActivatedRoute, Router, RouterLink } from "@angular/router"
 import { debounce, of, Subject, timer } from "rxjs"
@@ -41,6 +41,10 @@ const searchInit = {
   templateUrl: "./admin-order-list.component.html",
 })
 export class AdminOrderListComponent implements OnInit {
+  private adminOrderService = inject(AdminOrderService)
+  private route = inject(ActivatedRoute)
+  private router = inject(Router)
+
   api = api
 
   curPage = 1
@@ -67,12 +71,6 @@ export class AdminOrderListComponent implements OnInit {
   ]
 
   #searchqueue = new Subject<"delayed" | "immediate">()
-
-  constructor(
-    private adminOrderService: AdminOrderService,
-    private route: ActivatedRoute,
-    private router: Router,
-  ) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {

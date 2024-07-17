@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http"
-import { Injectable } from "@angular/core"
+import { inject, Injectable } from "@angular/core"
 import { api } from "../../api"
 import { ApiEvent, ApiEventgroup, ApiTicketgroup } from "../../apitypes"
 
@@ -12,7 +12,7 @@ export type Event = ApiEvent & {
   providedIn: "root",
 })
 export class EventService {
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient)
 
   get(id: string) {
     return this.http.get<Event>(api("event/" + encodeURIComponent(id)))

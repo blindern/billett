@@ -1,5 +1,5 @@
 import { Location } from "@angular/common"
-import { Component, Input, OnInit } from "@angular/core"
+import { Component, inject, Input, OnInit } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { Router, RouterLink } from "@angular/router"
 import { catchError, NEVER } from "rxjs"
@@ -25,19 +25,17 @@ import { AdminEventgroupService } from "./admin-eventgroup.service"
   templateUrl: "./admin-eventgroup-edit.component.html",
 })
 export class AdminEventgroupEditComponent implements OnInit {
+  private adminEventgroupService = inject(AdminEventgroupService)
+  private pageService = inject(PageService)
+  private router = inject(Router)
+  private location = inject(Location)
+  private history = inject(History)
+
   @Input()
   id!: string
 
   pageState = new ResourceLoadingState()
   eventgroup?: ApiEventgroupAdmin
-
-  constructor(
-    private adminEventgroupService: AdminEventgroupService,
-    private pageService: PageService,
-    private router: Router,
-    private location: Location,
-    private history: History,
-  ) {}
 
   ngOnInit(): void {
     this.pageService.set("title", "Rediger arrangementgruppe")

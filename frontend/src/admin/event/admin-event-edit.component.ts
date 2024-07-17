@@ -1,5 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core"
-import { FormsModule } from "@angular/forms"
+import { Component, inject, Input, OnInit } from "@angular/core"
 import { Router, RouterLink } from "@angular/router"
 import { api } from "../../api"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
@@ -26,6 +25,10 @@ import { AdminEventData, AdminEventService } from "./admin-event.service"
   templateUrl: "./admin-event-edit.component.html",
 })
 export class AdminEventEditComponent implements OnInit {
+  private adminEventService = inject(AdminEventService)
+  private pageService = inject(PageService)
+  private router = inject(Router)
+
   @Input()
   id!: string
 
@@ -33,12 +36,6 @@ export class AdminEventEditComponent implements OnInit {
 
   pageState = new ResourceLoadingState()
   event?: AdminEventData
-
-  constructor(
-    private adminEventService: AdminEventService,
-    private pageService: PageService,
-    private router: Router,
-  ) {}
 
   ngOnInit(): void {
     this.pageService.set("title", "Rediger arrangement")

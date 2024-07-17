@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common"
-import { Component, Input, OnInit } from "@angular/core"
+import { Component, inject, Input, OnInit } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { RouterLink } from "@angular/router"
 import moment from "moment"
@@ -30,6 +30,10 @@ import { AdminEventgroupService } from "./admin-eventgroup.service"
   templateUrl: "./admin-eventgroup.component.html",
 })
 export class AdminEventgroupComponent implements OnInit {
+  private adminEventgroupService = inject(AdminEventgroupService)
+  private adminEventService = inject(AdminEventService)
+  private pageService = inject(PageService)
+
   @Input()
   id!: string
 
@@ -41,12 +45,6 @@ export class AdminEventgroupComponent implements OnInit {
   filter_hidden: any
   categories: any
   days?: Record<string, any[]>
-
-  constructor(
-    private adminEventgroupService: AdminEventgroupService,
-    private adminEventService: AdminEventService,
-    private pageService: PageService,
-  ) {}
 
   ngOnInit(): void {
     this.pageService.set("title", "Arrangementgruppe")

@@ -1,5 +1,6 @@
 import {
   Component,
+  inject,
   Input,
   OnChanges,
   OnDestroy,
@@ -22,7 +23,7 @@ export class PagePropertyComponent implements OnChanges, OnDestroy {
 
   private cleanups: (() => void)[] = []
 
-  constructor(private pageService: PageService) {}
+  private pageService = inject(PageService)
 
   ngOnChanges(changes: SimpleChanges): void {
     const remove = this.pageService.set(this.name, this.value)

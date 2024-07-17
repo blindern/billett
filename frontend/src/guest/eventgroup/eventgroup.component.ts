@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common"
-import { Component, Input, OnInit } from "@angular/core"
+import { Component, inject, Input, OnInit } from "@angular/core"
 import { Router, RouterLink } from "@angular/router"
 import moment from "moment"
 import { AuthService } from "../../auth/auth.service"
@@ -26,6 +26,11 @@ import { EventgroupExpanded, EventgroupService } from "./eventgroup.service"
   templateUrl: "./eventgroup.component.html",
 })
 export class GuestEventgroupComponent implements OnInit {
+  private eventgroupService = inject(EventgroupService)
+  private router = inject(Router)
+  private page = inject(PageService)
+  public auth = inject(AuthService)
+
   @Input()
   id!: string
 
@@ -48,13 +53,6 @@ export class GuestEventgroupComponent implements OnInit {
     }
     return i
   }
-
-  constructor(
-    private eventgroupService: EventgroupService,
-    private router: Router,
-    private page: PageService,
-    public auth: AuthService,
-  ) {}
 
   ngOnInit(): void {
     this.page.set("title", "Arrangementgruppe")

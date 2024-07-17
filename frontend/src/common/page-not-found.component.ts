@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from "@angular/core"
+import { Component, inject, OnDestroy, OnInit } from "@angular/core"
 import { Meta } from "@angular/platform-browser"
 
 @Component({
@@ -8,7 +8,7 @@ import { Meta } from "@angular/platform-browser"
   templateUrl: "./page-not-found.component.html",
 })
 export class PageNotFoundComponent implements OnInit, OnDestroy {
-  constructor(private meta: Meta) {}
+  private meta = inject(Meta)
 
   ngOnInit(): void {
     this.meta.updateTag({ name: "prerender-status-code", content: "404" })

@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http"
-import { Injectable } from "@angular/core"
+import { inject, Injectable } from "@angular/core"
 import { firstValueFrom } from "rxjs"
 import { api } from "../../api"
 
@@ -45,12 +45,12 @@ export class EventReservationItem {
   providedIn: "root",
 })
 export class EventReservationService {
+  private http = inject(HttpClient)
+
   /**
    * The active reservation (should really only be one).
    */
   current: EventReservationItem | undefined
-
-  constructor(private http: HttpClient) {}
 
   setReservation(data: any) {
     this.current = new EventReservationItem(data, this.http, this)
