@@ -18,7 +18,7 @@
         <tr>
           <th>Arrangement</th>
           <th>Sum</th>
-          @for (day of stats.daysDetails; track day) {
+          @for (day of stats.daysDetails; track day.day) {
             <th>{{ day.short }}</th>
           }
         </tr>
@@ -32,7 +32,7 @@
             }}{{ stats.max_normal_sales != stats.max_sales ? " (" + stats.max_sales + ")" : "" }}
             stk
           </th>
-          @for (day of stats.daysDetails; track day) {
+          @for (day of stats.daysDetails; track day.day) {
             <td>
               {{ stats.daysAccum[day.day].price + stats.daysAccum[day.day].fee | price }}<br />
               {{ stats.daysAccum[day.day].count - stats.daysAccum[day.day].revoked }}
@@ -42,7 +42,7 @@
         </tr>
       </tfoot>
       <tbody>
-        @for (event of stats.events; track event) {
+        @for (event of stats.events; track event.id) {
           <tr>
             <td>
               <a routerLink="/a/event/{{ event.id }}">{{ event.title }}</a>
@@ -55,7 +55,7 @@
               stk
             </th>
 
-            @for (day of stats.daysDetails; track day) {
+            @for (day of stats.daysDetails; track day.day) {
               <td>
                 @if (event.daysAccum[day.day].count > 0 || event.daysAccum[day.day].revoked > 0) {
                   <span>

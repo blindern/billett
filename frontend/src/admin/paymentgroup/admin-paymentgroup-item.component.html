@@ -249,7 +249,7 @@
           <p>Ingen opptellinger er registrert.</p>
         }
 
-        @for (group of derived.ps.cashgroups; track group) {
+        @for (group of derived.ps.cashgroups; track $index) {
           <div class="print-page-section">
             @if (!group.is_deleted || show_details) {
               <div [ngClass]="{ is_deleted: group.is_deleted }">
@@ -263,7 +263,7 @@
                   <thead>
                     <tr>
                       <th rowspan="2">&nbsp;</th>
-                      @for (paymentsource of group.cols; track paymentsource) {
+                      @for (paymentsource of group.cols; track paymentsource.id) {
                         <th>
                           {{ paymentsource.time_created | formatdate: "DD.MM.YYYY HH:mm" }}
                         </th>
@@ -271,7 +271,7 @@
                       <th colspan="2">Totaler</th>
                     </tr>
                     <tr>
-                      @for (paymentsource of group.cols; track paymentsource) {
+                      @for (paymentsource of group.cols; track paymentsource.id) {
                         <th>
                           {{ paymentsource.user_created }}
                         </th>
@@ -283,7 +283,7 @@
                   <tfoot>
                     <tr>
                       <th>Sum</th>
-                      @for (paymentsource of group.cols; track paymentsource) {
+                      @for (paymentsource of group.cols; track paymentsource.id) {
                         <th>
                           {{ paymentsource.amount | price }}
                           @if (!group.is_deleted && !paymentgroup.time_end) {
@@ -326,7 +326,7 @@
                   </tbody>
                 </table>
 
-                @for (paymentsource of group.cols; track paymentsource) {
+                @for (paymentsource of group.cols; track paymentsource.id) {
                   @if (paymentsource.comment) {
                     <h4>
                       Kommentar til
@@ -341,7 +341,7 @@
           </div>
         }
 
-        @for (paymentsource of derived.ps.other; track paymentsource) {
+        @for (paymentsource of derived.ps.other; track paymentsource.id) {
           <div class="print-page-section">
             @if (!paymentsource.is_deleted || show_details) {
               <div [ngClass]="{ is_deleted: paymentsource.is_deleted }">
@@ -400,14 +400,14 @@
         }
 
         @if (derived.categories.length > 0) {
-          @for (category of derived.categories; track category) {
+          @for (category of derived.categories; track category.name) {
             <div class="print-page-section">
               <h3>
                 {{ category.name || "Uten kategori" }} - sum salg:
                 {{ -category.total | price }}
               </h3>
 
-              @for (event of category.events; track event) {
+              @for (event of category.events; track event.id) {
                 <table class="table table-condensed table-striped paymentgroup-sales">
                   <thead>
                     <tr>
@@ -422,7 +422,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    @for (ticketgroup of event.ticketgroups; track ticketgroup) {
+                    @for (ticketgroup of event.ticketgroups; track ticketgroup.id) {
                       <tr>
                         <td>{{ ticketgroup.title }}</td>
                         <td>{{ -(derived.ticketgroupStats.get(ticketgroup.id)?.paymentgroupCount ?? 0) }}</td>
@@ -505,7 +505,7 @@
           </tr>
         </thead>
         <tbody>
-          @for (payment of paymentgroup.payments; track payment) {
+          @for (payment of paymentgroup.payments; track payment.id) {
             <tr>
               <td>
                 <a routerLink="/a/order/{{ payment.order.id }}">{{ payment.order.order_text_id }}</a>
@@ -533,7 +533,7 @@
           </tr>
         </thead>
         <tbody>
-          @for (ticket of paymentgroup.valid_tickets; track ticket) {
+          @for (ticket of paymentgroup.valid_tickets; track ticket.id) {
             <tr>
               <td>
                 <a routerLink="/a/order/{{ ticket.order.id }}">{{ ticket.order.order_text_id }}</a>
@@ -570,7 +570,7 @@
           </tr>
         </thead>
         <tbody>
-          @for (ticket of paymentgroup.revoked_tickets; track ticket) {
+          @for (ticket of paymentgroup.revoked_tickets; track ticket.id) {
             <tr>
               <td>
                 <a routerLink="/a/order/{{ ticket.order.id }}">{{ ticket.order.order_text_id }}</a>

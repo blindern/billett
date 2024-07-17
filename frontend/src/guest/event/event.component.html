@@ -218,7 +218,7 @@
                     <div class="form-group">
                       <label class="text-right col-sm-4">Reserverte billetter</label>
                       <div class="col-sm-8">
-                        @for (ticket of reservation.data.tickets; track ticket) {
+                        @for (ticket of reservation.data.tickets; track ticket.id) {
                           <div>
                             {{ ticket.ticketgroup.title }} #{{ ticket.id }}
                             <span class="reservation-ticket-price"

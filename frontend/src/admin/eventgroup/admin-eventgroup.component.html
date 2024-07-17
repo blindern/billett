@@ -81,7 +81,7 @@
                 {{ item.value![0].time_start - 21600 | formatdate: "dddd D. MMMM YYYY" }}
               </th>
             </tr>
-            @for (event of item.value; track event) {
+            @for (event of item.value; track event.id) {
               <tr
                 [ngClass]="{
                   'event-not-published': !event.is_published,

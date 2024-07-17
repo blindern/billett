@@ -34,7 +34,7 @@
           </tr>
         </thead>
         <tbody>
-          @for (group of paymentgroups; track group) {
+          @for (group of paymentgroups; track group.id) {
             <tr>
               <td>
                 <a routerLink="/a/paymentgroup/{{ group.id }}">{{ group.title }}</a>

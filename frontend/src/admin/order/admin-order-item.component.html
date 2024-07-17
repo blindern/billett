@@ -281,7 +281,7 @@
               </tr>
             </thead>
             <tbody>
-              @for (ticket of order.tickets; track ticket) {
+              @for (ticket of order.tickets; track ticket.id) {
                 <tr
                   [ngClass]="{
                     invalid: !ticket.is_valid,
@@ -393,7 +393,7 @@
               </tr>
             </thead>
             <tbody>
-              @for (payment of order.payments; track payment) {
+              @for (payment of order.payments; track payment.id) {
                 <tr>
                   <td>
                     {{ payment.time | formatdate: "DD.MM.YYYY HH:mm" }}<br />
