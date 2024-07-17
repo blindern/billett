@@ -58,7 +58,7 @@
     text-align: center;
   }
 
-  .event-right-col > div {
+  .event-right-col:has(> div) {
     margin-top: 20px;
     padding-top: 20px;
     border-top: 1px solid $hr-border;
