@@ -65,7 +65,9 @@
         </dl>
 
         @if (event.description) {
-          <div marked="event.description" class="event-description"></div>
+          <div class="event-description">
+            <billett-markdown [data]="event.description" />
+          </div>
         }
 
         @if (event.link) {
@@ -80,7 +82,9 @@
           @if (event_status == "selling_text") {
             <div class="panel panel-default">
               <div class="panel-body">
-                <div class="selling-text" marked="event.selling_text"></div>
+                <div class="selling-text">
+                  <billett-markdown [data]="event.selling_text" />
+                </div>
               </div>
             </div>
           }

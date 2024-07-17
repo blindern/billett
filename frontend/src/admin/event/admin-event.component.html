@@ -59,9 +59,9 @@
           <dt>Lenketekst</dt>
           <dd>{{ event.ticket_info }}</dd>
           <dt>Salgsbeskrivelse</dt>
-          <dd marked="event.selling_text"></dd>
+          <dd><billett-markdown [data]="event.selling_text" /></dd>
           <dt>Beskrivelse</dt>
-          <dd marked="event.description"></dd>
+          <dd><billett-markdown [data]="event.description" /></dd>
           <dt>Kort beskrivelse</dt>
           <dd>{{ event.description_short }}</dd>
           <dt>Billett-tekst</dt>

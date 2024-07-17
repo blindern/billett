@@ -6,6 +6,7 @@ import { catchError, tap } from "rxjs"
 import { api } from "../../api"
 import { ApiTicketgroupAdmin } from "../../apitypes"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
+import { MarkdownComponent } from "../../common/markdown.component"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
 import { PageService } from "../../common/page.service"
@@ -28,6 +29,7 @@ import { AdminEventData, AdminEventService } from "./admin-event.service"
     FormatdatePipe,
     PricePipe,
     CommonModule,
+    MarkdownComponent,
   ],
   templateUrl: "./admin-event.component.html",
 })

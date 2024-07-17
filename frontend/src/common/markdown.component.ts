@@ -9,12 +9,12 @@ import { marked } from "marked"
 })
 export class MarkdownComponent {
   @Input("data")
-  data!: string
+  data!: string | null
 
   convertedData?: string
 
   ngOnChanges() {
     var md = marked.setOptions({})
-    this.convertedData = DOMPurify.sanitize(md.parse(this.data) as string)
+    this.convertedData = DOMPurify.sanitize(md.parse(this.data ?? "") as string)
   }
 }

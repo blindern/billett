@@ -11,6 +11,7 @@ import { Router, RouterLink } from "@angular/router"
 import { api } from "../../api"
 import { AuthService } from "../../auth/auth.service"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
+import { MarkdownComponent } from "../../common/markdown.component"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageService } from "../../common/page.service"
 import { PricePipe } from "../../common/price.pipe"
@@ -40,6 +41,7 @@ declare global {
     FormsModule,
     PagePropertyComponent,
     CommonModule,
+    MarkdownComponent,
   ],
   templateUrl: "./event.component.html",
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
