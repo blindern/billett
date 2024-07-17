@@ -155,7 +155,7 @@ export class AdminPaymentsourceCreateComponent {
     }
 
     if (this.type == "cash") {
-      var s = Math.abs(this.otherParsedNumber)
+      let s = Math.abs(this.otherParsedNumber)
       Object.entries(this.cashParsedNumbers).forEach(([key, val]) => {
         if (isNaN(val)) {
           this.pageService.toast(

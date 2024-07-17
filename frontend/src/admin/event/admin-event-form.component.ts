@@ -36,7 +36,7 @@ export class AdminEventFormComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    var parseTime = (t) => {
+    const parseTime = (t: number | null | undefined) => {
       if (!t) return ""
       return moment.unix(t).format("DD.MM.YYYY HH:mm")
     }
@@ -50,7 +50,7 @@ export class AdminEventFormComponent implements OnChanges {
   }
 
   updateTime(which: "start" | "end") {
-    var x = moment(
+    let x = moment(
       this[which == "start" ? "time_start_text" : "time_end_text"],
       "DD.MM.YYYY HH:mm",
     ).unix()

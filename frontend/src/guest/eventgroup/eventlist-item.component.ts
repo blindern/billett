@@ -20,7 +20,7 @@ class CategoryColors {
   #categories: string[] = []
 
   categoryNum(category: string) {
-    var i = this.#categories.indexOf(category)
+    let i = this.#categories.indexOf(category)
     if (i == -1) {
       i = this.#categories.push(category) - 1
     }

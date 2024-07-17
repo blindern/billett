@@ -140,7 +140,7 @@ export class AdminEventCheckinComponent implements OnInit {
     this.ticketsLoading = false
     this.keysearch = null
 
-    var filter = this.#generateSearchFilter()
+    const filter = this.#generateSearchFilter()
     if (filter == "") {
       if (!this.ticketsLoading) this.#loadTickets()
       return
@@ -222,7 +222,7 @@ export class AdminEventCheckinComponent implements OnInit {
     }
 
     if (this.searchinput.id) {
-      var x = this.searchinput.id.length > 8 ? "order_text_id" : "id"
+      const x = this.searchinput.id.length > 8 ? "order_text_id" : "id"
       r.push(x + "=" + this.searchinput.id)
     }
 

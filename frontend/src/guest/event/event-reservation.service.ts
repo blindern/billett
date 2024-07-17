@@ -17,7 +17,7 @@ export class EventReservationItem {
   }
 
   async abort() {
-    var id = this.data.id
+    const id = this.data.id
     await firstValueFrom(this.http.delete(api("order/" + id)))
     this.eventReservationService.removePersistedReservation(id)
   }
@@ -82,7 +82,7 @@ export class EventReservationService {
       throw new Error("not found")
     }
 
-    var data = JSON.parse(pendingReservation)
+    const data = JSON.parse(pendingReservation)
 
     try {
       const reservation = await this.getReservation(data.id)

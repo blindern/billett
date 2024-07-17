@@ -31,7 +31,7 @@ export class GuestOrderComponent implements OnInit {
       this.payment = data.payment
 
       // group the entries by ticketgroup
-      var ticketGroups = {}
+      const ticketGroups = {}
       for (const ticket of data.order.tickets) {
         if (ticket.ticketgroup.id in ticketGroups) {
           ticketGroups[ticket.ticketgroup.id][5]++

@@ -71,7 +71,7 @@ export class AdminEventgroupComponent implements OnInit {
   }
 
   applyFilter() {
-    var r = {}
+    const r = {}
     for (const item of this.group.events) {
       if (
         this.filter_sale !== "" &&
@@ -89,7 +89,7 @@ export class AdminEventgroupComponent implements OnInit {
       )
         continue
 
-      var k = moment.unix(item.time_start - 3600 * 6).format("YYYY-MM-DD")
+      const k = moment.unix(item.time_start - 3600 * 6).format("YYYY-MM-DD")
       r[k] = r[k] || []
       r[k].push(item)
     }

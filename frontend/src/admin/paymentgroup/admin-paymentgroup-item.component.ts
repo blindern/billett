@@ -172,7 +172,7 @@ export class AdminPaymentgroupItemComponent implements OnInit {
         orderStats.set(orderId, item)
       }
 
-      var t = is_payment
+      const t = is_payment
         ? value >= 0
           ? "payments"
           : "refunds"
@@ -393,7 +393,7 @@ export class AdminPaymentgroupItemComponent implements OnInit {
         ] || "Utestående beløp",
     }
 
-    var cashgroups_link = {}
+    const cashgroups_link = {}
 
     const processCashItem = (paymentsource) => {
       if (paymentsource.is_deleted) {
@@ -413,7 +413,7 @@ export class AdminPaymentgroupItemComponent implements OnInit {
         ps.cashgroups.push(cashgroups_link[paymentsource.title])
       }
 
-      var group = cashgroups_link[paymentsource.title]
+      const group = cashgroups_link[paymentsource.title]
 
       Object.entries(paymentsource.data || {}).forEach(([key, val]) => {
         if (!group.cashunique.includes(key)) {
@@ -441,9 +441,9 @@ export class AdminPaymentgroupItemComponent implements OnInit {
         return a - b
       })
       group.rows = group.cashunique.map((key) => {
-        var is_num = /^\d+(\.\d+)?/.test(key)
-        var m = is_num ? parseFloat(key) : 1
-        var total = group.cashuniquesum[key] || 0
+        const is_num = /^\d+(\.\d+)?/.test(key)
+        const m = is_num ? parseFloat(key) : 1
+        const total = group.cashuniquesum[key] || 0
 
         return {
           key: key,
@@ -455,7 +455,7 @@ export class AdminPaymentgroupItemComponent implements OnInit {
       })
 
       group.cols.forEach((paymentsource) => {
-        var i = 0
+        let i = 0
         group.cashunique.forEach((key) => {
           group.rows[i].items.push(paymentsource.data[key] || "")
           i++

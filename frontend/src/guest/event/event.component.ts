@@ -117,9 +117,9 @@ export class GuestEventComponent implements OnInit {
         return
       }
 
-      var groups = {}
+      const groups = {}
       for (const g of this.event!.ticketgroups) {
-        var c = g.order_count ?? 0
+        const c = g.order_count ?? 0
         if (c <= 0) continue
         groups[g.id] = c
       }

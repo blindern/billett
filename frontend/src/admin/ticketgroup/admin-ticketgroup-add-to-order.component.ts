@@ -142,7 +142,7 @@ export class AdminTicketgroupAddToOrderComponent implements OnInit {
       }
     }
 
-    var g = this.ticketgroupsToAdd[ticketgroup.id]
+    const g = this.ticketgroupsToAdd[ticketgroup.id]
     g.num += num
 
     if (g.num == 0) {
