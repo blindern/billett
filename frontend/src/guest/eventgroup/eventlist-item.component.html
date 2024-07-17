@@ -1,0 +1,49 @@
+<ul class="event" [class.is-upcoming]="isUpcoming">
+  <li>
+    @if (isUpcoming) {
+      {{ event.time_start | formatdate: "DD.MM" }}
+    }
+    <span>{{ event.time_start | formatdate: "HH:mm" }}</span>
+  </li>
+  <li>{{ event.location }}</li>
+  <li>
+    <a routerLink="/event/{{ event.alias || event.id }}" [target]="framed ? '_top' : undefined">
+      {{ event.title }}
+    </a>
+    @if (event.category) {
+      <span class="category" [ngClass]="'category-' + categoryNum(event.category)">
+        <a
+          routerLink="/eventgroup/{{ eventgroup.id }}/{{ event.category | lowercase }}"
+          [target]="framed ? '_top' : undefined"
+        >
+          {{ event.category }}
+        </a>
+      </span>
+    }
+  </li>
+  <li>
+    @if (event.ticket_info) {
+      {{ event.ticket_info }}
+    } @else {
+      @switch (event.web_selling_status) {
+        @case ("unknown") {
+          TBA
+        }
+        @case ("no_tickets") {}
+        @case ("old") {}
+        @case ("no_web_tickets") {}
+        @case ("timeout") {
+          I døra
+        }
+        @case ("sold_out") {
+          Utsolgt
+        }
+        @case ("sale") {
+          <a href="event/{{ event.alias || event.id }}" target="_top">
+            <img src="/assets/graphics/billettgul.png" alt="Kjøp billett" />
+          </a>
+        }
+      }
+    }
+  </li>
+</ul>

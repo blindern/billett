@@ -1,5 +1,12 @@
 @import "../../common/vars";
 
+ul,
+li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
 .day {
   margin-top: 30px;
   @media (min-width: $grid-float-breakpoint) {

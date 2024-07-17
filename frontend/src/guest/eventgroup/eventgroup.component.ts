@@ -12,6 +12,7 @@ import {
   ResourceLoadingState,
 } from "../../common/resource-loading"
 import { EventgroupExpanded, EventgroupService } from "./eventgroup.service"
+import { GuestEventlistItemComponent } from "./eventlist-item.component"
 
 @Component({
   selector: "billett-guest-eventgroup",
@@ -22,6 +23,7 @@ import { EventgroupExpanded, EventgroupService } from "./eventgroup.service"
     RouterLink,
     PagePropertyComponent,
     PageStatesComponent,
+    GuestEventlistItemComponent,
   ],
   templateUrl: "./eventgroup.component.html",
   styleUrl: "./eventgroup.component.scss",
@@ -43,17 +45,7 @@ export class GuestEventgroupComponent implements OnInit {
   daythemes!: Record<string, any>
   days!: Record<string, EventgroupExpanded["events"]>
   isFilter!: boolean
-  group: EventgroupExpanded | undefined
-
-  #categories: (string | null)[] = []
-
-  categoryNum(category: string | null) {
-    let i = this.#categories.indexOf(category)
-    if (i == -1) {
-      i = this.#categories.push(category) - 1
-    }
-    return i
-  }
+  eventgroup?: EventgroupExpanded
 
   ngOnInit(): void {
     this.pageService.set("title", "Arrangementgruppe")
@@ -79,11 +71,11 @@ export class GuestEventgroupComponent implements OnInit {
       .pipe(handleResourceLoadingStates(this.pageState))
       .subscribe((eventgroup) => {
         this.pageService.set("title", eventgroup.title)
-        this.group = eventgroup
+        this.eventgroup = eventgroup
 
         const r: any = {}
         let c = 0
-        for (const item of this.group.events) {
+        for (const item of this.eventgroup.events) {
           if (
             filter.category &&
             filter.category != (item.category || "").toLowerCase()
@@ -98,7 +90,7 @@ export class GuestEventgroupComponent implements OnInit {
           c++
         }
 
-        for (const item of this.group.daythemes) {
+        for (const item of this.eventgroup.daythemes) {
           const day = moment.unix(item.date).format("YYYY-MM-DD")
           this.daythemes[day] = item.title
         }

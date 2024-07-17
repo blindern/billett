@@ -10,54 +10,9 @@
   } @else if (upcoming.length == 0) {
     <p>Ingen arrangementer ble funnet.</p>
   } @else {
-    <div class="eventgroup-event-list eventgroup-upcoming">
-      @for (event of upcoming; track event.id) {
-        <ul class="event">
-          <li>
-            {{ event.time_start | formatdate: "DD.MM" }}
-            <span>{{ event.time_start | formatdate: "HH:mm" }}</span>
-          </li>
-          <li>{{ event.location }}</li>
-          <li>
-            <a routerLink="/event/{{ event.alias || event.id }}">{{ event.title }}</a>
-            @if (event.category) {
-              <span class="category" [class.category-{{ categoryNum(event.category) }}]>{{ event.category }}</span>
-            }
-          </li>
-          <li>
-            @if (!event.ticket_info) {
-              @if (event.web_selling_status == "unknown") {
-                <span>TBA</span>
-              }
-              @if (event.web_selling_status == "no_tickets") {
-                <span></span>
-              }
-              @if (event.web_selling_status == "old") {
-                <span></span>
-              }
-              @if (event.web_selling_status == "no_web_tickets") {
-                <span></span>
-              }
-              @if (event.web_selling_status == "timeout") {
-                <span>I døra</span>
-              }
-              @if (event.web_selling_status == "sold_out") {
-                <span>Utsolgt</span>
-              }
-              @if (event.web_selling_status == "sale") {
-                <span>
-                  <a routerLink="/event/{{ event.alias || event.id }}">
-                    <img src="/assets/graphics/billettgul.png" alt="Kjøp billett" />
-                  </a>
-                </span>
-              }
-            } @else {
-              {{ event.ticket_info }}
-            }
-          </li>
-        </ul>
-      }
-    </div>
+    @for (event of upcoming; track event.id) {
+      <billett-eventlist-item [event]="event" [eventgroup]="event.eventgroup" [isUpcoming]="true" />
+    }
   }
 
   <h2>Arrangementgrupper</h2>
