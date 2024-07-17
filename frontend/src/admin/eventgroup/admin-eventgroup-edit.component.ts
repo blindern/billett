@@ -4,6 +4,7 @@ import { FormsModule } from "@angular/forms"
 import { Router, RouterLink } from "@angular/router"
 import { catchError, NEVER } from "rxjs"
 import { ApiEventgroupAdmin } from "../../apitypes"
+import { NavigationService } from "../../common/navigation.service"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
 import { PageService } from "../../common/page.service"
@@ -29,7 +30,7 @@ export class AdminEventgroupEditComponent implements OnInit {
   private pageService = inject(PageService)
   private router = inject(Router)
   private location = inject(Location)
-  private history = inject(History)
+  private navigationService = inject(NavigationService)
 
   @Input()
   id!: string
@@ -60,11 +61,7 @@ export class AdminEventgroupEditComponent implements OnInit {
         }),
       )
       .subscribe((data) => {
-        if (this.history.length > 1) {
-          this.location.back()
-        } else {
-          this.router.navigateByUrl(`/a/eventgroup/${data.id}`)
-        }
+        this.navigationService.goBackOrTo(`/a/eventgroup/${data.id}`)
       })
   }
 }
