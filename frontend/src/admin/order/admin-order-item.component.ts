@@ -18,7 +18,7 @@ import {
 import { AdminPaymentService } from "../payment/admin-payment.service"
 import { AdminPaymentgroupService } from "../paymentgroup/admin-paymentgroup.service"
 import { AdminPrinterService } from "../printer/admin-printer.service"
-import { AdminTicketRevokeComponentInput } from "../ticket/admin-ticket-revoke.component"
+import { AdminTicketRevokeModalInput } from "../ticket/admin-ticket-revoke-modal.component"
 import { AdminTicketService } from "../ticket/admin-ticket.service"
 import { AdminTicketgroupService } from "../ticketgroup/admin-ticketgroup.service"
 import { AdminOrderGetData, AdminOrderService } from "./admin-order.service"
@@ -160,12 +160,12 @@ export class AdminOrderItemComponent implements OnInit {
 
   completeOrder() {
     this.adminPaymentgroupService
-      .selectModal({
+      .openSelectModal({
         eventgroupId: this.order!.eventgroup.id,
         actionText: "Marker som betalt",
         amount: this.totalReserved,
       })
-      .subscribe((paymentgroup) => {
+      .closed.subscribe((paymentgroup) => {
         if (!paymentgroup) return
 
         this.adminOrderService
@@ -201,23 +201,23 @@ export class AdminOrderItemComponent implements OnInit {
 
   addTickets() {
     this.adminTicketgroupService
-      .addTicketsModal({
+      .openAddTicketsModal({
         eventgroupId: this.order!.eventgroup.id,
         getOrderId: async () => this.order!.id,
       })
-      .subscribe((tickets) => {
+      .closed.subscribe((tickets) => {
         if (!tickets) return
         this.refreshOrder()
       })
   }
 
-  revokeTicket(ticket: AdminTicketRevokeComponentInput["ticket"]) {
+  revokeTicket(ticket: AdminTicketRevokeModalInput["ticket"]) {
     this.adminTicketService
-      .revokeModal({
+      .openRevokeModal({
         order: this.order!,
         ticket,
       })
-      .subscribe((result) => {
+      .closed.subscribe((result) => {
         if (!result) return
         this.refreshOrder()
       })
@@ -229,12 +229,12 @@ export class AdminOrderItemComponent implements OnInit {
     },
   ) {
     this.adminPaymentgroupService
-      .selectModal({
+      .openSelectModal({
         eventgroupId: this.order!.eventgroup.id,
         actionText: "Inntekstfør",
         amount: ticket.ticketgroup.price + ticket.ticketgroup.fee,
       })
-      .subscribe((paymentgroup) => {
+      .closed.subscribe((paymentgroup) => {
         if (!paymentgroup) return
 
         this.adminTicketService
@@ -258,27 +258,27 @@ export class AdminOrderItemComponent implements OnInit {
 
   newPayment() {
     this.adminPaymentService
-      .createModal({
+      .openCreateModal({
         order: this.order!,
       })
-      .subscribe(() => {
+      .closed.subscribe(() => {
         this.refreshOrder()
       })
   }
 
   sendEmail() {
     this.adminOrderService
-      .emailModal({
+      .openEmailModal({
         order: this.order!,
       })
-      .subscribe((sent) => {
+      .closed.subscribe((sent) => {
         if (!sent) return
         this.pageService.toast("E-post ble sendt", { class: "success" })
       })
   }
 
   printTickets() {
-    this.adminPrinterService.printSelectModal({
+    this.adminPrinterService.openPrinterSelectModal({
       handler: (printer) =>
         this.adminPrinterService.printTickets(printer, this.validTickets).pipe(
           tap(() => {
@@ -297,7 +297,7 @@ export class AdminOrderItemComponent implements OnInit {
   }
 
   printTicket(ticket: ApiTicketAdmin) {
-    this.adminPrinterService.printSelectModal({
+    this.adminPrinterService.openPrinterSelectModal({
       handler: (printer) => {
         console.log("print!")
         return this.adminPrinterService.printTicket(printer, ticket).pipe(

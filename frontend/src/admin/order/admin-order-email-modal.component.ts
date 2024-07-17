@@ -4,25 +4,29 @@ import { FormsModule } from "@angular/forms"
 import { ApiEventgroupAdmin, ApiOrderAdmin } from "../../apitypes"
 import { AdminOrderService } from "./admin-order.service"
 
-export interface AdminOrderEmailComponentInput {
+export interface AdminOrderEmailModalInput {
   order: ApiOrderAdmin & {
     eventgroup: ApiEventgroupAdmin
   }
 }
 
+export interface AdminOrderEmailModalResult {
+  completed: true
+}
+
 @Component({
-  selector: "billett-admin-order-email",
+  selector: "billett-admin-order-email-modal",
   standalone: true,
   imports: [FormsModule],
-  templateUrl: "./admin-order-email.component.html",
+  templateUrl: "./admin-order-email-modal.component.html",
 })
-export class AdminOrderEmailComponent {
+export class AdminOrderEmailModal {
   constructor(
     @Inject(DIALOG_DATA)
-    public data: AdminOrderEmailComponentInput,
+    public data: AdminOrderEmailModalInput,
   ) {}
 
-  private dialogRef = inject(DialogRef)
+  private dialogRef = inject(DialogRef<AdminOrderEmailModalResult>)
   private adminOrderService = inject(AdminOrderService)
 
   sending = false
@@ -41,7 +45,9 @@ export class AdminOrderEmailComponent {
       .subscribe({
         next: () => {
           this.sending = false
-          this.dialogRef.close(true)
+          this.dialogRef.close({
+            completed: true,
+          })
         },
         error: (err) => {
           this.sending = false

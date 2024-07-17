@@ -13,9 +13,10 @@ import {
   Paginated,
 } from "../../apitypes"
 import {
-  AdminOrderEmailComponent,
-  AdminOrderEmailComponentInput,
-} from "./admin-order-email.component"
+  AdminOrderEmailModal,
+  AdminOrderEmailModalInput,
+  AdminOrderEmailModalResult,
+} from "./admin-order-email-modal.component"
 
 export type AdminOrderData = Paginated<
   ApiOrderAdmin & {
@@ -152,12 +153,12 @@ export class AdminOrderService {
       )
   }
 
-  emailModal(data: AdminOrderEmailComponentInput) {
-    return this.dialog.open<boolean, AdminOrderEmailComponentInput>(
-      AdminOrderEmailComponent,
-      {
-        data,
-      },
-    ).closed
+  openEmailModal(data: AdminOrderEmailModalInput) {
+    return this.dialog.open<
+      AdminOrderEmailModalResult,
+      AdminOrderEmailModalInput
+    >(AdminOrderEmailModal, {
+      data,
+    })
   }
 }

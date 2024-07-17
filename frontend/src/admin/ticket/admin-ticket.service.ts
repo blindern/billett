@@ -2,11 +2,12 @@ import { Dialog } from "@angular/cdk/dialog"
 import { HttpClient } from "@angular/common/http"
 import { inject, Injectable } from "@angular/core"
 import { api } from "../../api"
-import { ApiPaymentgroupAdmin, ApiTicketAdmin } from "../../apitypes"
+import { ApiPaymentgroupAdmin } from "../../apitypes"
 import {
-  AdminTicketRevokeComponent,
-  AdminTicketRevokeComponentInput,
-} from "./admin-ticket-revoke.component"
+  AdminTicketRevokeModal,
+  AdminTicketRevokeModalInput,
+  AdminTicketRevokeModalResult,
+} from "./admin-ticket-revoke-modal.component"
 
 @Injectable({
   providedIn: "root",
@@ -45,12 +46,12 @@ export class AdminTicketService {
     )
   }
 
-  revokeModal(data: AdminTicketRevokeComponentInput) {
-    return this.dialog.open<ApiTicketAdmin, AdminTicketRevokeComponentInput>(
-      AdminTicketRevokeComponent,
-      {
-        data,
-      },
-    ).closed
+  openRevokeModal(data: AdminTicketRevokeModalInput) {
+    return this.dialog.open<
+      AdminTicketRevokeModalResult,
+      AdminTicketRevokeModalInput
+    >(AdminTicketRevokeModal, {
+      data,
+    })
   }
 }

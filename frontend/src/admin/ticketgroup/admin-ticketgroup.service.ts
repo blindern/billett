@@ -5,13 +5,13 @@ import { api } from "../../api"
 import {
   ApiEventAdmin,
   ApiEventgroupAdmin,
-  ApiTicketAdmin,
   ApiTicketgroupAdmin,
 } from "../../apitypes"
 import {
-  AdminTicketgroupAddToOrderComponent,
-  AdminTicketgroupAddToOrderComponentInput,
-} from "./admin-ticketgroup-add-to-order.component"
+  AdminTicketgroupAddToOrderModal,
+  AdminTicketgroupAddToOrderModalInput,
+  AdminTicketgroupAddToOrderModalResult,
+} from "./admin-ticketgroup-add-to-order-modal.component"
 
 export type AdminTicketgroupData = ApiTicketgroupAdmin & {
   event: ApiEventAdmin & {
@@ -59,12 +59,12 @@ export class AdminTicketgroupService {
     })
   }
 
-  addTicketsModal(data: AdminTicketgroupAddToOrderComponentInput) {
+  openAddTicketsModal(data: AdminTicketgroupAddToOrderModalInput) {
     return this.dialog.open<
-      ApiTicketAdmin[],
-      AdminTicketgroupAddToOrderComponentInput
-    >(AdminTicketgroupAddToOrderComponent, {
+      AdminTicketgroupAddToOrderModalResult,
+      AdminTicketgroupAddToOrderModalInput
+    >(AdminTicketgroupAddToOrderModal, {
       data,
-    }).closed
+    })
   }
 }

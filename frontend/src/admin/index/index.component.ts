@@ -18,7 +18,7 @@ export class AdminIndexComponent implements OnInit {
   private adminPrinterService = inject(AdminPrinterService)
 
   printText() {
-    this.adminPrinterService.printTextModal()
+    this.adminPrinterService.openPrintTextModal()
   }
 
   ngOnInit(): void {

@@ -3,7 +3,11 @@ import { NgClass } from "@angular/common"
 import { Component, inject, Inject, OnInit } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { RouterLink } from "@angular/router"
-import { ApiEventAdmin, ApiTicketgroupAdmin } from "../../apitypes"
+import {
+  ApiEventAdmin,
+  ApiTicketAdmin,
+  ApiTicketgroupAdmin,
+} from "../../apitypes"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PricePipe } from "../../common/price.pipe"
@@ -13,13 +17,15 @@ import {
 } from "../eventgroup/admin-eventgroup.service"
 import { AdminOrderService } from "../order/admin-order.service"
 
-export interface AdminTicketgroupAddToOrderComponentInput {
+export interface AdminTicketgroupAddToOrderModalInput {
   eventgroupId: number
   getOrderId: () => Promise<number>
 }
 
+export type AdminTicketgroupAddToOrderModalResult = ApiTicketAdmin[]
+
 @Component({
-  selector: "billett-admin-ticketgroup-add-to-order",
+  selector: "billett-admin-ticketgroup-add-to-order-modal",
   standalone: true,
   imports: [
     PagePropertyComponent,
@@ -29,16 +35,16 @@ export interface AdminTicketgroupAddToOrderComponentInput {
     RouterLink,
     FormatdatePipe,
   ],
-  templateUrl: "./admin-ticketgroup-add-to-order.component.html",
-  styleUrl: "./admin-ticketgroup-add-to-order.component.scss",
+  templateUrl: "./admin-ticketgroup-add-to-order-modal.component.html",
+  styleUrl: "./admin-ticketgroup-add-to-order-modal.component.scss",
 })
-export class AdminTicketgroupAddToOrderComponent implements OnInit {
+export class AdminTicketgroupAddToOrderModal implements OnInit {
   constructor(
     @Inject(DIALOG_DATA)
-    public data: AdminTicketgroupAddToOrderComponentInput,
+    public data: AdminTicketgroupAddToOrderModalInput,
   ) {}
 
-  private dialogRef = inject(DialogRef)
+  private dialogRef = inject(DialogRef<AdminTicketgroupAddToOrderModalResult>)
   private adminEventgroupService = inject(AdminEventgroupService)
   private adminOrderService = inject(AdminOrderService)
 

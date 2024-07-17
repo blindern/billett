@@ -13,13 +13,15 @@ import {
   ApiTicketgroupAdmin,
 } from "../../apitypes"
 import {
-  AdminPaymentgroupCreateComponent,
-  AdminPaymentgroupCreateComponentInput,
-} from "./admin-paymentgroup-create.component"
+  AdminPaymentgroupCreateModal,
+  AdminPaymentgroupCreateModalInput,
+  AdminPaymentgroupCreateModalResult,
+} from "./admin-paymentgroup-create-modal.component"
 import {
-  AdminPaymentgroupSelectComponent,
-  AdminPaymentgroupSelectComponentInput,
-} from "./admin-paymentgroup-select.component"
+  AdminPaymentgroupSelectModal,
+  AdminPaymentgroupSelectModalInput,
+  AdminPaymentgroupSelectModalResult,
+} from "./admin-paymentgroup-select-modal.component"
 
 export type AdminPaymentgroupData = ApiPaymentgroupAdmin & {
   eventgroup: ApiEventgroupAdmin
@@ -130,27 +132,21 @@ export class AdminPaymentgroupService {
     return groups.find((it) => it.id === Number(lastId)) ?? undefined
   }
 
-  createModal(eventgroupId: number) {
+  openCreateModal(data: AdminPaymentgroupCreateModalInput) {
     return this.dialog.open<
-      ApiPaymentgroupAdmin,
-      AdminPaymentgroupCreateComponentInput
-    >(AdminPaymentgroupCreateComponent, {
-      data: {
-        eventgroupId,
-      },
-    }).closed
+      AdminPaymentgroupCreateModalResult,
+      AdminPaymentgroupCreateModalInput
+    >(AdminPaymentgroupCreateModal, {
+      data,
+    })
   }
 
-  selectModal(data: {
-    eventgroupId: number
-    actionText: string
-    amount: number
-  }) {
+  openSelectModal(data: AdminPaymentgroupSelectModalInput) {
     return this.dialog.open<
-      ApiPaymentgroupAdmin,
-      AdminPaymentgroupSelectComponentInput
-    >(AdminPaymentgroupSelectComponent, {
+      AdminPaymentgroupSelectModalResult,
+      AdminPaymentgroupSelectModalInput
+    >(AdminPaymentgroupSelectModal, {
       data,
-    }).closed
+    })
   }
 }

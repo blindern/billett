@@ -5,23 +5,27 @@ import { Observable } from "rxjs"
 import { ApiPrinterAdmin } from "../../apitypes"
 import { AdminPrinterSelectboxComponent } from "./admin-printer-selectbox.component"
 
-export interface AdminPrinterSelectComponentInput {
+export interface AdminPrinterSelectInput {
   handler: (printer: ApiPrinterAdmin) => Observable<unknown>
 }
 
+export interface AdminPrinterSelectResult {
+  completed: true
+}
+
 @Component({
-  selector: "billett-admin-printer-select",
+  selector: "billett-admin-printer-select-modal",
   standalone: true,
   imports: [AdminPrinterSelectboxComponent, FormsModule],
-  templateUrl: "./admin-printer-select.component.html",
+  templateUrl: "./admin-printer-select-modal.component.html",
 })
-export class AdminPrinterSelectComponent {
+export class AdminPrinterSelectModal {
   constructor(
     @Inject(DIALOG_DATA)
-    public data: AdminPrinterSelectComponentInput,
+    public data: AdminPrinterSelectInput,
   ) {}
 
-  private dialogRef = inject(DialogRef)
+  private dialogRef = inject(DialogRef<AdminPrinterSelectResult>)
 
   sending = false
   printer?: ApiPrinterAdmin
@@ -31,7 +35,9 @@ export class AdminPrinterSelectComponent {
     this.data.handler(this.printer!).subscribe({
       next: () => {
         this.sending = false
-        this.dialogRef.close(true)
+        this.dialogRef.close({
+          completed: true,
+        })
       },
       error: () => {
         this.sending = false

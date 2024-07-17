@@ -4,30 +4,33 @@ import { FormsModule } from "@angular/forms"
 import {
   ApiEventgroupAdmin,
   ApiOrderAdmin,
+  ApiPaymentAdmin,
   ApiPaymentgroupAdmin,
 } from "../../apitypes"
 import { AdminPaymentgroupSelectboxComponent } from "../paymentgroup/admin-paymentgroup-selectbox.component"
 import { AdminPaymentService } from "./admin-payment.service"
 
-export interface AdminPaymentCreateComponentInput {
+export interface AdminPaymentCreateModalInput {
   order: ApiOrderAdmin & {
     eventgroup: ApiEventgroupAdmin
   }
 }
 
+export type AdminPaymentCreateModalResult = ApiPaymentAdmin
+
 @Component({
-  selector: "billett-admin-payment-create",
+  selector: "billett-admin-payment-create-modal",
   standalone: true,
   imports: [FormsModule, AdminPaymentgroupSelectboxComponent],
-  templateUrl: "./admin-payment-create.component.html",
+  templateUrl: "./admin-payment-create-modal.component.html",
 })
-export class AdminPaymentCreateComponent implements OnInit {
+export class AdminPaymentCreateModal implements OnInit {
   constructor(
     @Inject(DIALOG_DATA)
-    public data: AdminPaymentCreateComponentInput,
+    public data: AdminPaymentCreateModalInput,
   ) {}
 
-  private dialogRef = inject(DialogRef)
+  private dialogRef = inject(DialogRef<AdminPaymentCreateModalResult>)
   private adminPaymentService = inject(AdminPaymentService)
 
   sending = false

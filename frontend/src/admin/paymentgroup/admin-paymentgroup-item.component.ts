@@ -19,9 +19,10 @@ import {
   AdminPaymentgroupService,
 } from "./admin-paymentgroup.service"
 import {
-  AdminPaymentsourceCreateComponent,
-  AdminPaymentsourceCreateComponentInput,
-} from "./admin-paymentsource-create.component"
+  AdminPaymentsourceCreateModal,
+  AdminPaymentsourceCreateModalInput,
+  AdminPaymentsourceCreateModalResult,
+} from "./admin-paymentsource-create-modal.component"
 import { AdminPaymentsourceService } from "./admin-paymentsource.service"
 
 @Component({
@@ -338,17 +339,17 @@ export class AdminPaymentgroupItemComponent implements OnInit {
     }
   }
 
-  newPaymentsource() {
+  openCreatePaymentsourceModal() {
     this.dialog
-      .open<ApiPaymentsourceAdmin, AdminPaymentsourceCreateComponentInput>(
-        AdminPaymentsourceCreateComponent,
-        {
-          data: {
-            eventgroup: this.paymentgroup!.eventgroup,
-            paymentgroup: this.paymentgroup!,
-          },
+      .open<
+        AdminPaymentsourceCreateModalResult,
+        AdminPaymentsourceCreateModalInput
+      >(AdminPaymentsourceCreateModal, {
+        data: {
+          eventgroup: this.paymentgroup!.eventgroup,
+          paymentgroup: this.paymentgroup!,
         },
-      )
+      })
       .closed.subscribe((paymentsource) => {
         if (paymentsource) {
           this.refresh()

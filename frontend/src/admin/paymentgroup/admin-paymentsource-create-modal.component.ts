@@ -12,13 +12,15 @@ import { PageService } from "../../common/page.service"
 import { PricePipe } from "../../common/price.pipe"
 import { AdminPaymentsourceService } from "./admin-paymentsource.service"
 
-export interface AdminPaymentsourceCreateComponentInput {
+export interface AdminPaymentsourceCreateModalInput {
   paymentgroup: ApiPaymentgroupAdmin
   eventgroup: ApiEventgroupAdmin
 }
 
+export type AdminPaymentsourceCreateModalResult = ApiPaymentsourceAdmin
+
 @Component({
-  selector: "billett-admin-paymentsource-create",
+  selector: "billett-admin-paymentsource-create-modal",
   standalone: true,
   imports: [
     PagePropertyComponent,
@@ -26,19 +28,19 @@ export interface AdminPaymentsourceCreateComponentInput {
     FormsModule,
     NgxTypeAheadComponent,
   ],
-  templateUrl: "./admin-paymentsource-create.component.html",
+  templateUrl: "./admin-paymentsource-create-modal.component.html",
 })
-export class AdminPaymentsourceCreateComponent {
+export class AdminPaymentsourceCreateModal {
   constructor(
     @Inject(DIALOG_DATA)
-    private data: AdminPaymentsourceCreateComponentInput,
+    private data: AdminPaymentsourceCreateModalInput,
   ) {
     this.loadMathjs()
   }
 
   private adminPaymentsourceService = inject(AdminPaymentsourceService)
   private pageService = inject(PageService)
-  private dialogRef = inject(DialogRef<ApiPaymentsourceAdmin>)
+  private dialogRef = inject(DialogRef<AdminPaymentsourceCreateModalResult>)
 
   evaluate?: (value: string) => number
 

@@ -15,7 +15,7 @@ import { PricePipe } from "../../common/price.pipe"
 import { AdminPaymentgroupSelectboxComponent } from "../paymentgroup/admin-paymentgroup-selectbox.component"
 import { AdminTicketService } from "./admin-ticket.service"
 
-export interface AdminTicketRevokeComponentInput {
+export interface AdminTicketRevokeModalInput {
   order: ApiOrderAdmin & {
     eventgroup: ApiEventgroupAdmin
   }
@@ -25,8 +25,12 @@ export interface AdminTicketRevokeComponentInput {
   }
 }
 
+export interface AdminTicketRevokeModalResult {
+  completed: true
+}
+
 @Component({
-  selector: "billett-admin-ticket-revoke",
+  selector: "billett-admin-ticket-revoke-modal",
   standalone: true,
   imports: [
     FormsModule,
@@ -35,15 +39,15 @@ export interface AdminTicketRevokeComponentInput {
     PricePipe,
     AdminPaymentgroupSelectboxComponent,
   ],
-  templateUrl: "./admin-ticket-revoke.component.html",
+  templateUrl: "./admin-ticket-revoke-modal.component.html",
 })
-export class AdminTicketRevokeComponent {
+export class AdminTicketRevokeModal {
   constructor(
     @Inject(DIALOG_DATA)
-    public data: AdminTicketRevokeComponentInput,
+    public data: AdminTicketRevokeModalInput,
   ) {}
 
-  private dialogRef = inject(DialogRef)
+  private dialogRef = inject(DialogRef<AdminTicketRevokeModalResult>)
   private adminTicketService = inject(AdminTicketService)
 
   sending = false
@@ -57,7 +61,9 @@ export class AdminTicketRevokeComponent {
       .subscribe({
         next: () => {
           this.sending = false
-          this.dialogRef.close(true)
+          this.dialogRef.close({
+            completed: true,
+          })
         },
         error: (err) => {
           this.sending = false

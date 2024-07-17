@@ -110,7 +110,7 @@ export class AdminEventComponent implements OnInit {
   }
 
   previewTicketPrint(ticketgroup: ApiTicketgroupAdmin) {
-    this.adminPrinterService.printSelectModal({
+    this.adminPrinterService.openPrinterSelectModal({
       handler: (printer) =>
         this.adminPrinterService.printPreviewTicket(printer, ticketgroup).pipe(
           tap(() => {

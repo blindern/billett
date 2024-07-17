@@ -64,8 +64,10 @@ export class AdminPaymentgroupListComponent implements OnInit {
 
   createNew() {
     this.adminPaymentgroupService
-      .createModal(this.eventgroup!.id)
-      .subscribe((paymentgroup) => {
+      .openCreateModal({
+        eventgroupId: this.eventgroup!.id,
+      })
+      .closed.subscribe((paymentgroup) => {
         if (paymentgroup) {
           this.#loadPaymentGroups(this.eventgroup!.id)
         }

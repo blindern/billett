@@ -54,8 +54,10 @@ export class AdminPaymentgroupSelectboxComponent implements OnInit {
 
   createNew() {
     this.adminPaymentgroupService
-      .createModal(this.eventgroupId)
-      .subscribe((paymentgroup) => {
+      .openCreateModal({
+        eventgroupId: this.eventgroupId,
+      })
+      .closed.subscribe((paymentgroup) => {
         if (paymentgroup) {
           this.paymentgroup = paymentgroup
           this.paymentgroupChange.emit(paymentgroup)

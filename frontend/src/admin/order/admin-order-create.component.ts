@@ -305,11 +305,11 @@ export class AdminOrderCreateComponent implements OnInit {
 
   addTickets() {
     this.adminTicketgroupService
-      .addTicketsModal({
+      .openAddTicketsModal({
         eventgroupId: this.eventgroup!.id,
         getOrderId: () => this.getOrCreateOrder().then((order) => order.id!),
       })
-      .subscribe((tickets) => {
+      .closed.subscribe((tickets) => {
         if (!tickets) return
         this.getOrCreateOrder(true).then(
           () => {

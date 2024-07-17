@@ -8,9 +8,10 @@ import {
   ApiPaymentgroupAdmin,
 } from "../../apitypes"
 import {
-  AdminPaymentCreateComponent,
-  AdminPaymentCreateComponentInput,
-} from "./admin-payment-create.component"
+  AdminPaymentCreateModal,
+  AdminPaymentCreateModalInput,
+  AdminPaymentCreateModalResult,
+} from "./admin-payment-create-modal.component"
 
 @Injectable({
   providedIn: "root",
@@ -31,12 +32,12 @@ export class AdminPaymentService {
     })
   }
 
-  createModal(data: AdminPaymentCreateComponentInput) {
+  openCreateModal(data: AdminPaymentCreateModalInput) {
     return this.dialog.open<
-      ApiPaymentgroupAdmin,
-      AdminPaymentCreateComponentInput
-    >(AdminPaymentCreateComponent, {
+      AdminPaymentCreateModalResult,
+      AdminPaymentCreateModalInput
+    >(AdminPaymentCreateModal, {
       data,
-    }).closed
+    })
   }
 }

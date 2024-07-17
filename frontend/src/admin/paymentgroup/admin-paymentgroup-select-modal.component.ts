@@ -5,25 +5,27 @@ import { ApiPaymentgroupAdmin } from "../../apitypes"
 import { PricePipe } from "../../common/price.pipe"
 import { AdminPaymentgroupSelectboxComponent } from "./admin-paymentgroup-selectbox.component"
 
-export interface AdminPaymentgroupSelectComponentInput {
+export interface AdminPaymentgroupSelectModalInput {
   eventgroupId: number
   actionText: string
   amount: number
 }
 
+export type AdminPaymentgroupSelectModalResult = ApiPaymentgroupAdmin
+
 @Component({
-  selector: "billett-admin-paymentgroup-select",
+  selector: "billett-admin-paymentgroup-select-modal",
   standalone: true,
   imports: [AdminPaymentgroupSelectboxComponent, PricePipe, FormsModule],
-  templateUrl: "./admin-paymentgroup-select.component.html",
+  templateUrl: "./admin-paymentgroup-select-modal.component.html",
 })
-export class AdminPaymentgroupSelectComponent {
+export class AdminPaymentgroupSelectModal {
   constructor(
     @Inject(DIALOG_DATA)
-    public data: AdminPaymentgroupSelectComponentInput,
+    public data: AdminPaymentgroupSelectModalInput,
   ) {}
 
-  private dialogRef = inject(DialogRef<ApiPaymentgroupAdmin>)
+  private dialogRef = inject(DialogRef<AdminPaymentgroupSelectModalResult>)
 
   paymentgroup?: ApiPaymentgroupAdmin
 

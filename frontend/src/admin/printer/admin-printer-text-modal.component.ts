@@ -6,14 +6,18 @@ import { PageService } from "../../common/page.service"
 import { AdminPrinterSelectboxComponent } from "./admin-printer-selectbox.component"
 import { AdminPrinterService } from "./admin-printer.service"
 
+export interface AdminPrinterTextModalResult {
+  completed: true
+}
+
 @Component({
-  selector: "billett-admin-printer-text",
+  selector: "billett-admin-printer-text-modal",
   standalone: true,
   imports: [AdminPrinterSelectboxComponent, FormsModule],
-  templateUrl: "./admin-printer-text.component.html",
+  templateUrl: "./admin-printer-text-modal.component.html",
 })
-export class AdminPrinterTextComponent {
-  private dialogRef = inject(DialogRef)
+export class AdminPrinterTextModal {
+  private dialogRef = inject(DialogRef<AdminPrinterTextModalResult>)
   private adminPrinterService = inject(AdminPrinterService)
   private pageService = inject(PageService)
 
@@ -29,7 +33,9 @@ export class AdminPrinterTextComponent {
         next: () => {
           this.sending = false
           this.pageService.toast("Utskrift lagt i kø", { class: "success" })
-          this.dialogRef.close(true)
+          this.dialogRef.close({
+            completed: true,
+          })
         },
         error: () => {
           this.sending = false

@@ -8,10 +8,14 @@ import {
   ApiTicketgroupAdmin,
 } from "../../apitypes"
 import {
-  AdminPrinterSelectComponent,
-  AdminPrinterSelectComponentInput,
-} from "./admin-printer-select.component"
-import { AdminPrinterTextComponent } from "./admin-printer-text.component"
+  AdminPrinterSelectInput,
+  AdminPrinterSelectModal,
+  AdminPrinterSelectResult,
+} from "./admin-printer-select-modal.component"
+import {
+  AdminPrinterTextModal,
+  AdminPrinterTextModalResult,
+} from "./admin-printer-text-modal.component"
 
 @Injectable({
   providedIn: "root",
@@ -24,17 +28,17 @@ export class AdminPrinterService {
     return this.http.get<ApiPrinterAdmin[]>(api("printer"))
   }
 
-  printSelectModal(data: AdminPrinterSelectComponentInput) {
-    return this.dialog.open<boolean, AdminPrinterSelectComponentInput>(
-      AdminPrinterSelectComponent,
+  openPrinterSelectModal(data: AdminPrinterSelectInput) {
+    return this.dialog.open<AdminPrinterSelectResult, AdminPrinterSelectInput>(
+      AdminPrinterSelectModal,
       {
         data,
       },
-    ).closed
+    )
   }
 
-  printTextModal() {
-    return this.dialog.open<boolean>(AdminPrinterTextComponent).closed
+  openPrintTextModal() {
+    return this.dialog.open<AdminPrinterTextModalResult>(AdminPrinterTextModal)
   }
 
   printTickets(printer: ApiPrinterAdmin, tickets: ApiTicketAdmin[]) {
