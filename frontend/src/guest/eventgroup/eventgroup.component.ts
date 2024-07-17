@@ -24,6 +24,7 @@ import { EventgroupExpanded, EventgroupService } from "./eventgroup.service"
     PageStatesComponent,
   ],
   templateUrl: "./eventgroup.component.html",
+  styleUrl: "./eventgroup.component.scss",
 })
 export class GuestEventgroupComponent implements OnInit {
   private eventgroupService = inject(EventgroupService)

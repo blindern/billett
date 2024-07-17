@@ -1,0 +1,52 @@
+@import "../../common/vars";
+
+.isLoading {
+  opacity: 0.4;
+}
+
+.checkin-form.alert-success {
+  animation-duration: 8s;
+  animation-fill-mode: forwards;
+  animation-name: checkin-success;
+}
+
+.checkin-form.alert-danger {
+  animation-duration: 8s;
+  animation-fill-mode: forwards;
+  animation-name: checkin-failure;
+}
+
+.checkin-form {
+  .form-group {
+    margin-bottom: 4px;
+  }
+}
+
+@keyframes checkin-failure {
+  0% {
+    background-color: red;
+  }
+  30% {
+    background-color: #ebccd1;
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+@keyframes checkin-success {
+  0% {
+    background-color: #00ff00;
+  }
+  30% {
+    background-color: #dff0d8;
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+.checkin-time {
+  color: $gray-light;
+  font-size: $font-size-small;
+}

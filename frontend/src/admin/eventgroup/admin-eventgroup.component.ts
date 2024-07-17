@@ -28,6 +28,7 @@ import { AdminEventgroupService } from "./admin-eventgroup.service"
     PageStatesComponent,
   ],
   templateUrl: "./admin-eventgroup.component.html",
+  styleUrl: "./admin-eventgroup.component.scss",
 })
 export class AdminEventgroupComponent implements OnInit {
   private adminEventgroupService = inject(AdminEventgroupService)

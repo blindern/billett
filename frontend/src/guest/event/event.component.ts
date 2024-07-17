@@ -44,6 +44,7 @@ declare global {
     MarkdownComponent,
   ],
   templateUrl: "./event.component.html",
+  styleUrl: "./event.component.scss",
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class GuestEventComponent implements OnInit {

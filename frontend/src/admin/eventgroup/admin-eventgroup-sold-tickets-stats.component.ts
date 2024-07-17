@@ -45,6 +45,7 @@ class Accum {
     FormatdatePipe,
   ],
   templateUrl: "./admin-eventgroup-sold-tickets-stats.component.html",
+  styleUrl: "./admin-eventgroup-sold-tickets-stats.component.scss",
 })
 export class AdminEventgroupSoldTicketsStatsComponent implements OnInit {
   private adminEventgroupService = inject(AdminEventgroupService)

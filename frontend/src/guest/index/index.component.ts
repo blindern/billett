@@ -17,6 +17,7 @@ type UpcomingItem = ApiEvent & {
   standalone: true,
   imports: [CommonModule, RouterLink, FormatdatePipe],
   templateUrl: "./index.component.html",
+  styleUrl: "./index.component.scss",
 })
 export class GuestIndexComponent implements OnInit {
   private http = inject(HttpClient)

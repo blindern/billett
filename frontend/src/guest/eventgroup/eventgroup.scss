@@ -7,37 +7,6 @@
     padding: 0;
     list-style: none;
   }
-  .day {
-    margin-top: 30px;
-    @media (min-width: $grid-float-breakpoint) {
-      margin-top: 40px;
-    }
-  }
-  .header {
-    margin: 0 0 10px 0;
-    padding: 0 0 5px 0;
-    border-bottom: 2px solid $hr-border;
-    @media (min-width: $grid-float-breakpoint) {
-      font-size: 120%;
-    }
-    a {
-      color: $text-color;
-    }
-    .date {
-      float: right;
-      span {
-        font-weight: bold;
-      }
-    }
-    .theme {
-    }
-
-    &:after {
-      content: "";
-      display: block;
-      clear: both;
-    }
-  }
 
   .event {
     display: flex;
@@ -118,20 +87,5 @@
         background-color: adjust-hue(hsla(0, 100%, 90%, 1), $i * 35);
       }
     }
-  }
-  &.eventgroup-upcoming {
-    li:nth-child(1) {
-      font-weight: normal;
-      span {
-        font-weight: bold;
-      }
-    }
-  }
-}
-
-.isInIframe .eventgroup-event-list {
-  .header {
-    border-bottom: none;
-    margin-bottom: 0;
   }
 }

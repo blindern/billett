@@ -45,6 +45,7 @@ const searchinputInit = {
     PaginationComponent,
   ],
   templateUrl: "./admin-event-checkin.component.html",
+  styleUrl: "./admin-event-checkin.component.scss",
 })
 export class AdminEventCheckinComponent implements OnInit {
   private adminEventService = inject(AdminEventService)

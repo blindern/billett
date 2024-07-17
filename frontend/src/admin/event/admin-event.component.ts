@@ -32,6 +32,7 @@ import { AdminEventData, AdminEventService } from "./admin-event.service"
     MarkdownComponent,
   ],
   templateUrl: "./admin-event.component.html",
+  styleUrl: "./admin-event.component.scss",
 })
 export class AdminEventComponent implements OnInit {
   private adminEventService = inject(AdminEventService)

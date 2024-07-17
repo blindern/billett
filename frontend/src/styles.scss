@@ -3,12 +3,7 @@
 @import "./common/bootstrap";
 @import "./common/template";
 @import "./common/events";
-
-@import "./admin/event/event.scss";
-@import "./admin/eventgroup/eventgroup.scss";
 @import "./admin/order/order.scss";
-
-@import "./guest/event/event.scss";
 @import "./guest/eventgroup/eventgroup.scss";
 
 @include cdk.overlay();
