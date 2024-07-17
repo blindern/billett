@@ -29,7 +29,7 @@ export class PaginationComponent implements OnChanges {
   numPages!: number
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.total || changes.limit) {
+    if (changes["total"] || changes["limit"]) {
       this.numPages = Math.ceil(this.total / this.limit)
     }
   }

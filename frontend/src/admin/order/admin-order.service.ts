@@ -94,10 +94,10 @@ export class AdminOrderService {
   }
 
   sendEmail(options: { orderId: number; email: string; text: string }) {
-    const params: Record<string, string> = {}
-    if (options.email) params.email = options.email
-    if (options.text) params.text = options.text
-    return this.http.post(api(`order/${options.orderId}/email`), params)
+    return this.http.post(api(`order/${options.orderId}/email`), {
+      email: options.email ? options.email : undefined,
+      text: options.text ? options.text : undefined,
+    })
   }
 
   createTickets(orderId: number, ticketgroupToCount: Record<number, number>) {
