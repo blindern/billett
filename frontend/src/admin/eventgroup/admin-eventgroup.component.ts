@@ -58,7 +58,7 @@ export class AdminEventgroupComponent implements OnInit {
 
         this.categories = []
         for (const event of this.group.events) {
-          if (this.categories.indexOf(event.category || "") != -1) continue
+          if (this.categories.includes(event.category || "")) continue
           this.categories.push(event.category || "")
         }
         this.categories.sort()

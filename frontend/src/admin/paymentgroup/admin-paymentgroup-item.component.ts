@@ -416,7 +416,7 @@ export class AdminPaymentgroupItemComponent implements OnInit {
       var group = cashgroups_link[paymentsource.title]
 
       Object.entries(paymentsource.data || {}).forEach(([key, val]) => {
-        if (group.cashunique.indexOf(key) === -1) {
+        if (!group.cashunique.includes(key)) {
           group.cashunique.push(key)
         }
         group.cashuniquesum[key] = (group.cashuniquesum[key] || 0) + val

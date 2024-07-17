@@ -3,7 +3,7 @@ const BACKEND_URL = "/"
 
 export let backendUrl = BACKEND_URL
 
-if (backendUrl.indexOf("SAMEHOST") !== -1) {
+if (backendUrl.includes("SAMEHOST")) {
   backendUrl = backendUrl.replace("SAMEHOST", window.location.hostname)
 }
 
@@ -13,7 +13,7 @@ if (backendUrl === "/" && window.location.port === "3000") {
     window.location.protocol + "//" + window.location.hostname + ":8081/"
 }
 
-if (backendUrl.indexOf("//") === -1) {
+if (!backendUrl.includes("//")) {
   let seperator = backendUrl.substring(0, 1) === "/" ? "" : "/"
   backendUrl = window.location.origin + seperator + backendUrl
 }
