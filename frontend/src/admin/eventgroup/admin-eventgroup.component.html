@@ -39,12 +39,12 @@
     <p>Ingen arrangementer eksisterer.</p>
   } @else {
     <div class="form-inline">
-      <select class="form-control" [(ngModel)]="filter_sale" (change)="applyFilter()">
+      <select class="form-control" [(ngModel)]="filter_sale" name="filter_sale" (change)="applyFilter()">
         <option value="">Vis alle salgsmodus</option>
         <option value="1">Kun med billettgrupper</option>
         <option value="0">Kun uten billettgrupper</option>
       </select>
-      <select class="form-control" [(ngModel)]="filter_category" (change)="applyFilter()">
+      <select class="form-control" [(ngModel)]="filter_category" name="filter_category" (change)="applyFilter()">
         <option value="-1">Vis alle kategorier</option>
         @for (opt of categories; track opt) {
           <option value="{{ opt }}">
@@ -52,7 +52,7 @@
           </option>
         }
       </select>
-      <select class="form-control" [(ngModel)]="filter_hidden" (change)="applyFilter()">
+      <select class="form-control" [(ngModel)]="filter_hidden" name="filter_hidden" (change)="applyFilter()">
         <option value="0">Ikke vis skjulte oppføringer</option>
         <option value="1">Vis kun sjulte oppføringer</option>
         <option value="">Vis alle oppføringer</option>
