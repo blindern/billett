@@ -3,6 +3,11 @@ import { Component, inject, Input, OnInit } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { RouterLink } from "@angular/router"
 import moment from "moment"
+import {
+  ApiEventAdmin,
+  ApiEventgroupAdmin,
+  ApiTicketgroupAdmin,
+} from "../../apitypes"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
@@ -40,11 +45,15 @@ export class AdminEventgroupComponent implements OnInit {
 
   pageState = new ResourceLoadingState()
 
-  group: any
-  filter_sale: any
-  filter_category: any
-  filter_hidden: any
-  categories: any
+  eventgroup?: ApiEventgroupAdmin & {
+    events: (ApiEventAdmin & {
+      ticketgroups: ApiTicketgroupAdmin[]
+    })[]
+  }
+  filter_sale: "" | "0" | "1" = ""
+  filter_category = ""
+  filter_hidden: "" | "0" | "1" = ""
+  categories: string[] = []
   days?: Record<string, any[]>
 
   ngOnInit(): void {
@@ -54,11 +63,11 @@ export class AdminEventgroupComponent implements OnInit {
       .get(this.id)
       .pipe(handleResourceLoadingStates(this.pageState))
       .subscribe((data) => {
-        this.group = data
+        this.eventgroup = data
         this.applyFilter()
 
         this.categories = []
-        for (const event of this.group.events) {
+        for (const event of this.eventgroup.events) {
           if (this.categories.includes(event.category || "")) continue
           this.categories.push(event.category || "")
         }
@@ -71,11 +80,16 @@ export class AdminEventgroupComponent implements OnInit {
   }
 
   applyFilter() {
-    const r = {}
-    for (const item of this.group.events) {
+    const r: Record<
+      string,
+      (ApiEventAdmin & {
+        ticketgroups: ApiTicketgroupAdmin[]
+      })[]
+    > = {}
+    for (const item of this.eventgroup!.events) {
       if (
         this.filter_sale !== "" &&
-        this.filter_sale != !!item.ticketgroups.length
+        Boolean(this.filter_sale) != !!item.ticketgroups!.length
       )
         continue
       if (
@@ -85,7 +99,7 @@ export class AdminEventgroupComponent implements OnInit {
         continue
       if (
         this.filter_hidden != "" &&
-        this.filter_hidden != item.is_admin_hidden
+        Boolean(this.filter_hidden) != item.is_admin_hidden
       )
         continue
 
@@ -97,7 +111,7 @@ export class AdminEventgroupComponent implements OnInit {
     this.days = r
   }
 
-  eventTogglePublish(event) {
+  eventTogglePublish(event: ApiEventAdmin) {
     this.adminEventService
       .setPublish(event.id, !event.is_published)
       .subscribe((data) => {
@@ -105,7 +119,7 @@ export class AdminEventgroupComponent implements OnInit {
       })
   }
 
-  eventToggleSelling(event) {
+  eventToggleSelling(event: ApiEventAdmin) {
     this.adminEventService
       .setSelling(event.id, !event.is_selling)
       .subscribe((data) => {

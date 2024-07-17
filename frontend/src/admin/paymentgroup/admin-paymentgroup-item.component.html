@@ -359,7 +359,7 @@
                   @if (paymentsource.is_deleted) {
                     <span
                       >Slettet
-                      {{ paymentsource.time_deleted | formatdate: "DD.MM.YYYY HH:mm" }}
+                      {{ paymentsource.time_deleted! | formatdate: "DD.MM.YYYY HH:mm" }}
                       av {{ paymentsource.user_deleted }}.</span
                     >
                   }

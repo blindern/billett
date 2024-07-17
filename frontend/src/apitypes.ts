@@ -185,7 +185,21 @@ export interface ApiOrderAdmin {
   is_admin: boolean
   comment: string | null
   balance: string // decimal
+  total_amount: number
 }
+
+export type ApiOrder = Pick<
+  ApiOrderAdmin,
+  | "id"
+  | "email"
+  | "is_valid"
+  | "name"
+  | "order_text_id"
+  | "phone"
+  | "recruiter"
+  | "time"
+  | "total_amount"
+>
 
 export interface ApiPaymentgroupAdmin {
   id: number
@@ -213,6 +227,8 @@ export interface ApiPaymentAdmin {
   transaction_id: string
   status: string
 }
+
+export type ApiPayment = ApiPaymentAdmin
 
 export interface ApiPaymentsourceAdmin {
   id: number
@@ -274,3 +290,8 @@ export interface ApiTicketAdmin {
   time_revoked: number | null
   number: string // zero-padded
 }
+
+export type ApiTicket = Pick<
+  ApiTicketAdmin,
+  "event_id" | "expire" | "id" | "number" | "order_id" | "ticketgroup_id"
+>

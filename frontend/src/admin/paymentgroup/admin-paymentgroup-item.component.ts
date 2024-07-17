@@ -380,10 +380,29 @@ export class AdminPaymentgroupItemComponent implements OnInit {
   }
 
   private derivePaymentsources(paymentgroup: AdminPaymentgroupData) {
+    const cashgroups_link: Record<
+      string,
+      {
+        title: string
+        cashunique: string[]
+        cashuniquesum: Record<string, number>
+        cols: ApiPaymentsourceAdmin[]
+        rows: {
+          key: string
+          is_num: boolean
+          items: string[]
+          total: number
+          amount: number
+        }[]
+        total: number
+        is_deleted: boolean
+      }
+    > = {}
+
     const ps = {
       sum: 0,
-      cashgroups: [] as any[],
-      other: [] as any[],
+      cashgroups: [] as (typeof cashgroups_link)["foo"][],
+      other: [] as ApiPaymentsourceAdmin[],
       payments_deviation_prefix:
         paymentgroup.eventgroup.paymentsources_data[
           "payments_deviation_prefix"
@@ -394,9 +413,7 @@ export class AdminPaymentgroupItemComponent implements OnInit {
         ] || "Utestående beløp",
     }
 
-    const cashgroups_link = {}
-
-    const processCashItem = (paymentsource) => {
+    const processCashItem = (paymentsource: ApiPaymentsourceAdmin) => {
       if (paymentsource.is_deleted) {
         paymentsource.title = "Slettede oppføringer: " + paymentsource.title
       }
@@ -407,7 +424,7 @@ export class AdminPaymentgroupItemComponent implements OnInit {
           cashunique: ["1", "5", "10", "20", "50", "100", "200", "500", "1000"], // 'other' might be existent
           cashuniquesum: {},
           cols: [],
-          rows: null,
+          rows: [],
           total: 0,
           is_deleted: paymentsource.is_deleted,
         }
@@ -416,18 +433,18 @@ export class AdminPaymentgroupItemComponent implements OnInit {
 
       const group = cashgroups_link[paymentsource.title]
 
-      Object.entries(paymentsource.data || {}).forEach(([key, val]) => {
+      for (const [key, val] of Object.entries(paymentsource.data || {})) {
         if (!group.cashunique.includes(key)) {
           group.cashunique.push(key)
         }
         group.cashuniquesum[key] = (group.cashuniquesum[key] || 0) + val
-      })
+      }
 
       group.total += paymentsource.amount
       group.cols.push(paymentsource)
     }
 
-    paymentgroup.paymentsources.forEach((paymentsource) => {
+    for (const paymentsource of paymentgroup.paymentsources) {
       if (!paymentsource.is_deleted) ps.sum += paymentsource.amount
 
       if (paymentsource.type == "cash") {
@@ -435,12 +452,10 @@ export class AdminPaymentgroupItemComponent implements OnInit {
       } else {
         ps.other.push(paymentsource)
       }
-    })
+    }
 
-    ps.cashgroups.forEach((group) => {
-      group.cashunique.sort((a, b) => {
-        return a - b
-      })
+    for (const group of ps.cashgroups) {
+      group.cashunique.sort((a, b) => a.localeCompare(b))
       group.rows = group.cashunique.map((key) => {
         const is_num = /^\d+(\.\d+)?/.test(key)
         const m = is_num ? parseFloat(key) : 1
@@ -455,14 +470,16 @@ export class AdminPaymentgroupItemComponent implements OnInit {
         }
       })
 
-      group.cols.forEach((paymentsource) => {
+      for (const paymentsource of group.cols) {
         let i = 0
-        group.cashunique.forEach((key) => {
-          group.rows[i].items.push(paymentsource.data[key] || "")
+        for (const key of group.cashunique) {
+          group.rows[i].items.push(
+            paymentsource.data![key] ? String(paymentsource.data![key]) : "",
+          )
           i++
-        })
-      })
-    })
+        }
+      }
+    }
 
     return ps
   }

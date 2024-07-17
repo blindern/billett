@@ -15,9 +15,9 @@ export class PricePipe implements PipeTransform {
       decimals = 0
     }
 
-    function formatNumber(number, decimals) {
-      number = number.toFixed(decimals) + ""
-      const x = number.split(".")
+    function formatNumber(number: number, decimals: number) {
+      const numberStr = number.toFixed(decimals) + ""
+      const x = numberStr.split(".")
       let x1 = x[0]
       const x2 = x.length > 1 ? "," + x[1] : ""
       const rgx = /(\d+)(\d{3})/

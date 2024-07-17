@@ -2,6 +2,7 @@ import { AsyncPipe, KeyValuePipe } from "@angular/common"
 import { Component, inject, Input, OnInit } from "@angular/core"
 import { Router, RouterLink } from "@angular/router"
 import moment from "moment"
+import { ApiEvent } from "../../apitypes"
 import { AuthService } from "../../auth/auth.service"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { PagePropertyComponent } from "../../common/page-property.component"
@@ -52,17 +53,16 @@ export class GuestEventgroupComponent implements OnInit {
     this.pageService.set("title", "Arrangementgruppe")
     this.daythemes = {}
 
-    const filter: any = {
-      date: null,
-      category: null,
-    }
+    let filterDate = ""
+    let filterCategory = ""
+
     this.isFilter = false
     if (this.query) {
       const date = moment(this.query, "YYYY-MM-DD")
       if (date.isValid()) {
-        filter.date = date.format("YYYY-MM-DD")
+        filterDate = date.format("YYYY-MM-DD")
       } else {
-        filter.category = this.query
+        filterCategory = this.query
       }
       this.isFilter = true
     }
@@ -74,17 +74,17 @@ export class GuestEventgroupComponent implements OnInit {
         this.pageService.set("title", eventgroup.title)
         this.eventgroup = eventgroup
 
-        const r: any = {}
+        const r: Record<string, ApiEvent[]> = {}
         let c = 0
         for (const item of this.eventgroup.events) {
           if (
-            filter.category &&
-            filter.category != (item.category || "").toLowerCase()
+            filterCategory &&
+            filterCategory != (item.category || "").toLowerCase()
           )
             continue
 
           const k = moment.unix(item.time_start - 3600 * 6).format("YYYY-MM-DD")
-          if (filter.date && filter.date != k) continue
+          if (filterDate && filterDate != k) continue
 
           r[k] = r[k] || []
           r[k].push(item)
@@ -97,7 +97,7 @@ export class GuestEventgroupComponent implements OnInit {
         }
 
         // if blank page on filter
-        if (c == 0 && (filter.date || filter.category)) {
+        if (c == 0 && (filterDate || filterCategory)) {
           this.pageState.notfound = true
           this.router.navigateByUrl("eventgroup/" + eventgroup.id)
         }

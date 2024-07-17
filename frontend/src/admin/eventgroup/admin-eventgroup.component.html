@@ -1,28 +1,30 @@
 <billett-page-states [state]="pageState" />
 
-@if (group) {
-  <billett-page-property name="title" value="{{ group.title }}" />
+@if (eventgroup) {
+  <billett-page-property name="title" value="{{ eventgroup.title }}" />
 
   <div class="page-header">
     <h1>
       <span class="eventgroup">
         <a routerLink="/a">Administrasjon</a>
       </span>
-      {{ group.title }}
+      {{ eventgroup.title }}
 
       <span class="pull-right">
-        <a class="btn btn-success" routerLink="/a/order/new/{{ group.id }}">Ny ordre</a>
-        <a class="btn btn-default" routerLink="/a/orders" [queryParams]="{ eventgroup_id: group.id }">Ordreliste</a>
+        <a class="btn btn-success" routerLink="/a/order/new/{{ eventgroup.id }}">Ny ordre</a>
+        <a class="btn btn-default" routerLink="/a/orders" [queryParams]="{ eventgroup_id: eventgroup.id }"
+          >Ordreliste</a
+        >
       </span>
     </h1>
   </div>
 
   <ul>
     <li>
-      <a routerLink="/a/eventgroup/{{ group.id }}/sold_tickets_stats">Billettstatistikk (salgsoversikt)</a>
+      <a routerLink="/a/eventgroup/{{ eventgroup.id }}/sold_tickets_stats">Billettstatistikk (salgsoversikt)</a>
     </li>
     <li>
-      <a routerLink="/a/eventgroup/{{ group.id }}/paymentgroups">Oppgjørsoversikt</a>
+      <a routerLink="/a/eventgroup/{{ eventgroup.id }}/paymentgroups">Oppgjørsoversikt</a>
     </li>
   </ul>
 
@@ -31,11 +33,11 @@
   <h2>
     Arrangementliste
     <span class="pull-right">
-      <a routerLink="/a/eventgroup/{{ group.id }}/new_event" class="btn btn-default">Nytt arrangement</a>
+      <a routerLink="/a/eventgroup/{{ eventgroup.id }}/new_event" class="btn btn-default">Nytt arrangement</a>
     </span>
   </h2>
 
-  @if (group.events.length == 0) {
+  @if (eventgroup.events.length == 0) {
     <p>Ingen arrangementer eksisterer.</p>
   } @else {
     <div class="form-inline">

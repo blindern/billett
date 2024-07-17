@@ -4,6 +4,12 @@ import { FormsModule } from "@angular/forms"
 import { RouterLink } from "@angular/router"
 import { debounceTime, Subject } from "rxjs"
 import { api } from "../../api"
+import {
+  ApiEventAdmin,
+  ApiOrderAdmin,
+  ApiTicketAdmin,
+  ApiTicketgroupAdmin,
+} from "../../apitypes"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
@@ -21,6 +27,12 @@ import {
 } from "./admin-event-checkin.service"
 import { AdminEventFormComponent } from "./admin-event-form.component"
 import { AdminEventData, AdminEventService } from "./admin-event.service"
+
+type Ticket = ApiTicketAdmin & {
+  order: ApiOrderAdmin
+  event: ApiEventAdmin
+  ticketgroup: ApiTicketgroupAdmin
+}
 
 const searchinputInit = {
   page: 1,
@@ -63,17 +75,19 @@ export class AdminEventCheckinComponent implements OnInit {
 
   tickets?: ReturnType<AdminEventCheckinComponent["parseTicketsList"]>
   ticketsLoading = false
-  ticketLinks = {}
+  ticketsById: Record<number, Omit<Ticket, "event">> = {}
+
+  ticketsWorking = new Set<number>()
 
   lastUsedTickets?: AdminTicketForCheckinData[]
   lastUsedTicketsLoading = false
 
-  keysearch: any
-  keysearchlast: any
-  keyticket: any
-  keyok: any
+  keysearch = ""
+  keysearchlast = ""
+  keyticket?: Ticket
+  keyok?: boolean
 
-  ordersLoading: any
+  ordersLoading = false
   orders?: ReturnType<AdminEventCheckinComponent["parseOrdersList"]>
 
   searchinput = structuredClone(searchinputInit)
@@ -114,13 +128,13 @@ export class AdminEventCheckinComponent implements OnInit {
     input.focus()
   }
 
-  checkin(ticket) {
+  checkin(ticket: ApiTicketAdmin) {
     this.#performCheckin(ticket, true)
     this.#focusKeyfield()
   }
-  checkout(ticket) {
-    this.keyok = null
-    this.keyticket = null
+  checkout(ticket: ApiTicketAdmin) {
+    this.keyok = undefined
+    this.keyticket = undefined
     this.#performCheckin(ticket, false)
     this.#focusKeyfield()
   }
@@ -138,7 +152,7 @@ export class AdminEventCheckinComponent implements OnInit {
   #searchForOrders() {
     this.tickets = undefined
     this.ticketsLoading = false
-    this.keysearch = null
+    this.keysearch = ""
 
     const filter = this.#generateSearchFilter()
     if (filter == "") {
@@ -166,7 +180,10 @@ export class AdminEventCheckinComponent implements OnInit {
         let total_reserved = 0
 
         for (const ticket of order.tickets) {
-          this.ticketLinks[ticket.id] = ticket
+          this.ticketsById[ticket.id] = {
+            ...ticket,
+            order,
+          }
 
           if (ticket.is_revoked) continue
 
@@ -190,23 +207,29 @@ export class AdminEventCheckinComponent implements OnInit {
    * Automatically checkin if possible
    */
   #checkKeySearch() {
-    this.keyok = null
-    this.keyticket = null
+    this.keyok = undefined
+    this.keyticket = undefined
 
     if (this.orders && this.keysearch && this.keysearchlast != this.keysearch) {
       this.keysearchlast = this.keysearch
-      this.orders.result.forEach((order) => {
-        order.tickets.forEach((ticket) => {
+      for (const order of this.orders.result) {
+        for (const ticket of order.tickets) {
           if (this.keysearch == ticket.key) {
             this.keyok = ticket.is_valid && !ticket.is_revoked && !ticket.used
-            this.keyticket = ticket
+
+            const found = {
+              ...ticket,
+              order,
+            }
+
+            this.keyticket = found
 
             if (this.keyok) {
-              this.checkin(ticket)
+              this.checkin(found)
             }
           }
-        })
-      })
+        }
+      }
     }
   }
 
@@ -226,20 +249,20 @@ export class AdminEventCheckinComponent implements OnInit {
       r.push(x + "=" + this.searchinput.id)
     }
 
-    ;["email", "phone"].forEach((x) => {
+    for (const x of ["email", "phone"] as const) {
       if (this.searchinput[x]) {
         r.push(x + ":like:" + this.searchinput[x] + "%")
       }
-    })
+    }
 
     return r.join(",")
   }
 
   private resetSearchInput() {
-    this.keysearch = null
-    this.keysearchlast = null
-    this.keyok = null
-    this.keyticket = null
+    this.keysearch = ""
+    this.keysearchlast = ""
+    this.keyok = undefined
+    this.keyticket = undefined
     this.searchinput = structuredClone(searchinputInit)
   }
 
@@ -257,26 +280,26 @@ export class AdminEventCheckinComponent implements OnInit {
       })
   }
 
-  private parseTicketsList(list: AdminTicketForCheckinData[]) {
+  private parseTicketsList(tickets: AdminTicketForCheckinData[]) {
     const orders: (AdminTicketForCheckinData["order"] & {
       tickets: AdminTicketForCheckinData[]
     })[] = []
-    const orders_link = {}
-    this.ticketLinks = {}
+    const ordersById: Record<number, (typeof orders)[0]> = {}
+    this.ticketsById = {}
 
-    list.forEach((row) => {
-      this.ticketLinks[row.id] = row
-      if (row.order.id in orders_link) {
-        orders_link[row.order.id].tickets.push(row)
+    for (const ticket of tickets) {
+      this.ticketsById[ticket.id] = ticket
+      if (ticket.order.id in ordersById) {
+        ordersById[ticket.order.id].tickets.push(ticket)
       } else {
         const order = {
-          ...row.order,
-          tickets: [row],
+          ...ticket.order,
+          tickets: [ticket],
         }
-        orders_link[order.id] = order
+        ordersById[order.id] = order
         orders.push(order)
       }
-    })
+    }
 
     return orders
   }
@@ -296,8 +319,8 @@ export class AdminEventCheckinComponent implements OnInit {
     })
   }
 
-  #performCheckin(ticket: any, isCheckin: boolean) {
-    ticket.isWorking = true
+  #performCheckin(ticket: ApiTicketAdmin, isCheckin: boolean) {
+    this.ticketsWorking.add(ticket.id)
 
     const operation = isCheckin
       ? this.adminEventCheckinService.checkin(ticket.id)
@@ -305,12 +328,9 @@ export class AdminEventCheckinComponent implements OnInit {
 
     operation.subscribe({
       next: (data) => {
-        const newTicket = data
-        delete ticket.isWorking
-        newTicket.event = ticket.event
-        newTicket.ticketgroup = ticket.ticketgroup
-        ticket = this.ticketLinks[ticket.id] || ticket
-        Object.assign(ticket, newTicket)
+        this.ticketsWorking.delete(ticket.id)
+        const toUpdate = this.ticketsById[ticket.id] || ticket
+        Object.assign(toUpdate, data)
 
         // event checkin information will be changed, reload it
         this.#reloadEvent()

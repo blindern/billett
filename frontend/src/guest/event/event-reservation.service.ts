@@ -2,10 +2,18 @@ import { HttpClient } from "@angular/common/http"
 import { inject, Injectable } from "@angular/core"
 import { firstValueFrom } from "rxjs"
 import { api } from "../../api"
+import { ApiEvent, ApiOrder, ApiTicket, ApiTicketgroup } from "../../apitypes"
+
+type ReservationData = ApiOrder & {
+  tickets: (ApiTicket & {
+    event: ApiEvent
+    ticketgroup: ApiTicketgroup
+  })[]
+}
 
 export class EventReservationItem {
   constructor(
-    public data: any,
+    public data: ReservationData,
     private http: HttpClient,
     private eventReservationService: EventReservationService,
   ) {}
@@ -22,18 +30,21 @@ export class EventReservationItem {
     this.eventReservationService.removePersistedReservation(id)
   }
 
-  async update(data) {
+  async update(data: { recruiter: string }) {
     const updatedData = await firstValueFrom(
-      this.http.patch<any>(api("order/" + this.data.id), data),
+      this.http.patch<ReservationData>(api("order/" + this.data.id), data),
     )
     this.data = updatedData
     return updatedData
   }
 
   // send to payment
-  async place(force) {
+  async place(force?: boolean) {
     return await firstValueFrom(
-      this.http.post<any>(
+      this.http.post<{
+        checkoutFrontendUrl: string
+        token: string
+      }>(
         api("order/" + this.data.id + "/" + (force ? "force" : "place")),
         null,
       ),
@@ -52,14 +63,16 @@ export class EventReservationService {
    */
   current: EventReservationItem | undefined
 
-  setReservation(data: any) {
+  setReservation(data: ReservationData) {
     this.current = new EventReservationItem(data, this.http, this)
     this.current.persist()
     return this.current
   }
 
-  async getReservation(id) {
-    const data = await firstValueFrom(this.http.get<any>(api("order/" + id)))
+  async getReservation(id: number) {
+    const data = await firstValueFrom(
+      this.http.get<ReservationData>(api("order/" + id)),
+    )
     if (data.is_valid) {
       // real order, no reservation
       throw new Error("last reservation is valid order")
@@ -94,11 +107,14 @@ export class EventReservationService {
     }
   }
 
-  async create(event_id, ticketgroups) {
+  async create(event_id: number, ticketgroups: Record<number, number>) {
     const data = await firstValueFrom(
-      this.http.post(api("event/" + event_id + "/createreservation"), {
-        ticketgroups: ticketgroups,
-      }),
+      this.http.post<ReservationData>(
+        api("event/" + event_id + "/createreservation"),
+        {
+          ticketgroups: ticketgroups,
+        },
+      ),
     )
 
     return this.setReservation(data)

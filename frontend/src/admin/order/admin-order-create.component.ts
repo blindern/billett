@@ -16,6 +16,7 @@ import {
   ApiEventgroupAdmin,
   ApiOrderAdmin,
   ApiPaymentgroupAdmin,
+  ApiPrinterAdmin,
   ApiTicketAdmin,
   ApiTicketgroupAdmin,
 } from "../../apitypes"
@@ -82,8 +83,7 @@ export class AdminOrderCreateComponent implements OnInit {
     tickets: [],
   }
   paymentgroup?: ApiPaymentgroupAdmin
-
-  printer?: any
+  printer?: ApiPrinterAdmin
 
   ticketgroupsWorking = new Set<number>()
 
@@ -346,7 +346,7 @@ export class AdminOrderCreateComponent implements OnInit {
     )
     if (list.length == 0) return
 
-    this.adminPrinterService.printTickets(this.printer.name, list).subscribe({
+    this.adminPrinterService.printTickets(this.printer, list).subscribe({
       next: () => {
         this.pageService.toast("Utskrift lagt i kø", { class: "success" })
       },

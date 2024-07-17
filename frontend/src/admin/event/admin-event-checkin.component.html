@@ -164,7 +164,7 @@
     <div class="col-sm-7">
       <div
         [ngClass]="{
-          'alert-success': keyticket && keyok && !keyticket.isWorking && !ordersLoading,
+          'alert-success': keyticket && keyok && !ticketsWorking.has(keyticket.id) && !ordersLoading,
           'alert-danger': keyticket && !keyok && !ordersLoading,
         }"
         class="alert checkin-form"
@@ -210,14 +210,12 @@
 
         @if (keyticket) {
           <h4>Scanning av strekkode</h4>
-          @if (keyticket.isWorking) {
+          @if (ticketsWorking.has(keyticket.id)) {
             <p>Sjekker inn billett...</p>
-          }
-          @if (!keyticket.isWorking) {
+          } @else {
             @if (keyok) {
               <p><b>Billetten ble innsjekket</b></p>
-            }
-            @if (!keyok) {
+            } @else {
               <p>
                 <b>Billetten kan ikke sjekkes inn. Allerede innsjekket eller ugyldig billett?</b>
               </p>

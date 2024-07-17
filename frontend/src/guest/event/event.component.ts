@@ -9,6 +9,7 @@ import {
 import { FormsModule } from "@angular/forms"
 import { Router, RouterLink } from "@angular/router"
 import { api } from "../../api"
+import { ApiTicketgroup } from "../../apitypes"
 import { AuthService } from "../../auth/auth.service"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { MarkdownComponent } from "../../common/markdown.component"
@@ -69,30 +70,62 @@ export class GuestEventComponent implements OnInit {
 
   loadingReservation = false
   reservation: EventReservationItem | null | undefined
-  contact: any
-  newres: any
+
+  recruiter = ""
+  ticketgroups: {
+    ticketgroup: ApiTicketgroup
+    count: number
+  }[] = []
+
   vipps_checkout: any
 
   forcePay = false
 
   api = api
 
+  get count() {
+    if (this.reservation) {
+      return this.reservation.data.tickets.length
+    }
+
+    return this.ticketgroups.reduce((acc, { count }) => acc + count, 0)
+  }
+
+  get totalAmount() {
+    if (this.reservation) {
+      return this.reservation.data.total_amount
+    }
+
+    return this.ticketgroups.reduce(
+      (acc, { ticketgroup, count }) =>
+        acc + count * (ticketgroup.price + ticketgroup.fee),
+      0,
+    )
+  }
+
   private reset() {
     this.reservation = null
-    this.contact = {}
-    this.newres = {}
-    this.newres.count = 0
-    this.newres.total_amount = 0
+    this.recruiter = ""
     this.vipps_checkout = false
   }
 
-  // add/remove ticketgroup selection
-  changeTicketgroupNum(ticketgroup, num) {
-    if (!("order_count" in ticketgroup)) ticketgroup.order_count = 0
-    ticketgroup.order_count += num
-    this.event!.max_each_person! -= num
-    this.newres.total_amount += num * (ticketgroup.price + ticketgroup.fee)
-    this.newres.count += num
+  get availableCount() {
+    return this.event!.max_each_person - this.count
+  }
+
+  changeTicketgroupNum(ticketgroup: ApiTicketgroup, num: number) {
+    let found = this.ticketgroups.find(
+      (it) => it.ticketgroup.id === ticketgroup.id,
+    )
+    if (!found) {
+      found = {
+        ticketgroup,
+        count: 0,
+      }
+      this.ticketgroups.push(found)
+    }
+
+    found.count += num
   }
 
   // abort order
@@ -107,9 +140,9 @@ export class GuestEventComponent implements OnInit {
     )
   }
 
-  async placeOrder(force) {
+  async placeOrder(force?: boolean) {
     if (!this.reservation) {
-      if (this.newres.count == 0) {
+      if (this.count == 0) {
         this.pageService.toast("Du må velge noen billetter.", {
           class: "warning",
         })
@@ -117,7 +150,7 @@ export class GuestEventComponent implements OnInit {
         return
       }
 
-      const groups = {}
+      const groups: Record<number, number> = {}
       for (const g of this.event!.ticketgroups) {
         const c = g.order_count ?? 0
         if (c <= 0) continue
@@ -141,7 +174,7 @@ export class GuestEventComponent implements OnInit {
     }
 
     const data = {
-      recruiter: this.contact.recruiter,
+      recruiter: this.recruiter,
     }
     try {
       await this.reservation.update(data)
@@ -159,7 +192,7 @@ export class GuestEventComponent implements OnInit {
     }
 
     // send to payment
-    let response
+    let response: Awaited<ReturnType<EventReservationItem["place"]>>
     try {
       response = await this.reservation.place(force)
     } catch (err: any) {

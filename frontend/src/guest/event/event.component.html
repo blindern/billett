@@ -187,7 +187,7 @@
                           type="button"
                           (click)="changeTicketgroupNum(ticketgroup, 1)"
                           class="btn btn-primary btn-sm"
-                          [disabled]="event.max_each_person <= 0"
+                          [disabled]="availableCount <= 0"
                         >
                           <span class="glyphicon glyphicon-plus"></span>
                         </button>
@@ -238,13 +238,13 @@
                   <section id="vipps-checkout-frame-container"></section>
                 }
 
-                @if ((reservation || newres.count > 0) && !vipps_checkout) {
+                @if ((reservation || count > 0) && !vipps_checkout) {
                   <div class="reservation-details">
                     <hr />
                     <div class="form-group">
                       <label class="text-right col-sm-4">Totalt å betale</label>
                       <div class="col-sm-8">
-                        <b>{{ (reservation ? reservation!.data.total_amount : newres.total_amount) | price: true }}</b>
+                        <b>{{ totalAmount | price: true }}</b>
                       </div>
                     </div>
                     <div class="form-group">
@@ -253,7 +253,7 @@
                         <input
                           type="text"
                           name="recruiter"
-                          [(ngModel)]="contact.recruiter"
+                          [(ngModel)]="recruiter"
                           class="form-control"
                           placeholder="(valgfritt)"
                         />

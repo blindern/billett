@@ -1,4 +1,4 @@
-@if (!order) {
+@if (!order || !payment) {
   <p>Vennligst vent...</p>
 } @else {
   @if (payment.status == "ACCEPTED") {

@@ -25,11 +25,6 @@ export type AdminOrderSearchData = Paginated<
   }
 >
 
-export interface CheckinOrCheckoutData {
-  id: number
-  [k: string]: any
-}
-
 @Injectable({
   providedIn: "root",
 })
@@ -72,10 +67,16 @@ export class AdminEventCheckinService {
   }
 
   checkin(ticketId: number) {
-    return this.http.post<any>(api(`ticket/${ticketId}/checkin`), null)
+    return this.http.post<ApiTicketAdmin>(
+      api(`ticket/${ticketId}/checkin`),
+      null,
+    )
   }
 
   checkout(ticketId: number) {
-    return this.http.post<any>(api(`ticket/${ticketId}/checkout`), null)
+    return this.http.post<ApiTicketAdmin>(
+      api(`ticket/${ticketId}/checkout`),
+      null,
+    )
   }
 }

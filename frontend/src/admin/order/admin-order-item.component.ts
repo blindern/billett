@@ -56,7 +56,7 @@ export class AdminOrderItemComponent implements OnInit {
   pageState = new ResourceLoadingState()
   order?: AdminOrderGetData
 
-  #editFields = ["name", "email", "phone", "recruiter", "comment"]
+  #editFields = ["name", "email", "phone", "recruiter", "comment"] as const
   edit?: AdminOrderGetData
 
   ngOnInit(): void {
@@ -136,9 +136,9 @@ export class AdminOrderItemComponent implements OnInit {
   }
 
   save() {
-    this.#editFields.forEach((field) => {
+    for (const field of this.#editFields) {
       this.order![field] = this.edit![field]
-    })
+    }
     this.adminOrderService.update(this.order!).subscribe((order) => {
       this.order = order
       this.edit = undefined

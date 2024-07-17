@@ -13,8 +13,8 @@ export class PageService implements OnInit, OnDestroy {
 
   private routerEventsSubscription!: Subscription
 
-  private attrs = {}
-  public meta = {}
+  private attrs: Record<string, { val: string; isDefault?: boolean }[]> = {}
+  public meta: Record<string, string> = {}
 
   ngOnInit(): void {
     // TODO(migrate): absolute urls
@@ -84,7 +84,7 @@ export class PageService implements OnInit, OnDestroy {
     if (this.attrs[name].length === 0) {
       delete this.meta[name]
     } else {
-      this.meta[name] = this.attrs[name].at(-1).val
+      this.meta[name] = this.attrs[name].at(-1)!.val
     }
     this.#queueUpdate()
   }
@@ -150,10 +150,11 @@ export class PageService implements OnInit, OnDestroy {
   /**
    * Get page property
    */
-  get(name) {
+  get(name: string) {
     if (this.meta[name]) {
       return this.meta[name]
     }
+    return undefined
   }
 
   /**
