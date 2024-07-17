@@ -30,7 +30,7 @@
 
 @if (sending) {
   <div class="modal-body text-center">Registrerer data ...</div>
-} @else {
+} @else if (evaluate) {
   <div class="modal-body">
     @if (!type) {
       <div class="row text-center">

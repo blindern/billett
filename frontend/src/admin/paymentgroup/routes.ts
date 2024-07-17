@@ -5,12 +5,12 @@ import { AdminPaymentgroupListComponent } from "./admin-paymentgroup-list.compon
 
 export const routes: Routes = [
   {
-    path: "a/paymentgroup/:id",
+    path: "paymentgroup/:id",
     component: AdminPaymentgroupItemComponent,
     canActivate: [requireAdmin],
   },
   {
-    path: "a/eventgroup/:eventgroupId/paymentgroups",
+    path: "eventgroup/:eventgroupId/paymentgroups",
     component: AdminPaymentgroupListComponent,
     canActivate: [requireAdmin],
   },

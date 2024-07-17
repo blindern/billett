@@ -1,12 +1,11 @@
 import { Routes } from "@angular/router"
-import { routes as adminRoutes } from "./admin/routes"
 import { LoginComponent } from "./auth/login.component"
 import { LogoutComponent } from "./auth/logout.component"
+import { PageNotFoundComponent } from "./common/page-not-found.component"
 import { GuestEventComponent } from "./guest/event/event.component"
 import { GuestEventgroupComponent } from "./guest/eventgroup/eventgroup.component"
 import { GuestIndexComponent } from "./guest/index/index.component"
 import { HjelpComponent } from "./guest/infopages/hjelp.component"
-import { PageNotFoundComponent } from "./common/page-not-found.component"
 import { SalgsbetingelserComponent } from "./guest/infopages/salgsbetingelser.component"
 import { GuestOrderComponent } from "./guest/order/order.component"
 
@@ -53,7 +52,10 @@ export const routes: Routes = [
     path: "order/complete",
     component: GuestOrderComponent,
   },
-  ...adminRoutes,
+  {
+    path: "a",
+    loadChildren: () => import("./admin/routes").then((m) => m.routes),
+  },
   {
     path: "**",
     component: PageNotFoundComponent,

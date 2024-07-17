@@ -1,4 +1,4 @@
-import { CommonModule } from "@angular/common"
+import { AsyncPipe } from "@angular/common"
 import {
   Component,
   CUSTOM_ELEMENTS_SCHEMA,
@@ -40,8 +40,8 @@ declare global {
     PricePipe,
     FormsModule,
     PagePropertyComponent,
-    CommonModule,
     MarkdownComponent,
+    AsyncPipe,
   ],
   templateUrl: "./event.component.html",
   styleUrl: "./event.component.scss",

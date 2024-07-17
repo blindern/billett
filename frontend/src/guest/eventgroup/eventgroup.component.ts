@@ -1,4 +1,4 @@
-import { CommonModule } from "@angular/common"
+import { AsyncPipe, KeyValuePipe } from "@angular/common"
 import { Component, inject, Input, OnInit } from "@angular/core"
 import { Router, RouterLink } from "@angular/router"
 import moment from "moment"
@@ -18,12 +18,13 @@ import { GuestEventlistItemComponent } from "./eventlist-item.component"
   selector: "billett-guest-eventgroup",
   standalone: true,
   imports: [
-    CommonModule,
     FormatdatePipe,
     RouterLink,
     PagePropertyComponent,
     PageStatesComponent,
     GuestEventlistItemComponent,
+    AsyncPipe,
+    KeyValuePipe,
   ],
   templateUrl: "./eventgroup.component.html",
   styleUrl: "./eventgroup.component.scss",

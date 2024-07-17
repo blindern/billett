@@ -6,17 +6,17 @@ import { AdminOrderListComponent } from "./admin-order-list.component"
 
 export const routes: Routes = [
   {
-    path: "a/order/new/:eventgroupId",
+    path: "order/new/:eventgroupId",
     component: AdminOrderCreateComponent,
     canActivate: [requireAdmin],
   },
   {
-    path: "a/order/:id",
+    path: "order/:id",
     component: AdminOrderItemComponent,
     canActivate: [requireAdmin],
   },
   {
-    path: "a/orders",
+    path: "orders",
     // ?eventgroup_id
     // index.html
     component: AdminOrderListComponent,

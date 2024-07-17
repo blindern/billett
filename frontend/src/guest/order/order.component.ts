@@ -1,4 +1,3 @@
-import { CommonModule } from "@angular/common"
 import { HttpClient } from "@angular/common/http"
 import { Component, inject, OnInit } from "@angular/core"
 import { RouterLink } from "@angular/router"
@@ -10,13 +9,7 @@ import { PricePipe } from "../../common/price.pipe"
 @Component({
   selector: "billett-guest-order",
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterLink,
-    PagePropertyComponent,
-    FormatdatePipe,
-    PricePipe,
-  ],
+  imports: [RouterLink, PagePropertyComponent, FormatdatePipe, PricePipe],
   templateUrl: "./order.component.html",
 })
 export class GuestOrderComponent implements OnInit {

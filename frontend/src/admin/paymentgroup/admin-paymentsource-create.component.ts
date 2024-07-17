@@ -1,7 +1,6 @@
 import { DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
 import { Component, inject, Inject } from "@angular/core"
 import { FormsModule } from "@angular/forms"
-import { evaluate } from "mathjs"
 import { NgxTypeAheadComponent } from "ngx-typeahead"
 import {
   ApiEventgroupAdmin,
@@ -33,11 +32,15 @@ export class AdminPaymentsourceCreateComponent {
   constructor(
     @Inject(DIALOG_DATA)
     private data: AdminPaymentsourceCreateComponentInput,
-  ) {}
+  ) {
+    this.loadMathjs()
+  }
 
   private adminPaymentsourceService = inject(AdminPaymentsourceService)
   private pageService = inject(PageService)
   private dialogRef = inject(DialogRef<ApiPaymentsourceAdmin>)
+
+  evaluate?: (value: string) => number
 
   private _type: "" | "cash" | "other" = ""
 
@@ -53,6 +56,11 @@ export class AdminPaymentsourceCreateComponent {
 
   title = ""
   comment = ""
+
+  private async loadMathjs() {
+    const { evaluate } = await import("mathjs")
+    this.evaluate = evaluate
+  }
 
   complete() {
     if (!this.#validateInput() || this.type === "") {
@@ -108,7 +116,7 @@ export class AdminPaymentsourceCreateComponent {
     try {
       return this.otherText === ""
         ? 0
-        : evaluate(this.otherText.replace(",", "."))
+        : this.evaluate!(this.otherText.replace(",", "."))
     } catch {
       return NaN
     }
@@ -122,7 +130,7 @@ export class AdminPaymentsourceCreateComponent {
       for (const [key, val] of Object.entries(this.cashTexts)) {
         if (val === "") continue
         try {
-          this.cashParsedNumbers[key] = evaluate(val.replace(",", "."))
+          this.cashParsedNumbers[key] = this.evaluate!(val.replace(",", "."))
         } catch {
           this.cashParsedNumbers[key] = NaN
         }

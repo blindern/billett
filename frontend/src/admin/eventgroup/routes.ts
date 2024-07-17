@@ -7,22 +7,22 @@ import { AdminEventgroupComponent } from "./admin-eventgroup.component"
 
 export const routes: Routes = [
   {
-    path: "a/eventgroup/new",
+    path: "eventgroup/new",
     component: AdminEventgroupCreateComponent,
     canActivate: [requireAdmin],
   },
   {
-    path: "a/eventgroup/:id/edit",
+    path: "eventgroup/:id/edit",
     component: AdminEventgroupEditComponent,
     canActivate: [requireAdmin],
   },
   {
-    path: "a/eventgroup/:id",
+    path: "eventgroup/:id",
     component: AdminEventgroupComponent,
     canActivate: [requireAdmin],
   },
   {
-    path: "a/eventgroup/:id/sold_tickets_stats",
+    path: "eventgroup/:id/sold_tickets_stats",
     component: AdminEventgroupSoldTicketsStatsComponent,
     canActivate: [requireAdmin],
   },

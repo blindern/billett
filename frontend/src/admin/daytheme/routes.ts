@@ -4,7 +4,7 @@ import { AdminDaythemeCreateComponent } from "./admin-daytheme-create.component"
 
 export const routes: Routes = [
   {
-    path: "a/eventgroup/:eventgroupId/new_daytheme",
+    path: "eventgroup/:eventgroupId/new_daytheme",
     component: AdminDaythemeCreateComponent,
     canActivate: [requireAdmin],
   },

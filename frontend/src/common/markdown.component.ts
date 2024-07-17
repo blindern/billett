@@ -1,6 +1,4 @@
 import { Component, Input } from "@angular/core"
-import DOMPurify from "dompurify"
-import { marked } from "marked"
 
 @Component({
   selector: "billett-markdown",
@@ -13,8 +11,17 @@ export class MarkdownComponent {
 
   convertedData?: string
 
+  async update() {
+    const [marked, DOMPurify] = await Promise.all([
+      import("marked"),
+      import("dompurify"),
+    ])
+
+    const md = marked.marked.setOptions({})
+    this.convertedData = DOMPurify.default.sanitize(md.parse(this.data ?? "") as string)
+  }
+
   ngOnChanges() {
-    const md = marked.setOptions({})
-    this.convertedData = DOMPurify.sanitize(md.parse(this.data ?? "") as string)
+    void this.update()
   }
 }

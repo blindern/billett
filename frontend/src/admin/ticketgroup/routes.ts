@@ -5,12 +5,12 @@ import { AdminTicketgroupItemComponent } from "./admin-ticketgroup-item.componen
 
 export const routes: Routes = [
   {
-    path: "a/event/:eventId/ticketgroup/new",
+    path: "event/:eventId/ticketgroup/new",
     component: AdminTicketgroupCreateComponent,
     canActivate: [requireAdmin],
   },
   {
-    path: "a/event/:eventId/ticketgroup/:ticketgroupId",
+    path: "event/:eventId/ticketgroup/:ticketgroupId",
     component: AdminTicketgroupItemComponent,
     canActivate: [requireAdmin],
   },
