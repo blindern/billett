@@ -255,9 +255,7 @@
           <span class="pull-right">
             <a class="btn btn-default" (click)="$event.preventDefault(); addTickets()">Tilorde nye billetter</a>
             @if (validTickets.length > 0) {
-              <a class="btn btn-default" [href]="api('ticket/pdf?ids=' + validTickets.join(','))" target="_self"
-                >Last ned billetter</a
-              >
+              <a class="btn btn-default" [href]="downloadTicketsUrl" target="_self">Last ned billetter</a>
               <a class="btn btn-default" (click)="$event.preventDefault(); printTickets()">Skriv ut billetter</a>
             }
           </span>

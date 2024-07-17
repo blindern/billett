@@ -122,6 +122,11 @@ export class AdminOrderItemComponent implements OnInit {
     )
   }
 
+  get downloadTicketsUrl() {
+    const ids = this.validTickets.map((ticket) => ticket.id).join(",")
+    return api(`ticket/pdf?ids=${ids}`)
+  }
+
   startEdit() {
     this.edit = this.order
   }
