@@ -49,16 +49,6 @@
                   <li>{{ event.location }}</li>
 
                   <li>
-                    <!-- admin links -->
-                    @if (authService.isAdmin$ | async) {
-                      <div class="edit-link-wrap">
-                        <span class="edit-link">
-                          <a routerLink="/a/event/{{ event.id }}/edit">Rediger</a>
-                          <a routerLink="/a/event/{{ event.id }}">Detaljert</a>
-                        </span>
-                      </div>
-                    }
-
                     <a href="event/{{ event.alias || event.id }}" target="_top">
                       {{ event.title }}
                     </a>

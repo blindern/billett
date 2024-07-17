@@ -19,15 +19,6 @@
           </li>
           <li>{{ event.location }}</li>
           <li>
-            @if (authService.isAdmin$ | async) {
-              <div class="edit-link-wrap">
-                <span class="edit-link">
-                  <a routerLink="/a/event/{{ event.id }}/edit">Rediger</a>
-                  <a routerLink="/a/event/{{ event.id }}">Detaljert</a>
-                </span>
-              </div>
-            }
-
             <a routerLink="/event/{{ event.alias || event.id }}">{{ event.title }}</a>
             @if (event.category) {
               <span class="category" [class.category-{{ categoryNum(event.category) }}]>{{ event.category }}</span>
