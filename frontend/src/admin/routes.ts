@@ -9,7 +9,7 @@ import { routes as ticketgroupRoutes } from "./ticketgroup/routes"
 
 export const routes = [
   {
-    path: "a",
+    path: "",
     component: AdminIndexComponent,
     canActivate: [requireAdmin],
   },
