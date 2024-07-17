@@ -162,7 +162,7 @@
       <div class="form-group">
         <div class="col-sm-6 col-sm-offset-2">
           <input type="submit" value="Oppdater" class="btn btn-primary" />
-          <a class="btn" (click)="abortEdit(); $event.preventDefault()">Avbryt</a>
+          <a class="btn" (click)="$event.preventDefault(); abortEdit()">Avbryt</a>
         </div>
       </div>
     </form>
@@ -289,7 +289,7 @@
                           @if (!group.is_deleted && !paymentgroup.time_end) {
                             <span>
                               <br />
-                              <a href="" (click)="deletePaymentsource(paymentsource); $event.preventDefault()">Slett</a>
+                              <a href="" (click)="$event.preventDefault(); deletePaymentsource(paymentsource)">Slett</a>
                             </span>
                           }
                         </th>
@@ -364,7 +364,7 @@
                     >
                   }
                   @if (!paymentsource.is_deleted && !paymentgroup.time_end) {
-                    <a href="" (click)="deletePaymentsource(paymentsource); $event.preventDefault()">Slett</a>
+                    <a href="" (click)="$event.preventDefault(); deletePaymentsource(paymentsource)">Slett</a>
                   }
                 </p>
                 @if (paymentsource.comment) {

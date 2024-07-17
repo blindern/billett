@@ -212,7 +212,7 @@
         </table>
       }
 
-      <a class="btn btn-primary" (click)="addTickets()">
+      <a class="btn btn-primary" (click)="$event.preventDefault(); addTickets()">
         Legg til{{ order.tickets.length == 0 ? "" : " flere" }} billetter
       </a>
     </div>

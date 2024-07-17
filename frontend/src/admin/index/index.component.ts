@@ -17,8 +17,7 @@ export class AdminIndexComponent implements OnInit {
   private adminEventgroupService = inject(AdminEventgroupService)
   private adminPrinterService = inject(AdminPrinterService)
 
-  printText(e: MouseEvent) {
-    e.preventDefault()
+  printText() {
     this.adminPrinterService.printTextModal()
   }
 

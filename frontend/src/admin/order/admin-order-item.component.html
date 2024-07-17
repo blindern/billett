@@ -57,9 +57,9 @@
 
       <span class="pull-right">
         <a class="btn btn-success" routerLink="/a/order/new/{{ order.eventgroup.id }}" accesskey="n">Ny ordre</a>
-        <a class="btn btn-primary" (click)="startEdit()" accesskey="e">Rediger</a>
+        <a class="btn btn-primary" (click)="$event.preventDefault(); startEdit()" accesskey="e">Rediger</a>
         @if (order.is_valid) {
-          <a class="btn btn-default" (click)="sendEmail()">Send e-post</a>
+          <a class="btn btn-default" (click)="$event.preventDefault(); sendEmail()">Send e-post</a>
         }
       </span>
     </h1>
@@ -138,7 +138,7 @@
       <div class="form-group">
         <div class="col-sm-6 col-sm-offset-2">
           <input type="submit" value="Oppdater" class="btn btn-primary" />
-          <a class="btn" (click)="abortEdit()">Avbryt</a>
+          <a class="btn" (click)="$event.preventDefault(); abortEdit()">Avbryt</a>
         </div>
       </div>
     </form>
@@ -253,12 +253,12 @@
         <h2>
           Billetter
           <span class="pull-right">
-            <a class="btn btn-default" (click)="addTickets()">Tilorde nye billetter</a>
+            <a class="btn btn-default" (click)="$event.preventDefault(); addTickets()">Tilorde nye billetter</a>
             @if (validTickets.length > 0) {
               <a class="btn btn-default" [href]="api('ticket/pdf?ids=' + validTickets.join(','))" target="_self"
                 >Last ned billetter</a
               >
-              <a class="btn btn-default" (click)="printTickets()">Skriv ut billetter</a>
+              <a class="btn btn-default" (click)="$event.preventDefault(); printTickets()">Skriv ut billetter</a>
             }
           </span>
         </h2>
@@ -332,17 +332,26 @@
                   <td>{{ ticket.ticketgroup.fee | price }}</td>
                   <td>
                     @if (!ticket.is_revoked && ticket.is_valid) {
-                      <a class="btn btn-sm btn-danger" (click)="revokeTicket(ticket)" title="Tilbaketrekk billett"
+                      <a
+                        class="btn btn-sm btn-danger"
+                        (click)="$event.preventDefault(); revokeTicket(ticket)"
+                        title="Tilbaketrekk billett"
                         ><i class="glyphicon glyphicon-remove"></i
                       ></a>
                     }
                     @if (!ticket.is_valid && order.is_valid) {
-                      <a class="btn btn-sm btn-success" (click)="validateTicket(ticket)" title="Godkjenn reservasjon"
+                      <a
+                        class="btn btn-sm btn-success"
+                        (click)="$event.preventDefault(); validateTicket(ticket)"
+                        title="Godkjenn reservasjon"
                         ><i class="glyphicon glyphicon-plus"></i
                       ></a>
                     }
                     @if (!ticket.is_valid) {
-                      <a class="btn btn-sm btn-danger" (click)="deleteTicket(ticket)" title="Slett reservasjon"
+                      <a
+                        class="btn btn-sm btn-danger"
+                        (click)="$event.preventDefault(); deleteTicket(ticket)"
+                        title="Slett reservasjon"
                         ><i class="glyphicon glyphicon-remove"></i
                       ></a>
                     }
@@ -372,7 +381,7 @@
         <h2>
           Transaksjoner
           @if (order.is_valid) {
-            <a class="pull-right btn btn-default" (click)="newPayment()">Ny transaksjon</a>
+            <a class="pull-right btn btn-default" (click)="$event.preventDefault(); newPayment()">Ny transaksjon</a>
           }
         </h2>
         @if (order.payments.length == 0) {

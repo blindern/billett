@@ -66,9 +66,7 @@ export class AdminEventComponent implements OnInit {
     return Number(a) + Number(b)
   }
 
-  deleteEvent(event: MouseEvent) {
-    event.preventDefault()
-
+  deleteEvent() {
     if (this.event!.ticketgroups.length > 0) {
       this.pageService.toast(
         "Du må først slette billettgruppene som er tilegnet.",

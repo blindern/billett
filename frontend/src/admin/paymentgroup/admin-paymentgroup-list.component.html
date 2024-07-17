@@ -10,7 +10,7 @@
           <a routerLink="/a/eventgroup/{{ eventgroup.id }}">{{ eventgroup.title }}</a>
         </span>
         Oppgjør
-        <a class="btn btn-default pull-right" (click)="createNew(); $event.preventDefault()">Nytt oppgjør</a>
+        <a class="btn btn-default pull-right" (click)="$event.preventDefault(); createNew()">Nytt oppgjør</a>
       </h1>
     </div>
 

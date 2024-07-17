@@ -7,7 +7,7 @@
 <h2>Verktøy</h2>
 <ul>
   <li>
-    <a href="" (click)="printText($event)">Skriv ut tekst på billettskriver</a>
+    <a href="" (click)="$event.preventDefault(); printText()">Skriv ut tekst på billettskriver</a>
   </li>
 </ul>
 

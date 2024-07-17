@@ -13,7 +13,7 @@
         <a routerLink="/event/{{ event.id }}" class="btn btn-success"> Forhåndsvis </a>
         <a routerLink="/a/event/{{ event.id }}/edit" class="btn btn-primary"> Rediger </a>
         @if (!event.has_tickets) {
-          <a href="" class="btn btn-danger" (click)="deleteEvent($event)"> Slett arrangement </a>
+          <a href="" class="btn btn-danger" (click)="$event.preventDefault(); deleteEvent()"> Slett arrangement </a>
         }
         @if (event.has_tickets) {
           <a routerLink="/a/event/{{ event.id }}/checkin" class="btn btn-default"> Innsjekking </a>
@@ -136,7 +136,7 @@
                 <a [href]="api('ticketgroup/' + g.id + '/previewticket')" target="_blank">
                   <span class="glyphicon glyphicon-eye-open" title="Forhåndsvis"></span>
                 </a>
-                <a href="" (click)="previewTicketPrint(g)">
+                <a href="" (click)="$event.preventDefault(); previewTicketPrint(g)">
                   <span class="glyphicon glyphicon-print" title="Skriv ut"></span>
                 </a>
               </td>
