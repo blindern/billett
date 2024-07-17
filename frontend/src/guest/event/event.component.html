@@ -16,7 +16,7 @@
         </span>
         {{ event.title }}
         <span class="eventdate-header">({{ event.time_start | formatdate: "DD.MM" }})</span>
-        @if (auth.isLoggedIn$ | async) {
+        @if (authService.isLoggedIn$ | async) {
           <span class="pull-right">
             <a routerLink="/a/event/{{ event.id }}" class="btn btn-primary">Admin</a>
             <a routerLink="/a/event/{{ event.id }}/edit" class="btn btn-primary">Rediger</a>
@@ -286,7 +286,7 @@
                             <input class="btn btn-default" type="button" value="Avbryt" (click)="abortOrder()" />
                           }
                         </p>
-                        @if (auth.isVippsTest$ | async) {
+                        @if (authService.isVippsTest$ | async) {
                           <p class="text-center">
                             <input
                               type="submit"

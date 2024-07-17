@@ -18,7 +18,7 @@ import { AdminPaymentgroupService } from "./admin-paymentgroup.service"
   templateUrl: "./admin-paymentgroup-selectbox.component.html",
 })
 export class AdminPaymentgroupSelectboxComponent implements OnInit {
-  private paymentgroupService = inject(AdminPaymentgroupService)
+  private adminPaymentgroupService = inject(AdminPaymentgroupService)
 
   @Input()
   eventgroupId!: number
@@ -34,12 +34,12 @@ export class AdminPaymentgroupSelectboxComponent implements OnInit {
 
   ngOnInit(): void {
     this.paymentgroups = undefined
-    this.paymentgroupService
+    this.adminPaymentgroupService
       .listValid(this.eventgroupId)
       .subscribe((paymentgroups) => {
         this.paymentgroups = paymentgroups
 
-        const updated = this.paymentgroupService.getPreferredGroup(
+        const updated = this.adminPaymentgroupService.getPreferredGroup(
           paymentgroups,
           this.paymentgroup ? this.paymentgroup.id : undefined,
         )
@@ -53,14 +53,14 @@ export class AdminPaymentgroupSelectboxComponent implements OnInit {
   }
 
   createNew() {
-    this.paymentgroupService
+    this.adminPaymentgroupService
       .createModal(this.eventgroupId)
       .subscribe((paymentgroup) => {
         if (paymentgroup) {
           this.paymentgroup = paymentgroup
           this.paymentgroupChange.emit(paymentgroup)
           this.selectedPaymentgroupId = paymentgroup.id.toString()
-          this.paymentgroupService.setPreferredGroup(paymentgroup)
+          this.adminPaymentgroupService.setPreferredGroup(paymentgroup)
         }
       })
   }
@@ -74,6 +74,6 @@ export class AdminPaymentgroupSelectboxComponent implements OnInit {
 
     this.paymentgroup = paymentgroup
     this.paymentgroupChange.emit(paymentgroup)
-    this.paymentgroupService.setPreferredGroup(paymentgroup)
+    this.adminPaymentgroupService.setPreferredGroup(paymentgroup)
   }
 }

@@ -14,7 +14,7 @@ import { AdminPrinterService } from "./admin-printer.service"
 })
 export class AdminPrinterTextComponent {
   private dialogRef = inject(DialogRef)
-  private printerService = inject(AdminPrinterService)
+  private adminPrinterService = inject(AdminPrinterService)
   private pageService = inject(PageService)
 
   sending = false
@@ -23,17 +23,19 @@ export class AdminPrinterTextComponent {
 
   complete() {
     this.sending = true
-    this.printerService.printText(this.printer!.name, this.text).subscribe({
-      next: () => {
-        this.sending = false
-        this.pageService.toast("Utskrift lagt i kø", { class: "success" })
-        this.dialogRef.close(true)
-      },
-      error: () => {
-        this.sending = false
-        this.pageService.toast("Ukjent feil oppsto!", { class: "warning" })
-      },
-    })
+    this.adminPrinterService
+      .printText(this.printer!.name, this.text)
+      .subscribe({
+        next: () => {
+          this.sending = false
+          this.pageService.toast("Utskrift lagt i kø", { class: "success" })
+          this.dialogRef.close(true)
+        },
+        error: () => {
+          this.sending = false
+          this.pageService.toast("Ukjent feil oppsto!", { class: "warning" })
+        },
+      })
   }
 
   cancel() {

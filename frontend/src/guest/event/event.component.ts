@@ -49,7 +49,7 @@ export class GuestEventComponent implements OnInit {
   private eventReservationService = inject(EventReservationService)
   private router = inject(Router)
   private pageService = inject(PageService)
-  public auth = inject(AuthService)
+  public authService = inject(AuthService)
 
   @Input()
   id!: string

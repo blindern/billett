@@ -27,7 +27,7 @@ interface UpcomingItem {
 export class GuestIndexComponent implements OnInit {
   private http = inject(HttpClient)
   private eventgroupService = inject(EventgroupService)
-  public auth = inject(AuthService)
+  public authService = inject(AuthService)
 
   upcoming$!: Observable<UpcomingItem[]>
   eventgroups$!: Observable<ApiEventgroup[]>

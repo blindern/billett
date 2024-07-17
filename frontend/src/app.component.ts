@@ -19,7 +19,7 @@ import { ActiveFor } from "./common/active-for"
 })
 export class AppComponent implements OnInit {
   private location = inject(Location)
-  public auth = inject(AuthService)
+  public authService = inject(AuthService)
   private router = inject(Router)
   private dialog = inject(Dialog)
 
@@ -38,16 +38,16 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.auth.isDevPage$.subscribe((res) => {
+    this.authService.isDevPage$.subscribe((res) => {
       if (res) {
         document.body.classList.add("dev-page")
       } else {
         document.body.classList.remove("dev-page")
       }
     })
-    this.auth.isLoggedIn$.subscribe((res) => {
+    this.authService.isLoggedIn$.subscribe((res) => {
       if (res) {
-        this.auth.isAdmin$.subscribe((isAdmin) => {
+        this.authService.isAdmin$.subscribe((isAdmin) => {
           if (!isAdmin) {
             this.loggedInButNoAccess = true
           }

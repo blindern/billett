@@ -44,7 +44,7 @@ export class AdminTicketRevokeComponent {
   ) {}
 
   private dialogRef = inject(DialogRef)
-  private ticketService = inject(AdminTicketService)
+  private adminTicketService = inject(AdminTicketService)
 
   sending = false
 
@@ -52,7 +52,7 @@ export class AdminTicketRevokeComponent {
 
   submit() {
     this.sending = true
-    this.ticketService
+    this.adminTicketService
       .revoke(this.data.ticket.id, this.paymentgroup!.id)
       .subscribe({
         next: () => {

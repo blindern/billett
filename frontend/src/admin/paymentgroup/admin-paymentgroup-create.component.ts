@@ -21,7 +21,7 @@ export class AdminPaymentgroupCreateComponent {
   ) {}
 
   private dialogRef = inject(DialogRef)
-  private paymentgroupService = inject(AdminPaymentgroupService)
+  private adminPaymentgroupService = inject(AdminPaymentgroupService)
 
   sending = false
 
@@ -30,7 +30,7 @@ export class AdminPaymentgroupCreateComponent {
 
   complete() {
     this.sending = true
-    this.paymentgroupService
+    this.adminPaymentgroupService
       .create({
         eventgroup_id: this.data.eventgroupId,
         title: this.title,

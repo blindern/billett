@@ -35,7 +35,7 @@ export class AdminPaymentsourceCreateComponent {
     private data: AdminPaymentsourceCreateComponentInput,
   ) {}
 
-  private paymentsourceService = inject(AdminPaymentsourceService)
+  private adminPaymentsourceService = inject(AdminPaymentsourceService)
   private pageService = inject(PageService)
   private dialogRef = inject(DialogRef<ApiPaymentsourceAdmin>)
 
@@ -60,7 +60,7 @@ export class AdminPaymentsourceCreateComponent {
     }
 
     this.sending = true
-    this.paymentsourceService
+    this.adminPaymentsourceService
       .create({
         paymentgroup_id: this.data.paymentgroup.id,
         title: this.title,

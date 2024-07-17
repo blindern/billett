@@ -17,7 +17,7 @@ import { AdminPrinterService } from "./admin-printer.service"
   templateUrl: "./admin-printer-selectbox.component.html",
 })
 export class AdminPrinterSelectboxComponent implements OnInit {
-  private printerService = inject(AdminPrinterService)
+  private adminPrinterService = inject(AdminPrinterService)
 
   @Input()
   id?: string
@@ -36,10 +36,10 @@ export class AdminPrinterSelectboxComponent implements OnInit {
 
   ngOnInit(): void {
     this.printers = undefined
-    this.printerService.getList().subscribe((printers) => {
+    this.adminPrinterService.getList().subscribe((printers) => {
       this.printers = printers
 
-      const updated = this.printerService.getPreferred(
+      const updated = this.adminPrinterService.getPreferred(
         printers,
         this.printer ? this.printer.name : undefined,
       )
@@ -63,6 +63,6 @@ export class AdminPrinterSelectboxComponent implements OnInit {
 
     this.printer = printer
     this.printerChange.emit(printer)
-    this.printerService.setPreferred(printer)
+    this.adminPrinterService.setPreferred(printer)
   }
 }

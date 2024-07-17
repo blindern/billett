@@ -7,7 +7,7 @@
     <div class="page-header">
       <h1>
         {{ group.title }}
-        @if (auth.isAdmin$ | async) {
+        @if (authService.isAdmin$ | async) {
           <span class="pull-right">
             <a routerLink="/a/eventgroup/{{ group.id }}" class="btn btn-primary">Admin</a>
           </span>
@@ -53,7 +53,7 @@
 
                     <li>
                       <!-- admin links -->
-                      @if (auth.isAdmin$ | async) {
+                      @if (authService.isAdmin$ | async) {
                         <div class="edit-link-wrap">
                           <span class="edit-link">
                             <a routerLink="/a/event/{{ event.id }}/edit">Rediger</a>

@@ -22,7 +22,7 @@
           </li>
           <li>{{ event.location }}</li>
           <li>
-            @if (auth.isAdmin$ | async) {
+            @if (authService.isAdmin$ | async) {
               <div class="edit-link-wrap">
                 <span class="edit-link">
                   <a routerLink="/a/event/{{ event.id }}/edit">Rediger</a>

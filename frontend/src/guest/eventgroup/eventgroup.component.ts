@@ -28,8 +28,8 @@ import { EventgroupExpanded, EventgroupService } from "./eventgroup.service"
 export class GuestEventgroupComponent implements OnInit {
   private eventgroupService = inject(EventgroupService)
   private router = inject(Router)
-  private page = inject(PageService)
-  public auth = inject(AuthService)
+  private pageService = inject(PageService)
+  public authService = inject(AuthService)
 
   @Input()
   id!: string
@@ -55,7 +55,7 @@ export class GuestEventgroupComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.page.set("title", "Arrangementgruppe")
+    this.pageService.set("title", "Arrangementgruppe")
     this.daythemes = {}
 
     const filter: any = {
@@ -77,7 +77,7 @@ export class GuestEventgroupComponent implements OnInit {
       .get(this.id)
       .pipe(handleResourceLoadingStates(this.pageState))
       .subscribe((eventgroup) => {
-        this.page.set("title", eventgroup.title)
+        this.pageService.set("title", eventgroup.title)
         this.group = eventgroup
 
         const r: any = {}

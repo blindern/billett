@@ -28,7 +28,7 @@ export class AdminPaymentCreateComponent implements OnInit {
   ) {}
 
   private dialogRef = inject(DialogRef)
-  private paymentService = inject(AdminPaymentService)
+  private adminPaymentService = inject(AdminPaymentService)
 
   sending = false
 
@@ -41,7 +41,7 @@ export class AdminPaymentCreateComponent implements OnInit {
 
   submit() {
     this.sending = true
-    this.paymentService
+    this.adminPaymentService
       .create({
         order: this.data.order,
         paymentgroup: this.paymentgroup!,

@@ -23,7 +23,7 @@ export class AdminOrderEmailComponent {
   ) {}
 
   private dialogRef = inject(DialogRef)
-  private orderService = inject(AdminOrderService)
+  private adminOrderService = inject(AdminOrderService)
 
   sending = false
 
@@ -32,7 +32,7 @@ export class AdminOrderEmailComponent {
 
   submit() {
     this.sending = true
-    this.orderService
+    this.adminOrderService
       .sendEmail({
         orderId: this.data.order.id,
         email: this.email,

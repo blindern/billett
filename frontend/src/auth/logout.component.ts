@@ -9,10 +9,10 @@ import { AuthService } from "./auth.service"
   template: "Logger ut",
 })
 export class LogoutComponent implements OnInit {
-  private auth = inject(AuthService)
+  private authService = inject(AuthService)
 
   ngOnInit(): void {
-    firstValueFrom(this.auth.csrfToken$).then((csrfToken) => {
+    firstValueFrom(this.authService.csrfToken$).then((csrfToken) => {
       const form = document.createElement("form")
       form.method = "post"
       form.action = api(

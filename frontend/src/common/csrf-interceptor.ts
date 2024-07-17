@@ -10,8 +10,8 @@ export function csrfInterceptor(
 ): Observable<HttpEvent<unknown>> {
   // only add csrf-token to api-endpoint, but not /api/me
   if (req.url.startsWith(backendUrl) && !req.url.includes("api/me")) {
-    const auth = inject(AuthService)
-    return auth.csrfToken$.pipe(
+    const authService = inject(AuthService)
+    return authService.csrfToken$.pipe(
       take(1),
       mergeMap((csrfToken) => {
         const newReq = req.clone({

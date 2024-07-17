@@ -49,7 +49,7 @@ const searchinputInit = {
 export class AdminEventCheckinComponent implements OnInit {
   private adminEventService = inject(AdminEventService)
   private pageService = inject(PageService)
-  private checkinService = inject(AdminEventCheckinService)
+  private adminEventCheckinService = inject(AdminEventCheckinService)
 
   @Input()
   id!: string
@@ -148,7 +148,7 @@ export class AdminEventCheckinComponent implements OnInit {
     this.ordersLoading = true
     this.orders = undefined
 
-    this.checkinService
+    this.adminEventCheckinService
       .searchForOrders(this.searchinput.page, filter)
       .subscribe((data) => {
         this.ordersLoading = false
@@ -248,10 +248,12 @@ export class AdminEventCheckinComponent implements OnInit {
     this.ordersLoading = false
     this.resetSearchInput()
 
-    this.checkinService.getAllTickets(this.event!.id).subscribe((data) => {
-      this.tickets = this.parseTicketsList(data)
-      this.ticketsLoading = false
-    })
+    this.adminEventCheckinService
+      .getAllTickets(this.event!.id)
+      .subscribe((data) => {
+        this.tickets = this.parseTicketsList(data)
+        this.ticketsLoading = false
+      })
   }
 
   private parseTicketsList(list: AdminTicketForCheckinData[]) {
@@ -280,7 +282,7 @@ export class AdminEventCheckinComponent implements OnInit {
 
   #loadLastUsedTickets() {
     this.lastUsedTicketsLoading = true
-    this.checkinService.getLastUsedTickets(this.event!.id).subscribe({
+    this.adminEventCheckinService.getLastUsedTickets(this.event!.id).subscribe({
       next: (data) => {
         console.log(data)
         this.lastUsedTicketsLoading = false
@@ -297,8 +299,8 @@ export class AdminEventCheckinComponent implements OnInit {
     ticket.isWorking = true
 
     const operation = isCheckin
-      ? this.checkinService.checkin(ticket.id)
-      : this.checkinService.checkout(ticket.id)
+      ? this.adminEventCheckinService.checkin(ticket.id)
+      : this.adminEventCheckinService.checkout(ticket.id)
 
     operation.subscribe({
       next: (data) => {
