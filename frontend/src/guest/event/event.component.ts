@@ -233,11 +233,14 @@ export class GuestEventComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    const script = document.createElement("script")
-    script.type = "text/javascript"
-    script.src =
+    const src =
       "https://checkout.vipps.no/checkout-button/v1/vipps-checkout-button.js"
-    document.head.append(script)
+    if (!document.querySelector(`script[src="${src}"]`)) {
+      const script = document.createElement("script")
+      script.type = "text/javascript"
+      script.src = src
+      document.head.append(script)
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
