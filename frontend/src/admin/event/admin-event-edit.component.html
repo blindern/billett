@@ -1,23 +1,21 @@
 <billett-page-states [state]="pageState" />
 
 @if (event) {
-  <div class="admin-event-edit">
-    <billett-page-property
-      name="title"
-      value="Rediger: {{ event.title }} ({{ event.time_start | formatdate: 'DD. MMM' }})"
-    />
+  <billett-page-property
+    name="title"
+    value="Rediger: {{ event.title }} ({{ event.time_start | formatdate: 'DD. MMM' }})"
+  />
 
-    <div class="page-header">
-      <h1>
-        <span class="eventgroup">
-          <a routerLink="/a/event/{{ event.id }}">{{ event.eventgroup.title }}</a>
-        </span>
-        <span>{{ event.title }}</span>
-      </h1>
-    </div>
-
-    <p>Bilde for arrangementet endres på infosiden for arrangementet (holder musa over bildet).</p>
-
-    <billett-admin-event-form [event]="event" [eventgroupId]="event.eventgroup.id" (submitForm)="storeEvent()" />
+  <div class="page-header">
+    <h1>
+      <span class="eventgroup">
+        <a routerLink="/a/event/{{ event.id }}">{{ event.eventgroup.title }}</a>
+      </span>
+      <span>{{ event.title }}</span>
+    </h1>
   </div>
+
+  <p>Bilde for arrangementet endres på infosiden for arrangementet (holder musa over bildet).</p>
+
+  <billett-admin-event-form [event]="event" [eventgroupId]="event.eventgroup.id" (submitForm)="storeEvent()" />
 }

@@ -1,61 +1,59 @@
 <billett-page-states [state]="pageState" />
 
 @if (eventgroup && paymentgroups) {
-  <div class="admin-paymentgroup-list">
-    <billett-page-property name="title" value="Oppgjør" />
+  <billett-page-property name="title" value="Oppgjør" />
 
-    <div class="page-header">
-      <h1>
-        <span class="eventgroup">
-          <a routerLink="/a/eventgroup/{{ eventgroup.id }}">{{ eventgroup.title }}</a>
-        </span>
-        Oppgjør
-        <a class="btn btn-default pull-right" (click)="$event.preventDefault(); createNew()">Nytt oppgjør</a>
-      </h1>
-    </div>
-
-    <p class="text-muted">
-      Alle billetter og transaksjoner endret/opprettet i billettluke må tilegnes et oppgjør. Når oppgjøret avsluttes
-      registrerer man Z-rapport fra betalingsterminal, kontantopptelling m.v. for å kontrollere at transaksjonene
-      stemmer. Oppgjøret danner også grunnlaget for salgsinntekten som føres i regnskapet.
-    </p>
-
-    @if (paymentgroups.length == 0) {
-      <p>Ingen oppgjør eksisterer for denne arrangementgruppen.</p>
-    }
-
-    @if (paymentgroups.length > 0) {
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Tittel</th>
-            <th>Opprettet</th>
-            <th>Avsluttet</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (group of paymentgroups; track group.id) {
-            <tr>
-              <td>
-                <a routerLink="/a/paymentgroup/{{ group.id }}">{{ group.title }}</a>
-              </td>
-              <td>
-                {{ group.time_start | formatdate: "DD.MM.YYYY" }} av
-                {{ group.user_created }}
-              </td>
-              @if (group.time_end) {
-                <td>
-                  {{ group.time_end | formatdate: "DD.MM.YYYY" }} av
-                  {{ group.user_closed }}
-                </td>
-              }
-              @if (!group.time_end) {
-                <td>Ikke avsluttet</td>
-              }
-            </tr>
-          }
-        </tbody>
-      </table>
-    }
+  <div class="page-header">
+    <h1>
+      <span class="eventgroup">
+        <a routerLink="/a/eventgroup/{{ eventgroup.id }}">{{ eventgroup.title }}</a>
+      </span>
+      Oppgjør
+      <a class="btn btn-default pull-right" (click)="$event.preventDefault(); createNew()">Nytt oppgjør</a>
+    </h1>
   </div>
+
+  <p class="text-muted">
+    Alle billetter og transaksjoner endret/opprettet i billettluke må tilegnes et oppgjør. Når oppgjøret avsluttes
+    registrerer man Z-rapport fra betalingsterminal, kontantopptelling m.v. for å kontrollere at transaksjonene stemmer.
+    Oppgjøret danner også grunnlaget for salgsinntekten som føres i regnskapet.
+  </p>
+
+  @if (paymentgroups.length == 0) {
+    <p>Ingen oppgjør eksisterer for denne arrangementgruppen.</p>
+  }
+
+  @if (paymentgroups.length > 0) {
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Tittel</th>
+          <th>Opprettet</th>
+          <th>Avsluttet</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (group of paymentgroups; track group.id) {
+          <tr>
+            <td>
+              <a routerLink="/a/paymentgroup/{{ group.id }}">{{ group.title }}</a>
+            </td>
+            <td>
+              {{ group.time_start | formatdate: "DD.MM.YYYY" }} av
+              {{ group.user_created }}
+            </td>
+            @if (group.time_end) {
+              <td>
+                {{ group.time_end | formatdate: "DD.MM.YYYY" }} av
+                {{ group.user_closed }}
+              </td>
+            }
+            @if (!group.time_end) {
+              <td>Ikke avsluttet</td>
+            }
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
 }

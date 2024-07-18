@@ -1,26 +1,24 @@
-<div class="page-index">
-  <div class="page-header">
-    <h1>Arrangementer</h1>
-  </div>
-
-  <h2>Kommende arrangementer</h2>
-
-  @if (!upcoming) {
-    <p>Laster data..</p>
-  } @else if (upcoming.length == 0) {
-    <p>Ingen arrangementer ble funnet.</p>
-  } @else {
-    @for (event of upcoming; track event.id) {
-      <billett-eventlist-item [event]="event" [eventgroup]="event.eventgroup" [isUpcoming]="true" />
-    }
-  }
-
-  <h2>Arrangementgrupper</h2>
-  <ul>
-    @for (group of eventgroups; track group.id) {
-      <li>
-        <a routerLink="/eventgroup/{{ group.id }}">{{ group.title }}</a>
-      </li>
-    }
-  </ul>
+<div class="page-header">
+  <h1>Arrangementer</h1>
 </div>
+
+<h2>Kommende arrangementer</h2>
+
+@if (!upcoming) {
+  <p>Laster data..</p>
+} @else if (upcoming.length == 0) {
+  <p>Ingen arrangementer ble funnet.</p>
+} @else {
+  @for (event of upcoming; track event.id) {
+    <billett-eventlist-item [event]="event" [eventgroup]="event.eventgroup" [isUpcoming]="true" />
+  }
+}
+
+<h2>Arrangementgrupper</h2>
+<ul>
+  @for (group of eventgroups; track group.id) {
+    <li>
+      <a routerLink="/eventgroup/{{ group.id }}">{{ group.title }}</a>
+    </li>
+  }
+</ul>
