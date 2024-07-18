@@ -1,33 +1,33 @@
-import { inject, Injectable, OnDestroy, OnInit } from "@angular/core"
+import { DestroyRef, inject, Injectable } from "@angular/core"
 import { Meta, Title } from "@angular/platform-browser"
 import { Event, NavigationStart, Router } from "@angular/router"
-import { Subscription } from "rxjs"
 
 @Injectable({
   providedIn: "root",
 })
-export class PageService implements OnInit, OnDestroy {
-  private router = inject(Router)
+export class PageService {
   private metaService = inject(Meta)
   private titleService = inject(Title)
-
-  private routerEventsSubscription!: Subscription
 
   private attrs: Record<string, { val: string; isDefault?: boolean }[]> = {}
   public meta: Record<string, string> = {}
 
-  ngOnInit(): void {
-    // TODO(migrate): absolute urls
-    this.setDefault("url", this.router.url)
-    this.routerEventsSubscription = this.router.events.subscribe((s: Event) => {
+  constructor(router: Router, destroyRef: DestroyRef) {
+    this.setDefault("url", this.#getAbsoluteUrl(router.url))
+
+    const routerEventsSubscription = router.events.subscribe((s: Event) => {
       if (s instanceof NavigationStart) {
-        this.setDefault("url", s.url)
+        this.setDefault("url", this.#getAbsoluteUrl(s.url))
       }
+    })
+
+    destroyRef.onDestroy(() => {
+      routerEventsSubscription.unsubscribe()
     })
   }
 
-  ngOnDestroy(): void {
-    this.routerEventsSubscription.unsubscribe()
+  #getAbsoluteUrl(value: string) {
+    return new URL(value, document.location.origin).href
   }
 
   #updateQueued = false
