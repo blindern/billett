@@ -5,6 +5,7 @@ import { api } from "../../api"
 import { ApiEvent, ApiEventgroup } from "../../apitypes"
 import { AuthService } from "../../auth/auth.service"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
+import { PagePropertyComponent } from "../../common/page-property.component"
 import { EventgroupService } from "../eventgroup/eventgroup.service"
 import { GuestEventlistItemComponent } from "../eventgroup/eventlist-item.component"
 
@@ -15,7 +16,12 @@ type UpcomingItem = ApiEvent & {
 @Component({
   selector: "billett-guest-index",
   standalone: true,
-  imports: [RouterLink, FormatdatePipe, GuestEventlistItemComponent],
+  imports: [
+    RouterLink,
+    FormatdatePipe,
+    GuestEventlistItemComponent,
+    PagePropertyComponent,
+  ],
   templateUrl: "./index.component.html",
 })
 export class GuestIndexComponent implements OnInit {

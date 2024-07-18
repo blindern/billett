@@ -16,10 +16,9 @@
 </style>
 
 <billett-page-states [state]="pageState" />
+<billett-page-property name="title" value="Ny ordre" />
 
 @if (eventgroup && order) {
-  <billett-page-property name="title" value="Ny ordre" />
-
   <div class="page-header">
     <h1>
       <span class="eventgroup">

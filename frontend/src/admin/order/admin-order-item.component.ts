@@ -5,7 +5,6 @@ import {
   inject,
   Input,
   OnChanges,
-  OnInit,
   SimpleChanges,
 } from "@angular/core"
 import { FormsModule } from "@angular/forms"
@@ -17,7 +16,6 @@ import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { MarkdownComponent } from "../../common/markdown.component"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
-import { PageService } from "../../common/page.service"
 import { PricePipe } from "../../common/price.pipe"
 import {
   handleResourceLoadingStates,
@@ -52,11 +50,10 @@ import { AdminOrderGetData, AdminOrderService } from "./admin-order.service"
   ],
   templateUrl: "./admin-order-item.component.html",
 })
-export class AdminOrderItemComponent implements OnInit, OnChanges {
+export class AdminOrderItemComponent implements OnChanges {
   private adminOrderService = inject(AdminOrderService)
   private adminTicketService = inject(AdminTicketService)
   private adminPrinterService = inject(AdminPrinterService)
-  private pageService = inject(PageService)
   private toastService = inject(ToastService)
   private router = inject(Router)
   private dialog = inject(Dialog)
@@ -71,10 +68,6 @@ export class AdminOrderItemComponent implements OnInit, OnChanges {
 
   #editFields = ["name", "email", "phone", "recruiter", "comment"] as const
   edit?: AdminOrderGetData
-
-  ngOnInit(): void {
-    this.pageService.set("title", "Ordre")
-  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes["id"]) {

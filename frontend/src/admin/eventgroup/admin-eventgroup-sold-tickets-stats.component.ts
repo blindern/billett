@@ -3,7 +3,6 @@ import {
   inject,
   Input,
   OnChanges,
-  OnInit,
   SimpleChanges,
 } from "@angular/core"
 import { RouterLink } from "@angular/router"
@@ -11,7 +10,6 @@ import { ApiSoldTicketsStats } from "../../apitypes"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
-import { PageService } from "../../common/page.service"
 import { PricePipe } from "../../common/price.pipe"
 import {
   handleResourceLoadingStates,
@@ -54,21 +52,14 @@ class Accum {
   templateUrl: "./admin-eventgroup-sold-tickets-stats.component.html",
   styleUrl: "./admin-eventgroup-sold-tickets-stats.component.scss",
 })
-export class AdminEventgroupSoldTicketsStatsComponent
-  implements OnInit, OnChanges
-{
+export class AdminEventgroupSoldTicketsStatsComponent implements OnChanges {
   private adminEventgroupService = inject(AdminEventgroupService)
-  private pageService = inject(PageService)
 
   @Input()
   id!: string
 
   pageState = new ResourceLoadingState()
   stats?: ReturnType<AdminEventgroupSoldTicketsStatsComponent["deriveStats"]>
-
-  ngOnInit(): void {
-    this.pageService.set("title", "Billettstatistikk for arrangementgruppe")
-  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes["id"]) {

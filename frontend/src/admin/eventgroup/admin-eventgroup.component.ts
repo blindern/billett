@@ -4,7 +4,6 @@ import {
   inject,
   Input,
   OnChanges,
-  OnInit,
   SimpleChanges,
 } from "@angular/core"
 import { FormsModule } from "@angular/forms"
@@ -18,7 +17,6 @@ import {
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
-import { PageService } from "../../common/page.service"
 import { PricePipe } from "../../common/price.pipe"
 import {
   handleResourceLoadingStates,
@@ -42,10 +40,9 @@ import { AdminEventgroupService } from "./admin-eventgroup.service"
   templateUrl: "./admin-eventgroup.component.html",
   styleUrl: "./admin-eventgroup.component.scss",
 })
-export class AdminEventgroupComponent implements OnInit, OnChanges {
+export class AdminEventgroupComponent implements OnChanges {
   private adminEventgroupService = inject(AdminEventgroupService)
   private adminEventService = inject(AdminEventService)
-  private pageService = inject(PageService)
 
   @Input()
   id!: string
@@ -62,10 +59,6 @@ export class AdminEventgroupComponent implements OnInit, OnChanges {
   filter_hidden: "" | "0" | "1" = ""
   categories: string[] = []
   days?: Record<string, any[]>
-
-  ngOnInit(): void {
-    this.pageService.set("title", "Arrangementgruppe")
-  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes["id"]) {

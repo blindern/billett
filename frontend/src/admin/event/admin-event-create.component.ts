@@ -3,14 +3,13 @@ import {
   inject,
   Input,
   OnChanges,
-  OnInit,
   SimpleChanges,
 } from "@angular/core"
 import { Router, RouterLink } from "@angular/router"
 import { api } from "../../api"
 import { ApiEventgroupAdmin } from "../../apitypes"
+import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
-import { PageService } from "../../common/page.service"
 import {
   handleResourceLoadingStates,
   ResourceLoadingState,
@@ -22,13 +21,17 @@ import { AdminEventCreateData, AdminEventService } from "./admin-event.service"
 @Component({
   selector: "billett-admin-event-create",
   standalone: true,
-  imports: [PageStatesComponent, RouterLink, AdminEventFormComponent],
+  imports: [
+    PageStatesComponent,
+    RouterLink,
+    AdminEventFormComponent,
+    PagePropertyComponent,
+  ],
   templateUrl: "./admin-event-create.component.html",
 })
-export class AdminEventCreateComponent implements OnInit, OnChanges {
+export class AdminEventCreateComponent implements OnChanges {
   private adminEventgroupService = inject(AdminEventgroupService)
   private adminEventService = inject(AdminEventService)
-  private pageService = inject(PageService)
   private router = inject(Router)
 
   @Input()
@@ -39,10 +42,6 @@ export class AdminEventCreateComponent implements OnInit, OnChanges {
   pageState = new ResourceLoadingState()
   eventgroup?: ApiEventgroupAdmin
   event?: AdminEventCreateData
-
-  ngOnInit(): void {
-    this.pageService.set("title", "Nytt arrangement")
-  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes["eventgroupId"]) {

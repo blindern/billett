@@ -5,7 +5,6 @@ import {
   inject,
   Input,
   OnChanges,
-  OnInit,
   SimpleChanges,
 } from "@angular/core"
 import { FormsModule } from "@angular/forms"
@@ -17,7 +16,6 @@ import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { MarkdownComponent } from "../../common/markdown.component"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
-import { PageService } from "../../common/page.service"
 import { PricePipe } from "../../common/price.pipe"
 import {
   handleResourceLoadingStates,
@@ -44,9 +42,8 @@ import { AdminEventData, AdminEventService } from "./admin-event.service"
   templateUrl: "./admin-event.component.html",
   styleUrl: "./admin-event.component.scss",
 })
-export class AdminEventComponent implements OnInit, OnChanges {
+export class AdminEventComponent implements OnChanges {
   private adminEventService = inject(AdminEventService)
-  private pageService = inject(PageService)
   private toastService = inject(ToastService)
   private router = inject(Router)
   private adminPrinterService = inject(AdminPrinterService)
@@ -62,10 +59,6 @@ export class AdminEventComponent implements OnInit, OnChanges {
 
   image_version = ""
   uploadprogress = undefined
-
-  ngOnInit(): void {
-    this.pageService.set("title", "Arrangement")
-  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes["id"]) {

@@ -3,7 +3,6 @@ import {
   inject,
   Input,
   OnChanges,
-  OnInit,
   SimpleChanges,
 } from "@angular/core"
 import { FormsModule } from "@angular/forms"
@@ -11,8 +10,8 @@ import { Router, RouterLink } from "@angular/router"
 import moment from "moment"
 import { catchError, of } from "rxjs"
 import { ApiEventgroupAdmin } from "../../apitypes"
+import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
-import { PageService } from "../../common/page.service"
 import {
   handleResourceLoadingStates,
   ResourceLoadingState,
@@ -23,13 +22,17 @@ import { AdminDaythemeService } from "./admin-daytheme.service"
 @Component({
   selector: "billett-admin-daytheme-create",
   standalone: true,
-  imports: [PageStatesComponent, RouterLink, FormsModule],
+  imports: [
+    PageStatesComponent,
+    PagePropertyComponent,
+    RouterLink,
+    FormsModule,
+  ],
   templateUrl: "./admin-daytheme-create.component.html",
 })
-export class AdminDaythemeCreateComponent implements OnInit, OnChanges {
+export class AdminDaythemeCreateComponent implements OnChanges {
   private adminDaythemeService = inject(AdminDaythemeService)
   private adminEventgroupService = inject(AdminEventgroupService)
-  private pageService = inject(PageService)
   private router = inject(Router)
 
   @Input()
@@ -40,10 +43,6 @@ export class AdminDaythemeCreateComponent implements OnInit, OnChanges {
   form = {
     title: "",
     date: "",
-  }
-
-  ngOnInit(): void {
-    this.pageService.set("title", "Ny temadag")
   }
 
   ngOnChanges(changes: SimpleChanges): void {

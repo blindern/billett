@@ -13,27 +13,22 @@ export const routes: Routes = [
   {
     path: "",
     component: GuestIndexComponent,
-    title: "Arrangementer",
   },
   {
     path: "login",
     component: LoginComponent,
-    title: "Logg inn",
   },
   {
     path: "logout",
     component: LogoutComponent,
-    title: "Logger ut",
   },
   {
     path: "salgsbetingelser",
     component: SalgsbetingelserComponent,
-    title: "Salgsbetingelser",
   },
   {
     path: "hjelp",
     component: HjelpComponent,
-    title: "Hjelp",
   },
   {
     path: "eventgroup/:id",
@@ -46,7 +41,6 @@ export const routes: Routes = [
   {
     path: "event/:id",
     component: GuestEventComponent,
-    title: "Arrangement",
   },
   {
     path: "order/complete",

@@ -14,7 +14,6 @@ import { AuthService } from "../../auth/auth.service"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
-import { PageService } from "../../common/page.service"
 import {
   handleResourceLoadingStates,
   ResourceLoadingState,
@@ -40,7 +39,6 @@ import { GuestEventlistItemComponent } from "./eventlist-item.component"
 export class GuestEventgroupComponent implements OnInit, OnChanges {
   private eventgroupService = inject(EventgroupService)
   private router = inject(Router)
-  private pageService = inject(PageService)
   public authService = inject(AuthService)
 
   @Input()
@@ -57,7 +55,6 @@ export class GuestEventgroupComponent implements OnInit, OnChanges {
   eventgroup?: EventgroupExpanded
 
   ngOnInit(): void {
-    this.pageService.set("title", "Arrangementgruppe")
     this.daythemes = {}
   }
 
@@ -81,7 +78,6 @@ export class GuestEventgroupComponent implements OnInit, OnChanges {
         .get(this.id)
         .pipe(handleResourceLoadingStates(this.pageState))
         .subscribe((eventgroup) => {
-          this.pageService.set("title", eventgroup.title)
           this.eventgroup = eventgroup
 
           const r: Record<string, ApiEvent[]> = {}

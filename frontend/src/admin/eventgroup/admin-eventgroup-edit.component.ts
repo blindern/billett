@@ -3,7 +3,6 @@ import {
   inject,
   Input,
   OnChanges,
-  OnInit,
   SimpleChanges,
 } from "@angular/core"
 import { FormsModule } from "@angular/forms"
@@ -13,7 +12,6 @@ import { ApiEventgroupAdmin } from "../../apitypes"
 import { NavigationService } from "../../common/navigation.service"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
-import { PageService } from "../../common/page.service"
 import {
   handleResourceLoadingStates,
   ResourceLoadingState,
@@ -31,9 +29,8 @@ import { AdminEventgroupService } from "./admin-eventgroup.service"
   ],
   templateUrl: "./admin-eventgroup-edit.component.html",
 })
-export class AdminEventgroupEditComponent implements OnInit, OnChanges {
+export class AdminEventgroupEditComponent implements OnChanges {
   private adminEventgroupService = inject(AdminEventgroupService)
-  private pageService = inject(PageService)
   private navigationService = inject(NavigationService)
 
   @Input()
@@ -41,10 +38,6 @@ export class AdminEventgroupEditComponent implements OnInit, OnChanges {
 
   pageState = new ResourceLoadingState()
   eventgroup?: ApiEventgroupAdmin
-
-  ngOnInit(): void {
-    this.pageService.set("title", "Rediger arrangementgruppe")
-  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes["id"]) {

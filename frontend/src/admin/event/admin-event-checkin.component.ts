@@ -20,7 +20,6 @@ import {
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
-import { PageService } from "../../common/page.service"
 import { PaginationComponent } from "../../common/pagination.component"
 import { PricePipe } from "../../common/price.pipe"
 import {
@@ -68,7 +67,6 @@ const searchinputInit = {
 })
 export class AdminEventCheckinComponent implements OnInit, OnChanges {
   private adminEventService = inject(AdminEventService)
-  private pageService = inject(PageService)
   private adminEventCheckinService = inject(AdminEventCheckinService)
 
   @Input()
@@ -102,8 +100,6 @@ export class AdminEventCheckinComponent implements OnInit, OnChanges {
   #searchqueue = new Subject()
 
   ngOnInit(): void {
-    this.pageService.set("title", "Innsjekking av billetter")
-
     this.#searchqueue.pipe(debounceTime(300)).subscribe(() => {
       if (this.searchinput.page !== 1) {
         this.searchinput.page = 1

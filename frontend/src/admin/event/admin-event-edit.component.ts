@@ -3,7 +3,6 @@ import {
   inject,
   Input,
   OnChanges,
-  OnInit,
   SimpleChanges,
 } from "@angular/core"
 import { Router, RouterLink } from "@angular/router"
@@ -11,7 +10,6 @@ import { api } from "../../api"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
-import { PageService } from "../../common/page.service"
 import {
   handleResourceLoadingStates,
   ResourceLoadingState,
@@ -31,9 +29,8 @@ import { AdminEventData, AdminEventService } from "./admin-event.service"
   ],
   templateUrl: "./admin-event-edit.component.html",
 })
-export class AdminEventEditComponent implements OnInit, OnChanges {
+export class AdminEventEditComponent implements OnChanges {
   private adminEventService = inject(AdminEventService)
-  private pageService = inject(PageService)
   private router = inject(Router)
 
   @Input()
@@ -43,10 +40,6 @@ export class AdminEventEditComponent implements OnInit, OnChanges {
 
   pageState = new ResourceLoadingState()
   event?: AdminEventData
-
-  ngOnInit(): void {
-    this.pageService.set("title", "Rediger arrangement")
-  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes["id"]) {

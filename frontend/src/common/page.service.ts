@@ -1,7 +1,6 @@
 import { DestroyRef, inject, Injectable } from "@angular/core"
 import { Meta, Title } from "@angular/platform-browser"
 import { Event, NavigationStart, Router } from "@angular/router"
-import { ToastService } from "./toast.service"
 
 @Injectable({
   providedIn: "root",
@@ -9,7 +8,6 @@ import { ToastService } from "./toast.service"
 export class PageService {
   private metaService = inject(Meta)
   private titleService = inject(Title)
-  private toastService = inject(ToastService)
 
   private attrs: Record<string, { val: string; isDefault?: boolean }[]> = {}
   public meta: Record<string, string> = {}
@@ -88,23 +86,6 @@ export class PageService {
     } else {
       this.meta[name] = this.attrs[name].at(-1)!.val
     }
-    this.#queueUpdate()
-  }
-
-  /**
-   * Return page title
-   * @deprecated (use get method)
-   */
-  title() {
-    return this.get("title")
-  }
-
-  /**
-   * Set page title
-   * @deprecated (use set method)
-   */
-  setTitle(newTitle: string) {
-    this.set("title", newTitle)
     this.#queueUpdate()
   }
 

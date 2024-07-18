@@ -1,12 +1,17 @@
 import { Component, inject, OnInit } from "@angular/core"
 import { firstValueFrom } from "rxjs"
 import { api } from "../api"
+import { PagePropertyComponent } from "../common/page-property.component"
 import { AuthService } from "./auth.service"
 
 @Component({
   selector: "billett-logout",
   standalone: true,
-  template: "Logger ut",
+  template: `
+    <billett-page-property name="title" value="Logger ut" />
+    <p>Logger ut</p>
+  `,
+  imports: [PagePropertyComponent],
 })
 export class LogoutComponent implements OnInit {
   private authService = inject(AuthService)

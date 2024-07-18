@@ -1,28 +1,23 @@
-import { Component, inject, OnInit } from "@angular/core"
+import { Component, inject } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { Router } from "@angular/router"
 import { catchError, NEVER } from "rxjs"
-import { PageService } from "../../common/page.service"
+import { PagePropertyComponent } from "../../common/page-property.component"
 import { AdminEventgroupService } from "./admin-eventgroup.service"
 
 @Component({
   selector: "billett-admin-eventgroup-create",
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, PagePropertyComponent],
   templateUrl: "./admin-eventgroup-create.component.html",
 })
-export class AdminEventgroupCreateComponent implements OnInit {
+export class AdminEventgroupCreateComponent {
   private adminEventgroupService = inject(AdminEventgroupService)
-  private pageService = inject(PageService)
   private router = inject(Router)
 
   form = {
     title: "",
     is_active: false,
-  }
-
-  ngOnInit(): void {
-    this.pageService.set("title", "Ny arrangementgruppe")
   }
 
   storeEventgroup() {
