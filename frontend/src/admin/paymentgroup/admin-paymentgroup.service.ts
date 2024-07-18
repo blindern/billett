@@ -1,4 +1,3 @@
-import { Dialog } from "@angular/cdk/dialog"
 import { HttpClient } from "@angular/common/http"
 import { inject, Injectable } from "@angular/core"
 import { api } from "../../api"
@@ -12,16 +11,6 @@ import {
   ApiTicketAdmin,
   ApiTicketgroupAdmin,
 } from "../../apitypes"
-import {
-  AdminPaymentgroupCreateModal,
-  AdminPaymentgroupCreateModalInput,
-  AdminPaymentgroupCreateModalResult,
-} from "./admin-paymentgroup-create-modal.component"
-import {
-  AdminPaymentgroupSelectModal,
-  AdminPaymentgroupSelectModalInput,
-  AdminPaymentgroupSelectModalResult,
-} from "./admin-paymentgroup-select-modal.component"
 
 export type AdminPaymentgroupData = ApiPaymentgroupAdmin & {
   eventgroup: ApiEventgroupAdmin
@@ -52,7 +41,6 @@ export type AdminEventCreateData = Partial<Omit<ApiEventAdmin, "id">>
 })
 export class AdminPaymentgroupService {
   private http = inject(HttpClient)
-  private dialog = inject(Dialog)
 
   get(id: string) {
     return this.http.get<AdminPaymentgroupData>(
@@ -130,23 +118,5 @@ export class AdminPaymentgroupService {
     }
 
     return groups.find((it) => it.id === Number(lastId)) ?? undefined
-  }
-
-  openCreateModal(data: AdminPaymentgroupCreateModalInput) {
-    return this.dialog.open<
-      AdminPaymentgroupCreateModalResult,
-      AdminPaymentgroupCreateModalInput
-    >(AdminPaymentgroupCreateModal, {
-      data,
-    })
-  }
-
-  openSelectModal(data: AdminPaymentgroupSelectModalInput) {
-    return this.dialog.open<
-      AdminPaymentgroupSelectModalResult,
-      AdminPaymentgroupSelectModalInput
-    >(AdminPaymentgroupSelectModal, {
-      data,
-    })
   }
 }

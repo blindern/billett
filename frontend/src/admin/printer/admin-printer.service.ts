@@ -1,4 +1,3 @@
-import { Dialog } from "@angular/cdk/dialog"
 import { HttpClient } from "@angular/common/http"
 import { inject, Injectable } from "@angular/core"
 import { api } from "../../api"
@@ -7,38 +6,15 @@ import {
   ApiTicketAdmin,
   ApiTicketgroupAdmin,
 } from "../../apitypes"
-import {
-  AdminPrinterSelectInput,
-  AdminPrinterSelectModal,
-  AdminPrinterSelectResult,
-} from "./admin-printer-select-modal.component"
-import {
-  AdminPrinterTextModal,
-  AdminPrinterTextModalResult,
-} from "./admin-printer-text-modal.component"
 
 @Injectable({
   providedIn: "root",
 })
 export class AdminPrinterService {
   private http = inject(HttpClient)
-  private dialog = inject(Dialog)
 
   getList() {
     return this.http.get<ApiPrinterAdmin[]>(api("printer"))
-  }
-
-  openPrinterSelectModal(data: AdminPrinterSelectInput) {
-    return this.dialog.open<AdminPrinterSelectResult, AdminPrinterSelectInput>(
-      AdminPrinterSelectModal,
-      {
-        data,
-      },
-    )
-  }
-
-  openPrintTextModal() {
-    return this.dialog.open<AdminPrinterTextModalResult>(AdminPrinterTextModal)
   }
 
   printTickets(printer: ApiPrinterAdmin, tickets: ApiTicketAdmin[]) {

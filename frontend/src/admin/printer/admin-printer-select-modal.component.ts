@@ -1,15 +1,15 @@
-import { DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
+import { Dialog, DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
 import { Component, inject, Inject } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { Observable } from "rxjs"
 import { ApiPrinterAdmin } from "../../apitypes"
 import { AdminPrinterSelectboxComponent } from "./admin-printer-selectbox.component"
 
-export interface AdminPrinterSelectInput {
+export interface AdminPrinterSelectModalInput {
   handler: (printer: ApiPrinterAdmin) => Observable<unknown>
 }
 
-export interface AdminPrinterSelectResult {
+export interface AdminPrinterSelectModalResult {
   completed: true
 }
 
@@ -20,12 +20,21 @@ export interface AdminPrinterSelectResult {
   templateUrl: "./admin-printer-select-modal.component.html",
 })
 export class AdminPrinterSelectModal {
+  static open(dialog: Dialog, data: AdminPrinterSelectModalInput) {
+    return dialog.open<
+      AdminPrinterSelectModalResult,
+      AdminPrinterSelectModalInput
+    >(AdminPrinterSelectModal, {
+      data,
+    })
+  }
+
   constructor(
     @Inject(DIALOG_DATA)
-    public data: AdminPrinterSelectInput,
+    public data: AdminPrinterSelectModalInput,
   ) {}
 
-  private dialogRef = inject(DialogRef<AdminPrinterSelectResult>)
+  private dialogRef = inject(DialogRef<AdminPrinterSelectModalResult>)
 
   sending = false
   printer?: ApiPrinterAdmin

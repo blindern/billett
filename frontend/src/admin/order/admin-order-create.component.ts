@@ -1,3 +1,4 @@
+import { Dialog } from "@angular/cdk/dialog"
 import { NgClass } from "@angular/common"
 import {
   Component,
@@ -36,7 +37,7 @@ import { AdminPaymentgroupSelectboxComponent } from "../paymentgroup/admin-payme
 import { AdminPrinterSelectboxComponent } from "../printer/admin-printer-selectbox.component"
 import { AdminPrinterService } from "../printer/admin-printer.service"
 import { AdminTicketService } from "../ticket/admin-ticket.service"
-import { AdminTicketgroupService } from "../ticketgroup/admin-ticketgroup.service"
+import { AdminTicketgroupAddToOrderModal } from "../ticketgroup/admin-ticketgroup-add-to-order-modal.component"
 import { AdminOrderGetData, AdminOrderService } from "./admin-order.service"
 
 @Component({
@@ -58,11 +59,11 @@ import { AdminOrderGetData, AdminOrderService } from "./admin-order.service"
 export class AdminOrderCreateComponent implements OnInit, OnChanges {
   private adminEventgroupService = inject(AdminEventgroupService)
   private adminOrderService = inject(AdminOrderService)
-  private adminTicketgroupService = inject(AdminTicketgroupService)
   private adminTicketService = inject(AdminTicketService)
   private adminPrinterService = inject(AdminPrinterService)
   private pageService = inject(PageService)
   private router = inject(Router)
+  private dialog = inject(Dialog)
 
   api = api
   parseFloat = parseFloat
@@ -309,22 +310,20 @@ export class AdminOrderCreateComponent implements OnInit, OnChanges {
   }
 
   addTickets() {
-    this.adminTicketgroupService
-      .openAddTicketsModal({
-        eventgroupId: this.eventgroup!.id,
-        getOrderId: () => this.getOrCreateOrder().then((order) => order.id!),
-      })
-      .closed.subscribe((tickets) => {
-        if (!tickets) return
-        this.getOrCreateOrder(true).then(
-          () => {
-            this.usernameInput.nativeElement.focus()
-          },
-          () => {
-            alert("Ukjent feil oppsto ved forsøk på å laste ordren på nytt")
-          },
-        )
-      })
+    AdminTicketgroupAddToOrderModal.open(this.dialog, {
+      eventgroupId: this.eventgroup!.id,
+      getOrderId: () => this.getOrCreateOrder().then((order) => order.id!),
+    }).closed.subscribe((tickets) => {
+      if (!tickets) return
+      this.getOrCreateOrder(true).then(
+        () => {
+          this.usernameInput.nativeElement.focus()
+        },
+        () => {
+          alert("Ukjent feil oppsto ved forsøk på å laste ordren på nytt")
+        },
+      )
+    })
   }
 
   private reloadHistory() {

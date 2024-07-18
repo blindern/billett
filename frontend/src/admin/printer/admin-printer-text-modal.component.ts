@@ -1,4 +1,4 @@
-import { DialogRef } from "@angular/cdk/dialog"
+import { Dialog, DialogRef } from "@angular/cdk/dialog"
 import { Component, inject } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { ApiPrinterAdmin } from "../../apitypes"
@@ -17,6 +17,10 @@ export interface AdminPrinterTextModalResult {
   templateUrl: "./admin-printer-text-modal.component.html",
 })
 export class AdminPrinterTextModal {
+  static open(dialog: Dialog) {
+    return dialog.open<AdminPrinterTextModalResult>(AdminPrinterTextModal)
+  }
+
   private dialogRef = inject(DialogRef<AdminPrinterTextModalResult>)
   private adminPrinterService = inject(AdminPrinterService)
   private pageService = inject(PageService)

@@ -1,9 +1,10 @@
+import { Dialog } from "@angular/cdk/dialog"
 import { Component, inject, OnInit } from "@angular/core"
 import { RouterLink } from "@angular/router"
 import { ApiEventgroupAdmin } from "../../apitypes"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { AdminEventgroupService } from "../eventgroup/admin-eventgroup.service"
-import { AdminPrinterService } from "../printer/admin-printer.service"
+import { AdminPrinterTextModal } from "../printer/admin-printer-text-modal.component"
 
 @Component({
   selector: "billett-admin-index",
@@ -15,10 +16,10 @@ export class AdminIndexComponent implements OnInit {
   eventgroups?: ApiEventgroupAdmin[]
 
   private adminEventgroupService = inject(AdminEventgroupService)
-  private adminPrinterService = inject(AdminPrinterService)
+  private dialog = inject(Dialog)
 
   printText() {
-    this.adminPrinterService.openPrintTextModal()
+    AdminPrinterTextModal.open(this.dialog)
   }
 
   ngOnInit(): void {

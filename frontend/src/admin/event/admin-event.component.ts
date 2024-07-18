@@ -1,3 +1,4 @@
+import { Dialog } from "@angular/cdk/dialog"
 import { CommonModule } from "@angular/common"
 import {
   Component,
@@ -22,6 +23,7 @@ import {
   handleResourceLoadingStates,
   ResourceLoadingState,
 } from "../../common/resource-loading"
+import { AdminPrinterSelectModal } from "../printer/admin-printer-select-modal.component"
 import { AdminPrinterService } from "../printer/admin-printer.service"
 import { AdminEventData, AdminEventService } from "./admin-event.service"
 
@@ -46,6 +48,7 @@ export class AdminEventComponent implements OnInit, OnChanges {
   private pageService = inject(PageService)
   private router = inject(Router)
   private adminPrinterService = inject(AdminPrinterService)
+  private dialog = inject(Dialog)
 
   @Input()
   id!: string
@@ -121,7 +124,7 @@ export class AdminEventComponent implements OnInit, OnChanges {
   }
 
   previewTicketPrint(ticketgroup: ApiTicketgroupAdmin) {
-    this.adminPrinterService.openPrinterSelectModal({
+    AdminPrinterSelectModal.open(this.dialog, {
       handler: (printer) =>
         this.adminPrinterService.printPreviewTicket(printer, ticketgroup).pipe(
           tap(() => {

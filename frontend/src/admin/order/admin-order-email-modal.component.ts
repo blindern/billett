@@ -1,4 +1,4 @@
-import { DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
+import { Dialog, DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
 import { Component, inject, Inject } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { ApiEventgroupAdmin, ApiOrderAdmin } from "../../apitypes"
@@ -21,6 +21,15 @@ export interface AdminOrderEmailModalResult {
   templateUrl: "./admin-order-email-modal.component.html",
 })
 export class AdminOrderEmailModal {
+  static open(dialog: Dialog, data: AdminOrderEmailModalInput) {
+    return dialog.open<AdminOrderEmailModalResult, AdminOrderEmailModalInput>(
+      AdminOrderEmailModal,
+      {
+        data,
+      },
+    )
+  }
+
   constructor(
     @Inject(DIALOG_DATA)
     public data: AdminOrderEmailModalInput,

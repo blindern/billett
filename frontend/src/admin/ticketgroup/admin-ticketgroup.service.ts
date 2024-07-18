@@ -1,4 +1,3 @@
-import { Dialog } from "@angular/cdk/dialog"
 import { HttpClient } from "@angular/common/http"
 import { inject, Injectable } from "@angular/core"
 import { api } from "../../api"
@@ -7,11 +6,6 @@ import {
   ApiEventgroupAdmin,
   ApiTicketgroupAdmin,
 } from "../../apitypes"
-import {
-  AdminTicketgroupAddToOrderModal,
-  AdminTicketgroupAddToOrderModalInput,
-  AdminTicketgroupAddToOrderModalResult,
-} from "./admin-ticketgroup-add-to-order-modal.component"
 
 export type AdminTicketgroupData = ApiTicketgroupAdmin & {
   event: ApiEventAdmin & {
@@ -24,7 +18,6 @@ export type AdminTicketgroupData = ApiTicketgroupAdmin & {
 })
 export class AdminTicketgroupService {
   private http = inject(HttpClient)
-  private dialog = inject(Dialog)
 
   get(id: string) {
     return this.http.get<AdminTicketgroupData>(
@@ -56,15 +49,6 @@ export class AdminTicketgroupService {
   delete(id: number) {
     return this.http.delete(api(`ticketgroup/${encodeURIComponent(id)}`), {
       responseType: "text",
-    })
-  }
-
-  openAddTicketsModal(data: AdminTicketgroupAddToOrderModalInput) {
-    return this.dialog.open<
-      AdminTicketgroupAddToOrderModalResult,
-      AdminTicketgroupAddToOrderModalInput
-    >(AdminTicketgroupAddToOrderModal, {
-      data,
     })
   }
 }

@@ -1,4 +1,4 @@
-import { DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
+import { Dialog, DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
 import { Component, inject, Inject, OnInit } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import {
@@ -25,6 +25,15 @@ export type AdminPaymentCreateModalResult = ApiPaymentAdmin
   templateUrl: "./admin-payment-create-modal.component.html",
 })
 export class AdminPaymentCreateModal implements OnInit {
+  static open(dialog: Dialog, data: AdminPaymentCreateModalInput) {
+    return dialog.open<
+      AdminPaymentCreateModalResult,
+      AdminPaymentCreateModalInput
+    >(AdminPaymentCreateModal, {
+      data,
+    })
+  }
+
   constructor(
     @Inject(DIALOG_DATA)
     public data: AdminPaymentCreateModalInput,

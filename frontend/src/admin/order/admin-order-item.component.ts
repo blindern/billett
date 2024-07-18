@@ -1,3 +1,4 @@
+import { Dialog } from "@angular/cdk/dialog"
 import { NgClass } from "@angular/common"
 import {
   Component,
@@ -22,12 +23,20 @@ import {
   handleResourceLoadingStates,
   ResourceLoadingState,
 } from "../../common/resource-loading"
+import { AdminPaymentCreateModal } from "../payment/admin-payment-create-modal.component"
 import { AdminPaymentService } from "../payment/admin-payment.service"
+import { AdminPaymentgroupSelectModal } from "../paymentgroup/admin-paymentgroup-select-modal.component"
 import { AdminPaymentgroupService } from "../paymentgroup/admin-paymentgroup.service"
+import { AdminPrinterSelectModal } from "../printer/admin-printer-select-modal.component"
 import { AdminPrinterService } from "../printer/admin-printer.service"
-import { AdminTicketRevokeModalInput } from "../ticket/admin-ticket-revoke-modal.component"
+import {
+  AdminTicketRevokeModal,
+  AdminTicketRevokeModalInput,
+} from "../ticket/admin-ticket-revoke-modal.component"
 import { AdminTicketService } from "../ticket/admin-ticket.service"
+import { AdminTicketgroupAddToOrderModal } from "../ticketgroup/admin-ticketgroup-add-to-order-modal.component"
 import { AdminTicketgroupService } from "../ticketgroup/admin-ticketgroup.service"
+import { AdminOrderEmailModal } from "./admin-order-email-modal.component"
 import { AdminOrderGetData, AdminOrderService } from "./admin-order.service"
 
 @Component({
@@ -54,6 +63,7 @@ export class AdminOrderItemComponent implements OnInit, OnChanges {
   private adminPrinterService = inject(AdminPrinterService)
   private pageService = inject(PageService)
   private router = inject(Router)
+  private dialog = inject(Dialog)
 
   api = api
 
@@ -170,36 +180,34 @@ export class AdminOrderItemComponent implements OnInit, OnChanges {
   }
 
   completeOrder() {
-    this.adminPaymentgroupService
-      .openSelectModal({
-        eventgroupId: this.order!.eventgroup.id,
-        actionText: "Marker som betalt",
-        amount: this.totalReserved,
-      })
-      .closed.subscribe((paymentgroup) => {
-        if (!paymentgroup) return
+    AdminPaymentgroupSelectModal.open(this.dialog, {
+      eventgroupId: this.order!.eventgroup.id,
+      actionText: "Marker som betalt",
+      amount: this.totalReserved,
+    }).closed.subscribe((paymentgroup) => {
+      if (!paymentgroup) return
 
-        this.adminOrderService
-          .validateAndConvert(this.order!.id, paymentgroup, this.totalReserved)
-          .subscribe({
-            next: (order) => {
-              this.refreshOrder()
-            },
-            error: (err) => {
-              // TODO(migrate): response body error handling
-              // if (err.data == "amount mismatched") {
-              //   alert(
-              //     "Noe i reservasjonen ser ut til å ha endret seg. Prøv på nytt.",
-              //   )
-              //   this.getOrCreateOrder(true)
-              // } else {
-              console.error(err)
-              alert(err.data)
-              this.refreshOrder()
-              // }
-            },
-          })
-      })
+      this.adminOrderService
+        .validateAndConvert(this.order!.id, paymentgroup, this.totalReserved)
+        .subscribe({
+          next: (order) => {
+            this.refreshOrder()
+          },
+          error: (err) => {
+            // TODO(migrate): response body error handling
+            // if (err.data == "amount mismatched") {
+            //   alert(
+            //     "Noe i reservasjonen ser ut til å ha endret seg. Prøv på nytt.",
+            //   )
+            //   this.getOrCreateOrder(true)
+            // } else {
+            console.error(err)
+            alert(err.data)
+            this.refreshOrder()
+            // }
+          },
+        })
+    })
   }
 
   convertOrder() {
@@ -211,27 +219,23 @@ export class AdminOrderItemComponent implements OnInit, OnChanges {
   }
 
   addTickets() {
-    this.adminTicketgroupService
-      .openAddTicketsModal({
-        eventgroupId: this.order!.eventgroup.id,
-        getOrderId: async () => this.order!.id,
-      })
-      .closed.subscribe((tickets) => {
-        if (!tickets) return
-        this.refreshOrder()
-      })
+    AdminTicketgroupAddToOrderModal.open(this.dialog, {
+      eventgroupId: this.order!.eventgroup.id,
+      getOrderId: async () => this.order!.id,
+    }).closed.subscribe((tickets) => {
+      if (!tickets) return
+      this.refreshOrder()
+    })
   }
 
   revokeTicket(ticket: AdminTicketRevokeModalInput["ticket"]) {
-    this.adminTicketService
-      .openRevokeModal({
-        order: this.order!,
-        ticket,
-      })
-      .closed.subscribe((result) => {
-        if (!result) return
-        this.refreshOrder()
-      })
+    AdminTicketRevokeModal.open(this.dialog, {
+      order: this.order!,
+      ticket,
+    }).closed.subscribe((result) => {
+      if (!result) return
+      this.refreshOrder()
+    })
   }
 
   validateTicket(
@@ -239,21 +243,19 @@ export class AdminOrderItemComponent implements OnInit, OnChanges {
       ticketgroup: ApiTicketgroupAdmin
     },
   ) {
-    this.adminPaymentgroupService
-      .openSelectModal({
-        eventgroupId: this.order!.eventgroup.id,
-        actionText: "Inntekstfør",
-        amount: ticket.ticketgroup.price + ticket.ticketgroup.fee,
-      })
-      .closed.subscribe((paymentgroup) => {
-        if (!paymentgroup) return
+    AdminPaymentgroupSelectModal.open(this.dialog, {
+      eventgroupId: this.order!.eventgroup.id,
+      actionText: "Inntekstfør",
+      amount: ticket.ticketgroup.price + ticket.ticketgroup.fee,
+    }).closed.subscribe((paymentgroup) => {
+      if (!paymentgroup) return
 
-        this.adminTicketService
-          .validateAndConvert(ticket.id, paymentgroup)
-          .subscribe(() => {
-            this.refreshOrder()
-          })
-      })
+      this.adminTicketService
+        .validateAndConvert(ticket.id, paymentgroup)
+        .subscribe(() => {
+          this.refreshOrder()
+        })
+    })
   }
 
   deleteTicket(ticket: ApiTicketAdmin) {
@@ -268,28 +270,24 @@ export class AdminOrderItemComponent implements OnInit, OnChanges {
   }
 
   newPayment() {
-    this.adminPaymentService
-      .openCreateModal({
-        order: this.order!,
-      })
-      .closed.subscribe(() => {
-        this.refreshOrder()
-      })
+    AdminPaymentCreateModal.open(this.dialog, {
+      order: this.order!,
+    }).closed.subscribe(() => {
+      this.refreshOrder()
+    })
   }
 
   sendEmail() {
-    this.adminOrderService
-      .openEmailModal({
-        order: this.order!,
-      })
-      .closed.subscribe((sent) => {
-        if (!sent) return
-        this.pageService.toast("E-post ble sendt", { class: "success" })
-      })
+    AdminOrderEmailModal.open(this.dialog, {
+      order: this.order!,
+    }).closed.subscribe((sent) => {
+      if (!sent) return
+      this.pageService.toast("E-post ble sendt", { class: "success" })
+    })
   }
 
   printTickets() {
-    this.adminPrinterService.openPrinterSelectModal({
+    AdminPrinterSelectModal.open(this.dialog, {
       handler: (printer) =>
         this.adminPrinterService.printTickets(printer, this.validTickets).pipe(
           tap(() => {
@@ -308,7 +306,7 @@ export class AdminOrderItemComponent implements OnInit, OnChanges {
   }
 
   printTicket(ticket: ApiTicketAdmin) {
-    this.adminPrinterService.openPrinterSelectModal({
+    AdminPrinterSelectModal.open(this.dialog, {
       handler: (printer) => {
         console.log("print!")
         return this.adminPrinterService.printTicket(printer, ticket).pipe(

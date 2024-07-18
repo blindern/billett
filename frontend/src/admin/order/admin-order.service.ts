@@ -1,4 +1,3 @@
-import { Dialog } from "@angular/cdk/dialog"
 import { HttpClient } from "@angular/common/http"
 import { inject, Injectable } from "@angular/core"
 import { api } from "../../api"
@@ -12,11 +11,6 @@ import {
   ApiTicketgroupAdmin,
   Paginated,
 } from "../../apitypes"
-import {
-  AdminOrderEmailModal,
-  AdminOrderEmailModalInput,
-  AdminOrderEmailModalResult,
-} from "./admin-order-email-modal.component"
 
 export type AdminOrderData = Paginated<
   ApiOrderAdmin & {
@@ -44,7 +38,6 @@ export type AdminOrderGetData = ApiOrderAdmin & {
 })
 export class AdminOrderService {
   private http = inject(HttpClient)
-  private dialog = inject(Dialog)
 
   query(options: { page?: number; filter: string; limit?: number }) {
     const limit = options.limit ?? 20
@@ -151,14 +144,5 @@ export class AdminOrderService {
           acc + ticket.ticketgroup.price + ticket.ticketgroup.fee,
         0,
       )
-  }
-
-  openEmailModal(data: AdminOrderEmailModalInput) {
-    return this.dialog.open<
-      AdminOrderEmailModalResult,
-      AdminOrderEmailModalInput
-    >(AdminOrderEmailModal, {
-      data,
-    })
   }
 }

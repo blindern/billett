@@ -1,4 +1,4 @@
-import { DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
+import { Dialog, DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
 import { Component, inject, Inject } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { NgxTypeAheadComponent } from "ngx-typeahead"
@@ -31,6 +31,15 @@ export type AdminPaymentsourceCreateModalResult = ApiPaymentsourceAdmin
   templateUrl: "./admin-paymentsource-create-modal.component.html",
 })
 export class AdminPaymentsourceCreateModal {
+  static open(dialog: Dialog, data: AdminPaymentsourceCreateModalInput) {
+    return dialog.open<
+      AdminPaymentsourceCreateModalResult,
+      AdminPaymentsourceCreateModalInput
+    >(AdminPaymentsourceCreateModal, {
+      data,
+    })
+  }
+
   constructor(
     @Inject(DIALOG_DATA)
     private data: AdminPaymentsourceCreateModalInput,

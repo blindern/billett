@@ -1,3 +1,4 @@
+import { Dialog } from "@angular/cdk/dialog"
 import {
   Component,
   EventEmitter,
@@ -11,6 +12,7 @@ import {
 import { FormsModule } from "@angular/forms"
 import { ApiPaymentgroupAdmin } from "../../apitypes"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
+import { AdminPaymentgroupCreateModal } from "./admin-paymentgroup-create-modal.component"
 import { AdminPaymentgroupService } from "./admin-paymentgroup.service"
 
 @Component({
@@ -21,6 +23,7 @@ import { AdminPaymentgroupService } from "./admin-paymentgroup.service"
 })
 export class AdminPaymentgroupSelectboxComponent implements OnInit, OnChanges {
   private adminPaymentgroupService = inject(AdminPaymentgroupService)
+  private dialog = inject(Dialog)
 
   @Input()
   eventgroupId!: number
@@ -60,18 +63,16 @@ export class AdminPaymentgroupSelectboxComponent implements OnInit, OnChanges {
   }
 
   createNew() {
-    this.adminPaymentgroupService
-      .openCreateModal({
-        eventgroupId: this.eventgroupId,
-      })
-      .closed.subscribe((paymentgroup) => {
-        if (paymentgroup) {
-          this.paymentgroup = paymentgroup
-          this.paymentgroupChange.emit(paymentgroup)
-          this.selectedPaymentgroupId = paymentgroup.id.toString()
-          this.adminPaymentgroupService.setPreferredGroup(paymentgroup)
-        }
-      })
+    AdminPaymentgroupCreateModal.open(this.dialog, {
+      eventgroupId: this.eventgroupId,
+    }).closed.subscribe((paymentgroup) => {
+      if (paymentgroup) {
+        this.paymentgroup = paymentgroup
+        this.paymentgroupChange.emit(paymentgroup)
+        this.selectedPaymentgroupId = paymentgroup.id.toString()
+        this.adminPaymentgroupService.setPreferredGroup(paymentgroup)
+      }
+    })
   }
 
   update() {

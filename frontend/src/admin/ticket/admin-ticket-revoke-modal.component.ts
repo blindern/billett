@@ -1,4 +1,4 @@
-import { DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
+import { Dialog, DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
 import { Component, inject, Inject } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { RouterLink } from "@angular/router"
@@ -42,6 +42,15 @@ export interface AdminTicketRevokeModalResult {
   templateUrl: "./admin-ticket-revoke-modal.component.html",
 })
 export class AdminTicketRevokeModal {
+  static open(dialog: Dialog, data: AdminTicketRevokeModalInput) {
+    return dialog.open<
+      AdminTicketRevokeModalResult,
+      AdminTicketRevokeModalInput
+    >(AdminTicketRevokeModal, {
+      data,
+    })
+  }
+
   constructor(
     @Inject(DIALOG_DATA)
     public data: AdminTicketRevokeModalInput,

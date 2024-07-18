@@ -1,4 +1,4 @@
-import { DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
+import { Dialog, DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
 import { Component, inject, Inject } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { ApiPaymentgroupAdmin } from "../../apitypes"
@@ -18,6 +18,15 @@ export type AdminPaymentgroupCreateModalResult = ApiPaymentgroupAdmin
   templateUrl: "./admin-paymentgroup-create-modal.component.html",
 })
 export class AdminPaymentgroupCreateModal {
+  static open(dialog: Dialog, data: AdminPaymentgroupCreateModalInput) {
+    return dialog.open<
+      AdminPaymentgroupCreateModalResult,
+      AdminPaymentgroupCreateModalInput
+    >(AdminPaymentgroupCreateModal, {
+      data,
+    })
+  }
+
   constructor(
     @Inject(DIALOG_DATA)
     public data: AdminPaymentgroupCreateModalInput,

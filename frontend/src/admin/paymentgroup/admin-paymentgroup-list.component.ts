@@ -1,3 +1,4 @@
+import { Dialog } from "@angular/cdk/dialog"
 import {
   Component,
   inject,
@@ -16,6 +17,7 @@ import {
   ResourceLoadingState,
 } from "../../common/resource-loading"
 import { AdminEventgroupService } from "../eventgroup/admin-eventgroup.service"
+import { AdminPaymentgroupCreateModal } from "./admin-paymentgroup-create-modal.component"
 import { AdminPaymentgroupService } from "./admin-paymentgroup.service"
 
 @Component({
@@ -32,6 +34,7 @@ import { AdminPaymentgroupService } from "./admin-paymentgroup.service"
 export class AdminPaymentgroupListComponent implements OnChanges {
   private adminEventgroupService = inject(AdminEventgroupService)
   private adminPaymentgroupService = inject(AdminPaymentgroupService)
+  private dialog = inject(Dialog)
 
   @Input()
   eventgroupId!: string
@@ -71,14 +74,12 @@ export class AdminPaymentgroupListComponent implements OnChanges {
   }
 
   createNew() {
-    this.adminPaymentgroupService
-      .openCreateModal({
-        eventgroupId: this.eventgroup!.id,
-      })
-      .closed.subscribe((paymentgroup) => {
-        if (paymentgroup) {
-          this.#loadPaymentGroups(this.eventgroup!.id)
-        }
-      })
+    AdminPaymentgroupCreateModal.open(this.dialog, {
+      eventgroupId: this.eventgroup!.id,
+    }).closed.subscribe((paymentgroup) => {
+      if (paymentgroup) {
+        this.#loadPaymentGroups(this.eventgroup!.id)
+      }
+    })
   }
 }

@@ -24,11 +24,7 @@ import {
   AdminPaymentgroupData,
   AdminPaymentgroupService,
 } from "./admin-paymentgroup.service"
-import {
-  AdminPaymentsourceCreateModal,
-  AdminPaymentsourceCreateModalInput,
-  AdminPaymentsourceCreateModalResult,
-} from "./admin-paymentsource-create-modal.component"
+import { AdminPaymentsourceCreateModal } from "./admin-paymentsource-create-modal.component"
 import { AdminPaymentsourceService } from "./admin-paymentsource.service"
 
 @Component({
@@ -348,21 +344,14 @@ export class AdminPaymentgroupItemComponent implements OnChanges {
   }
 
   openCreatePaymentsourceModal() {
-    this.dialog
-      .open<
-        AdminPaymentsourceCreateModalResult,
-        AdminPaymentsourceCreateModalInput
-      >(AdminPaymentsourceCreateModal, {
-        data: {
-          eventgroup: this.paymentgroup!.eventgroup,
-          paymentgroup: this.paymentgroup!,
-        },
-      })
-      .closed.subscribe((paymentsource) => {
-        if (paymentsource) {
-          this.refresh()
-        }
-      })
+    AdminPaymentsourceCreateModal.open(this.dialog, {
+      eventgroup: this.paymentgroup!.eventgroup,
+      paymentgroup: this.paymentgroup!,
+    }).closed.subscribe((paymentsource) => {
+      if (paymentsource) {
+        this.refresh()
+      }
+    })
   }
 
   public deletePaymentsource(paymentsource: ApiPaymentsourceAdmin) {

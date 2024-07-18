@@ -1,4 +1,4 @@
-import { DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
+import { Dialog, DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
 import { NgClass } from "@angular/common"
 import { Component, inject, Inject, OnInit } from "@angular/core"
 import { FormsModule } from "@angular/forms"
@@ -39,6 +39,15 @@ export type AdminTicketgroupAddToOrderModalResult = ApiTicketAdmin[]
   styleUrl: "./admin-ticketgroup-add-to-order-modal.component.scss",
 })
 export class AdminTicketgroupAddToOrderModal implements OnInit {
+  static open(dialog: Dialog, data: AdminTicketgroupAddToOrderModalInput) {
+    return dialog.open<
+      AdminTicketgroupAddToOrderModalResult,
+      AdminTicketgroupAddToOrderModalInput
+    >(AdminTicketgroupAddToOrderModal, {
+      data,
+    })
+  }
+
   constructor(
     @Inject(DIALOG_DATA)
     public data: AdminTicketgroupAddToOrderModalInput,
