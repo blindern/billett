@@ -100,7 +100,7 @@ export class AdminEventgroupComponent implements OnInit, OnChanges {
     for (const item of this.eventgroup!.events) {
       if (
         this.filter_sale !== "" &&
-        Boolean(this.filter_sale) != !!item.ticketgroups!.length
+        (this.filter_sale === "1") !== !!item.ticketgroups!.length
       )
         continue
       if (
@@ -110,7 +110,7 @@ export class AdminEventgroupComponent implements OnInit, OnChanges {
         continue
       if (
         this.filter_hidden != "" &&
-        Boolean(this.filter_hidden) != item.is_admin_hidden
+        (this.filter_hidden === "1") !== item.is_admin_hidden
       )
         continue
 
