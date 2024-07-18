@@ -1,11 +1,4 @@
-import {
-  Component,
-  inject,
-  Input,
-  OnChanges,
-  OnDestroy,
-  SimpleChanges,
-} from "@angular/core"
+import { Component, inject, Input, OnChanges, OnDestroy } from "@angular/core"
 import { PageService } from "./page.service"
 
 @Component({
@@ -25,7 +18,7 @@ export class PagePropertyComponent implements OnChanges, OnDestroy {
 
   private pageService = inject(PageService)
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     const remove = this.pageService.set(this.name, this.value)
     this.cleanups.push(remove)
   }

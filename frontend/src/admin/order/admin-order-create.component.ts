@@ -4,7 +4,9 @@ import {
   ElementRef,
   inject,
   Input,
+  OnChanges,
   OnInit,
+  SimpleChanges,
   ViewChild,
 } from "@angular/core"
 import { FormsModule } from "@angular/forms"
@@ -53,7 +55,7 @@ import { AdminOrderGetData, AdminOrderService } from "./admin-order.service"
   ],
   templateUrl: "./admin-order-create.component.html",
 })
-export class AdminOrderCreateComponent implements OnInit {
+export class AdminOrderCreateComponent implements OnInit, OnChanges {
   private adminEventgroupService = inject(AdminEventgroupService)
   private adminOrderService = inject(AdminOrderService)
   private adminTicketgroupService = inject(AdminTicketgroupService)
@@ -104,31 +106,35 @@ export class AdminOrderCreateComponent implements OnInit {
   // }
 
   ngOnInit(): void {
-    this.adminEventgroupService
-      .get(this.eventgroupId)
-      .pipe(handleResourceLoadingStates(this.pageState))
-      .subscribe((data) => {
-        this.eventgroup = data
-        this.reloadHistory()
-
-        const newOrderId = localStorage.getItem("billett.neworder.id")
-        if (newOrderId) {
-          // TODO: loading state
-          this.adminOrderService.get(newOrderId).subscribe({
-            next: (order) => {
-              this.order = order
-            },
-            error: () => {
-              localStorage.removeItem("billett.neworder.id")
-              this.addTickets()
-            },
-          })
-        } else {
-          this.addTickets()
-        }
-      })
-
     this.resetOrder()
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes["eventgroupId"]) {
+      this.adminEventgroupService
+        .get(this.eventgroupId)
+        .pipe(handleResourceLoadingStates(this.pageState))
+        .subscribe((data) => {
+          this.eventgroup = data
+          this.reloadHistory()
+
+          const newOrderId = localStorage.getItem("billett.neworder.id")
+          if (newOrderId) {
+            // TODO: loading state
+            this.adminOrderService.get(newOrderId).subscribe({
+              next: (order) => {
+                this.order = order
+              },
+              error: () => {
+                localStorage.removeItem("billett.neworder.id")
+                this.addTickets()
+              },
+            })
+          } else {
+            this.addTickets()
+          }
+        })
+    }
   }
 
   private resetOrder() {

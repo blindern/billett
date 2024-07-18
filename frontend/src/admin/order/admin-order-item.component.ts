@@ -1,5 +1,12 @@
 import { NgClass } from "@angular/common"
-import { Component, inject, Input, OnInit } from "@angular/core"
+import {
+  Component,
+  inject,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { Router, RouterLink } from "@angular/router"
 import { catchError, tap } from "rxjs"
@@ -38,7 +45,7 @@ import { AdminOrderGetData, AdminOrderService } from "./admin-order.service"
   ],
   templateUrl: "./admin-order-item.component.html",
 })
-export class AdminOrderItemComponent implements OnInit {
+export class AdminOrderItemComponent implements OnInit, OnChanges {
   private adminOrderService = inject(AdminOrderService)
   private adminPaymentgroupService = inject(AdminPaymentgroupService)
   private adminTicketgroupService = inject(AdminTicketgroupService)
@@ -61,13 +68,17 @@ export class AdminOrderItemComponent implements OnInit {
 
   ngOnInit(): void {
     this.pageService.set("title", "Ordre")
+  }
 
-    this.adminOrderService
-      .get(this.id)
-      .pipe(handleResourceLoadingStates(this.pageState))
-      .subscribe((data) => {
-        this.order = data
-      })
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes["id"]) {
+      this.adminOrderService
+        .get(this.id)
+        .pipe(handleResourceLoadingStates(this.pageState))
+        .subscribe((data) => {
+          this.order = data
+        })
+    }
   }
 
   refreshOrder() {

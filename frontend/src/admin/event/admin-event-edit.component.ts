@@ -1,4 +1,11 @@
-import { Component, inject, Input, OnInit } from "@angular/core"
+import {
+  Component,
+  inject,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from "@angular/core"
 import { Router, RouterLink } from "@angular/router"
 import { api } from "../../api"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
@@ -24,7 +31,7 @@ import { AdminEventData, AdminEventService } from "./admin-event.service"
   ],
   templateUrl: "./admin-event-edit.component.html",
 })
-export class AdminEventEditComponent implements OnInit {
+export class AdminEventEditComponent implements OnInit, OnChanges {
   private adminEventService = inject(AdminEventService)
   private pageService = inject(PageService)
   private router = inject(Router)
@@ -39,13 +46,17 @@ export class AdminEventEditComponent implements OnInit {
 
   ngOnInit(): void {
     this.pageService.set("title", "Rediger arrangement")
+  }
 
-    this.adminEventService
-      .get(this.id)
-      .pipe(handleResourceLoadingStates(this.pageState))
-      .subscribe((data) => {
-        this.event = data
-      })
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes["id"]) {
+      this.adminEventService
+        .get(this.id)
+        .pipe(handleResourceLoadingStates(this.pageState))
+        .subscribe((data) => {
+          this.event = data
+        })
+    }
   }
 
   storeEvent() {

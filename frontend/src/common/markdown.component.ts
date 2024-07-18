@@ -18,7 +18,9 @@ export class MarkdownComponent {
     ])
 
     const md = marked.marked.setOptions({})
-    this.convertedData = DOMPurify.default.sanitize(md.parse(this.data ?? "") as string)
+    this.convertedData = DOMPurify.default.sanitize(
+      md.parse(this.data ?? "") as string,
+    )
   }
 
   ngOnChanges() {

@@ -1,5 +1,12 @@
 import { CommonModule } from "@angular/common"
-import { Component, inject, Input, OnInit } from "@angular/core"
+import {
+  Component,
+  inject,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { RouterLink } from "@angular/router"
 import { debounceTime, Subject } from "rxjs"
@@ -59,7 +66,7 @@ const searchinputInit = {
   templateUrl: "./admin-event-checkin.component.html",
   styleUrl: "./admin-event-checkin.component.scss",
 })
-export class AdminEventCheckinComponent implements OnInit {
+export class AdminEventCheckinComponent implements OnInit, OnChanges {
   private adminEventService = inject(AdminEventService)
   private pageService = inject(PageService)
   private adminEventCheckinService = inject(AdminEventCheckinService)
@@ -97,15 +104,6 @@ export class AdminEventCheckinComponent implements OnInit {
   ngOnInit(): void {
     this.pageService.set("title", "Innsjekking av billetter")
 
-    this.adminEventService
-      .get(this.id)
-      .pipe(handleResourceLoadingStates(this.pageState))
-      .subscribe((data) => {
-        this.event = data
-        this.#loadTickets()
-        this.#loadLastUsedTickets()
-      })
-
     this.#searchqueue.pipe(debounceTime(300)).subscribe(() => {
       if (this.searchinput.page !== 1) {
         this.searchinput.page = 1
@@ -115,6 +113,19 @@ export class AdminEventCheckinComponent implements OnInit {
       if (this.event) this.#searchForOrders()
       if (this.keysearch) this.#focusKeyfield()
     })
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes["id"]) {
+      this.adminEventService
+        .get(this.id)
+        .pipe(handleResourceLoadingStates(this.pageState))
+        .subscribe((data) => {
+          this.event = data
+          this.#loadTickets()
+          this.#loadLastUsedTickets()
+        })
+    }
   }
 
   #reloadEvent() {

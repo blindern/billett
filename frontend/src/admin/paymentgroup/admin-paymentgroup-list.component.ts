@@ -1,4 +1,10 @@
-import { Component, inject, Input, OnInit } from "@angular/core"
+import {
+  Component,
+  inject,
+  Input,
+  OnChanges,
+  SimpleChanges,
+} from "@angular/core"
 import { RouterLink } from "@angular/router"
 import { ApiEventgroupAdmin, ApiPaymentgroupAdmin } from "../../apitypes"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
@@ -23,7 +29,7 @@ import { AdminPaymentgroupService } from "./admin-paymentgroup.service"
   ],
   templateUrl: "./admin-paymentgroup-list.component.html",
 })
-export class AdminPaymentgroupListComponent implements OnInit {
+export class AdminPaymentgroupListComponent implements OnChanges {
   private adminEventgroupService = inject(AdminEventgroupService)
   private adminPaymentgroupService = inject(AdminPaymentgroupService)
 
@@ -43,14 +49,16 @@ export class AdminPaymentgroupListComponent implements OnInit {
     )
   }
 
-  ngOnInit(): void {
-    this.adminEventgroupService
-      .get(this.eventgroupId)
-      .pipe(handleResourceLoadingStates(this.eventgroupState))
-      .subscribe((eventgroup) => {
-        this.eventgroup = eventgroup
-        this.#loadPaymentGroups(eventgroup.id)
-      })
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes["eventgroupId"]) {
+      this.adminEventgroupService
+        .get(this.eventgroupId)
+        .pipe(handleResourceLoadingStates(this.eventgroupState))
+        .subscribe((eventgroup) => {
+          this.eventgroup = eventgroup
+          this.#loadPaymentGroups(eventgroup.id)
+        })
+    }
   }
 
   #loadPaymentGroups(eventgroupId: number) {

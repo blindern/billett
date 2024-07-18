@@ -1,4 +1,11 @@
-import { Component, inject, Input, OnInit } from "@angular/core"
+import {
+  Component,
+  inject,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from "@angular/core"
 import { RouterLink } from "@angular/router"
 import { ApiSoldTicketsStats } from "../../apitypes"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
@@ -47,7 +54,9 @@ class Accum {
   templateUrl: "./admin-eventgroup-sold-tickets-stats.component.html",
   styleUrl: "./admin-eventgroup-sold-tickets-stats.component.scss",
 })
-export class AdminEventgroupSoldTicketsStatsComponent implements OnInit {
+export class AdminEventgroupSoldTicketsStatsComponent
+  implements OnInit, OnChanges
+{
   private adminEventgroupService = inject(AdminEventgroupService)
   private pageService = inject(PageService)
 
@@ -59,13 +68,17 @@ export class AdminEventgroupSoldTicketsStatsComponent implements OnInit {
 
   ngOnInit(): void {
     this.pageService.set("title", "Billettstatistikk for arrangementgruppe")
+  }
 
-    this.adminEventgroupService
-      .getSoldTicketsStats(this.id)
-      .pipe(handleResourceLoadingStates(this.pageState))
-      .subscribe((data) => {
-        this.stats = this.deriveStats(data)
-      })
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes["id"]) {
+      this.adminEventgroupService
+        .getSoldTicketsStats(this.id)
+        .pipe(handleResourceLoadingStates(this.pageState))
+        .subscribe((data) => {
+          this.stats = this.deriveStats(data)
+        })
+    }
   }
 
   deriveStats(data: ApiSoldTicketsStats) {

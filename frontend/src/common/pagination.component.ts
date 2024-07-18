@@ -1,11 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  Output,
-  SimpleChanges,
-} from "@angular/core"
+import { Component, EventEmitter, Input, Output } from "@angular/core"
 
 @Component({
   selector: "billett-pagination",
@@ -13,7 +6,7 @@ import {
   imports: [],
   templateUrl: "./pagination.component.html",
 })
-export class PaginationComponent implements OnChanges {
+export class PaginationComponent {
   @Input()
   total!: number
 
@@ -26,12 +19,8 @@ export class PaginationComponent implements OnChanges {
   @Output()
   changePage = new EventEmitter<number>()
 
-  numPages!: number
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes["total"] || changes["limit"]) {
-      this.numPages = Math.ceil(this.total / this.limit)
-    }
+  get numPages() {
+    return Math.ceil(this.total / this.limit)
   }
 
   changePageHandler(event: Event, to: number) {

@@ -1,4 +1,10 @@
-import { Component, inject, Input, OnInit } from "@angular/core"
+import {
+  Component,
+  inject,
+  Input,
+  OnChanges,
+  SimpleChanges,
+} from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { Router, RouterLink } from "@angular/router"
 import { ApiEventAdmin, ApiEventgroupAdmin } from "../../apitypes"
@@ -24,7 +30,7 @@ import { AdminTicketgroupService } from "./admin-ticketgroup.service"
   ],
   templateUrl: "./admin-ticketgroup-create.component.html",
 })
-export class AdminTicketgroupCreateComponent implements OnInit {
+export class AdminTicketgroupCreateComponent implements OnChanges {
   private adminTicketgroupService = inject(AdminTicketgroupService)
   private adminEventService = inject(AdminEventService)
   private router = inject(Router)
@@ -49,13 +55,15 @@ export class AdminTicketgroupCreateComponent implements OnInit {
 
   pageState = new ResourceLoadingState()
 
-  ngOnInit(): void {
-    this.adminEventService
-      .get(this.eventId)
-      .pipe(handleResourceLoadingStates(this.pageState))
-      .subscribe((data) => {
-        this.event = data
-      })
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes["eventId"]) {
+      this.adminEventService
+        .get(this.eventId)
+        .pipe(handleResourceLoadingStates(this.pageState))
+        .subscribe((data) => {
+          this.event = data
+        })
+    }
   }
 
   submit() {

@@ -1,4 +1,11 @@
-import { Component, inject, Input, OnInit } from "@angular/core"
+import {
+  Component,
+  inject,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { Router, RouterLink } from "@angular/router"
 import moment from "moment"
@@ -19,7 +26,7 @@ import { AdminDaythemeService } from "./admin-daytheme.service"
   imports: [PageStatesComponent, RouterLink, FormsModule],
   templateUrl: "./admin-daytheme-create.component.html",
 })
-export class AdminDaythemeCreateComponent implements OnInit {
+export class AdminDaythemeCreateComponent implements OnInit, OnChanges {
   private adminDaythemeService = inject(AdminDaythemeService)
   private adminEventgroupService = inject(AdminEventgroupService)
   private pageService = inject(PageService)
@@ -37,12 +44,17 @@ export class AdminDaythemeCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.pageService.set("title", "Ny temadag")
-    this.adminEventgroupService
-      .get(this.eventgroupId)
-      .pipe(handleResourceLoadingStates(this.pageState))
-      .subscribe((data) => {
-        this.eventgroup = data
-      })
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes["eventgroupId"]) {
+      this.adminEventgroupService
+        .get(this.eventgroupId)
+        .pipe(handleResourceLoadingStates(this.pageState))
+        .subscribe((data) => {
+          this.eventgroup = data
+        })
+    }
   }
 
   storeDaytheme() {

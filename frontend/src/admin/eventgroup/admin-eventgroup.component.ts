@@ -1,5 +1,12 @@
 import { CommonModule } from "@angular/common"
-import { Component, inject, Input, OnInit } from "@angular/core"
+import {
+  Component,
+  inject,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { RouterLink } from "@angular/router"
 import moment from "moment"
@@ -35,7 +42,7 @@ import { AdminEventgroupService } from "./admin-eventgroup.service"
   templateUrl: "./admin-eventgroup.component.html",
   styleUrl: "./admin-eventgroup.component.scss",
 })
-export class AdminEventgroupComponent implements OnInit {
+export class AdminEventgroupComponent implements OnInit, OnChanges {
   private adminEventgroupService = inject(AdminEventgroupService)
   private adminEventService = inject(AdminEventService)
   private pageService = inject(PageService)
@@ -58,25 +65,29 @@ export class AdminEventgroupComponent implements OnInit {
 
   ngOnInit(): void {
     this.pageService.set("title", "Arrangementgruppe")
+  }
 
-    this.adminEventgroupService
-      .get(this.id)
-      .pipe(handleResourceLoadingStates(this.pageState))
-      .subscribe((data) => {
-        this.eventgroup = data
-        this.applyFilter()
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes["id"]) {
+      this.adminEventgroupService
+        .get(this.id)
+        .pipe(handleResourceLoadingStates(this.pageState))
+        .subscribe((data) => {
+          this.eventgroup = data
+          this.applyFilter()
 
-        this.categories = []
-        for (const event of this.eventgroup.events) {
-          if (this.categories.includes(event.category || "")) continue
-          this.categories.push(event.category || "")
-        }
-        this.categories.sort()
-      })
+          this.categories = []
+          for (const event of this.eventgroup.events) {
+            if (this.categories.includes(event.category || "")) continue
+            this.categories.push(event.category || "")
+          }
+          this.categories.sort()
+        })
 
-    this.filter_sale = ""
-    this.filter_category = "-1"
-    this.filter_hidden = "0"
+      this.filter_sale = ""
+      this.filter_category = "-1"
+      this.filter_hidden = "0"
+    }
   }
 
   applyFilter() {

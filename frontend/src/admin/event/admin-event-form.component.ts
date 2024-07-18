@@ -1,11 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  Output,
-  SimpleChanges,
-} from "@angular/core"
+import { Component, EventEmitter, Input, Output } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { RouterLink } from "@angular/router"
 import moment from "moment"
@@ -18,7 +11,7 @@ import { AdminEventCreateData, AdminEventData } from "./admin-event.service"
   imports: [FormsModule, RouterLink, FormatdatePipe],
   templateUrl: "./admin-event-form.component.html",
 })
-export class AdminEventFormComponent implements OnChanges {
+export class AdminEventFormComponent {
   @Input()
   event!: AdminEventData | AdminEventCreateData
 
@@ -28,21 +21,21 @@ export class AdminEventFormComponent implements OnChanges {
   @Output()
   submitForm = new EventEmitter<void>()
 
-  time_start_text!: string
-  time_end_text!: string
-
   submit() {
     this.submitForm.emit()
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    const parseTime = (t: number | null | undefined) => {
-      if (!t) return ""
-      return moment.unix(t).format("DD.MM.YYYY HH:mm")
-    }
+  get time_start_text() {
+    return this.#parseTime(this.event.time_start)
+  }
 
-    this.time_start_text = parseTime(this.event.time_start)
-    this.time_end_text = parseTime(this.event.time_end)
+  get time_end_text() {
+    return this.#parseTime(this.event.time_end)
+  }
+
+  #parseTime(t: number | null | undefined) {
+    if (!t) return ""
+    return moment.unix(t).format("DD.MM.YYYY HH:mm")
   }
 
   get eventId() {

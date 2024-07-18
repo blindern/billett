@@ -3,8 +3,10 @@ import {
   EventEmitter,
   inject,
   Input,
+  OnChanges,
   OnInit,
   Output,
+  SimpleChanges,
 } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { ApiPaymentgroupAdmin } from "../../apitypes"
@@ -17,7 +19,7 @@ import { AdminPaymentgroupService } from "./admin-paymentgroup.service"
   imports: [FormsModule, FormatdatePipe],
   templateUrl: "./admin-paymentgroup-selectbox.component.html",
 })
-export class AdminPaymentgroupSelectboxComponent implements OnInit {
+export class AdminPaymentgroupSelectboxComponent implements OnInit, OnChanges {
   private adminPaymentgroupService = inject(AdminPaymentgroupService)
 
   @Input()
@@ -34,22 +36,27 @@ export class AdminPaymentgroupSelectboxComponent implements OnInit {
 
   ngOnInit(): void {
     this.paymentgroups = undefined
-    this.adminPaymentgroupService
-      .listValid(this.eventgroupId)
-      .subscribe((paymentgroups) => {
-        this.paymentgroups = paymentgroups
+  }
 
-        const updated = this.adminPaymentgroupService.getPreferredGroup(
-          paymentgroups,
-          this.paymentgroup ? this.paymentgroup.id : undefined,
-        )
-        this.selectedPaymentgroupId = updated?.id.toString() ?? ""
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes["eventgroupId"]) {
+      this.adminPaymentgroupService
+        .listValid(this.eventgroupId)
+        .subscribe((paymentgroups) => {
+          this.paymentgroups = paymentgroups
 
-        if (this.paymentgroup?.id !== updated?.id) {
-          this.paymentgroup = updated
-          this.paymentgroupChange.emit(updated)
-        }
-      })
+          const updated = this.adminPaymentgroupService.getPreferredGroup(
+            paymentgroups,
+            this.paymentgroup ? this.paymentgroup.id : undefined,
+          )
+          this.selectedPaymentgroupId = updated?.id.toString() ?? ""
+
+          if (this.paymentgroup?.id !== updated?.id) {
+            this.paymentgroup = updated
+            this.paymentgroupChange.emit(updated)
+          }
+        })
+    }
   }
 
   createNew() {

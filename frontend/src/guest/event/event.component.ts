@@ -4,7 +4,9 @@ import {
   CUSTOM_ELEMENTS_SCHEMA,
   inject,
   Input,
+  OnChanges,
   OnInit,
+  SimpleChanges,
 } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { Router, RouterLink } from "@angular/router"
@@ -48,7 +50,7 @@ declare global {
   styleUrl: "./event.component.scss",
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class GuestEventComponent implements OnInit {
+export class GuestEventComponent implements OnInit, OnChanges {
   private eventService = inject(EventService)
   private eventReservationService = inject(EventReservationService)
   private router = inject(Router)
@@ -236,48 +238,52 @@ export class GuestEventComponent implements OnInit {
     script.src =
       "https://checkout.vipps.no/checkout-button/v1/vipps-checkout-button.js"
     document.head.append(script)
+  }
 
-    this.eventService
-      .get(this.id)
-      .pipe(handleResourceLoadingStates(this.pageState))
-      .subscribe((event) => {
-        this.event = {
-          ...event,
-          ticketgroups: event.ticketgroups.map((ticketgroup) => ({
-            ...ticketgroup,
-            order_count: 0,
-          })),
-        }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes["id"]) {
+      this.eventService
+        .get(this.id)
+        .pipe(handleResourceLoadingStates(this.pageState))
+        .subscribe((event) => {
+          this.event = {
+            ...event,
+            ticketgroups: event.ticketgroups.map((ticketgroup) => ({
+              ...ticketgroup,
+              order_count: 0,
+            })),
+          }
 
-        this.event_status = event.web_selling_status
-        if (
-          event.selling_text &&
-          (event.web_selling_status == "unknown" ||
-            event.web_selling_status == "no_web_tickets")
-        ) {
-          this.event_status = "selling_text"
-        }
+          this.event_status = event.web_selling_status
+          if (
+            event.selling_text &&
+            (event.web_selling_status == "unknown" ||
+              event.web_selling_status == "no_web_tickets")
+          ) {
+            this.event_status = "selling_text"
+          }
 
-        // do we have an alias not being used?
-        if (event.alias != null && this.id != event.alias) {
-          this.router.navigateByUrl("/event/" + event.alias, {
-            replaceUrl: true,
-          })
-        }
-      })
+          // do we have an alias not being used?
+          if (event.alias != null && this.id != event.alias) {
+            this.router.navigateByUrl("/event/" + event.alias, {
+              replaceUrl: true,
+            })
+          }
+        })
 
-    // check for reservation
-    this.loadingReservation = true
-    this.eventReservationService
-      .restoreReservation()
-      .then((reservationResult) => {
-        this.reservation = reservationResult
-      })
-      .catch(() => null)
-      .finally(() => {
-        this.loadingReservation = false
-      })
+      // check for reservation
+      this.loadingReservation = true
+      this.eventReservationService
+        .restoreReservation()
+        .then((reservationResult) => {
+          this.reservation = reservationResult
+        })
+        .catch(() => null)
+        .finally(() => {
+          this.loadingReservation = false
+        })
 
-    this.reset()
+      this.reset()
+    }
   }
 }

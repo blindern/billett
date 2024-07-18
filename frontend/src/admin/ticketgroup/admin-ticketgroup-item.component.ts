@@ -1,4 +1,10 @@
-import { Component, inject, Input, OnInit } from "@angular/core"
+import {
+  Component,
+  inject,
+  Input,
+  OnChanges,
+  SimpleChanges,
+} from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { Router, RouterLink } from "@angular/router"
 import {
@@ -27,7 +33,7 @@ import { AdminTicketgroupService } from "./admin-ticketgroup.service"
   ],
   templateUrl: "./admin-ticketgroup-item.component.html",
 })
-export class AdminTicketgroupItemComponent implements OnInit {
+export class AdminTicketgroupItemComponent implements OnChanges {
   private adminTicketgroupService = inject(AdminTicketgroupService)
   private router = inject(Router)
 
@@ -45,18 +51,20 @@ export class AdminTicketgroupItemComponent implements OnInit {
 
   pageState = new ResourceLoadingState()
 
-  ngOnInit(): void {
-    this.adminTicketgroupService
-      .get(this.ticketgroupId)
-      .pipe(handleResourceLoadingStates(this.pageState))
-      .subscribe((data) => {
-        if (String(data.event.id) !== this.eventId) {
-          this.router.navigateByUrl("/a")
-          return
-        }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes["ticketgroupId"] || changes["eventId"]) {
+      this.adminTicketgroupService
+        .get(this.ticketgroupId)
+        .pipe(handleResourceLoadingStates(this.pageState))
+        .subscribe((data) => {
+          if (String(data.event.id) !== this.eventId) {
+            this.router.navigateByUrl("/a")
+            return
+          }
 
-        this.ticketgroup = data
-      })
+          this.ticketgroup = data
+        })
+    }
   }
 
   updateTicketgroup() {

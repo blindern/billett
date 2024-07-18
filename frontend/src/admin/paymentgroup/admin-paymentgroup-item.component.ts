@@ -1,6 +1,12 @@
 import { Dialog, DialogModule } from "@angular/cdk/dialog"
 import { NgClass } from "@angular/common"
-import { Component, inject, Input, OnInit } from "@angular/core"
+import {
+  Component,
+  inject,
+  Input,
+  OnChanges,
+  SimpleChanges,
+} from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { RouterLink } from "@angular/router"
 import { ApiOrderAdmin, ApiPaymentsourceAdmin } from "../../apitypes"
@@ -41,7 +47,7 @@ import { AdminPaymentsourceService } from "./admin-paymentsource.service"
   ],
   templateUrl: "./admin-paymentgroup-item.component.html",
 })
-export class AdminPaymentgroupItemComponent implements OnInit {
+export class AdminPaymentgroupItemComponent implements OnChanges {
   private pageService = inject(PageService)
   private adminPaymentgroupService = inject(AdminPaymentgroupService)
   private adminPaymentsourceService = inject(AdminPaymentsourceService)
@@ -76,14 +82,16 @@ export class AdminPaymentgroupItemComponent implements OnInit {
     })
   }
 
-  ngOnInit(): void {
-    this.adminPaymentgroupService
-      .get(this.id)
-      .pipe(handleResourceLoadingStates(this.pageState))
-      .subscribe((paymentgroup) => {
-        this.paymentgroup = paymentgroup
-        this.derived = this.deriveData(paymentgroup)
-      })
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes["id"]) {
+      this.adminPaymentgroupService
+        .get(this.id)
+        .pipe(handleResourceLoadingStates(this.pageState))
+        .subscribe((paymentgroup) => {
+          this.paymentgroup = paymentgroup
+          this.derived = this.deriveData(paymentgroup)
+        })
+    }
   }
 
   #deriveEvents(paymentgroup: AdminPaymentgroupData) {

@@ -7,7 +7,6 @@ import {
   OnDestroy,
   OnInit,
   Renderer2,
-  SimpleChanges,
 } from "@angular/core"
 import { Event, NavigationEnd, Router } from "@angular/router"
 import { Subscription } from "rxjs"
@@ -38,7 +37,7 @@ export class ActiveFor implements OnInit, OnChanges, OnDestroy {
     })
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     this.update()
   }
 

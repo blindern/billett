@@ -1,4 +1,11 @@
-import { Component, inject, Input, OnInit } from "@angular/core"
+import {
+  Component,
+  inject,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from "@angular/core"
 import { Router, RouterLink } from "@angular/router"
 import { api } from "../../api"
 import { ApiEventgroupAdmin } from "../../apitypes"
@@ -18,7 +25,7 @@ import { AdminEventCreateData, AdminEventService } from "./admin-event.service"
   imports: [PageStatesComponent, RouterLink, AdminEventFormComponent],
   templateUrl: "./admin-event-create.component.html",
 })
-export class AdminEventCreateComponent implements OnInit {
+export class AdminEventCreateComponent implements OnInit, OnChanges {
   private adminEventgroupService = inject(AdminEventgroupService)
   private adminEventService = inject(AdminEventService)
   private pageService = inject(PageService)
@@ -35,18 +42,22 @@ export class AdminEventCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.pageService.set("title", "Nytt arrangement")
+  }
 
-    this.adminEventgroupService
-      .get(this.eventgroupId)
-      .pipe(handleResourceLoadingStates(this.pageState))
-      .subscribe((data) => {
-        this.eventgroup = data
-        this.event = {
-          eventgroup_id: data.id,
-          max_sales: 0,
-          max_each_person: 10,
-        }
-      })
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes["eventgroupId"]) {
+      this.adminEventgroupService
+        .get(this.eventgroupId)
+        .pipe(handleResourceLoadingStates(this.pageState))
+        .subscribe((data) => {
+          this.eventgroup = data
+          this.event = {
+            eventgroup_id: data.id,
+            max_sales: 0,
+            max_each_person: 10,
+          }
+        })
+    }
   }
 
   storeEvent() {
