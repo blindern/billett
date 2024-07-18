@@ -182,7 +182,7 @@
                       </div>
                       <div class="count">
                         <span class="value">
-                          {{ ticketgroup.order_count }}
+                          {{ getTicketgroupCount(ticketgroup) }}
                         </span>
                         <button
                           type="button"
@@ -196,7 +196,7 @@
                           type="button"
                           (click)="changeTicketgroupNum(ticketgroup, -1)"
                           class="btn btn-primary btn-sm"
-                          [disabled]="ticketgroup.order_count <= 0"
+                          [disabled]="getTicketgroupCount(ticketgroup) <= 0"
                         >
                           <span class="glyphicon glyphicon-minus"></span>
                         </button>

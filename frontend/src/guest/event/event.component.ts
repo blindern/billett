@@ -62,11 +62,7 @@ export class GuestEventComponent implements OnInit, OnChanges {
 
   pageState = new ResourceLoadingState()
 
-  event?: Event & {
-    ticketgroups: {
-      order_count: number
-    }[]
-  }
+  event?: Event
 
   event_status: string | null | undefined
 
@@ -115,6 +111,13 @@ export class GuestEventComponent implements OnInit, OnChanges {
     return this.event!.max_each_person - this.count
   }
 
+  getTicketgroupCount(ticketgroup: ApiTicketgroup) {
+    return (
+      this.ticketgroups.find((it) => it.ticketgroup.id === ticketgroup.id)
+        ?.count ?? 0
+    )
+  }
+
   changeTicketgroupNum(ticketgroup: ApiTicketgroup, num: number) {
     let found = this.ticketgroups.find(
       (it) => it.ticketgroup.id === ticketgroup.id,
@@ -154,7 +157,7 @@ export class GuestEventComponent implements OnInit, OnChanges {
 
       const groups: Record<number, number> = {}
       for (const g of this.event!.ticketgroups) {
-        const c = g.order_count ?? 0
+        const c = this.getTicketgroupCount(g)
         if (c <= 0) continue
         groups[g.id] = c
       }
@@ -249,13 +252,7 @@ export class GuestEventComponent implements OnInit, OnChanges {
         .get(this.id)
         .pipe(handleResourceLoadingStates(this.pageState))
         .subscribe((event) => {
-          this.event = {
-            ...event,
-            ticketgroups: event.ticketgroups.map((ticketgroup) => ({
-              ...ticketgroup,
-              order_count: 0,
-            })),
-          }
+          this.event = event
 
           this.event_status = event.web_selling_status
           if (
