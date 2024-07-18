@@ -70,7 +70,7 @@ export class AdminOrderCreateComponent implements OnInit, OnChanges {
   @Input()
   eventgroupId!: string
 
-  @ViewChild("username")
+  @ViewChild("usernameInput")
   usernameInput!: ElementRef<HTMLInputElement>
 
   pageState = new ResourceLoadingState()
@@ -99,12 +99,6 @@ export class AdminOrderCreateComponent implements OnInit, OnChanges {
   getTotalValid = this.adminOrderService.getTotalValid
   getTotalReserved = this.adminOrderService.getTotalReserved
 
-  // TODO(migrate)
-  // if (this.order.is_valid) {
-  //   localStorage.removeItem("billett.neworder.id")
-  //   $state.go("admin-order", { id: this.order.id })
-  // }
-
   ngOnInit(): void {
     this.resetOrder()
   }
@@ -124,6 +118,11 @@ export class AdminOrderCreateComponent implements OnInit, OnChanges {
             this.adminOrderService.get(newOrderId).subscribe({
               next: (order) => {
                 this.order = order
+
+                if (order.is_valid) {
+                  localStorage.removeItem("billett.neworder.id")
+                  this.router.navigateByUrl(`/a/order/${order.id}`)
+                }
               },
               error: () => {
                 localStorage.removeItem("billett.neworder.id")
