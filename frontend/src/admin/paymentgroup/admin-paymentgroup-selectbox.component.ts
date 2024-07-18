@@ -5,7 +5,6 @@ import {
   inject,
   Input,
   OnChanges,
-  OnInit,
   Output,
   SimpleChanges,
 } from "@angular/core"
@@ -21,7 +20,7 @@ import { AdminPaymentgroupService } from "./admin-paymentgroup.service"
   imports: [FormsModule, FormatdatePipe],
   templateUrl: "./admin-paymentgroup-selectbox.component.html",
 })
-export class AdminPaymentgroupSelectboxComponent implements OnInit, OnChanges {
+export class AdminPaymentgroupSelectboxComponent implements OnChanges {
   private adminPaymentgroupService = inject(AdminPaymentgroupService)
   private dialog = inject(Dialog)
 
@@ -36,10 +35,6 @@ export class AdminPaymentgroupSelectboxComponent implements OnInit, OnChanges {
 
   paymentgroups?: ApiPaymentgroupAdmin[]
   selectedPaymentgroupId = ""
-
-  ngOnInit(): void {
-    this.paymentgroups = undefined
-  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes["eventgroupId"]) {
@@ -68,6 +63,7 @@ export class AdminPaymentgroupSelectboxComponent implements OnInit, OnChanges {
     }).closed.subscribe((paymentgroup) => {
       if (paymentgroup) {
         this.paymentgroup = paymentgroup
+        this.paymentgroups!.push(paymentgroup)
         this.paymentgroupChange.emit(paymentgroup)
         this.selectedPaymentgroupId = paymentgroup.id.toString()
         this.adminPaymentgroupService.setPreferredGroup(paymentgroup)
