@@ -8,8 +8,8 @@ import {
   ApiPaymentsourceAdmin,
 } from "../../apitypes"
 import { PagePropertyComponent } from "../../common/page-property.component"
-import { PageService } from "../../common/page.service"
 import { PricePipe } from "../../common/price.pipe"
+import { ToastService } from "../../common/toast.service"
 import { AdminPaymentsourceService } from "./admin-paymentsource.service"
 
 export interface AdminPaymentsourceCreateModalInput {
@@ -48,7 +48,7 @@ export class AdminPaymentsourceCreateModal {
   }
 
   private adminPaymentsourceService = inject(AdminPaymentsourceService)
-  private pageService = inject(PageService)
+  private toastService = inject(ToastService)
   private dialogRef = inject(DialogRef<AdminPaymentsourceCreateModalResult>)
 
   evaluate?: (value: string) => number
@@ -91,7 +91,7 @@ export class AdminPaymentsourceCreateModal {
       .subscribe({
         next: (paymentsource) => {
           this.sending = false
-          this.pageService.toast("Registrering vellykket", { class: "success" })
+          this.toastService.show("Registrering vellykket", { class: "success" })
           this.dialogRef.close(paymentsource)
         },
         error: (err) => {
@@ -154,13 +154,13 @@ export class AdminPaymentsourceCreateModal {
 
   #validateInput() {
     const errorNeg = () => {
-      this.pageService.toast("Du kan ikke registrere en negativ telling", {
+      this.toastService.show("Du kan ikke registrere en negativ telling", {
         class: "danger",
       })
     }
 
     if (isNaN(this.otherParsedNumber)) {
-      this.pageService.toast(
+      this.toastService.show(
         "Feltet for " +
           (this.type == "cash" ? "annet " : "") +
           "beløp er feil utfylt",
@@ -177,7 +177,7 @@ export class AdminPaymentsourceCreateModal {
       let s = Math.abs(this.otherParsedNumber)
       Object.entries(this.cashParsedNumbers).forEach(([key, val]) => {
         if (isNaN(val)) {
-          this.pageService.toast(
+          this.toastService.show(
             "Feltet for valør " + key + " er feil utfylt",
             {
               class: "danger",
@@ -193,7 +193,7 @@ export class AdminPaymentsourceCreateModal {
       })
 
       if (s == 0) {
-        this.pageService.toast("Du kan ikke registrere en tom opptelling", {
+        this.toastService.show("Du kan ikke registrere en tom opptelling", {
           class: "danger",
         })
         return false

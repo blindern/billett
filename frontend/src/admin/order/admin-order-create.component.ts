@@ -26,12 +26,12 @@ import {
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
-import { PageService } from "../../common/page.service"
 import { PricePipe } from "../../common/price.pipe"
 import {
   handleResourceLoadingStates,
   ResourceLoadingState,
 } from "../../common/resource-loading"
+import { ToastService } from "../../common/toast.service"
 import { AdminEventgroupService } from "../eventgroup/admin-eventgroup.service"
 import { AdminPaymentgroupSelectboxComponent } from "../paymentgroup/admin-paymentgroup-selectbox.component"
 import { AdminPrinterSelectboxComponent } from "../printer/admin-printer-selectbox.component"
@@ -61,7 +61,7 @@ export class AdminOrderCreateComponent implements OnInit, OnChanges {
   private adminOrderService = inject(AdminOrderService)
   private adminTicketService = inject(AdminTicketService)
   private adminPrinterService = inject(AdminPrinterService)
-  private pageService = inject(PageService)
+  private toastService = inject(ToastService)
   private router = inject(Router)
   private dialog = inject(Dialog)
 
@@ -154,10 +154,11 @@ export class AdminOrderCreateComponent implements OnInit, OnChanges {
           .validateAndConvert(this.order.id!, this.paymentgroup!, this.total)
           .subscribe({
             next: (order) => {
-              this.pageService.toast(
+              this.toastService.show(
                 `Ordren ble vellykket opprettet. <a href="a/order/${order.id}">Vis ordre</a>`,
                 {
                   class: "success",
+                  unsafeHtml: true,
                   timeout: 15000,
                 },
               )
@@ -352,11 +353,11 @@ export class AdminOrderCreateComponent implements OnInit, OnChanges {
 
     this.adminPrinterService.printTickets(this.printer, list).subscribe({
       next: () => {
-        this.pageService.toast("Utskrift lagt i kø", { class: "success" })
+        this.toastService.show("Utskrift lagt i kø", { class: "success" })
       },
       error: (err) => {
         console.error(err)
-        this.pageService.toast("Ukjent feil oppsto!", { class: "warning" })
+        this.toastService.show("Ukjent feil oppsto!", { class: "warning" })
       },
     })
   }

@@ -10,11 +10,18 @@ import {
 } from "@angular/router"
 import { AuthService } from "./auth/auth.service"
 import { ActiveFor } from "./common/active-for"
+import { ToastContainerComponent } from "./common/toast-container.component"
 
 @Component({
   selector: "billett-app",
   standalone: true,
-  imports: [RouterOutlet, RouterLink, ActiveFor, AsyncPipe],
+  imports: [
+    RouterOutlet,
+    RouterLink,
+    ActiveFor,
+    AsyncPipe,
+    ToastContainerComponent,
+  ],
   templateUrl: "./app.component.html",
 })
 export class AppComponent implements OnInit {

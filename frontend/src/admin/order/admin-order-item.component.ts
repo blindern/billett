@@ -23,10 +23,9 @@ import {
   handleResourceLoadingStates,
   ResourceLoadingState,
 } from "../../common/resource-loading"
+import { ToastService } from "../../common/toast.service"
 import { AdminPaymentCreateModal } from "../payment/admin-payment-create-modal.component"
-import { AdminPaymentService } from "../payment/admin-payment.service"
 import { AdminPaymentgroupSelectModal } from "../paymentgroup/admin-paymentgroup-select-modal.component"
-import { AdminPaymentgroupService } from "../paymentgroup/admin-paymentgroup.service"
 import { AdminPrinterSelectModal } from "../printer/admin-printer-select-modal.component"
 import { AdminPrinterService } from "../printer/admin-printer.service"
 import {
@@ -35,7 +34,6 @@ import {
 } from "../ticket/admin-ticket-revoke-modal.component"
 import { AdminTicketService } from "../ticket/admin-ticket.service"
 import { AdminTicketgroupAddToOrderModal } from "../ticketgroup/admin-ticketgroup-add-to-order-modal.component"
-import { AdminTicketgroupService } from "../ticketgroup/admin-ticketgroup.service"
 import { AdminOrderEmailModal } from "./admin-order-email-modal.component"
 import { AdminOrderGetData, AdminOrderService } from "./admin-order.service"
 
@@ -56,12 +54,10 @@ import { AdminOrderGetData, AdminOrderService } from "./admin-order.service"
 })
 export class AdminOrderItemComponent implements OnInit, OnChanges {
   private adminOrderService = inject(AdminOrderService)
-  private adminPaymentgroupService = inject(AdminPaymentgroupService)
-  private adminTicketgroupService = inject(AdminTicketgroupService)
   private adminTicketService = inject(AdminTicketService)
-  private adminPaymentService = inject(AdminPaymentService)
   private adminPrinterService = inject(AdminPrinterService)
   private pageService = inject(PageService)
+  private toastService = inject(ToastService)
   private router = inject(Router)
   private dialog = inject(Dialog)
 
@@ -282,7 +278,7 @@ export class AdminOrderItemComponent implements OnInit, OnChanges {
       order: this.order!,
     }).closed.subscribe((sent) => {
       if (!sent) return
-      this.pageService.toast("E-post ble sendt", { class: "success" })
+      this.toastService.show("E-post ble sendt", { class: "success" })
     })
   }
 
@@ -291,12 +287,12 @@ export class AdminOrderItemComponent implements OnInit, OnChanges {
       handler: (printer) =>
         this.adminPrinterService.printTickets(printer, this.validTickets).pipe(
           tap(() => {
-            this.pageService.toast("Utskrift lagt i kø", {
+            this.toastService.show("Utskrift lagt i kø", {
               class: "success",
             })
           }),
           catchError((e) => {
-            this.pageService.toast("Ukjent feil oppsto!", {
+            this.toastService.show("Ukjent feil oppsto!", {
               class: "warning",
             })
             throw e
@@ -311,12 +307,12 @@ export class AdminOrderItemComponent implements OnInit, OnChanges {
         console.log("print!")
         return this.adminPrinterService.printTicket(printer, ticket).pipe(
           tap(() => {
-            this.pageService.toast("Utskrift lagt i kø", {
+            this.toastService.show("Utskrift lagt i kø", {
               class: "success",
             })
           }),
           catchError((e) => {
-            this.pageService.toast("Ukjent feil oppsto!", {
+            this.toastService.show("Ukjent feil oppsto!", {
               class: "warning",
             })
             throw e

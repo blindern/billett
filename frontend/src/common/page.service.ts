@@ -1,6 +1,7 @@
 import { DestroyRef, inject, Injectable } from "@angular/core"
 import { Meta, Title } from "@angular/platform-browser"
 import { Event, NavigationStart, Router } from "@angular/router"
+import { ToastService } from "./toast.service"
 
 @Injectable({
   providedIn: "root",
@@ -8,6 +9,7 @@ import { Event, NavigationStart, Router } from "@angular/router"
 export class PageService {
   private metaService = inject(Meta)
   private titleService = inject(Title)
+  private toastService = inject(ToastService)
 
   private attrs: Record<string, { val: string; isDefault?: boolean }[]> = {}
   public meta: Record<string, string> = {}
@@ -155,16 +157,5 @@ export class PageService {
       return this.meta[name]
     }
     return undefined
-  }
-
-  /**
-   * Add page toast
-   */
-  toast(text: string, params?: Record<string, any>) {
-    // TODO(migrate): re-implement toasts
-    console.log("toast", {
-      ...params,
-      content: text,
-    })
   }
 }

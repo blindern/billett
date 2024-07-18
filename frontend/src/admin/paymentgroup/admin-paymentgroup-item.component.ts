@@ -14,12 +14,12 @@ import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { MarkdownComponent } from "../../common/markdown.component"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
-import { PageService } from "../../common/page.service"
 import { PricePipe } from "../../common/price.pipe"
 import {
   handleResourceLoadingStates,
   ResourceLoadingState,
 } from "../../common/resource-loading"
+import { ToastService } from "../../common/toast.service"
 import {
   AdminPaymentgroupData,
   AdminPaymentgroupService,
@@ -44,7 +44,7 @@ import { AdminPaymentsourceService } from "./admin-paymentsource.service"
   templateUrl: "./admin-paymentgroup-item.component.html",
 })
 export class AdminPaymentgroupItemComponent implements OnChanges {
-  private pageService = inject(PageService)
+  private toastService = inject(ToastService)
   private adminPaymentgroupService = inject(AdminPaymentgroupService)
   private adminPaymentsourceService = inject(AdminPaymentsourceService)
   private dialog = inject(Dialog)
@@ -362,13 +362,13 @@ export class AdminPaymentgroupItemComponent implements OnChanges {
     ) {
       this.adminPaymentsourceService.delete(paymentsource.id).subscribe({
         next: () => {
-          this.pageService.toast("Registeringen ble slettet", {
+          this.toastService.show("Registeringen ble slettet", {
             class: "success",
           })
           this.refresh()
         },
         error: () => {
-          this.pageService.toast("Ukjent feil ved sletting av registering", {
+          this.toastService.show("Ukjent feil ved sletting av registering", {
             class: "warning",
           })
         },

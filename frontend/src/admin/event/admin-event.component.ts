@@ -23,6 +23,7 @@ import {
   handleResourceLoadingStates,
   ResourceLoadingState,
 } from "../../common/resource-loading"
+import { ToastService } from "../../common/toast.service"
 import { AdminPrinterSelectModal } from "../printer/admin-printer-select-modal.component"
 import { AdminPrinterService } from "../printer/admin-printer.service"
 import { AdminEventData, AdminEventService } from "./admin-event.service"
@@ -46,6 +47,7 @@ import { AdminEventData, AdminEventService } from "./admin-event.service"
 export class AdminEventComponent implements OnInit, OnChanges {
   private adminEventService = inject(AdminEventService)
   private pageService = inject(PageService)
+  private toastService = inject(ToastService)
   private router = inject(Router)
   private adminPrinterService = inject(AdminPrinterService)
   private dialog = inject(Dialog)
@@ -82,7 +84,7 @@ export class AdminEventComponent implements OnInit, OnChanges {
 
   deleteEvent() {
     if (this.event!.ticketgroups.length > 0) {
-      this.pageService.toast(
+      this.toastService.show(
         "Du må først slette billettgruppene som er tilegnet.",
         {
           class: "danger",
@@ -128,12 +130,12 @@ export class AdminEventComponent implements OnInit, OnChanges {
       handler: (printer) =>
         this.adminPrinterService.printPreviewTicket(printer, ticketgroup).pipe(
           tap(() => {
-            this.pageService.toast("Utskrift lagt i kø", {
+            this.toastService.show("Utskrift lagt i kø", {
               class: "success",
             })
           }),
           catchError((e) => {
-            this.pageService.toast("Ukjent feil oppsto!", {
+            this.toastService.show("Ukjent feil oppsto!", {
               class: "warning",
             })
             throw e

@@ -16,12 +16,12 @@ import { AuthService } from "../../auth/auth.service"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { MarkdownComponent } from "../../common/markdown.component"
 import { PagePropertyComponent } from "../../common/page-property.component"
-import { PageService } from "../../common/page.service"
 import { PricePipe } from "../../common/price.pipe"
 import {
   handleResourceLoadingStates,
   ResourceLoadingState,
 } from "../../common/resource-loading"
+import { ToastService } from "../../common/toast.service"
 import {
   EventReservationItem,
   EventReservationService,
@@ -54,7 +54,7 @@ export class GuestEventComponent implements OnInit, OnChanges {
   private eventService = inject(EventService)
   private eventReservationService = inject(EventReservationService)
   private router = inject(Router)
-  private pageService = inject(PageService)
+  private toastService = inject(ToastService)
   public authService = inject(AuthService)
 
   @Input()
@@ -145,7 +145,7 @@ export class GuestEventComponent implements OnInit, OnChanges {
   async placeOrder(force?: boolean) {
     if (!this.reservation) {
       if (this.count == 0) {
-        this.pageService.toast("Du må velge noen billetter.", {
+        this.toastService.show("Du må velge noen billetter.", {
           class: "warning",
         })
         alert("Du må velge noen billetter.")
@@ -183,7 +183,7 @@ export class GuestEventComponent implements OnInit, OnChanges {
     } catch (err: any) {
       // TODO(migrate): error object structure
       if (err == "data validation failed") {
-        this.pageService.toast("Ugyldig inndata i skjemaet.", {
+        this.toastService.show("Ugyldig inndata i skjemaet.", {
           class: "warning",
         })
       } else {
