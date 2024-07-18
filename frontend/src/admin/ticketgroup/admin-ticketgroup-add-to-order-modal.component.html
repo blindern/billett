@@ -31,91 +31,97 @@
     <hr />
 
     <p class="search-options">
+      <label> <input type="checkbox" [(ngModel)]="showOld" name="showOld" /> Vis tidligere arrangementer </label>
       <label>
-        <input type="checkbox" [(ngModel)]="ticketfilter.show_old" name="show_old" /> Vis tidligere arrangementer
-      </label>
-      <label>
-        <input type="checkbox" [(ngModel)]="ticketfilter.show_inactive" name="show_inactive" /> Vis inaktive
-        billettgrupper
+        <input type="checkbox" [(ngModel)]="showInactive" name="showInactive" /> Vis inaktive billettgrupper
       </label>
     </p>
 
     <p>
-      <input class="form-control" type="text" [(ngModel)]="ticket_search" name="ticket_search" placeholder="Søk .." />
+      <input class="form-control" type="text" [(ngModel)]="ticketSearch" name="ticketSearch" placeholder="Søk .." />
     </p>
 
-    <div class="event-list">
-      <table class="table table-striped table-condensed">
-        @for (event of filteredEvents; track event.id) {
-          <tbody [ngClass]="{ old: event.is_old }">
-            <tr>
-              <th colspan="3">
-                <span class="pull-right count-info">
-                  <br />
-                  Ledige: {{ event.ticket_count.totals.free }} /
-                  {{ event.max_sales }}
-                </span>
-
-                <a routerLink="/a/event/{{ event.id }}">{{ event.title }}</a>
-                <span class="event-time">{{ event.time_start | formatdate: "ddd D. MMM YYYY HH:mm" }}</span>
-              </th>
-            </tr>
-
-            @for (ticketgroup of filterTicketgroups(event.ticketgroups); track ticketgroup.id) {
-              <tr
-                [ngClass]="{
-                  'no-office': !ticketgroup.use_office,
-                  'no-web': !ticketgroup.use_web,
-                }"
-              >
-                <td>
-                  {{ ticketgroup.title }}
-                  @if (!ticketgroup.use_office) {
-                    <abbr title="NB! Billettgruppen er ikke satt for billettluke">Ikke luke</abbr>
-                  }
-                  @if (!ticketgroup.use_web) {
-                    <abbr title="Billettgruppen er ikke publisert for nettsalg">Upub</abbr>
-                  }
-
-                  @if (ticketgroup.ticket_text) {
-                    <div class="ticket-text">
-                      {{ ticketgroup.ticket_text }}
-                    </div>
-                  }
-                </td>
-
-                <td>
-                  {{ ticketgroup.price + ticketgroup.fee | price: true }}
-                  <span class="price-fee">(Gebyr: {{ ticketgroup.fee | price: true }})</span>
-                </td>
-
-                <td>
-                  <span class="value">
-                    {{ ticketgroupsToAdd[ticketgroup.id] ? ticketgroupsToAdd[ticketgroup.id].num : 0 }} /
-                    {{ event.ticket_count.groups[ticketgroup.id].free }}
+    @if (filteredEvents.length === 0) {
+      <p>Ingen arrangementer funnet.</p>
+      @if (ticketSearch || !showOld || !showInactive) {
+        <button class="btn btn-default" (click)="ticketSearch = ''; showOld = true; showInactive = true">
+          Vis alle
+        </button>
+      }
+    } @else {
+      <div class="event-list">
+        <table class="table table-striped table-condensed">
+          @for (event of filteredEvents; track event.id) {
+            <tbody [ngClass]="{ old: event.is_old }">
+              <tr>
+                <th colspan="3">
+                  <span class="pull-right count-info">
+                    <br />
+                    Ledige: {{ event.ticket_count.totals.free }} /
+                    {{ event.max_sales }}
                   </span>
 
-                  <button
-                    class="btn btn-primary btn-sm"
-                    type="button"
-                    (click)="changeTicketgroupNum(ticketgroup, event, 1)"
-                  >
-                    <span class="glyphicon glyphicon-plus"></span>
-                  </button>
-                  <button
-                    class="btn btn-primary btn-sm"
-                    type="button"
-                    (click)="changeTicketgroupNum(ticketgroup, event, -1)"
-                    [disabled]="(ticketgroupsToAdd[ticketgroup.id] ? ticketgroupsToAdd[ticketgroup.id].num : 0) <= 0"
-                  >
-                    <span class="glyphicon glyphicon-minus"></span>
-                  </button>
-                </td>
+                  <a routerLink="/a/event/{{ event.id }}">{{ event.title }}</a>
+                  <span class="event-time">{{ event.time_start | formatdate: "ddd D. MMM YYYY HH:mm" }}</span>
+                </th>
               </tr>
-            }
-          </tbody>
-        }
-      </table>
-    </div>
+
+              @for (ticketgroup of filterTicketgroups(event.ticketgroups); track ticketgroup.id) {
+                <tr
+                  [ngClass]="{
+                    'no-office': !ticketgroup.use_office,
+                    'no-web': !ticketgroup.use_web,
+                  }"
+                >
+                  <td>
+                    {{ ticketgroup.title }}
+                    @if (!ticketgroup.use_office) {
+                      <abbr title="NB! Billettgruppen er ikke satt for billettluke">Ikke luke</abbr>
+                    }
+                    @if (!ticketgroup.use_web) {
+                      <abbr title="Billettgruppen er ikke publisert for nettsalg">Upub</abbr>
+                    }
+
+                    @if (ticketgroup.ticket_text) {
+                      <div class="ticket-text">
+                        {{ ticketgroup.ticket_text }}
+                      </div>
+                    }
+                  </td>
+
+                  <td>
+                    {{ ticketgroup.price + ticketgroup.fee | price: true }}
+                    <span class="price-fee">(Gebyr: {{ ticketgroup.fee | price: true }})</span>
+                  </td>
+
+                  <td>
+                    <span class="value">
+                      {{ ticketgroupsToAdd[ticketgroup.id] ? ticketgroupsToAdd[ticketgroup.id].num : 0 }} /
+                      {{ event.ticket_count.groups[ticketgroup.id].free }}
+                    </span>
+
+                    <button
+                      class="btn btn-primary btn-sm"
+                      type="button"
+                      (click)="changeTicketgroupNum(ticketgroup, event, 1)"
+                    >
+                      <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                    <button
+                      class="btn btn-primary btn-sm"
+                      type="button"
+                      (click)="changeTicketgroupNum(ticketgroup, event, -1)"
+                      [disabled]="(ticketgroupsToAdd[ticketgroup.id] ? ticketgroupsToAdd[ticketgroup.id].num : 0) <= 0"
+                    >
+                      <span class="glyphicon glyphicon-minus"></span>
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          }
+        </table>
+      </div>
+    }
   </div>
 }

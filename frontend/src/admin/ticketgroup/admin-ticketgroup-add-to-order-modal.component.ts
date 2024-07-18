@@ -58,11 +58,9 @@ export class AdminTicketgroupAddToOrderModal implements OnInit {
   count = 0
   amount = 0
 
-  ticket_search = ""
-  ticketfilter = {
-    show_old: false,
-    show_inactive: false,
-  }
+  ticketSearch = ""
+  showOld = false
+  showInactive = false
 
   ticketgroupsToAdd: Record<
     number,
@@ -73,18 +71,41 @@ export class AdminTicketgroupAddToOrderModal implements OnInit {
     }
   > = {}
 
+  #matchEvent(
+    text: string,
+    event: ApiEventAdmin & {
+      ticketgroups: ApiTicketgroupAdmin[]
+    },
+  ) {
+    // A very naive search algorithm for now.
+
+    text = text.toLowerCase()
+    if (!text) return true
+
+    if (event.title.toLowerCase().includes(text)) return true
+
+    if (event.description && event.description.toLowerCase().includes(text))
+      return true
+
+    for (const ticketgroup of event.ticketgroups) {
+      if (ticketgroup.title.toLowerCase().includes(text)) return true
+    }
+
+    return false
+  }
+
   get filteredEvents() {
-    // TODO: ticket_search
-    return this.events ?? []
+    return (this.events ?? []).filter((event) =>
+      this.#matchEvent(this.ticketSearch, event),
+    )
   }
 
   filterTicketgroups(ticketgroups: ApiTicketgroupAdmin[]) {
-    // TODO: | filter: { use_office: ticketfilter.show_inactive } : ticketgroup_check;
-    // ticketgroup_check(actual, expected) {
-    //   if (expected) return true
-    //   return actual
-    // }
-    return ticketgroups
+    if (this.showInactive) {
+      return ticketgroups
+    } else {
+      return ticketgroups.filter((ticketgroup) => ticketgroup.use_office)
+    }
   }
 
   ngOnInit(): void {
@@ -130,7 +151,7 @@ export class AdminTicketgroupAddToOrderModal implements OnInit {
     if (!this.eventgroup) return []
 
     return this.eventgroup.events.filter((event) => {
-      if (event.is_old && !this.ticketfilter.show_old) return false
+      if (event.is_old && !this.showOld) return false
       return event.is_selling && event.ticketgroups.length > 0
     })
   }
