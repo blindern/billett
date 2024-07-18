@@ -113,7 +113,7 @@ export class AdminOrderService {
     return this.http.post<ApiOrderAdmin>(
       api(`order/${encodeURIComponent(orderId)}/validate`),
       {
-        paymentgroup_id: paymentgroup.id,
+        paymentgroup: paymentgroup.id,
         amount,
         sendmail: true,
       },
