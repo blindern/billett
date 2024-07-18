@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core"
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+} from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { RouterLink } from "@angular/router"
 import moment from "moment"
@@ -11,7 +18,7 @@ import { AdminEventCreateData, AdminEventData } from "./admin-event.service"
   imports: [FormsModule, RouterLink, FormatdatePipe],
   templateUrl: "./admin-event-form.component.html",
 })
-export class AdminEventFormComponent {
+export class AdminEventFormComponent implements OnChanges {
   @Input()
   event!: AdminEventData | AdminEventCreateData
 
@@ -21,21 +28,23 @@ export class AdminEventFormComponent {
   @Output()
   submitForm = new EventEmitter<void>()
 
+  time_start_text!: string
+  time_end_text!: string
+
   submit() {
     this.submitForm.emit()
   }
 
-  get time_start_text() {
-    return this.#parseTime(this.event.time_start)
-  }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes["event"]) {
+      const parseTime = (t: number | null | undefined) => {
+        if (!t) return ""
+        return moment.unix(t).format("DD.MM.YYYY HH:mm")
+      }
 
-  get time_end_text() {
-    return this.#parseTime(this.event.time_end)
-  }
-
-  #parseTime(t: number | null | undefined) {
-    if (!t) return ""
-    return moment.unix(t).format("DD.MM.YYYY HH:mm")
+      this.time_start_text = parseTime(this.event.time_start)
+      this.time_end_text = parseTime(this.event.time_end)
+    }
   }
 
   get eventId() {
