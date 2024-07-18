@@ -1,7 +1,4 @@
-// TODO(migrate): Support BACKEND_URL env override.
-const BACKEND_URL = "/"
-
-export let backendUrl = BACKEND_URL
+export let backendUrl = localStorage.getItem("billett-baseurl") ?? "/"
 
 if (backendUrl.includes("SAMEHOST")) {
   backendUrl = backendUrl.replace("SAMEHOST", window.location.hostname)

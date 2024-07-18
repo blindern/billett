@@ -89,32 +89,33 @@ For å gjøre lokal utvikling trenger du:
 
 ### Kjøre frontend lokalt
 
-Frontend kan utvikles direkte mot backend i produksjon. Tilpass `BACKEND_URL`
-etter hva du ønsker å gå mot.
-
 1. ```bash
    cd frontend
    ```
 
-1. Installer/oppdater avhengigheter:
+2. Installer/oppdater avhengigheter:
 
    ```bash
    npm ci
    ```
 
-1. Kjør lokal server
-
-   enten mot lokalt:
+3. Kjør lokal server
 
    ```bash
-   BACKEND_URL=http://localhost:8081/ npx ng servce --port 3000 --open
+   npx ng serve --port 3000 --open
    ```
 
-   eller mot produksjon:
+   Denne går mot lokal backend som standard.
+   For å gå mot produksjon kan man kjøre følgende i nettleser-konsollen (og oppdater siden):
 
-   ```bash
-   BACKEND_URL=https://billett.blindernuka.no/ npx ng servce --port 3000 --open
+   ```js
+   localStorage.setItem("billett-baseurl", "https://billett.blindernuka.no/")
    ```
+
+   Og for å endre tilbake:
+
+   ```js
+   localStorage.removeItem("billett-baseurl")
 
 ### phpMyAdmin
 
