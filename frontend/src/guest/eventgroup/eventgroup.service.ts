@@ -20,7 +20,7 @@ export class EventgroupService {
 
   get(id: string) {
     return this.http.get<EventgroupExpanded>(
-      api("eventgroup/" + encodeURIComponent(id)),
+      api(`eventgroup/${encodeURIComponent(id)}`),
     )
   }
 }

@@ -15,6 +15,6 @@ export class EventService {
   private http = inject(HttpClient)
 
   get(id: string) {
-    return this.http.get<Event>(api("event/" + encodeURIComponent(id)))
+    return this.http.get<Event>(api(`event/${encodeURIComponent(id)}`))
   }
 }

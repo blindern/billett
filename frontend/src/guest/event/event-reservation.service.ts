@@ -26,13 +26,18 @@ export class EventReservationItem {
 
   async abort() {
     const id = this.data.id
-    await firstValueFrom(this.http.delete(api("order/" + id)))
+    await firstValueFrom(
+      this.http.delete(api(`order/${encodeURIComponent(id)}`)),
+    )
     this.eventReservationService.removePersistedReservation(id)
   }
 
   async update(data: { recruiter: string }) {
     const updatedData = await firstValueFrom(
-      this.http.patch<ReservationData>(api("order/" + this.data.id), data),
+      this.http.patch<ReservationData>(
+        api(`order/${encodeURIComponent(this.data.id)}`),
+        data,
+      ),
     )
     this.data = updatedData
     return updatedData
@@ -45,7 +50,9 @@ export class EventReservationItem {
         checkoutFrontendUrl: string
         token: string
       }>(
-        api("order/" + this.data.id + "/" + (force ? "force" : "place")),
+        api(
+          `order/${encodeURIComponent(this.data.id)}/${force ? "force" : "place"}`,
+        ),
         null,
       ),
     )
@@ -71,7 +78,7 @@ export class EventReservationService {
 
   async getReservation(id: number) {
     const data = await firstValueFrom(
-      this.http.get<ReservationData>(api("order/" + id)),
+      this.http.get<ReservationData>(api(`order/${encodeURIComponent(id)}`)),
     )
     if (data.is_valid) {
       // real order, no reservation
@@ -110,7 +117,7 @@ export class EventReservationService {
   async create(event_id: number, ticketgroups: Record<number, number>) {
     const data = await firstValueFrom(
       this.http.post<ReservationData>(
-        api("event/" + event_id + "/createreservation"),
+        api(`event/${encodeURIComponent(event_id)}/createreservation`),
         {
           ticketgroups: ticketgroups,
         },

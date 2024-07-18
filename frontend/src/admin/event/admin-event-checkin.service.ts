@@ -68,14 +68,14 @@ export class AdminEventCheckinService {
 
   checkin(ticketId: number) {
     return this.http.post<ApiTicketAdmin>(
-      api(`ticket/${ticketId}/checkin`),
+      api(`ticket/${encodeURIComponent(ticketId)}/checkin`),
       null,
     )
   }
 
   checkout(ticketId: number) {
     return this.http.post<ApiTicketAdmin>(
-      api(`ticket/${ticketId}/checkout`),
+      api(`ticket/${encodeURIComponent(ticketId)}/checkout`),
       null,
     )
   }

@@ -87,7 +87,7 @@ export class AdminPaymentgroupService {
       ApiPaymentgroupAdmin & {
         eventgroup: ApiEventgroupAdmin
       }
-    >(api(`paymentgroup/${data.id}`), data)
+    >(api(`paymentgroup/${encodeURIComponent(data.id)}`), data)
   }
 
   close(id: number) {
@@ -95,7 +95,7 @@ export class AdminPaymentgroupService {
       ApiPaymentgroupAdmin & {
         eventgroup: ApiEventgroupAdmin
       }
-    >(api(`paymentgroup/${id}/close`), null)
+    >(api(`paymentgroup/${encodeURIComponent(id)}/close`), null)
   }
 
   setPreferredGroup(group?: ApiPaymentgroupAdmin) {

@@ -87,15 +87,18 @@ export class AdminOrderService {
   }
 
   sendEmail(options: { orderId: number; email: string; text: string }) {
-    return this.http.post(api(`order/${options.orderId}/email`), {
-      email: options.email ? options.email : undefined,
-      text: options.text ? options.text : undefined,
-    })
+    return this.http.post(
+      api(`order/${encodeURIComponent(options.orderId)}/email`),
+      {
+        email: options.email ? options.email : undefined,
+        text: options.text ? options.text : undefined,
+      },
+    )
   }
 
   createTickets(orderId: number, ticketgroupToCount: Record<number, number>) {
     return this.http.post<ApiTicketAdmin[]>(
-      api(`order/${orderId}/create_tickets`),
+      api(`order/${encodeURIComponent(orderId)}/create_tickets`),
       {
         ticketgroups: ticketgroupToCount,
       },
@@ -107,15 +110,21 @@ export class AdminOrderService {
     paymentgroup: ApiPaymentgroupAdmin,
     amount: number,
   ) {
-    return this.http.post<ApiOrderAdmin>(api(`order/${orderId}/validate`), {
-      paymentgroup_id: paymentgroup.id,
-      amount,
-      sendmail: true,
-    })
+    return this.http.post<ApiOrderAdmin>(
+      api(`order/${encodeURIComponent(orderId)}/validate`),
+      {
+        paymentgroup_id: paymentgroup.id,
+        amount,
+        sendmail: true,
+      },
+    )
   }
 
   validate(orderId: number) {
-    return this.http.post<ApiOrderAdmin>(api(`order/${orderId}/validate`), null)
+    return this.http.post<ApiOrderAdmin>(
+      api(`order/${encodeURIComponent(orderId)}/validate`),
+      null,
+    )
   }
 
   getTotalValid(
