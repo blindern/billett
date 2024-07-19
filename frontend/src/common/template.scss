@@ -226,10 +226,6 @@ footer {
   font-size: 150%;
 }
 
-[ng-sortable] > * {
-  cursor: pointer;
-}
-
 // background when modal is active
 .modal-open .modal {
   background: hsla(0, 0%, 0%, 0.2);

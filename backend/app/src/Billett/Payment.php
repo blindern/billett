@@ -13,6 +13,10 @@ class Payment extends Model implements ApiQueryInterface
 
     protected $hidden = ['data'];
 
+    protected $casts = [
+        'is_web' => 'boolean',
+    ];
+
     protected $apiAllowedFields = ['id', 'order_id', 'paymentgroup_id', 'time', 'user_created', 'is_web', 'amount', 'transaction_id', 'status', 'data'];
 
     protected $apiAllowedRelations = ['order', 'paymentgroup'];

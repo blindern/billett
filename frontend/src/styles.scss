@@ -1,0 +1,14 @@
+@use "@angular/cdk" as cdk;
+
+@import "./common/bootstrap";
+@import "./common/template";
+@import "./common/events";
+@import "./admin/order/order.scss";
+
+@include cdk.overlay();
+
+@media (min-width: 630px) {
+  .modal-content {
+    width: 600px;
+  }
+}

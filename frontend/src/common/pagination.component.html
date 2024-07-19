@@ -1,0 +1,9 @@
+<ul class="pagination">
+  <li><a href="" (click)="changePageHandler($event, 1)">«</a></li>
+  <li><a href="" (click)="changePageHandler($event, page - 1)">‹</a></li>
+  <li>
+    <a>{{ page }}/{{ numPages }}</a>
+  </li>
+  <li><a href="" (click)="changePageHandler($event, page + 1)">›</a></li>
+  <li><a href="" (click)="changePageHandler($event, numPages)">»</a></li>
+</ul>

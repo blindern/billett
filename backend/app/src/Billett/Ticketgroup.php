@@ -43,6 +43,12 @@ class Ticketgroup extends Model
 
     protected $table = 'ticketgroups';
 
+    protected $casts = [
+        'use_office' => 'boolean',
+        'use_web' => 'boolean',
+        'is_normal' => 'boolean',
+    ];
+
     protected $apiAllowedFields = ['id', 'event_id', 'use_office', 'use_web', 'is_normal', 'title', 'ticket_text', 'price', 'fee', 'limit', 'order'];
 
     protected $apiAllowedRelations = ['event', 'tickets'];

@@ -1,0 +1,301 @@
+<billett-page-states [state]="pageState" />
+<billett-page-property name="title" value="Arrangement" />
+
+@if (event) {
+  <billett-page-property
+    name="title"
+    value="{{ event.title }} ({{ event.time_start | formatdate: 'D. MMM \\k\\l HH:mm' }})"
+  />
+  <billett-page-property name="image" value="{{ api('event/' + event.id + '/image') }}" />
+  <billett-page-property name="description" value="{{ event.description_short || event.description }}" />
+
+  <div class="page-header">
+    <h1>
+      <span class="eventgroup">
+        <a routerLink="/eventgroup/{{ event.eventgroup.id }}">{{ event.eventgroup.title }}</a>
+      </span>
+      {{ event.title }}
+      <span class="eventdate-header">({{ event.time_start | formatdate: "DD.MM" }})</span>
+      @if (authService.isLoggedIn$ | async) {
+        <span class="pull-right">
+          <a routerLink="/a/event/{{ event.id }}" class="btn btn-primary">Admin</a>
+          <a routerLink="/a/event/{{ event.id }}/edit" class="btn btn-primary">Rediger</a>
+        </span>
+      }
+    </h1>
+    @if (!event.is_published) {
+      <p>Dette arrangementet er ikke publisert. Du er innlogget og kan se.</p>
+    }
+  </div>
+
+  <!-- TODO: ics-link -->
+
+  <div class="row">
+    <div class="col-sm-5" [class.no-buy-form]="event_status == 'no_tickets'">
+      <div class="event-image">
+        <img [src]="api('event/' + event.id + '/image')" alt="" />
+      </div>
+      <dl class="dl-horizontal">
+        <dt>Tidspunkt</dt>
+        <dd>
+          {{ event.time_start | formatdate: "dddd D. MMMM YYYY" }}<br />
+          kl. {{ event.time_start | formatdate: "HH:mm" }}
+          @if (event.time_end) {
+            <span>til {{ event.time_end | formatdate: "HH:mm" }}</span>
+          }
+        </dd>
+        @if (event.category) {
+          <dt>Kategori</dt>
+        }
+        @if (event.category) {
+          <dd>{{ event.category }}</dd>
+        }
+        @if (event.location) {
+          <dt>Sted</dt>
+        }
+        @if (event.location) {
+          <dd>{{ event.location }}</dd>
+        }
+        @if (event.age_restriction) {
+          <dt>Aldersgrense</dt>
+        }
+        @if (event.age_restriction) {
+          <dd>{{ event.age_restriction }} år</dd>
+        }
+      </dl>
+
+      @if (event.description) {
+        <div class="event-description">
+          <billett-markdown [data]="event.description" />
+        </div>
+      }
+
+      @if (event.link) {
+        <p class="event-link">
+          <a [href]="event.link">Gå til arrangementsartikkel »</a>
+        </p>
+      }
+    </div>
+
+    <div class="col-sm-7 event-right-col">
+      @if (!reservation || event_status == "sale") {
+        @if (event_status == "selling_text") {
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <div class="selling-text">
+                <billett-markdown [data]="event.selling_text" />
+              </div>
+            </div>
+          </div>
+        }
+
+        @if (event_status == "unknown") {
+          <div class="panel panel-default">
+            <div class="panel-body">
+              Informasjon om billetter for dette arrangementet er for øyeblikket ikke tilgjengelig. Sjekk tilbake
+              senere.
+            </div>
+          </div>
+        }
+
+        @if (event_status == "old") {
+          <div class="panel panel-default">
+            <div class="panel-body">Billettsalg for arrangementet er avsluttet.</div>
+          </div>
+        }
+
+        @if (event_status == "no_web_tickets") {
+          <div class="panel panel-default">
+            <div class="panel-body">
+              Dette arrangementet selges ikke på nett eller har foreløpig ingen tilgjengelige billetter.
+            </div>
+          </div>
+        }
+
+        @if (event_status == "timeout") {
+          <div class="panel panel-default">
+            <div class="panel-body">
+              Nettsalget for dette arrangementet har avsluttet. Evt. tilgjengelige billetter selges i døra.
+            </div>
+          </div>
+        }
+
+        @if (event_status == "sold_out") {
+          <div class="panel panel-default">
+            <div class="panel-body">
+              Arrangementet er dessverre utsolgt. Sjekk tilbake senere for se å om det kanskje blir gjort nye billetter
+              tilgjengelig.
+            </div>
+          </div>
+        }
+      }
+
+      @if ((!reservation && event_status == "sale") || (reservation && event_status != "no_tickets")) {
+        @if (reservation && reservation.data.tickets[0].event.id != event.id) {
+          <div class="panel panel-warning">
+            <div class="panel-heading">Kjøp billetter</div>
+            <div class="panel-body">
+              Du holder allerede på å bestille billetter til
+              <a href="event/{{ reservation.data.tickets[0].event.alias || reservation.data.tickets[0].event.id }}">{{
+                reservation.data.tickets[0].event.title
+              }}</a>
+              og må fullføre/avbryte den bestillingen først.
+            </div>
+          </div>
+        }
+
+        @if ((!reservation || reservation.data.tickets[0].event.id == event.id) && loadingReservation) {
+          <div class="panel panel-info buy-form">
+            <div class="panel-heading">Kjøp billetter</div>
+            <div class="panel-body">Ser etter eksisterende ordrereservasjon ...</div>
+          </div>
+        }
+
+        @if ((!reservation || reservation.data.tickets[0].event.id == event.id) && !loadingReservation) {
+          <div class="panel panel-info buy-form">
+            <div class="panel-heading">Kjøp billetter</div>
+            <div class="panel-body">
+              <form
+                class="form-horizontal"
+                (ngSubmit)="!form.valid || placeOrder(forcePay)"
+                name="form"
+                #form="ngForm"
+                ngNativeValidate
+              >
+                @if (!reservation) {
+                  <p>
+                    Ved kjøp av billetter får du tilsendt en elektronisk billett i PDF-format på e-post som printes ut
+                    eller tas med på mobiltelefon til arrangementet.
+                    <a routerLink="/hjelp">Informasjon om billetter</a>
+                  </p>
+
+                  @for (ticketgroup of event.ticketgroups; track ticketgroup.id) {
+                    <div class="ticketgroup">
+                      <div class="meta">
+                        <div class="title">
+                          {{ ticketgroup.title }}
+                          @if (ticketgroup.ticket_text) {
+                            <div class="ticket-text">
+                              {{ ticketgroup.ticket_text }}
+                            </div>
+                          }
+                        </div>
+                        <div class="price">
+                          <span class="price-label">Pris:</span>
+                          {{ ticketgroup.price + ticketgroup.fee | price: true }}
+                          <span class="price-fee">Hvorav {{ ticketgroup.fee | price: true }} i gebyr</span>
+                        </div>
+                      </div>
+                      <div class="count">
+                        <span class="value">
+                          {{ getTicketgroupCount(ticketgroup) }}
+                        </span>
+                        <button
+                          type="button"
+                          (click)="changeTicketgroupNum(ticketgroup, 1)"
+                          class="btn btn-primary btn-sm"
+                          [disabled]="availableCount <= 0"
+                        >
+                          <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <button
+                          type="button"
+                          (click)="changeTicketgroupNum(ticketgroup, -1)"
+                          class="btn btn-primary btn-sm"
+                          [disabled]="getTicketgroupCount(ticketgroup) <= 0"
+                        >
+                          <span class="glyphicon glyphicon-minus"></span>
+                        </button>
+                      </div>
+                    </div>
+                  }
+                }
+                @if (reservation) {
+                  <p>
+                    Du har nå reservert billetter. For å ikke risikere og miste reservasjonen må du fullføre eller
+                    oppdatere skjemaet innen 10 minutter.
+                  </p>
+
+                  <div class="form-group">
+                    <label class="text-right col-sm-4">Reserverte billetter</label>
+                    <div class="col-sm-8">
+                      @for (ticket of reservation.data.tickets; track ticket.id) {
+                        <div>
+                          {{ ticket.ticketgroup.title }} #{{ ticket.id }}
+                          <span class="reservation-ticket-price"
+                            >{{ ticket.ticketgroup.price + ticket.ticketgroup.fee | price: true }}
+                            (hvorav
+                            {{ ticket.ticketgroup.fee | price: true }} i gebyr)</span
+                          >
+                        </div>
+                      }
+                    </div>
+                  </div>
+                }
+
+                @if (vipps_checkout) {
+                  <p class="text-center">
+                    @if (reservation) {
+                      <input class="btn btn-default" type="button" value="Avbryt" (click)="abortOrder()" />
+                    }
+                  </p>
+                }
+
+                @if (vipps_checkout) {
+                  <section id="vipps-checkout-frame-container"></section>
+                }
+
+                @if ((reservation || count > 0) && !vipps_checkout) {
+                  <div class="reservation-details">
+                    <hr />
+                    <div class="form-group">
+                      <label class="text-right col-sm-4">Totalt å betale</label>
+                      <div class="col-sm-8">
+                        <b>{{ totalAmount | price: true }}</b>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-sm-4">Ev. vervet av</label>
+                      <div class="col-sm-8">
+                        <input
+                          type="text"
+                          name="recruiter"
+                          [(ngModel)]="recruiter"
+                          class="form-control"
+                          placeholder="(valgfritt)"
+                        />
+                        <span class="help-block">Navn på funksjonær</span>
+                      </div>
+                    </div>
+                    <p class="text-center vipps-button-line">
+                      <vipps-checkout-button variant="orange" branded="true" (click)="forcePay = false" type="submit">
+                      </vipps-checkout-button>
+                      @if (reservation) {
+                        <input class="btn btn-default" type="button" value="Avbryt" (click)="abortOrder()" />
+                      }
+                    </p>
+                    @if (authService.isVippsTest$ | async) {
+                      <p class="text-center">
+                        <input
+                          type="submit"
+                          value="Overstyr betaling"
+                          (click)="forcePay = true"
+                          class="btn btn-default"
+                        />
+                      </p>
+                    }
+
+                    <hr />
+                  </div>
+                }
+              </form>
+              @if (!vipps_checkout) {
+                <div class="text-center text-muted">Billettprisene inkluderer evt. mva og billettgebyr.</div>
+              }
+            </div>
+          </div>
+        }
+      }
+    </div>
+  </div>
+}

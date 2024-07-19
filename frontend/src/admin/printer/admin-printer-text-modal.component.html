@@ -1,0 +1,39 @@
+<div class="modal-header">
+  <h3 class="modal-title">Skriv ut tekst på billettskriver</h3>
+</div>
+<div class="modal-body">
+  <form class="form-horizontal" (ngSubmit)="complete()" ngNativeValidate>
+    <div class="form-group">
+      <label for="printer" class="col-sm-4 control-label">Billettskriver</label>
+      <div class="col-sm-7">
+        <billett-admin-printer-selectbox [(printer)]="printer" id="printer" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-4 control-label" for="text">Tekst</label>
+      <div class="col-sm-7">
+        <textarea
+          class="form-control"
+          [(ngModel)]="text"
+          id="text"
+          name="text"
+          rows="10"
+          required=""
+          [disabled]="sending"
+          autofocus=""
+        ></textarea>
+      </div>
+    </div>
+
+    @if (sending) {
+      <p class="text-center">Sender data til utskrift ...</p>
+    } @else {
+      <div class="row">
+        <div class="col-sm-7 col-sm-offset-4">
+          <button class="btn btn-success" type="submit" [disabled]="!printer">Skriv ut</button>
+          <button class="btn btn-default" type="button" (click)="cancel()">Avbryt</button>
+        </div>
+      </div>
+    }
+  </form>
+</div>

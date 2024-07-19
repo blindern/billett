@@ -1,0 +1,27 @@
+<billett-page-states [state]="pageState" />
+<billett-page-property name="title" value="Administrasjon" />
+
+@if (eventgroups) {
+  <div class="page-header">
+    <h1>Administrasjon</h1>
+  </div>
+
+  <h2>Verktøy</h2>
+  <ul>
+    <li>
+      <a href="" (click)="$event.preventDefault(); printText()">Skriv ut tekst på billettskriver</a>
+    </li>
+  </ul>
+
+  <h2>
+    Arrangementgrupper
+    <a routerLink="/a/eventgroup/new" class="btn btn-default pull-right">Ny gruppe</a>
+  </h2>
+  <ul>
+    @for (group of eventgroups; track group.id) {
+      <li>
+        <a routerLink="/a/eventgroup/{{ group.id }}">{{ group.title }}</a>
+      </li>
+    }
+  </ul>
+}

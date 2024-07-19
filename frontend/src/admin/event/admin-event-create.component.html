@@ -1,0 +1,20 @@
+<billett-page-states [state]="pageState" />
+<billett-page-property name="title" value="Nytt arrangement" />
+
+@if (eventgroup && event) {
+  <div class="page-header">
+    <h1>
+      <span class="eventgroup">
+        <a routerLink="/a/eventgroup/{{ eventgroup.id }}">{{ eventgroup.title }}</a>
+      </span>
+      <span>Nytt arrangement</span>
+    </h1>
+  </div>
+
+  <p>
+    Når arrangementet er opprettet kan man opprette billettgrupper, redigere informasjonen, laste opp arrangementbilde
+    m.v.
+  </p>
+
+  <billett-admin-event-form [event]="event" [eventgroupId]="eventgroup.id" (submitForm)="storeEvent()" />
+}

@@ -1,0 +1,59 @@
+<billett-toast-container></billett-toast-container>
+
+@if (authService.isDevPage$ | async) {
+  <div class="dev-page-bar">
+    NB! Du er nå på utviklersia!
+    <span>Endringene her blir ikke oppdatert på blindernuka.no.</span>
+  </div>
+}
+
+<div class="container" [class.noadmin]="!isAdminPage()">
+  <header class="header navbar">
+    <h3 class="navbar-left">
+      <a routerLink="/" class="text-muted"> <img src="/assets/graphics/uka_gul_pikto.gif" alt="" />UKA på Blindern </a>
+    </h3>
+    <ul class="nav nav-pills navbar-right">
+      <li [activeFor]="['/', '/eventgroup/*', '/event/*']">
+        <a routerLink="/eventgroup/9"><span class="glyphicon glyphicon-list"></span> Arrangementer</a>
+      </li>
+      <li [activeFor]="['/salgsbetingelser']">
+        <a routerLink="/salgsbetingelser"><span class="glyphicon glyphicon-flash"></span> Salgsbetingelser</a>
+      </li>
+      <li [activeFor]="['/hjelp']">
+        <a routerLink="/hjelp"><span class="glyphicon glyphicon-question-sign"></span> Hjelp</a>
+      </li>
+    </ul>
+  </header>
+
+  @if (loggedInButNoAccess) {
+    <p class="text-center">
+      <b>NB!</b> Du er innlogget som <u>{{ (this.authService.user$ | async)?.realname }}</u> men har ikke tilgang til
+      dette systemet.
+      <a routerLink="/logout" target="_self">Logg ut</a>
+    </p>
+    <hr />
+  }
+
+  <router-outlet></router-outlet>
+
+  <footer>
+    <ul>
+      <li>2022</li>
+      <li><a href="https://blindernuka.no">UKA på Blindern</a></li>
+      <li>
+        <a href="https://foreningenbs.no">Foreningen Blindern Studenterhjem</a>
+      </li>
+      <li>
+        <a routerLink="/a">Administrasjon</a>
+        @if (authService.user$ | async; as user) {
+          <span>
+            <br />
+            {{ user.username }}
+            <br />
+            <a routerLink="/logout">[logg ut]</a>
+          </span>
+        }
+      </li>
+    </ul>
+  </footer>
+</div>

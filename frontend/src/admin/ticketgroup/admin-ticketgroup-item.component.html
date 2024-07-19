@@ -1,0 +1,138 @@
+<billett-page-states [state]="pageState" />
+<billett-page-property name="title" value="Billettgruppe" />
+
+@if (ticketgroup) {
+  <billett-page-property
+    name="title"
+    value="{{ ticketgroup.event.title }} ({{ ticketgroup.event.time_start | formatdate: 'DD. MMM' }}): {{
+      ticketgroup.title
+    }}"
+  />
+
+  <div class="page-header">
+    <h1>
+      <span class="eventgroup">
+        <a routerLink="/a/event/{{ ticketgroup.event.id }}">{{ ticketgroup.event.title }}</a>
+      </span>
+      Rediger billettgruppe
+    </h1>
+  </div>
+
+  @if (ticketgroup.has_tickets) {
+    <p>
+      Billettgruppen har enten reserverte eller tilknyttede billetter. Derfor er en del av feltene utilgjengelig for
+      endringer.
+    </p>
+  }
+
+  <form (ngSubmit)="updateTicketgroup()" class="form-horizontal" autocomplete="off" ngNativeValidate>
+    <div class="form-group">
+      <label for="title" class="col-sm-3 control-label">Tittel</label>
+      <div class="col-sm-7">
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="ticketgroup.title"
+          id="title"
+          name="title"
+          placeholder=""
+          required=""
+          autofocus=""
+          [disabled]="ticketgroup.has_tickets"
+        />
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="ticket_text" class="col-sm-3 control-label">Billett-tekst</label>
+      <div class="col-sm-7">
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="ticketgroup.ticket_text"
+          id="ticket_text"
+          name="ticket_text"
+          placeholder="(valgfritt)"
+          [disabled]="ticketgroup.has_tickets"
+        />
+        <span class="help-block">Kan f.eks. være gyldighetsinformasjon for studentbillett.</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="price" class="col-sm-3 control-label">Priser</label>
+      <div class="col-sm-3">
+        <input
+          type="number"
+          class="form-control"
+          [(ngModel)]="ticketgroup.price"
+          id="price"
+          name="price"
+          placeholder=""
+          required=""
+          [disabled]="ticketgroup.has_tickets"
+        />
+      </div>
+      <div class="col-sm-3">
+        <input
+          type="number"
+          class="form-control"
+          [(ngModel)]="ticketgroup.fee"
+          id="fee"
+          name="fee"
+          placeholder="(valgfritt)"
+          [disabled]="ticketgroup.has_tickets"
+        />
+        <span class="help-block">Evt. billettgebyr regnes i tillegg til billettpris</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="max_sales" class="col-sm-3 control-label">Antall billetter</label>
+      <div class="col-sm-3">
+        <input
+          type="number"
+          class="form-control"
+          [(ngModel)]="ticketgroup.limit"
+          id="max_sales"
+          name="max_sales"
+          placeholder="(valgfritt)"
+        />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-offset-3 col-sm-9">
+        <label>
+          <input type="checkbox" [(ngModel)]="ticketgroup.use_office" name="use_office" /> Aktiv for salg i billettluke?
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-offset-3 col-sm-9">
+        <label>
+          <input type="checkbox" [(ngModel)]="ticketgroup.use_web" name="use_web" />
+          Tilgjengelig for kjøp på nettside?
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-offset-3 col-sm-9">
+        <label>
+          <input type="checkbox" [(ngModel)]="ticketgroup.is_normal" name="is_normal" />
+          Billetter solgt telles som normalt salg
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-8 col-sm-offset-3">
+        <button type="submit" class="btn btn-success">Oppdater</button>
+        <button type="button" class="btn btn-danger" [disabled]="ticketgroup.has_tickets" (click)="deleteTicketgroup()">
+          Slett
+        </button>
+      </div>
+    </div>
+  </form>
+}

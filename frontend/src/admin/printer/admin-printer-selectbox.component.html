@@ -1,0 +1,22 @@
+@if (resourceState.loading) {
+  <div class="form-control-static">Laster skrivere ...</div>
+} @else if (resourceState.error) {
+  <div class="form-control-static">Feil: {{ getErrorText(resourceState.error) }}</div>
+} @else if (printers) {
+  @if (printers.length == 0) {
+    <div class="form-control-static">Ingen skrivere er tilgjengelig</div>
+  } @else {
+    <select class="form-control" id="{{ id }}" [(ngModel)]="selectedPrinterName" name="printer" (change)="update()">
+      @if (!printer || canDisable) {
+        <option value="">
+          {{ canDisable ? "Ikke skriv ut" : "Velg ..." }}
+        </option>
+      }
+      @for (p of printers; track p.name) {
+        <option [value]="p.name">
+          {{ p.name }} ({{ p.ip || "IKKE TILGJENGELIG" }}:{{ p.port }}, oppe {{ getUptime(p) }} min)
+        </option>
+      }
+    </select>
+  }
+}

@@ -106,6 +106,11 @@ class Ticket extends Model implements ApiQueryInterface
 
     protected $hidden = ['pdf'];
 
+    protected $casts = [
+        'is_valid' => 'boolean',
+        'is_revoked' => 'boolean',
+    ];
+
     protected $apiAllowedFields = ['id', 'order_id', 'event_id', 'ticketgroup_id', 'time', 'expire', 'is_valid', 'is_revoked', 'user_valid', 'user_revoked', 'used', 'key'];
 
     protected $apiAllowedRelations = ['event', 'order', 'ticketgroup', 'valid_paymentgroup', 'revoked_paymentgroup'];

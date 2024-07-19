@@ -107,6 +107,12 @@ class Order extends Model implements ApiQueryInterface
     protected $table = 'orders';
     //protected $appends = array('total_amount');
 
+    protected $casts = [
+        'is_locked' => 'boolean',
+        'is_valid' => 'boolean',
+        'is_admin' => 'boolean',
+    ];
+
     protected $apiAllowedFields = ['id', 'eventgroup_id', 'order_text_id', 'is_valid', 'is_admin', 'time', 'user_created', 'ip', 'browser', 'name', 'email', 'phone', 'recruiter', 'total_amount', 'comment', 'balance'];
 
     protected $apiAllowedRelations = ['eventgroup', 'tickets', 'payments'];

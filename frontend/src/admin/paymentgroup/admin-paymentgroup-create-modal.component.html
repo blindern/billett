@@ -1,0 +1,55 @@
+<billett-page-property name="title" value="Ny betalingsgruppe" />
+
+<div class="modal-header">
+  <h3 class="modal-title">Nytt oppgjør</h3>
+</div>
+
+@if (sending) {
+  <div class="modal-body text-center">Registrerer data ...</div>
+} @else {
+  <div class="modal-body">
+    <form class="form-horizontal" (ngSubmit)="complete()" autocomplete="off" ngNativeValidate>
+      <div class="form-group">
+        <label for="title" class="col-sm-4 control-label">Tittel</label>
+        <div class="col-sm-7">
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="title"
+            id="title"
+            name="title"
+            placeholder=""
+            required=""
+            autofocus=""
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="description" class="col-sm-4 control-label">Beskrivelse</label>
+        <div class="col-sm-7">
+          <textarea
+            class="form-control"
+            [(ngModel)]="description"
+            id="description"
+            name="description"
+            rows="5"
+            placeholder="(valgfritt)"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-sm-7 col-sm-offset-4">
+          <button class="btn btn-success" type="submit">Opprett</button>
+          <button class="btn btn-default" type="button" (click)="cancel()">Avbryt</button>
+        </div>
+      </div>
+    </form>
+
+    <div class="text-muted">
+      Et oppgjør kan sees på som en virtuell kasse. Lag et oppgjør f.eks. hver gang du bemanner billettluken. Når du
+      avslutter oppgjøret («tar oppgjøret») kan du enkelt kontrollere at f.eks. kontantbeholdningen stemmer.
+    </div>
+  </div>
+}

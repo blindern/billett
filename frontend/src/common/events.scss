@@ -15,35 +15,3 @@
     }
   }
 }
-
-/*
- * shared between admin/eventgroup and guest/eventgroup
- */
-.admin-eventgroup,
-.eventgroup-page {
-  .edit-link-container {
-    position: relative;
-
-    .edit-link-wrap {
-      position: absolute;
-      left: 0;
-      display: none;
-      .edit-link {
-        position: absolute;
-        right: 0;
-        top: -4px;
-        background-color: $btn-primary-bg;
-        a {
-          color: $btn-primary-color;
-          display: block;
-          padding: 4px;
-        }
-      }
-    }
-    &:hover {
-      .edit-link-wrap {
-        display: block;
-      }
-    }
-  }
-}

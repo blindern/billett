@@ -1,0 +1,55 @@
+<billett-page-states [state]="pageState" />
+<billett-page-property name="title" value="Arrangementgruppe" />
+
+@if (eventgroup) {
+  <billett-page-property name="title" [value]="eventgroup.title" />
+  <billett-page-property name="description" value="Oversikt over arrangementer for {{ eventgroup.title }}" />
+
+  <div class="page-header">
+    <h1>
+      {{ eventgroup.title }}
+      @if (authService.isAdmin$ | async) {
+        <span class="pull-right">
+          <a routerLink="/a/eventgroup/{{ eventgroup.id }}" class="btn btn-primary">Admin</a>
+        </span>
+      }
+    </h1>
+  </div>
+
+  @if (eventgroup.events.length == 0) {
+    <p>Ingen arrangementer eksisterer.</p>
+  }
+
+  @if (eventgroup.events.length > 0) {
+    @if (isFilter) {
+      <p>
+        <a routerLink="/eventgroup/{{ eventgroup.id }}">Vis hele arrangementlista</a>
+      </p>
+    }
+
+    <div class="eventgroup-event-list">
+      <ul class="days">
+        @for (item of days | keyvalue; track item.key) {
+          <li class="day">
+            <div class="header">
+              <a routerLink="/eventgroup/{{ eventgroup.id }}/{{ item.key }}">
+                <span class="date">
+                  <span>{{ item.value[0].time_start - 21600 | formatdate: "dddd" }}</span>
+                  {{ item.value[0].time_start - 21600 | formatdate: "D. MMMM YYYY" }}
+                </span>
+                @if (daythemes[item.key]) {
+                  <span class="theme">{{ daythemes[item.key] }}</span>
+                }
+              </a>
+            </div>
+
+            <!-- each event -->
+            @for (event of item.value; track event.id) {
+              <billett-eventlist-item [event]="event" [eventgroup]="eventgroup" />
+            }
+          </li>
+        }
+      </ul>
+    </div>
+  }
+}
