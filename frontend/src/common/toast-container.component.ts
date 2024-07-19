@@ -34,6 +34,7 @@ import { ToastService } from "./toast.service"
         @for (toast of toastService.toasts; track toast.id) {
           <li>
             <div
+              tabindex="0"
               class="alert"
               [ngClass]="'alert-' + toast.type"
               (click)="toast.remove()"
