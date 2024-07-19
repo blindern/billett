@@ -9,7 +9,7 @@ import {
 } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { Router, RouterLink } from "@angular/router"
-import { catchError, finalize, tap } from "rxjs"
+import { catchError, finalize, of, tap } from "rxjs"
 import { api } from "../../api"
 import { ApiTicketAdmin, ApiTicketgroupAdmin } from "../../apitypes"
 import { getValidationError, toastErrorHandler } from "../../common/errors"
@@ -180,31 +180,27 @@ export class AdminOrderItemComponent implements OnChanges {
       eventgroupId: this.order!.eventgroup.id,
       actionText: "Marker som betalt",
       amount: this.totalReserved,
-    }).closed.subscribe((paymentgroup) => {
-      if (!paymentgroup) return
-
-      this.adminOrderService
-        .validateAndConvert(this.order!.id, paymentgroup, this.totalReserved)
-        .pipe(
-          finalize(() => {
-            this.refreshOrder()
-          }),
-        )
-        .subscribe({
-          error: (error) => {
-            this.refreshOrder()
-            if (getValidationError(error) === "amount mismatched") {
-              this.toastService.show(
-                "Noe i reservasjonen ser ut til å ha endret seg. Prøv på nytt.",
-                {
-                  class: "warning",
-                },
-              )
-            } else {
-              toastErrorHandler(this.toastService)(error)
-            }
-          },
-        })
+      handler: (paymentgroup) =>
+        this.adminOrderService
+          .validateAndConvert(this.order!.id, paymentgroup, this.totalReserved)
+          .pipe(
+            finalize(() => {
+              this.refreshOrder()
+            }),
+            catchError((error) => {
+              if (getValidationError(error) === "amount mismatched") {
+                this.toastService.show(
+                  "Noe i reservasjonen ser ut til å ha endret seg. Prøv på nytt.",
+                  {
+                    class: "warning",
+                  },
+                )
+              } else {
+                toastErrorHandler(this.toastService)(error)
+              }
+              return of()
+            }),
+          ),
     })
   }
 
@@ -246,17 +242,18 @@ export class AdminOrderItemComponent implements OnChanges {
       eventgroupId: this.order!.eventgroup.id,
       actionText: "Inntekstfør",
       amount: ticket.ticketgroup.price + ticket.ticketgroup.fee,
-    }).closed.subscribe((paymentgroup) => {
-      if (!paymentgroup) return
-
-      this.adminTicketService
-        .validateAndConvert(ticket.id, paymentgroup)
-        .subscribe({
-          next: () => {
-            this.refreshOrder()
-          },
-          error: toastErrorHandler(this.toastService),
-        })
+      handler: (paymentgroup) =>
+        this.adminTicketService
+          .validateAndConvert(ticket.id, paymentgroup)
+          .pipe(
+            finalize(() => {
+              this.refreshOrder()
+            }),
+            catchError((error) => {
+              toastErrorHandler(this.toastService)(error)
+              return of()
+            }),
+          ),
     })
   }
 

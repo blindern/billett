@@ -1,6 +1,7 @@
 import { Dialog, DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
 import { Component, inject, Inject } from "@angular/core"
 import { FormsModule } from "@angular/forms"
+import { finalize, Observable } from "rxjs"
 import { ApiPaymentgroupAdmin } from "../../apitypes"
 import { PricePipe } from "../../common/price.pipe"
 import { AdminPaymentgroupSelectboxComponent } from "./admin-paymentgroup-selectbox.component"
@@ -9,9 +10,8 @@ export interface AdminPaymentgroupSelectModalInput {
   eventgroupId: number
   actionText: string
   amount: number
+  handler: (printer: ApiPaymentgroupAdmin) => Observable<unknown>
 }
-
-export type AdminPaymentgroupSelectModalResult = ApiPaymentgroupAdmin
 
 @Component({
   selector: "billett-admin-paymentgroup-select-modal",
@@ -21,12 +21,12 @@ export type AdminPaymentgroupSelectModalResult = ApiPaymentgroupAdmin
 })
 export class AdminPaymentgroupSelectModal {
   static open(dialog: Dialog, data: AdminPaymentgroupSelectModalInput) {
-    return dialog.open<
-      AdminPaymentgroupSelectModalResult,
-      AdminPaymentgroupSelectModalInput
-    >(AdminPaymentgroupSelectModal, {
-      data,
-    })
+    return dialog.open<void, AdminPaymentgroupSelectModalInput>(
+      AdminPaymentgroupSelectModal,
+      {
+        data,
+      },
+    )
   }
 
   constructor(
@@ -34,12 +34,23 @@ export class AdminPaymentgroupSelectModal {
     public data: AdminPaymentgroupSelectModalInput,
   ) {}
 
-  private dialogRef = inject(DialogRef<AdminPaymentgroupSelectModalResult>)
+  private dialogRef = inject(DialogRef)
 
+  handling = false
   paymentgroup?: ApiPaymentgroupAdmin
 
   complete() {
-    this.dialogRef.close(this.paymentgroup)
+    this.handling = true
+    this.data
+      .handler(this.paymentgroup!)
+      .pipe(
+        finalize(() => {
+          this.handling = false
+        }),
+      )
+      .subscribe(() => {
+        this.dialogRef.close()
+      })
   }
 
   cancel() {

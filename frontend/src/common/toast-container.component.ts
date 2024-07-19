@@ -10,7 +10,7 @@ import { ToastService } from "./toast.service"
     <style>
       .toast-container {
         position: fixed;
-        z-index: 1000;
+        z-index: 2000;
         margin-top: 20px;
         width: 100%;
         height: 0;
