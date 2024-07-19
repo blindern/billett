@@ -3,8 +3,18 @@
   "extends": [
     "config:recommended"
   ],
-  "ignorePaths": [
-    "frontend/package.json",
-    "frontend/package-lock.json"
-  ]
+  "lockFileMaintenance": {
+    "enabled": true,
+    "branchTopic": "lock-file-maintenance-{{packageFile}}",
+    "commitMessageExtra": "({{packageFile}})"
+  },
+  "major": {
+    "automerge": false
+  },
+  "automerge": true,
+  "automergeType": "branch",
+  "prCreation": "not-pending",
+  "stabilityDays": 3,
+  "prNotPendingHours": 74,
+  "timezone": "Europe/Oslo"
 }
