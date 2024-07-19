@@ -35,8 +35,8 @@
 
       <div class="row">
         <div class="col-sm-7 col-sm-offset-4">
-          <input class="btn btn-success" type="submit" value="Registrer" [disabled]="amount == 0 || !paymentgroup" />
-          <button type="button" class="btn btn-default" (click)="cancel()">Avbryt</button>
+          <input class="btn btn-success" type="submit" value="Registrer" [disabled]="amount === 0 || !paymentgroup" />
+          <button type="button" class="btn btn-link" (click)="cancel()">Avbryt</button>
         </div>
       </div>
     </form>

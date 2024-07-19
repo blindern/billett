@@ -161,7 +161,7 @@
       <div class="form-group">
         <div class="col-sm-6 col-sm-offset-2">
           <input type="submit" value="Oppdater" class="btn btn-primary" />
-          <a class="btn" (click)="$event.preventDefault(); abortEdit()">Avbryt</a>
+          <button class="btn btn-link" (click)="abortEdit()">Avbryt</button>
         </div>
       </div>
     </form>
@@ -238,9 +238,9 @@
         <h2>
           Opptelling/kontroll
           @if (!paymentgroup.time_end) {
-            <span class="pull-right btn btn-primary hidden-print" (click)="openCreatePaymentsourceModal()"
-              >Registrer opptelling</span
-            >
+            <button class="pull-right btn btn-primary hidden-print" (click)="openCreatePaymentsourceModal()">
+              Registrer opptelling
+            </button>
           }
         </h2>
 
@@ -288,7 +288,9 @@
                           @if (!group.is_deleted && !paymentgroup.time_end) {
                             <span>
                               <br />
-                              <a href="" (click)="$event.preventDefault(); deletePaymentsource(paymentsource)">Slett</a>
+                              <button class="btn btn-xs btn-danger" (click)="deletePaymentsource(paymentsource)">
+                                Slett
+                              </button>
                             </span>
                           }
                         </th>
@@ -363,7 +365,7 @@
                     >
                   }
                   @if (!paymentsource.is_deleted && !paymentgroup.time_end) {
-                    <a href="" (click)="$event.preventDefault(); deletePaymentsource(paymentsource)">Slett</a>
+                    <button class="btn btn-danger btn-xs" (click)="deletePaymentsource(paymentsource)">Slett</button>
                   }
                 </p>
                 @if (paymentsource.comment) {

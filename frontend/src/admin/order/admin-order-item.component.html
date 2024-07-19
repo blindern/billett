@@ -58,9 +58,9 @@
 
       <span class="pull-right">
         <a class="btn btn-success" routerLink="/a/order/new/{{ order.eventgroup.id }}" accesskey="n">Ny ordre</a>
-        <a class="btn btn-primary" (click)="$event.preventDefault(); startEdit()" accesskey="e">Rediger</a>
+        <button class="btn btn-primary" (click)="startEdit()" accesskey="e">Rediger</button>
         @if (order.is_valid) {
-          <a class="btn btn-default" (click)="$event.preventDefault(); sendEmail()">Send e-post</a>
+          <button class="btn btn-default" (click)="sendEmail()">Send e-post</button>
         }
       </span>
     </h1>
@@ -139,7 +139,7 @@
       <div class="form-group">
         <div class="col-sm-6 col-sm-offset-2">
           <input type="submit" value="Oppdater" class="btn btn-primary" />
-          <a class="btn" (click)="$event.preventDefault(); abortEdit()">Avbryt</a>
+          <button class="btn btn-link" (click)="abortEdit()">Avbryt</button>
         </div>
       </div>
     </form>
@@ -254,10 +254,10 @@
         <h2>
           Billetter
           <span class="pull-right">
-            <a class="btn btn-default" (click)="$event.preventDefault(); addTickets()">Tilorde nye billetter</a>
+            <button class="btn btn-default" (click)="addTickets()">Tilorde nye billetter</button>
             @if (validTickets.length > 0) {
               <a class="btn btn-default" [href]="downloadTicketsUrl" target="_self">Last ned billetter</a>
-              <a class="btn btn-default" (click)="$event.preventDefault(); printTickets()">Skriv ut billetter</a>
+              <button class="btn btn-default" (click)="printTickets()">Skriv ut billetter</button>
             }
           </span>
         </h2>
@@ -289,13 +289,13 @@
                 >
                   <td>
                     @if (ticket.is_valid && !ticket.is_revoked) {
-                      <a [href]="api('ticket/' + ticket.id + '/pdf')" target="_blank">
+                      <a class="btn btn-default btn-xs" [href]="api('ticket/' + ticket.id + '/pdf')" target="_blank">
                         <span class="glyphicon glyphicon-eye-open" title="Last ned PDF"></span>
                       </a>
                     }
-                    <a href="" (click)="$event.preventDefault(); printTicket(ticket)">
+                    <button class="btn btn-default btn-xs" (click)="printTicket(ticket)">
                       <span class="glyphicon glyphicon-print" title="Skriv ut billett"></span>
-                    </a>
+                    </button>
                   </td>
                   <td>{{ ticket.id }}</td>
                   <td>
@@ -375,7 +375,7 @@
         <h2>
           Transaksjoner
           @if (order.is_valid) {
-            <a class="pull-right btn btn-default" (click)="$event.preventDefault(); newPayment()">Ny transaksjon</a>
+            <button class="pull-right btn btn-default" (click)="newPayment()">Ny transaksjon</button>
           }
         </h2>
         @if (order.payments.length === 0) {

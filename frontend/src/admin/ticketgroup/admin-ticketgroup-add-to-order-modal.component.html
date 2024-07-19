@@ -21,10 +21,10 @@
         </dl>
       </div>
       <div class="col-sm-6">
-        <button class="btn btn-success" (click)="submit()" [disabled]="count == 0">
+        <button class="btn btn-success" (click)="submit()" [disabled]="count === 0">
           <i class="glyphicon glyphicon-plus"></i> Legg til billetter
         </button>
-        <button class="btn btn-default" (click)="cancel()">Avbryt</button>
+        <button class="btn btn-link" (click)="cancel()">Avbryt</button>
       </div>
     </div>
 

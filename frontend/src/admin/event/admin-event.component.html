@@ -11,13 +11,13 @@
       </span>
       {{ event.title }}
       <span class="pull-right">
-        <a routerLink="/event/{{ event.id }}" class="btn btn-success"> Forhåndsvis </a>
-        <a routerLink="/a/event/{{ event.id }}/edit" class="btn btn-primary"> Rediger </a>
+        <a routerLink="/event/{{ event.id }}" class="btn btn-success">Forhåndsvis</a>
+        <a routerLink="/a/event/{{ event.id }}/edit" class="btn btn-primary">Rediger</a>
         @if (!event.has_tickets) {
-          <a href="" class="btn btn-danger" (click)="$event.preventDefault(); deleteEvent()"> Slett arrangement </a>
+          <button class="btn btn-danger" (click)="deleteEvent()">Slett arrangement</button>
         }
         @if (event.has_tickets) {
-          <a routerLink="/a/event/{{ event.id }}/checkin" class="btn btn-default"> Innsjekking </a>
+          <a routerLink="/a/event/{{ event.id }}/checkin" class="btn btn-default">Innsjekking</a>
           <a routerLink="/a/orders" [queryParams]="{ 'tickets.event.id': event.id }" class="btn btn-default">
             Vis ordre
           </a>
@@ -134,12 +134,16 @@
               }"
             >
               <td>
-                <a [href]="api('ticketgroup/' + g.id + '/previewticket')" target="_blank">
+                <a
+                  class="btn btn-default btn-xs"
+                  [href]="api('ticketgroup/' + g.id + '/previewticket')"
+                  target="_blank"
+                >
                   <span class="glyphicon glyphicon-eye-open" title="Forhåndsvis"></span>
                 </a>
-                <a href="" (click)="$event.preventDefault(); previewTicketPrint(g)">
+                <button class="btn btn-default btn-xs" (click)="previewTicketPrint(g)">
                   <span class="glyphicon glyphicon-print" title="Skriv ut"></span>
-                </a>
+                </button>
               </td>
               <td>{{ g.id }}</td>
               <td>
@@ -167,12 +171,12 @@
               </td>
               <td>
                 @if (!$first) {
-                  <button (click)="moveTicketgroup($index, 'up')">↑</button>
+                  <button class="btn btn-default btn-xs" (click)="moveTicketgroup($index, 'up')">↑</button>
                 }
               </td>
               <td>
                 @if (!$last) {
-                  <button (click)="moveTicketgroup($index, 'down')">↓</button>
+                  <button class="btn btn-default btn-xs" (click)="moveTicketgroup($index, 'down')">↓</button>
                 }
               </td>
             </tr>
