@@ -1,6 +1,6 @@
 import { Component, inject } from "@angular/core"
 import { FormsModule } from "@angular/forms"
-import { Router } from "@angular/router"
+import { Router, RouterLink } from "@angular/router"
 import { toastErrorHandler } from "../../common/errors"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { ToastService } from "../../common/toast.service"
@@ -9,7 +9,7 @@ import { AdminEventgroupService } from "./admin-eventgroup.service"
 @Component({
   selector: "billett-admin-eventgroup-create",
   standalone: true,
-  imports: [FormsModule, PagePropertyComponent],
+  imports: [FormsModule, PagePropertyComponent, RouterLink],
   templateUrl: "./admin-eventgroup-create.component.html",
 })
 export class AdminEventgroupCreateComponent {
