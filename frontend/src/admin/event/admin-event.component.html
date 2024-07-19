@@ -82,7 +82,7 @@
         @if (uploadprogress) {
           <span>Laster opp nytt bilde...</span>
         } @else {
-          <img [src]="api('event/' + event.id + '/image?v=' + (image_version || ''))" />
+          <img [src]="api('event/' + event.id + '/image?v=' + (image_version || ''))" alt="Logo" />
         }
         <input type="file" (change)="uploadImage($event)" />
       </div>
