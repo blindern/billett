@@ -27,7 +27,7 @@
         <th>
           {{ stats.topAccum.price + stats.topAccum.fee | price }}<br />
           {{ stats.topAccum.count - stats.topAccum.revoked }} / {{ stats.max_normal_sales || stats.max_sales
-          }}{{ stats.max_normal_sales != stats.max_sales ? " (" + stats.max_sales + ")" : "" }}
+          }}{{ stats.max_normal_sales !== stats.max_sales ? " (" + stats.max_sales + ")" : "" }}
           stk
         </th>
         @for (day of stats.daysDetails; track day.day) {

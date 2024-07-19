@@ -157,7 +157,7 @@
     <div class="col-md-6">
       <h2>Reserverte billetter</h2>
 
-      @if (ticketgroups.length == 0) {
+      @if (ticketgroups.length === 0) {
         <p>Ingen billetter er reservert.</p>
       } @else {
         <table class="tickets table table-striped table-condensed">
@@ -271,7 +271,7 @@
               @if (getTotalReserved(order)) {
                 <span><br />(reservert: {{ getTotalReserved(order) | price }})</span>
               }
-              @if (parseFloat(order.balance) != 0) {
+              @if (parseFloat(order.balance) !== 0) {
                 <span class="unbalance"><br />(ubalanse: {{ order.balance | price }})</span>
               }
             </td>

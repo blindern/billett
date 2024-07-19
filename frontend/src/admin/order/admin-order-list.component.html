@@ -102,7 +102,7 @@
 
 @if (!orders || !orders.result) {
   <div class="page-loading">Søker...</div>
-} @else if (orders.result.length == 0) {
+} @else if (orders.result.length === 0) {
   <p class="text-center">Ingen ordrer ble funnet.</p>
 } @else {
   <h2>Søkeresultat</h2>

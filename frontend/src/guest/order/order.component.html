@@ -3,21 +3,21 @@
 } @else if (!order || !payment) {
   <p>Vennligst vent...</p>
 } @else {
-  @if (payment.status == "ACCEPTED") {
+  @if (payment.status === "ACCEPTED") {
     <billett-page-property name="title" value="Kvittering" />
   } @else {
     <billett-page-property name="title" value="Ordrebekreftelse" />
   }
 
   <div class="page-header">
-    @if (payment.status != "ACCEPTED") {
+    @if (payment.status !== "ACCEPTED") {
       <h1>Kvittering</h1>
     } @else {
       <h1>Ordrebekreftelse</h1>
     }
   </div>
 
-  @if (payment.status != "ACCEPTED") {
+  @if (payment.status !== "ACCEPTED") {
     <p>
       Din bestilling har blitt <b>vellykket gjennomført</b>. Du vil motta billett og kvittering på e-post. Kontroller at
       e-postadressen nedenfor er riktig. Kontakt
@@ -53,7 +53,7 @@
     <dt>Totalbeløp</dt>
     <dd>
       {{ payment.amount | price: true }}
-      @if (payment.status != "ACCEPTED") {
+      @if (payment.status !== "ACCEPTED") {
         <span> har blitt belastet ditt kort</span>
       }
     </dd>

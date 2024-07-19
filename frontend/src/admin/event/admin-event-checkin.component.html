@@ -100,7 +100,7 @@
       @if (!lastUsedTickets && lastUsedTicketsLoading) {
         <p>Laster data...</p>
       }
-      @if (lastUsedTickets && lastUsedTickets.length == 0 && !lastUsedTicketsLoading) {
+      @if (lastUsedTickets && lastUsedTickets.length === 0 && !lastUsedTicketsLoading) {
         <p>Ingen billetter er innsjekket.</p>
       }
       @if (lastUsedTickets && lastUsedTickets.length > 0) {
@@ -236,7 +236,7 @@
         <h3>Ordresøk</h3>
         @if (!orders || !orders.result) {
           <div class="page-loading">Søker...</div>
-        } @else if (orders.result.length == 0) {
+        } @else if (orders.result.length === 0) {
           <p class="text-center">Ingen ordrer ble funnet.</p>
         } @else {
           <table class="table table-striped table-condensed order-list-table">
@@ -270,7 +270,7 @@
                       <span class="order-detail"><i>Ingen detaljer</i></span>
                     }
 
-                    @if (order.balance != "0.00") {
+                    @if (order.balance !== "0.00") {
                       <span class="unbalance"><br />(ubalanse: {{ order.balance | price }})</span>
                     }
                   </td>
@@ -281,11 +281,11 @@
                           [ngClass]="{
                             reservation: !ticket.is_valid,
                             revoked: ticket.is_revoked,
-                            keyresult: ticket.key == keysearch,
+                            keyresult: ticket.key === keysearch,
                           }"
                         >
                           <a href="/api/ticket/{{ ticket.id }}/pdf" target="_self">#{{ ticket.id }}</a>
-                          @if (ticket.event.id == event.id && ticket.is_valid && !ticket.is_revoked) {
+                          @if (ticket.event.id === event.id && ticket.is_valid && !ticket.is_revoked) {
                             @if (ticket.used) {
                               <button class="btn btn-danger" (click)="checkout(ticket)">Utsjekk</button>
                             }
@@ -293,8 +293,8 @@
                               <button class="btn btn-success" (click)="checkin(ticket)">Innsjekk</button>
                             }
                           }
-                          @if (ticket.event.id != event.id) {
-                            @if (ticket.event.id != event.id) {
+                          @if (ticket.event.id !== event.id) {
+                            @if (ticket.event.id !== event.id) {
                               <a routerLink="/a/event/{{ ticket.event.id }}">
                                 {{ ticket.event.title }}
                                 ({{ ticket.event.time_start | formatdate: "DD.MM \\k\\l HH" }})
@@ -302,7 +302,7 @@
                             }
                           }
                           ({{ ticket.ticketgroup.title }})
-                          @if (ticket.key == keysearch) {
+                          @if (ticket.key === keysearch) {
                             <b>(DENNE BLE SØKT OPP)</b>
                           }
                         </li>
@@ -330,7 +330,7 @@
         <h3>Billettliste</h3>
         @if (!tickets) {
           <div class="page-loading">Henter data...</div>
-        } @else if (tickets.length == 0) {
+        } @else if (tickets.length === 0) {
           <p class="text-center">Ingen billetter ble funnet.</p>
         } @else if (tickets.length > 0) {
           <table class="table table-striped table-condensed ticket-list-table">
@@ -364,7 +364,7 @@
                       <span class="order-detail"><i>Ingen detaljer</i></span>
                     }
 
-                    @if (parseFloat(order.balance) != 0) {
+                    @if (parseFloat(order.balance) !== 0) {
                       <span class="unbalance"><br />(ubalanse: {{ order.balance | price }})</span>
                     }
                   </td>

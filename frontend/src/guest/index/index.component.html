@@ -10,7 +10,7 @@
   <p>Feil: {{ upcomingState.error }}</p>
 } @else if (!upcoming) {
   <p>Laster data..</p>
-} @else if (upcoming.length == 0) {
+} @else if (upcoming.length === 0) {
   <p>Ingen arrangementer ble funnet.</p>
 } @else {
   @for (event of upcoming; track event.id) {

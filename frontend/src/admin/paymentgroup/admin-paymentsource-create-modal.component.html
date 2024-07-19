@@ -56,14 +56,14 @@
     }
 
     @if (type) {
-      @if (multiply == 1) {
+      @if (multiply === 1) {
         <p class="text-muted text-center">Du register nå opptelling ved slutt.</p>
       } @else {
         <p class="text-muted text-center">Du register nå opptelling ved start.</p>
       }
 
       <form class="form-horizontal" (ngSubmit)="complete()" autocomplete="off" ngNativeValidate>
-        @if (type == "cash") {
+        @if (type === "cash") {
           <div class="form-group">
             <label class="col-sm-4 control-label">Kontantopptelling</label>
             <div class="col-sm-8">

@@ -163,7 +163,7 @@
       </div>
     }
 
-    @if (balance != 0) {
+    @if (balance !== 0) {
       <div class="alert alert-warning">
         Ordren er ikke i balanse.
         @if (balance < 0) {
@@ -220,7 +220,7 @@
           <dt>Ordretotal</dt>
           <dd>
             {{ totalValid | price }} ({{ totalPaid | price }} betalt
-            @if (balance != 0) {
+            @if (balance !== 0) {
               <span>, {{ -balance | price }} gjenstår</span>
             }
             )
@@ -262,7 +262,7 @@
           </span>
         </h2>
 
-        @if (order.tickets.length == 0) {
+        @if (order.tickets.length === 0) {
           <p>Ingen billetter er tilordnet.</p>
         }
 
@@ -359,12 +359,12 @@
         @if (order.tickets.length > 1) {
           <div>
             <b>{{ countValid }}</b>
-            gyldig{{ countValid == 1 ? "" : "e" }} billett{{ countValid == 1 ? "" : "er" }},
+            gyldig{{ countValid === 1 ? "" : "e" }} billett{{ countValid === 1 ? "" : "er" }},
             <b>{{ countReserved }}</b>
-            reservert{{ countReserved == 1 ? "" : "e" }} billett{{ countReserved == 1 ? "" : "er" }}
+            reservert{{ countReserved === 1 ? "" : "e" }} billett{{ countReserved === 1 ? "" : "er" }}
             og
             <b>{{ countRevoked }}</b>
-            tilbaketruk{{ countRevoked == 1 ? "ket" : "ne" }} billett{{ countRevoked ? "" : "er" }}.
+            tilbaketruk{{ countRevoked === 1 ? "ket" : "ne" }} billett{{ countRevoked ? "" : "er" }}.
           </div>
         }
       </div>
@@ -378,7 +378,7 @@
             <a class="pull-right btn btn-default" (click)="$event.preventDefault(); newPayment()">Ny transaksjon</a>
           }
         </h2>
-        @if (order.payments.length == 0) {
+        @if (order.payments.length === 0) {
           <p>Ingen transaksjoner er tilordnet ordren.</p>
         }
         @if (!order.is_valid) {

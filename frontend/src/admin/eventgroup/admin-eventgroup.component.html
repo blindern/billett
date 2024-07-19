@@ -38,7 +38,7 @@
     </span>
   </h2>
 
-  @if (eventgroup.events.length == 0) {
+  @if (eventgroup.events.length === 0) {
     <p>Ingen arrangementer eksisterer.</p>
   } @else {
     <div class="form-inline">
@@ -92,7 +92,7 @@
             >
               <td>
                 <b>{{ event.time_start | formatdate: "HH:mm" }}</b>
-                @if (event.time_end && event.time_end != event.time_start) {
+                @if (event.time_end && event.time_end !== event.time_start) {
                   <span> - {{ event.time_end | formatdate: "HH:mm" }} </span>
                 }
               </td>
@@ -108,7 +108,7 @@
                 <a routerLink="/a/event/{{ event.id }}">{{ event.title }}</a>
               </td>
               <td>
-                @if (event.max_sales != 0 || event.ticket_count.totals.valid != 0) {
+                @if (event.max_sales !== 0 || event.ticket_count.totals.valid !== 0) {
                   <span>
                     <a routerLink="/a/orders" [queryParams]="{ 'tickets.event.id': event.id }">{{
                       event.ticket_count.totals.valid
@@ -117,11 +117,11 @@
                 }
               </td>
               <td>
-                {{ event.max_sales == 0 ? "" : event.ticket_count.totals.free }}
+                {{ event.max_sales === 0 ? "" : event.ticket_count.totals.free }}
               </td>
               <td>
                 {{
-                  event.max_sales == 0 && event.ticket_count.totals.valid == 0
+                  event.max_sales === 0 && event.ticket_count.totals.valid === 0
                     ? ""
                     : (event.ticket_count.totals.sum_price + event.ticket_count.totals.sum_fee | price)
                 }}

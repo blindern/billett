@@ -204,13 +204,13 @@
         <p class="dl-prefix">Registrerte salg og transaksjoner:</p>
         <dl class="dl-horizontal">
           <dt>Solgte billetter</dt>
-          @if (derived.totals.revoked != 0) {
+          @if (derived.totals.revoked !== 0) {
             <dd>
               {{ -derived.totals.valid | price }} (registrerte) - {{ derived.totals.revoked | price }} (refunderte) =
               {{ -derived.totals.valid - derived.totals.revoked | price }} (netto)
             </dd>
           }
-          @if (derived.totals.revoked == 0) {
+          @if (derived.totals.revoked === 0) {
             <dd>
               {{ -derived.totals.valid - derived.totals.revoked | price }}
             </dd>
@@ -244,7 +244,7 @@
           }
         </h2>
 
-        @if (derived.ps.cashgroups.length == 0 && derived.ps.other.length == 0) {
+        @if (derived.ps.cashgroups.length === 0 && derived.ps.other.length === 0) {
           <p>Ingen opptellinger er registrert.</p>
         }
 
@@ -305,7 +305,7 @@
                         }
                         @if (!row.is_num) {
                           <th>
-                            {{ row.key == "other" ? "Annet" : row.key }}
+                            {{ row.key === "other" ? "Annet" : row.key }}
                           </th>
                         }
                         @for (item of row.items; track $index) {
@@ -375,7 +375,7 @@
         }
 
         <!-- utestående beløp -->
-        @if (-derived.totals.valid - derived.totals.revoked - derived.totals.payments != 0) {
+        @if (-derived.totals.valid - derived.totals.revoked - derived.totals.payments !== 0) {
           <h3>
             {{ derived.ps.orders_deviation_prefix }}:
             {{ -derived.totals.valid - derived.totals.revoked - derived.totals.payments | price }}
@@ -384,7 +384,7 @@
         }
 
         <!-- avvik/svinn -->
-        @if (derived.totals.payments - derived.ps.sum != 0) {
+        @if (derived.totals.payments - derived.ps.sum !== 0) {
           <h3>
             {{ derived.ps.payments_deviation_prefix }}:
             {{ derived.totals.payments - derived.ps.sum | price }}
@@ -394,7 +394,7 @@
       <div class="col-xs-6">
         <h2>Salgsoversikt</h2>
 
-        @if (derived.categories.length == 0) {
+        @if (derived.categories.length === 0) {
           <p>Ingen bevegelser på billetter er utført.</p>
         }
 
