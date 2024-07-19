@@ -140,7 +140,7 @@ export class AdminEventCheckinComponent implements OnInit, OnChanges {
   }
 
   #focusKeyfield() {
-    const input = document.querySelector("#keyfield")! as HTMLInputElement
+    const input = document.querySelector<HTMLInputElement>("#keyfield")!
     input.focus()
   }
 

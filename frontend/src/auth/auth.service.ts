@@ -23,7 +23,7 @@ export class AuthService {
     return this.#authData$
   }
 
-  async refreshAuthData() {
+  refreshAuthData() {
     this.http.get<ApiAuthInfo>(api("me")).subscribe({
       next: (authData) => {
         this.#authData$.next(authData)

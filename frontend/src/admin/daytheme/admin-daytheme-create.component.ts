@@ -59,7 +59,7 @@ export class AdminDaythemeCreateComponent implements OnChanges {
   }
 
   storeDaytheme() {
-    if (!this.form || !this.form.title || !this.form.date) return
+    if (!this.form?.title || !this.form.date) return
 
     const date = moment(this.form.date, "YYYY-MM-DD").unix()
     if (!date) {
@@ -75,7 +75,7 @@ export class AdminDaythemeCreateComponent implements OnChanges {
       })
       .subscribe({
         next: () => {
-          this.router.navigateByUrl(`/a/eventgroup/${this.eventgroupId}`)
+          void this.router.navigateByUrl(`/a/eventgroup/${this.eventgroupId}`)
         },
         error: toastErrorHandler(this.toastService),
       })

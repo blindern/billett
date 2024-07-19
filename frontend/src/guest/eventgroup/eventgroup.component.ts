@@ -4,7 +4,6 @@ import {
   inject,
   Input,
   OnChanges,
-  OnInit,
   SimpleChanges,
 } from "@angular/core"
 import { Router, RouterLink } from "@angular/router"
@@ -36,7 +35,7 @@ import { GuestEventlistItemComponent } from "./eventlist-item.component"
   templateUrl: "./eventgroup.component.html",
   styleUrl: "./eventgroup.component.scss",
 })
-export class GuestEventgroupComponent implements OnInit, OnChanges {
+export class GuestEventgroupComponent implements OnChanges {
   private eventgroupService = inject(EventgroupService)
   private router = inject(Router)
   public authService = inject(AuthService)
@@ -49,14 +48,10 @@ export class GuestEventgroupComponent implements OnInit, OnChanges {
 
   pageState = new ResourceLoadingState()
 
-  daythemes!: Record<string, any>
+  daythemes: Record<string, string> = {}
   days!: Record<string, EventgroupExpanded["events"]>
   isFilter!: boolean
   eventgroup?: EventgroupExpanded
-
-  ngOnInit(): void {
-    this.daythemes = {}
-  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes["id"] || changes["query"]) {
@@ -85,7 +80,7 @@ export class GuestEventgroupComponent implements OnInit, OnChanges {
           for (const item of this.eventgroup.events) {
             if (
               filterCategory &&
-              filterCategory != (item.category || "").toLowerCase()
+              filterCategory != (item.category ?? "").toLowerCase()
             )
               continue
 
@@ -106,7 +101,7 @@ export class GuestEventgroupComponent implements OnInit, OnChanges {
 
           // if blank page on filter
           if (c == 0 && (filterDate || filterCategory)) {
-            this.router.navigateByUrl("eventgroup/" + eventgroup.id)
+            void this.router.navigateByUrl("eventgroup/" + eventgroup.id)
           }
 
           this.days = r

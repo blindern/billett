@@ -121,7 +121,7 @@ export class PageService {
     if (!(name in this.attrs)) this.attrs[name] = []
     if (
       this.attrs[name].length == 0 ||
-      !(this.attrs[name][0].isDefault || null)
+      !(this.attrs[name][0].isDefault ?? false)
     ) {
       this.attrs[name].unshift({ val: value, isDefault: true })
     } else {

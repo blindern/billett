@@ -107,7 +107,7 @@ export class EventReservationService {
           return of(undefined)
         }
 
-        const data = JSON.parse(pendingReservation)
+        const data = JSON.parse(pendingReservation) as ReservationData
 
         return this.getReservation(data.id).pipe(
           tap((reservation) => {

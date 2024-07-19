@@ -61,7 +61,7 @@ export class AdminTicketgroupItemComponent implements OnChanges {
         .pipe(handleResourceLoadingStates(this.pageState))
         .subscribe((data) => {
           if (String(data.event.id) !== this.eventId) {
-            this.router.navigateByUrl("/a")
+            void this.router.navigateByUrl("/a")
             return
           }
 
@@ -73,7 +73,7 @@ export class AdminTicketgroupItemComponent implements OnChanges {
   updateTicketgroup() {
     this.adminTicketgroupService.update(this.ticketgroup!).subscribe({
       next: () => {
-        this.router.navigateByUrl(`/a/event/${this.ticketgroup!.event.id}`)
+        void this.router.navigateByUrl(`/a/event/${this.ticketgroup!.event.id}`)
       },
       error: toastErrorHandler(this.toastService),
     })
@@ -83,7 +83,7 @@ export class AdminTicketgroupItemComponent implements OnChanges {
     // TODO: no delete on valid/reserved tickets
     this.adminTicketgroupService.delete(this.ticketgroup!.id).subscribe({
       next: () => {
-        this.router.navigateByUrl(`/a/event/${this.ticketgroup!.event.id}`)
+        void this.router.navigateByUrl(`/a/event/${this.ticketgroup!.event.id}`)
       },
       error: toastErrorHandler(this.toastService),
     })

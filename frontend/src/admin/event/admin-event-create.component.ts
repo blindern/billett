@@ -63,12 +63,11 @@ export class AdminEventCreateComponent implements OnChanges {
   }
 
   storeEvent() {
-    if (!this.event || !this.event.time_start || isNaN(this.event.time_start))
-      return
+    if (!this.event?.time_start || isNaN(this.event.time_start)) return
 
     this.adminEventService.create(this.event).subscribe({
       next: (data) => {
-        this.router.navigateByUrl(`/a/event/${data.id}`)
+        void this.router.navigateByUrl(`/a/event/${data.id}`)
       },
       error: toastErrorHandler(this.toastService),
     })

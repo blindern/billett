@@ -169,7 +169,9 @@ export class AdminOrderItemComponent implements OnChanges {
     const eventgroupId = this.order!.eventgroup.id
     this.adminOrderService.delete(this.order!.id).subscribe({
       next: () => {
-        this.router.navigateByUrl(`/a/orders?eventgroup_id=${eventgroupId}`)
+        void this.router.navigateByUrl(
+          `/a/orders?eventgroup_id=${eventgroupId}`,
+        )
       },
       error: toastErrorHandler(this.toastService, "Feil ved sletting av ordre"),
     })

@@ -1,12 +1,12 @@
-import { Component, Input } from "@angular/core"
+import { Component, Input, OnChanges } from "@angular/core"
 
 @Component({
   selector: "billett-markdown",
   standalone: true,
   template: `<div [innerHTML]="convertedData"></div>`,
 })
-export class MarkdownComponent {
-  @Input("data")
+export class MarkdownComponent implements OnChanges {
+  @Input()
   data!: string | null
 
   convertedData?: string

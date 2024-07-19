@@ -9,7 +9,7 @@ function errorToText(error: unknown) {
       : error != null &&
           typeof error === "object" &&
           "message" in error &&
-          typeof error["message"] === "string"
+          typeof error.message === "string"
         ? error.message
         : JSON.stringify(error)
 }

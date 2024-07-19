@@ -2,13 +2,13 @@ import { catchError, Observable, of, tap } from "rxjs"
 
 export class ResourceLoadingState {
   loading = true
-  error: Error | undefined
+  error: unknown
 }
 
 export function handleResourceLoadingStates<T>(state: ResourceLoadingState) {
   return (source: Observable<T>) =>
     source.pipe(
-      catchError((error) => {
+      catchError((error: unknown) => {
         console.warn(error)
 
         state.error = error

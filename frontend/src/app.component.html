@@ -13,13 +13,13 @@
       <a routerLink="/" class="text-muted"> <img src="/assets/graphics/uka_gul_pikto.gif" alt="" />UKA på Blindern </a>
     </h3>
     <ul class="nav nav-pills navbar-right">
-      <li [activeFor]="['/', '/eventgroup/*', '/event/*']">
+      <li [billettActiveFor]="['/', '/eventgroup/*', '/event/*']">
         <a routerLink="/eventgroup/9"><span class="glyphicon glyphicon-list"></span> Arrangementer</a>
       </li>
-      <li [activeFor]="['/salgsbetingelser']">
+      <li [billettActiveFor]="['/salgsbetingelser']">
         <a routerLink="/salgsbetingelser"><span class="glyphicon glyphicon-flash"></span> Salgsbetingelser</a>
       </li>
-      <li [activeFor]="['/hjelp']">
+      <li [billettActiveFor]="['/hjelp']">
         <a routerLink="/hjelp"><span class="glyphicon glyphicon-question-sign"></span> Hjelp</a>
       </li>
     </ul>

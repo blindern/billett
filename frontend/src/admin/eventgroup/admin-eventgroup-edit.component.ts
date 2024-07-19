@@ -53,7 +53,7 @@ export class AdminEventgroupEditComponent implements OnChanges {
   }
 
   storeEventgroup() {
-    if (!this.eventgroup || !this.eventgroup.title) return
+    if (!this.eventgroup?.title) return
 
     this.adminEventgroupService.update(this.eventgroup).subscribe({
       next: (data) => {

@@ -9,7 +9,7 @@ import {
   RouterOutlet,
 } from "@angular/router"
 import { AuthService } from "./auth/auth.service"
-import { ActiveFor } from "./common/active-for"
+import { ActiveForDirective } from "./common/active-for.directive"
 import { ToastContainerComponent } from "./common/toast-container.component"
 
 @Component({
@@ -18,7 +18,7 @@ import { ToastContainerComponent } from "./common/toast-container.component"
   imports: [
     RouterOutlet,
     RouterLink,
-    ActiveFor,
+    ActiveForDirective,
     AsyncPipe,
     ToastContainerComponent,
   ],
@@ -33,7 +33,7 @@ export class AppComponent implements OnInit {
   loggedInButNoAccess = false
 
   isAdminPage() {
-    return this.location.path().substring(0, 3) == "/a/"
+    return this.location.path().startsWith("/a/")
   }
 
   constructor() {

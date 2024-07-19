@@ -61,7 +61,12 @@ export class AdminEventgroupComponent implements OnChanges {
   filter_category = ""
   filter_hidden: "" | "0" | "1" = ""
   categories: string[] = []
-  days?: Record<string, any[]>
+  days?: Record<
+    string,
+    (ApiEventAdmin & {
+      ticketgroups: ApiTicketgroupAdmin[]
+    })[]
+  >
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes["id"]) {
@@ -74,8 +79,8 @@ export class AdminEventgroupComponent implements OnChanges {
 
           this.categories = []
           for (const event of this.eventgroup.events) {
-            if (this.categories.includes(event.category || "")) continue
-            this.categories.push(event.category || "")
+            if (this.categories.includes(event.category ?? "")) continue
+            this.categories.push(event.category ?? "")
           }
           this.categories.sort()
         })
@@ -87,21 +92,16 @@ export class AdminEventgroupComponent implements OnChanges {
   }
 
   applyFilter() {
-    const r: Record<
-      string,
-      (ApiEventAdmin & {
-        ticketgroups: ApiTicketgroupAdmin[]
-      })[]
-    > = {}
+    const r: NonNullable<this["days"]> = {}
     for (const item of this.eventgroup!.events) {
       if (
         this.filter_sale !== "" &&
-        (this.filter_sale === "1") !== !!item.ticketgroups!.length
+        (this.filter_sale === "1") !== !!item.ticketgroups.length
       )
         continue
       if (
         this.filter_category !== "-1" &&
-        this.filter_category != (item.category || "")
+        this.filter_category != (item.category ?? "")
       )
         continue
       if (

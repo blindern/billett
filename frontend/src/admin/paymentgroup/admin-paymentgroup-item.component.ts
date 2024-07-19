@@ -190,7 +190,7 @@ export class AdminPaymentgroupItemComponent implements OnChanges {
           : "ticket_sales"
 
       item[t] += value
-      item["total"] += value
+      item.total += value
     }
 
     for (const payment of paymentgroup.payments) {
@@ -406,13 +406,11 @@ export class AdminPaymentgroupItemComponent implements OnChanges {
       cashgroups: [] as (typeof cashgroups_link)["foo"][],
       other: [] as ApiPaymentsourceAdmin[],
       payments_deviation_prefix:
-        paymentgroup.eventgroup.paymentsources_data[
-          "payments_deviation_prefix"
-        ] || "Kassedifferanse",
+        paymentgroup.eventgroup.paymentsources_data.payments_deviation_prefix ||
+        "Kassedifferanse",
       orders_deviation_prefix:
-        paymentgroup.eventgroup.paymentsources_data[
-          "orders_deviation_prefix"
-        ] || "Utestående beløp",
+        paymentgroup.eventgroup.paymentsources_data.orders_deviation_prefix ||
+        "Utestående beløp",
     }
 
     const processCashItem = (paymentsource: ApiPaymentsourceAdmin) => {
@@ -435,7 +433,7 @@ export class AdminPaymentgroupItemComponent implements OnChanges {
 
       const group = cashgroups_link[paymentsource.title]
 
-      for (const [key, val] of Object.entries(paymentsource.data || {})) {
+      for (const [key, val] of Object.entries(paymentsource.data ?? {})) {
         if (!group.cashunique.includes(key)) {
           group.cashunique.push(key)
         }

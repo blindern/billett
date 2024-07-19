@@ -34,7 +34,12 @@ import { Event, EventService } from "./event.service"
 
 declare global {
   interface Window {
-    VippsCheckout: any
+    VippsCheckout: (options: {
+      checkoutFrontendUrl: string
+      iFrameContainerId: string
+      language: string
+      token: string
+    }) => void
   }
 }
 
@@ -80,7 +85,7 @@ export class GuestEventComponent implements OnInit, OnChanges {
     count: number
   }[] = []
 
-  vipps_checkout: any
+  vipps_checkout = false
 
   forcePay = false
 
@@ -206,7 +211,7 @@ export class GuestEventComponent implements OnInit, OnChanges {
     if (force) {
       // details about the order is fetched at the
       // completed url
-      this.router.navigateByUrl("order/complete")
+      void this.router.navigateByUrl("order/complete")
       return
     } else {
       this.vipps_checkout = true
@@ -262,7 +267,7 @@ export class GuestEventComponent implements OnInit, OnChanges {
 
           // do we have an alias not being used?
           if (event.alias != null && this.id != event.alias) {
-            this.router.navigateByUrl("/event/" + event.alias, {
+            void this.router.navigateByUrl("/event/" + event.alias, {
               replaceUrl: true,
             })
           }

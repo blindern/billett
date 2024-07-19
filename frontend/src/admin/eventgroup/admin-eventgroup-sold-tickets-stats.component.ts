@@ -80,8 +80,8 @@ export class AdminEventgroupSoldTicketsStatsComponent implements OnChanges {
       .sort()
       .reverse()
 
-    let topAccum = new Accum()
-    let daysAccum = Object.fromEntries(days.map((day) => [day, new Accum()]))
+    const topAccum = new Accum()
+    const daysAccum = Object.fromEntries(days.map((day) => [day, new Accum()]))
 
     let max_sales = 0
     let max_normal_sales = 0
@@ -100,7 +100,7 @@ export class AdminEventgroupSoldTicketsStatsComponent implements OnChanges {
 
     const events = data.events.map((event) => {
       max_sales += event.max_sales
-      max_normal_sales += event.max_normal_sales || event.max_sales
+      max_normal_sales += event.max_normal_sales ?? event.max_sales
 
       return {
         ...event,

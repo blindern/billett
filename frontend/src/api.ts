@@ -11,7 +11,7 @@ if (backendUrl === "/" && window.location.port === "3000") {
 }
 
 if (!backendUrl.includes("//")) {
-  let seperator = backendUrl.substring(0, 1) === "/" ? "" : "/"
+  const seperator = backendUrl.startsWith("/") ? "" : "/"
   backendUrl = window.location.origin + seperator + backendUrl
 }
 

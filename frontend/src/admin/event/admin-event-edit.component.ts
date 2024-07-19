@@ -60,7 +60,7 @@ export class AdminEventEditComponent implements OnChanges {
 
     this.adminEventService.update(this.event).subscribe({
       next: () => {
-        this.router.navigateByUrl(`/a/event/${this.event!.id}`)
+        void this.router.navigateByUrl(`/a/event/${this.event!.id}`)
       },
       error: toastErrorHandler(this.toastService),
     })

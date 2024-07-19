@@ -46,7 +46,7 @@ export class AdminPaymentsourceCreateModal {
     @Inject(DIALOG_DATA)
     private data: AdminPaymentsourceCreateModalInput,
   ) {
-    this.loadMathjs()
+    void this.loadMathjs()
   }
 
   private adminPaymentsourceService = inject(AdminPaymentsourceService)
@@ -116,12 +116,12 @@ export class AdminPaymentsourceCreateModal {
   set type(value: typeof this._type) {
     this._type = value
     if (value == "cash") {
-      this.title = this.data.eventgroup.paymentsources_data["cash_prefix"] || ""
+      this.title = this.data.eventgroup.paymentsources_data.cash_prefix || ""
     }
   }
 
   get titleTemplates() {
-    return (this.data.eventgroup.paymentsources_data["sources"] ?? []).map(
+    return (this.data.eventgroup.paymentsources_data.sources ?? []).map(
       (it) => it.title,
     )
   }

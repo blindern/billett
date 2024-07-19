@@ -123,7 +123,7 @@ export class AdminOrderCreateComponent implements OnInit, OnChanges {
 
                 if (order.is_valid) {
                   localStorage.removeItem("billett.neworder.id")
-                  this.router.navigateByUrl(`/a/order/${order.id}`)
+                  void this.router.navigateByUrl(`/a/order/${order.id}`)
                 }
               },
               error: () => {
@@ -145,7 +145,7 @@ export class AdminOrderCreateComponent implements OnInit, OnChanges {
   }
 
   createBlank() {
-    this.getOrCreateOrder()
+    void this.getOrCreateOrder()
   }
 
   completeOrder() {
@@ -179,7 +179,7 @@ export class AdminOrderCreateComponent implements OnInit, OnChanges {
                 } else {
                   toastErrorHandler(this.toastService)(error)
                 }
-                this.getOrCreateOrder(true)
+                void this.getOrCreateOrder(true)
                 return of()
               }),
             ),
@@ -206,7 +206,7 @@ export class AdminOrderCreateComponent implements OnInit, OnChanges {
   saveOrder() {
     this.saveEdit().subscribe(() => {
       localStorage.removeItem("billett.neworder.id")
-      this.router.navigateByUrl(`/a/order/${this.order.id}`)
+      void this.router.navigateByUrl(`/a/order/${this.order.id}`)
     })
   }
 
@@ -309,7 +309,7 @@ export class AdminOrderCreateComponent implements OnInit, OnChanges {
 
     this.adminTicketService.delete(tickets[0].id).subscribe({
       next: () => {
-        this.getOrCreateOrder(true).finally(() => {
+        void this.getOrCreateOrder(true).finally(() => {
           this.ticketgroupsWorking.delete(ticketgroup.id)
         })
       },

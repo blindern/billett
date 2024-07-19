@@ -89,7 +89,9 @@ export class AdminEventComponent implements OnChanges {
 
     this.adminEventService.delete(this.event!.id).subscribe({
       next: () => {
-        this.router.navigateByUrl("/a/eventgroup/" + this.event!.eventgroup.id)
+        void this.router.navigateByUrl(
+          "/a/eventgroup/" + this.event!.eventgroup.id,
+        )
       },
       error: toastErrorHandler(this.toastService),
     })

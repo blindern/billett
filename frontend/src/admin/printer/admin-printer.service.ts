@@ -69,7 +69,7 @@ export class AdminPrinterService {
   }
 
   setPreferred(printer: ApiPrinterAdmin | undefined, forceEmpty?: boolean) {
-    if (printer || forceEmpty) {
+    if (printer != null || forceEmpty) {
       if (printer) {
         sessionStorage.setItem("billett.printer.default", printer.name)
       } else {

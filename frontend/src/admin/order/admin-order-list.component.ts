@@ -183,7 +183,7 @@ export class AdminOrderListComponent implements OnInit {
       }
     }
 
-    this.router.navigate([], {
+    void this.router.navigate([], {
       relativeTo: this.route,
       queryParams,
       queryParamsHandling: "merge",

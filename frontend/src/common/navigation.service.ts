@@ -24,7 +24,7 @@ export class NavigationService implements OnInit {
       this.history.pop()
       this.location.back()
     } else {
-      this.router.navigateByUrl(url)
+      void this.router.navigateByUrl(url)
     }
   }
 }

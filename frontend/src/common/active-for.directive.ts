@@ -12,11 +12,11 @@ import { Event, NavigationEnd, Router } from "@angular/router"
 import { Subscription } from "rxjs"
 
 @Directive({
-  selector: "[activeFor]",
-  exportAs: "activeFor",
+  selector: "[billettActiveFor]",
+  exportAs: "billettActiveFor",
   standalone: true,
 })
-export class ActiveFor implements OnInit, OnChanges, OnDestroy {
+export class ActiveForDirective implements OnInit, OnChanges, OnDestroy {
   private router = inject(Router)
   private element = inject(ElementRef)
   private renderer = inject(Renderer2)
@@ -25,7 +25,7 @@ export class ActiveFor implements OnInit, OnChanges, OnDestroy {
   private routerEventsSubscription!: Subscription
 
   @Input()
-  set activeFor(data: string[]) {
+  set billettActiveFor(data: string[]) {
     this.paths = data
   }
 

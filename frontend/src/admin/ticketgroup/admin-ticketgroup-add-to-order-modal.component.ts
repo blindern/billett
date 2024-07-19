@@ -103,8 +103,7 @@ export class AdminTicketgroupAddToOrderModal implements OnInit {
 
     if (event.title.toLowerCase().includes(text)) return true
 
-    if (event.description && event.description.toLowerCase().includes(text))
-      return true
+    if (event.description?.toLowerCase().includes(text)) return true
 
     for (const ticketgroup of event.ticketgroups) {
       if (ticketgroup.title.toLowerCase().includes(text)) return true
@@ -138,7 +137,7 @@ export class AdminTicketgroupAddToOrderModal implements OnInit {
 
   submit() {
     this.sending = true
-    this.data.getOrderId().then((orderId) => {
+    void this.data.getOrderId().then((orderId) => {
       this.adminOrderService
         .createTickets(
           orderId,

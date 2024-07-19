@@ -128,6 +128,7 @@ export class AdminOrderService {
   }
 
   getTotalValid(
+    this: void,
     order: ApiOrderAdmin & {
       tickets: (ApiTicketAdmin & { ticketgroup: ApiTicketgroupAdmin })[]
     },
@@ -142,6 +143,7 @@ export class AdminOrderService {
   }
 
   getTotalReserved(
+    this: void,
     order: ApiOrderAdmin & {
       tickets: (ApiTicketAdmin & { ticketgroup: ApiTicketgroupAdmin })[]
     },

@@ -27,7 +27,7 @@ export class AdminEventgroupCreateComponent {
 
     this.adminEventgroupService.create(this.form).subscribe({
       next: (data) => {
-        this.router.navigateByUrl(`/a/eventgroup/${data.id}`)
+        void this.router.navigateByUrl(`/a/eventgroup/${data.id}`)
       },
       error: toastErrorHandler(this.toastService),
     })
