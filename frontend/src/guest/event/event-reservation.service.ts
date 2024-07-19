@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http"
 import { inject, Injectable } from "@angular/core"
-import { firstValueFrom } from "rxjs"
+import { catchError, defer, map, mergeMap, of, tap } from "rxjs"
 import { api } from "../../api"
 import { ApiEvent, ApiOrder, ApiTicket, ApiTicketgroup } from "../../apitypes"
 
@@ -24,37 +24,38 @@ export class EventReservationItem {
     }
   }
 
-  async abort() {
+  abort() {
     const id = this.data.id
-    await firstValueFrom(
-      this.http.delete(api(`order/${encodeURIComponent(id)}`)),
+    return this.http.delete(api(`order/${encodeURIComponent(id)}`)).pipe(
+      tap(() => {
+        this.eventReservationService.removePersistedReservation(id)
+      }),
     )
-    this.eventReservationService.removePersistedReservation(id)
   }
 
-  async update(data: { recruiter: string }) {
-    const updatedData = await firstValueFrom(
-      this.http.patch<ReservationData>(
+  update(data: { recruiter: string }) {
+    return this.http
+      .patch<ReservationData>(
         api(`order/${encodeURIComponent(this.data.id)}`),
         data,
-      ),
-    )
-    this.data = updatedData
-    return updatedData
+      )
+      .pipe(
+        tap((updatedData) => {
+          this.data = updatedData
+        }),
+      )
   }
 
   // send to payment
-  async place(force?: boolean) {
-    return await firstValueFrom(
-      this.http.post<{
-        checkoutFrontendUrl: string
-        token: string
-      }>(
-        api(
-          `order/${encodeURIComponent(this.data.id)}/${force ? "force" : "place"}`,
-        ),
-        null,
+  place(force?: boolean) {
+    return this.http.post<{
+      checkoutFrontendUrl: string
+      token: string
+    }>(
+      api(
+        `order/${encodeURIComponent(this.data.id)}/${force ? "force" : "place"}`,
       ),
+      null,
     )
   }
 }
@@ -76,15 +77,18 @@ export class EventReservationService {
     return this.current
   }
 
-  async getReservation(id: number) {
-    const data = await firstValueFrom(
-      this.http.get<ReservationData>(api(`order/${encodeURIComponent(id)}`)),
-    )
-    if (data.is_valid) {
-      // real order, no reservation
-      throw new Error("last reservation is valid order")
-    }
-    return new EventReservationItem(data, this.http, this)
+  getReservation(id: number) {
+    return this.http
+      .get<ReservationData>(api(`order/${encodeURIComponent(id)}`))
+      .pipe(
+        tap((data) => {
+          if (data.is_valid) {
+            // real order, no reservation
+            throw new Error("last reservation is valid order")
+          }
+        }),
+        map((data) => new EventReservationItem(data, this.http, this)),
+      )
   }
 
   removePersistedReservation(only_id?: number) {
@@ -96,34 +100,36 @@ export class EventReservationService {
     }
   }
 
-  async restoreReservation() {
-    const pendingReservation = sessionStorage.getItem("pendingReservation")
-    if (!pendingReservation) {
-      throw new Error("not found")
-    }
+  restoreReservation() {
+    return defer(() => of(sessionStorage.getItem("pendingReservation"))).pipe(
+      mergeMap((pendingReservation) => {
+        if (!pendingReservation) {
+          return of(undefined)
+        }
 
-    const data = JSON.parse(pendingReservation)
+        const data = JSON.parse(pendingReservation)
 
-    try {
-      const reservation = await this.getReservation(data.id)
-      this.current = reservation
-      return reservation
-    } catch (e) {
-      this.removePersistedReservation()
-      throw e
-    }
+        return this.getReservation(data.id).pipe(
+          tap((reservation) => {
+            this.current = reservation
+          }),
+          catchError((error) => {
+            this.removePersistedReservation()
+            throw error
+          }),
+        )
+      }),
+    )
   }
 
-  async create(event_id: number, ticketgroups: Record<number, number>) {
-    const data = await firstValueFrom(
-      this.http.post<ReservationData>(
+  create(event_id: number, ticketgroups: Record<number, number>) {
+    return this.http
+      .post<ReservationData>(
         api(`event/${encodeURIComponent(event_id)}/createreservation`),
         {
           ticketgroups: ticketgroups,
         },
-      ),
-    )
-
-    return this.setReservation(data)
+      )
+      .pipe(map((data) => this.setReservation(data)))
   }
 }

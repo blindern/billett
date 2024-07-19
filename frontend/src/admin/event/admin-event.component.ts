@@ -12,6 +12,7 @@ import { Router, RouterLink } from "@angular/router"
 import { catchError, tap } from "rxjs"
 import { api } from "../../api"
 import { ApiTicketgroupAdmin } from "../../apitypes"
+import { toastErrorHandler } from "../../common/errors"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { MarkdownComponent } from "../../common/markdown.component"
 import { PagePropertyComponent } from "../../common/page-property.component"
@@ -86,8 +87,11 @@ export class AdminEventComponent implements OnChanges {
       return
     }
 
-    this.adminEventService.delete(this.event!.id).subscribe(() => {
-      this.router.navigateByUrl("/a/eventgroup/" + this.event!.eventgroup.id)
+    this.adminEventService.delete(this.event!.id).subscribe({
+      next: () => {
+        this.router.navigateByUrl("/a/eventgroup/" + this.event!.eventgroup.id)
+      },
+      error: toastErrorHandler(this.toastService),
     })
   }
 
@@ -115,7 +119,12 @@ export class AdminEventComponent implements OnChanges {
           this.event!.ticketgroups.map((g, index) => [g.id, index]),
         ),
       )
-      .subscribe()
+      .subscribe({
+        error: toastErrorHandler(
+          this.toastService,
+          "Feil ved endring av rekkefølge",
+        ),
+      })
   }
 
   previewTicketPrint(ticketgroup: ApiTicketgroupAdmin) {
@@ -142,11 +151,15 @@ export class AdminEventComponent implements OnChanges {
     const file = fileInput.files![0]
     const formData = new FormData()
     formData.append("file", file)
-    this.adminEventService
-      .uploadImage(this.event!.id, formData)
-      .subscribe(() => {
+    this.adminEventService.uploadImage(this.event!.id, formData).subscribe({
+      next: () => {
         this.image_version = new Date().getTime().toString()
         fileInput.value = ""
-      })
+      },
+      error: toastErrorHandler(
+        this.toastService,
+        "Feil ved opplasting av bilde",
+      ),
+    })
   }
 }

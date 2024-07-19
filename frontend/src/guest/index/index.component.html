@@ -6,7 +6,9 @@
 
 <h2>Kommende arrangementer</h2>
 
-@if (!upcoming) {
+@if (upcomingState.error) {
+  <p>Feil: {{ upcomingState.error }}</p>
+} @else if (!upcoming) {
   <p>Laster data..</p>
 } @else if (upcoming.length == 0) {
   <p>Ingen arrangementer ble funnet.</p>
@@ -17,10 +19,16 @@
 }
 
 <h2>Arrangementgrupper</h2>
-<ul>
-  @for (group of eventgroups; track group.id) {
-    <li>
-      <a routerLink="/eventgroup/{{ group.id }}">{{ group.title }}</a>
-    </li>
-  }
-</ul>
+@if (eventgroupsState.error) {
+  <p>Feil: {{ eventgroupsState.error }}</p>
+} @else if (eventgroupsState.loading) {
+  <p>Laster data..</p>
+} @else {
+  <ul>
+    @for (group of eventgroups; track group.id) {
+      <li>
+        <a routerLink="/eventgroup/{{ group.id }}">{{ group.title }}</a>
+      </li>
+    }
+  </ul>
+}

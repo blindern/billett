@@ -1,7 +1,7 @@
 @if (state.loading) {
   <billett-page-loading />
-} @else if (state.notfound) {
+} @else if (isNotFound) {
   <billett-page-not-found />
 } @else if (state.error) {
-  Feil oppsto: {{ state.error }}
+  Feil oppsto: {{ getErrorText(state.error) }}
 }

@@ -106,7 +106,6 @@ export class GuestEventgroupComponent implements OnInit, OnChanges {
 
           // if blank page on filter
           if (c == 0 && (filterDate || filterCategory)) {
-            this.pageState.notfound = true
             this.router.navigateByUrl("eventgroup/" + eventgroup.id)
           }
 

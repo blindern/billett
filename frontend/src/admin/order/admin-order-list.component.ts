@@ -4,10 +4,12 @@ import { FormsModule } from "@angular/forms"
 import { ActivatedRoute, Router, RouterLink } from "@angular/router"
 import { debounce, of, Subject, timer } from "rxjs"
 import { api } from "../../api"
+import { toastErrorHandler } from "../../common/errors"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PaginationComponent } from "../../common/pagination.component"
 import { PricePipe } from "../../common/price.pipe"
+import { ToastService } from "../../common/toast.service"
 import { AdminOrderData, AdminOrderService } from "./admin-order.service"
 
 const searchInit = {
@@ -44,6 +46,7 @@ export class AdminOrderListComponent implements OnInit {
   private adminOrderService = inject(AdminOrderService)
   private route = inject(ActivatedRoute)
   private router = inject(Router)
+  private toastService = inject(ToastService)
 
   api = api
 
@@ -92,8 +95,14 @@ export class AdminOrderListComponent implements OnInit {
             page: this.search.page,
             filter: this.genFilter(),
           })
-          .subscribe((data) => {
-            this.orders = this.parseOrdersList(data)
+          .subscribe({
+            next: (data) => {
+              this.orders = this.parseOrdersList(data)
+            },
+            error: toastErrorHandler(
+              this.toastService,
+              "Feil ved søk etter ordre",
+            ),
           })
       })
 

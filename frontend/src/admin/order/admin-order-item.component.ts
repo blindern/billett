@@ -9,9 +9,10 @@ import {
 } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { Router, RouterLink } from "@angular/router"
-import { catchError, tap } from "rxjs"
+import { catchError, finalize, tap } from "rxjs"
 import { api } from "../../api"
 import { ApiTicketAdmin, ApiTicketgroupAdmin } from "../../apitypes"
+import { getValidationError, toastErrorHandler } from "../../common/errors"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { MarkdownComponent } from "../../common/markdown.component"
 import { PagePropertyComponent } from "../../common/page-property.component"
@@ -81,8 +82,11 @@ export class AdminOrderItemComponent implements OnChanges {
   }
 
   refreshOrder() {
-    this.adminOrderService.get(this.id).subscribe((data) => {
-      this.order = data
+    this.adminOrderService.get(this.id).subscribe({
+      next: (data) => {
+        this.order = data
+      },
+      error: toastErrorHandler(this.toastService, "Feil ved henting av ordre"),
     })
   }
 
@@ -149,9 +153,15 @@ export class AdminOrderItemComponent implements OnChanges {
     for (const field of this.#editFields) {
       this.order![field] = this.edit![field]
     }
-    this.adminOrderService.update(this.order!).subscribe((order) => {
-      this.order = order
-      this.edit = undefined
+    this.adminOrderService.update(this.order!).subscribe({
+      next: (order) => {
+        this.order = order
+        this.edit = undefined
+      },
+      error: toastErrorHandler(
+        this.toastService,
+        "Feil ved oppdatering av ordre",
+      ),
     })
   }
 
@@ -161,10 +171,7 @@ export class AdminOrderItemComponent implements OnChanges {
       next: () => {
         this.router.navigateByUrl(`/a/orders?eventgroup_id=${eventgroupId}`)
       },
-      error: (err) => {
-        console.error(err)
-        alert("Feil ved sletting av ordre")
-      },
+      error: toastErrorHandler(this.toastService, "Feil ved sletting av ordre"),
     })
   }
 
@@ -178,22 +185,24 @@ export class AdminOrderItemComponent implements OnChanges {
 
       this.adminOrderService
         .validateAndConvert(this.order!.id, paymentgroup, this.totalReserved)
+        .pipe(
+          finalize(() => {
+            this.refreshOrder()
+          }),
+        )
         .subscribe({
-          next: (order) => {
+          error: (error) => {
             this.refreshOrder()
-          },
-          error: (err) => {
-            // TODO(migrate): response body error handling
-            // if (err.data == "amount mismatched") {
-            //   alert(
-            //     "Noe i reservasjonen ser ut til å ha endret seg. Prøv på nytt.",
-            //   )
-            //   this.getOrCreateOrder(true)
-            // } else {
-            console.error(err)
-            alert(err.data)
-            this.refreshOrder()
-            // }
+            if (getValidationError(error) === "amount mismatched") {
+              this.toastService.show(
+                "Noe i reservasjonen ser ut til å ha endret seg. Prøv på nytt.",
+                {
+                  class: "warning",
+                },
+              )
+            } else {
+              toastErrorHandler(this.toastService)(error)
+            }
           },
         })
     })
@@ -204,6 +213,7 @@ export class AdminOrderItemComponent implements OnChanges {
       next: () => {
         this.refreshOrder()
       },
+      error: toastErrorHandler(this.toastService),
     })
   }
 
@@ -241,8 +251,11 @@ export class AdminOrderItemComponent implements OnChanges {
 
       this.adminTicketService
         .validateAndConvert(ticket.id, paymentgroup)
-        .subscribe(() => {
-          this.refreshOrder()
+        .subscribe({
+          next: () => {
+            this.refreshOrder()
+          },
+          error: toastErrorHandler(this.toastService),
         })
     })
   }
@@ -252,7 +265,8 @@ export class AdminOrderItemComponent implements OnChanges {
       next: () => {
         this.refreshOrder()
       },
-      error: () => {
+      error: (error) => {
+        toastErrorHandler(this.toastService)(error)
         this.refreshOrder()
       },
     })
@@ -305,9 +319,7 @@ export class AdminOrderItemComponent implements OnChanges {
             })
           }),
           catchError((e) => {
-            this.toastService.show("Ukjent feil oppsto!", {
-              class: "warning",
-            })
+            toastErrorHandler(this.toastService)(e)
             throw e
           }),
         )

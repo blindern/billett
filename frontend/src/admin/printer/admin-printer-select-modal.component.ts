@@ -1,7 +1,7 @@
 import { Dialog, DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
 import { Component, inject, Inject } from "@angular/core"
 import { FormsModule } from "@angular/forms"
-import { Observable } from "rxjs"
+import { finalize, Observable } from "rxjs"
 import { ApiPrinterAdmin } from "../../apitypes"
 import { AdminPrinterSelectboxComponent } from "./admin-printer-selectbox.component"
 
@@ -41,17 +41,18 @@ export class AdminPrinterSelectModal {
 
   complete() {
     this.sending = true
-    this.data.handler(this.printer!).subscribe({
-      next: () => {
-        this.sending = false
+    this.data
+      .handler(this.printer!)
+      .pipe(
+        finalize(() => {
+          this.sending = false
+        }),
+      )
+      .subscribe(() => {
         this.dialogRef.close({
           completed: true,
         })
-      },
-      error: () => {
-        this.sending = false
-      },
-    })
+      })
   }
 
   cancel() {

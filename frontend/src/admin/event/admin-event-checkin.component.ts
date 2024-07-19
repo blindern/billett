@@ -17,6 +17,7 @@ import {
   ApiTicketAdmin,
   ApiTicketgroupAdmin,
 } from "../../apitypes"
+import { toastErrorHandler } from "../../common/errors"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
@@ -26,6 +27,7 @@ import {
   handleResourceLoadingStates,
   ResourceLoadingState,
 } from "../../common/resource-loading"
+import { ToastService } from "../../common/toast.service"
 import {
   AdminEventCheckinService,
   AdminOrderSearchData,
@@ -68,6 +70,7 @@ const searchinputInit = {
 export class AdminEventCheckinComponent implements OnInit, OnChanges {
   private adminEventService = inject(AdminEventService)
   private adminEventCheckinService = inject(AdminEventCheckinService)
+  private toastService = inject(ToastService)
 
   @Input()
   id!: string
@@ -125,8 +128,14 @@ export class AdminEventCheckinComponent implements OnInit, OnChanges {
   }
 
   #reloadEvent() {
-    this.adminEventService.get(this.id).subscribe((data) => {
-      this.event = data
+    this.adminEventService.get(this.id).subscribe({
+      next: (data) => {
+        this.event = data
+      },
+      error: toastErrorHandler(
+        this.toastService,
+        "Kunne ikke laste arrangement",
+      ),
     })
   }
 
@@ -172,10 +181,13 @@ export class AdminEventCheckinComponent implements OnInit, OnChanges {
 
     this.adminEventCheckinService
       .searchForOrders(this.searchinput.page, filter)
-      .subscribe((data) => {
-        this.ordersLoading = false
-        this.orders = this.parseOrdersList(data)
-        this.#checkKeySearch()
+      .subscribe({
+        next: (data) => {
+          this.ordersLoading = false
+          this.orders = this.parseOrdersList(data)
+          this.#checkKeySearch()
+        },
+        error: toastErrorHandler(this.toastService, "Søk feilet"),
       })
   }
 
@@ -279,12 +291,16 @@ export class AdminEventCheckinComponent implements OnInit, OnChanges {
     this.ordersLoading = false
     this.resetSearchInput()
 
-    this.adminEventCheckinService
-      .getAllTickets(this.event!.id)
-      .subscribe((data) => {
+    this.adminEventCheckinService.getAllTickets(this.event!.id).subscribe({
+      next: (data) => {
         this.tickets = this.parseTicketsList(data)
         this.ticketsLoading = false
-      })
+      },
+      error: toastErrorHandler(
+        this.toastService,
+        "Feil ved lasting av billetter",
+      ),
+    })
   }
 
   private parseTicketsList(tickets: AdminTicketForCheckinData[]) {
@@ -319,10 +335,10 @@ export class AdminEventCheckinComponent implements OnInit, OnChanges {
         this.lastUsedTicketsLoading = false
         this.lastUsedTickets = data.result
       },
-      error: (err) => {
-        console.warn(err)
-        alert("Ukjent feil ved lasting av siste innsjekkede billetter")
-      },
+      error: toastErrorHandler(
+        this.toastService,
+        "Feil ved lasting av siste innsjekkede billetter",
+      ),
     })
   }
 
@@ -345,9 +361,10 @@ export class AdminEventCheckinComponent implements OnInit, OnChanges {
         // list of last checked in tickets are probably changed, reload it
         this.#loadLastUsedTickets()
       },
-      error: () => {
-        alert("Innsjekking feilet av ukjent årsak - oppdater siden")
-      },
+      error: toastErrorHandler(
+        this.toastService,
+        "Innsjekking feilet av ukjent årsak - oppdater siden",
+      ),
     })
   }
 }

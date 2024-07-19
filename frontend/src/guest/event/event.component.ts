@@ -10,12 +10,16 @@ import {
 } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { Router, RouterLink } from "@angular/router"
+import { finalize, firstValueFrom } from "rxjs"
 import { api } from "../../api"
 import { ApiTicketgroup } from "../../apitypes"
 import { AuthService } from "../../auth/auth.service"
+import { toastErrorHandler } from "../../common/errors"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { MarkdownComponent } from "../../common/markdown.component"
+import { ObservableType } from "../../common/observable"
 import { PagePropertyComponent } from "../../common/page-property.component"
+import { PageStatesComponent } from "../../common/page-states.component"
 import { PricePipe } from "../../common/price.pipe"
 import {
   handleResourceLoadingStates,
@@ -45,6 +49,7 @@ declare global {
     PagePropertyComponent,
     MarkdownComponent,
     AsyncPipe,
+    PageStatesComponent,
   ],
   templateUrl: "./event.component.html",
   styleUrl: "./event.component.scss",
@@ -133,16 +138,16 @@ export class GuestEventComponent implements OnInit, OnChanges {
     found.count += num
   }
 
-  // abort order
   abortOrder() {
-    this.reservation!.abort().then(
-      () => {
+    this.reservation!.abort().subscribe({
+      next: () => {
         this.reset()
       },
-      (err) => {
-        alert("Klarte ikke å avbryte reservasjonen. Ukjent feil: " + err)
-      },
-    )
+      error: toastErrorHandler(
+        this.toastService,
+        "Klarte ikke å avbryte reservasjonen",
+      ),
+    })
   }
 
   async placeOrder(force?: boolean) {
@@ -151,7 +156,6 @@ export class GuestEventComponent implements OnInit, OnChanges {
         this.toastService.show("Du må velge noen billetter.", {
           class: "warning",
         })
-        alert("Du må velge noen billetter.")
         return
       }
 
@@ -163,17 +167,14 @@ export class GuestEventComponent implements OnInit, OnChanges {
       }
 
       try {
-        const res = await this.eventReservationService.create(
-          this.event!.id,
-          groups,
+        this.reservation = await firstValueFrom(
+          this.eventReservationService.create(this.event!.id, groups),
         )
-        this.reservation = res
-      } catch (err: any) {
-        // creating reservation failed
-        // TODO: handle error cases
-        // TODO(migrate): error object structure
-        const msg = "data" in err ? err.data : err
-        alert("Ukjent feil oppsto ved henting av reservasjon: " + msg)
+      } catch (error: unknown) {
+        toastErrorHandler(
+          this.toastService,
+          "Ukjent feil oppsto ved henting av reservasjon",
+        )(error)
         return
       }
     }
@@ -182,29 +183,25 @@ export class GuestEventComponent implements OnInit, OnChanges {
       recruiter: this.recruiter,
     }
     try {
-      await this.reservation.update(data)
-    } catch (err: any) {
-      // TODO(migrate): error object structure
-      if (err == "data validation failed") {
-        this.toastService.show("Ugyldig inndata i skjemaet.", {
-          class: "warning",
-        })
-      } else {
-        const msg = "data" in err ? err.data : err
-        alert("Ukjent feil oppsto ved lagring av kontaktdata: " + msg)
-        return
-      }
+      await firstValueFrom(this.reservation.update(data))
+    } catch (error: unknown) {
+      toastErrorHandler(
+        this.toastService,
+        "Ukjent feil oppsto ved lagring av kontaktdata",
+      )(error)
+      return
     }
 
     // send to payment
-    let response: Awaited<ReturnType<EventReservationItem["place"]>>
+    let response: ObservableType<ReturnType<EventReservationItem["place"]>>
     try {
-      response = await this.reservation.place(force)
-    } catch (err: any) {
-      // TODO: handle error cases
-      // TODO(migrate): error object structure
-      const msg = "data" in err ? err.data : err
-      alert("Ukjent feil oppsto ved lagring av ordre: " + msg)
+      response = await firstValueFrom(this.reservation.place(force))
+    } catch (error: unknown) {
+      toastErrorHandler(
+        this.toastService,
+        "Ukjent feil oppsto ved lagring av ordre",
+      )(error)
+      return
     }
     if (force) {
       // details about the order is fetched at the
@@ -271,19 +268,22 @@ export class GuestEventComponent implements OnInit, OnChanges {
           }
         })
 
-      // check for reservation
       this.loadingReservation = true
       this.eventReservationService
         .restoreReservation()
-        .then((reservationResult) => {
-          this.reservation = reservationResult
+        .pipe(
+          finalize(() => {
+            this.loadingReservation = false
+          }),
+        )
+        .subscribe({
+          next: (reservation) => {
+            this.reservation = reservation
+          },
+          error: (error) => {
+            console.warn("Failed to restore reservation - ignoring", error)
+          },
         })
-        .catch(() => null)
-        .finally(() => {
-          this.loadingReservation = false
-        })
-
-      this.reset()
     }
   }
 }

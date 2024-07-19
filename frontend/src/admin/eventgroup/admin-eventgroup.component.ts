@@ -14,6 +14,7 @@ import {
   ApiEventgroupAdmin,
   ApiTicketgroupAdmin,
 } from "../../apitypes"
+import { toastErrorHandler } from "../../common/errors"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
@@ -22,6 +23,7 @@ import {
   handleResourceLoadingStates,
   ResourceLoadingState,
 } from "../../common/resource-loading"
+import { ToastService } from "../../common/toast.service"
 import { AdminEventService } from "../event/admin-event.service"
 import { AdminEventgroupService } from "./admin-eventgroup.service"
 
@@ -43,6 +45,7 @@ import { AdminEventgroupService } from "./admin-eventgroup.service"
 export class AdminEventgroupComponent implements OnChanges {
   private adminEventgroupService = inject(AdminEventgroupService)
   private adminEventService = inject(AdminEventService)
+  private toastService = inject(ToastService)
 
   @Input()
   id!: string
@@ -116,18 +119,20 @@ export class AdminEventgroupComponent implements OnChanges {
   }
 
   eventTogglePublish(event: ApiEventAdmin) {
-    this.adminEventService
-      .setPublish(event.id, !event.is_published)
-      .subscribe((data) => {
+    this.adminEventService.setPublish(event.id, !event.is_published).subscribe({
+      next: (data) => {
         event.is_published = data.is_published
-      })
+      },
+      error: toastErrorHandler(this.toastService),
+    })
   }
 
   eventToggleSelling(event: ApiEventAdmin) {
-    this.adminEventService
-      .setSelling(event.id, !event.is_selling)
-      .subscribe((data) => {
+    this.adminEventService.setSelling(event.id, !event.is_selling).subscribe({
+      next: (data) => {
         event.is_selling = data.is_selling
-      })
+      },
+      error: toastErrorHandler(this.toastService),
+    })
   }
 }

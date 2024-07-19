@@ -12,6 +12,7 @@ import {
   ApiEventgroupAdmin,
   ApiTicketgroupAdmin,
 } from "../../apitypes"
+import { toastErrorHandler } from "../../common/errors"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
@@ -19,6 +20,7 @@ import {
   handleResourceLoadingStates,
   ResourceLoadingState,
 } from "../../common/resource-loading"
+import { ToastService } from "../../common/toast.service"
 import { AdminTicketgroupService } from "./admin-ticketgroup.service"
 
 @Component({
@@ -36,6 +38,7 @@ import { AdminTicketgroupService } from "./admin-ticketgroup.service"
 export class AdminTicketgroupItemComponent implements OnChanges {
   private adminTicketgroupService = inject(AdminTicketgroupService)
   private router = inject(Router)
+  private toastService = inject(ToastService)
 
   @Input()
   eventId!: string
@@ -72,10 +75,7 @@ export class AdminTicketgroupItemComponent implements OnChanges {
       next: () => {
         this.router.navigateByUrl(`/a/event/${this.ticketgroup!.event.id}`)
       },
-      error: (err) => {
-        console.error(err)
-        alert(err.message)
-      },
+      error: toastErrorHandler(this.toastService),
     })
   }
 
@@ -85,10 +85,7 @@ export class AdminTicketgroupItemComponent implements OnChanges {
       next: () => {
         this.router.navigateByUrl(`/a/event/${this.ticketgroup!.event.id}`)
       },
-      error: (err) => {
-        console.error(err)
-        alert(err.message)
-      },
+      error: toastErrorHandler(this.toastService),
     })
   }
 }

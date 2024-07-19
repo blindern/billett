@@ -6,7 +6,7 @@
   @if (sending) {
     <div class="text-center">Sender e-post ...</div>
   } @else {
-    <form class="form-horizontal" (ngSubmit)="submit()">
+    <form class="form-horizontal" (ngSubmit)="submit()" ngNativeValidate>
       <div class="form-group">
         <label for="email" class="col-sm-4 control-label">E-postadresse</label>
         <div class="col-sm-7">

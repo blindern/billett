@@ -8,12 +8,14 @@ import {
 import { Router, RouterLink } from "@angular/router"
 import { api } from "../../api"
 import { ApiEventgroupAdmin } from "../../apitypes"
+import { toastErrorHandler } from "../../common/errors"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
 import {
   handleResourceLoadingStates,
   ResourceLoadingState,
 } from "../../common/resource-loading"
+import { ToastService } from "../../common/toast.service"
 import { AdminEventgroupService } from "../eventgroup/admin-eventgroup.service"
 import { AdminEventFormComponent } from "./admin-event-form.component"
 import { AdminEventCreateData, AdminEventService } from "./admin-event.service"
@@ -33,6 +35,7 @@ export class AdminEventCreateComponent implements OnChanges {
   private adminEventgroupService = inject(AdminEventgroupService)
   private adminEventService = inject(AdminEventService)
   private router = inject(Router)
+  private toastService = inject(ToastService)
 
   @Input()
   eventgroupId!: string
@@ -63,8 +66,11 @@ export class AdminEventCreateComponent implements OnChanges {
     if (!this.event || !this.event.time_start || isNaN(this.event.time_start))
       return
 
-    this.adminEventService.create(this.event).subscribe((data) => {
-      this.router.navigateByUrl(`/a/event/${data.id}`)
+    this.adminEventService.create(this.event).subscribe({
+      next: (data) => {
+        this.router.navigateByUrl(`/a/event/${data.id}`)
+      },
+      error: toastErrorHandler(this.toastService),
     })
   }
 }

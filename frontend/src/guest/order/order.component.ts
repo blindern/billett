@@ -9,9 +9,14 @@ import {
   ApiTicket,
   ApiTicketgroup,
 } from "../../apitypes"
+import { getErrorText } from "../../common/errors"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PricePipe } from "../../common/price.pipe"
+import {
+  handleResourceLoadingStates,
+  ResourceLoadingState,
+} from "../../common/resource-loading"
 
 type Order = ApiOrder & {
   tickets: (ApiTicket & {
@@ -29,6 +34,9 @@ type Order = ApiOrder & {
 export class GuestOrderComponent implements OnInit {
   private http = inject(HttpClient)
 
+  getErrorText = getErrorText
+
+  orderState = new ResourceLoadingState()
   order?: Order
   payment?: ApiPayment
 
@@ -38,6 +46,7 @@ export class GuestOrderComponent implements OnInit {
         order: Order
         payment: ApiPayment
       }>(api("order/receipt"))
+      .pipe(handleResourceLoadingStates(this.orderState))
       .subscribe((data) => {
         this.order = data.order
         this.payment = data.payment

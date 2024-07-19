@@ -62,7 +62,7 @@
         <p class="text-muted text-center">Du register nå opptelling ved start.</p>
       }
 
-      <form class="form-horizontal" (ngSubmit)="complete()" autocomplete="off">
+      <form class="form-horizontal" (ngSubmit)="complete()" autocomplete="off" ngNativeValidate>
         @if (type == "cash") {
           <div class="form-group">
             <label class="col-sm-4 control-label">Kontantopptelling</label>

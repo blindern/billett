@@ -1,7 +1,10 @@
 import { Dialog, DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
 import { Component, inject, Inject } from "@angular/core"
 import { FormsModule } from "@angular/forms"
+import { finalize } from "rxjs"
 import { ApiEventgroupAdmin, ApiOrderAdmin } from "../../apitypes"
+import { toastErrorHandler } from "../../common/errors"
+import { ToastService } from "../../common/toast.service"
 import { AdminOrderService } from "./admin-order.service"
 
 export interface AdminOrderEmailModalInput {
@@ -37,6 +40,7 @@ export class AdminOrderEmailModal {
 
   private dialogRef = inject(DialogRef<AdminOrderEmailModalResult>)
   private adminOrderService = inject(AdminOrderService)
+  private toastService = inject(ToastService)
 
   sending = false
 
@@ -51,18 +55,18 @@ export class AdminOrderEmailModal {
         email: this.email,
         text: this.text,
       })
+      .pipe(
+        finalize(() => {
+          this.sending = false
+        }),
+      )
       .subscribe({
         next: () => {
-          this.sending = false
           this.dialogRef.close({
             completed: true,
           })
         },
-        error: (err) => {
-          this.sending = false
-          console.error(err)
-          alert(err.message)
-        },
+        error: toastErrorHandler(this.toastService),
       })
   }
 

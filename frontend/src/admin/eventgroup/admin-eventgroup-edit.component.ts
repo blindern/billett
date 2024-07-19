@@ -7,8 +7,8 @@ import {
 } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { RouterLink } from "@angular/router"
-import { catchError, NEVER } from "rxjs"
 import { ApiEventgroupAdmin } from "../../apitypes"
+import { toastErrorHandler } from "../../common/errors"
 import { NavigationService } from "../../common/navigation.service"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
@@ -16,6 +16,7 @@ import {
   handleResourceLoadingStates,
   ResourceLoadingState,
 } from "../../common/resource-loading"
+import { ToastService } from "../../common/toast.service"
 import { AdminEventgroupService } from "./admin-eventgroup.service"
 
 @Component({
@@ -32,6 +33,7 @@ import { AdminEventgroupService } from "./admin-eventgroup.service"
 export class AdminEventgroupEditComponent implements OnChanges {
   private adminEventgroupService = inject(AdminEventgroupService)
   private navigationService = inject(NavigationService)
+  private toastService = inject(ToastService)
 
   @Input()
   id!: string
@@ -53,16 +55,11 @@ export class AdminEventgroupEditComponent implements OnChanges {
   storeEventgroup() {
     if (!this.eventgroup || !this.eventgroup.title) return
 
-    this.adminEventgroupService
-      .update(this.eventgroup)
-      .pipe(
-        catchError((err) => {
-          alert(String(err))
-          return NEVER
-        }),
-      )
-      .subscribe((data) => {
+    this.adminEventgroupService.update(this.eventgroup).subscribe({
+      next: (data) => {
         this.navigationService.goBackOrTo(`/a/eventgroup/${data.id}`)
-      })
+      },
+      error: toastErrorHandler(this.toastService),
+    })
   }
 }

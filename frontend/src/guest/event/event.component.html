@@ -155,7 +155,13 @@
           <div class="panel panel-info buy-form">
             <div class="panel-heading">Kjøp billetter</div>
             <div class="panel-body">
-              <form class="form-horizontal" (ngSubmit)="!form.valid || placeOrder(forcePay)" name="form" #form="ngForm">
+              <form
+                class="form-horizontal"
+                (ngSubmit)="!form.valid || placeOrder(forcePay)"
+                name="form"
+                #form="ngForm"
+                ngNativeValidate
+              >
                 @if (!reservation) {
                   <p>
                     Ved kjøp av billetter får du tilsendt en elektronisk billett i PDF-format på e-post som printes ut

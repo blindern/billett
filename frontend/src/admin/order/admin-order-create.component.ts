@@ -12,7 +12,7 @@ import {
 } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { Router, RouterLink } from "@angular/router"
-import { firstValueFrom } from "rxjs"
+import { catchError, firstValueFrom, mergeMap, of, tap } from "rxjs"
 import { api } from "../../api"
 import {
   ApiEventAdmin,
@@ -23,6 +23,7 @@ import {
   ApiTicketAdmin,
   ApiTicketgroupAdmin,
 } from "../../apitypes"
+import { getValidationError, toastErrorHandler } from "../../common/errors"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
@@ -148,53 +149,62 @@ export class AdminOrderCreateComponent implements OnInit, OnChanges {
   }
 
   completeOrder() {
-    this.saveEdit().then(
-      () => {
-        this.adminOrderService
-          .validateAndConvert(this.order.id!, this.paymentgroup!, this.total)
-          .subscribe({
-            next: (order) => {
-              this.toastService.show(
-                `Ordren ble vellykket opprettet. <a href="a/order/${order.id}">Vis ordre</a>`,
-                {
-                  class: "success",
-                  unsafeHtml: true,
-                  timeout: 15000,
-                },
-              )
-              this.printTickets()
-              localStorage.removeItem("billett.neworder.id")
-              this.resetOrder()
-            },
-            error: (err) => {
-              // TODO(migrate): response body error handling
-              // if (err.data == "amount mismatched") {
-              //   alert(
-              //     "Noe i reservasjonen ser ut til å ha endret seg. Prøv på nytt.",
-              //   )
-              //   this.getOrCreateOrder(true)
-              // } else {
-              console.error(err)
-              alert(err.data)
-              // }
-            },
-          })
-      },
-      (err) => {
-        alert("Ukjent feil ved lagring av endringer: " + err)
-      },
-    )
+    this.saveEdit()
+      .pipe(
+        mergeMap(() =>
+          this.adminOrderService
+            .validateAndConvert(this.order.id!, this.paymentgroup!, this.total)
+            .pipe(
+              tap((order) => {
+                this.toastService.show(
+                  `Ordren ble vellykket opprettet. <a href="a/order/${order.id}">Vis ordre</a>`,
+                  {
+                    class: "success",
+                    unsafeHtml: true,
+                    timeout: 15000,
+                  },
+                )
+                this.printTickets()
+                localStorage.removeItem("billett.neworder.id")
+                this.resetOrder()
+              }),
+              catchError((error) => {
+                if (getValidationError(error) === "amount mismatched") {
+                  this.toastService.show(
+                    "Noe i reservasjonen ser ut til å ha endret seg. Prøv på nytt.",
+                    {
+                      class: "warning",
+                    },
+                  )
+                } else {
+                  toastErrorHandler(this.toastService)(error)
+                }
+                this.getOrCreateOrder(true)
+                return of()
+              }),
+            ),
+        ),
+      )
+      .subscribe()
   }
 
-  async saveEdit() {
-    const order = await firstValueFrom(
-      this.adminOrderService.update(this.order as ApiOrderAdmin),
+  saveEdit() {
+    return this.adminOrderService.update(this.order as ApiOrderAdmin).pipe(
+      tap((order) => {
+        this.order = order
+      }),
+      catchError((error) => {
+        toastErrorHandler(
+          this.toastService,
+          "Feil ved lagring av endringer",
+        )(error)
+        return of()
+      }),
     )
-    this.order = order
   }
 
   saveOrder() {
-    this.saveEdit().then(() => {
+    this.saveEdit().subscribe(() => {
       localStorage.removeItem("billett.neworder.id")
       this.router.navigateByUrl(`/a/order/${this.order.id}`)
     })
@@ -206,9 +216,7 @@ export class AdminOrderCreateComponent implements OnInit, OnChanges {
         localStorage.removeItem("billett.neworder.id")
         this.resetOrder()
       },
-      error: () => {
-        alert("Feil ved sletting av ordre")
-      },
+      error: toastErrorHandler(this.toastService, "Feil ved sletting av ordre"),
     })
   }
 
@@ -238,9 +246,12 @@ export class AdminOrderCreateComponent implements OnInit, OnChanges {
           comment: this.order?.comment,
         }),
       )
-    } catch (e) {
-      alert("Ukjent feil oppsto ved opprettelse av ordre")
-      throw e
+    } catch (error: unknown) {
+      toastErrorHandler(
+        this.toastService,
+        "Feil oppsto ved opprettelse av ordre",
+      )(error)
+      throw error
     }
 
     localStorage.setItem("billett.neworder.id", String(order.id))
@@ -302,9 +313,8 @@ export class AdminOrderCreateComponent implements OnInit, OnChanges {
           this.ticketgroupsWorking.delete(ticketgroup.id)
         })
       },
-      error: (err) => {
-        console.error(err)
-        alert("Feilet å fjerne billett")
+      error: (error) => {
+        toastErrorHandler(this.toastService, "Feilet å fjerne billett")(error)
         this.ticketgroupsWorking.delete(ticketgroup.id)
       },
     })
@@ -320,8 +330,11 @@ export class AdminOrderCreateComponent implements OnInit, OnChanges {
         () => {
           this.usernameInput.nativeElement.focus()
         },
-        () => {
-          alert("Ukjent feil oppsto ved forsøk på å laste ordren på nytt")
+        (error) => {
+          toastErrorHandler(
+            this.toastService,
+            "Ukjent feil oppsto ved forsøk på å laste ordren på nytt",
+          )(error)
         },
       )
     })
@@ -337,9 +350,7 @@ export class AdminOrderCreateComponent implements OnInit, OnChanges {
         next: (data) => {
           this.previousOrders = data.result
         },
-        error: (err) => {
-          console.error(err)
-        },
+        error: toastErrorHandler(this.toastService, "Feilet å hente historikk"),
       })
   }
 
@@ -355,10 +366,7 @@ export class AdminOrderCreateComponent implements OnInit, OnChanges {
       next: () => {
         this.toastService.show("Utskrift lagt i kø", { class: "success" })
       },
-      error: (err) => {
-        console.error(err)
-        this.toastService.show("Ukjent feil oppsto!", { class: "warning" })
-      },
+      error: toastErrorHandler(this.toastService),
     })
   }
 }

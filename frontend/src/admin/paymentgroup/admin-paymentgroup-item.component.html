@@ -129,7 +129,7 @@
   </div>
 
   @if (edit) {
-    <form (ngSubmit)="save()" class="form-horizontal" autocomplete="off">
+    <form (ngSubmit)="save()" class="form-horizontal" autocomplete="off" ngNativeValidate>
       <div class="form-group">
         <label for="title" class="col-sm-2 control-label">Tittel</label>
         <div class="col-sm-6">

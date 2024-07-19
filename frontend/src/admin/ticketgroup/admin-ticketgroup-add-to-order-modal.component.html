@@ -1,7 +1,9 @@
 <div class="modal-header">
   <h3 class="modal-title">Tilordne billetter til ordre</h3>
 </div>
-@if (!events) {
+@if (eventgroupState.error) {
+  <div class="modal-body text-center">Feil: {{ getErrorText(eventgroupState.error) }}</div>
+} @else if (eventgroupState.loading) {
   <div class="modal-body text-center">Laster data ...</div>
 }
 @if (sending) {

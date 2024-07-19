@@ -10,7 +10,12 @@ import {
 } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { ApiPaymentgroupAdmin } from "../../apitypes"
+import { getErrorText } from "../../common/errors"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
+import {
+  handleResourceLoadingStates,
+  ResourceLoadingState,
+} from "../../common/resource-loading"
 import { AdminPaymentgroupCreateModal } from "./admin-paymentgroup-create-modal.component"
 import { AdminPaymentgroupService } from "./admin-paymentgroup.service"
 
@@ -23,6 +28,9 @@ import { AdminPaymentgroupService } from "./admin-paymentgroup.service"
 export class AdminPaymentgroupSelectboxComponent implements OnChanges {
   private adminPaymentgroupService = inject(AdminPaymentgroupService)
   private dialog = inject(Dialog)
+
+  getErrorText = getErrorText
+  resourceState = new ResourceLoadingState()
 
   @Input()
   eventgroupId!: number
@@ -40,6 +48,7 @@ export class AdminPaymentgroupSelectboxComponent implements OnChanges {
     if (changes["eventgroupId"]) {
       this.adminPaymentgroupService
         .listValid(this.eventgroupId)
+        .pipe(handleResourceLoadingStates(this.resourceState))
         .subscribe((paymentgroups) => {
           this.paymentgroups = paymentgroups
 

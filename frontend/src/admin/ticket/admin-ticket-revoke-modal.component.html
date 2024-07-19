@@ -8,7 +8,7 @@
   <div class="modal-body">
     <p>En billett som tilbaketrekkes kan ikke aktiveres igjen. I så fall må ny billett opprettes.</p>
 
-    <form class="form-horizontal" (ngSubmit)="submit()">
+    <form class="form-horizontal" (ngSubmit)="submit()" ngNativeValidate>
       <div class="row">
         <label class="col-sm-4 control-label">Billett</label>
         <div class="col-sm-7 form-control-static">

@@ -1,8 +1,9 @@
 import { Component, inject } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { Router } from "@angular/router"
-import { catchError, NEVER } from "rxjs"
+import { toastErrorHandler } from "../../common/errors"
 import { PagePropertyComponent } from "../../common/page-property.component"
+import { ToastService } from "../../common/toast.service"
 import { AdminEventgroupService } from "./admin-eventgroup.service"
 
 @Component({
@@ -14,6 +15,7 @@ import { AdminEventgroupService } from "./admin-eventgroup.service"
 export class AdminEventgroupCreateComponent {
   private adminEventgroupService = inject(AdminEventgroupService)
   private router = inject(Router)
+  private toastService = inject(ToastService)
 
   form = {
     title: "",
@@ -23,16 +25,11 @@ export class AdminEventgroupCreateComponent {
   storeEventgroup() {
     if (!this.form.title) return
 
-    this.adminEventgroupService
-      .create(this.form)
-      .pipe(
-        catchError((err) => {
-          alert(String(err))
-          return NEVER
-        }),
-      )
-      .subscribe((data) => {
+    this.adminEventgroupService.create(this.form).subscribe({
+      next: (data) => {
         this.router.navigateByUrl(`/a/eventgroup/${data.id}`)
-      })
+      },
+      error: toastErrorHandler(this.toastService),
+    })
   }
 }

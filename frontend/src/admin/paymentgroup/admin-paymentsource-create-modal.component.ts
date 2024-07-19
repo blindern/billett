@@ -2,11 +2,13 @@ import { Dialog, DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
 import { Component, inject, Inject } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { NgxTypeAheadComponent } from "ngx-typeahead"
+import { finalize } from "rxjs"
 import {
   ApiEventgroupAdmin,
   ApiPaymentgroupAdmin,
   ApiPaymentsourceAdmin,
 } from "../../apitypes"
+import { toastErrorHandler } from "../../common/errors"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PricePipe } from "../../common/price.pipe"
 import { ToastService } from "../../common/toast.service"
@@ -88,17 +90,18 @@ export class AdminPaymentsourceCreateModal {
         type: this.type,
         data: this.#getDataField() ?? null,
       })
+      .pipe(
+        finalize(() => {
+          this.sending = false
+        }),
+      )
       .subscribe({
         next: (paymentsource) => {
           this.sending = false
           this.toastService.show("Registrering vellykket", { class: "success" })
           this.dialogRef.close(paymentsource)
         },
-        error: (err) => {
-          this.sending = false
-          console.error(err)
-          alert(err.message)
-        },
+        error: toastErrorHandler(this.toastService),
       })
   }
 

@@ -8,9 +8,15 @@ import {
   ApiTicketAdmin,
   ApiTicketgroupAdmin,
 } from "../../apitypes"
+import { getErrorText, toastErrorHandler } from "../../common/errors"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PricePipe } from "../../common/price.pipe"
+import {
+  handleResourceLoadingStates,
+  ResourceLoadingState,
+} from "../../common/resource-loading"
+import { ToastService } from "../../common/toast.service"
 import {
   AdminEventgroupData,
   AdminEventgroupService,
@@ -56,6 +62,10 @@ export class AdminTicketgroupAddToOrderModal implements OnInit {
   private dialogRef = inject(DialogRef<AdminTicketgroupAddToOrderModalResult>)
   private adminEventgroupService = inject(AdminEventgroupService)
   private adminOrderService = inject(AdminOrderService)
+  private toastService = inject(ToastService)
+
+  getErrorText = getErrorText
+  eventgroupState = new ResourceLoadingState()
 
   eventgroup?: AdminEventgroupData
 
@@ -120,6 +130,7 @@ export class AdminTicketgroupAddToOrderModal implements OnInit {
   ngOnInit(): void {
     this.adminEventgroupService
       .get(String(this.data.eventgroupId))
+      .pipe(handleResourceLoadingStates(this.eventgroupState))
       .subscribe((eventgroup) => {
         this.eventgroup = eventgroup
       })
@@ -143,11 +154,10 @@ export class AdminTicketgroupAddToOrderModal implements OnInit {
             this.sending = false
             this.dialogRef.close(tickets)
           },
-          error: (err) => {
-            this.sending = false
-            console.error(err)
-            alert("Ukjent feil oppsto ved registrering av billetter")
-          },
+          error: toastErrorHandler(
+            this.toastService,
+            "Feil oppsto ved registrering av billetter",
+          ),
         })
     })
   }

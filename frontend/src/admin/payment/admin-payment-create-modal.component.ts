@@ -1,12 +1,15 @@
 import { Dialog, DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
 import { Component, inject, Inject, OnInit } from "@angular/core"
 import { FormsModule } from "@angular/forms"
+import { finalize } from "rxjs"
 import {
   ApiEventgroupAdmin,
   ApiOrderAdmin,
   ApiPaymentAdmin,
   ApiPaymentgroupAdmin,
 } from "../../apitypes"
+import { toastErrorHandler } from "../../common/errors"
+import { ToastService } from "../../common/toast.service"
 import { AdminPaymentgroupSelectboxComponent } from "../paymentgroup/admin-paymentgroup-selectbox.component"
 import { AdminPaymentService } from "./admin-payment.service"
 
@@ -41,6 +44,7 @@ export class AdminPaymentCreateModal implements OnInit {
 
   private dialogRef = inject(DialogRef<AdminPaymentCreateModalResult>)
   private adminPaymentService = inject(AdminPaymentService)
+  private toastService = inject(ToastService)
 
   sending = false
 
@@ -59,16 +63,16 @@ export class AdminPaymentCreateModal implements OnInit {
         paymentgroup: this.paymentgroup!,
         amount: this.amount,
       })
+      .pipe(
+        finalize(() => {
+          this.sending = false
+        }),
+      )
       .subscribe({
         next: (payment) => {
-          this.sending = false
           this.dialogRef.close(payment)
         },
-        error: (err) => {
-          this.sending = false
-          console.error(err)
-          alert(err.message)
-        },
+        error: toastErrorHandler(this.toastService),
       })
   }
 

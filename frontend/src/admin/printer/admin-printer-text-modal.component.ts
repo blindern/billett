@@ -1,7 +1,9 @@
 import { Dialog, DialogRef } from "@angular/cdk/dialog"
 import { Component, inject } from "@angular/core"
 import { FormsModule } from "@angular/forms"
+import { finalize } from "rxjs"
 import { ApiPrinterAdmin } from "../../apitypes"
+import { toastErrorHandler } from "../../common/errors"
 import { ToastService } from "../../common/toast.service"
 import { AdminPrinterSelectboxComponent } from "./admin-printer-selectbox.component"
 import { AdminPrinterService } from "./admin-printer.service"
@@ -33,18 +35,19 @@ export class AdminPrinterTextModal {
     this.sending = true
     this.adminPrinterService
       .printText(this.printer!.name, this.text)
+      .pipe(
+        finalize(() => {
+          this.sending = false
+        }),
+      )
       .subscribe({
         next: () => {
-          this.sending = false
           this.toastService.show("Utskrift lagt i kø", { class: "success" })
           this.dialogRef.close({
             completed: true,
           })
         },
-        error: () => {
-          this.sending = false
-          this.toastService.show("Ukjent feil oppsto!", { class: "warning" })
-        },
+        error: toastErrorHandler(this.toastService),
       })
   }
 

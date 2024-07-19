@@ -38,7 +38,7 @@
     <div class="col-md-6">
       <h2>Ordredetaljer</h2>
 
-      <form class="form-horizontal" #form="ngForm" (ngSubmit)="!form.valid || completeOrder()">
+      <form class="form-horizontal" #form="ngForm" (ngSubmit)="!form.valid || completeOrder()" ngNativeValidate>
         @if (order.id) {
           <div class="form-group">
             <label class="text-right col-sm-4">Ordrenr</label>

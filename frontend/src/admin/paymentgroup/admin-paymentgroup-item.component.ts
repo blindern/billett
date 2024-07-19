@@ -10,6 +10,7 @@ import {
 import { FormsModule } from "@angular/forms"
 import { RouterLink } from "@angular/router"
 import { ApiOrderAdmin, ApiPaymentsourceAdmin } from "../../apitypes"
+import { toastErrorHandler } from "../../common/errors"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { MarkdownComponent } from "../../common/markdown.component"
 import { PagePropertyComponent } from "../../common/page-property.component"
@@ -72,9 +73,12 @@ export class AdminPaymentgroupItemComponent implements OnChanges {
   orders_inbalance: ApiOrderAdmin[] = []
 
   private refresh() {
-    this.adminPaymentgroupService.get(this.id).subscribe((paymentgroup) => {
-      this.paymentgroup = paymentgroup
-      this.derived = this.deriveData(paymentgroup)
+    this.adminPaymentgroupService.get(this.id).subscribe({
+      next: (paymentgroup) => {
+        this.paymentgroup = paymentgroup
+        this.derived = this.deriveData(paymentgroup)
+      },
+      error: toastErrorHandler(this.toastService, "Feil ved oppdatering"),
     })
   }
 
@@ -319,12 +323,15 @@ export class AdminPaymentgroupItemComponent implements OnChanges {
         title: this.edit!.title,
         description: this.edit!.description,
       })
-      .subscribe((data) => {
-        // TODO(migrate): check type
-        console.log("response", data)
-        this.paymentgroup!.title = this.edit!.title
-        this.paymentgroup!.description = this.edit!.description
-        this.edit = undefined
+      .subscribe({
+        next: (data) => {
+          // TODO(migrate): check type
+          console.log("response", data)
+          this.paymentgroup!.title = this.edit!.title
+          this.paymentgroup!.description = this.edit!.description
+          this.edit = undefined
+        },
+        error: toastErrorHandler(this.toastService, "Feil ved lagring"),
       })
   }
 
@@ -335,11 +342,12 @@ export class AdminPaymentgroupItemComponent implements OnChanges {
         "Er du sikker på at du vil lukke betalingsgruppen? Dette gjøres kun ved oppgjør av økonomi. Kontroller evt. avvik først. Handlingen kan ikke angres.",
       )
     ) {
-      this.adminPaymentgroupService
-        .close(this.paymentgroup!.id)
-        .subscribe(() => {
+      this.adminPaymentgroupService.close(this.paymentgroup!.id).subscribe({
+        next: () => {
           this.refresh()
-        })
+        },
+        error: toastErrorHandler(this.toastService),
+      })
     }
   }
 
@@ -367,11 +375,10 @@ export class AdminPaymentgroupItemComponent implements OnChanges {
           })
           this.refresh()
         },
-        error: () => {
-          this.toastService.show("Ukjent feil ved sletting av registering", {
-            class: "warning",
-          })
-        },
+        error: toastErrorHandler(
+          this.toastService,
+          "Feil ved sletting av registering",
+        ),
       })
     }
   }

@@ -8,6 +8,11 @@ import {
 } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { ApiPrinterAdmin } from "../../apitypes"
+import { getErrorText } from "../../common/errors"
+import {
+  handleResourceLoadingStates,
+  ResourceLoadingState,
+} from "../../common/resource-loading"
 import { AdminPrinterService } from "./admin-printer.service"
 
 @Component({
@@ -18,6 +23,9 @@ import { AdminPrinterService } from "./admin-printer.service"
 })
 export class AdminPrinterSelectboxComponent implements OnInit {
   private adminPrinterService = inject(AdminPrinterService)
+
+  getErrorText = getErrorText
+  resourceState = new ResourceLoadingState()
 
   @Input()
   id?: string
@@ -36,20 +44,23 @@ export class AdminPrinterSelectboxComponent implements OnInit {
 
   ngOnInit(): void {
     this.printers = undefined
-    this.adminPrinterService.getList().subscribe((printers) => {
-      this.printers = printers
+    this.adminPrinterService
+      .getList()
+      .pipe(handleResourceLoadingStates(this.resourceState))
+      .subscribe((printers) => {
+        this.printers = printers
 
-      const updated = this.adminPrinterService.getPreferred(
-        printers,
-        this.printer ? this.printer.name : undefined,
-      )
-      this.selectedPrinterName = updated?.name ?? ""
+        const updated = this.adminPrinterService.getPreferred(
+          printers,
+          this.printer ? this.printer.name : undefined,
+        )
+        this.selectedPrinterName = updated?.name ?? ""
 
-      if (this.printer?.name !== updated?.name) {
-        this.printer = updated
-        this.printerChange.emit(updated)
-      }
-    })
+        if (this.printer?.name !== updated?.name) {
+          this.printer = updated
+          this.printerChange.emit(updated)
+        }
+      })
   }
 
   getUptime(printer: ApiPrinterAdmin) {

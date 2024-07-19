@@ -170,7 +170,13 @@
         }"
         class="alert checkin-form"
       >
-        <form class="form-horizontal" (ngSubmit)="performSearch()" (input)="queueSearch()" autocomplete="off">
+        <form
+          class="form-horizontal"
+          (ngSubmit)="performSearch()"
+          (input)="queueSearch()"
+          autocomplete="off"
+          ngNativeValidate
+        >
           <div class="form-group">
             <label class="col-sm-4 control-label">Navn eller strekkode</label>
             <div class="col-sm-8">

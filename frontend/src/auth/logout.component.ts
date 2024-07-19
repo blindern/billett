@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from "@angular/core"
-import { firstValueFrom } from "rxjs"
+import { take } from "rxjs"
 import { api } from "../api"
 import { PagePropertyComponent } from "../common/page-property.component"
 import { AuthService } from "./auth.service"
@@ -17,7 +17,7 @@ export class LogoutComponent implements OnInit {
   private authService = inject(AuthService)
 
   ngOnInit(): void {
-    firstValueFrom(this.authService.csrfToken$).then((csrfToken) => {
+    this.authService.csrfToken$.pipe(take(1)).subscribe((csrfToken) => {
       const form = document.createElement("form")
       form.method = "post"
       form.action = api(

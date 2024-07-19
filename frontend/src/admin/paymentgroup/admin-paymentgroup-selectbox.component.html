@@ -1,6 +1,8 @@
-@if (!paymentgroups) {
+@if (resourceState.loading) {
   <div class="form-control-static">Laster oppgjørsgrupper ...</div>
-} @else {
+} @else if (resourceState.error) {
+  <div class="form-control-static">Feil: {{ getErrorText(resourceState.error) }}</div>
+} @else if (paymentgroups) {
   <select class="form-control" [(ngModel)]="selectedPaymentgroupId" name="selectedPaymentgroupId" (change)="update()">
     @if (!paymentgroup) {
       <option value="">Velg ...</option>

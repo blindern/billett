@@ -6,7 +6,7 @@
   <div class="modal-body text-center">Utfører ...</div>
 } @else {
   <div class="modal-body">
-    <form class="form-horizontal" (ngSubmit)="submit()">
+    <form class="form-horizontal" (ngSubmit)="submit()" ngNativeValidate>
       <div class="form-group">
         <label class="col-sm-4 control-label">Beløp</label>
         <div class="col-sm-4">

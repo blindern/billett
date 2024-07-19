@@ -8,7 +8,7 @@
   <div class="modal-body text-center">Registrerer data ...</div>
 } @else {
   <div class="modal-body">
-    <form class="form-horizontal" (ngSubmit)="complete()" autocomplete="off">
+    <form class="form-horizontal" (ngSubmit)="complete()" autocomplete="off" ngNativeValidate>
       <div class="form-group">
         <label for="title" class="col-sm-4 control-label">Tittel</label>
         <div class="col-sm-7">

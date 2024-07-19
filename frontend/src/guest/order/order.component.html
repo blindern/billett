@@ -1,4 +1,6 @@
-@if (!order || !payment) {
+@if (orderState.error) {
+  <p>Feil: {{ orderState.error }}</p>
+} @else if (!order || !payment) {
   <p>Vennligst vent...</p>
 } @else {
   @if (payment.status == "ACCEPTED") {

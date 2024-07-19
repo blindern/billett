@@ -8,14 +8,15 @@ import {
 import { FormsModule } from "@angular/forms"
 import { Router, RouterLink } from "@angular/router"
 import moment from "moment"
-import { catchError, of } from "rxjs"
 import { ApiEventgroupAdmin } from "../../apitypes"
+import { toastErrorHandler } from "../../common/errors"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
 import {
   handleResourceLoadingStates,
   ResourceLoadingState,
 } from "../../common/resource-loading"
+import { ToastService } from "../../common/toast.service"
 import { AdminEventgroupService } from "../eventgroup/admin-eventgroup.service"
 import { AdminDaythemeService } from "./admin-daytheme.service"
 
@@ -34,6 +35,7 @@ export class AdminDaythemeCreateComponent implements OnChanges {
   private adminDaythemeService = inject(AdminDaythemeService)
   private adminEventgroupService = inject(AdminEventgroupService)
   private router = inject(Router)
+  private toastService = inject(ToastService)
 
   @Input()
   eventgroupId!: string
@@ -61,7 +63,7 @@ export class AdminDaythemeCreateComponent implements OnChanges {
 
     const date = moment(this.form.date, "YYYY-MM-DD").unix()
     if (!date) {
-      alert("Ugyldig dato")
+      this.toastService.show("Ugyldig dato", { class: "warning" })
       return
     }
 
@@ -71,14 +73,11 @@ export class AdminDaythemeCreateComponent implements OnChanges {
         date,
         title: this.form.title,
       })
-      .pipe(
-        catchError((err) => {
-          alert(err)
-          return of()
-        }),
-      )
-      .subscribe(() => {
-        this.router.navigateByUrl(`/a/eventgroup/${this.eventgroupId}`)
+      .subscribe({
+        next: () => {
+          this.router.navigateByUrl(`/a/eventgroup/${this.eventgroupId}`)
+        },
+        error: toastErrorHandler(this.toastService),
       })
   }
 }

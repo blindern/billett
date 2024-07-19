@@ -1,8 +1,11 @@
 import { Dialog, DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
 import { Component, inject, Inject } from "@angular/core"
 import { FormsModule } from "@angular/forms"
+import { finalize } from "rxjs"
 import { ApiPaymentgroupAdmin } from "../../apitypes"
+import { toastErrorHandler } from "../../common/errors"
 import { PagePropertyComponent } from "../../common/page-property.component"
+import { ToastService } from "../../common/toast.service"
 import { AdminPaymentgroupService } from "./admin-paymentgroup.service"
 
 export interface AdminPaymentgroupCreateModalInput {
@@ -34,6 +37,7 @@ export class AdminPaymentgroupCreateModal {
 
   private dialogRef = inject(DialogRef<AdminPaymentgroupCreateModalResult>)
   private adminPaymentgroupService = inject(AdminPaymentgroupService)
+  private toastService = inject(ToastService)
 
   sending = false
 
@@ -48,16 +52,17 @@ export class AdminPaymentgroupCreateModal {
         title: this.title,
         description: this.description,
       })
+      .pipe(
+        finalize(() => {
+          this.sending = false
+        }),
+      )
       .subscribe({
         next: (paymentgroup) => {
           this.sending = false
           this.dialogRef.close(paymentgroup)
         },
-        error: (err) => {
-          this.sending = false
-          console.error(err)
-          alert(err.message)
-        },
+        error: toastErrorHandler(this.toastService),
       })
   }
 

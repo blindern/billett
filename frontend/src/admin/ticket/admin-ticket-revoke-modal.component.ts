@@ -2,6 +2,7 @@ import { Dialog, DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
 import { Component, inject, Inject } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { RouterLink } from "@angular/router"
+import { finalize } from "rxjs"
 import {
   ApiEventAdmin,
   ApiEventgroupAdmin,
@@ -10,8 +11,10 @@ import {
   ApiTicketAdmin,
   ApiTicketgroupAdmin,
 } from "../../apitypes"
+import { toastErrorHandler } from "../../common/errors"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { PricePipe } from "../../common/price.pipe"
+import { ToastService } from "../../common/toast.service"
 import { AdminPaymentgroupSelectboxComponent } from "../paymentgroup/admin-paymentgroup-selectbox.component"
 import { AdminTicketService } from "./admin-ticket.service"
 
@@ -58,6 +61,7 @@ export class AdminTicketRevokeModal {
 
   private dialogRef = inject(DialogRef<AdminTicketRevokeModalResult>)
   private adminTicketService = inject(AdminTicketService)
+  private toastService = inject(ToastService)
 
   sending = false
 
@@ -67,18 +71,18 @@ export class AdminTicketRevokeModal {
     this.sending = true
     this.adminTicketService
       .revoke(this.data.ticket.id, this.paymentgroup!.id)
+      .pipe(
+        finalize(() => {
+          this.sending = false
+        }),
+      )
       .subscribe({
         next: () => {
-          this.sending = false
           this.dialogRef.close({
             completed: true,
           })
         },
-        error: (err) => {
-          this.sending = false
-          console.error(err)
-          alert(err.message)
-        },
+        error: toastErrorHandler(this.toastService),
       })
   }
 

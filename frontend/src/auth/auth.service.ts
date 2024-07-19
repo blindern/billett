@@ -1,14 +1,17 @@
 import { HttpClient } from "@angular/common/http"
 import { inject, Injectable } from "@angular/core"
-import { firstValueFrom, map, Observable, ReplaySubject } from "rxjs"
+import { map, Observable, ReplaySubject } from "rxjs"
 import { api } from "../api"
 import { ApiAuthInfo } from "../apitypes"
+import { toastErrorHandler } from "../common/errors"
+import { ToastService } from "../common/toast.service"
 
 @Injectable({
   providedIn: "root",
 })
 export class AuthService {
   private http = inject(HttpClient)
+  private toastService = inject(ToastService)
 
   #authData$ = new ReplaySubject<ApiAuthInfo>(1)
 
@@ -21,9 +24,12 @@ export class AuthService {
   }
 
   async refreshAuthData() {
-    const authData = await firstValueFrom(this.http.get<ApiAuthInfo>(api("me")))
-    this.#authData$.next(authData)
-    return authData
+    this.http.get<ApiAuthInfo>(api("me")).subscribe({
+      next: (authData) => {
+        this.#authData$.next(authData)
+      },
+      error: toastErrorHandler(this.toastService, "Feilet å hente brukerinfo"),
+    })
   }
 
   get isLoggedIn$() {
