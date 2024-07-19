@@ -325,10 +325,8 @@ export class AdminPaymentgroupItemComponent implements OnChanges {
       })
       .subscribe({
         next: (data) => {
-          // TODO(migrate): check type
-          console.log("response", data)
-          this.paymentgroup!.title = this.edit!.title
-          this.paymentgroup!.description = this.edit!.description
+          this.paymentgroup!.title = data.title
+          this.paymentgroup!.description = data.description
           this.edit = undefined
         },
         error: toastErrorHandler(this.toastService, "Feil ved lagring"),
