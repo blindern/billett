@@ -71,6 +71,7 @@ export class AdminPaymentsourceCreateModal {
   comment = ""
 
   private async loadMathjs() {
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     const { evaluate } = await import("mathjs")
     this.evaluate = evaluate
   }

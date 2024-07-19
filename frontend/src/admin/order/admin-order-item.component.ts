@@ -218,6 +218,7 @@ export class AdminOrderItemComponent implements OnChanges {
   addTickets() {
     AdminTicketgroupAddToOrderModal.open(this.dialog, {
       eventgroupId: this.order!.eventgroup.id,
+      // eslint-disable-next-line @typescript-eslint/require-await
       getOrderId: async () => this.order!.id,
     }).closed.subscribe((tickets) => {
       if (!tickets) return

@@ -1,9 +1,8 @@
-// @ts-expect-error
-import jQuery from "jquery/dist/jquery.js"
+import jQuery from "jquery"
 
 declare global {
   interface Window {
-    jQuery: any
+    jQuery: typeof jQuery
   }
 }
 

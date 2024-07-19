@@ -1,5 +1,19 @@
 {
   "semi": false,
   "trailingComma": "all",
+  "overrides": [
+    {
+      "files": "*.html",
+      "options": {
+        "parser": "html"
+      }
+    },
+    {
+      "files": "*.component.html",
+      "options": {
+        "parser": "angular"
+      }
+    }
+  ],
   "plugins": ["prettier-plugin-organize-imports"]
 }
