@@ -42,7 +42,7 @@ class Eventgroup extends Model implements ApiQueryInterface
 
     public function getPaymentsourcesDataAttribute($val)
     {
-        $data = json_decode($val, true);
+        $data = $val ? json_decode($val, true) : null;
 
         // this information might not exist yet
         // we will return a mocked state of the data
