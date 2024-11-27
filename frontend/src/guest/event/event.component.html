@@ -268,8 +268,18 @@
                       </div>
                     </div>
                     <p class="text-center vipps-button-line">
-                      <vipps-checkout-button variant="orange" branded="true" (click)="forcePay = false" type="submit">
-                      </vipps-checkout-button>
+                      <vipps-mobilepay-button
+                        (click)="forcePay = false"
+                        type="submit"
+                        brand="vipps"
+                        language="no"
+                        variant="primary"
+                        rounded="false"
+                        verb="buy"
+                        stretched="false"
+                        branded="true"
+                        loading="false"
+                      ></vipps-mobilepay-button>
                       @if (reservation) {
                         <input class="btn btn-default" type="button" value="Avbryt" (click)="abortOrder()" />
                       }
