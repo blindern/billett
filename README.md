@@ -46,7 +46,8 @@ For å gjøre lokal utvikling trenger du:
 
 - Docker
 - PHP 8.3+ med Composer
-- Node.js 18+
+- Node.js 20+
+- PNPM
 
 ### Kjøre backend lokalt
 
@@ -96,13 +97,13 @@ For å gjøre lokal utvikling trenger du:
 2. Installer/oppdater avhengigheter:
 
    ```bash
-   npm ci
+   pnpm install
    ```
 
 3. Kjør lokal server
 
    ```bash
-   npx ng serve --port 3000 --open
+   pnpx ng serve --port 3000 --open
    ```
 
    Denne går mot lokal backend som standard.
