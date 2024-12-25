@@ -23,6 +23,10 @@
         "zone.js"
       ],
       "separateMajorMinor": false
+    },
+    {
+      "matchDepNames": ["typescript"],
+      "separateMultipleMinor": true
     }
   ],
   "automerge": true,
