@@ -327,7 +327,7 @@ $months = ['jan', 'feb', 'mar', 'apr', 'mai', 'jun', 'jul', 'aug', 'sep', 'okt',
     </div>
 
     <p class="footer">
-      <a href="http://blindernuka.no">blindernuka.no</a>
+      <a href="https://blindernuka.no">blindernuka.no</a>
     </p>
 
   </body>

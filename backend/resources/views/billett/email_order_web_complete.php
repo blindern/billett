@@ -104,7 +104,7 @@ Totalbeløp: '.format_nok($total).($payment ? ' har blitt belastet ditt kort' : 
 SPØRSMÅL/PROBLEMER:
 -------------------
 Se vår nettside eller ta kontakt:
-http://blindernuka.no/
+https://blindernuka.no/
 billett@blindernuka.no
 
 
@@ -113,7 +113,7 @@ Vi håper du får en flott opplevelse på UKA på Blindern!
 --
 UKA på Blindern
 Foreningen Blindern Studenterhjem
-http://blindernuka.no/
+https://blindernuka.no/
 
 Dette billettsystemet har vi utviklet som fri programvare og er fritt tilgjengelig,
 se https://github.com/blindernuka/billett';
