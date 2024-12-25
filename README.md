@@ -123,3 +123,18 @@ For å gjøre lokal utvikling trenger du:
 Kan brukes for å enkelt se og gjøre manuelle endringer i den lokale databasen.
 
 http://localhost:8080/
+
+### Teste Vipps lokalt
+
+Detaljer fra Vipps: https://developer.vippsmobilepay.com/docs/knowledge-base/test-environment
+
+Se https://developer.vippsmobilepay.com/docs/knowledge-base/test-environment#app-installation
+for hvordan sette opp Vipps-appen for test.
+
+Se [.env.example](./backend/.env.example) for nødvendig oppsett av API.
+
+Alle testbrukere kan ses på https://portal.vipps.no/56260/developer/test-users
+Eksempel som kan brukes:
+
+Fnr: 62085200521
+Tlfnr: 99121347
