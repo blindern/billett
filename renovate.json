@@ -25,14 +25,16 @@
       "separateMajorMinor": false
     },
     {
-      "matchDepNames": ["typescript"],
+      "matchDepNames": [
+        "typescript"
+      ],
       "separateMultipleMinor": true
     }
   ],
   "automerge": true,
   "automergeType": "branch",
   "prCreation": "not-pending",
-  "stabilityDays": 3,
+  "minimumReleaseAge": "3 days",
   "prNotPendingHours": 74,
   "timezone": "Europe/Oslo"
 }
