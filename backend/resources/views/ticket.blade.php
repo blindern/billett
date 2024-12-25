@@ -1,12 +1,13 @@
 <?php
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Config;
 use Milon\Barcode\Facades\DNS1DFacade;
 
-$start = Carbon::createFromTimeStamp($ticket->event->time_start);
+$start = Carbon::createFromTimestampUTC($ticket->event->time_start)->setTimezone(Config::get("app.timezone"));
 $price = $ticket->ticketgroup->price + $ticket->ticketgroup->fee;
 
-$order_time = Carbon::createFromTimeStamp($ticket->order->time);
+$order_time = Carbon::createFromTimestampUTC($ticket->order->time)->setTimezone(Config::get("app.timezone"));
 
 $ticketid = '#'.$ticket->number;
 

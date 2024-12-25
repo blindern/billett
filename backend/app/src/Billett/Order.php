@@ -141,7 +141,7 @@ class Order extends Model implements ApiQueryInterface
 
         Mail::send(['text' => 'billett.email_order_web_complete'], ['order' => $this], function ($message) use ($events) {
             $event = count($events) == 1 ? $events[0] : null;
-            $eventinfo = $event ? ' - '.$event->title.' ('.Carbon::createFromTimeStamp($event->time_start)->format('d.m.Y').')' : '';
+            $eventinfo = $event ? ' - '.$event->title.' ('.Carbon::createFromTimestampUTC($event->time_start)->setTimezone(Config::get("app.timezone"))->format('d.m.Y').')' : '';
 
             $message->to($this->email, $this->name ?: null);
             $message->subject('Billett'.(count($this->tickets) == 1 ? '' : 'er').' UKA på Blindern #'.$this->order_text_id.$eventinfo);
@@ -172,7 +172,7 @@ class Order extends Model implements ApiQueryInterface
         Mail::send(['text' => 'billett.email_order_details'], ['order' => $this, 'text' => $text], function ($message) use ($email, $name, $text) {
             $events = $this->getEvents();
             $event = count($events) == 1 ? $events[0] : null;
-            $eventinfo = $event ? ' - '.$event->title.' ('.Carbon::createFromTimeStamp($event->time_start)->format('d.m.Y').')' : '';
+            $eventinfo = $event ? ' - '.$event->title.' ('.Carbon::createFromTimestampUTC($event->time_start)->setTimezone(Config::get("app.timezone"))->format('d.m.Y').')' : '';
 
             $has_valid_tickets = false;
             foreach ($this->tickets as $ticket) {
@@ -341,7 +341,7 @@ class Order extends Model implements ApiQueryInterface
             throw new \Exception('Trying to create new order text-id, but it exists already!');
         }
 
-        $d = \Carbon\Carbon::createFromTimeStamp($this->time);
+        $d = \Carbon\Carbon::createFromTimestampUTC($this->time)->setTimezone(Config::get("app.timezone"));
         $orderid = $d->format('y').str_pad($d->format('z'), 3, '0', STR_PAD_LEFT).str_pad($this->id, 4, '0', STR_PAD_LEFT).(Config::get('vipps.test') ? '-TEST' : '');
 
         $this->order_text_id = $orderid;
@@ -546,7 +546,7 @@ class Order extends Model implements ApiQueryInterface
             return 'Billett';
         }
 
-        $date = \Carbon\Carbon::createFromTimeStamp($event->time_start);
+        $date = \Carbon\Carbon::createFromTimestampUTC($event->time_start)->setTimezone(Config::get("app.timezone"));
 
         return $event->title.' ('.$date->format('Y-m-d H:i').')';
     }

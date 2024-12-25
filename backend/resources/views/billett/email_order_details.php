@@ -1,8 +1,9 @@
 <?php
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Config;
 
-$order_time = Carbon::createFromTimeStamp($order->time)->format('d.m.Y H:i:s');
+$order_time = Carbon::createFromTimestampUTC($order->time)->setTimezone(Config::get("app.timezone"))->format('d.m.Y H:i:s');
 
 // ticket list
 $tickets_valid = [];
@@ -60,7 +61,7 @@ if (count($tickets_valid) == 0) {
 Ordren inneholder ingen gyldige billetter.';
 } else {
     foreach ($tickets_valid as $ticket) {
-        $time = Carbon::createFromTimeStamp($ticket->event->time_start)->format('d.m.Y H:i');
+        $time = Carbon::createFromTimestampUTC($ticket->event->time_start)->setTimezone(Config::get("app.timezone"))->format('d.m.Y H:i');
 
         $price = format_nok($ticket->ticketgroup->price + $ticket->ticketgroup->fee);
         if ($ticket->ticketgroup->fee) {
@@ -78,7 +79,7 @@ if (count($tickets_revoked) > 0) {
 Billetter som er trukket tilbake og ikke lenger gyldige (kun til informasjon):';
 
     foreach ($tickets_revoked as $ticket) {
-        $time = Carbon::createFromTimeStamp($ticket->event->time_start)->format('d.m.Y H:i');
+        $time = Carbon::createFromTimestampUTC($ticket->event->time_start)->setTimezone(Config::get("app.timezone"))->format('d.m.Y H:i');
 
         echo '
   '.$time.': '.$ticket->event->title.': '.$ticket->ticketgroup->title.' (#'.$ticket->number.')';
@@ -111,7 +112,7 @@ if (count($payments) == 0) {
 Ingen betalinger er registrert.';
 } else {
     foreach ($payments as $payment) {
-        $time = Carbon::createFromTimeStamp($payment->time)->format('d.m.Y H:i');
+        $time = Carbon::createFromTimestampUTC($payment->time)->setTimezone(Config::get("app.timezone"))->format('d.m.Y H:i');
 
         echo '
 '.$time.': '.format_nok($payment->amount).' ('.($payment->is_web ? 'betalt på nett, transaksjonsnr '.$payment->transaction_id : 'billettluke').')';
