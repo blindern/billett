@@ -14,7 +14,7 @@
   "packageRules": [
     {
       "groupName": "angular",
-      "matchPackageNames": [
+      "matchDepNames": [
         "@angular-devkit/*",
         "@angular-eslint/*",
         "@angular/*",
