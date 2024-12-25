@@ -98,7 +98,7 @@ class VippsPaymentModule
                     $class = ModelHelper::getModelPath('Order');
                     $order = $class::findOrFail($order->id);
 
-                    $body = $this->getSessionDetails($order->order_text_id);
+                    $body = $this->getSessionDetailsPreferTerminalState($order->order_text_id);
 
                     $sessionState = $body['sessionState'];
                     $amount = $body['paymentDetails']['amount']['value'];
@@ -231,7 +231,30 @@ class VippsPaymentModule
             throw new \Exception("Unexpected status from Vipps: $statusCode");
         }
 
-        return json_decode($response->getBody(), true);
+        $body = json_decode($response->getBody(), true);
+        Log::info('Vipps session details: '.json_encode($body));
+        return $body;
+    }
+
+    private function getSessionDetailsPreferTerminalState($reference)
+    {
+        // https://developer.vippsmobilepay.com/docs/APIs/checkout-api/checkout-api-guide/?payment-method-response=wallet#payment-details
+        $terminalStates = ['PaymentSuccessful', 'PaymentTerminated', 'SessionExpired'];
+
+        $i = 0;
+        while (true) {
+            $details = $this->getSessionDetails($reference);
+            $sessionState = $details['sessionState'];
+            if (in_array($sessionState, $terminalStates)) {
+                return $details;
+            }
+
+            if (++$i == 10) {
+                return $details;
+            }
+
+            sleep(2);
+        }
     }
 
     private function getAccessToken()
