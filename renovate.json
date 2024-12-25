@@ -21,7 +21,8 @@
         "angular-cli",
         "angular-eslint",
         "zone.js"
-      ]
+      ],
+      "separateMajorMinor": false
     }
   ],
   "automerge": true,
