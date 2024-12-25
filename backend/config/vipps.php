@@ -1,6 +1,7 @@
 <?php
 
-$local_url = env('VIPPS_LOCAL_URL');
+$local_callback_url = env('VIPPS_LOCAL_CALLBACK_URL');
+$local_return_url = env('VIPPS_LOCAL_RETURN_URL');
 
 return [
     'api_base_url' => env('VIPPS_API_BASE_URL', 'https://apitest.vipps.no'),
@@ -10,6 +11,6 @@ return [
     'client_secret' => env('VIPPS_CLIENT_SECRET', 'overridden-in-local-configuration'),
     'subscription_key' => env('VIPPS_SUBSCRIPTION_KEY', 'overridden-in-local-configuration'),
     'email_reports' => 'billettsystem-gruppe@blindernuka.no',
-    'callback_url' => $local_url ? ($local_url.'/api/vipps/callback') : 'https://billett.blindernuka.no/api/vipps/callback',
-    'return_url_template' => $local_url ? ($local_url.'/api/vipps/order-return/{orderId}') : 'https://billett.blindernuka.no/api/vipps/order-return/{orderId}',
+    'callback_url' => $local_callback_url ? ($local_callback_url.'/api/vipps/callback') : 'https://billett.blindernuka.no/api/vipps/callback',
+    'return_url_template' => $local_return_url ? ($local_return_url.'/api/vipps/order-return/{orderId}') : 'https://billett.blindernuka.no/api/vipps/order-return/{orderId}',
 ];

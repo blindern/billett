@@ -56,6 +56,8 @@ return [
 
     'url' => env('APP_URL', 'https://billett.blindernuka.no/'),
 
+    'frontend_url' => env('APP_FRONTEND_URL', 'https://billett.blindernuka.no'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

@@ -37,9 +37,9 @@ class VippsController extends Controller
                 'payment' => $payment,
             ]);
 
-            return Redirect::to('order/complete');
+            return Redirect::to(Config::get('app.frontend_url').'/order/complete');
         } else {
-            return Redirect::to('event/'.$order->tickets()->with('event')->get()[0]->event->id);
+            return Redirect::to(Config::get('app.frontend_url').'/event/'.$order->tickets()->with('event')->get()[0]->event->id);
         }
     }
 
