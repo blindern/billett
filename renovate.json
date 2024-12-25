@@ -11,6 +11,19 @@
   "major": {
     "automerge": false
   },
+  "packageRules": [
+    {
+      "groupName": "angular",
+      "matchPackageNames": [
+        "@angular-devkit/*",
+        "@angular-eslint/*",
+        "@angular/*",
+        "angular-cli",
+        "angular-eslint",
+        "zone.js"
+      ]
+    }
+  ],
   "automerge": true,
   "automergeType": "branch",
   "prCreation": "not-pending",
