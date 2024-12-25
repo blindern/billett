@@ -103,7 +103,7 @@ For å gjøre lokal utvikling trenger du:
 3. Kjør lokal server
 
    ```bash
-   pnpx ng serve --port 3000 --open
+   pnpm ng serve --port 3000 --open
    ```
 
    Denne går mot lokal backend som standard.
