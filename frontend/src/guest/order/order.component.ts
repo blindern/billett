@@ -30,6 +30,7 @@ type Order = ApiOrder & {
   standalone: true,
   imports: [RouterLink, PagePropertyComponent, FormatdatePipe, PricePipe],
   templateUrl: "./order.component.html",
+  preserveWhitespaces: false,
 })
 export class GuestOrderComponent implements OnInit {
   private http = inject(HttpClient)
