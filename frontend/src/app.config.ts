@@ -1,6 +1,3 @@
-import moment from "moment"
-import "moment/locale/nb.js"
-
 import { DEFAULT_DIALOG_CONFIG } from "@angular/cdk/dialog"
 import {
   provideHttpClient,
@@ -12,8 +9,6 @@ import { provideRouter, withComponentInputBinding } from "@angular/router"
 import { routes } from "./app.routes"
 import { csrfInterceptor } from "./common/csrf-interceptor"
 import { withCredentials } from "./common/with-credentials"
-
-moment.locale("nb")
 
 export const appConfig: ApplicationConfig = {
   providers: [

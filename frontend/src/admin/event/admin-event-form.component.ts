@@ -8,8 +8,8 @@ import {
 } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { RouterLink } from "@angular/router"
-import moment from "moment"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
+import moment from "../../common/moment"
 import { AdminEventCreateData, AdminEventData } from "./admin-event.service"
 
 @Component({

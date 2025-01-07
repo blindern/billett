@@ -8,7 +8,6 @@ import {
 } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { RouterLink } from "@angular/router"
-import moment from "moment"
 import {
   ApiEventAdmin,
   ApiEventgroupAdmin,
@@ -16,6 +15,7 @@ import {
 } from "../../apitypes"
 import { toastErrorHandler } from "../../common/errors"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
+import moment from "../../common/moment"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
 import { PricePipe } from "../../common/price.pipe"

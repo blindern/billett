@@ -7,9 +7,9 @@ import {
 } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { Router, RouterLink } from "@angular/router"
-import moment from "moment"
 import { ApiEventgroupAdmin } from "../../apitypes"
 import { toastErrorHandler } from "../../common/errors"
+import moment from "../../common/moment"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
 import {

@@ -7,10 +7,10 @@ import {
   SimpleChanges,
 } from "@angular/core"
 import { Router, RouterLink } from "@angular/router"
-import moment from "moment"
 import { ApiEvent } from "../../apitypes"
 import { AuthService } from "../../auth/auth.service"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
+import moment from "../../common/moment"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
 import {
