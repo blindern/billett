@@ -58,9 +58,9 @@
 
       <span class="pull-right">
         <a class="btn btn-success" routerLink="/a/order/new/{{ order.eventgroup.id }}" accesskey="n">Ny ordre</a>
-        <button class="btn btn-primary" (click)="startEdit()" accesskey="e">Rediger</button>
+        <button class="btn btn-primary" type="button" (click)="startEdit()" accesskey="e">Rediger</button>
         @if (order.is_valid) {
-          <button class="btn btn-default" (click)="sendEmail()">Send e-post</button>
+          <button class="btn btn-default" type="button" (click)="sendEmail()">Send e-post</button>
         }
       </span>
     </h1>
@@ -139,7 +139,7 @@
       <div class="form-group">
         <div class="col-sm-6 col-sm-offset-2">
           <input type="submit" value="Oppdater" class="btn btn-primary" />
-          <button class="btn btn-link" (click)="abortEdit()">Avbryt</button>
+          <button class="btn btn-link" type="button" (click)="abortEdit()">Avbryt</button>
         </div>
       </div>
     </form>
@@ -155,10 +155,14 @@
 
         <p>
           @if (order.tickets.length > 0) {
-            <button class="btn btn-success" (click)="completeOrder()">Marker som betalt og fullfør ordre</button>
+            <button class="btn btn-success" type="button" (click)="completeOrder()">
+              Marker som betalt og fullfør ordre
+            </button>
           }
-          <button class="btn btn-primary" (click)="convertOrder()">Konverter, men ikke valider billetter enda</button>
-          <button class="btn btn-danger" (click)="deleteReservation()">Slett reservasjon</button>
+          <button class="btn btn-primary" type="button" (click)="convertOrder()">
+            Konverter, men ikke valider billetter enda
+          </button>
+          <button class="btn btn-danger" type="button" (click)="deleteReservation()">Slett reservasjon</button>
         </p>
       </div>
     }
@@ -254,10 +258,10 @@
         <h2>
           Billetter
           <span class="pull-right">
-            <button class="btn btn-default" (click)="addTickets()">Tilorde nye billetter</button>
+            <button class="btn btn-default" type="button" (click)="addTickets()">Tilorde nye billetter</button>
             @if (validTickets.length > 0) {
               <a class="btn btn-default" [href]="downloadTicketsUrl" target="_self">Last ned billetter</a>
-              <button class="btn btn-default" (click)="printTickets()">Skriv ut billetter</button>
+              <button class="btn btn-default" type="button" (click)="printTickets()">Skriv ut billetter</button>
             }
           </span>
         </h2>
@@ -293,7 +297,7 @@
                         <span class="glyphicon glyphicon-eye-open" title="Last ned PDF"></span>
                       </a>
                     }
-                    <button class="btn btn-default btn-xs" (click)="printTicket(ticket)">
+                    <button class="btn btn-default btn-xs" type="button" (click)="printTicket(ticket)">
                       <span class="glyphicon glyphicon-print" title="Skriv ut billett"></span>
                     </button>
                   </td>
@@ -331,13 +335,19 @@
                   <td>{{ ticket.ticketgroup.fee | price }}</td>
                   <td>
                     @if (!ticket.is_revoked && ticket.is_valid) {
-                      <button class="btn btn-sm btn-danger" (click)="revokeTicket(ticket)" title="Tilbaketrekk billett">
+                      <button
+                        class="btn btn-sm btn-danger"
+                        type="button"
+                        (click)="revokeTicket(ticket)"
+                        title="Tilbaketrekk billett"
+                      >
                         <i class="glyphicon glyphicon-remove"></i>
                       </button>
                     }
                     @if (!ticket.is_valid && order.is_valid) {
                       <button
                         class="btn btn-sm btn-success"
+                        type="button"
                         (click)="validateTicket(ticket)"
                         title="Godkjenn reservasjon"
                       >
@@ -345,7 +355,12 @@
                       </button>
                     }
                     @if (!ticket.is_valid) {
-                      <button class="btn btn-sm btn-danger" (click)="deleteTicket(ticket)" title="Slett reservasjon">
+                      <button
+                        class="btn btn-sm btn-danger"
+                        type="button"
+                        (click)="deleteTicket(ticket)"
+                        title="Slett reservasjon"
+                      >
                         <i class="glyphicon glyphicon-remove"></i>
                       </button>
                     }
@@ -375,7 +390,7 @@
         <h2>
           Transaksjoner
           @if (order.is_valid) {
-            <button class="pull-right btn btn-default" (click)="newPayment()">Ny transaksjon</button>
+            <button class="pull-right btn btn-default" type="button" (click)="newPayment()">Ny transaksjon</button>
           }
         </h2>
         @if (order.payments.length === 0) {

@@ -186,6 +186,7 @@
                 <td>
                   <button
                     class="btn btn-sm btn-danger"
+                    type="button"
                     (click)="deleteTicket(group)"
                     title="Slett én reservasjon"
                     [disabled]="ticketgroupsWorking.has(group.ticketgroup.id)"
@@ -212,7 +213,7 @@
         </table>
       }
 
-      <button class="btn btn-primary" (click)="addTickets()">
+      <button class="btn btn-primary" type="button" (click)="addTickets()">
         Legg til{{ order.tickets.length === 0 ? "" : " flere" }} billetter
       </button>
     </div>

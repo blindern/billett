@@ -14,7 +14,7 @@
         <a routerLink="/event/{{ event.id }}" class="btn btn-success">Forhåndsvis</a>
         <a routerLink="/a/event/{{ event.id }}/edit" class="btn btn-primary">Rediger</a>
         @if (!event.has_tickets) {
-          <button class="btn btn-danger" (click)="deleteEvent()">Slett arrangement</button>
+          <button class="btn btn-danger" type="button" (click)="deleteEvent()">Slett arrangement</button>
         }
         @if (event.has_tickets) {
           <a routerLink="/a/event/{{ event.id }}/checkin" class="btn btn-default">Innsjekking</a>
@@ -141,7 +141,7 @@
                 >
                   <span class="glyphicon glyphicon-eye-open" title="Forhåndsvis"></span>
                 </a>
-                <button class="btn btn-default btn-xs" (click)="previewTicketPrint(g)">
+                <button class="btn btn-default btn-xs" type="button" (click)="previewTicketPrint(g)">
                   <span class="glyphicon glyphicon-print" title="Skriv ut"></span>
                 </button>
               </td>
@@ -171,12 +171,16 @@
               </td>
               <td>
                 @if (!$first) {
-                  <button class="btn btn-default btn-xs" (click)="moveTicketgroup($index, 'up')">↑</button>
+                  <button class="btn btn-default btn-xs" type="button" (click)="moveTicketgroup($index, 'up')">
+                    ↑
+                  </button>
                 }
               </td>
               <td>
                 @if (!$last) {
-                  <button class="btn btn-default btn-xs" (click)="moveTicketgroup($index, 'down')">↓</button>
+                  <button class="btn btn-default btn-xs" type="button" (click)="moveTicketgroup($index, 'down')">
+                    ↓
+                  </button>
                 }
               </td>
             </tr>

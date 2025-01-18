@@ -18,7 +18,7 @@
         {{ event.title }} ({{ event.time_start | formatdate: "ddd D. MMM YYYY HH.mm" }})
       </a>
       <span class="pull-right">
-        <button class="btn btn-primary" (click)="loadAllTickets()">Last inn hele billettlista</button>
+        <button class="btn btn-primary" type="button" (click)="loadAllTickets()">Last inn hele billettlista</button>
         <a
           class="btn btn-default"
           routerLink="/a/orders"
@@ -147,10 +147,10 @@
                   <a href="/api/ticket/{{ ticket.id }}/pdf" target="_self">#{{ ticket.id }}</a>
                   @if (ticket.is_valid && !ticket.is_revoked) {
                     @if (ticket.used) {
-                      <button class="btn btn-danger" (click)="checkout(ticket)">Utsjekk</button>
+                      <button class="btn btn-danger" type="button" (click)="checkout(ticket)">Utsjekk</button>
                     }
                     @if (!ticket.used) {
-                      <button class="btn btn-success" (click)="checkin(ticket)">Innsjekk</button>
+                      <button class="btn btn-success" type="button" (click)="checkin(ticket)">Innsjekk</button>
                     }
                   }
                   ({{ ticket.ticketgroup.title }})
@@ -287,10 +287,10 @@
                           <a href="/api/ticket/{{ ticket.id }}/pdf" target="_self">#{{ ticket.id }}</a>
                           @if (ticket.event.id === event.id && ticket.is_valid && !ticket.is_revoked) {
                             @if (ticket.used) {
-                              <button class="btn btn-danger" (click)="checkout(ticket)">Utsjekk</button>
+                              <button class="btn btn-danger" type="button" (click)="checkout(ticket)">Utsjekk</button>
                             }
                             @if (!ticket.used) {
-                              <button class="btn btn-success" (click)="checkin(ticket)">Innsjekk</button>
+                              <button class="btn btn-success" type="button" (click)="checkin(ticket)">Innsjekk</button>
                             }
                           }
                           @if (ticket.event.id !== event.id) {
@@ -380,10 +380,10 @@
                           <a href="/api/ticket/{{ ticket.id }}/pdf" target="_self">#{{ ticket.id }}</a>
                           @if (ticket.is_valid && !ticket.is_revoked) {
                             @if (ticket.used) {
-                              <button class="btn btn-danger" (click)="checkout(ticket)">Utsjekk</button>
+                              <button class="btn btn-danger" type="button" (click)="checkout(ticket)">Utsjekk</button>
                             }
                             @if (!ticket.used) {
-                              <button class="btn btn-success" (click)="checkin(ticket)">Innsjekk</button>
+                              <button class="btn btn-success" type="button" (click)="checkin(ticket)">Innsjekk</button>
                             }
                           }
                           ({{ ticket.ticketgroup.title }})

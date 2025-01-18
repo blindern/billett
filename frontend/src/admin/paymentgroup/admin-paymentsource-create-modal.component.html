@@ -37,19 +37,27 @@
         <div class="col-sm-6">
           <h4>Ved start/påfylling</h4>
           <p>
-            <button class="btn btn-primary" (click)="multiply = -1; type = 'cash'">Kontantopptelling</button>
+            <button class="btn btn-primary" type="button" (click)="multiply = -1; type = 'cash'">
+              Kontantopptelling
+            </button>
           </p>
           <p>
-            <button class="btn btn-primary" (click)="multiply = -1; type = 'other'">Annen opptelling</button>
+            <button class="btn btn-primary" type="button" (click)="multiply = -1; type = 'other'">
+              Annen opptelling
+            </button>
           </p>
         </div>
         <div class="col-sm-6">
           <h4>Ved slutt/uttak</h4>
           <p>
-            <button class="btn btn-primary" (click)="multiply = 1; type = 'cash'">Kontantopptelling</button>
+            <button class="btn btn-primary" type="button" (click)="multiply = 1; type = 'cash'">
+              Kontantopptelling
+            </button>
           </p>
           <p>
-            <button class="btn btn-primary" (click)="multiply = 1; type = 'other'">Annen opptelling</button>
+            <button class="btn btn-primary" type="button" (click)="multiply = 1; type = 'other'">
+              Annen opptelling
+            </button>
           </p>
         </div>
       </div>

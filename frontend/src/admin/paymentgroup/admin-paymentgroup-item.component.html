@@ -116,13 +116,13 @@
 
       <span class="pull-right hidden-print">
         @if (!paymentgroup.time_end && !edit) {
-          <button class="btn btn-default" (click)="startEdit()">Rediger</button>
+          <button class="btn btn-default" type="button" (click)="startEdit()">Rediger</button>
         }
-        <button class="btn btn-default" (click)="show_details = !show_details">
+        <button class="btn btn-default" type="button" (click)="show_details = !show_details">
           {{ show_details ? "Skjul detaljer" : "Vis detaljer" }}
         </button>
         @if (!paymentgroup.time_end) {
-          <button class="btn btn-primary" (click)="close()">Avslutt/ta oppgjør</button>
+          <button class="btn btn-primary" type="button" (click)="close()">Avslutt/ta oppgjør</button>
         }
       </span>
     </h1>
@@ -161,7 +161,7 @@
       <div class="form-group">
         <div class="col-sm-6 col-sm-offset-2">
           <input type="submit" value="Oppdater" class="btn btn-primary" />
-          <button class="btn btn-link" (click)="abortEdit()">Avbryt</button>
+          <button class="btn btn-link" type="button" (click)="abortEdit()">Avbryt</button>
         </div>
       </div>
     </form>
@@ -238,7 +238,11 @@
         <h2>
           Opptelling/kontroll
           @if (!paymentgroup.time_end) {
-            <button class="pull-right btn btn-primary hidden-print" (click)="openCreatePaymentsourceModal()">
+            <button
+              class="pull-right btn btn-primary hidden-print"
+              type="button"
+              (click)="openCreatePaymentsourceModal()"
+            >
               Registrer opptelling
             </button>
           }
@@ -288,7 +292,11 @@
                           @if (!group.is_deleted && !paymentgroup.time_end) {
                             <span>
                               <br />
-                              <button class="btn btn-xs btn-danger" (click)="deletePaymentsource(paymentsource)">
+                              <button
+                                class="btn btn-xs btn-danger"
+                                type="button"
+                                (click)="deletePaymentsource(paymentsource)"
+                              >
                                 Slett
                               </button>
                             </span>
@@ -365,7 +373,9 @@
                     >
                   }
                   @if (!paymentsource.is_deleted && !paymentgroup.time_end) {
-                    <button class="btn btn-danger btn-xs" (click)="deletePaymentsource(paymentsource)">Slett</button>
+                    <button class="btn btn-danger btn-xs" type="button" (click)="deletePaymentsource(paymentsource)">
+                      Slett
+                    </button>
                   }
                 </p>
                 @if (paymentsource.comment) {
