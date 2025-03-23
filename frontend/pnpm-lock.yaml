@@ -13,7 +13,7 @@ importers:
         version: 19.2.3(@angular/core@19.2.3(rxjs@7.8.2)(zone.js@0.15.0))
       '@angular/cdk':
         specifier: ~19.2.0
-        version: 19.2.4(@angular/common@19.2.3(@angular/core@19.2.3(rxjs@7.8.2)(zone.js@0.15.0))(rxjs@7.8.2))(@angular/core@19.2.3(rxjs@7.8.2)(zone.js@0.15.0))(rxjs@7.8.2)
+        version: 19.2.5(@angular/common@19.2.3(@angular/core@19.2.3(rxjs@7.8.2)(zone.js@0.15.0))(rxjs@7.8.2))(@angular/core@19.2.3(rxjs@7.8.2)(zone.js@0.15.0))(rxjs@7.8.2)
       '@angular/common':
         specifier: ^19.0.0
         version: 19.2.3(@angular/core@19.2.3(rxjs@7.8.2)(zone.js@0.15.0))(rxjs@7.8.2)
@@ -311,8 +311,8 @@ packages:
       tailwindcss:
         optional: true
 
-  '@angular/cdk@19.2.4':
-    resolution: {integrity: sha512-PwifR87AbEyuchlIJrGVE1VX6aOULusYsqxNoVtDXlHzecvd0xjmz48Lpt4cnc11Ug0IGFTfJbknoLdnAY9tdQ==}
+  '@angular/cdk@19.2.5':
+    resolution: {integrity: sha512-cLQO5k9Wp4sYJfaawMgTPWFkPB7cZCws1HHd4YdhVg7VrNWDB/gtcOUJOklc52e17EWVA69U8xuB57FdktCnXg==}
     peerDependencies:
       '@angular/common': ^19.0.0 || ^20.0.0
       '@angular/core': ^19.0.0 || ^20.0.0
@@ -5002,7 +5002,7 @@ snapshots:
       - tsx
       - yaml
 
-  '@angular/cdk@19.2.4(@angular/common@19.2.3(@angular/core@19.2.3(rxjs@7.8.2)(zone.js@0.15.0))(rxjs@7.8.2))(@angular/core@19.2.3(rxjs@7.8.2)(zone.js@0.15.0))(rxjs@7.8.2)':
+  '@angular/cdk@19.2.5(@angular/common@19.2.3(@angular/core@19.2.3(rxjs@7.8.2)(zone.js@0.15.0))(rxjs@7.8.2))(@angular/core@19.2.3(rxjs@7.8.2)(zone.js@0.15.0))(rxjs@7.8.2)':
     dependencies:
       '@angular/common': 19.2.3(@angular/core@19.2.3(rxjs@7.8.2)(zone.js@0.15.0))(rxjs@7.8.2)
       '@angular/core': 19.2.3(rxjs@7.8.2)(zone.js@0.15.0)
