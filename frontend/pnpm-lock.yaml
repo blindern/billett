@@ -51,8 +51,8 @@ importers:
         specifier: ^15.0.0
         version: 15.0.12
       mathjs:
-        specifier: 14.5.1
-        version: 14.5.1
+        specifier: 14.5.2
+        version: 14.5.2
       moment:
         specifier: 2.30.1
         version: 2.30.1
@@ -3419,8 +3419,8 @@ packages:
     resolution: {integrity: sha512-/IXtbwEk5HTPyEwyKX6hGkYXxM9nbj64B+ilVJnC/R6B0pH5G4V3b0pVbL7DBj4tkhBAppbQUlf6F6Xl9LHu1g==}
     engines: {node: '>= 0.4'}
 
-  mathjs@14.5.1:
-    resolution: {integrity: sha512-AG2axXkY1v3Y7D4zCT19Vu25+jcIfhRBPpNXByavNcMmlNVm8owohyVeM3+6s/8VF8a8vLCNrhqoU9c5EeN3jA==}
+  mathjs@14.5.2:
+    resolution: {integrity: sha512-51U6hp7j4M4Rj+l+q2KbmXAV9EhQVQzUdw1wE67RnUkKKq5ibxdrl9Ky2YkSUEIc2+VU8/IsThZNu6QSHUoyTA==}
     engines: {node: '>= 18'}
     hasBin: true
 
@@ -8441,7 +8441,7 @@ snapshots:
 
   math-intrinsics@1.1.0: {}
 
-  mathjs@14.5.1:
+  mathjs@14.5.2:
     dependencies:
       '@babel/runtime': 7.27.1
       complex.js: 2.4.2
