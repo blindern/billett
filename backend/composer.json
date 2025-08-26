@@ -14,7 +14,7 @@
     "require": {
         "php": "^8.2",
         "dompdf/dompdf": "^3",
-        "guzzlehttp/guzzle": "7.9.3",
+        "guzzlehttp/guzzle": "7.10.0",
         "henrist/laravel-api-query": "dev-master",
         "iio/libmergepdf": "4.0.4",
         "intervention/image-laravel": "^1.3",
