@@ -8,6 +8,9 @@ on:
 jobs:
   frontend:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
 
     defaults:
       run:
