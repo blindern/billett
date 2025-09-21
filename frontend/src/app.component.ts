@@ -1,6 +1,6 @@
 import { Dialog } from "@angular/cdk/dialog"
 import { AsyncPipe, Location } from "@angular/common"
-import { afterRender, Component, inject, OnInit } from "@angular/core"
+import { afterEveryRender, Component, inject, OnInit } from "@angular/core"
 import {
   Event,
   EventType,
@@ -37,7 +37,7 @@ export class AppComponent implements OnInit {
   }
 
   constructor() {
-    afterRender(() => {
+    afterEveryRender(() => {
       if (window.top != window.self) {
         document.body.classList.add("isInIframe")
       }

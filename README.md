@@ -24,7 +24,7 @@ Systemet er utviklet av Henrik Steen som også vedlikeholder det ved behov.
 ## Tekniske detaljer
 
 Systemet bruker [Laravel](https://laravel.com/)-rammeverket som backend i
-kombinasjon med en selvstendig frontend-applikasjon.
+kombinasjon med en selvstendig Angular frontend-applikasjon.
 
 [Mer teknisk dokumentasjon](docs/index.md)
 

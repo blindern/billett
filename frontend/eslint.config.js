@@ -1,9 +1,10 @@
 import js from "@eslint/js"
 import angular from "angular-eslint"
 import prettier from "eslint-plugin-prettier/recommended"
+import { defineConfig } from "eslint/config"
 import tseslint from "typescript-eslint"
 
-export default tseslint.config(
+export default defineConfig(
   prettier,
   {
     ignores: ["dist/", ".angular/"],
@@ -42,6 +43,7 @@ export default tseslint.config(
       ],
       // TODO: Fix this.
       "@angular-eslint/component-class-suffix": "off",
+      "@angular-eslint/prefer-inject": "off",
     },
   },
   {
