@@ -18,7 +18,7 @@
         "henrist/laravel-api-query": "dev-master",
         "iio/libmergepdf": "4.0.4",
         "intervention/image-laravel": "^1.3",
-        "laravel/framework": "^11.9",
+        "laravel/framework": "^12.0",
         "laravel/tinker": "^2.9",
         "milon/barcode": "^12",
         "onelogin/php-saml": "4.3.0"
