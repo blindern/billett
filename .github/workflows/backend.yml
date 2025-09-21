@@ -11,17 +11,21 @@ on:
 jobs:
   backend:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Login to DockerHub
-        uses: docker/login-action@v3
+      - uses: docker/login-action@v3
+        if: github.ref == 'refs/heads/main'
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build nginx container
         uses: docker/build-push-action@v6
@@ -49,7 +53,7 @@ jobs:
           context: .
           file: Dockerfile.nginx
           push: true
-          tags: blindernuka/billett-proxy:latest
+          tags: ghcr.io/blindern/billett-proxy:latest
 
       - name: Push fpm container
         id: fpm_docker_build
@@ -59,7 +63,7 @@ jobs:
           context: .
           file: Dockerfile.fpm
           push: true
-          tags: blindernuka/billett-backend:latest
+          tags: ghcr.io/blindern/billett-backend:latest
 
       - name: Deploy
         if: github.ref == 'refs/heads/main'
@@ -68,8 +72,8 @@ jobs:
           {
             "service": "uka-billett",
             "attributes": {
-              "fpm_image": "blindernuka/billett-backend@${{ steps.fpm_docker_build.outputs.digest }}",
-              "proxy_image": "blindernuka/billett-proxy@${{ steps.nginx_docker_build.outputs.digest }}"
+              "fpm_image": "ghcr.io/blindern/billett-backend@${{ steps.fpm_docker_build.outputs.digest }}",
+              "proxy_image": "ghcr.io/blindern/billett-proxy@${{ steps.nginx_docker_build.outputs.digest }}"
             }
           }'
         env:
