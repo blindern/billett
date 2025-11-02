@@ -1,4 +1,4 @@
-FROM nginx:1.29.2
+FROM nginx:1.29.3
 
 COPY container/default.conf /etc/nginx/conf.d/default.conf
 
