@@ -27,14 +27,14 @@
     "zone.js": "~0.15.1"
   },
   "devDependencies": {
-    "@angular-eslint/schematics": "20.5.2",
+    "@angular-eslint/schematics": "20.6.0",
     "@angular/build": "^20.3.2",
     "@angular/cli": "^20.3.2",
     "@angular/compiler-cli": "^20.3.1",
     "@eslint/js": "9.39.1",
     "@types/dompurify": "^3.2.0",
     "@types/jasmine": "~5.1.9",
-    "angular-eslint": "20.5.2",
+    "angular-eslint": "20.6.0",
     "eslint": "9.39.1",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.4",
