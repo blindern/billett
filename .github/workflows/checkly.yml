@@ -1,0 +1,39 @@
+name: Checkly
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/checkly.yml"
+      - "checkly/**"
+
+env:
+  CHECKLY_ACCOUNT_ID: ${{ vars.CHECKLY_ACCOUNT_ID }}
+  CHECKLY_API_KEY: ${{ secrets.CHECKLY_API_KEY }}
+
+defaults:
+  run:
+    working-directory: ./checkly
+
+jobs:
+  build:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: "checkly/package.json"
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: "pnpm"
+          cache-dependency-path: "checkly/pnpm-lock.yaml"
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm checkly -v
+      - run: pnpm checkly test --reporter=github --record
+        id: run-checks
+      - run: cat checkly-github-report.md > $GITHUB_STEP_SUMMARY
+      - name: Deploy checks
+        if: github.ref == 'refs/heads/main' && steps.run-checks.outcome == 'success'
+        run: pnpm checkly deploy --force

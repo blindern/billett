@@ -17,7 +17,7 @@ jobs:
         working-directory: frontend
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: pnpm/action-setup@v4
         with:
@@ -32,7 +32,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v6
         with:
           node-version: "24"
 
@@ -62,3 +62,13 @@ jobs:
           }'
         env:
           DEPLOYER_TOKEN: ${{ secrets.DEPLOYER_TOKEN }}
+
+  checkly:
+    if: github.ref == 'refs/heads/main'
+    needs: frontend
+    permissions:
+      contents: read
+    uses: ./.github/workflows/run-checkly.yml
+    with:
+      tags: frontend
+    secrets: inherit
