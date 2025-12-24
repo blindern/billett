@@ -34,6 +34,7 @@ jobs:
       - run: pnpm checkly test --reporter=github --record
         id: run-checks
       - run: cat checkly-github-report.md > $GITHUB_STEP_SUMMARY
+        if: always()
       - name: Deploy checks
         if: github.ref == 'refs/heads/main' && steps.run-checks.outcome == 'success'
         run: pnpm checkly deploy --force

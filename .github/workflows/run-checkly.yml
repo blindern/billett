@@ -34,3 +34,4 @@ jobs:
       - run: pnpm checkly -v
       - run: pnpm checkly test --reporter=github --record ${{ inputs.tags && format('--tags "{0}"', inputs.tags) || '' }}
       - run: cat checkly-github-report.md > $GITHUB_STEP_SUMMARY
+        if: always()
