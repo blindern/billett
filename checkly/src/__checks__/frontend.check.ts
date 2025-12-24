@@ -5,7 +5,6 @@ import { billettGroup } from "../groups"
 
 new BrowserCheck("billett-frontend-browser-check", {
   name: "Billett Frontend",
-  alertChannels: [emailChannel],
   group: billettGroup,
   frequency: 1440, // once per day
   playwrightConfig: {
