@@ -15,7 +15,7 @@ jobs:
       contents: read
       packages: write
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -78,3 +78,13 @@ jobs:
           }'
         env:
           DEPLOYER_TOKEN: ${{ secrets.DEPLOYER_TOKEN }}
+
+  checkly:
+    if: github.ref == 'refs/heads/main'
+    needs: backend
+    permissions:
+      contents: read
+    uses: ./.github/workflows/run-checkly.yml
+    with:
+      tags: api
+    secrets: inherit
