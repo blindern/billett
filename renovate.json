@@ -29,6 +29,7 @@
   ],
   "automerge": true,
   "automergeType": "branch",
+  "gitIgnoredAuthors": ["114827586+autofix-ci[bot]@users.noreply.github.com"],
   "prCreation": "not-pending",
   "minimumReleaseAge": "3 days",
   "prNotPendingHours": 74,
