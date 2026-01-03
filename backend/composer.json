@@ -21,7 +21,7 @@
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.9",
         "milon/barcode": "^12",
-        "onelogin/php-saml": "4.3.0"
+        "onelogin/php-saml": "4.3.1"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
