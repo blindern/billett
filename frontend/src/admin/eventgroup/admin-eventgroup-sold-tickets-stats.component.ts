@@ -93,8 +93,7 @@ export class AdminEventgroupSoldTicketsStatsComponent implements OnChanges {
 
       return {
         day: day,
-        short:
-          !tmp || tmp.slice(0, 7) != day.slice(0, 7) ? day : "-" + day.slice(8),
+        short: tmp?.slice(0, 7) != day.slice(0, 7) ? day : "-" + day.slice(8),
       }
     })
 
