@@ -1,8 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
-  ],
+  "extends": ["config:best-practices"],
   "lockFileMaintenance": {
     "enabled": true,
     "branchTopic": "lock-file-maintenance-{{packageFile}}",
@@ -25,9 +23,7 @@
       "separateMajorMinor": false
     },
     {
-      "matchDepNames": [
-        "typescript"
-      ],
+      "matchDepNames": ["typescript"],
       "separateMultipleMinor": true
     }
   ],
