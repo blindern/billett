@@ -1,0 +1,18 @@
+name: autofix.ci # needed to securely identify the workflow
+on:
+  pull_request:
+jobs:
+  autofix:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: frontend/package.json
+      - run: pnpm install
+        working-directory: frontend
+      - run: pnpm run lint --fix
+        working-directory: frontend
+      - uses: autofix-ci/action@635ffb0c9798bd160680f18fd73371e355b85f27
