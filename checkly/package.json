@@ -9,7 +9,7 @@
   "license": "MIT",
   "devDependencies": {
     "@playwright/test": "^1.51.1",
-    "checkly": "^6.0.0",
+    "checkly": "^6.9.7",
     "dotenv": "^17.0.0",
     "prettier": "^3.5.3",
     "prettier-plugin-organize-imports": "^4.1.0",
