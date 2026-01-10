@@ -76,13 +76,13 @@ importers:
         specifier: 21.1.0
         version: 21.1.0(@angular-eslint/template-parser@21.1.0(eslint@9.39.2)(typescript@5.9.3))(@angular/cli@21.0.4(@types/node@24.9.2)(chokidar@4.0.3))(@typescript-eslint/types@8.51.0)(@typescript-eslint/utils@8.51.0(eslint@9.39.2)(typescript@5.9.3))(chokidar@4.0.3)(eslint@9.39.2)(typescript@5.9.3)
       '@angular/build':
-        specifier: ^21.0.0
+        specifier: 21.0.4
         version: 21.0.4(@angular/compiler-cli@21.0.6(@angular/compiler@21.0.6)(typescript@5.9.3))(@angular/compiler@21.0.6)(@angular/core@21.0.7(@angular/compiler@21.0.6)(rxjs@7.8.2)(zone.js@0.16.0))(@angular/platform-browser@21.0.6(@angular/animations@21.0.6(@angular/core@21.0.7(@angular/compiler@21.0.6)(rxjs@7.8.2)(zone.js@0.16.0)))(@angular/common@21.0.6(@angular/core@21.0.7(@angular/compiler@21.0.6)(rxjs@7.8.2)(zone.js@0.16.0))(rxjs@7.8.2))(@angular/core@21.0.7(@angular/compiler@21.0.6)(rxjs@7.8.2)(zone.js@0.16.0)))(@types/node@24.9.2)(chokidar@4.0.3)(karma@6.4.4)(postcss@8.5.6)(tslib@2.8.1)(typescript@5.9.3)
       '@angular/cli':
-        specifier: ^21.0.0
+        specifier: 21.0.4
         version: 21.0.4(@types/node@24.9.2)(chokidar@4.0.3)
       '@angular/compiler-cli':
-        specifier: ^21.0.0
+        specifier: 21.0.6
         version: 21.0.6(@angular/compiler@21.0.6)(typescript@5.9.3)
       '@eslint/js':
         specifier: 9.39.2
@@ -3110,10 +3110,6 @@ packages:
     resolution: {integrity: sha512-Azwzvl90HaF0aCz1JrDdXQykFakSSNPaPoiZ9fm5qJIMHioDZEi7OAdRwSm6rSoPtY3Qutnm3L7ogmg3dc+wbQ==}
     engines: {node: ^18.17.0 || >=20.5.0}
 
-  proc-log@6.0.0:
-    resolution: {integrity: sha512-KG/XsTDN901PNfPfAMmj6N/Ywg9tM+bHK8pAz+27fS4N4Pcr+4zoYBOcGSBu6ceXYNPxkLpa4ohtfxV1XcLAfA==}
-    engines: {node: ^20.17.0 || >=22.9.0}
-
   proc-log@6.1.0:
     resolution: {integrity: sha512-iG+GYldRf2BQ0UDUAd6JQ/RwzaQy6mXmsk/IzlYyal4A4SNFw54MeH4/tLkF4I5WoWG9SQwuqWzS99jaFQHBuQ==}
     engines: {node: ^20.17.0 || >=22.9.0}
@@ -4771,7 +4767,7 @@ snapshots:
       ini: 6.0.0
       lru-cache: 11.2.2
       npm-pick-manifest: 11.0.3
-      proc-log: 6.0.0
+      proc-log: 6.1.0
       promise-retry: 2.0.1
       semver: 7.7.3
       which: 6.0.0
@@ -4789,7 +4785,7 @@ snapshots:
       glob: 13.0.0
       hosted-git-info: 9.0.2
       json-parse-even-better-errors: 5.0.0
-      proc-log: 6.0.0
+      proc-log: 6.1.0
       semver: 7.7.3
       validate-npm-package-license: 3.0.4
 
@@ -4809,7 +4805,7 @@ snapshots:
       '@npmcli/package-json': 7.0.4
       '@npmcli/promise-spawn': 9.0.1
       node-gyp: 12.1.0
-      proc-log: 6.0.0
+      proc-log: 6.1.0
       which: 6.0.0
     transitivePeerDependencies:
       - supports-color
@@ -6371,7 +6367,7 @@ snapshots:
       minipass-flush: 1.0.5
       minipass-pipeline: 1.2.4
       negotiator: 1.0.0
-      proc-log: 6.0.0
+      proc-log: 6.1.0
       promise-retry: 2.0.1
       ssri: 13.0.0
     transitivePeerDependencies:
@@ -6536,7 +6532,7 @@ snapshots:
       graceful-fs: 4.2.11
       make-fetch-happen: 15.0.3
       nopt: 9.0.0
-      proc-log: 6.0.0
+      proc-log: 6.1.0
       semver: 7.7.3
       tar: 7.5.2
       tinyglobby: 0.2.15
@@ -6574,7 +6570,7 @@ snapshots:
   npm-packlist@10.0.3:
     dependencies:
       ignore-walk: 8.0.0
-      proc-log: 6.0.0
+      proc-log: 6.1.0
 
   npm-pick-manifest@11.0.3:
     dependencies:
@@ -6592,7 +6588,7 @@ snapshots:
       minipass-fetch: 5.0.0
       minizlib: 3.1.0
       npm-package-arg: 13.0.1
-      proc-log: 6.0.0
+      proc-log: 6.1.0
     transitivePeerDependencies:
       - supports-color
 
@@ -6745,8 +6741,6 @@ snapshots:
   prettier@3.7.4: {}
 
   proc-log@5.0.0: {}
-
-  proc-log@6.0.0: {}
 
   proc-log@6.1.0: {}
 
