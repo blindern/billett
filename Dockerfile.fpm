@@ -1,4 +1,4 @@
-FROM php:8.4-fpm
+FROM php:8.4-fpm@sha256:71ab8cba2910562033a98d51f757e57c59237cf8a91e63cc62b6c52f493f33d2
 
 RUN \
     # system packages
