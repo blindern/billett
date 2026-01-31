@@ -1552,16 +1552,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v12.48.1",
+            "version": "v12.49.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "0f0974a9769378ccd9c9935c09b9927f3a606830"
+                "reference": "4bde4530545111d8bdd1de6f545fa8824039fcb5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/0f0974a9769378ccd9c9935c09b9927f3a606830",
-                "reference": "0f0974a9769378ccd9c9935c09b9927f3a606830",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/4bde4530545111d8bdd1de6f545fa8824039fcb5",
+                "reference": "4bde4530545111d8bdd1de6f545fa8824039fcb5",
                 "shasum": ""
             },
             "require": {
@@ -1770,7 +1770,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2026-01-20T16:12:36+00:00"
+            "time": "2026-01-28T03:40:49+00:00"
         },
         {
             "name": "laravel/prompts",
@@ -6009,16 +6009,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v7.4.3",
+            "version": "v7.4.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "2f8e1a6cdf590ca63715da4d3a7a3327404a523f"
+                "reference": "608476f4604102976d687c483ac63a79ba18cc97"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/2f8e1a6cdf590ca63715da4d3a7a3327404a523f",
-                "reference": "2f8e1a6cdf590ca63715da4d3a7a3327404a523f",
+                "url": "https://api.github.com/repos/symfony/process/zipball/608476f4604102976d687c483ac63a79ba18cc97",
+                "reference": "608476f4604102976d687c483ac63a79ba18cc97",
                 "shasum": ""
             },
             "require": {
@@ -6050,7 +6050,7 @@
             "description": "Executes commands in sub-processes",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/process/tree/v7.4.3"
+                "source": "https://github.com/symfony/process/tree/v7.4.5"
             },
             "funding": [
                 {
@@ -6070,7 +6070,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-12-19T10:00:43+00:00"
+            "time": "2026-01-26T15:07:59+00:00"
         },
         {
             "name": "symfony/routing",
