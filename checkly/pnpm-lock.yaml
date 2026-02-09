@@ -9,25 +9,25 @@ importers:
   .:
     devDependencies:
       '@playwright/test':
-        specifier: ^1.57.0
+        specifier: 1.57.0
         version: 1.57.0
       checkly:
-        specifier: ^6.9.7
+        specifier: 6.9.7
         version: 6.9.7(@types/node@25.0.3)(typescript@5.9.3)
       dotenv:
-        specifier: ^17.2.3
+        specifier: 17.2.3
         version: 17.2.3
       prettier:
-        specifier: ^3.8.0
+        specifier: 3.8.0
         version: 3.8.0
       prettier-plugin-organize-imports:
-        specifier: ^4.1.0
+        specifier: 4.3.0
         version: 4.3.0(prettier@3.8.0)(typescript@5.9.3)
       ts-node:
-        specifier: ^10.9.2
+        specifier: 10.9.2
         version: 10.9.2(@types/node@25.0.3)(typescript@5.9.3)
       typescript:
-        specifier: ~5.9.0
+        specifier: 5.9.3
         version: 5.9.3
 
 packages:
