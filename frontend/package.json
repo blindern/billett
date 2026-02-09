@@ -16,7 +16,7 @@
     "@types/jquery": "^3.5.33",
     "bootstrap-sass": "^3.4.3",
     "dompurify": "^3.2.7",
-    "jquery": "3.7.1",
+    "jquery": "4.0.0",
     "marked": "^17.0.0",
     "mathjs": "15.1.0",
     "moment": "2.30.1",
