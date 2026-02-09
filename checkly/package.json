@@ -11,7 +11,7 @@
     "@playwright/test": "1.57.0",
     "checkly": "6.9.10",
     "dotenv": "17.2.4",
-    "prettier": "3.8.0",
+    "prettier": "3.8.1",
     "prettier-plugin-organize-imports": "4.3.0",
     "ts-node": "10.9.2",
     "typescript": "5.9.3"
