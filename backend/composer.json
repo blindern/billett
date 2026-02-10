@@ -21,7 +21,13 @@
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.9",
         "milon/barcode": "^12",
-        "onelogin/php-saml": "4.3.1"
+        "onelogin/php-saml": "4.3.1",
+        "open-telemetry/exporter-otlp": "1.4.0",
+        "open-telemetry/opentelemetry-auto-curl": "0.1.0",
+        "open-telemetry/opentelemetry-auto-guzzle": "1.2.1",
+        "open-telemetry/opentelemetry-auto-laravel": "1.4.0",
+        "open-telemetry/opentelemetry-auto-pdo": "0.3.0",
+        "open-telemetry/sdk": "1.12.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
