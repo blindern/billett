@@ -27,7 +27,7 @@
         "open-telemetry/opentelemetry-auto-guzzle": "1.2.1",
         "open-telemetry/opentelemetry-auto-laravel": "1.4.0",
         "open-telemetry/opentelemetry-auto-pdo": "0.3.0",
-        "open-telemetry/sdk": "1.12.0"
+        "open-telemetry/sdk": "1.13.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
