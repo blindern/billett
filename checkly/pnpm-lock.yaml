@@ -12,8 +12,8 @@ importers:
         specifier: 1.58.2
         version: 1.58.2
       checkly:
-        specifier: 6.9.10
-        version: 6.9.10(@types/node@25.0.3)(typescript@5.9.3)
+        specifier: 7.0.0
+        version: 7.0.0(@types/node@25.0.3)(typescript@5.9.3)
       dotenv:
         specifier: 17.2.4
         version: 17.2.4
@@ -407,8 +407,8 @@ packages:
   chardet@2.1.1:
     resolution: {integrity: sha512-PsezH1rqdV9VvyNhxxOW32/d75r01NY7TQCmOqomRo15ZSOKbpTFVsfjghxo6JloQUCGnH4k1LGu0R4yCLlWQQ==}
 
-  checkly@6.9.10:
-    resolution: {integrity: sha512-cCxgjBNcSYh0Znrqa6P5CAvDhRQ7Ipnrp3GCHQBbb0zsT+C4qP6woDBGoSx4z6rtLV096N8T4/JXHSTqtvHZNw==}
+  checkly@7.0.0:
+    resolution: {integrity: sha512-QmAIeF8ZUX1YGbq6oMd+HY6Hy+HVgIrv8up8bOh809UD5E7yIVnJZ5INYdpF/KdqzW3S2C0c24uj4iUMmT2AKQ==}
     engines: {node: ^18.19.0 || >=20.5.0}
     hasBin: true
     peerDependencies:
@@ -1627,9 +1627,9 @@ snapshots:
 
   atomically@1.7.0: {}
 
-  axios@1.13.2:
+  axios@1.13.2(debug@4.4.3):
     dependencies:
-      follow-redirects: 1.15.11
+      follow-redirects: 1.15.11(debug@4.4.3)
       form-data: 4.0.5
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
@@ -1682,7 +1682,7 @@ snapshots:
 
   chardet@2.1.1: {}
 
-  checkly@6.9.10(@types/node@25.0.3)(typescript@5.9.3):
+  checkly@7.0.0(@types/node@25.0.3)(typescript@5.9.3):
     dependencies:
       '@oclif/core': 4.8.0
       '@oclif/plugin-help': 6.2.36
@@ -1692,10 +1692,11 @@ snapshots:
       acorn: 8.15.0
       acorn-walk: 8.3.4
       archiver: 7.0.1
-      axios: 1.13.2
+      axios: 1.13.2(debug@4.4.3)
       chalk: 4.1.2
       ci-info: 4.3.1
       conf: 10.2.0
+      debug: 4.4.3(supports-color@8.1.1)
       dotenv: 16.6.1
       execa: 9.6.1
       git-repo-info: 2.1.1
@@ -1720,7 +1721,6 @@ snapshots:
       - '@types/node'
       - bare-abort-controller
       - bufferutil
-      - debug
       - react-native-b4a
       - supports-color
       - typescript
@@ -1927,7 +1927,9 @@ snapshots:
     dependencies:
       locate-path: 3.0.0
 
-  follow-redirects@1.15.11: {}
+  follow-redirects@1.15.11(debug@4.4.3):
+    optionalDependencies:
+      debug: 4.4.3(supports-color@8.1.1)
 
   foreground-child@3.3.1:
     dependencies:
