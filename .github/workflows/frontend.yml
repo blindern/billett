@@ -64,12 +64,12 @@ jobs:
         env:
           DEPLOYER_TOKEN: ${{ secrets.DEPLOYER_TOKEN }}
 
-  checkly:
+  e2e-tests:
     if: github.ref == 'refs/heads/main'
     needs: frontend
     permissions:
       contents: read
-    uses: ./.github/workflows/run-checkly.yml
+    uses: ./.github/workflows/run-e2e-tests.yml
     with:
-      tags: frontend
+      tag: "@frontend"
     secrets: inherit

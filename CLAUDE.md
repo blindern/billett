@@ -36,6 +36,16 @@ pnpm test                         # Run tests (Karma + Jasmine)
 pnpm run lint                     # Lint with ESLint
 ```
 
+### E2E Tests (from `e2e-tests/` directory)
+
+```bash
+pnpm test              # Run all checks
+pnpm test:headed       # Run with visible browser
+pnpm test:ui           # Run with Playwright UI
+```
+
+Runs hourly via GitHub Actions for monitoring. Also runs post-deploy filtered by `@api` / `@frontend` tags.
+
 ### Local Development Setup
 
 ```bash
