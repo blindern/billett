@@ -4,7 +4,7 @@ test(
   "frontend loads and renders",
   { tag: "@frontend" },
   async ({ page }) => {
-    const response = (await page.goto("https://billett.blindernuka.no"))!
+    const response = (await page.goto("/"))!
     expect(response.status()).toBeLessThan(400)
 
     await page.waitForLoadState("networkidle")

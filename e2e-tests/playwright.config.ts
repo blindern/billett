@@ -1,6 +1,8 @@
 import { defineConfig, devices } from "@playwright/test"
 import "dotenv/config"
 
+const baseURL = process.env.BASE_URL || "https://billett.blindernuka.no"
+
 export default defineConfig({
   testDir: "src",
   testMatch: "**/*.spec.ts",
@@ -8,6 +10,9 @@ export default defineConfig({
   expect: { timeout: 10000 },
   retries: 3,
   reporter: process.env.CI ? [["list"], ["github"], ["html"]] : [["list"], ["html"]],
+  use: {
+    baseURL,
+  },
   projects: [
     {
       name: "chromium",

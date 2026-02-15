@@ -39,11 +39,14 @@ pnpm run lint                     # Lint with ESLint
 ### E2E Tests (from `e2e-tests/` directory)
 
 ```bash
-pnpm test              # Run all checks
-pnpm test:headed       # Run with visible browser
-pnpm test:ui           # Run with Playwright UI
+pnpm test                                        # Run against production
+BASE_URL=http://localhost:3000 pnpm test          # Run against local frontend
+BASE_URL=http://localhost:8081 pnpm test -- --grep @api  # Run API tests against local backend
+pnpm test:headed                                  # Run with visible browser
+pnpm test:ui                                      # Run with Playwright UI
 ```
 
+Defaults to `https://billett.blindernuka.no`. Set `BASE_URL` env var (or use `.env` file) to test locally.
 Runs hourly via GitHub Actions for monitoring. Also runs post-deploy filtered by `@api` / `@frontend` tags.
 
 ### Local Development Setup
