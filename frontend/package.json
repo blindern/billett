@@ -28,8 +28,8 @@
   },
   "devDependencies": {
     "@angular-eslint/schematics": "21.2.0",
-    "@angular/build": "21.1.5",
-    "@angular/cli": "21.1.5",
+    "@angular/build": "21.2.0",
+    "@angular/cli": "21.2.0",
     "@angular/compiler-cli": "21.2.0",
     "@eslint/js": "9.39.3",
     "@types/dompurify": "3.2.0",
