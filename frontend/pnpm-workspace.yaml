@@ -2,3 +2,5 @@ minimumReleaseAge: 2880
 minimumReleaseAgeExclude:
   # Renovate security update: @angular/core@21.1.6
   - "@angular/core@21.1.6"
+  # Renovate security update: dompurify@3.3.2
+  - dompurify@3.3.2
