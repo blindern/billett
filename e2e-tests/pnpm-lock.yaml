@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@types/node':
         specifier: ^25.0.9
-        version: 25.3.3
+        version: 25.3.5
     devDependencies:
       '@playwright/test':
         specifier: 1.58.2
@@ -29,8 +29,8 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  '@types/node@25.3.3':
-    resolution: {integrity: sha512-DpzbrH7wIcBaJibpKo9nnSQL0MTRdnWttGyE5haGwK86xgMOkFLp7vEyfQPGLOJh5wNYiJ3V9PmUMDhV9u8kkQ==}
+  '@types/node@25.3.5':
+    resolution: {integrity: sha512-oX8xrhvpiyRCQkG1MFchB09f+cXftgIXb3a7UUa4Y3wpmZPw5tyZGTLWhlESOLq1Rq6oDlc8npVU2/9xiCuXMA==}
 
   dotenv@17.3.1:
     resolution: {integrity: sha512-IO8C/dzEb6O3F9/twg6ZLXz164a2fhTnEWb95H23Dm4OuN+92NmEAlTrupP9VW6Jm3sO26tQlqyvyi4CsnY9GA==}
@@ -65,7 +65,7 @@ snapshots:
     dependencies:
       playwright: 1.58.2
 
-  '@types/node@25.3.3':
+  '@types/node@25.3.5':
     dependencies:
       undici-types: 7.18.2
 
