@@ -4,3 +4,5 @@ minimumReleaseAgeExclude:
   - "@angular/core@21.1.6"
   # Renovate security update: dompurify@3.3.2
   - dompurify@3.3.2
+  # Renovate security update: @angular/compiler@21.2.4
+  - "@angular/compiler@21.2.4"
