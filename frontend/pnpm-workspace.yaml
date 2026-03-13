@@ -1,4 +1,4 @@
-minimumReleaseAge: 2880
+minimumReleaseAge: 4320
 minimumReleaseAgeExclude:
   # Renovate security update: @angular/core@21.1.6
   - "@angular/core@21.1.6"
