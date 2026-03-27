@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ed95479d33a42610c67665ad4cf7911d",
+    "content-hash": "f6429ec8d26260b6073bf276b5e28e80",
     "packages": [
         {
             "name": "brick/math",
@@ -3686,16 +3686,16 @@
         },
         {
             "name": "open-telemetry/opentelemetry-auto-curl",
-            "version": "0.1.0",
+            "version": "0.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/opentelemetry-php/contrib-auto-curl.git",
-                "reference": "77f70c908426bf9827ad1570afeff72c8fd92e98"
+                "reference": "b796153651e94bd2d5fce2aff725670efa511d68"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/opentelemetry-php/contrib-auto-curl/zipball/77f70c908426bf9827ad1570afeff72c8fd92e98",
-                "reference": "77f70c908426bf9827ad1570afeff72c8fd92e98",
+                "url": "https://api.github.com/repos/opentelemetry-php/contrib-auto-curl/zipball/b796153651e94bd2d5fce2aff725670efa511d68",
+                "reference": "b796153651e94bd2d5fce2aff725670efa511d68",
                 "shasum": ""
             },
             "require": {
@@ -3730,7 +3730,7 @@
                 "Apache-2.0"
             ],
             "description": "OpenTelemetry auto-instrumentation for curl",
-            "homepage": "https://opentelemetry.io/docs/php",
+            "homepage": "https://opentelemetry.io/docs/languages/php/",
             "keywords": [
                 "curl",
                 "instrumentation",
@@ -3740,9 +3740,9 @@
                 "tracing"
             ],
             "support": {
-                "source": "https://github.com/opentelemetry-php/contrib-auto-curl/tree/0.1.0"
+                "source": "https://github.com/opentelemetry-php/contrib-auto-curl/tree/0.2.0"
             },
-            "time": "2025-08-06T10:25:21+00:00"
+            "time": "2026-03-24T16:33:16+00:00"
         },
         {
             "name": "open-telemetry/opentelemetry-auto-guzzle",
