@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f6429ec8d26260b6073bf276b5e28e80",
+    "content-hash": "4502a7e382a1ffb0d1a12a1d5dd283a9",
     "packages": [
         {
             "name": "brick/math",
@@ -3746,16 +3746,16 @@
         },
         {
             "name": "open-telemetry/opentelemetry-auto-guzzle",
-            "version": "1.2.1",
+            "version": "1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/opentelemetry-php/contrib-auto-guzzle.git",
-                "reference": "dd67e8a1cf937a505114aa70c2dad33289ddeecd"
+                "reference": "002d5a15f833a431d7c33389becca051b2ecd7b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/opentelemetry-php/contrib-auto-guzzle/zipball/dd67e8a1cf937a505114aa70c2dad33289ddeecd",
-                "reference": "dd67e8a1cf937a505114aa70c2dad33289ddeecd",
+                "url": "https://api.github.com/repos/opentelemetry-php/contrib-auto-guzzle/zipball/002d5a15f833a431d7c33389becca051b2ecd7b2",
+                "reference": "002d5a15f833a431d7c33389becca051b2ecd7b2",
                 "shasum": ""
             },
             "require": {
@@ -3792,7 +3792,7 @@
                 "Apache-2.0"
             ],
             "description": "OpenTelemetry auto-instrumentation for Guzzle.",
-            "homepage": "https://opentelemetry.io/docs/php",
+            "homepage": "https://opentelemetry.io/docs/languages/php/",
             "keywords": [
                 "Guzzle",
                 "instrumentation",
@@ -3802,9 +3802,9 @@
                 "tracing"
             ],
             "support": {
-                "source": "https://github.com/opentelemetry-php/contrib-auto-guzzle/tree/1.2.1"
+                "source": "https://github.com/opentelemetry-php/contrib-auto-guzzle/tree/1.3.0"
             },
-            "time": "2025-06-17T23:41:12+00:00"
+            "time": "2026-03-24T16:33:16+00:00"
         },
         {
             "name": "open-telemetry/opentelemetry-auto-laravel",
