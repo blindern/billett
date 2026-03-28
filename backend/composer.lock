@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4502a7e382a1ffb0d1a12a1d5dd283a9",
+    "content-hash": "6625c52f1ced0cd39fc548963cdf5f5e",
     "packages": [
         {
             "name": "brick/math",
@@ -3808,23 +3808,23 @@
         },
         {
             "name": "open-telemetry/opentelemetry-auto-laravel",
-            "version": "1.4.0",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/opentelemetry-php/contrib-auto-laravel.git",
-                "reference": "fa6e0c9189cf559a5d83983bc313eea16d2b6b52"
+                "reference": "b521d470972a17a68b623cfb23a498deea848f7e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/opentelemetry-php/contrib-auto-laravel/zipball/fa6e0c9189cf559a5d83983bc313eea16d2b6b52",
-                "reference": "fa6e0c9189cf559a5d83983bc313eea16d2b6b52",
+                "url": "https://api.github.com/repos/opentelemetry-php/contrib-auto-laravel/zipball/b521d470972a17a68b623cfb23a498deea848f7e",
+                "reference": "b521d470972a17a68b623cfb23a498deea848f7e",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "ext-opentelemetry": "*",
                 "laravel/framework": "^6.0 || ^7.0 || ^8.0 || ^9.0 || ^10.0 || ^11.0 || ^12.0",
-                "open-telemetry/api": "^1.6",
+                "open-telemetry/api": "^1.8",
                 "open-telemetry/sem-conv": "^1.32",
                 "php": "^8.1"
             },
@@ -3861,7 +3861,7 @@
                 "Apache-2.0"
             ],
             "description": "OpenTelemetry auto-instrumentation for Laravel",
-            "homepage": "https://opentelemetry.io/docs/php",
+            "homepage": "https://opentelemetry.io/docs/languages/php/",
             "keywords": [
                 "instrumentation",
                 "laravel",
@@ -3871,9 +3871,9 @@
                 "tracing"
             ],
             "support": {
-                "source": "https://github.com/opentelemetry-php/contrib-auto-laravel/tree/1.4.0"
+                "source": "https://github.com/opentelemetry-php/contrib-auto-laravel/tree/1.5.0"
             },
-            "time": "2025-09-23T23:14:02+00:00"
+            "time": "2026-03-24T16:33:16+00:00"
         },
         {
             "name": "open-telemetry/opentelemetry-auto-pdo",
