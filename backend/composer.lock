@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6625c52f1ced0cd39fc548963cdf5f5e",
+    "content-hash": "bb49e7d27f7fc655b9300de260948175",
     "packages": [
         {
             "name": "brick/math",
@@ -3877,16 +3877,16 @@
         },
         {
             "name": "open-telemetry/opentelemetry-auto-pdo",
-            "version": "0.3.0",
+            "version": "0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/opentelemetry-php/contrib-auto-pdo.git",
-                "reference": "bbd0461d242c4aa49fbfc13b4df83fa754b5d0f5"
+                "reference": "c5a824b3f46f3c1eca653149f59c06edb7fb94ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/opentelemetry-php/contrib-auto-pdo/zipball/bbd0461d242c4aa49fbfc13b4df83fa754b5d0f5",
-                "reference": "bbd0461d242c4aa49fbfc13b4df83fa754b5d0f5",
+                "url": "https://api.github.com/repos/opentelemetry-php/contrib-auto-pdo/zipball/c5a824b3f46f3c1eca653149f59c06edb7fb94ac",
+                "reference": "c5a824b3f46f3c1eca653149f59c06edb7fb94ac",
                 "shasum": ""
             },
             "require": {
@@ -3926,7 +3926,7 @@
                 "Apache-2.0"
             ],
             "description": "OpenTelemetry auto-instrumentation for PDO",
-            "homepage": "https://opentelemetry.io/docs/php",
+            "homepage": "https://opentelemetry.io/docs/languages/php/",
             "keywords": [
                 "instrumentation",
                 "open-telemetry",
@@ -3936,9 +3936,9 @@
                 "tracing"
             ],
             "support": {
-                "source": "https://github.com/opentelemetry-php/contrib-auto-pdo/tree/0.3.0"
+                "source": "https://github.com/opentelemetry-php/contrib-auto-pdo/tree/0.4.0"
             },
-            "time": "2025-10-22T12:55:47+00:00"
+            "time": "2026-03-24T16:33:16+00:00"
         },
         {
             "name": "open-telemetry/sdk",
