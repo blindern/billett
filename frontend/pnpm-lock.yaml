@@ -49,7 +49,7 @@ importers:
         version: 3.7.1
       marked:
         specifier: ^18.0.0
-        version: 18.0.1
+        version: 18.0.2
       mathjs:
         specifier: 15.2.0
         version: 15.2.0
@@ -2530,8 +2530,8 @@ packages:
     resolution: {integrity: sha512-uCbIa8jWWmQZt4dSnEStkVC6gdakiinAm4PiGsywIkguF0eWMdcjDz0ECYhUolFU3pFLOev9VNPCEygydXnddg==}
     engines: {node: ^20.17.0 || >=22.9.0}
 
-  marked@18.0.1:
-    resolution: {integrity: sha512-IILJE4Aap/KIGu4ZRCzQcYMxkhumblXnbqfQe+HAD4f982wrRAsJEGKGM653yAioS6g3Yq3yOhjrUebcrtOgRA==}
+  marked@18.0.2:
+    resolution: {integrity: sha512-NsmlUYBS/Zg57rgDWMYdnre6OTj4e+qq/JS2ot3KrYLSoHLw+sDu0Nm1ZGpRgYAq6c+b1ekaY5NzVchMCQnzcg==}
     engines: {node: '>= 20'}
     hasBin: true
 
@@ -5833,7 +5833,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  marked@18.0.1: {}
+  marked@18.0.2: {}
 
   math-intrinsics@1.1.0: {}
 
