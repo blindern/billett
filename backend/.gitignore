@@ -3,3 +3,4 @@
 /_ide_helper.php
 /composer.phar
 /.env
+/.phpunit.result.cache
