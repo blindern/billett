@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Intervention\Image\Encoders\JpegEncoder;
+use Intervention\Image\Exceptions\DecoderException;
 use Intervention\Image\Laravel\Facades\Image;
 
 class EventController extends Controller
@@ -280,11 +282,11 @@ class EventController extends Controller
         }
 
         try {
-            $event->image = Image::read(Request::file('file'))->scale(275, null)->toJpeg(75);
+            $event->image = Image::decode(Request::file('file'))->scale(275, null)->encode(new JpegEncoder(quality: 75));
             $event->save();
 
             return 'ok';
-        } catch (\Intervention\Image\Exceptions\DecoderException $e) {
+        } catch (DecoderException $e) {
             App::abort(400, 'Could not read image');
         }
     }
