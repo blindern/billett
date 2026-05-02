@@ -2,7 +2,9 @@ name: E2E Tests
 on:
   workflow_dispatch:
   schedule:
-    - cron: "35 * * * *"
+    # Skip Zincati reboot windows for fcos-1/2/3/fbshs1 (01-05 Europe/Oslo
+    # = 23-04 UTC summer / 00-05 UTC winter). Gatus monitors externally.
+    - cron: "35 5-22 * * *"
   push:
     paths:
       - ".github/workflows/e2e-tests.yml"
