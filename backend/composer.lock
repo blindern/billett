@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2dc6a0b5486dbf61c99f475e1e3993f1",
+    "content-hash": "94223da11dc2936b822295305509dd87",
     "packages": [
         {
             "name": "brick/math",
@@ -919,16 +919,16 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "7.10.1",
+            "version": "7.10.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "b777df1776c667e287664dda75b0298ad8ae3a14"
+                "reference": "47ba23c7a55247e2e1b7407aca90e9bbed0d9d86"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/b777df1776c667e287664dda75b0298ad8ae3a14",
-                "reference": "b777df1776c667e287664dda75b0298ad8ae3a14",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/47ba23c7a55247e2e1b7407aca90e9bbed0d9d86",
+                "reference": "47ba23c7a55247e2e1b7407aca90e9bbed0d9d86",
                 "shasum": ""
             },
             "require": {
@@ -1026,7 +1026,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/guzzle/issues",
-                "source": "https://github.com/guzzle/guzzle/tree/7.10.1"
+                "source": "https://github.com/guzzle/guzzle/tree/7.10.3"
             },
             "funding": [
                 {
@@ -1042,7 +1042,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-05-19T18:01:31+00:00"
+            "time": "2026-05-20T22:59:19+00:00"
         },
         {
             "name": "guzzlehttp/promises",
