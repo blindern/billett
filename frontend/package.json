@@ -30,7 +30,7 @@
     "@angular-eslint/schematics": "21.4.0",
     "@angular/build": "21.2.13",
     "@angular/cli": "21.2.13",
-    "@angular/compiler-cli": "21.2.14",
+    "@angular/compiler-cli": "21.2.15",
     "@eslint/js": "10.0.1",
     "@types/dompurify": "3.2.0",
     "@types/jasmine": "6.0.0",
