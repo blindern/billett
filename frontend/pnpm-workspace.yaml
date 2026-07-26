@@ -1,4 +1,9 @@
 minimumReleaseAge: 4320
+allowBuilds:
+  "@parcel/watcher": false
+  esbuild: false
+  lmdb: false
+  msgpackr-extract: false
 minimumReleaseAgeExclude:
   # Renovate security update: @angular/core@21.1.6 || 21.2.4
   - "@angular/core@21.1.6 || 21.2.4"
