@@ -4,8 +4,7 @@
   "lockFileMaintenance": {
     "enabled": true,
     "branchTopic": "lock-file-maintenance-{{packageFile}}",
-    "commitMessageExtra": "({{packageFile}})",
-    "minimumReleaseAgeBehaviour": "timestamp-optional"
+    "commitMessageExtra": "({{packageFile}})"
   },
   "major": {
     "automerge": false
@@ -33,6 +32,7 @@
   "gitIgnoredAuthors": ["114827586+autofix-ci[bot]@users.noreply.github.com"],
   "prCreation": "not-pending",
   "minimumReleaseAge": "3 days",
+  "minimumReleaseAgeBehaviour": "timestamp-optional",
   "prNotPendingHours": 74,
   "timezone": "Europe/Oslo"
 }
