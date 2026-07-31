@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f301f198f1a4b0ec37467daaab4d4de8",
+    "content-hash": "a3d73ee09a72c1248072aa1046cdca2e",
     "packages": [
         {
             "name": "brick/math",
@@ -3696,16 +3696,16 @@
         },
         {
             "name": "open-telemetry/opentelemetry-auto-curl",
-            "version": "0.2.0",
+            "version": "0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/opentelemetry-php/contrib-auto-curl.git",
-                "reference": "b796153651e94bd2d5fce2aff725670efa511d68"
+                "reference": "bb2df1ec08affd889f26b5c91c5ada8cea5e1fd3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/opentelemetry-php/contrib-auto-curl/zipball/b796153651e94bd2d5fce2aff725670efa511d68",
-                "reference": "b796153651e94bd2d5fce2aff725670efa511d68",
+                "url": "https://api.github.com/repos/opentelemetry-php/contrib-auto-curl/zipball/bb2df1ec08affd889f26b5c91c5ada8cea5e1fd3",
+                "reference": "bb2df1ec08affd889f26b5c91c5ada8cea5e1fd3",
                 "shasum": ""
             },
             "require": {
@@ -3750,9 +3750,9 @@
                 "tracing"
             ],
             "support": {
-                "source": "https://github.com/opentelemetry-php/contrib-auto-curl/tree/0.2.0"
+                "source": "https://github.com/opentelemetry-php/contrib-auto-curl/tree/0.3.0"
             },
-            "time": "2026-03-24T16:33:16+00:00"
+            "time": "2026-06-08T12:54:17+00:00"
         },
         {
             "name": "open-telemetry/opentelemetry-auto-guzzle",

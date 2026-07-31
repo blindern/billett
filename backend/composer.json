@@ -23,7 +23,7 @@
         "milon/barcode": "^13",
         "onelogin/php-saml": "4.3.2",
         "open-telemetry/exporter-otlp": "1.4.0",
-        "open-telemetry/opentelemetry-auto-curl": "0.2.0",
+        "open-telemetry/opentelemetry-auto-curl": "0.3.0",
         "open-telemetry/opentelemetry-auto-guzzle": "1.3.0",
         "open-telemetry/opentelemetry-auto-laravel": "1.7.0",
         "open-telemetry/opentelemetry-auto-pdo": "0.4.0",
