@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a9a3e2eb345d757614225a8f2a9933f7",
+    "content-hash": "35416e1e636f2bb98753d41ce3cf2862",
     "packages": [
         {
             "name": "brick/math",
@@ -3818,16 +3818,16 @@
         },
         {
             "name": "open-telemetry/opentelemetry-auto-laravel",
-            "version": "1.7.0",
+            "version": "1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/opentelemetry-php/contrib-auto-laravel.git",
-                "reference": "4dbf215ac9caee21a7b4c2f1d819a3bf4bbba6bb"
+                "reference": "f0a750eeb0a69012d81c84010a4c7a7b61926e00"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/opentelemetry-php/contrib-auto-laravel/zipball/4dbf215ac9caee21a7b4c2f1d819a3bf4bbba6bb",
-                "reference": "4dbf215ac9caee21a7b4c2f1d819a3bf4bbba6bb",
+                "url": "https://api.github.com/repos/opentelemetry-php/contrib-auto-laravel/zipball/f0a750eeb0a69012d81c84010a4c7a7b61926e00",
+                "reference": "f0a750eeb0a69012d81c84010a4c7a7b61926e00",
                 "shasum": ""
             },
             "require": {
@@ -3848,7 +3848,7 @@
                 "php-http/mock-client": "*",
                 "phpstan/phpstan": "^1.1",
                 "phpstan/phpstan-phpunit": "^1.0",
-                "phpunit/phpunit": "^9.5",
+                "phpunit/phpunit": "^9.5 || ^10 || ^11 || ^12 || ^13",
                 "psalm/plugin-phpunit": "^0.19.2",
                 "spatie/laravel-ignition": "*",
                 "vimeo/psalm": "6.4.0"
@@ -3881,9 +3881,9 @@
                 "tracing"
             ],
             "support": {
-                "source": "https://github.com/opentelemetry-php/contrib-auto-laravel/tree/1.7.0"
+                "source": "https://github.com/opentelemetry-php/contrib-auto-laravel/tree/1.8.0"
             },
-            "time": "2026-04-29T13:32:51+00:00"
+            "time": "2026-07-09T20:34:43+00:00"
         },
         {
             "name": "open-telemetry/opentelemetry-auto-pdo",
