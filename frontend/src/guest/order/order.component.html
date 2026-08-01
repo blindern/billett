@@ -64,8 +64,7 @@
     @for (ticket of order.tickets; track ticket.id) {
       <li>
         {{ ticket.event.time_start | formatdate: "DD.MM.YYYY HH:mm" }}: {{ ticket.event.title }}:
-        {{ ticket.ticketgroup.title }} ({{ ticket.ticketgroup.price + ticket.ticketgroup.fee | price: true
-        }}<!--
+        {{ ticket.ticketgroup.title }} ({{ ticket.ticketgroup.price + ticket.ticketgroup.fee | price: true }}<!--
       -->
         @if (ticket.ticketgroup.fee) {
           hvorav {{ ticket.ticketgroup.fee | price: true }} i billettgebyr
