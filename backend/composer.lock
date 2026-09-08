@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d83a8f84294846c5c830eb6488bb9a71",
+    "content-hash": "a46f28edf902fecac4fad03110a1028d",
     "packages": [
         {
             "name": "brick/math",
@@ -3821,16 +3821,16 @@
         },
         {
             "name": "open-telemetry/opentelemetry-auto-laravel",
-            "version": "1.8.0",
+            "version": "1.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/opentelemetry-php/contrib-auto-laravel.git",
-                "reference": "f0a750eeb0a69012d81c84010a4c7a7b61926e00"
+                "reference": "ec649e8bc7a938467b74db9876b856179a856bbc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/opentelemetry-php/contrib-auto-laravel/zipball/f0a750eeb0a69012d81c84010a4c7a7b61926e00",
-                "reference": "f0a750eeb0a69012d81c84010a4c7a7b61926e00",
+                "url": "https://api.github.com/repos/opentelemetry-php/contrib-auto-laravel/zipball/ec649e8bc7a938467b74db9876b856179a856bbc",
+                "reference": "ec649e8bc7a938467b74db9876b856179a856bbc",
                 "shasum": ""
             },
             "require": {
@@ -3847,7 +3847,7 @@
                 "nunomaduro/collision": "*",
                 "open-telemetry/sdk": "^1.8",
                 "orchestra/testbench": ">=7.41.3",
-                "phan/phan": "^5.0",
+                "phan/phan": "^6.0",
                 "php-http/mock-client": "*",
                 "phpstan/phpstan": "^1.1",
                 "phpstan/phpstan-phpunit": "^1.0",
@@ -3884,9 +3884,9 @@
                 "tracing"
             ],
             "support": {
-                "source": "https://github.com/opentelemetry-php/contrib-auto-laravel/tree/1.8.0"
+                "source": "https://github.com/opentelemetry-php/contrib-auto-laravel/tree/1.9.0"
             },
-            "time": "2026-07-09T20:34:43+00:00"
+            "time": "2026-09-02T12:13:51+00:00"
         },
         {
             "name": "open-telemetry/opentelemetry-auto-pdo",
