@@ -28,7 +28,7 @@ services:
       FPM_HOST: fpm:9000
       FRONTEND_URL: http://${DOCKER_GATEWAY_HOST:-host.docker.internal}:3000
   database:
-    image: mysql:8.4.11@sha256:85b9bf2e29cf836ecb8c2a15a935d4ba0c606631dff1dd79531a11983c638f2a
+    image: mysql:26.7.0@sha256:45abdd9b4144660b5c93a5b7d0ebb21e024f0ba9851ecb4ab43bf83c6bf83592
     volumes:
       - db:/var/lib/mysql/
     environment:
