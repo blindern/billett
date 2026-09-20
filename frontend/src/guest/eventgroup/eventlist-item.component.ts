@@ -1,5 +1,11 @@
 import { LowerCasePipe, NgClass } from "@angular/common"
-import { Component, inject, Injectable, Input } from "@angular/core"
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  Injectable,
+  Input,
+} from "@angular/core"
 import { EventType, Router, RouterLink } from "@angular/router"
 import { filter } from "rxjs"
 import { ApiEvent, ApiEventgroup } from "../../apitypes"
@@ -33,6 +39,7 @@ class CategoryColors {
   standalone: true,
   imports: [FormatdatePipe, RouterLink, NgClass, LowerCasePipe],
   templateUrl: "./eventlist-item.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./eventlist-item.component.scss",
 })
 export class GuestEventlistItemComponent {

@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   inject,
   Input,
@@ -28,6 +29,7 @@ import { AdminEventgroupService } from "./admin-eventgroup.service"
     PagePropertyComponent,
     RouterLink,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-eventgroup-edit.component.html",
 })
 export class AdminEventgroupEditComponent implements OnChanges {

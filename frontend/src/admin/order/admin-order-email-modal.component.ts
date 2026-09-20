@@ -1,5 +1,10 @@
 import { Dialog, DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
-import { Component, inject, Inject } from "@angular/core"
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  Inject,
+} from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { finalize } from "rxjs"
 import { ApiEventgroupAdmin, ApiOrderAdmin } from "../../apitypes"
@@ -21,6 +26,7 @@ export interface AdminOrderEmailModalResult {
   selector: "billett-admin-order-email-modal",
   standalone: true,
   imports: [FormsModule],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-order-email-modal.component.html",
 })
 export class AdminOrderEmailModal {

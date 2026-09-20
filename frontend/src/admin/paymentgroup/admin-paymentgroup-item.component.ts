@@ -1,6 +1,7 @@
 import { Dialog, DialogModule } from "@angular/cdk/dialog"
 import { NgClass } from "@angular/common"
 import {
+  ChangeDetectionStrategy,
   Component,
   inject,
   Input,
@@ -42,6 +43,7 @@ import { AdminPaymentsourceService } from "./admin-paymentsource.service"
     MarkdownComponent,
     DialogModule,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-paymentgroup-item.component.html",
 })
 export class AdminPaymentgroupItemComponent implements OnChanges {

@@ -1,5 +1,10 @@
 import { HttpClient } from "@angular/common/http"
-import { Component, inject, OnInit } from "@angular/core"
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+} from "@angular/core"
 import { RouterLink } from "@angular/router"
 import { api } from "../../api"
 import {
@@ -30,6 +35,7 @@ type Order = ApiOrder & {
   standalone: true,
   imports: [RouterLink, PagePropertyComponent, FormatdatePipe, PricePipe],
   templateUrl: "./order.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   preserveWhitespaces: false,
 })
 export class GuestOrderComponent implements OnInit {

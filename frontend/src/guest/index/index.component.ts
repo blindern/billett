@@ -1,5 +1,10 @@
 import { HttpClient } from "@angular/common/http"
-import { Component, inject, OnInit } from "@angular/core"
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+} from "@angular/core"
 import { RouterLink } from "@angular/router"
 import { api } from "../../api"
 import { ApiEvent, ApiEventgroup } from "../../apitypes"
@@ -27,6 +32,7 @@ type UpcomingItem = ApiEvent & {
     GuestEventlistItemComponent,
     PagePropertyComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./index.component.html",
 })
 export class GuestIndexComponent implements OnInit {

@@ -1,5 +1,6 @@
 import { Dialog } from "@angular/cdk/dialog"
 import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   inject,
@@ -23,6 +24,7 @@ import { AdminPaymentgroupService } from "./admin-paymentgroup.service"
   selector: "billett-admin-paymentgroup-selectbox",
   standalone: true,
   imports: [FormsModule, FormatdatePipe],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-paymentgroup-selectbox.component.html",
 })
 export class AdminPaymentgroupSelectboxComponent implements OnChanges {

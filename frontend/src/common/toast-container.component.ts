@@ -1,11 +1,12 @@
 import { NgClass } from "@angular/common"
-import { Component, inject } from "@angular/core"
+import { ChangeDetectionStrategy, Component, inject } from "@angular/core"
 import { ToastService } from "./toast.service"
 
 @Component({
   selector: "billett-toast-container",
   standalone: true,
   imports: [NgClass],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <style>
       .toast-container {

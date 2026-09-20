@@ -1,6 +1,7 @@
 import { Dialog } from "@angular/cdk/dialog"
 import { NgClass } from "@angular/common"
 import {
+  ChangeDetectionStrategy,
   Component,
   inject,
   Input,
@@ -49,6 +50,7 @@ import { AdminOrderGetData, AdminOrderService } from "./admin-order.service"
     NgClass,
     MarkdownComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-order-item.component.html",
 })
 export class AdminOrderItemComponent implements OnChanges {

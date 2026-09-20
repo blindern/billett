@@ -1,4 +1,9 @@
-import { Component, inject, OnInit } from "@angular/core"
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+} from "@angular/core"
 import { take } from "rxjs"
 import { api } from "../api"
 import { PagePropertyComponent } from "../common/page-property.component"
@@ -11,6 +16,7 @@ import { AuthService } from "./auth.service"
     <billett-page-property name="title" value="Logger ut" />
     <p>Logger ut</p>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [PagePropertyComponent],
 })
 export class LogoutComponent implements OnInit {

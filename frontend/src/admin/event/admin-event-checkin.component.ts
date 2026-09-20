@@ -1,5 +1,6 @@
 import { CommonModule } from "@angular/common"
 import {
+  ChangeDetectionStrategy,
   Component,
   inject,
   Input,
@@ -65,6 +66,7 @@ const searchinputInit = {
     PaginationComponent,
   ],
   templateUrl: "./admin-event-checkin.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./admin-event-checkin.component.scss",
 })
 export class AdminEventCheckinComponent implements OnInit, OnChanges {

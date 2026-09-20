@@ -1,5 +1,11 @@
 import { Dialog, DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
-import { Component, inject, Inject, OnInit } from "@angular/core"
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  Inject,
+  OnInit,
+} from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { finalize } from "rxjs"
 import {
@@ -25,6 +31,7 @@ export type AdminPaymentCreateModalResult = ApiPaymentAdmin
   selector: "billett-admin-payment-create-modal",
   standalone: true,
   imports: [FormsModule, AdminPaymentgroupSelectboxComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-payment-create-modal.component.html",
 })
 export class AdminPaymentCreateModal implements OnInit {

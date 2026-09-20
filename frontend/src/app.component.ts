@@ -1,6 +1,12 @@
 import { Dialog } from "@angular/cdk/dialog"
 import { AsyncPipe, Location } from "@angular/common"
-import { afterEveryRender, Component, inject, OnInit } from "@angular/core"
+import {
+  afterEveryRender,
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+} from "@angular/core"
 import {
   Event,
   EventType,
@@ -22,6 +28,7 @@ import { ToastContainerComponent } from "./common/toast-container.component"
     AsyncPipe,
     ToastContainerComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./app.component.html",
 })
 export class AppComponent implements OnInit {

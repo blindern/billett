@@ -1,5 +1,10 @@
 import { Dialog } from "@angular/cdk/dialog"
-import { Component, inject, OnInit } from "@angular/core"
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+} from "@angular/core"
 import { RouterLink } from "@angular/router"
 import { ApiEventgroupAdmin } from "../../apitypes"
 import { PagePropertyComponent } from "../../common/page-property.component"
@@ -15,6 +20,7 @@ import { AdminPrinterTextModal } from "../printer/admin-printer-text-modal.compo
   selector: "billett-admin-index",
   standalone: true,
   imports: [PagePropertyComponent, RouterLink, PageStatesComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./index.component.html",
 })
 export class AdminIndexComponent implements OnInit {

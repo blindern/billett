@@ -1,5 +1,6 @@
 import { AsyncPipe, KeyValuePipe } from "@angular/common"
 import {
+  ChangeDetectionStrategy,
   Component,
   inject,
   Input,
@@ -33,6 +34,7 @@ import { GuestEventlistItemComponent } from "./eventlist-item.component"
     KeyValuePipe,
   ],
   templateUrl: "./eventgroup.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./eventgroup.component.scss",
 })
 export class GuestEventgroupComponent implements OnChanges {

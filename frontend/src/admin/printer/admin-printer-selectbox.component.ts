@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   inject,
@@ -19,6 +20,7 @@ import { AdminPrinterService } from "./admin-printer.service"
   selector: "billett-admin-printer-selectbox",
   standalone: true,
   imports: [FormsModule],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-printer-selectbox.component.html",
 })
 export class AdminPrinterSelectboxComponent implements OnInit {

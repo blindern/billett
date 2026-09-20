@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   inject,
   Input,
@@ -29,6 +30,7 @@ import { AdminEventData, AdminEventService } from "./admin-event.service"
     AdminEventFormComponent,
     FormatdatePipe,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-event-edit.component.html",
 })
 export class AdminEventEditComponent implements OnChanges {

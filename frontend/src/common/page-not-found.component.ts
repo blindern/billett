@@ -1,10 +1,17 @@
-import { Component, inject, OnDestroy, OnInit } from "@angular/core"
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+} from "@angular/core"
 import { Meta } from "@angular/platform-browser"
 
 @Component({
   selector: "billett-page-not-found",
   standalone: true,
   imports: [],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./page-not-found.component.html",
 })
 export class PageNotFoundComponent implements OnInit, OnDestroy {

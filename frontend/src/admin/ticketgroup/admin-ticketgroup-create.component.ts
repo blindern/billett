@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   inject,
   Input,
@@ -30,6 +31,7 @@ import { AdminTicketgroupService } from "./admin-ticketgroup.service"
     RouterLink,
     PageStatesComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-ticketgroup-create.component.html",
 })
 export class AdminTicketgroupCreateComponent implements OnChanges {

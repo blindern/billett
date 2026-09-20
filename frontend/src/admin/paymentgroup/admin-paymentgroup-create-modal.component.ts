@@ -1,5 +1,10 @@
 import { Dialog, DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
-import { Component, inject, Inject } from "@angular/core"
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  Inject,
+} from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { finalize } from "rxjs"
 import { ApiPaymentgroupAdmin } from "../../apitypes"
@@ -18,6 +23,7 @@ export type AdminPaymentgroupCreateModalResult = ApiPaymentgroupAdmin
   selector: "billett-admin-paymentgroup-create-modal",
   standalone: true,
   imports: [PagePropertyComponent, FormsModule],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-paymentgroup-create-modal.component.html",
 })
 export class AdminPaymentgroupCreateModal {

@@ -1,5 +1,10 @@
 import { CommonModule } from "@angular/common"
-import { Component, inject, OnInit } from "@angular/core"
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+} from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { ActivatedRoute, Router, RouterLink } from "@angular/router"
 import { debounce, of, Subject, timer } from "rxjs"
@@ -40,6 +45,7 @@ const searchInit = {
     PricePipe,
     CommonModule,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-order-list.component.html",
 })
 export class AdminOrderListComponent implements OnInit {

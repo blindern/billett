@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from "@angular/common/http"
-import { Component, Input } from "@angular/core"
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core"
 import { getErrorText } from "./errors"
 import { PageLoadingComponent } from "./page-loading.component"
 import { PageNotFoundComponent } from "./page-not-found.component"
@@ -9,6 +9,7 @@ import { ResourceLoadingState } from "./resource-loading"
   selector: "billett-page-states",
   standalone: true,
   imports: [PageLoadingComponent, PageNotFoundComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./page-states.component.html",
 })
 export class PageStatesComponent {

@@ -1,5 +1,10 @@
 import { Dialog, DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
-import { Component, inject, Inject } from "@angular/core"
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  Inject,
+} from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { NgxTypeAheadComponent } from "ngx-typeahead"
 import { finalize } from "rxjs"
@@ -30,6 +35,7 @@ export type AdminPaymentsourceCreateModalResult = ApiPaymentsourceAdmin
     FormsModule,
     NgxTypeAheadComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-paymentsource-create-modal.component.html",
 })
 export class AdminPaymentsourceCreateModal {
