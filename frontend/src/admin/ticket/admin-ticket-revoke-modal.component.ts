@@ -1,5 +1,10 @@
 import { Dialog, DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
-import { Component, inject, Inject } from "@angular/core"
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  Inject,
+} from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { RouterLink } from "@angular/router"
 import { finalize } from "rxjs"
@@ -42,6 +47,7 @@ export interface AdminTicketRevokeModalResult {
     PricePipe,
     AdminPaymentgroupSelectboxComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-ticket-revoke-modal.component.html",
 })
 export class AdminTicketRevokeModal {

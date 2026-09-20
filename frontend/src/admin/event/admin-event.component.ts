@@ -1,6 +1,7 @@
 import { Dialog } from "@angular/cdk/dialog"
 import { CommonModule } from "@angular/common"
 import {
+  ChangeDetectionStrategy,
   Component,
   inject,
   Input,
@@ -41,6 +42,7 @@ import { AdminEventData, AdminEventService } from "./admin-event.service"
     MarkdownComponent,
   ],
   templateUrl: "./admin-event.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./admin-event.component.scss",
 })
 export class AdminEventComponent implements OnChanges {

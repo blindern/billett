@@ -1,5 +1,6 @@
 import { CommonModule } from "@angular/common"
 import {
+  ChangeDetectionStrategy,
   Component,
   inject,
   Input,
@@ -40,6 +41,7 @@ import { AdminEventgroupService } from "./admin-eventgroup.service"
     PageStatesComponent,
   ],
   templateUrl: "./admin-eventgroup.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./admin-eventgroup.component.scss",
 })
 export class AdminEventgroupComponent implements OnChanges {

@@ -1,6 +1,12 @@
 import { Dialog, DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
 import { NgClass } from "@angular/common"
-import { Component, inject, Inject, OnInit } from "@angular/core"
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  Inject,
+  OnInit,
+} from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { RouterLink } from "@angular/router"
 import {
@@ -42,6 +48,7 @@ export type AdminTicketgroupAddToOrderModalResult = ApiTicketAdmin[]
     FormatdatePipe,
   ],
   templateUrl: "./admin-ticketgroup-add-to-order-modal.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./admin-ticketgroup-add-to-order-modal.component.scss",
 })
 export class AdminTicketgroupAddToOrderModal implements OnInit {

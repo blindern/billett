@@ -1,5 +1,5 @@
 import { Dialog, DialogRef } from "@angular/cdk/dialog"
-import { Component, inject } from "@angular/core"
+import { ChangeDetectionStrategy, Component, inject } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { finalize } from "rxjs"
 import { ApiPrinterAdmin } from "../../apitypes"
@@ -16,6 +16,7 @@ export interface AdminPrinterTextModalResult {
   selector: "billett-admin-printer-text-modal",
   standalone: true,
   imports: [AdminPrinterSelectboxComponent, FormsModule],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-printer-text-modal.component.html",
 })
 export class AdminPrinterTextModal {

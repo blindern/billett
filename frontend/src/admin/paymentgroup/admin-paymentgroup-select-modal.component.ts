@@ -1,5 +1,10 @@
 import { Dialog, DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
-import { Component, inject, Inject } from "@angular/core"
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  Inject,
+} from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { finalize, Observable } from "rxjs"
 import { ApiPaymentgroupAdmin } from "../../apitypes"
@@ -17,6 +22,7 @@ export interface AdminPaymentgroupSelectModalInput {
   selector: "billett-admin-paymentgroup-select-modal",
   standalone: true,
   imports: [AdminPaymentgroupSelectboxComponent, PricePipe, FormsModule],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-paymentgroup-select-modal.component.html",
 })
 export class AdminPaymentgroupSelectModal {

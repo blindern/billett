@@ -1,10 +1,18 @@
-import { Component, inject, Input, OnChanges, OnDestroy } from "@angular/core"
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  Input,
+  OnChanges,
+  OnDestroy,
+} from "@angular/core"
 import { PageService } from "./page.service"
 
 @Component({
   selector: "billett-page-property",
   standalone: true,
   imports: [],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: "",
 })
 export class PagePropertyComponent implements OnChanges, OnDestroy {

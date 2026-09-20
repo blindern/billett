@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   inject,
   Input,
@@ -29,6 +30,7 @@ import { AdminDaythemeService } from "./admin-daytheme.service"
     RouterLink,
     FormsModule,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-daytheme-create.component.html",
 })
 export class AdminDaythemeCreateComponent implements OnChanges {

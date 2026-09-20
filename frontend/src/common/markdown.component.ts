@@ -1,8 +1,14 @@
-import { Component, Input, OnChanges } from "@angular/core"
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+} from "@angular/core"
 
 @Component({
   selector: "billett-markdown",
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `<div [innerHTML]="convertedData"></div>`,
 })
 export class MarkdownComponent implements OnChanges {

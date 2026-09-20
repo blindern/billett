@@ -1,5 +1,6 @@
 import { Dialog } from "@angular/cdk/dialog"
 import {
+  ChangeDetectionStrategy,
   Component,
   inject,
   Input,
@@ -29,6 +30,7 @@ import { AdminPaymentgroupService } from "./admin-paymentgroup.service"
     PageStatesComponent,
     FormatdatePipe,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-paymentgroup-list.component.html",
 })
 export class AdminPaymentgroupListComponent implements OnChanges {

@@ -1,5 +1,6 @@
 import { AsyncPipe } from "@angular/common"
 import {
+  ChangeDetectionStrategy,
   Component,
   CUSTOM_ELEMENTS_SCHEMA,
   inject,
@@ -58,6 +59,7 @@ declare global {
   ],
   templateUrl: "./event.component.html",
   styleUrl: "./event.component.scss",
+  changeDetection: ChangeDetectionStrategy.Eager,
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class GuestEventComponent implements OnInit, OnChanges {

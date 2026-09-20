@@ -1,10 +1,11 @@
-import { Component } from "@angular/core"
+import { ChangeDetectionStrategy, Component } from "@angular/core"
 import { PagePropertyComponent } from "../../common/page-property.component"
 
 @Component({
   selector: "billett-salgsbetingelser",
   standalone: true,
   imports: [PagePropertyComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./salgsbetingelser.component.html",
 })
 export class SalgsbetingelserComponent {}

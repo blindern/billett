@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Input,
@@ -16,6 +17,7 @@ import { AdminEventCreateData, AdminEventData } from "./admin-event.service"
   selector: "billett-admin-event-form",
   standalone: true,
   imports: [FormsModule, RouterLink, FormatdatePipe],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-event-form.component.html",
 })
 export class AdminEventFormComponent implements OnChanges {

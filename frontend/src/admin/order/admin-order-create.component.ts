@@ -1,6 +1,7 @@
 import { Dialog } from "@angular/cdk/dialog"
 import { NgClass } from "@angular/common"
 import {
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   inject,
@@ -55,6 +56,7 @@ import { AdminOrderGetData, AdminOrderService } from "./admin-order.service"
     AdminPaymentgroupSelectboxComponent,
     AdminPrinterSelectboxComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-order-create.component.html",
 })
 export class AdminOrderCreateComponent implements OnInit, OnChanges {

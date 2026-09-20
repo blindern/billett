@@ -1,9 +1,16 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core"
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from "@angular/core"
 
 @Component({
   selector: "billett-pagination",
   standalone: true,
   imports: [],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./pagination.component.html",
 })
 export class PaginationComponent {

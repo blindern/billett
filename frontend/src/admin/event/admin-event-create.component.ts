@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   inject,
   Input,
@@ -29,6 +30,7 @@ import { AdminEventCreateData, AdminEventService } from "./admin-event.service"
     AdminEventFormComponent,
     PagePropertyComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-event-create.component.html",
 })
 export class AdminEventCreateComponent implements OnChanges {
