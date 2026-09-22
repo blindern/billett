@@ -4,6 +4,18 @@ import "dotenv/config"
 const baseURL = process.env.BASE_URL || "https://billett.blindernuka.no"
 
 export default defineConfig({
+  // Only the @render suite serves a local build. Playwright starts webServer on every run
+  // of this config regardless of --grep, and the production monitor and post-deploy jobs
+  // share it without ever building the frontend.
+  ...(process.env.RENDER_SERVER
+    ? {
+        webServer: {
+          command: "pnpm dlx serve -s ../frontend/dist/billett/browser -l 4200",
+          url: "http://localhost:4200",
+          reuseExistingServer: !process.env.CI,
+        },
+      }
+    : {}),
   testDir: "src",
   testMatch: "**/*.spec.ts",
   timeout: 120000,
