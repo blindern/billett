@@ -48,6 +48,18 @@ const event = {
  * SAML2 endpoint when it resolves falsy, which navigates the browser off the app.
  */
 export async function mockApi(page: Page) {
+  // Registered first on purpose: Playwright matches routes in reverse registration order,
+  // so this catch-all must be the oldest handler or it swallows every mock below it.
+  // Without it an unmatched /api/* falls through to the SPA fallback and returns index.html
+  // with a 200, which fails as a JSON parse error rather than as a clear 404.
+  await page.route("**/api/**", (route) =>
+    route.fulfill({
+      status: 404,
+      contentType: "application/json",
+      body: JSON.stringify({ error: "not mocked" }),
+    }),
+  )
+
   await page.route("**/api/me", (route) => json(route, anonymousAuth))
 
   await page.route("**/api/event/get_upcoming", (route) =>
@@ -62,14 +74,5 @@ export async function mockApi(page: Page) {
 
   await page.route("**/api/event/1*", (route) =>
     json(route, { ...event, eventgroup, ticketgroups: [] }),
-  )
-
-  // Anything unmatched 404s rather than reaching a real backend.
-  await page.route("**/api/**", (route) =>
-    route.fulfill({
-      status: 404,
-      contentType: "application/json",
-      body: JSON.stringify({ error: "not found" }),
-    }),
   )
 }

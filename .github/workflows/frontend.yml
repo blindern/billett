@@ -57,7 +57,9 @@ jobs:
         env:
           RENDER_SERVER: "1"
           BASE_URL: http://localhost:4200
-        run: pnpm exec playwright test --grep @render
+        # No retries: these tests are hermetic, so a retry only masks a real failure
+        # and the retryDelay fixture makes each one progressively slower.
+        run: pnpm exec playwright test --grep @render --retries 0
 
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         if: failure()
