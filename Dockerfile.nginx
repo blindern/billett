@@ -1,4 +1,4 @@
-FROM nginx:1.31.6@sha256:f6ee2eff6bc131ec351c3c70e95c146fa12b2eb4426954e5279bbda36740667e
+FROM nginx:1.31.6@sha256:908dc23e643a1447dbfb2e189ed268bfde6a51a5bf9a34d3dd3440a24f58ccf7
 
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY nginx/default.conf.template /etc/nginx/conf.d/default.conf.template
