@@ -8,7 +8,7 @@ Ticket sales system for UKA på Blindern, a Norwegian student festival. Features
 
 **Tech Stack:**
 - Backend: Laravel 12 (PHP 8.5) with MySQL 8.4
-- Frontend: Angular 21 (standalone components, no NgModules)
+- Frontend: Angular 22 (standalone components, no NgModules)
 - Payment: Vipps Checkout
 - Auth: SAML2 for admin access (requires `ukabillettadmin` group)
 
