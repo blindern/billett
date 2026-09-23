@@ -1,78 +1,29 @@
-import {
-  Directive,
-  ElementRef,
-  inject,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Renderer2,
-} from "@angular/core"
-import { Event, NavigationEnd, Router } from "@angular/router"
-import { Subscription } from "rxjs"
+import { computed, Directive, inject, input } from "@angular/core"
+import { toSignal } from "@angular/core/rxjs-interop"
+import { NavigationEnd, Router } from "@angular/router"
+import { filter, map } from "rxjs"
 
 @Directive({
   selector: "[billettActiveFor]",
-  exportAs: "billettActiveFor",
+  host: { "[class.active]": "isActive()" },
 })
-export class ActiveForDirective implements OnInit, OnChanges, OnDestroy {
+export class ActiveForDirective {
   private router = inject(Router)
-  private element = inject(ElementRef)
-  private renderer = inject(Renderer2)
 
-  private paths: string[] = []
-  private routerEventsSubscription!: Subscription
+  paths = input.required<string[]>({ alias: "billettActiveFor" })
 
-  @Input()
-  set billettActiveFor(data: string[]) {
-    this.paths = data
-  }
+  #url = toSignal(
+    this.router.events.pipe(
+      filter((event) => event instanceof NavigationEnd),
+      map(() => this.router.url),
+    ),
+  )
 
-  ngOnInit() {
-    this.routerEventsSubscription = this.router.events.subscribe((s: Event) => {
-      if (s instanceof NavigationEnd) {
-        this.update()
-      }
-    })
-  }
-
-  ngOnChanges(): void {
-    this.update()
-  }
-
-  ngOnDestroy(): void {
-    this.routerEventsSubscription.unsubscribe()
-  }
-
-  private update(): void {
-    if (!this.router.navigated) return
-
-    queueMicrotask(() => {
-      const hasActiveLinks = this.hasActiveLinks()
-
-      if (hasActiveLinks) {
-        this.renderer.addClass(this.element.nativeElement, "active")
-      } else {
-        this.renderer.removeClass(this.element.nativeElement, "active")
-      }
-    })
-  }
-
-  private hasActiveLinks(): boolean {
-    const currentUrl = this.router.url
-
-    for (const path of this.paths) {
-      if (path.endsWith("*")) {
-        if (currentUrl.startsWith(path.slice(0, -1))) {
-          return true
-        }
-      } else {
-        if (currentUrl === path) {
-          return true
-        }
-      }
-    }
-
-    return false
-  }
+  isActive = computed(() => {
+    const url = this.#url()
+    if (url === undefined) return false
+    return this.paths().some((path) =>
+      path.endsWith("*") ? url.startsWith(path.slice(0, -1)) : url === path,
+    )
+  })
 }
