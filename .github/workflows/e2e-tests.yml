@@ -31,7 +31,9 @@ jobs:
           cache-dependency-path: "e2e-tests/pnpm-lock.yaml"
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright install --with-deps chromium
-      - run: pnpm test
+      # @render needs a locally served build with mocked APIs; it must never run
+      # against production.
+      - run: pnpm exec playwright test --grep-invert @render
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         if: failure()
         with:

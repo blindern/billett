@@ -5,6 +5,8 @@ on:
     paths:
       - ".github/workflows/frontend.yml"
       - "frontend/**"
+      # The @render suite runs in this job against the build produced below.
+      - "e2e-tests/**"
 jobs:
   frontend:
     runs-on: ubuntu-latest
@@ -39,6 +41,32 @@ jobs:
       - run: pnpm install
       - run: pnpm run lint
       - run: pnpm run build
+
+      # Runs here rather than via run-e2e-tests.yml because it needs the dist/ this job
+      # just produced; that workflow runs on a separate runner with no access to it.
+      - name: Install e2e dependencies
+        working-directory: e2e-tests
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browser
+        working-directory: e2e-tests
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Render tests
+        working-directory: e2e-tests
+        env:
+          RENDER_SERVER: "1"
+          BASE_URL: http://localhost:4200
+        # No retries: these tests are hermetic, so a retry only masks a real failure
+        # and the retryDelay fixture makes each one progressively slower.
+        run: pnpm exec playwright test --grep @render --retries 0
+
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        if: failure()
+        with:
+          name: render-playwright-report
+          path: e2e-tests/playwright-report/
+          retention-days: 7
 
       - name: Build docker image
         id: docker_build
