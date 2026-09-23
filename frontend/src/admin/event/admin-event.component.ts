@@ -20,7 +20,6 @@ import { AdminEventService } from "./admin-event.service"
 
 @Component({
   selector: "billett-admin-event",
-  standalone: true,
   imports: [
     FormsModule,
     PageStatesComponent,

@@ -46,7 +46,6 @@ type OrderDraft = Partial<ApiOrderAdmin> & {
 
 @Component({
   selector: "billett-admin-order-create",
-  standalone: true,
   imports: [
     PageStatesComponent,
     RouterLink,

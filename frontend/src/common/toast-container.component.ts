@@ -4,7 +4,6 @@ import { ToastService } from "./toast.service"
 
 @Component({
   selector: "billett-toast-container",
-  standalone: true,
   imports: [NgClass],
   template: `
     <style>

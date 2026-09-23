@@ -6,7 +6,6 @@ import { AuthService } from "./auth.service"
 
 @Component({
   selector: "billett-logout",
-  standalone: true,
   template: `
     <billett-page-property name="title" value="Logger ut" />
     <p>Logger ut</p>

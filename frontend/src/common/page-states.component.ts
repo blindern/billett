@@ -6,7 +6,6 @@ import { PageNotFoundComponent } from "./page-not-found.component"
 
 @Component({
   selector: "billett-page-states",
-  standalone: true,
   imports: [PageLoadingComponent, PageNotFoundComponent],
   templateUrl: "./page-states.component.html",
 })

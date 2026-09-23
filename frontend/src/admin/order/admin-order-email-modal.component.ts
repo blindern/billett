@@ -19,7 +19,6 @@ export interface AdminOrderEmailModalResult {
 
 @Component({
   selector: "billett-admin-order-email-modal",
-  standalone: true,
   imports: [FormsModule],
   templateUrl: "./admin-order-email-modal.component.html",
 })

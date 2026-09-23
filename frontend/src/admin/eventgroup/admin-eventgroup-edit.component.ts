@@ -11,7 +11,6 @@ import { AdminEventgroupService } from "./admin-eventgroup.service"
 
 @Component({
   selector: "billett-admin-eventgroup-edit",
-  standalone: true,
   imports: [
     FormsModule,
     PageStatesComponent,

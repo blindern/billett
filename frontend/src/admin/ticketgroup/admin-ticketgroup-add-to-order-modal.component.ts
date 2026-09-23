@@ -24,7 +24,6 @@ export type AdminTicketgroupAddToOrderModalResult = ApiTicketAdmin[]
 
 @Component({
   selector: "billett-admin-ticketgroup-add-to-order-modal",
-  standalone: true,
   imports: [FormsModule, PricePipe, NgClass, RouterLink, FormatdatePipe],
   templateUrl: "./admin-ticketgroup-add-to-order-modal.component.html",
   styleUrl: "./admin-ticketgroup-add-to-order-modal.component.scss",

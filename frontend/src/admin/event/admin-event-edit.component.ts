@@ -12,7 +12,6 @@ import { AdminEventService } from "./admin-event.service"
 
 @Component({
   selector: "billett-admin-event-edit",
-  standalone: true,
   imports: [
     PageStatesComponent,
     PagePropertyComponent,

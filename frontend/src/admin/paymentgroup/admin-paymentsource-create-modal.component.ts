@@ -22,7 +22,6 @@ export type AdminPaymentsourceCreateModalResult = ApiPaymentsourceAdmin
 
 @Component({
   selector: "billett-admin-paymentsource-create-modal",
-  standalone: true,
   imports: [PagePropertyComponent, PricePipe, FormsModule],
   templateUrl: "./admin-paymentsource-create-modal.component.html",
 })

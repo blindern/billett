@@ -34,7 +34,6 @@ export interface AdminTicketRevokeModalResult {
 
 @Component({
   selector: "billett-admin-ticket-revoke-modal",
-  standalone: true,
   imports: [
     FormsModule,
     RouterLink,

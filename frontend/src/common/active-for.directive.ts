@@ -14,7 +14,6 @@ import { Subscription } from "rxjs"
 @Directive({
   selector: "[billettActiveFor]",
   exportAs: "billettActiveFor",
-  standalone: true,
 })
 export class ActiveForDirective implements OnInit, OnChanges, OnDestroy {
   private router = inject(Router)

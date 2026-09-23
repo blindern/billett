@@ -12,7 +12,6 @@ import { AdminTicketgroupService } from "./admin-ticketgroup.service"
 
 @Component({
   selector: "billett-admin-ticketgroup-create",
-  standalone: true,
   imports: [
     PagePropertyComponent,
     FormatdatePipe,

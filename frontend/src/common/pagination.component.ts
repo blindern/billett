@@ -2,7 +2,6 @@ import { Component, computed, input, output } from "@angular/core"
 
 @Component({
   selector: "billett-pagination",
-  standalone: true,
   templateUrl: "./pagination.component.html",
 })
 export class PaginationComponent {

@@ -11,7 +11,6 @@ import { AdminPaymentgroupService } from "./admin-paymentgroup.service"
 
 @Component({
   selector: "billett-admin-paymentgroup-list",
-  standalone: true,
   imports: [
     PagePropertyComponent,
     RouterLink,

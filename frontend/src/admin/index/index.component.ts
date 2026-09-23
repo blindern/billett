@@ -9,7 +9,6 @@ import { AdminPrinterTextModal } from "../printer/admin-printer-text-modal.compo
 
 @Component({
   selector: "billett-admin-index",
-  standalone: true,
   imports: [PagePropertyComponent, RouterLink, PageStatesComponent],
   templateUrl: "./index.component.html",
 })

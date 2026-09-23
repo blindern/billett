@@ -31,7 +31,6 @@ const searchInit = {
 
 @Component({
   selector: "billett-admin-order-list",
-  standalone: true,
   imports: [
     FormsModule,
     RouterLink,

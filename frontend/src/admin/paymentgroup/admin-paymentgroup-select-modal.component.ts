@@ -15,7 +15,6 @@ export interface AdminPaymentgroupSelectModalInput {
 
 @Component({
   selector: "billett-admin-paymentgroup-select-modal",
-  standalone: true,
   imports: [AdminPaymentgroupSelectboxComponent, PricePipe, FormsModule],
   templateUrl: "./admin-paymentgroup-select-modal.component.html",
 })

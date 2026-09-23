@@ -13,7 +13,6 @@ import { GuestEventlistItemComponent } from "./eventlist-item.component"
 
 @Component({
   selector: "billett-guest-eventgroup",
-  standalone: true,
   imports: [
     FormatdatePipe,
     RouterLink,

@@ -23,7 +23,6 @@ export type AdminPaymentCreateModalResult = ApiPaymentAdmin
 
 @Component({
   selector: "billett-admin-payment-create-modal",
-  standalone: true,
   imports: [FormsModule, AdminPaymentgroupSelectboxComponent],
   templateUrl: "./admin-payment-create-modal.component.html",
 })

@@ -15,7 +15,6 @@ export interface AdminPrinterSelectModalResult {
 
 @Component({
   selector: "billett-admin-printer-select-modal",
-  standalone: true,
   imports: [AdminPrinterSelectboxComponent, FormsModule],
   templateUrl: "./admin-printer-select-modal.component.html",
 })

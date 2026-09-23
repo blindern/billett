@@ -3,7 +3,6 @@ import { PageService } from "./page.service"
 
 @Component({
   selector: "billett-page-property",
-  standalone: true,
   template: "",
 })
 export class PagePropertyComponent {

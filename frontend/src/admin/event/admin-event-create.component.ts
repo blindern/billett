@@ -12,7 +12,6 @@ import { AdminEventCreateData, AdminEventService } from "./admin-event.service"
 
 @Component({
   selector: "billett-admin-event-create",
-  standalone: true,
   imports: [
     PageStatesComponent,
     RouterLink,

@@ -41,7 +41,6 @@ const searchinputInit = {
 
 @Component({
   selector: "billett-admin-event-checkin",
-  standalone: true,
   imports: [
     PageStatesComponent,
     PagePropertyComponent,

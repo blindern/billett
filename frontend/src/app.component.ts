@@ -16,7 +16,6 @@ import { ToastContainerComponent } from "./common/toast-container.component"
 
 @Component({
   selector: "billett-app",
-  standalone: true,
   imports: [
     RouterOutlet,
     RouterLink,

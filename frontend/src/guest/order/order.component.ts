@@ -23,7 +23,6 @@ type Order = ApiOrder & {
 
 @Component({
   selector: "billett-guest-order",
-  standalone: true,
   imports: [PagePropertyComponent, FormatdatePipe, PricePipe],
   templateUrl: "./order.component.html",
   preserveWhitespaces: false,

@@ -29,7 +29,6 @@ import { AdminOrderGetData, AdminOrderService } from "./admin-order.service"
 
 @Component({
   selector: "billett-admin-order-item",
-  standalone: true,
   imports: [
     PageStatesComponent,
     PagePropertyComponent,

@@ -12,7 +12,6 @@ import { AdminDaythemeService } from "./admin-daytheme.service"
 
 @Component({
   selector: "billett-admin-daytheme-create",
-  standalone: true,
   imports: [
     PageStatesComponent,
     PagePropertyComponent,

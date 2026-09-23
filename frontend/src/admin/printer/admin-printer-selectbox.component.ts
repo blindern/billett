@@ -8,7 +8,6 @@ import { AdminPrinterService } from "./admin-printer.service"
 
 @Component({
   selector: "billett-admin-printer-selectbox",
-  standalone: true,
   imports: [FormsModule],
   templateUrl: "./admin-printer-selectbox.component.html",
 })

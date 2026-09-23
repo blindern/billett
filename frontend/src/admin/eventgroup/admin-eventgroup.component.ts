@@ -19,7 +19,6 @@ import {
 
 @Component({
   selector: "billett-admin-eventgroup",
-  standalone: true,
   imports: [
     PagePropertyComponent,
     RouterLink,

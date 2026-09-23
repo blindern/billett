@@ -15,7 +15,6 @@ type UpcomingItem = ApiEvent & {
 
 @Component({
   selector: "billett-guest-index",
-  standalone: true,
   imports: [RouterLink, GuestEventlistItemComponent, PagePropertyComponent],
   templateUrl: "./index.component.html",
 })

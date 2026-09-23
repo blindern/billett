@@ -16,7 +16,6 @@ export type AdminPaymentgroupCreateModalResult = ApiPaymentgroupAdmin
 
 @Component({
   selector: "billett-admin-paymentgroup-create-modal",
-  standalone: true,
   imports: [PagePropertyComponent, FormsModule],
   templateUrl: "./admin-paymentgroup-create-modal.component.html",
 })

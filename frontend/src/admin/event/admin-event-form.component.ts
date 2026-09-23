@@ -10,7 +10,6 @@ const formatTime = (t: number | null | undefined) =>
 
 @Component({
   selector: "billett-admin-event-form",
-  standalone: true,
   imports: [FormsModule, RouterLink, FormatdatePipe],
   templateUrl: "./admin-event-form.component.html",
 })

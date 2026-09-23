@@ -8,7 +8,6 @@ import { AdminEventgroupService } from "./admin-eventgroup.service"
 
 @Component({
   selector: "billett-admin-eventgroup-create",
-  standalone: true,
   imports: [FormsModule, PagePropertyComponent, RouterLink],
   templateUrl: "./admin-eventgroup-create.component.html",
 })

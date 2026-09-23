@@ -4,7 +4,6 @@ import { PagePropertyComponent } from "../common/page-property.component"
 
 @Component({
   selector: "billett-login",
-  standalone: true,
   template: `
     <billett-page-property name="title" value="Logg inn" />
     <p>Går til logg inn side</p>

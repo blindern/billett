@@ -2,7 +2,6 @@ import { Component, input, resource } from "@angular/core"
 
 @Component({
   selector: "billett-markdown",
-  standalone: true,
   template: `<div [innerHTML]="html.value()"></div>`,
 })
 export class MarkdownComponent {

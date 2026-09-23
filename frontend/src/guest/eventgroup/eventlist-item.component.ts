@@ -30,7 +30,6 @@ class CategoryColors {
 
 @Component({
   selector: "billett-eventlist-item",
-  standalone: true,
   imports: [FormatdatePipe, RouterLink, NgClass, LowerCasePipe],
   templateUrl: "./eventlist-item.component.html",
   styleUrl: "./eventlist-item.component.scss",
