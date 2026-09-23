@@ -1,5 +1,12 @@
+import type { Page } from "@playwright/test"
 import { expect, test } from "./fixtures"
-import { EVENT_TITLE, EVENTGROUP_TITLE, mockApi } from "./render-fixtures"
+import {
+  EVENT_TITLE,
+  EVENTGROUP_TITLE,
+  mockApi,
+  ORDER_TEXT_ID,
+  PAYMENTGROUP_TITLE,
+} from "./render-fixtures"
 
 /**
  * Guards the failure mode the signals migration risks: data arrives but the DOM never
@@ -9,35 +16,112 @@ import { EVENT_TITLE, EVENTGROUP_TITLE, mockApi } from "./render-fixtures"
  * Runs against a locally served build with every API call mocked, so it must be kept out
  * of the production monitor in e2e-tests.yml.
  */
+
+const expectLoaded = (page: Page) =>
+  expect(page.locator("billett-page-loading")).toHaveCount(0)
+
 test.describe("render", { tag: "@render" }, () => {
-  test.beforeEach(async ({ page }) => {
-    await mockApi(page)
+  let pageErrors: Error[]
+
+  test.beforeEach(({ page }) => {
+    pageErrors = []
+    page.on("pageerror", (error) => pageErrors.push(error))
   })
 
-  test("guest index lists eventgroups", async ({ page }) => {
-    await page.goto("/")
-
-    await expect(page.getByRole("link", { name: EVENTGROUP_TITLE })).toBeVisible()
+  test.afterEach(() => {
+    expect(pageErrors).toEqual([])
   })
 
-  test("eventgroup page renders and resolves loading", async ({ page }) => {
-    await page.goto("/eventgroup/1")
+  test.describe("guest", () => {
+    test.beforeEach(async ({ page }) => {
+      await mockApi(page)
+    })
 
-    await expect(page.getByRole("heading", { name: EVENTGROUP_TITLE })).toBeVisible()
-    await expect(page.locator("billett-page-loading")).toHaveCount(0)
+    test("index lists eventgroups", async ({ page }) => {
+      await page.goto("/")
+
+      await expect(page.getByRole("link", { name: EVENTGROUP_TITLE })).toBeVisible()
+    })
+
+    test("eventgroup page renders and resolves loading", async ({ page }) => {
+      await page.goto("/eventgroup/1")
+
+      await expect(page.getByRole("heading", { name: EVENTGROUP_TITLE })).toBeVisible()
+      await expectLoaded(page)
+    })
+
+    test("event page renders and resolves loading", async ({ page }) => {
+      await page.goto("/event/1")
+
+      await expect(page.getByText(EVENT_TITLE).first()).toBeVisible()
+      await expectLoaded(page)
+    })
+
+    test("missing eventgroup renders not-found, not a stuck spinner", async ({ page }) => {
+      await page.goto("/eventgroup/999")
+
+      await expect(page.getByRole("heading", { name: "Side ikke funnet" })).toBeVisible()
+      await expectLoaded(page)
+    })
+
+    test("order receipt renders", async ({ page }) => {
+      await page.goto("/order/complete")
+
+      await expect(page.getByText(ORDER_TEXT_ID)).toBeVisible()
+    })
   })
 
-  test("event page renders and resolves loading", async ({ page }) => {
-    await page.goto("/event/1")
+  test.describe("admin", () => {
+    test.beforeEach(async ({ page }) => {
+      await mockApi(page, { admin: true })
+    })
 
-    await expect(page.getByText(EVENT_TITLE).first()).toBeVisible()
-    await expect(page.locator("billett-page-loading")).toHaveCount(0)
-  })
+    test("sold tickets stats renders", async ({ page }) => {
+      await page.goto("/a/eventgroup/1/sold_tickets_stats")
 
-  test("missing eventgroup renders not-found, not a stuck spinner", async ({ page }) => {
-    await page.goto("/eventgroup/999")
+      await expect(page.getByRole("cell", { name: EVENT_TITLE })).toBeVisible()
+      await expectLoaded(page)
+    })
 
-    await expect(page.getByRole("heading", { name: "Side ikke funnet" })).toBeVisible()
-    await expect(page.locator("billett-page-loading")).toHaveCount(0)
+    test("ticketgroup renders", async ({ page }) => {
+      await page.goto("/a/event/1/ticketgroup/1")
+
+      await expect(page.getByRole("heading", { name: EVENT_TITLE })).toBeVisible()
+      await expect(page.getByRole("heading", { name: EVENT_TITLE })).toContainText(
+        "Rediger billettgruppe",
+      )
+      await expectLoaded(page)
+    })
+
+    test("order renders", async ({ page }) => {
+      await page.goto("/a/order/1")
+
+      await expect(page.getByRole("heading", { name: `Ordre: ${ORDER_TEXT_ID}` })).toBeVisible()
+      await expectLoaded(page)
+    })
+
+    test("event checkin renders tickets", async ({ page }) => {
+      await page.goto("/a/event/1/checkin")
+
+      await expect(page.getByRole("heading", { name: EVENT_TITLE })).toBeVisible()
+      await expect(page.getByRole("link", { name: ORDER_TEXT_ID })).toBeVisible()
+      await expectLoaded(page)
+    })
+
+    test("paymentgroup renders", async ({ page }) => {
+      await page.goto("/a/paymentgroup/1")
+
+      await expect(
+        page.getByRole("heading", { name: `Oppgjør: ${PAYMENTGROUP_TITLE}` }),
+      ).toBeVisible()
+      await expectLoaded(page)
+    })
+
+    test("paymentgroup list renders", async ({ page }) => {
+      await page.goto("/a/eventgroup/1/paymentgroups")
+
+      await expect(page.getByRole("link", { name: PAYMENTGROUP_TITLE })).toBeVisible()
+      await expectLoaded(page)
+    })
   })
 })
