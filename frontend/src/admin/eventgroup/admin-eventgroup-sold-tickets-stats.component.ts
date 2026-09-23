@@ -51,6 +51,7 @@ class Accum {
     FormatdatePipe,
   ],
   templateUrl: "./admin-eventgroup-sold-tickets-stats.component.html",
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./admin-eventgroup-sold-tickets-stats.component.scss",
 })

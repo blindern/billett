@@ -22,6 +22,7 @@ export interface AdminPaymentgroupSelectModalInput {
   selector: "billett-admin-paymentgroup-select-modal",
   standalone: true,
   imports: [AdminPaymentgroupSelectboxComponent, PricePipe, FormsModule],
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-paymentgroup-select-modal.component.html",
 })

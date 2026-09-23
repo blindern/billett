@@ -48,6 +48,7 @@ export type AdminTicketgroupAddToOrderModalResult = ApiTicketAdmin[]
     FormatdatePipe,
   ],
   templateUrl: "./admin-ticketgroup-add-to-order-modal.component.html",
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./admin-ticketgroup-add-to-order-modal.component.scss",
 })

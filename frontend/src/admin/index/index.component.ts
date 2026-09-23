@@ -20,6 +20,7 @@ import { AdminPrinterTextModal } from "../printer/admin-printer-text-modal.compo
   selector: "billett-admin-index",
   standalone: true,
   imports: [PagePropertyComponent, RouterLink, PageStatesComponent],
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./index.component.html",
 })

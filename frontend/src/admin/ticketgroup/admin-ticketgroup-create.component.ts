@@ -31,6 +31,7 @@ import { AdminTicketgroupService } from "./admin-ticketgroup.service"
     RouterLink,
     PageStatesComponent,
   ],
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-ticketgroup-create.component.html",
 })

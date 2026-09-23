@@ -56,6 +56,7 @@ import { AdminOrderGetData, AdminOrderService } from "./admin-order.service"
     AdminPaymentgroupSelectboxComponent,
     AdminPrinterSelectboxComponent,
   ],
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-order-create.component.html",
 })

@@ -35,6 +35,7 @@ export type AdminPaymentsourceCreateModalResult = ApiPaymentsourceAdmin
     FormsModule,
     NgxTypeAheadComponent,
   ],
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-paymentsource-create-modal.component.html",
 })

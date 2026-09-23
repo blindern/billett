@@ -47,6 +47,7 @@ export interface AdminTicketRevokeModalResult {
     PricePipe,
     AdminPaymentgroupSelectboxComponent,
   ],
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-ticket-revoke-modal.component.html",
 })

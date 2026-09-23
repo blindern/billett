@@ -26,6 +26,7 @@ export interface AdminOrderEmailModalResult {
   selector: "billett-admin-order-email-modal",
   standalone: true,
   imports: [FormsModule],
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-order-email-modal.component.html",
 })

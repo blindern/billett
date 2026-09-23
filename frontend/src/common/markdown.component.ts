@@ -8,6 +8,7 @@ import {
 @Component({
   selector: "billett-markdown",
   standalone: true,
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   template: `<div [innerHTML]="convertedData"></div>`,
 })

@@ -10,6 +10,7 @@ import { AdminEventgroupService } from "./admin-eventgroup.service"
   selector: "billett-admin-eventgroup-create",
   standalone: true,
   imports: [FormsModule, PagePropertyComponent, RouterLink],
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-eventgroup-create.component.html",
 })

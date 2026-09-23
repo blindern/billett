@@ -30,6 +30,7 @@ import { AdminPaymentgroupService } from "./admin-paymentgroup.service"
     PageStatesComponent,
     FormatdatePipe,
   ],
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-paymentgroup-list.component.html",
 })

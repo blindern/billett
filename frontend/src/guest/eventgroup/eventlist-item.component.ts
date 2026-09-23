@@ -39,6 +39,7 @@ class CategoryColors {
   standalone: true,
   imports: [FormatdatePipe, RouterLink, NgClass, LowerCasePipe],
   templateUrl: "./eventlist-item.component.html",
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./eventlist-item.component.scss",
 })

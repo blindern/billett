@@ -59,6 +59,7 @@ declare global {
   ],
   templateUrl: "./event.component.html",
   styleUrl: "./event.component.scss",
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

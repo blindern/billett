@@ -16,6 +16,7 @@ import { AuthService } from "./auth.service"
     <billett-page-property name="title" value="Logger ut" />
     <p>Logger ut</p>
   `,
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [PagePropertyComponent],
 })

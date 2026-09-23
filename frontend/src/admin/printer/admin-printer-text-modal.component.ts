@@ -16,6 +16,7 @@ export interface AdminPrinterTextModalResult {
   selector: "billett-admin-printer-text-modal",
   standalone: true,
   imports: [AdminPrinterSelectboxComponent, FormsModule],
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-printer-text-modal.component.html",
 })

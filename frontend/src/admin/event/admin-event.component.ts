@@ -42,6 +42,7 @@ import { AdminEventData, AdminEventService } from "./admin-event.service"
     MarkdownComponent,
   ],
   templateUrl: "./admin-event.component.html",
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./admin-event.component.scss",
 })

@@ -45,6 +45,7 @@ const searchInit = {
     PricePipe,
     CommonModule,
   ],
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-order-list.component.html",
 })

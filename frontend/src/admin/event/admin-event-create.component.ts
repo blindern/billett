@@ -30,6 +30,7 @@ import { AdminEventCreateData, AdminEventService } from "./admin-event.service"
     AdminEventFormComponent,
     PagePropertyComponent,
   ],
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-event-create.component.html",
 })

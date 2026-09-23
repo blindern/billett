@@ -44,8 +44,6 @@ export default defineConfig(
       // TODO: Fix this.
       "@angular-eslint/component-class-suffix": "off",
       "@angular-eslint/prefer-inject": "off",
-      // Angular 22 flipped the default to OnPush; components still rely on eager CD.
-      "@angular-eslint/prefer-on-push-component-change-detection": "off",
     },
   },
   {
