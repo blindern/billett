@@ -51,6 +51,13 @@ test.describe("render", { tag: "@render" }, () => {
       await expectLoaded(page)
     })
 
+    test("eventgroup filter without matches redirects to full list", async ({ page }) => {
+      await page.goto("/eventgroup/1/nomatch")
+
+      await expect(page).toHaveURL(/\/eventgroup\/1$/)
+      await expect(page.getByRole("link", { name: EVENT_TITLE })).toBeVisible()
+    })
+
     test("event page renders and resolves loading", async ({ page }) => {
       await page.goto("/event/1")
 
