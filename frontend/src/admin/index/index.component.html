@@ -1,7 +1,8 @@
-<billett-page-states [loading]="pageState.loading" [error]="pageState.error" />
+<billett-page-states [loading]="eventgroupsResource.isLoading()" [error]="eventgroupsResource.error()" />
 <billett-page-property name="title" value="Administrasjon" />
 
-@if (eventgroups) {
+@if (eventgroupsResource.hasValue()) {
+  @let eventgroups = eventgroupsResource.value();
   <div class="page-header">
     <h1>Administrasjon</h1>
   </div>

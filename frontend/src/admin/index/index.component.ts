@@ -1,18 +1,9 @@
 import { Dialog } from "@angular/cdk/dialog"
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnInit,
-} from "@angular/core"
+import { Component, inject } from "@angular/core"
+import { rxResource } from "@angular/core/rxjs-interop"
 import { RouterLink } from "@angular/router"
-import { ApiEventgroupAdmin } from "../../apitypes"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
-import {
-  handleResourceLoadingStates,
-  ResourceLoadingState,
-} from "../../common/resource-loading"
 import { AdminEventgroupService } from "../eventgroup/admin-eventgroup.service"
 import { AdminPrinterTextModal } from "../printer/admin-printer-text-modal.component"
 
@@ -20,28 +11,17 @@ import { AdminPrinterTextModal } from "../printer/admin-printer-text-modal.compo
   selector: "billett-admin-index",
   standalone: true,
   imports: [PagePropertyComponent, RouterLink, PageStatesComponent],
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./index.component.html",
 })
-export class AdminIndexComponent implements OnInit {
-  eventgroups?: ApiEventgroupAdmin[]
-
+export class AdminIndexComponent {
   private adminEventgroupService = inject(AdminEventgroupService)
   private dialog = inject(Dialog)
 
-  pageState = new ResourceLoadingState()
+  eventgroupsResource = rxResource({
+    stream: () => this.adminEventgroupService.query(),
+  })
 
   printText() {
     AdminPrinterTextModal.open(this.dialog)
-  }
-
-  ngOnInit(): void {
-    this.adminEventgroupService
-      .query()
-      .pipe(handleResourceLoadingStates(this.pageState))
-      .subscribe((data) => {
-        this.eventgroups = data
-      })
   }
 }
