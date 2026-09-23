@@ -1,7 +1,13 @@
-<billett-page-states [loading]="pageState.loading" [error]="pageState.error" />
+<billett-page-states [loading]="eventResource.isLoading()" [error]="eventResource.error()" />
 <billett-page-property name="title" value="Innsjekking av billetter" />
 
-@if (event) {
+@if (eventResource.hasValue()) {
+  @let event = eventResource.value();
+  @let lastUsedTickets = lastUsedTicketsResource.hasValue() ? lastUsedTicketsResource.value() : undefined;
+  @let lastUsedTicketsLoading = lastUsedTicketsResource.isLoading();
+  @let keyticket = this.keyticket();
+  @let orders = this.orders();
+  @let tickets = this.tickets();
   <billett-page-property
     name="title"
     value="Innsjekking: {{ event.title }} ({{ event.time_start | formatdate: 'DD. MMM' }})"
@@ -165,8 +171,8 @@
     <div class="col-sm-7">
       <div
         [ngClass]="{
-          'alert-success': keyticket && keyok && !ticketsWorking.has(keyticket.id) && !ordersLoading,
-          'alert-danger': keyticket && !keyok && !ordersLoading,
+          'alert-success': keyticket && keyok() && !ticketsWorking().includes(keyticket.id) && !ordersLoading(),
+          'alert-danger': keyticket && !keyok() && !ordersLoading(),
         }"
         class="alert checkin-form"
       >
@@ -185,7 +191,7 @@
                 type="text"
                 id="keyfield"
                 name="keyfield"
-                [(ngModel)]="searchinput.name"
+                [(ngModel)]="searchinput().name"
                 autofocus=""
               />
             </div>
@@ -193,19 +199,19 @@
           <div class="form-group">
             <label class="col-sm-4 control-label">E-post</label>
             <div class="col-sm-8">
-              <input class="form-control" type="text" name="email" [(ngModel)]="searchinput.email" />
+              <input class="form-control" type="text" name="email" [(ngModel)]="searchinput().email" />
             </div>
           </div>
           <div class="form-group">
             <label class="col-sm-4 control-label">Telefon</label>
             <div class="col-sm-8">
-              <input class="form-control" type="text" name="phone" [(ngModel)]="searchinput.phone" />
+              <input class="form-control" type="text" name="phone" [(ngModel)]="searchinput().phone" />
             </div>
           </div>
           <div class="form-group">
             <label class="col-sm-4 control-label">Ordrenr</label>
             <div class="col-sm-8">
-              <input class="form-control" type="text" name="id" [(ngModel)]="searchinput.id" />
+              <input class="form-control" type="text" name="id" [(ngModel)]="searchinput().id" />
             </div>
           </div>
           <input type="submit" value="Søk" style="display: none" />
@@ -217,10 +223,10 @@
 
         @if (keyticket) {
           <h4>Scanning av strekkode</h4>
-          @if (ticketsWorking.has(keyticket.id)) {
+          @if (ticketsWorking().includes(keyticket.id)) {
             <p>Sjekker inn billett...</p>
           } @else {
-            @if (keyok) {
+            @if (keyok()) {
               <p><b>Billetten ble innsjekket</b></p>
             } @else {
               <p>
@@ -232,7 +238,7 @@
       </div>
 
       <!-- resultat etter ordresøk -->
-      @if (orders || ordersLoading) {
+      @if (orders || ordersLoading()) {
         <h3>Ordresøk</h3>
         @if (!orders || !orders.result) {
           <div class="page-loading">Søker...</div>
@@ -281,7 +287,7 @@
                           [ngClass]="{
                             reservation: !ticket.is_valid,
                             revoked: ticket.is_revoked,
-                            keyresult: ticket.key === keysearch,
+                            keyresult: ticket.key === keysearch(),
                           }"
                         >
                           <a href="/api/ticket/{{ ticket.id }}/pdf" target="_self">#{{ ticket.id }}</a>
@@ -302,7 +308,7 @@
                             }
                           }
                           ({{ ticket.ticketgroup.title }})
-                          @if (ticket.key === keysearch) {
+                          @if (ticket.key === keysearch()) {
                             <b>(DENNE BLE SØKT OPP)</b>
                           }
                         </li>
@@ -316,17 +322,17 @@
 
           <div class="text-center">
             <billett-pagination
-              [page]="searchinput.page"
+              [page]="searchinput().page"
               [total]="orders.pagination.total"
               [limit]="orders.pagination.limit"
-              (changePage)="searchinput.page = $event"
+              (changePage)="changePage($event)"
             />
           </div>
         }
       }
 
       <!-- hele billettlisten -->
-      @if (tickets || ticketsLoading) {
+      @if (tickets || ticketsLoading()) {
         <h3>Billettliste</h3>
         @if (!tickets) {
           <div class="page-loading">Henter data...</div>

@@ -1,16 +1,9 @@
 import { CommonModule } from "@angular/common"
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-} from "@angular/core"
+import { Component, inject, input, signal } from "@angular/core"
+import { rxResource, takeUntilDestroyed } from "@angular/core/rxjs-interop"
 import { FormsModule } from "@angular/forms"
 import { RouterLink } from "@angular/router"
-import { debounceTime, Subject } from "rxjs"
+import { debounceTime, map, Subject, tap } from "rxjs"
 import { api } from "../../api"
 import {
   ApiEventAdmin,
@@ -24,18 +17,13 @@ import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
 import { PaginationComponent } from "../../common/pagination.component"
 import { PricePipe } from "../../common/price.pipe"
-import {
-  handleResourceLoadingStates,
-  ResourceLoadingState,
-} from "../../common/resource-loading"
 import { ToastService } from "../../common/toast.service"
 import {
   AdminEventCheckinService,
   AdminOrderSearchData,
   AdminTicketForCheckinData,
 } from "./admin-event-checkin.service"
-import { AdminEventFormComponent } from "./admin-event-form.component"
-import { AdminEventData, AdminEventService } from "./admin-event.service"
+import { AdminEventService } from "./admin-event.service"
 
 type Ticket = ApiTicketAdmin & {
   order: ApiOrderAdmin
@@ -58,7 +46,6 @@ const searchinputInit = {
     PageStatesComponent,
     PagePropertyComponent,
     RouterLink,
-    AdminEventFormComponent,
     FormatdatePipe,
     PricePipe,
     CommonModule,
@@ -66,74 +53,68 @@ const searchinputInit = {
     PaginationComponent,
   ],
   templateUrl: "./admin-event-checkin.component.html",
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./admin-event-checkin.component.scss",
 })
-export class AdminEventCheckinComponent implements OnInit, OnChanges {
+export class AdminEventCheckinComponent {
   private adminEventService = inject(AdminEventService)
   private adminEventCheckinService = inject(AdminEventCheckinService)
   private toastService = inject(ToastService)
 
-  @Input()
-  id!: string
+  id = input.required<string>()
 
   api = api
   parseFloat = parseFloat
 
-  pageState = new ResourceLoadingState()
-  event?: AdminEventData
+  eventResource = rxResource({
+    params: () => this.id(),
+    stream: ({ params }) =>
+      this.adminEventService.get(params).pipe(tap(() => this.#loadTickets())),
+  })
 
-  tickets?: ReturnType<AdminEventCheckinComponent["parseTicketsList"]>
-  ticketsLoading = false
+  lastUsedTicketsResource = rxResource({
+    params: () => this.eventResource.value()?.id,
+    stream: ({ params }) =>
+      this.adminEventCheckinService
+        .getLastUsedTickets(params)
+        .pipe(map((data) => data.result)),
+  })
+
+  tickets = signal<
+    ReturnType<AdminEventCheckinComponent["parseTicketsList"]> | undefined
+  >(undefined)
+  ticketsLoading = signal(false)
   ticketsById: Record<number, Omit<Ticket, "event">> = {}
 
-  ticketsWorking = new Set<number>()
+  ticketsWorking = signal<number[]>([])
 
-  lastUsedTickets?: AdminTicketForCheckinData[]
-  lastUsedTicketsLoading = false
-
-  keysearch = ""
+  keysearch = signal("")
   keysearchlast = ""
-  keyticket?: Ticket
-  keyok?: boolean
+  keyticket = signal<Ticket | undefined>(undefined)
+  keyok = signal<boolean | undefined>(undefined)
 
-  ordersLoading = false
-  orders?: ReturnType<AdminEventCheckinComponent["parseOrdersList"]>
+  ordersLoading = signal(false)
+  orders = signal<
+    ReturnType<AdminEventCheckinComponent["parseOrdersList"]> | undefined
+  >(undefined)
 
-  searchinput = structuredClone(searchinputInit)
+  searchinput = signal(structuredClone(searchinputInit))
 
-  #searchqueue = new Subject()
+  #searchqueue = new Subject<void>()
 
-  ngOnInit(): void {
-    this.#searchqueue.pipe(debounceTime(300)).subscribe(() => {
-      if (this.searchinput.page !== 1) {
-        this.searchinput.page = 1
-        return
-      }
-
-      if (this.event) this.#searchForOrders()
-      if (this.keysearch) this.#focusKeyfield()
-    })
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes["id"]) {
-      this.adminEventService
-        .get(this.id)
-        .pipe(handleResourceLoadingStates(this.pageState))
-        .subscribe((data) => {
-          this.event = data
-          this.#loadTickets()
-          this.#loadLastUsedTickets()
-        })
-    }
+  constructor() {
+    this.#searchqueue
+      .pipe(debounceTime(300), takeUntilDestroyed())
+      .subscribe(() => {
+        this.searchinput().page = 1
+        if (this.eventResource.hasValue()) this.#searchForOrders()
+        if (this.keysearch()) this.#focusKeyfield()
+      })
   }
 
   #reloadEvent() {
-    this.adminEventService.get(this.id).subscribe({
+    this.adminEventService.get(this.id()).subscribe({
       next: (data) => {
-        this.event = data
+        this.eventResource.set(data)
       },
       error: toastErrorHandler(
         this.toastService,
@@ -152,8 +133,8 @@ export class AdminEventCheckinComponent implements OnInit, OnChanges {
     this.#focusKeyfield()
   }
   checkout(ticket: ApiTicketAdmin) {
-    this.keyok = undefined
-    this.keyticket = undefined
+    this.keyok.set(undefined)
+    this.keyticket.set(undefined)
     this.#performCheckin(ticket, false)
     this.#focusKeyfield()
   }
@@ -165,29 +146,33 @@ export class AdminEventCheckinComponent implements OnInit, OnChanges {
     this.#focusKeyfield()
   }
   queueSearch() {
-    this.#searchqueue.next(null)
+    this.#searchqueue.next()
+  }
+  changePage(page: number) {
+    this.searchinput().page = page
+    this.#searchForOrders()
   }
 
   #searchForOrders() {
-    this.tickets = undefined
-    this.ticketsLoading = false
-    this.keysearch = ""
+    this.tickets.set(undefined)
+    this.ticketsLoading.set(false)
+    this.keysearch.set("")
 
     const filter = this.#generateSearchFilter()
     if (filter == "") {
-      if (!this.ticketsLoading) this.#loadTickets()
+      this.#loadTickets()
       return
     }
 
-    this.ordersLoading = true
-    this.orders = undefined
+    this.ordersLoading.set(true)
+    this.orders.set(undefined)
 
     this.adminEventCheckinService
-      .searchForOrders(this.searchinput.page, filter)
+      .searchForOrders(this.searchinput().page, filter)
       .subscribe({
         next: (data) => {
-          this.ordersLoading = false
-          this.orders = this.parseOrdersList(data)
+          this.ordersLoading.set(false)
+          this.orders.set(this.parseOrdersList(data))
           this.#checkKeySearch()
         },
         error: toastErrorHandler(this.toastService, "Søk feilet"),
@@ -229,24 +214,27 @@ export class AdminEventCheckinComponent implements OnInit, OnChanges {
    * Automatically checkin if possible
    */
   #checkKeySearch() {
-    this.keyok = undefined
-    this.keyticket = undefined
+    this.keyok.set(undefined)
+    this.keyticket.set(undefined)
 
-    if (this.orders && this.keysearch && this.keysearchlast != this.keysearch) {
-      this.keysearchlast = this.keysearch
-      for (const order of this.orders.result) {
+    const orders = this.orders()
+    const keysearch = this.keysearch()
+    if (orders && keysearch && this.keysearchlast != keysearch) {
+      this.keysearchlast = keysearch
+      for (const order of orders.result) {
         for (const ticket of order.tickets) {
-          if (this.keysearch == ticket.key) {
-            this.keyok = ticket.is_valid && !ticket.is_revoked && !ticket.used
+          if (keysearch == ticket.key) {
+            const keyok = ticket.is_valid && !ticket.is_revoked && !ticket.used
+            this.keyok.set(keyok)
 
             const found = {
               ...ticket,
               order,
             }
 
-            this.keyticket = found
+            this.keyticket.set(found)
 
-            if (this.keyok) {
+            if (keyok) {
               this.checkin(found)
             }
           }
@@ -256,24 +244,25 @@ export class AdminEventCheckinComponent implements OnInit, OnChanges {
   }
 
   #generateSearchFilter() {
+    const searchinput = this.searchinput()
     const r: string[] = []
-    if (this.searchinput.name) {
-      if (/^\d{6}$/.test(this.searchinput.name)) {
-        this.keysearch = this.searchinput.name
-        r.push("tickets.key=" + this.searchinput.name)
+    if (searchinput.name) {
+      if (/^\d{6}$/.test(searchinput.name)) {
+        this.keysearch.set(searchinput.name)
+        r.push("tickets.key=" + searchinput.name)
       } else {
-        r.push("name:like:" + this.searchinput.name + "%")
+        r.push("name:like:" + searchinput.name + "%")
       }
     }
 
-    if (this.searchinput.id) {
-      const x = this.searchinput.id.length > 8 ? "order_text_id" : "id"
-      r.push(x + "=" + this.searchinput.id)
+    if (searchinput.id) {
+      const x = searchinput.id.length > 8 ? "order_text_id" : "id"
+      r.push(x + "=" + searchinput.id)
     }
 
     for (const x of ["email", "phone"] as const) {
-      if (this.searchinput[x]) {
-        r.push(x + ":like:" + this.searchinput[x] + "%")
+      if (searchinput[x]) {
+        r.push(x + ":like:" + searchinput[x] + "%")
       }
     }
 
@@ -281,23 +270,23 @@ export class AdminEventCheckinComponent implements OnInit, OnChanges {
   }
 
   private resetSearchInput() {
-    this.keysearch = ""
+    this.keysearch.set("")
     this.keysearchlast = ""
-    this.keyok = undefined
-    this.keyticket = undefined
-    this.searchinput = structuredClone(searchinputInit)
+    this.keyok.set(undefined)
+    this.keyticket.set(undefined)
+    this.searchinput.set(structuredClone(searchinputInit))
   }
 
   #loadTickets() {
-    this.ticketsLoading = true
-    this.orders = undefined
-    this.ordersLoading = false
+    this.ticketsLoading.set(true)
+    this.orders.set(undefined)
+    this.ordersLoading.set(false)
     this.resetSearchInput()
 
-    this.adminEventCheckinService.getAllTickets(this.event!.id).subscribe({
+    this.adminEventCheckinService.getAllTickets(Number(this.id())).subscribe({
       next: (data) => {
-        this.tickets = this.parseTicketsList(data)
-        this.ticketsLoading = false
+        this.tickets.set(this.parseTicketsList(data))
+        this.ticketsLoading.set(false)
       },
       error: toastErrorHandler(
         this.toastService,
@@ -330,23 +319,8 @@ export class AdminEventCheckinComponent implements OnInit, OnChanges {
     return orders
   }
 
-  #loadLastUsedTickets() {
-    this.lastUsedTicketsLoading = true
-    this.adminEventCheckinService.getLastUsedTickets(this.event!.id).subscribe({
-      next: (data) => {
-        console.log(data)
-        this.lastUsedTicketsLoading = false
-        this.lastUsedTickets = data.result
-      },
-      error: toastErrorHandler(
-        this.toastService,
-        "Feil ved lasting av siste innsjekkede billetter",
-      ),
-    })
-  }
-
   #performCheckin(ticket: ApiTicketAdmin, isCheckin: boolean) {
-    this.ticketsWorking.add(ticket.id)
+    this.ticketsWorking.update((ids) => [...ids, ticket.id])
 
     const operation = isCheckin
       ? this.adminEventCheckinService.checkin(ticket.id)
@@ -354,15 +328,17 @@ export class AdminEventCheckinComponent implements OnInit, OnChanges {
 
     operation.subscribe({
       next: (data) => {
-        this.ticketsWorking.delete(ticket.id)
         const toUpdate = this.ticketsById[ticket.id] || ticket
         Object.assign(toUpdate, data)
+        this.ticketsWorking.update((ids) =>
+          ids.filter((id) => id !== ticket.id),
+        )
 
         // event checkin information will be changed, reload it
         this.#reloadEvent()
 
         // list of last checked in tickets are probably changed, reload it
-        this.#loadLastUsedTickets()
+        this.lastUsedTicketsResource.reload()
       },
       error: toastErrorHandler(
         this.toastService,
