@@ -193,6 +193,18 @@ test.describe("render", { tag: "@render" }, () => {
       await expectLoaded(page)
     })
 
+    test("paymentgroup toggles details and saves edit", async ({ page }) => {
+      await page.goto("/a/paymentgroup/1")
+
+      await page.getByRole("button", { name: "Vis detaljer" }).click()
+      await expect(page.getByRole("button", { name: "Skjul detaljer" })).toBeVisible()
+
+      await page.getByRole("button", { name: "Rediger" }).click()
+      await expect(page.locator("#title")).toHaveValue(PAYMENTGROUP_TITLE)
+      await page.getByRole("button", { name: "Oppdater" }).click()
+      await expect(page.locator("#title")).toBeHidden()
+    })
+
     test("paymentgroup list renders", async ({ page }) => {
       await page.goto("/a/eventgroup/1/paymentgroups")
 
