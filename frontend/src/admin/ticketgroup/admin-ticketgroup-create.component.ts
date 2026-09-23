@@ -1,22 +1,11 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  Input,
-  OnChanges,
-  SimpleChanges,
-} from "@angular/core"
+import { Component, inject, input } from "@angular/core"
+import { rxResource } from "@angular/core/rxjs-interop"
 import { FormsModule } from "@angular/forms"
 import { Router, RouterLink } from "@angular/router"
-import { ApiEventAdmin, ApiEventgroupAdmin } from "../../apitypes"
 import { toastErrorHandler } from "../../common/errors"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
-import {
-  handleResourceLoadingStates,
-  ResourceLoadingState,
-} from "../../common/resource-loading"
 import { ToastService } from "../../common/toast.service"
 import { AdminEventService } from "../event/admin-event.service"
 import { AdminTicketgroupService } from "./admin-ticketgroup.service"
@@ -31,22 +20,20 @@ import { AdminTicketgroupService } from "./admin-ticketgroup.service"
     RouterLink,
     PageStatesComponent,
   ],
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-ticketgroup-create.component.html",
 })
-export class AdminTicketgroupCreateComponent implements OnChanges {
+export class AdminTicketgroupCreateComponent {
   private adminTicketgroupService = inject(AdminTicketgroupService)
   private adminEventService = inject(AdminEventService)
   private router = inject(Router)
   private toastService = inject(ToastService)
 
-  @Input()
-  eventId!: string
+  eventId = input.required<string>()
 
-  event?: ApiEventAdmin & {
-    eventgroup: ApiEventgroupAdmin
-  }
+  eventResource = rxResource({
+    params: () => this.eventId(),
+    stream: ({ params }) => this.adminEventService.get(params),
+  })
 
   form = {
     title: "",
@@ -59,29 +46,17 @@ export class AdminTicketgroupCreateComponent implements OnChanges {
     is_normal: true,
   }
 
-  pageState = new ResourceLoadingState()
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes["eventId"]) {
-      this.adminEventService
-        .get(this.eventId)
-        .pipe(handleResourceLoadingStates(this.pageState))
-        .subscribe((data) => {
-          this.event = data
-        })
-    }
-  }
-
   submit() {
+    const eventId = this.eventResource.value()!.id
     this.adminTicketgroupService
       .create({
-        event_id: this.event!.id,
+        event_id: eventId,
         ...this.form,
         fee: this.form.fee ?? 0,
       })
       .subscribe({
         next: () => {
-          void this.router.navigateByUrl(`/a/event/${this.event!.id}`)
+          void this.router.navigateByUrl(`/a/event/${eventId}`)
         },
         error: toastErrorHandler(this.toastService),
       })
