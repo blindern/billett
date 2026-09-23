@@ -128,14 +128,15 @@
                 id="title"
                 name="title"
                 placeholder=""
-                ngxTypeahead
-                [taList]="titleTemplates"
-                [taAllowEmpty]="true"
-                [taDisplayOnFocus]="true"
-                (taSelected)="title = $event"
+                list="title-templates"
                 required=""
                 autofocus=""
               />
+              <datalist id="title-templates">
+                @for (template of titleTemplates; track template) {
+                  <option [value]="template"></option>
+                }
+              </datalist>
             </div>
           </div>
           <div class="form-group">

@@ -6,7 +6,6 @@ import {
   Inject,
 } from "@angular/core"
 import { FormsModule } from "@angular/forms"
-import { NgxTypeAheadComponent } from "ngx-typeahead"
 import { finalize } from "rxjs"
 import {
   ApiEventgroupAdmin,
@@ -29,12 +28,7 @@ export type AdminPaymentsourceCreateModalResult = ApiPaymentsourceAdmin
 @Component({
   selector: "billett-admin-paymentsource-create-modal",
   standalone: true,
-  imports: [
-    PagePropertyComponent,
-    PricePipe,
-    FormsModule,
-    NgxTypeAheadComponent,
-  ],
+  imports: [PagePropertyComponent, PricePipe, FormsModule],
   // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-paymentsource-create-modal.component.html",
