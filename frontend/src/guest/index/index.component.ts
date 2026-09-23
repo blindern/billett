@@ -25,11 +25,11 @@ export class GuestIndexComponent {
 
   getErrorText = getErrorText
 
-  upcoming = rxResource({
+  upcomingResource = rxResource({
     stream: () => this.http.get<UpcomingItem[]>(api("event/get_upcoming")),
   })
 
-  eventgroups = rxResource({
+  eventgroupsResource = rxResource({
     stream: () => this.eventgroupService.getList(),
   })
 }

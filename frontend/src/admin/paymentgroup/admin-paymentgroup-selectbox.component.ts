@@ -24,7 +24,7 @@ export class AdminPaymentgroupSelectboxComponent {
   eventgroupId = input.required<number>()
   paymentgroup = model<ApiPaymentgroupAdmin>()
 
-  paymentgroups = rxResource({
+  paymentgroupsResource = rxResource({
     params: () => this.eventgroupId(),
     stream: ({ params }) =>
       this.adminPaymentgroupService.listValid(params).pipe(
@@ -45,14 +45,19 @@ export class AdminPaymentgroupSelectboxComponent {
       eventgroupId: this.eventgroupId(),
     }).closed.subscribe((paymentgroup) => {
       if (paymentgroup) {
-        this.paymentgroups.update((list) => [...(list ?? []), paymentgroup])
+        this.paymentgroupsResource.update((list) => [
+          ...(list ?? []),
+          paymentgroup,
+        ])
         this.select(paymentgroup.id)
       }
     })
   }
 
   select(id: number | "") {
-    const paymentgroup = this.paymentgroups.value()?.find((it) => it.id === id)
+    const paymentgroup = this.paymentgroupsResource
+      .value()
+      ?.find((it) => it.id === id)
     this.paymentgroup.set(paymentgroup)
     this.adminPaymentgroupService.setPreferredGroup(paymentgroup)
   }

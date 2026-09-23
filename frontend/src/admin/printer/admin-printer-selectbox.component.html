@@ -1,9 +1,9 @@
-@if (printers.isLoading()) {
+@if (printersResource.isLoading()) {
   <div class="form-control-static">Laster skrivere ...</div>
-} @else if (printers.error()) {
-  <div class="form-control-static">Feil: {{ getErrorText(printers.error()) }}</div>
-} @else if (printers.hasValue()) {
-  @if (printers.value().length === 0) {
+} @else if (printersResource.error()) {
+  <div class="form-control-static">Feil: {{ getErrorText(printersResource.error()) }}</div>
+} @else if (printersResource.hasValue()) {
+  @if (printersResource.value().length === 0) {
     <div class="form-control-static">Ingen skrivere er tilgjengelig</div>
   } @else {
     <select
@@ -18,7 +18,7 @@
           {{ canDisable() ? "Ikke skriv ut" : "Velg ..." }}
         </option>
       }
-      @for (p of printers.value(); track p.name) {
+      @for (p of printersResource.value(); track p.name) {
         <option [value]="p.name">
           {{ p.name }} ({{ p.ip || "IKKE TILGJENGELIG" }}:{{ p.port }}, oppe {{ getUptime(p) }} min)
         </option>

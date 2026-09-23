@@ -1,10 +1,10 @@
-@if (receipt.error()) {
-  <p>Feil: {{ getErrorText(receipt.error()) }}</p>
-} @else if (!receipt.hasValue()) {
+@if (receiptResource.error()) {
+  <p>Feil: {{ getErrorText(receiptResource.error()) }}</p>
+} @else if (!receiptResource.hasValue()) {
   <p>Vennligst vent...</p>
 } @else {
-  @let order = receipt.value().order;
-  @let payment = receipt.value().payment;
+  @let order = receiptResource.value().order;
+  @let payment = receiptResource.value().payment;
   @if (payment.status === "ACCEPTED") {
     <billett-page-property name="title" value="Kvittering" />
   } @else {

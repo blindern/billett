@@ -34,7 +34,7 @@ export class GuestEventgroupComponent {
   id = input.required<string>()
   query = input<string>()
 
-  eventgroup = rxResource({
+  eventgroupResource = rxResource({
     params: () => this.id(),
     stream: ({ params }) => this.eventgroupService.get(params),
   })
@@ -50,9 +50,9 @@ export class GuestEventgroupComponent {
 
   days = computed(() => {
     const days: Record<string, ApiEvent[]> = {}
-    if (!this.eventgroup.hasValue()) return days
+    if (!this.eventgroupResource.hasValue()) return days
     const filter = this.filter()
-    for (const item of this.eventgroup.value().events) {
+    for (const item of this.eventgroupResource.value().events) {
       if (
         filter?.category &&
         filter.category != (item.category ?? "").toLowerCase()
@@ -69,7 +69,7 @@ export class GuestEventgroupComponent {
 
   daythemes = computed(() =>
     Object.fromEntries(
-      (this.eventgroup.value()?.daythemes ?? []).map((item) => [
+      (this.eventgroupResource.value()?.daythemes ?? []).map((item) => [
         moment.unix(item.date).format("YYYY-MM-DD"),
         item.title,
       ]),
@@ -79,12 +79,12 @@ export class GuestEventgroupComponent {
   constructor() {
     effect(() => {
       if (
-        this.eventgroup.hasValue() &&
+        this.eventgroupResource.hasValue() &&
         this.filter() &&
         Object.keys(this.days()).length === 0
       ) {
         void this.router.navigateByUrl(
-          "eventgroup/" + this.eventgroup.value().id,
+          "eventgroup/" + this.eventgroupResource.value().id,
         )
       }
     })

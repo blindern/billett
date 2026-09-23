@@ -33,7 +33,7 @@ export class GuestOrderComponent {
 
   getErrorText = getErrorText
 
-  receipt = rxResource({
+  receiptResource = rxResource({
     stream: () =>
       this.http.get<{ order: Order; payment: ApiPayment }>(
         api("order/receipt"),

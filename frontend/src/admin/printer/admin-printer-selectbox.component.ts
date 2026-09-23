@@ -21,7 +21,7 @@ export class AdminPrinterSelectboxComponent {
   printer = model<ApiPrinterAdmin>()
   canDisable = input(false)
 
-  printers = rxResource({
+  printersResource = rxResource({
     stream: () =>
       this.adminPrinterService.getList().pipe(
         tap((printers) => {
@@ -41,7 +41,9 @@ export class AdminPrinterSelectboxComponent {
   }
 
   select(name: string) {
-    const printer = this.printers.value()?.find((it) => it.name === name)
+    const printer = this.printersResource
+      .value()
+      ?.find((it) => it.name === name)
     this.printer.set(printer)
     this.adminPrinterService.setPreferred(printer)
   }

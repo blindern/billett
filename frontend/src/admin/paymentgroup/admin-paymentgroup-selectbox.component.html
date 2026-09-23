@@ -1,8 +1,8 @@
-@if (paymentgroups.isLoading()) {
+@if (paymentgroupsResource.isLoading()) {
   <div class="form-control-static">Laster oppgjørsgrupper ...</div>
-} @else if (paymentgroups.error()) {
-  <div class="form-control-static">Feil: {{ getErrorText(paymentgroups.error()) }}</div>
-} @else if (paymentgroups.hasValue()) {
+} @else if (paymentgroupsResource.error()) {
+  <div class="form-control-static">Feil: {{ getErrorText(paymentgroupsResource.error()) }}</div>
+} @else if (paymentgroupsResource.hasValue()) {
   <select
     class="form-control"
     [ngModel]="paymentgroup()?.id ?? ''"
@@ -12,7 +12,7 @@
     @if (!paymentgroup()) {
       <option value="">Velg ...</option>
     }
-    @for (g of paymentgroups.value(); track g.id) {
+    @for (g of paymentgroupsResource.value(); track g.id) {
       <option [ngValue]="g.id">
         {{ g.time_start | formatdate: "DD.MM.YYYY HH:mm" }} ({{ g.user_created }}): {{ g.title }}
       </option>

@@ -6,26 +6,26 @@
 
 <h2>Kommende arrangementer</h2>
 
-@if (upcoming.error()) {
-  <p>Feil: {{ getErrorText(upcoming.error()) }}</p>
-} @else if (!upcoming.hasValue()) {
+@if (upcomingResource.error()) {
+  <p>Feil: {{ getErrorText(upcomingResource.error()) }}</p>
+} @else if (!upcomingResource.hasValue()) {
   <p>Laster data..</p>
-} @else if (upcoming.value().length === 0) {
+} @else if (upcomingResource.value().length === 0) {
   <p>Ingen arrangementer ble funnet.</p>
 } @else {
-  @for (event of upcoming.value(); track event.id) {
+  @for (event of upcomingResource.value(); track event.id) {
     <billett-eventlist-item [event]="event" [eventgroup]="event.eventgroup" [isUpcoming]="true" />
   }
 }
 
 <h2>Arrangementgrupper</h2>
-@if (eventgroups.error()) {
-  <p>Feil: {{ getErrorText(eventgroups.error()) }}</p>
-} @else if (!eventgroups.hasValue()) {
+@if (eventgroupsResource.error()) {
+  <p>Feil: {{ getErrorText(eventgroupsResource.error()) }}</p>
+} @else if (!eventgroupsResource.hasValue()) {
   <p>Laster data..</p>
 } @else {
   <ul>
-    @for (group of eventgroups.value(); track group.id) {
+    @for (group of eventgroupsResource.value(); track group.id) {
       <li>
         <a routerLink="/eventgroup/{{ group.id }}">{{ group.title }}</a>
       </li>
