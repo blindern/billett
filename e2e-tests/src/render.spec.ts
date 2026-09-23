@@ -100,6 +100,8 @@ test.describe("render", { tag: "@render" }, () => {
 
     for (const [path, heading] of [
       ["/a", "Administrasjon"],
+      ["/a/eventgroup/1", EVENTGROUP_TITLE],
+      ["/a/event/1", EVENT_TITLE],
       ["/a/eventgroup/1/edit", EVENTGROUP_TITLE],
       ["/a/eventgroup/1/new_event", "Nytt arrangement"],
       ["/a/eventgroup/1/new_daytheme", `Ny temadag for ${EVENTGROUP_TITLE}`],
