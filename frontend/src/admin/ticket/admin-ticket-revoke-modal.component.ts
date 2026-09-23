@@ -1,10 +1,5 @@
 import { Dialog, DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  Inject,
-} from "@angular/core"
+import { Component, inject, signal } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { RouterLink } from "@angular/router"
 import { finalize } from "rxjs"
@@ -47,8 +42,6 @@ export interface AdminTicketRevokeModalResult {
     PricePipe,
     AdminPaymentgroupSelectboxComponent,
   ],
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-ticket-revoke-modal.component.html",
 })
 export class AdminTicketRevokeModal {
@@ -61,26 +54,23 @@ export class AdminTicketRevokeModal {
     })
   }
 
-  constructor(
-    @Inject(DIALOG_DATA)
-    public data: AdminTicketRevokeModalInput,
-  ) {}
+  data = inject<AdminTicketRevokeModalInput>(DIALOG_DATA)
 
   private dialogRef = inject(DialogRef<AdminTicketRevokeModalResult>)
   private adminTicketService = inject(AdminTicketService)
   private toastService = inject(ToastService)
 
-  sending = false
+  sending = signal(false)
 
-  paymentgroup?: ApiPaymentgroupAdmin
+  paymentgroup = signal<ApiPaymentgroupAdmin | undefined>(undefined)
 
   submit() {
-    this.sending = true
+    this.sending.set(true)
     this.adminTicketService
-      .revoke(this.data.ticket.id, this.paymentgroup!.id)
+      .revoke(this.data.ticket.id, this.paymentgroup()!.id)
       .pipe(
         finalize(() => {
-          this.sending = false
+          this.sending.set(false)
         }),
       )
       .subscribe({

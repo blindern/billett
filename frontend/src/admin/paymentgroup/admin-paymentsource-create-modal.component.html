@@ -28,9 +28,9 @@
   <h3 class="modal-title">Registrer ny betalingskilde</h3>
 </div>
 
-@if (sending) {
+@if (sending()) {
   <div class="modal-body text-center">Registrerer data ...</div>
-} @else if (evaluate) {
+} @else if (evaluate()) {
   <div class="modal-body">
     @if (!type) {
       <div class="row text-center">

@@ -1,11 +1,5 @@
 import { Dialog, DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  Inject,
-  OnInit,
-} from "@angular/core"
+import { Component, inject, OnInit, signal } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { finalize } from "rxjs"
 import {
@@ -31,8 +25,6 @@ export type AdminPaymentCreateModalResult = ApiPaymentAdmin
   selector: "billett-admin-payment-create-modal",
   standalone: true,
   imports: [FormsModule, AdminPaymentgroupSelectboxComponent],
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-payment-create-modal.component.html",
 })
 export class AdminPaymentCreateModal implements OnInit {
@@ -45,18 +37,15 @@ export class AdminPaymentCreateModal implements OnInit {
     })
   }
 
-  constructor(
-    @Inject(DIALOG_DATA)
-    public data: AdminPaymentCreateModalInput,
-  ) {}
+  data = inject<AdminPaymentCreateModalInput>(DIALOG_DATA)
 
   private dialogRef = inject(DialogRef<AdminPaymentCreateModalResult>)
   private adminPaymentService = inject(AdminPaymentService)
   private toastService = inject(ToastService)
 
-  sending = false
+  sending = signal(false)
 
-  paymentgroup?: ApiPaymentgroupAdmin
+  paymentgroup = signal<ApiPaymentgroupAdmin | undefined>(undefined)
   amount = 0
 
   ngOnInit(): void {
@@ -64,16 +53,16 @@ export class AdminPaymentCreateModal implements OnInit {
   }
 
   submit() {
-    this.sending = true
+    this.sending.set(true)
     this.adminPaymentService
       .create({
         order: this.data.order,
-        paymentgroup: this.paymentgroup!,
+        paymentgroup: this.paymentgroup()!,
         amount: this.amount,
       })
       .pipe(
         finalize(() => {
-          this.sending = false
+          this.sending.set(false)
         }),
       )
       .subscribe({

@@ -1,10 +1,5 @@
 import { Dialog, DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  Inject,
-} from "@angular/core"
+import { Component, inject, signal } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { finalize, Observable } from "rxjs"
 import { ApiPaymentgroupAdmin } from "../../apitypes"
@@ -22,8 +17,6 @@ export interface AdminPaymentgroupSelectModalInput {
   selector: "billett-admin-paymentgroup-select-modal",
   standalone: true,
   imports: [AdminPaymentgroupSelectboxComponent, PricePipe, FormsModule],
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-paymentgroup-select-modal.component.html",
 })
 export class AdminPaymentgroupSelectModal {
@@ -36,23 +29,20 @@ export class AdminPaymentgroupSelectModal {
     )
   }
 
-  constructor(
-    @Inject(DIALOG_DATA)
-    public data: AdminPaymentgroupSelectModalInput,
-  ) {}
+  data = inject<AdminPaymentgroupSelectModalInput>(DIALOG_DATA)
 
   private dialogRef = inject(DialogRef)
 
-  handling = false
-  paymentgroup?: ApiPaymentgroupAdmin
+  handling = signal(false)
+  paymentgroup = signal<ApiPaymentgroupAdmin | undefined>(undefined)
 
   complete() {
-    this.handling = true
+    this.handling.set(true)
     this.data
-      .handler(this.paymentgroup!)
+      .handler(this.paymentgroup()!)
       .pipe(
         finalize(() => {
-          this.handling = false
+          this.handling.set(false)
         }),
       )
       .subscribe(() => {

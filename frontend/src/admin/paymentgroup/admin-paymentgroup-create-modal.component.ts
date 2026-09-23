@@ -1,10 +1,5 @@
 import { Dialog, DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  Inject,
-} from "@angular/core"
+import { Component, inject, signal } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { finalize } from "rxjs"
 import { ApiPaymentgroupAdmin } from "../../apitypes"
@@ -23,8 +18,6 @@ export type AdminPaymentgroupCreateModalResult = ApiPaymentgroupAdmin
   selector: "billett-admin-paymentgroup-create-modal",
   standalone: true,
   imports: [PagePropertyComponent, FormsModule],
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-paymentgroup-create-modal.component.html",
 })
 export class AdminPaymentgroupCreateModal {
@@ -37,22 +30,19 @@ export class AdminPaymentgroupCreateModal {
     })
   }
 
-  constructor(
-    @Inject(DIALOG_DATA)
-    public data: AdminPaymentgroupCreateModalInput,
-  ) {}
+  data = inject<AdminPaymentgroupCreateModalInput>(DIALOG_DATA)
 
   private dialogRef = inject(DialogRef<AdminPaymentgroupCreateModalResult>)
   private adminPaymentgroupService = inject(AdminPaymentgroupService)
   private toastService = inject(ToastService)
 
-  sending = false
+  sending = signal(false)
 
   title = ""
   description = ""
 
   complete() {
-    this.sending = true
+    this.sending.set(true)
     this.adminPaymentgroupService
       .create({
         eventgroup_id: this.data.eventgroupId,
@@ -61,12 +51,12 @@ export class AdminPaymentgroupCreateModal {
       })
       .pipe(
         finalize(() => {
-          this.sending = false
+          this.sending.set(false)
         }),
       )
       .subscribe({
         next: (paymentgroup) => {
-          this.sending = false
+          this.sending.set(false)
           this.dialogRef.close(paymentgroup)
         },
         error: toastErrorHandler(this.toastService),

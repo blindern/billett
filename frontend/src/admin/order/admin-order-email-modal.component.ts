@@ -1,10 +1,5 @@
 import { Dialog, DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  Inject,
-} from "@angular/core"
+import { Component, inject, signal } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { finalize } from "rxjs"
 import { ApiEventgroupAdmin, ApiOrderAdmin } from "../../apitypes"
@@ -26,8 +21,6 @@ export interface AdminOrderEmailModalResult {
   selector: "billett-admin-order-email-modal",
   standalone: true,
   imports: [FormsModule],
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-order-email-modal.component.html",
 })
 export class AdminOrderEmailModal {
@@ -40,22 +33,19 @@ export class AdminOrderEmailModal {
     )
   }
 
-  constructor(
-    @Inject(DIALOG_DATA)
-    public data: AdminOrderEmailModalInput,
-  ) {}
+  data = inject<AdminOrderEmailModalInput>(DIALOG_DATA)
 
   private dialogRef = inject(DialogRef<AdminOrderEmailModalResult>)
   private adminOrderService = inject(AdminOrderService)
   private toastService = inject(ToastService)
 
-  sending = false
+  sending = signal(false)
 
   email = ""
   text = ""
 
   submit() {
-    this.sending = true
+    this.sending.set(true)
     this.adminOrderService
       .sendEmail({
         orderId: this.data.order.id,
@@ -64,7 +54,7 @@ export class AdminOrderEmailModal {
       })
       .pipe(
         finalize(() => {
-          this.sending = false
+          this.sending.set(false)
         }),
       )
       .subscribe({

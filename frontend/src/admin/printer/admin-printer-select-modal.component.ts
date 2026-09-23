@@ -1,10 +1,5 @@
 import { Dialog, DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  Inject,
-} from "@angular/core"
+import { Component, inject, signal } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { finalize, Observable } from "rxjs"
 import { ApiPrinterAdmin } from "../../apitypes"
@@ -22,8 +17,6 @@ export interface AdminPrinterSelectModalResult {
   selector: "billett-admin-printer-select-modal",
   standalone: true,
   imports: [AdminPrinterSelectboxComponent, FormsModule],
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-printer-select-modal.component.html",
 })
 export class AdminPrinterSelectModal {
@@ -36,23 +29,20 @@ export class AdminPrinterSelectModal {
     })
   }
 
-  constructor(
-    @Inject(DIALOG_DATA)
-    public data: AdminPrinterSelectModalInput,
-  ) {}
+  data = inject<AdminPrinterSelectModalInput>(DIALOG_DATA)
 
   private dialogRef = inject(DialogRef<AdminPrinterSelectModalResult>)
 
-  sending = false
-  printer?: ApiPrinterAdmin
+  sending = signal(false)
+  printer = signal<ApiPrinterAdmin | undefined>(undefined)
 
   complete() {
-    this.sending = true
+    this.sending.set(true)
     this.data
-      .handler(this.printer!)
+      .handler(this.printer()!)
       .pipe(
         finalize(() => {
-          this.sending = false
+          this.sending.set(false)
         }),
       )
       .subscribe(() => {

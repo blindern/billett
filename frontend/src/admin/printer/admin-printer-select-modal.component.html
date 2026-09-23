@@ -9,12 +9,12 @@
         <billett-admin-printer-selectbox [(printer)]="printer" id="printer" />
       </div>
     </div>
-    @if (sending) {
+    @if (sending()) {
       <p class="text-center">Sender data til utskrift ...</p>
     } @else {
       <div class="row">
         <div class="col-sm-7 col-sm-offset-4">
-          <button class="btn btn-success" type="submit" [disabled]="!printer">Skriv ut</button>
+          <button class="btn btn-success" type="submit" [disabled]="!printer()">Skriv ut</button>
           <button class="btn btn-link" type="button" (click)="cancel()">Avbryt</button>
         </div>
       </div>

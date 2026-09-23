@@ -1,10 +1,5 @@
 import { Dialog, DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  Inject,
-} from "@angular/core"
+import { Component, inject, signal } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { finalize } from "rxjs"
 import {
@@ -29,8 +24,6 @@ export type AdminPaymentsourceCreateModalResult = ApiPaymentsourceAdmin
   selector: "billett-admin-paymentsource-create-modal",
   standalone: true,
   imports: [PagePropertyComponent, PricePipe, FormsModule],
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-paymentsource-create-modal.component.html",
 })
 export class AdminPaymentsourceCreateModal {
@@ -43,10 +36,9 @@ export class AdminPaymentsourceCreateModal {
     })
   }
 
-  constructor(
-    @Inject(DIALOG_DATA)
-    private data: AdminPaymentsourceCreateModalInput,
-  ) {
+  data = inject<AdminPaymentsourceCreateModalInput>(DIALOG_DATA)
+
+  constructor() {
     void this.loadMathjs()
   }
 
@@ -54,11 +46,11 @@ export class AdminPaymentsourceCreateModal {
   private toastService = inject(ToastService)
   private dialogRef = inject(DialogRef<AdminPaymentsourceCreateModalResult>)
 
-  evaluate?: (value: string) => number
+  evaluate = signal<((value: string) => number) | undefined>(undefined)
 
   private _type: "" | "cash" | "other" = ""
 
-  sending = false
+  sending = signal(false)
 
   multiply = 1
   cashitems = [1, 5, 10, 20, 50, 100, 200, 500, 1000]
@@ -73,7 +65,7 @@ export class AdminPaymentsourceCreateModal {
 
   private async loadMathjs() {
     const { evaluate } = await import("mathjs")
-    this.evaluate = evaluate
+    this.evaluate.set(evaluate)
   }
 
   complete() {
@@ -81,7 +73,7 @@ export class AdminPaymentsourceCreateModal {
       return
     }
 
-    this.sending = true
+    this.sending.set(true)
     this.adminPaymentsourceService
       .create({
         paymentgroup_id: this.data.paymentgroup.id,
@@ -93,12 +85,12 @@ export class AdminPaymentsourceCreateModal {
       })
       .pipe(
         finalize(() => {
-          this.sending = false
+          this.sending.set(false)
         }),
       )
       .subscribe({
         next: (paymentsource) => {
-          this.sending = false
+          this.sending.set(false)
           this.toastService.show("Registrering vellykket", { class: "success" })
           this.dialogRef.close(paymentsource)
         },
@@ -131,7 +123,7 @@ export class AdminPaymentsourceCreateModal {
     try {
       return this.otherText === ""
         ? 0
-        : this.evaluate!(this.otherText.replace(",", "."))
+        : this.evaluate()!(this.otherText.replace(",", "."))
     } catch {
       return NaN
     }
@@ -145,7 +137,7 @@ export class AdminPaymentsourceCreateModal {
       for (const [key, val] of Object.entries(this.cashTexts)) {
         if (val === "") continue
         try {
-          this.cashParsedNumbers[key] = this.evaluate!(val.replace(",", "."))
+          this.cashParsedNumbers[key] = this.evaluate()!(val.replace(",", "."))
         } catch {
           this.cashParsedNumbers[key] = NaN
         }

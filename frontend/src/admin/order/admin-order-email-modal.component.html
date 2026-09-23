@@ -3,7 +3,7 @@
 </div>
 <div class="modal-body">
   <p>E-posten som sendes inneholder ordredetaljer, billettinformasjon, betalingsoversikt og billetter i PDF.</p>
-  @if (sending) {
+  @if (sending()) {
     <div class="text-center">Sender e-post ...</div>
   } @else {
     <form class="form-horizontal" (ngSubmit)="submit()" ngNativeValidate>
