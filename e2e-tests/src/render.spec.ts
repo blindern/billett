@@ -47,6 +47,7 @@ test.describe("render", { tag: "@render" }, () => {
       await page.goto("/eventgroup/1")
 
       await expect(page.getByRole("heading", { name: EVENTGROUP_TITLE })).toBeVisible()
+      await expect(page).toHaveTitle(EVENTGROUP_TITLE)
       await expectLoaded(page)
     })
 
