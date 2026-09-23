@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from "@angular/core"
+import { Component, inject } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { Router, RouterLink } from "@angular/router"
 import { toastErrorHandler } from "../../common/errors"
@@ -10,8 +10,6 @@ import { AdminEventgroupService } from "./admin-eventgroup.service"
   selector: "billett-admin-eventgroup-create",
   standalone: true,
   imports: [FormsModule, PagePropertyComponent, RouterLink],
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-eventgroup-create.component.html",
 })
 export class AdminEventgroupCreateComponent {
