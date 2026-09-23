@@ -166,12 +166,11 @@ override, so tests must not set one.
    tests still runs them. **Caveat:** on `main` this workflow also builds, pushes the image and
    POSTs to the deployer — so as written, a test-only commit would redeploy production. Guard the
    build/deploy steps with a path filter, or accept the redeploy deliberately.
-2. `.github/workflows/frontend.yml`: run the render tests after `pnpm run build`, with
-   `RENDER_SERVER=1` and `BASE_URL=http://localhost:4200`. Prefer **extending the existing
-   reusable `run-e2e-tests.yml`** with a `serve-local` input over pasting a third copy of the
-   pnpm/node/`playwright install` setup — `frontend.yml` already calls that workflow for
-   `@frontend`. Note the job sets `defaults.run.working-directory: frontend`, so any inline steps
-   need their own `working-directory`.
+2. `.github/workflows/frontend.yml`: run the render tests inline in the `frontend` job after
+   `pnpm run build`, with `RENDER_SERVER=1`, `BASE_URL=http://localhost:4200` and
+   `--retries 0`. The config's `retries: 3` suits the flaky production monitor but turns a
+   deterministic render failure into a ~12-minute run. The job sets
+   `defaults.run.working-directory: frontend`, so the e2e steps set their own.
 3. `.github/workflows/e2e-tests.yml`: this is the **hourly production monitor** (cron
    `35 5-22 * * *`, `BASE_URL` defaulting to `https://billett.blindernuka.no`, Slack alert on
    failure). Its step is `pnpm test`, which is `playwright test` with no `--grep`, so it would
@@ -179,8 +178,8 @@ override, so tests must not set one.
    Change **the workflow step** to `pnpm exec playwright test --grep-invert @render` — do not
    edit the `test` script in `package.json`, which local development also uses.
 
-`frontend.yml` has no `pull_request` trigger — it is `push` + `workflow_dispatch`. Decide whether
-to add one or rely on push-to-branch. "Runs pre-merge on every PR" is not true today.
+`frontend.yml` has no `pull_request` trigger — it is `push` + `workflow_dispatch`, so the suite
+runs pre-merge via push-to-branch.
 
 **Ratchet.** This lands 46 `eslint-disable` comments plus the `eslint.config.js` flip — a
 47-file frontend diff on top of the test work. Keep it as its own commit, or its own PR, so the
@@ -191,14 +190,14 @@ and add a **rule-scoped** disable to each of the 46 — never a bare `eslint-dis
 switch off every rule for that file:
 
 ```ts
-/* eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection */
+// eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 changeDetection: ChangeDetectionStrategy.Eager,
 ```
  This only bites if lint also fails on
-warnings: change `frontend/package.json`'s `"lint": "eslint ."` to `eslint . --max-warnings 0`,
-or set `linterOptions.reportUnusedDisableDirectives: "error"` in `eslint.config.js`. Without
-that, a component retaining both its `Eager` line and its disable comment lints clean forever,
-and orphaned directives never fail the build.
+warnings: `frontend/package.json`'s lint script is `eslint . --max-warnings 0`, which also
+fails on unused disable directives (reported as warnings by default). Without that, a component
+retaining both its `Eager` line and its disable comment lints clean forever, and orphaned
+directives never fail the build.
 
 **Screens.** Derive from the slice-2 list below rather than guessing. Minimum for slice 2 to
 proceed: `guest/eventgroup`, `guest/event`, `guest/order`, `guest/index`,
