@@ -1,24 +1,14 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  Input,
-  OnChanges,
-  SimpleChanges,
-} from "@angular/core"
+import { Component, inject, input } from "@angular/core"
+import { rxResource } from "@angular/core/rxjs-interop"
 import { Router, RouterLink } from "@angular/router"
 import { api } from "../../api"
 import { toastErrorHandler } from "../../common/errors"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
-import {
-  handleResourceLoadingStates,
-  ResourceLoadingState,
-} from "../../common/resource-loading"
 import { ToastService } from "../../common/toast.service"
 import { AdminEventFormComponent } from "./admin-event-form.component"
-import { AdminEventData, AdminEventService } from "./admin-event.service"
+import { AdminEventService } from "./admin-event.service"
 
 @Component({
   selector: "billett-admin-event-edit",
@@ -30,40 +20,29 @@ import { AdminEventData, AdminEventService } from "./admin-event.service"
     AdminEventFormComponent,
     FormatdatePipe,
   ],
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-event-edit.component.html",
 })
-export class AdminEventEditComponent implements OnChanges {
+export class AdminEventEditComponent {
   private adminEventService = inject(AdminEventService)
   private router = inject(Router)
   private toastService = inject(ToastService)
 
-  @Input()
-  id!: string
+  id = input.required<string>()
 
   api = api
 
-  pageState = new ResourceLoadingState()
-  event?: AdminEventData
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes["id"]) {
-      this.adminEventService
-        .get(this.id)
-        .pipe(handleResourceLoadingStates(this.pageState))
-        .subscribe((data) => {
-          this.event = data
-        })
-    }
-  }
+  eventResource = rxResource({
+    params: () => this.id(),
+    stream: ({ params }) => this.adminEventService.get(params),
+  })
 
   storeEvent() {
-    if (!this.event || isNaN(this.event.time_start)) return
+    const event = this.eventResource.value()
+    if (!event || isNaN(event.time_start)) return
 
-    this.adminEventService.update(this.event).subscribe({
+    this.adminEventService.update(event).subscribe({
       next: () => {
-        void this.router.navigateByUrl(`/a/event/${this.event!.id}`)
+        void this.router.navigateByUrl(`/a/event/${event.id}`)
       },
       error: toastErrorHandler(this.toastService),
     })
