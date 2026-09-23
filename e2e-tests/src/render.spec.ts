@@ -193,6 +193,17 @@ test.describe("render", { tag: "@render" }, () => {
       await expect(page.getByText("Ingen billetter er reservert.")).toBeVisible()
     })
 
+    test("order payment modal registers payment", async ({ page }) => {
+      await page.goto("/a/order/1")
+      await page.getByRole("button", { name: "Ny transaksjon" }).click()
+
+      const heading = page.getByRole("heading", { name: "Registrer transaksjon" })
+      await page.locator("select[name=selectedPaymentgroupId]").selectOption({ index: 1 })
+      await page.locator("input[name=amount]").fill("110")
+      await page.getByRole("button", { name: "Registrer" }).click()
+      await expect(heading).toBeHidden()
+    })
+
     test("order print modal resolves printers", async ({ page }) => {
       await page.goto("/a/order/1")
       await page.getByRole("button", { name: "Skriv ut billetter" }).click()
@@ -249,6 +260,17 @@ test.describe("render", { tag: "@render" }, () => {
       await expect(page.locator("#title")).toHaveValue(PAYMENTGROUP_TITLE)
       await page.getByRole("button", { name: "Oppdater" }).click()
       await expect(page.locator("#title")).toBeHidden()
+    })
+
+    test("paymentsource modal registers count", async ({ page }) => {
+      await page.goto("/a/paymentgroup/1")
+      await page.getByRole("button", { name: "Registrer opptelling" }).click()
+      await page.getByRole("button", { name: "Annen opptelling" }).first().click()
+
+      await page.locator("#title").fill("Kasse")
+      await page.locator("#other").fill("50+50")
+      await page.getByRole("button", { name: "Registrer", exact: true }).click()
+      await expect(page.getByText("Registrering vellykket")).toBeVisible()
     })
 
     test("paymentgroup list renders", async ({ page }) => {

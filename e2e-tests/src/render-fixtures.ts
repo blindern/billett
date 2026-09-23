@@ -346,6 +346,8 @@ const endpoints: Partial<Record<string, Handler>> = {
     paymentsources: [paymentsource],
   }),
   printer: () => [],
+  payment: () => payment,
+  paymentsource: () => paymentsource,
 }
 
 /**
