@@ -1,4 +1,4 @@
-import { CommonModule } from "@angular/common"
+import { NgClass } from "@angular/common"
 import { Component, inject, signal } from "@angular/core"
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop"
 import { FormsModule } from "@angular/forms"
@@ -38,7 +38,7 @@ const searchInit = {
     PaginationComponent,
     FormatdatePipe,
     PricePipe,
-    CommonModule,
+    NgClass,
   ],
   templateUrl: "./admin-order-list.component.html",
 })

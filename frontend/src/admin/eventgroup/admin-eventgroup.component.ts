@@ -1,4 +1,4 @@
-import { CommonModule } from "@angular/common"
+import { KeyValuePipe, NgClass } from "@angular/common"
 import { Component, computed, inject, input, signal } from "@angular/core"
 import { rxResource } from "@angular/core/rxjs-interop"
 import { FormsModule } from "@angular/forms"
@@ -23,7 +23,8 @@ import {
     PagePropertyComponent,
     RouterLink,
     FormsModule,
-    CommonModule,
+    KeyValuePipe,
+    NgClass,
     FormatdatePipe,
     PricePipe,
     PageStatesComponent,

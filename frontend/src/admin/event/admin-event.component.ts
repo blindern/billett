@@ -1,5 +1,5 @@
 import { Dialog } from "@angular/cdk/dialog"
-import { CommonModule } from "@angular/common"
+import { NgClass } from "@angular/common"
 import { Component, inject, input, signal } from "@angular/core"
 import { rxResource } from "@angular/core/rxjs-interop"
 import { FormsModule } from "@angular/forms"
@@ -27,7 +27,7 @@ import { AdminEventService } from "./admin-event.service"
     RouterLink,
     FormatdatePipe,
     PricePipe,
-    CommonModule,
+    NgClass,
     MarkdownComponent,
   ],
   templateUrl: "./admin-event.component.html",

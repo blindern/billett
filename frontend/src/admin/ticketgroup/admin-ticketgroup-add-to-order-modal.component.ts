@@ -1,6 +1,6 @@
 import { Dialog, DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
 import { NgClass } from "@angular/common"
-import { Component, computed, inject, Inject, signal } from "@angular/core"
+import { Component, computed, inject, signal } from "@angular/core"
 import { rxResource } from "@angular/core/rxjs-interop"
 import { FormsModule } from "@angular/forms"
 import { RouterLink } from "@angular/router"
@@ -38,10 +38,7 @@ export class AdminTicketgroupAddToOrderModal {
     })
   }
 
-  constructor(
-    @Inject(DIALOG_DATA)
-    public data: AdminTicketgroupAddToOrderModalInput,
-  ) {}
+  data = inject<AdminTicketgroupAddToOrderModalInput>(DIALOG_DATA)
 
   private dialogRef = inject(DialogRef<AdminTicketgroupAddToOrderModalResult>)
   private adminEventgroupService = inject(AdminEventgroupService)

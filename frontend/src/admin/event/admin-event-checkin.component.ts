@@ -1,4 +1,4 @@
-import { CommonModule } from "@angular/common"
+import { NgClass } from "@angular/common"
 import { Component, inject, input, signal } from "@angular/core"
 import { rxResource, takeUntilDestroyed } from "@angular/core/rxjs-interop"
 import { FormsModule } from "@angular/forms"
@@ -47,7 +47,7 @@ const searchinputInit = {
     RouterLink,
     FormatdatePipe,
     PricePipe,
-    CommonModule,
+    NgClass,
     FormsModule,
     PaginationComponent,
   ],
