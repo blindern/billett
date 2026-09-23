@@ -72,7 +72,12 @@ export class AdminOrderItemComponent {
   }
 
   refreshOrder() {
-    this.orderResource.reload()
+    this.adminOrderService.get(this.id()).subscribe({
+      next: (data) => {
+        this.orderResource.set(data)
+      },
+      error: toastErrorHandler(this.toastService, "Feil ved henting av ordre"),
+    })
   }
 
   get balance() {

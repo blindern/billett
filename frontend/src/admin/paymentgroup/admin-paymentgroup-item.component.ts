@@ -58,6 +58,15 @@ export class AdminPaymentgroupItemComponent {
       : undefined,
   )
 
+  #refresh() {
+    this.adminPaymentgroupService.get(this.id()).subscribe({
+      next: (paymentgroup) => {
+        this.paymentgroupResource.set(paymentgroup)
+      },
+      error: toastErrorHandler(this.toastService, "Feil ved oppdatering"),
+    })
+  }
+
   show_details = signal(false)
 
   edit = signal<{ title: string; description: string | null } | undefined>(
@@ -312,7 +321,7 @@ export class AdminPaymentgroupItemComponent {
     ) {
       this.adminPaymentgroupService.close(paymentgroup.id).subscribe({
         next: () => {
-          this.paymentgroupResource.reload()
+          this.#refresh()
         },
         error: toastErrorHandler(this.toastService),
       })
@@ -326,7 +335,7 @@ export class AdminPaymentgroupItemComponent {
       paymentgroup,
     }).closed.subscribe((paymentsource) => {
       if (paymentsource) {
-        this.paymentgroupResource.reload()
+        this.#refresh()
       }
     })
   }
@@ -342,7 +351,7 @@ export class AdminPaymentgroupItemComponent {
           this.toastService.show("Registeringen ble slettet", {
             class: "success",
           })
-          this.paymentgroupResource.reload()
+          this.#refresh()
         },
         error: toastErrorHandler(
           this.toastService,
