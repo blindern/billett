@@ -26,7 +26,7 @@ const auth = (isAdmin: boolean) => ({
     : null,
   is_admin: isAdmin,
   is_dev: false,
-  is_vipps_test: false,
+  is_vipps_test: true,
   csrf_token: "render-test-csrf",
 })
 
@@ -62,7 +62,7 @@ const event = {
   description_short: "Kort beskrivelse",
   link: null,
   age_restriction: null,
-  web_selling_status: "no_tickets",
+  web_selling_status: "sale",
 }
 
 const ticketCount = {
@@ -212,6 +212,13 @@ const paymentsource = {
   data: { "100": 1, "10": 1 },
 }
 
+const reservation = {
+  ...order,
+  id: 2,
+  is_valid: false,
+  tickets: [{ ...ticket, order_id: 2, event, ticketgroup }],
+}
+
 const paginated = <T>(result: T[]) => ({
   pagination: { offset: 0, limit: 20, total: result.length },
   result,
@@ -263,7 +270,7 @@ const endpoints: Partial<Record<string, Handler>> = {
           eventgroup: eventgroupAdmin,
           ticketgroups: [ticketgroupAdmin],
         }
-      : { ...event, eventgroup, ticketgroups: [] },
+      : { ...event, eventgroup, ticketgroups: [ticketgroup] },
   "ticketgroup/1": () => ({
     ...ticketgroupAdmin,
     event: { ...eventAdmin, eventgroup: eventgroupAdmin },
@@ -284,6 +291,9 @@ const endpoints: Partial<Record<string, Handler>> = {
     ],
     payments: [{ ...payment, paymentgroup: paymentgroupAdmin }],
   }),
+  "event/1/createreservation": () => reservation,
+  "order/2": () => reservation,
+  "order/2/force": () => ({}),
   "order/receipt": () => ({
     order: { ...order, tickets: [{ ...ticket, event, ticketgroup }] },
     payment,

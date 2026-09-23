@@ -66,6 +66,19 @@ test.describe("render", { tag: "@render" }, () => {
       await expectLoaded(page)
     })
 
+    test("event purchase reaches receipt", async ({ page }) => {
+      await page.goto("/event/1")
+      await page.locator(".ticketgroup button:has(.glyphicon-plus)").click()
+
+      await expect(page.locator(".ticketgroup .value")).toHaveText("1")
+      await expect(page.getByText("Totalt å betale")).toBeVisible()
+
+      await page.getByRole("button", { name: "Overstyr betaling" }).click()
+
+      await expect(page).toHaveURL(/\/order\/complete$/)
+      await expect(page.getByText(ORDER_TEXT_ID)).toBeVisible()
+    })
+
     test("missing eventgroup renders not-found, not a stuck spinner", async ({ page }) => {
       await page.goto("/eventgroup/999")
 
