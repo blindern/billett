@@ -1,36 +1,23 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  OnChanges,
-} from "@angular/core"
+import { Component, input, resource } from "@angular/core"
 
 @Component({
   selector: "billett-markdown",
   standalone: true,
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
-  template: `<div [innerHTML]="convertedData"></div>`,
+  template: `<div [innerHTML]="html.value()"></div>`,
 })
-export class MarkdownComponent implements OnChanges {
-  @Input()
-  data!: string | null
+export class MarkdownComponent {
+  data = input<string | null>()
 
-  convertedData?: string
-
-  async update() {
-    const [marked, DOMPurify] = await Promise.all([
-      import("marked"),
-      import("dompurify"),
-    ])
-
-    const md = marked.marked.setOptions({})
-    this.convertedData = DOMPurify.default.sanitize(
-      md.parse(this.data ?? "") as string,
-    )
-  }
-
-  ngOnChanges() {
-    void this.update()
-  }
+  html = resource({
+    params: () => this.data() ?? "",
+    loader: async ({ params }) => {
+      const [marked, DOMPurify] = await Promise.all([
+        import("marked"),
+        import("dompurify"),
+      ])
+      return DOMPurify.default.sanitize(
+        marked.marked.setOptions({}).parse(params) as string,
+      )
+    },
+  })
 }
