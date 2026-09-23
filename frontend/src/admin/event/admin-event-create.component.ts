@@ -1,21 +1,10 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  Input,
-  OnChanges,
-  SimpleChanges,
-} from "@angular/core"
+import { Component, inject, input } from "@angular/core"
+import { rxResource } from "@angular/core/rxjs-interop"
 import { Router, RouterLink } from "@angular/router"
 import { api } from "../../api"
-import { ApiEventgroupAdmin } from "../../apitypes"
 import { toastErrorHandler } from "../../common/errors"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
-import {
-  handleResourceLoadingStates,
-  ResourceLoadingState,
-} from "../../common/resource-loading"
 import { ToastService } from "../../common/toast.service"
 import { AdminEventgroupService } from "../eventgroup/admin-eventgroup.service"
 import { AdminEventFormComponent } from "./admin-event-form.component"
@@ -30,49 +19,41 @@ import { AdminEventCreateData, AdminEventService } from "./admin-event.service"
     AdminEventFormComponent,
     PagePropertyComponent,
   ],
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-event-create.component.html",
 })
-export class AdminEventCreateComponent implements OnChanges {
+export class AdminEventCreateComponent {
   private adminEventgroupService = inject(AdminEventgroupService)
   private adminEventService = inject(AdminEventService)
   private router = inject(Router)
   private toastService = inject(ToastService)
 
-  @Input()
-  eventgroupId!: string
+  eventgroupId = input.required<string>()
 
   api = api
 
-  pageState = new ResourceLoadingState()
-  eventgroup?: ApiEventgroupAdmin
-  event?: AdminEventCreateData
+  eventgroupResource = rxResource({
+    params: () => this.eventgroupId(),
+    stream: ({ params }) => this.adminEventgroupService.get(params),
+  })
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes["eventgroupId"]) {
-      this.adminEventgroupService
-        .get(this.eventgroupId)
-        .pipe(handleResourceLoadingStates(this.pageState))
-        .subscribe((data) => {
-          this.eventgroup = data
-          this.event = {
-            eventgroup_id: data.id,
-            max_sales: 0,
-            max_each_person: 10,
-          }
-        })
-    }
+  event: AdminEventCreateData = {
+    max_sales: 0,
+    max_each_person: 10,
   }
 
   storeEvent() {
-    if (!this.event?.time_start || isNaN(this.event.time_start)) return
+    if (!this.event.time_start || isNaN(this.event.time_start)) return
 
-    this.adminEventService.create(this.event).subscribe({
-      next: (data) => {
-        void this.router.navigateByUrl(`/a/event/${data.id}`)
-      },
-      error: toastErrorHandler(this.toastService),
-    })
+    this.adminEventService
+      .create({
+        ...this.event,
+        eventgroup_id: this.eventgroupResource.value()!.id,
+      })
+      .subscribe({
+        next: (data) => {
+          void this.router.navigateByUrl(`/a/event/${data.id}`)
+        },
+        error: toastErrorHandler(this.toastService),
+      })
   }
 }
