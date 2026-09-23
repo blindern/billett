@@ -1,66 +1,35 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  Output,
-  SimpleChanges,
-} from "@angular/core"
+import { Component, input, linkedSignal, output } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { RouterLink } from "@angular/router"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import moment from "../../common/moment"
 import { AdminEventCreateData, AdminEventData } from "./admin-event.service"
 
+const formatTime = (t: number | null | undefined) =>
+  t ? moment.unix(t).format("DD.MM.YYYY HH:mm") : ""
+
 @Component({
   selector: "billett-admin-event-form",
   standalone: true,
   imports: [FormsModule, RouterLink, FormatdatePipe],
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-event-form.component.html",
 })
-export class AdminEventFormComponent implements OnChanges {
-  @Input()
-  event!: AdminEventData | AdminEventCreateData
+export class AdminEventFormComponent {
+  event = input.required<AdminEventData | AdminEventCreateData>()
+  eventgroupId = input.required<number>()
+  submitForm = output()
 
-  @Input()
-  eventgroupId!: number
-
-  @Output()
-  submitForm = new EventEmitter<void>()
-
-  time_start_text!: string
-  time_end_text!: string
-
-  submit() {
-    this.submitForm.emit()
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes["event"]) {
-      const parseTime = (t: number | null | undefined) => {
-        if (!t) return ""
-        return moment.unix(t).format("DD.MM.YYYY HH:mm")
-      }
-
-      this.time_start_text = parseTime(this.event.time_start)
-      this.time_end_text = parseTime(this.event.time_end)
-    }
-  }
+  time_start_text = linkedSignal(() => formatTime(this.event().time_start))
+  time_end_text = linkedSignal(() => formatTime(this.event().time_end))
 
   get eventId() {
-    return "id" in this.event ? this.event.id : null
+    const event = this.event()
+    return "id" in event ? event.id : null
   }
 
   updateTime(which: "start" | "end") {
-    let x = moment(
-      this[which == "start" ? "time_start_text" : "time_end_text"],
-      "DD.MM.YYYY HH:mm",
-    ).unix()
-
-    if (x < 0) x = 0
-    this.event[which == "start" ? "time_start" : "time_end"] = x
+    const text = which == "start" ? this.time_start_text : this.time_end_text
+    const x = Math.max(0, moment(text(), "DD.MM.YYYY HH:mm").unix())
+    this.event()[which == "start" ? "time_start" : "time_end"] = x
   }
 }

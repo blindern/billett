@@ -1,9 +1,9 @@
-<form (ngSubmit)="submit()" class="form-horizontal" autocomplete="off" ngNativeValidate>
+<form (ngSubmit)="submitForm.emit()" class="form-horizontal" autocomplete="off" ngNativeValidate>
   <h3>Grunnleggende informasjon</h3>
   <div class="form-group">
     <label for="title" class="col-sm-3 control-label">Tittel</label>
     <div class="col-sm-9 col-md-6">
-      <input type="text" class="form-control" [(ngModel)]="event.title" id="title" name="title" required autofocus />
+      <input type="text" class="form-control" [(ngModel)]="event().title" id="title" name="title" required autofocus />
     </div>
   </div>
   <div class="form-group">
@@ -19,9 +19,9 @@
         placeholder="Start (DD.MM.YYYY HH:MM)"
         required
       />
-      @if (event.time_start) {
-        <span class="help-block">{{ event.time_start | formatdate: "DD.MM.YYYY HH:mm" }}</span>
-      } @else if (time_start_text) {
+      @if (event().time_start; as time) {
+        <span class="help-block">{{ time | formatdate: "DD.MM.YYYY HH:mm" }}</span>
+      } @else if (time_start_text()) {
         <span class="help-block">Manglende inndata</span>
       }
     </div>
@@ -35,9 +35,9 @@
         name="end"
         placeholder="Slutt (DD.MM.YYYY HH:MM)"
       />
-      @if (event.time_end) {
-        <span class="help-block">{{ event.time_end | formatdate: "DD.MM.YYYY HH:mm" }}</span>
-      } @else if (time_end_text) {
+      @if (event().time_end; as time) {
+        <span class="help-block">{{ time | formatdate: "DD.MM.YYYY HH:mm" }}</span>
+      } @else if (time_end_text()) {
         <span class="help-block">Manglende inndata</span>
       }
       <span class="help-block">Valgfritt</span>
@@ -49,7 +49,7 @@
       <input
         type="text"
         class="form-control"
-        [(ngModel)]="event.category"
+        [(ngModel)]="event().category"
         id="category"
         name="category"
         placeholder="(valgfritt)"
@@ -62,7 +62,7 @@
       <input
         type="text"
         class="form-control"
-        [(ngModel)]="event.location"
+        [(ngModel)]="event().location"
         id="location"
         name="location"
         placeholder="(valgfritt)"
@@ -77,7 +77,7 @@
       <input
         type="number"
         class="form-control"
-        [(ngModel)]="event.max_sales"
+        [(ngModel)]="event().max_sales"
         id="max_sales"
         name="max_sales"
         required
@@ -91,7 +91,7 @@
       <input
         type="number"
         class="form-control"
-        [(ngModel)]="event.max_normal_sales"
+        [(ngModel)]="event().max_normal_sales"
         id="max_normal_sales"
         name="max_normal_sales"
         placeholder="(valgfritt)"
@@ -104,7 +104,7 @@
       <input
         type="number"
         class="form-control"
-        [(ngModel)]="event.max_each_person"
+        [(ngModel)]="event().max_each_person"
         id="max_each_person"
         name="max_each_person"
         required
@@ -121,7 +121,7 @@
         <input
           type="text"
           class="form-control"
-          [(ngModel)]="event.alias"
+          [(ngModel)]="event().alias"
           id="alias"
           name="alias"
           placeholder="(valgfritt)"
@@ -139,7 +139,7 @@
     <div class="col-sm-9 col-md-6">
       <textarea
         class="form-control"
-        [(ngModel)]="event.description"
+        [(ngModel)]="event().description"
         id="description"
         name="description"
         placeholder="(valgfritt)"
@@ -156,7 +156,7 @@
     <div class="col-sm-9 col-md-6">
       <textarea
         class="form-control"
-        [(ngModel)]="event.description_short"
+        [(ngModel)]="event().description_short"
         id="description_short"
         name="description_short"
         placeholder="(valgfritt)"
@@ -171,7 +171,7 @@
       <input
         type="text"
         class="form-control"
-        [(ngModel)]="event.ticket_info"
+        [(ngModel)]="event().ticket_info"
         id="ticket_info"
         name="ticket_info"
         placeholder="(valgfritt)"
@@ -184,7 +184,7 @@
     <div class="col-sm-9 col-md-6">
       <textarea
         class="form-control"
-        [(ngModel)]="event.selling_text"
+        [(ngModel)]="event().selling_text"
         id="selling_text"
         name="selling_text"
         placeholder="(valgfritt)"
@@ -203,7 +203,7 @@
       <input
         type="text"
         class="form-control"
-        [(ngModel)]="event.ticket_text"
+        [(ngModel)]="event().ticket_text"
         id="ticket_text"
         name="ticket_text"
         placeholder="(valgfritt)"
@@ -220,7 +220,7 @@
       <input
         type="text"
         class="form-control"
-        [(ngModel)]="event.link"
+        [(ngModel)]="event().link"
         id="link"
         name="link"
         placeholder="(valgfritt)"
@@ -234,7 +234,7 @@
       <input
         type="number"
         class="form-control"
-        [(ngModel)]="event.age_restriction"
+        [(ngModel)]="event().age_restriction"
         id="age_restriction"
         name="age_restriction"
         placeholder="(valgfritt)"
@@ -245,7 +245,7 @@
   <div class="form-group">
     <div class="col-sm-9 col-sm-offset-3">
       <label>
-        <input type="checkbox" [(ngModel)]="event.is_published" name="is_published" />
+        <input type="checkbox" [(ngModel)]="event().is_published" name="is_published" />
         Publiser arrangementet
       </label>
     </div>
@@ -253,7 +253,7 @@
   <div class="form-group">
     <div class="col-sm-9 col-sm-offset-3">
       <label>
-        <input type="checkbox" [(ngModel)]="event.is_selling" name="is_selling" />
+        <input type="checkbox" [(ngModel)]="event().is_selling" name="is_selling" />
         Annonser informasjon om billetter, inkl. om det ikke er billettsalg
       </label>
     </div>
@@ -261,7 +261,7 @@
   <div class="form-group">
     <div class="col-sm-9 col-sm-offset-3">
       <label for="is_admin_hidden">
-        <input type="checkbox" [(ngModel)]="event.is_admin_hidden" id="is_admin_hidden" name="is_admin_hidden" />
+        <input type="checkbox" [(ngModel)]="event().is_admin_hidden" id="is_admin_hidden" name="is_admin_hidden" />
         Skjult som standard i arrangementlista i admin?
       </label>
     </div>
@@ -278,7 +278,7 @@
     <div class="form-group">
       <div class="col-sm-9 col-md-6 col-sm-offset-3">
         <input type="submit" value="Opprett" class="btn btn-primary" />
-        <a routerLink="/a/eventgroup/{{ eventgroupId }}">Avbryt</a>
+        <a routerLink="/a/eventgroup/{{ eventgroupId() }}">Avbryt</a>
       </div>
     </div>
   }
