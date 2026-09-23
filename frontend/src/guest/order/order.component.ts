@@ -1,11 +1,6 @@
 import { HttpClient } from "@angular/common/http"
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnInit,
-} from "@angular/core"
-import { RouterLink } from "@angular/router"
+import { Component, inject } from "@angular/core"
+import { rxResource } from "@angular/core/rxjs-interop"
 import { api } from "../../api"
 import {
   ApiEvent,
@@ -18,10 +13,6 @@ import { getErrorText } from "../../common/errors"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PricePipe } from "../../common/price.pipe"
-import {
-  handleResourceLoadingStates,
-  ResourceLoadingState,
-} from "../../common/resource-loading"
 
 type Order = ApiOrder & {
   tickets: (ApiTicket & {
@@ -33,31 +24,19 @@ type Order = ApiOrder & {
 @Component({
   selector: "billett-guest-order",
   standalone: true,
-  imports: [RouterLink, PagePropertyComponent, FormatdatePipe, PricePipe],
+  imports: [PagePropertyComponent, FormatdatePipe, PricePipe],
   templateUrl: "./order.component.html",
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   preserveWhitespaces: false,
 })
-export class GuestOrderComponent implements OnInit {
+export class GuestOrderComponent {
   private http = inject(HttpClient)
 
   getErrorText = getErrorText
 
-  orderState = new ResourceLoadingState()
-  order?: Order
-  payment?: ApiPayment
-
-  ngOnInit(): void {
-    this.http
-      .get<{
-        order: Order
-        payment: ApiPayment
-      }>(api("order/receipt"))
-      .pipe(handleResourceLoadingStates(this.orderState))
-      .subscribe((data) => {
-        this.order = data.order
-        this.payment = data.payment
-      })
-  }
+  receipt = rxResource({
+    stream: () =>
+      this.http.get<{ order: Order; payment: ApiPayment }>(
+        api("order/receipt"),
+      ),
+  })
 }

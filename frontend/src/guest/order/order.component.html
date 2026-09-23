@@ -1,8 +1,10 @@
-@if (orderState.error) {
-  <p>Feil: {{ orderState.error }}</p>
-} @else if (!order || !payment) {
+@if (receipt.error()) {
+  <p>Feil: {{ getErrorText(receipt.error()) }}</p>
+} @else if (!receipt.hasValue()) {
   <p>Vennligst vent...</p>
 } @else {
+  @let order = receipt.value().order;
+  @let payment = receipt.value().payment;
   @if (payment.status === "ACCEPTED") {
     <billett-page-property name="title" value="Kvittering" />
   } @else {
