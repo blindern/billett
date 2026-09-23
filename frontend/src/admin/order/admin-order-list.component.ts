@@ -86,7 +86,7 @@ export class AdminOrderListComponent {
 
     this.#searchqueue
       .pipe(
-        debounce((value) => (value === "delayed" ? timer(3000) : of(null))),
+        debounce((value) => (value === "delayed" ? timer(300) : of(null))),
         takeUntilDestroyed(),
       )
       .subscribe((type) => {
