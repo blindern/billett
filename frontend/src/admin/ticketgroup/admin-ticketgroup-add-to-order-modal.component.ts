@@ -1,27 +1,13 @@
 import { Dialog, DIALOG_DATA, DialogRef } from "@angular/cdk/dialog"
 import { NgClass } from "@angular/common"
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  Inject,
-  OnInit,
-} from "@angular/core"
+import { Component, computed, inject, Inject, signal } from "@angular/core"
+import { rxResource } from "@angular/core/rxjs-interop"
 import { FormsModule } from "@angular/forms"
 import { RouterLink } from "@angular/router"
-import {
-  ApiEventAdmin,
-  ApiTicketAdmin,
-  ApiTicketgroupAdmin,
-} from "../../apitypes"
+import { ApiTicketAdmin, ApiTicketgroupAdmin } from "../../apitypes"
 import { getErrorText, toastErrorHandler } from "../../common/errors"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
-import { PagePropertyComponent } from "../../common/page-property.component"
 import { PricePipe } from "../../common/price.pipe"
-import {
-  handleResourceLoadingStates,
-  ResourceLoadingState,
-} from "../../common/resource-loading"
 import { ToastService } from "../../common/toast.service"
 import {
   AdminEventgroupData,
@@ -39,20 +25,11 @@ export type AdminTicketgroupAddToOrderModalResult = ApiTicketAdmin[]
 @Component({
   selector: "billett-admin-ticketgroup-add-to-order-modal",
   standalone: true,
-  imports: [
-    PagePropertyComponent,
-    FormsModule,
-    PricePipe,
-    NgClass,
-    RouterLink,
-    FormatdatePipe,
-  ],
+  imports: [FormsModule, PricePipe, NgClass, RouterLink, FormatdatePipe],
   templateUrl: "./admin-ticketgroup-add-to-order-modal.component.html",
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./admin-ticketgroup-add-to-order-modal.component.scss",
 })
-export class AdminTicketgroupAddToOrderModal implements OnInit {
+export class AdminTicketgroupAddToOrderModal {
   static open(dialog: Dialog, data: AdminTicketgroupAddToOrderModalInput) {
     return dialog.open<
       AdminTicketgroupAddToOrderModalResult,
@@ -73,37 +50,47 @@ export class AdminTicketgroupAddToOrderModal implements OnInit {
   private toastService = inject(ToastService)
 
   getErrorText = getErrorText
-  eventgroupState = new ResourceLoadingState()
 
-  eventgroup?: AdminEventgroupData
+  eventgroupResource = rxResource({
+    stream: () =>
+      this.adminEventgroupService.get(String(this.data.eventgroupId)),
+  })
 
-  sending = false
+  sending = signal(false)
 
-  title = ""
-  description = ""
+  ticketSearch = signal("")
+  showOld = signal(false)
+  showInactive = signal(false)
 
-  count = 0
-  amount = 0
+  ticketgroupsToAdd = signal<
+    Record<number, { ticketgroup: ApiTicketgroupAdmin; num: number }>
+  >({})
 
-  ticketSearch = ""
-  showOld = false
-  showInactive = false
+  count = computed(() =>
+    Object.values(this.ticketgroupsToAdd()).reduce((acc, g) => acc + g.num, 0),
+  )
 
-  ticketgroupsToAdd: Record<
-    number,
-    {
-      ticketgroup: ApiTicketgroupAdmin
-      event: ApiEventAdmin
-      num: number
-    }
-  > = {}
+  amount = computed(() =>
+    Object.values(this.ticketgroupsToAdd()).reduce(
+      (acc, g) => acc + g.num * (g.ticketgroup.price + g.ticketgroup.fee),
+      0,
+    ),
+  )
 
-  #matchEvent(
-    text: string,
-    event: ApiEventAdmin & {
-      ticketgroups: ApiTicketgroupAdmin[]
-    },
-  ) {
+  events = computed(() =>
+    (this.eventgroupResource.value()?.events ?? []).filter((event) => {
+      if (event.is_old && !this.showOld()) return false
+      return event.is_selling && event.ticketgroups.length > 0
+    }),
+  )
+
+  filteredEvents = computed(() =>
+    this.events().filter((event) =>
+      this.#matchEvent(this.ticketSearch(), event),
+    ),
+  )
+
+  #matchEvent(text: string, event: AdminEventgroupData["events"][number]) {
     // A very naive search algorithm for now.
 
     text = text.toLowerCase()
@@ -120,37 +107,30 @@ export class AdminTicketgroupAddToOrderModal implements OnInit {
     return false
   }
 
-  get filteredEvents() {
-    return (this.events ?? []).filter((event) =>
-      this.#matchEvent(this.ticketSearch, event),
-    )
-  }
-
   filterTicketgroups(ticketgroups: ApiTicketgroupAdmin[]) {
-    if (this.showInactive) {
-      return ticketgroups
-    } else {
-      return ticketgroups.filter((ticketgroup) => ticketgroup.use_office)
-    }
+    return this.showInactive()
+      ? ticketgroups
+      : ticketgroups.filter((ticketgroup) => ticketgroup.use_office)
   }
 
-  ngOnInit(): void {
-    this.adminEventgroupService
-      .get(String(this.data.eventgroupId))
-      .pipe(handleResourceLoadingStates(this.eventgroupState))
-      .subscribe((eventgroup) => {
-        this.eventgroup = eventgroup
-      })
+  getNum(ticketgroup: ApiTicketgroupAdmin) {
+    return this.ticketgroupsToAdd()[ticketgroup.id]?.num ?? 0
+  }
+
+  showAll() {
+    this.ticketSearch.set("")
+    this.showOld.set(true)
+    this.showInactive.set(true)
   }
 
   submit() {
-    this.sending = true
+    this.sending.set(true)
     void this.data.getOrderId().then((orderId) => {
       this.adminOrderService
         .createTickets(
           orderId,
           Object.fromEntries(
-            Object.values(this.ticketgroupsToAdd).map((group) => [
+            Object.values(this.ticketgroupsToAdd()).map((group) => [
               group.ticketgroup.id,
               group.num,
             ]),
@@ -158,7 +138,7 @@ export class AdminTicketgroupAddToOrderModal implements OnInit {
         )
         .subscribe({
           next: (tickets) => {
-            this.sending = false
+            this.sending.set(false)
             this.dialogRef.close(tickets)
           },
           error: toastErrorHandler(
@@ -173,36 +153,13 @@ export class AdminTicketgroupAddToOrderModal implements OnInit {
     this.dialogRef.close()
   }
 
-  get events() {
-    if (!this.eventgroup) return []
-
-    return this.eventgroup.events.filter((event) => {
-      if (event.is_old && !this.showOld) return false
-      return event.is_selling && event.ticketgroups.length > 0
+  changeTicketgroupNum(ticketgroup: ApiTicketgroupAdmin, num: number) {
+    this.ticketgroupsToAdd.update((current) => {
+      const { [ticketgroup.id]: existing, ...rest } = current
+      const next = (existing?.num ?? 0) + num
+      return next == 0
+        ? rest
+        : { ...rest, [ticketgroup.id]: { ticketgroup, num: next } }
     })
-  }
-
-  changeTicketgroupNum(
-    ticketgroup: ApiTicketgroupAdmin,
-    event: ApiEventAdmin,
-    num: number,
-  ) {
-    if (!(ticketgroup.id in this.ticketgroupsToAdd)) {
-      this.ticketgroupsToAdd[ticketgroup.id] = {
-        ticketgroup: ticketgroup,
-        event: event,
-        num: 0,
-      }
-    }
-
-    const g = this.ticketgroupsToAdd[ticketgroup.id]
-    g.num += num
-
-    if (g.num == 0) {
-      delete this.ticketgroupsToAdd[ticketgroup.id]
-    }
-
-    this.count += num
-    this.amount += num * (ticketgroup.price + ticketgroup.fee)
   }
 }
