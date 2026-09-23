@@ -215,6 +215,21 @@ test.describe("render", { tag: "@render" }, () => {
       await expectLoaded(page)
     })
 
+    test("event checkin checks in from ticket list", async ({ page }) => {
+      await page.goto("/a/event/1/checkin")
+
+      await page.getByRole("button", { name: "Innsjekk" }).click()
+      await expect(page.getByRole("button", { name: "Utsjekk" })).toBeVisible()
+    })
+
+    test("event checkin checks in scanned barcode", async ({ page }) => {
+      await page.goto("/a/event/1/checkin")
+      await expect(page.getByRole("link", { name: ORDER_TEXT_ID })).toBeVisible()
+
+      await page.locator("#keyfield").fill("123456")
+      await expect(page.getByText("Billetten ble innsjekket")).toBeVisible()
+    })
+
     test("paymentgroup renders", async ({ page }) => {
       await page.goto("/a/paymentgroup/1")
 

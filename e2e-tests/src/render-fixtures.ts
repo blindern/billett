@@ -164,7 +164,7 @@ const ticketAdmin = {
   user_revoked: null,
   used: null,
   user_used: null,
-  key: "renderkey",
+  key: "123456",
   time_revoked: null,
 }
 
@@ -319,6 +319,7 @@ const endpoints: Partial<Record<string, Handler>> = {
   "order/2": () => reservation,
   "order/2/force": () => ({}),
   "order/1/create_tickets": () => [],
+  "ticket/1/checkin": () => ({ ...ticketAdmin, used: TIME, user_used: "render" }),
   order: (_, __, method) =>
     method === "POST" ? newOrder([]) : paginated([orderWithTickets]),
   "order/3": () => newOrder([boxOfficeTicket]),
