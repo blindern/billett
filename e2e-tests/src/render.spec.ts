@@ -115,6 +115,13 @@ test.describe("render", { tag: "@render" }, () => {
       })
     }
 
+    test("order list renders search results", async ({ page }) => {
+      await page.goto("/a/orders?eventgroup_id=1")
+
+      await expect(page.getByRole("link", { name: ORDER_TEXT_ID })).toBeVisible()
+      await expect(page.getByRole("link", { name: "Ny ordre" })).toBeVisible()
+    })
+
     test("sold tickets stats renders", async ({ page }) => {
       await page.goto("/a/eventgroup/1/sold_tickets_stats")
 
