@@ -101,10 +101,12 @@
   }
 </style>
 
-<billett-page-states [loading]="pageState.loading" [error]="pageState.error" />
+<billett-page-states [loading]="paymentgroupResource.isLoading()" [error]="paymentgroupResource.error()" />
 <billett-page-property name="title" value="Oppgjør" />
 
-@if (paymentgroup && derived) {
+@if (paymentgroupResource.hasValue() && derived()) {
+  @let paymentgroup = paymentgroupResource.value();
+  @let derived = this.derived()!;
   <div class="page-header">
     <h1>
       <span class="eventgroup">
@@ -115,11 +117,11 @@
       Oppgjør: {{ paymentgroup.title }}
 
       <span class="pull-right hidden-print">
-        @if (!paymentgroup.time_end && !edit) {
+        @if (!paymentgroup.time_end && !edit()) {
           <button class="btn btn-default" type="button" (click)="startEdit()">Rediger</button>
         }
-        <button class="btn btn-default" type="button" (click)="show_details = !show_details">
-          {{ show_details ? "Skjul detaljer" : "Vis detaljer" }}
+        <button class="btn btn-default" type="button" (click)="show_details.set(!show_details())">
+          {{ show_details() ? "Skjul detaljer" : "Vis detaljer" }}
         </button>
         @if (!paymentgroup.time_end) {
           <button class="btn btn-primary" type="button" (click)="close()">Avslutt/ta oppgjør</button>
@@ -128,7 +130,7 @@
     </h1>
   </div>
 
-  @if (edit) {
+  @if (edit(); as edit) {
     <form (ngSubmit)="save()" class="form-horizontal" autocomplete="off" ngNativeValidate>
       <div class="form-group">
         <label for="title" class="col-sm-2 control-label">Tittel</label>
@@ -254,7 +256,7 @@
 
         @for (group of derived.ps.cashgroups; track $index) {
           <div class="print-page-section">
-            @if (!group.is_deleted || show_details) {
+            @if (!group.is_deleted || show_details()) {
               <div [ngClass]="{ is_deleted: group.is_deleted }">
                 <h3>
                   {{ group.title }}: {{ group.total | price }}
@@ -352,7 +354,7 @@
 
         @for (paymentsource of derived.ps.other; track paymentsource.id) {
           <div class="print-page-section">
-            @if (!paymentsource.is_deleted || show_details) {
+            @if (!paymentsource.is_deleted || show_details()) {
               <div [ngClass]="{ is_deleted: paymentsource.is_deleted }">
                 <h3>
                   {{ paymentsource.title }}:
@@ -458,7 +460,7 @@
       </div>
     </div>
 
-    @if (orders_inbalance.length > 0) {
+    @if (derived.orders_inbalance.length > 0) {
       <div class="print-page-section">
         <h2>Ordre i ubalanse</h2>
         <p>
@@ -480,7 +482,7 @@
             </tr>
           </thead>
           <tbody>
-            @for (order of orders_inbalance; track order.id) {
+            @for (order of derived.orders_inbalance; track order.id) {
               <tr>
                 <td>
                   <a routerLink="/a/order/{{ order.id }}">{{ order.order_text_id }}</a>
@@ -505,7 +507,7 @@
       </div>
     }
 
-    @if (show_details) {
+    @if (show_details()) {
       <h2>Transaksjoner</h2>
       <table class="table table-condensed table-striped paymentgroup-payments print-page-section">
         <thead>

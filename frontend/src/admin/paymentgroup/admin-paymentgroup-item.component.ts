@@ -1,26 +1,16 @@
 import { Dialog, DialogModule } from "@angular/cdk/dialog"
 import { NgClass } from "@angular/common"
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  Input,
-  OnChanges,
-  SimpleChanges,
-} from "@angular/core"
+import { Component, computed, inject, input, signal } from "@angular/core"
+import { rxResource } from "@angular/core/rxjs-interop"
 import { FormsModule } from "@angular/forms"
 import { RouterLink } from "@angular/router"
-import { ApiOrderAdmin, ApiPaymentsourceAdmin } from "../../apitypes"
+import { ApiPaymentsourceAdmin } from "../../apitypes"
 import { toastErrorHandler } from "../../common/errors"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { MarkdownComponent } from "../../common/markdown.component"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
 import { PricePipe } from "../../common/price.pipe"
-import {
-  handleResourceLoadingStates,
-  ResourceLoadingState,
-} from "../../common/resource-loading"
 import { ToastService } from "../../common/toast.service"
 import {
   AdminPaymentgroupData,
@@ -43,59 +33,36 @@ import { AdminPaymentsourceService } from "./admin-paymentsource.service"
     MarkdownComponent,
     DialogModule,
   ],
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-paymentgroup-item.component.html",
 })
-export class AdminPaymentgroupItemComponent implements OnChanges {
+export class AdminPaymentgroupItemComponent {
   private toastService = inject(ToastService)
   private adminPaymentgroupService = inject(AdminPaymentgroupService)
   private adminPaymentsourceService = inject(AdminPaymentsourceService)
   private dialog = inject(Dialog)
 
-  @Input()
-  id!: string
+  id = input.required<string>()
 
   // note:
   // payments are registered as debet, so a payment for 100 means 100, while -100 means refund
   // tickets are registered as kredit, so a sale for 30 means -30, while 30 means revoked ticket
 
-  pageState = new ResourceLoadingState()
+  paymentgroupResource = rxResource({
+    params: () => this.id(),
+    stream: ({ params }) => this.adminPaymentgroupService.get(params),
+  })
 
-  paymentgroup?: AdminPaymentgroupData
-  derived?: ReturnType<AdminPaymentgroupItemComponent["deriveData"]>
+  derived = computed(() =>
+    this.paymentgroupResource.hasValue()
+      ? this.deriveData(this.paymentgroupResource.value())
+      : undefined,
+  )
 
-  show_details = false
+  show_details = signal(false)
 
-  edit?: {
-    title: string
-    description: string | null
-  }
-
-  // isolate orders not in balance (only looking at this paymentgroup, not the real balance of the order)
-  orders_inbalance: ApiOrderAdmin[] = []
-
-  private refresh() {
-    this.adminPaymentgroupService.get(this.id).subscribe({
-      next: (paymentgroup) => {
-        this.paymentgroup = paymentgroup
-        this.derived = this.deriveData(paymentgroup)
-      },
-      error: toastErrorHandler(this.toastService, "Feil ved oppdatering"),
-    })
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes["id"]) {
-      this.adminPaymentgroupService
-        .get(this.id)
-        .pipe(handleResourceLoadingStates(this.pageState))
-        .subscribe((paymentgroup) => {
-          this.paymentgroup = paymentgroup
-          this.derived = this.deriveData(paymentgroup)
-        })
-    }
-  }
+  edit = signal<{ title: string; description: string | null } | undefined>(
+    undefined,
+  )
 
   #deriveEvents(paymentgroup: AdminPaymentgroupData) {
     const eventStats = new Map<
@@ -309,43 +276,43 @@ export class AdminPaymentgroupItemComponent implements OnChanges {
   }
 
   startEdit() {
-    this.edit = {
-      title: this.paymentgroup!.title,
-      description: this.paymentgroup!.description,
-    }
+    const { title, description } = this.paymentgroupResource.value()!
+    this.edit.set({ title, description })
   }
 
   abortEdit() {
-    this.edit = undefined
+    this.edit.set(undefined)
   }
 
   save() {
     this.adminPaymentgroupService
       .update({
-        id: this.paymentgroup!.id,
-        title: this.edit!.title,
-        description: this.edit!.description,
+        id: this.paymentgroupResource.value()!.id,
+        ...this.edit()!,
       })
       .subscribe({
-        next: (data) => {
-          this.paymentgroup!.title = data.title
-          this.paymentgroup!.description = data.description
-          this.edit = undefined
+        next: ({ title, description }) => {
+          this.paymentgroupResource.update(
+            (paymentgroup) =>
+              paymentgroup && { ...paymentgroup, title, description },
+          )
+          this.edit.set(undefined)
         },
         error: toastErrorHandler(this.toastService, "Feil ved lagring"),
       })
   }
 
   close() {
+    const paymentgroup = this.paymentgroupResource.value()!
     if (
-      !this.paymentgroup!.time_end &&
+      !paymentgroup.time_end &&
       confirm(
         "Er du sikker på at du vil lukke betalingsgruppen? Dette gjøres kun ved oppgjør av økonomi. Kontroller evt. avvik først. Handlingen kan ikke angres.",
       )
     ) {
-      this.adminPaymentgroupService.close(this.paymentgroup!.id).subscribe({
+      this.adminPaymentgroupService.close(paymentgroup.id).subscribe({
         next: () => {
-          this.refresh()
+          this.paymentgroupResource.reload()
         },
         error: toastErrorHandler(this.toastService),
       })
@@ -353,12 +320,13 @@ export class AdminPaymentgroupItemComponent implements OnChanges {
   }
 
   openCreatePaymentsourceModal() {
+    const paymentgroup = this.paymentgroupResource.value()!
     AdminPaymentsourceCreateModal.open(this.dialog, {
-      eventgroup: this.paymentgroup!.eventgroup,
-      paymentgroup: this.paymentgroup!,
+      eventgroup: paymentgroup.eventgroup,
+      paymentgroup,
     }).closed.subscribe((paymentsource) => {
       if (paymentsource) {
-        this.refresh()
+        this.paymentgroupResource.reload()
       }
     })
   }
@@ -374,7 +342,7 @@ export class AdminPaymentgroupItemComponent implements OnChanges {
           this.toastService.show("Registeringen ble slettet", {
             class: "success",
           })
-          this.refresh()
+          this.paymentgroupResource.reload()
         },
         error: toastErrorHandler(
           this.toastService,
@@ -417,13 +385,13 @@ export class AdminPaymentgroupItemComponent implements OnChanges {
     }
 
     const processCashItem = (paymentsource: ApiPaymentsourceAdmin) => {
-      if (paymentsource.is_deleted) {
-        paymentsource.title = "Slettede oppføringer: " + paymentsource.title
-      }
+      const title = paymentsource.is_deleted
+        ? "Slettede oppføringer: " + paymentsource.title
+        : paymentsource.title
 
-      if (!(paymentsource.title in cashgroups_link)) {
-        cashgroups_link[paymentsource.title] = {
-          title: paymentsource.title,
+      if (!(title in cashgroups_link)) {
+        cashgroups_link[title] = {
+          title,
           cashunique: ["1", "5", "10", "20", "50", "100", "200", "500", "1000"], // 'other' might be existent
           cashuniquesum: {},
           cols: [],
@@ -431,10 +399,10 @@ export class AdminPaymentgroupItemComponent implements OnChanges {
           total: 0,
           is_deleted: paymentsource.is_deleted,
         }
-        ps.cashgroups.push(cashgroups_link[paymentsource.title])
+        ps.cashgroups.push(cashgroups_link[title])
       }
 
-      const group = cashgroups_link[paymentsource.title]
+      const group = cashgroups_link[title]
 
       for (const [key, val] of Object.entries(paymentsource.data ?? {})) {
         if (!group.cashunique.includes(key)) {
