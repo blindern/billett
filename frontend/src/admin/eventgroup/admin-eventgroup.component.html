@@ -1,7 +1,8 @@
-<billett-page-states [loading]="pageState.loading" [error]="pageState.error" />
+<billett-page-states [loading]="eventgroupResource.isLoading()" [error]="eventgroupResource.error()" />
 <billett-page-property name="title" value="Arrangementgruppe" />
 
-@if (eventgroup) {
+@if (eventgroupResource.hasValue()) {
+  @let eventgroup = eventgroupResource.value();
   <billett-page-property name="title" value="{{ eventgroup.title }}" />
 
   <div class="page-header">
@@ -42,20 +43,20 @@
     <p>Ingen arrangementer eksisterer.</p>
   } @else {
     <div class="form-inline">
-      <select class="form-control" [(ngModel)]="filter_sale" name="filter_sale" (change)="applyFilter()">
+      <select class="form-control" [(ngModel)]="filter_sale" name="filter_sale">
         <option value="">Vis alle salgsmodus</option>
         <option value="1">Kun med billettgrupper</option>
         <option value="0">Kun uten billettgrupper</option>
       </select>
-      <select class="form-control" [(ngModel)]="filter_category" name="filter_category" (change)="applyFilter()">
+      <select class="form-control" [(ngModel)]="filter_category" name="filter_category">
         <option value="-1">Vis alle kategorier</option>
-        @for (opt of categories; track opt) {
+        @for (opt of categories(); track opt) {
           <option value="{{ opt }}">
             {{ opt || "Tom kategori" }}
           </option>
         }
       </select>
-      <select class="form-control" [(ngModel)]="filter_hidden" name="filter_hidden" (change)="applyFilter()">
+      <select class="form-control" [(ngModel)]="filter_hidden" name="filter_hidden">
         <option value="0">Ikke vis skjulte oppføringer</option>
         <option value="1">Vis kun sjulte oppføringer</option>
         <option value="">Vis alle oppføringer</option>
@@ -76,7 +77,7 @@
           <th>Billett-<br />info</th>
         </tr>
       </thead>
-      @for (item of days | keyvalue; track item.key) {
+      @for (item of days() | keyvalue; track item.key) {
         <tbody>
           <tr>
             <th colspan="9">

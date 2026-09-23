@@ -1,32 +1,21 @@
 import { CommonModule } from "@angular/common"
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  Input,
-  OnChanges,
-  SimpleChanges,
-} from "@angular/core"
+import { Component, computed, inject, input, signal } from "@angular/core"
+import { rxResource } from "@angular/core/rxjs-interop"
 import { FormsModule } from "@angular/forms"
 import { RouterLink } from "@angular/router"
-import {
-  ApiEventAdmin,
-  ApiEventgroupAdmin,
-  ApiTicketgroupAdmin,
-} from "../../apitypes"
+import { ApiEventAdmin } from "../../apitypes"
 import { toastErrorHandler } from "../../common/errors"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import moment from "../../common/moment"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
 import { PricePipe } from "../../common/price.pipe"
-import {
-  handleResourceLoadingStates,
-  ResourceLoadingState,
-} from "../../common/resource-loading"
 import { ToastService } from "../../common/toast.service"
 import { AdminEventService } from "../event/admin-event.service"
-import { AdminEventgroupService } from "./admin-eventgroup.service"
+import {
+  AdminEventgroupData,
+  AdminEventgroupService,
+} from "./admin-eventgroup.service"
 
 @Component({
   selector: "billett-admin-eventgroup",
@@ -41,90 +30,66 @@ import { AdminEventgroupService } from "./admin-eventgroup.service"
     PageStatesComponent,
   ],
   templateUrl: "./admin-eventgroup.component.html",
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./admin-eventgroup.component.scss",
 })
-export class AdminEventgroupComponent implements OnChanges {
+export class AdminEventgroupComponent {
   private adminEventgroupService = inject(AdminEventgroupService)
   private adminEventService = inject(AdminEventService)
   private toastService = inject(ToastService)
 
-  @Input()
-  id!: string
+  id = input.required<string>()
 
-  pageState = new ResourceLoadingState()
+  eventgroupResource = rxResource({
+    params: () => this.id(),
+    stream: ({ params }) => this.adminEventgroupService.get(params),
+  })
 
-  eventgroup?: ApiEventgroupAdmin & {
-    events: (ApiEventAdmin & {
-      ticketgroups: ApiTicketgroupAdmin[]
-    })[]
-  }
-  filter_sale: "" | "0" | "1" = ""
-  filter_category = ""
-  filter_hidden: "" | "0" | "1" = ""
-  categories: string[] = []
-  days?: Record<
-    string,
-    (ApiEventAdmin & {
-      ticketgroups: ApiTicketgroupAdmin[]
-    })[]
-  >
+  filter_sale = signal<"" | "0" | "1">("")
+  filter_category = signal("-1")
+  filter_hidden = signal<"" | "0" | "1">("0")
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes["id"]) {
-      this.adminEventgroupService
-        .get(this.id)
-        .pipe(handleResourceLoadingStates(this.pageState))
-        .subscribe((data) => {
-          this.eventgroup = data
-          this.applyFilter()
+  categories = computed(() =>
+    [
+      ...new Set(
+        (this.eventgroupResource.value()?.events ?? []).map(
+          (event) => event.category ?? "",
+        ),
+      ),
+    ].sort(),
+  )
 
-          this.categories = []
-          for (const event of this.eventgroup.events) {
-            if (this.categories.includes(event.category ?? "")) continue
-            this.categories.push(event.category ?? "")
-          }
-          this.categories.sort()
-        })
-
-      this.filter_sale = ""
-      this.filter_category = "-1"
-      this.filter_hidden = "0"
-    }
-  }
-
-  applyFilter() {
-    const r: NonNullable<this["days"]> = {}
-    for (const item of this.eventgroup!.events) {
-      if (
-        this.filter_sale !== "" &&
-        (this.filter_sale === "1") !== !!item.ticketgroups.length
-      )
-        continue
-      if (
-        this.filter_category !== "-1" &&
-        this.filter_category != (item.category ?? "")
-      )
-        continue
-      if (
-        this.filter_hidden != "" &&
-        (this.filter_hidden === "1") !== item.is_admin_hidden
-      )
-        continue
+  days = computed(() => {
+    const sale = this.filter_sale()
+    const category = this.filter_category()
+    const hidden = this.filter_hidden()
+    const r: Record<string, AdminEventgroupData["events"]> = {}
+    for (const item of this.eventgroupResource.value()?.events ?? []) {
+      if (sale !== "" && (sale === "1") !== !!item.ticketgroups.length) continue
+      if (category !== "-1" && category != (item.category ?? "")) continue
+      if (hidden != "" && (hidden === "1") !== item.is_admin_hidden) continue
 
       const k = moment.unix(item.time_start - 3600 * 6).format("YYYY-MM-DD")
-      r[k] = r[k] || []
-      r[k].push(item)
+      ;(r[k] ??= []).push(item)
     }
+    return r
+  })
 
-    this.days = r
+  #patchEvent(id: number, patch: Partial<ApiEventAdmin>) {
+    this.eventgroupResource.update(
+      (eventgroup) =>
+        eventgroup && {
+          ...eventgroup,
+          events: eventgroup.events.map((event) =>
+            event.id === id ? { ...event, ...patch } : event,
+          ),
+        },
+    )
   }
 
   eventTogglePublish(event: ApiEventAdmin) {
     this.adminEventService.setPublish(event.id, !event.is_published).subscribe({
       next: (data) => {
-        event.is_published = data.is_published
+        this.#patchEvent(event.id, { is_published: data.is_published })
       },
       error: toastErrorHandler(this.toastService),
     })
@@ -133,7 +98,7 @@ export class AdminEventgroupComponent implements OnChanges {
   eventToggleSelling(event: ApiEventAdmin) {
     this.adminEventService.setSelling(event.id, !event.is_selling).subscribe({
       next: (data) => {
-        event.is_selling = data.is_selling
+        this.#patchEvent(event.id, { is_selling: data.is_selling })
       },
       error: toastErrorHandler(this.toastService),
     })
