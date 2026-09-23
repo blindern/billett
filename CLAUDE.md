@@ -8,7 +8,7 @@ Ticket sales system for UKA på Blindern, a Norwegian student festival. Features
 
 **Tech Stack:**
 - Backend: Laravel 12 (PHP 8.5) with MySQL 8.4
-- Frontend: Angular 22 (standalone components, no NgModules)
+- Frontend: Angular 22 (standalone components, zoneless, signals)
 - Payment: Vipps Checkout
 - Auth: SAML2 for admin access (requires `ukabillettadmin` group)
 
@@ -44,6 +44,7 @@ BASE_URL=http://localhost:3000 pnpm test -- --grep @frontend  # Local frontend
 BASE_URL=http://localhost:8081 pnpm test -- --grep @api       # Local backend
 pnpm test:headed                                       # Run with visible browser
 pnpm test:ui                                           # Run with Playwright UI
+RENDER_SERVER=1 BASE_URL=http://localhost:4200 pnpm test -- --grep @render  # Mocked-API render tests against ../frontend/dist (build first)
 ```
 
 Defaults to `https://billett.blindernuka.no`. Set `BASE_URL` env var (or `.env` file) to test locally.
@@ -88,6 +89,7 @@ Automatic on push to `main`. Database migrations run manually via SSH.
 - `/a/*` - Admin interface (lazy-loaded from `src/admin/routes.ts`, `requireAdmin` guard)
 - `/` - Guest/public interface (from `src/app.routes.ts`)
 - Standalone components with `inject()` pattern, Bootstrap 3 SASS
+- Zoneless change detection, all components OnPush (Angular 22 default): keep template state in signals; load data with `rxResource` (fields suffixed `Resource`), unwrap in templates with `@let`
 - `frontend/src/apitypes.ts` - TypeScript interfaces for all API responses
 
 ### Vipps Testing
