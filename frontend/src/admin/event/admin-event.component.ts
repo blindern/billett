@@ -1,13 +1,7 @@
 import { Dialog } from "@angular/cdk/dialog"
 import { CommonModule } from "@angular/common"
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  Input,
-  OnChanges,
-  SimpleChanges,
-} from "@angular/core"
+import { Component, inject, input, signal } from "@angular/core"
+import { rxResource } from "@angular/core/rxjs-interop"
 import { FormsModule } from "@angular/forms"
 import { Router, RouterLink } from "@angular/router"
 import { catchError, tap } from "rxjs"
@@ -19,14 +13,10 @@ import { MarkdownComponent } from "../../common/markdown.component"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
 import { PricePipe } from "../../common/price.pipe"
-import {
-  handleResourceLoadingStates,
-  ResourceLoadingState,
-} from "../../common/resource-loading"
 import { ToastService } from "../../common/toast.service"
 import { AdminPrinterSelectModal } from "../printer/admin-printer-select-modal.component"
 import { AdminPrinterService } from "../printer/admin-printer.service"
-import { AdminEventData, AdminEventService } from "./admin-event.service"
+import { AdminEventService } from "./admin-event.service"
 
 @Component({
   selector: "billett-admin-event",
@@ -42,45 +32,33 @@ import { AdminEventData, AdminEventService } from "./admin-event.service"
     MarkdownComponent,
   ],
   templateUrl: "./admin-event.component.html",
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./admin-event.component.scss",
 })
-export class AdminEventComponent implements OnChanges {
+export class AdminEventComponent {
   private adminEventService = inject(AdminEventService)
   private toastService = inject(ToastService)
   private router = inject(Router)
   private adminPrinterService = inject(AdminPrinterService)
   private dialog = inject(Dialog)
 
-  @Input()
-  id!: string
+  id = input.required<string>()
 
   api = api
 
-  pageState = new ResourceLoadingState()
-  event?: AdminEventData
+  eventResource = rxResource({
+    params: () => this.id(),
+    stream: ({ params }) => this.adminEventService.get(params),
+  })
 
-  image_version = ""
-  uploadprogress = undefined
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes["id"]) {
-      this.adminEventService
-        .get(this.id)
-        .pipe(handleResourceLoadingStates(this.pageState))
-        .subscribe((data) => {
-          this.event = data
-        })
-    }
-  }
+  image_version = signal("")
 
   plus(a: string | number, b: string | number | null) {
     return Number(a) + Number(b)
   }
 
   deleteEvent() {
-    if (this.event!.ticketgroups.length > 0) {
+    const event = this.eventResource.value()!
+    if (event.ticketgroups.length > 0) {
       this.toastService.show(
         "Du må først slette billettgruppene som er tilegnet.",
         {
@@ -90,19 +68,18 @@ export class AdminEventComponent implements OnChanges {
       return
     }
 
-    this.adminEventService.delete(this.event!.id).subscribe({
+    this.adminEventService.delete(event.id).subscribe({
       next: () => {
-        void this.router.navigateByUrl(
-          "/a/eventgroup/" + this.event!.eventgroup.id,
-        )
+        void this.router.navigateByUrl("/a/eventgroup/" + event.eventgroup.id)
       },
       error: toastErrorHandler(this.toastService),
     })
   }
 
   moveTicketgroup(idx: number, direction: "up" | "down") {
-    const groups = this.event!.ticketgroups
-    this.event!.ticketgroups =
+    const event = this.eventResource.value()!
+    const groups = event.ticketgroups
+    const ticketgroups =
       direction === "up"
         ? [
             ...groups.slice(0, idx - 1),
@@ -117,12 +94,12 @@ export class AdminEventComponent implements OnChanges {
             ...groups.slice(idx + 2),
           ]
 
+    this.eventResource.set({ ...event, ticketgroups })
+
     this.adminEventService
       .setTicketgroupsOrder(
-        this.event!.id,
-        Object.fromEntries(
-          this.event!.ticketgroups.map((g, index) => [g.id, index]),
-        ),
+        event.id,
+        Object.fromEntries(ticketgroups.map((g, index) => [g.id, index])),
       )
       .subscribe({
         error: toastErrorHandler(
@@ -156,15 +133,17 @@ export class AdminEventComponent implements OnChanges {
     const file = fileInput.files![0]
     const formData = new FormData()
     formData.append("file", file)
-    this.adminEventService.uploadImage(this.event!.id, formData).subscribe({
-      next: () => {
-        this.image_version = new Date().getTime().toString()
-        fileInput.value = ""
-      },
-      error: toastErrorHandler(
-        this.toastService,
-        "Feil ved opplasting av bilde",
-      ),
-    })
+    this.adminEventService
+      .uploadImage(this.eventResource.value()!.id, formData)
+      .subscribe({
+        next: () => {
+          this.image_version.set(new Date().getTime().toString())
+          fileInput.value = ""
+        },
+        error: toastErrorHandler(
+          this.toastService,
+          "Feil ved opplasting av bilde",
+        ),
+      })
   }
 }
