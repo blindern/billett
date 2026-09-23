@@ -176,6 +176,23 @@ test.describe("render", { tag: "@render" }, () => {
       await expect(heading).toBeHidden()
     })
 
+    test("box office order is created and marked paid", async ({ page }) => {
+      await page.goto("/a/order/new/1")
+
+      const modalHeading = page.getByRole("heading", { name: "Tilordne billetter til ordre" })
+      await expect(modalHeading).toBeVisible()
+      await page.locator("tr:has-text('Ordinær') button:has(.glyphicon-plus)").click()
+      await page.getByRole("button", { name: "Legg til billetter" }).click()
+      await expect(modalHeading).toBeHidden()
+
+      await expect(page.locator("table.tickets tbody tr")).toHaveCount(1)
+      await page.locator("select[name=selectedPaymentgroupId]").selectOption({ index: 1 })
+      await page.getByRole("button", { name: "Marker som betalt" }).click()
+
+      await expect(page.getByText("Ordren ble vellykket opprettet")).toBeVisible()
+      await expect(page.getByText("Ingen billetter er reservert.")).toBeVisible()
+    })
+
     test("order print modal resolves printers", async ({ page }) => {
       await page.goto("/a/order/1")
       await page.getByRole("button", { name: "Skriv ut billetter" }).click()

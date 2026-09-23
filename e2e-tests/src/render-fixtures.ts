@@ -219,13 +219,37 @@ const reservation = {
   tickets: [{ ...ticket, order_id: 2, event, ticketgroup }],
 }
 
+const orderWithTickets = {
+  ...orderAdmin,
+  tickets: [{ ...ticketAdmin, event: eventAdmin, ticketgroup: ticketgroupAdmin }],
+  payments: [payment],
+}
+
+const boxOfficeTicket = {
+  ...ticketAdmin,
+  order_id: 3,
+  is_valid: false,
+  event: eventAdmin,
+  ticketgroup: ticketgroupAdmin,
+}
+
+const newOrder = (tickets: (typeof boxOfficeTicket)[]) => ({
+  ...orderAdmin,
+  id: 3,
+  order_text_id: null,
+  is_valid: false,
+  eventgroup: eventgroupAdmin,
+  tickets,
+  payments: [],
+})
+
 const paginated = <T>(result: T[]) => ({
   pagination: { offset: 0, limit: 20, total: result.length },
   result,
 })
 
 // Mirrors the backend: `?admin` only yields full models for an admin session.
-type Handler = (url: URL, isAdmin: boolean) => unknown
+type Handler = (url: URL, isAdmin: boolean, method: string) => unknown
 
 const endpoints: Partial<Record<string, Handler>> = {
   me: (_, isAdmin) => auth(isAdmin),
@@ -295,6 +319,11 @@ const endpoints: Partial<Record<string, Handler>> = {
   "order/2": () => reservation,
   "order/2/force": () => ({}),
   "order/1/create_tickets": () => [],
+  order: (_, __, method) =>
+    method === "POST" ? newOrder([]) : paginated([orderWithTickets]),
+  "order/3": () => newOrder([boxOfficeTicket]),
+  "order/3/create_tickets": () => [],
+  "order/3/validate": () => ({ ...orderAdmin, id: 3 }),
   "order/receipt": () => ({
     order: { ...order, tickets: [{ ...ticket, event, ticketgroup }] },
     payment,
@@ -332,7 +361,9 @@ export async function mockApi(page: Page, { admin = false } = {}) {
     return route.fulfill({
       status: handler ? 200 : 404,
       contentType: "application/json",
-      body: JSON.stringify(handler ? handler(url, admin) : { error: "not mocked" }),
+      body: JSON.stringify(
+        handler ? handler(url, admin, route.request().method()) : { error: "not mocked" },
+      ),
     })
   })
 }
