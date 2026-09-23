@@ -1,22 +1,10 @@
 import { Dialog } from "@angular/cdk/dialog"
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  Input,
-  OnChanges,
-  SimpleChanges,
-} from "@angular/core"
+import { Component, inject, input } from "@angular/core"
+import { rxResource } from "@angular/core/rxjs-interop"
 import { RouterLink } from "@angular/router"
-import { ApiEventgroupAdmin, ApiPaymentgroupAdmin } from "../../apitypes"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
-import {
-  composeResourceLoadingStates,
-  handleResourceLoadingStates,
-  ResourceLoadingState,
-} from "../../common/resource-loading"
 import { AdminEventgroupService } from "../eventgroup/admin-eventgroup.service"
 import { AdminPaymentgroupCreateModal } from "./admin-paymentgroup-create-modal.component"
 import { AdminPaymentgroupService } from "./admin-paymentgroup.service"
@@ -30,58 +18,31 @@ import { AdminPaymentgroupService } from "./admin-paymentgroup.service"
     PageStatesComponent,
     FormatdatePipe,
   ],
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-paymentgroup-list.component.html",
 })
-export class AdminPaymentgroupListComponent implements OnChanges {
+export class AdminPaymentgroupListComponent {
   private adminEventgroupService = inject(AdminEventgroupService)
   private adminPaymentgroupService = inject(AdminPaymentgroupService)
   private dialog = inject(Dialog)
 
-  @Input()
-  eventgroupId!: string
+  eventgroupId = input.required<string>()
 
-  eventgroupState = new ResourceLoadingState()
-  paymentgroupsState = new ResourceLoadingState()
+  eventgroupResource = rxResource({
+    params: () => this.eventgroupId(),
+    stream: ({ params }) => this.adminEventgroupService.get(params),
+  })
 
-  eventgroup?: ApiEventgroupAdmin
-  paymentgroups?: ApiPaymentgroupAdmin[]
-
-  get pageState() {
-    return composeResourceLoadingStates(
-      this.eventgroupState,
-      this.paymentgroupsState,
-    )
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes["eventgroupId"]) {
-      this.adminEventgroupService
-        .get(this.eventgroupId)
-        .pipe(handleResourceLoadingStates(this.eventgroupState))
-        .subscribe((eventgroup) => {
-          this.eventgroup = eventgroup
-          this.#loadPaymentGroups(eventgroup.id)
-        })
-    }
-  }
-
-  #loadPaymentGroups(eventgroupId: number) {
-    this.adminPaymentgroupService
-      .list(eventgroupId)
-      .pipe(handleResourceLoadingStates(this.paymentgroupsState))
-      .subscribe((paymentgroups) => {
-        this.paymentgroups = paymentgroups
-      })
-  }
+  paymentgroupsResource = rxResource({
+    params: () => this.eventgroupResource.value()?.id,
+    stream: ({ params }) => this.adminPaymentgroupService.list(params),
+  })
 
   createNew() {
     AdminPaymentgroupCreateModal.open(this.dialog, {
-      eventgroupId: this.eventgroup!.id,
+      eventgroupId: this.eventgroupResource.value()!.id,
     }).closed.subscribe((paymentgroup) => {
       if (paymentgroup) {
-        this.#loadPaymentGroups(this.eventgroup!.id)
+        this.paymentgroupsResource.reload()
       }
     })
   }
