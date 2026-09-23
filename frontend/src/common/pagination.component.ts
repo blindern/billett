@@ -1,41 +1,21 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-} from "@angular/core"
+import { Component, computed, input, output } from "@angular/core"
 
 @Component({
   selector: "billett-pagination",
   standalone: true,
-  imports: [],
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./pagination.component.html",
 })
 export class PaginationComponent {
-  @Input()
-  total!: number
+  total = input.required<number>()
+  limit = input.required<number>()
+  page = input.required<number>()
+  changePage = output<number>()
 
-  @Input()
-  limit!: number
-
-  @Input()
-  page!: number
-
-  @Output()
-  changePage = new EventEmitter<number>()
-
-  get numPages() {
-    return Math.ceil(this.total / this.limit)
-  }
+  numPages = computed(() => Math.ceil(this.total() / this.limit()))
 
   changePageHandler(event: Event, to: number) {
     event.preventDefault()
-
-    if (to < 1 || to > this.numPages) return
-    this.page = to
+    if (to < 1 || to > this.numPages()) return
     this.changePage.emit(to)
   }
 }
