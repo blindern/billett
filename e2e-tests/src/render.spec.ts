@@ -41,6 +41,8 @@ test.describe("render", { tag: "@render" }, () => {
       await page.goto("/")
 
       await expect(page.getByRole("link", { name: EVENTGROUP_TITLE })).toBeVisible()
+      await expect(page.locator("li:has(> a[href='/eventgroup/10'])")).toHaveClass(/active/)
+      await expect(page.locator("li:has(> a[href='/hjelp'])")).not.toHaveClass(/active/)
     })
 
     test("eventgroup page renders and resolves loading", async ({ page }) => {
