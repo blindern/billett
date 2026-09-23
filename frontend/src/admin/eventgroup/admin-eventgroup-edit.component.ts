@@ -1,22 +1,11 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  Input,
-  OnChanges,
-  SimpleChanges,
-} from "@angular/core"
+import { Component, inject, input } from "@angular/core"
+import { rxResource } from "@angular/core/rxjs-interop"
 import { FormsModule } from "@angular/forms"
 import { RouterLink } from "@angular/router"
-import { ApiEventgroupAdmin } from "../../apitypes"
 import { toastErrorHandler } from "../../common/errors"
 import { NavigationService } from "../../common/navigation.service"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
-import {
-  handleResourceLoadingStates,
-  ResourceLoadingState,
-} from "../../common/resource-loading"
 import { ToastService } from "../../common/toast.service"
 import { AdminEventgroupService } from "./admin-eventgroup.service"
 
@@ -29,36 +18,25 @@ import { AdminEventgroupService } from "./admin-eventgroup.service"
     PagePropertyComponent,
     RouterLink,
   ],
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-eventgroup-edit.component.html",
 })
-export class AdminEventgroupEditComponent implements OnChanges {
+export class AdminEventgroupEditComponent {
   private adminEventgroupService = inject(AdminEventgroupService)
   private navigationService = inject(NavigationService)
   private toastService = inject(ToastService)
 
-  @Input()
-  id!: string
+  id = input.required<string>()
 
-  pageState = new ResourceLoadingState()
-  eventgroup?: ApiEventgroupAdmin
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes["id"]) {
-      this.adminEventgroupService
-        .get(this.id)
-        .pipe(handleResourceLoadingStates(this.pageState))
-        .subscribe((data) => {
-          this.eventgroup = data
-        })
-    }
-  }
+  eventgroupResource = rxResource({
+    params: () => this.id(),
+    stream: ({ params }) => this.adminEventgroupService.get(params),
+  })
 
   storeEventgroup() {
-    if (!this.eventgroup?.title) return
+    const eventgroup = this.eventgroupResource.value()
+    if (!eventgroup?.title) return
 
-    this.adminEventgroupService.update(this.eventgroup).subscribe({
+    this.adminEventgroupService.update(eventgroup).subscribe({
       next: (data) => {
         this.navigationService.goBackOrTo(`/a/eventgroup/${data.id}`)
       },

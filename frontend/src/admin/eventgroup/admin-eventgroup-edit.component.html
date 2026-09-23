@@ -1,7 +1,8 @@
-<billett-page-states [loading]="pageState.loading" [error]="pageState.error" />
+<billett-page-states [loading]="eventgroupResource.isLoading()" [error]="eventgroupResource.error()" />
 <billett-page-property name="title" value="Rediger arrangementgruppe" />
 
-@if (eventgroup) {
+@if (eventgroupResource.hasValue()) {
+  @let eventgroup = eventgroupResource.value();
   <billett-page-property name="title" value="Rediger: {{ eventgroup.title }}" />
 
   <div class="page-header">
