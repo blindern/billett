@@ -1,12 +1,6 @@
 import { AsyncPipe, KeyValuePipe } from "@angular/common"
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  Input,
-  OnChanges,
-  SimpleChanges,
-} from "@angular/core"
+import { Component, computed, effect, inject, input } from "@angular/core"
+import { rxResource } from "@angular/core/rxjs-interop"
 import { Router, RouterLink } from "@angular/router"
 import { ApiEvent } from "../../apitypes"
 import { AuthService } from "../../auth/auth.service"
@@ -14,11 +8,7 @@ import { FormatdatePipe } from "../../common/formatdate.pipe"
 import moment from "../../common/moment"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
-import {
-  handleResourceLoadingStates,
-  ResourceLoadingState,
-} from "../../common/resource-loading"
-import { EventgroupExpanded, EventgroupService } from "./eventgroup.service"
+import { EventgroupService } from "./eventgroup.service"
 import { GuestEventlistItemComponent } from "./eventlist-item.component"
 
 @Component({
@@ -34,81 +24,69 @@ import { GuestEventlistItemComponent } from "./eventlist-item.component"
     KeyValuePipe,
   ],
   templateUrl: "./eventgroup.component.html",
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./eventgroup.component.scss",
 })
-export class GuestEventgroupComponent implements OnChanges {
+export class GuestEventgroupComponent {
   private eventgroupService = inject(EventgroupService)
   private router = inject(Router)
   public authService = inject(AuthService)
 
-  @Input()
-  id!: string
+  id = input.required<string>()
+  query = input<string>()
 
-  @Input()
-  query!: string
+  eventgroup = rxResource({
+    params: () => this.id(),
+    stream: ({ params }) => this.eventgroupService.get(params),
+  })
 
-  pageState = new ResourceLoadingState()
+  filter = computed(() => {
+    const query = this.query()
+    if (!query) return undefined
+    const date = moment(query, "YYYY-MM-DD")
+    return date.isValid()
+      ? { date: date.format("YYYY-MM-DD") }
+      : { category: query }
+  })
 
-  daythemes: Record<string, string> = {}
-  days!: Record<string, EventgroupExpanded["events"]>
-  isFilter!: boolean
-  eventgroup?: EventgroupExpanded
+  days = computed(() => {
+    const days: Record<string, ApiEvent[]> = {}
+    if (!this.eventgroup.hasValue()) return days
+    const filter = this.filter()
+    for (const item of this.eventgroup.value().events) {
+      if (
+        filter?.category &&
+        filter.category != (item.category ?? "").toLowerCase()
+      )
+        continue
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes["id"] || changes["query"]) {
-      let filterDate = ""
-      let filterCategory = ""
+      const day = moment.unix(item.time_start - 3600 * 6).format("YYYY-MM-DD")
+      if (filter?.date && filter.date != day) continue
 
-      this.isFilter = false
-      if (this.query) {
-        const date = moment(this.query, "YYYY-MM-DD")
-        if (date.isValid()) {
-          filterDate = date.format("YYYY-MM-DD")
-        } else {
-          filterCategory = this.query
-        }
-        this.isFilter = true
-      }
-
-      this.eventgroupService
-        .get(this.id)
-        .pipe(handleResourceLoadingStates(this.pageState))
-        .subscribe((eventgroup) => {
-          this.eventgroup = eventgroup
-
-          const r: Record<string, ApiEvent[]> = {}
-          let c = 0
-          for (const item of this.eventgroup.events) {
-            if (
-              filterCategory &&
-              filterCategory != (item.category ?? "").toLowerCase()
-            )
-              continue
-
-            const k = moment
-              .unix(item.time_start - 3600 * 6)
-              .format("YYYY-MM-DD")
-            if (filterDate && filterDate != k) continue
-
-            r[k] = r[k] || []
-            r[k].push(item)
-            c++
-          }
-
-          for (const item of this.eventgroup.daythemes) {
-            const day = moment.unix(item.date).format("YYYY-MM-DD")
-            this.daythemes[day] = item.title
-          }
-
-          // if blank page on filter
-          if (c == 0 && (filterDate || filterCategory)) {
-            void this.router.navigateByUrl("eventgroup/" + eventgroup.id)
-          }
-
-          this.days = r
-        })
+      ;(days[day] ??= []).push(item)
     }
+    return days
+  })
+
+  daythemes = computed(() =>
+    Object.fromEntries(
+      (this.eventgroup.value()?.daythemes ?? []).map((item) => [
+        moment.unix(item.date).format("YYYY-MM-DD"),
+        item.title,
+      ]),
+    ),
+  )
+
+  constructor() {
+    effect(() => {
+      if (
+        this.eventgroup.hasValue() &&
+        this.filter() &&
+        Object.keys(this.days()).length === 0
+      ) {
+        void this.router.navigateByUrl(
+          "eventgroup/" + this.eventgroup.value().id,
+        )
+      }
+    })
   }
 }
