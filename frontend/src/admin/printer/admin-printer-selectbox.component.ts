@@ -1,82 +1,48 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  inject,
-  Input,
-  OnInit,
-  Output,
-} from "@angular/core"
+import { Component, inject, input, model } from "@angular/core"
+import { rxResource } from "@angular/core/rxjs-interop"
 import { FormsModule } from "@angular/forms"
+import { tap } from "rxjs"
 import { ApiPrinterAdmin } from "../../apitypes"
 import { getErrorText } from "../../common/errors"
-import {
-  handleResourceLoadingStates,
-  ResourceLoadingState,
-} from "../../common/resource-loading"
 import { AdminPrinterService } from "./admin-printer.service"
 
 @Component({
   selector: "billett-admin-printer-selectbox",
   standalone: true,
   imports: [FormsModule],
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-printer-selectbox.component.html",
 })
-export class AdminPrinterSelectboxComponent implements OnInit {
+export class AdminPrinterSelectboxComponent {
   private adminPrinterService = inject(AdminPrinterService)
 
   getErrorText = getErrorText
-  resourceState = new ResourceLoadingState()
 
-  @Input()
-  id?: string
+  id = input<string>()
+  printer = model<ApiPrinterAdmin>()
+  canDisable = input(false)
 
-  @Input()
-  printer?: ApiPrinterAdmin
-
-  @Input()
-  canDisable?: boolean
-
-  @Output()
-  printerChange = new EventEmitter<ApiPrinterAdmin>()
-
-  printers?: ApiPrinterAdmin[]
-  selectedPrinterName = ""
-
-  ngOnInit(): void {
-    this.printers = undefined
-    this.adminPrinterService
-      .getList()
-      .pipe(handleResourceLoadingStates(this.resourceState))
-      .subscribe((printers) => {
-        this.printers = printers
-
-        const updated = this.adminPrinterService.getPreferred(
-          printers,
-          this.printer ? this.printer.name : undefined,
-        )
-        this.selectedPrinterName = updated?.name ?? ""
-
-        if (this.printer?.name !== updated?.name) {
-          this.printer = updated
-          this.printerChange.emit(updated)
-        }
-      })
-  }
+  printers = rxResource({
+    stream: () =>
+      this.adminPrinterService.getList().pipe(
+        tap((printers) => {
+          const preferred = this.adminPrinterService.getPreferred(
+            printers,
+            this.printer()?.name,
+          )
+          if (this.printer()?.name !== preferred?.name) {
+            this.printer.set(preferred)
+          }
+        }),
+      ),
+  })
 
   getUptime(printer: ApiPrinterAdmin) {
     return Math.floor((printer.last_seen - printer.registered) / 60)
   }
 
-  update() {
-    const printer = this.selectedPrinterName
-      ? this.printers!.find((it) => it.name === this.selectedPrinterName)
-      : undefined
-
-    this.printer = printer
-    this.printerChange.emit(printer)
+  select(name: string) {
+    const printer = this.printers.value()?.find((it) => it.name === name)
+    this.printer.set(printer)
     this.adminPrinterService.setPreferred(printer)
   }
 }
