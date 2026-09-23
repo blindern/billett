@@ -140,7 +140,10 @@ test.describe("render", { tag: "@render" }, () => {
     })
 
     test("order renders", async ({ page }) => {
+      await page.goto("/")
+      await expect(page.locator(".container").first()).toHaveClass(/noadmin/)
       await page.goto("/a/order/1")
+      await expect(page.locator(".container").first()).not.toHaveClass(/noadmin/)
 
       await expect(page.getByRole("heading", { name: `Ordre: ${ORDER_TEXT_ID}` })).toBeVisible()
       await expectLoaded(page)
