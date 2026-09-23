@@ -98,6 +98,21 @@ test.describe("render", { tag: "@render" }, () => {
       await mockApi(page, { admin: true })
     })
 
+    for (const [path, heading] of [
+      ["/a", "Administrasjon"],
+      ["/a/eventgroup/1/edit", EVENTGROUP_TITLE],
+      ["/a/eventgroup/1/new_event", "Nytt arrangement"],
+      ["/a/eventgroup/1/new_daytheme", `Ny temadag for ${EVENTGROUP_TITLE}`],
+      ["/a/event/1/ticketgroup/new", "Ny billettgruppe"],
+    ]) {
+      test(`${path} renders`, async ({ page }) => {
+        await page.goto(path)
+
+        await expect(page.getByRole("heading", { name: heading })).toBeVisible()
+        await expectLoaded(page)
+      })
+    }
+
     test("sold tickets stats renders", async ({ page }) => {
       await page.goto("/a/eventgroup/1/sold_tickets_stats")
 
