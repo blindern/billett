@@ -1,22 +1,11 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  Input,
-  OnChanges,
-  SimpleChanges,
-} from "@angular/core"
+import { Component, inject, input } from "@angular/core"
+import { rxResource } from "@angular/core/rxjs-interop"
 import { FormsModule } from "@angular/forms"
 import { Router, RouterLink } from "@angular/router"
-import { ApiEventgroupAdmin } from "../../apitypes"
 import { toastErrorHandler } from "../../common/errors"
 import moment from "../../common/moment"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
-import {
-  handleResourceLoadingStates,
-  ResourceLoadingState,
-} from "../../common/resource-loading"
 import { ToastService } from "../../common/toast.service"
 import { AdminEventgroupService } from "../eventgroup/admin-eventgroup.service"
 import { AdminDaythemeService } from "./admin-daytheme.service"
@@ -30,39 +19,28 @@ import { AdminDaythemeService } from "./admin-daytheme.service"
     RouterLink,
     FormsModule,
   ],
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-daytheme-create.component.html",
 })
-export class AdminDaythemeCreateComponent implements OnChanges {
+export class AdminDaythemeCreateComponent {
   private adminDaythemeService = inject(AdminDaythemeService)
   private adminEventgroupService = inject(AdminEventgroupService)
   private router = inject(Router)
   private toastService = inject(ToastService)
 
-  @Input()
-  eventgroupId!: string
+  eventgroupId = input.required<string>()
 
-  pageState = new ResourceLoadingState()
-  eventgroup?: ApiEventgroupAdmin
+  eventgroupResource = rxResource({
+    params: () => this.eventgroupId(),
+    stream: ({ params }) => this.adminEventgroupService.get(params),
+  })
+
   form = {
     title: "",
     date: "",
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes["eventgroupId"]) {
-      this.adminEventgroupService
-        .get(this.eventgroupId)
-        .pipe(handleResourceLoadingStates(this.pageState))
-        .subscribe((data) => {
-          this.eventgroup = data
-        })
-    }
-  }
-
   storeDaytheme() {
-    if (!this.form?.title || !this.form.date) return
+    if (!this.form.title || !this.form.date) return
 
     const date = moment(this.form.date, "YYYY-MM-DD").unix()
     if (!date) {
@@ -72,13 +50,13 @@ export class AdminDaythemeCreateComponent implements OnChanges {
 
     this.adminDaythemeService
       .create({
-        eventgroup_id: this.eventgroup!.id,
+        eventgroup_id: this.eventgroupResource.value()!.id,
         date,
         title: this.form.title,
       })
       .subscribe({
         next: () => {
-          void this.router.navigateByUrl(`/a/eventgroup/${this.eventgroupId}`)
+          void this.router.navigateByUrl(`/a/eventgroup/${this.eventgroupId()}`)
         },
         error: toastErrorHandler(this.toastService),
       })
