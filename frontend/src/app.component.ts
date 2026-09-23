@@ -1,19 +1,15 @@
 import { Dialog } from "@angular/cdk/dialog"
 import { AsyncPipe, Location } from "@angular/common"
+import { Component, inject } from "@angular/core"
+import { toSignal } from "@angular/core/rxjs-interop"
 import {
-  afterEveryRender,
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnInit,
-} from "@angular/core"
-import {
-  Event,
   EventType,
+  NavigationEnd,
   Router,
   RouterLink,
   RouterOutlet,
 } from "@angular/router"
+import { filter, map } from "rxjs"
 import { AuthService } from "./auth/auth.service"
 import { ActiveForDirective } from "./common/active-for.directive"
 import { ToastContainerComponent } from "./common/toast-container.component"
@@ -28,50 +24,38 @@ import { ToastContainerComponent } from "./common/toast-container.component"
     AsyncPipe,
     ToastContainerComponent,
   ],
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./app.component.html",
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   private location = inject(Location)
   public authService = inject(AuthService)
   private router = inject(Router)
   private dialog = inject(Dialog)
 
-  loggedInButNoAccess = false
+  loggedInButNoAccess = toSignal(
+    this.authService.authData$.pipe(map((it) => it.logged_in && !it.is_admin)),
+    { initialValue: false },
+  )
 
-  isAdminPage() {
-    return this.location.path().startsWith("/a/")
-  }
+  isAdminPage = toSignal(
+    this.router.events.pipe(
+      filter((event) => event instanceof NavigationEnd),
+      map(() => this.location.path().startsWith("/a/")),
+    ),
+    { initialValue: false },
+  )
 
   constructor() {
-    afterEveryRender(() => {
-      if (window.top != window.self) {
-        document.body.classList.add("isInIframe")
-      }
-    })
-  }
+    if (window.top != window.self) {
+      document.body.classList.add("isInIframe")
+    }
 
-  ngOnInit(): void {
     this.authService.isDevPage$.subscribe((res) => {
-      if (res) {
-        document.body.classList.add("dev-page")
-      } else {
-        document.body.classList.remove("dev-page")
-      }
-    })
-    this.authService.isLoggedIn$.subscribe((res) => {
-      if (res) {
-        this.authService.isAdmin$.subscribe((isAdmin) => {
-          if (!isAdmin) {
-            this.loggedInButNoAccess = true
-          }
-        })
-      }
+      document.body.classList.toggle("dev-page", res)
     })
 
     // make sure modals close on state change
-    this.router.events.subscribe((s: Event) => {
+    this.router.events.subscribe((s) => {
       if (s.type === EventType.NavigationStart) {
         for (const dialog of this.dialog.openDialogs) {
           dialog.close()
