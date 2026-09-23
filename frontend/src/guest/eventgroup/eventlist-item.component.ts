@@ -1,11 +1,5 @@
 import { LowerCasePipe, NgClass } from "@angular/common"
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  Injectable,
-  Input,
-} from "@angular/core"
+import { Component, inject, Injectable, input } from "@angular/core"
 import { EventType, Router, RouterLink } from "@angular/router"
 import { filter } from "rxjs"
 import { ApiEvent, ApiEventgroup } from "../../apitypes"
@@ -39,21 +33,14 @@ class CategoryColors {
   standalone: true,
   imports: [FormatdatePipe, RouterLink, NgClass, LowerCasePipe],
   templateUrl: "./eventlist-item.component.html",
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./eventlist-item.component.scss",
 })
 export class GuestEventlistItemComponent {
   private categoryColors = inject(CategoryColors)
 
-  @Input()
-  event!: ApiEvent
-
-  @Input()
-  eventgroup!: ApiEventgroup
-
-  @Input()
-  isUpcoming = false
+  event = input.required<ApiEvent>()
+  eventgroup = input.required<ApiEventgroup>()
+  isUpcoming = input(false)
 
   framed = window.top != window.self
 
