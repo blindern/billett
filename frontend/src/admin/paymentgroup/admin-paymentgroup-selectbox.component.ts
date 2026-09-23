@@ -1,22 +1,11 @@
 import { Dialog } from "@angular/cdk/dialog"
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  inject,
-  Input,
-  OnChanges,
-  Output,
-  SimpleChanges,
-} from "@angular/core"
+import { Component, inject, input, model } from "@angular/core"
+import { rxResource } from "@angular/core/rxjs-interop"
 import { FormsModule } from "@angular/forms"
+import { tap } from "rxjs"
 import { ApiPaymentgroupAdmin } from "../../apitypes"
 import { getErrorText } from "../../common/errors"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
-import {
-  handleResourceLoadingStates,
-  ResourceLoadingState,
-} from "../../common/resource-loading"
 import { AdminPaymentgroupCreateModal } from "./admin-paymentgroup-create-modal.component"
 import { AdminPaymentgroupService } from "./admin-paymentgroup.service"
 
@@ -24,74 +13,47 @@ import { AdminPaymentgroupService } from "./admin-paymentgroup.service"
   selector: "billett-admin-paymentgroup-selectbox",
   standalone: true,
   imports: [FormsModule, FormatdatePipe],
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-paymentgroup-selectbox.component.html",
 })
-export class AdminPaymentgroupSelectboxComponent implements OnChanges {
+export class AdminPaymentgroupSelectboxComponent {
   private adminPaymentgroupService = inject(AdminPaymentgroupService)
   private dialog = inject(Dialog)
 
   getErrorText = getErrorText
-  resourceState = new ResourceLoadingState()
 
-  @Input()
-  eventgroupId!: number
+  eventgroupId = input.required<number>()
+  paymentgroup = model<ApiPaymentgroupAdmin>()
 
-  @Input()
-  paymentgroup?: ApiPaymentgroupAdmin
-
-  @Output()
-  paymentgroupChange = new EventEmitter<ApiPaymentgroupAdmin>()
-
-  paymentgroups?: ApiPaymentgroupAdmin[]
-  selectedPaymentgroupId = ""
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes["eventgroupId"]) {
-      this.adminPaymentgroupService
-        .listValid(this.eventgroupId)
-        .pipe(handleResourceLoadingStates(this.resourceState))
-        .subscribe((paymentgroups) => {
-          this.paymentgroups = paymentgroups
-
-          const updated = this.adminPaymentgroupService.getPreferredGroup(
+  paymentgroups = rxResource({
+    params: () => this.eventgroupId(),
+    stream: ({ params }) =>
+      this.adminPaymentgroupService.listValid(params).pipe(
+        tap((paymentgroups) => {
+          const preferred = this.adminPaymentgroupService.getPreferredGroup(
             paymentgroups,
-            this.paymentgroup ? this.paymentgroup.id : undefined,
+            this.paymentgroup()?.id,
           )
-          this.selectedPaymentgroupId = updated?.id.toString() ?? ""
-
-          if (this.paymentgroup?.id !== updated?.id) {
-            this.paymentgroup = updated
-            this.paymentgroupChange.emit(updated)
+          if (this.paymentgroup()?.id !== preferred?.id) {
+            this.paymentgroup.set(preferred)
           }
-        })
-    }
-  }
+        }),
+      ),
+  })
 
   createNew() {
     AdminPaymentgroupCreateModal.open(this.dialog, {
-      eventgroupId: this.eventgroupId,
+      eventgroupId: this.eventgroupId(),
     }).closed.subscribe((paymentgroup) => {
       if (paymentgroup) {
-        this.paymentgroup = paymentgroup
-        this.paymentgroups!.push(paymentgroup)
-        this.paymentgroupChange.emit(paymentgroup)
-        this.selectedPaymentgroupId = paymentgroup.id.toString()
-        this.adminPaymentgroupService.setPreferredGroup(paymentgroup)
+        this.paymentgroups.update((list) => [...(list ?? []), paymentgroup])
+        this.select(paymentgroup.id)
       }
     })
   }
 
-  update() {
-    const paymentgroup = this.selectedPaymentgroupId
-      ? this.paymentgroups!.find(
-          (it) => it.id === Number(this.selectedPaymentgroupId),
-        )
-      : undefined
-
-    this.paymentgroup = paymentgroup
-    this.paymentgroupChange.emit(paymentgroup)
+  select(id: number | "") {
+    const paymentgroup = this.paymentgroups.value()?.find((it) => it.id === id)
+    this.paymentgroup.set(paymentgroup)
     this.adminPaymentgroupService.setPreferredGroup(paymentgroup)
   }
 }
