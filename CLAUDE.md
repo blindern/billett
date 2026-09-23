@@ -32,7 +32,6 @@ OpenTelemetry packages require `--ignore-platform-req=ext-opentelemetry` for loc
 ```bash
 pnpm ng serve --port 3000 --open  # Start dev server
 pnpm run build                    # Production build
-pnpm test                         # Run tests (Karma + Jasmine)
 pnpm run lint                     # Lint with ESLint
 ```
 
