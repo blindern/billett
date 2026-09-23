@@ -54,6 +54,7 @@ test.describe("render", { tag: "@render" }, () => {
       await page.goto("/event/1")
 
       await expect(page.getByText(EVENT_TITLE).first()).toBeVisible()
+      await expect(page.getByText("Beskrivelse", { exact: true })).toBeVisible()
       await expectLoaded(page)
     })
 
@@ -97,6 +98,30 @@ test.describe("render", { tag: "@render" }, () => {
       await page.goto("/a/order/1")
 
       await expect(page.getByRole("heading", { name: `Ordre: ${ORDER_TEXT_ID}` })).toBeVisible()
+      await expectLoaded(page)
+    })
+
+    test("order payment modal selects paymentgroup", async ({ page }) => {
+      await page.goto("/a/order/1")
+      await page.getByRole("button", { name: "Ny transaksjon" }).click()
+
+      const select = page.locator("select[name=selectedPaymentgroupId]")
+      await expect(select.getByRole("option", { name: PAYMENTGROUP_TITLE })).toHaveCount(1)
+      await select.selectOption({ index: 1 })
+      await expect(select.getByRole("option", { name: "Velg ..." })).toHaveCount(0)
+    })
+
+    test("order print modal resolves printers", async ({ page }) => {
+      await page.goto("/a/order/1")
+      await page.getByRole("button", { name: "Skriv ut billetter" }).click()
+
+      await expect(page.getByText("Ingen skrivere er tilgjengelig")).toBeVisible()
+    })
+
+    test("event edit form renders", async ({ page }) => {
+      await page.goto("/a/event/1/edit")
+
+      await expect(page.locator("#title")).toHaveValue(EVENT_TITLE)
       await expectLoaded(page)
     })
 
