@@ -1,10 +1,6 @@
 import { CommonModule } from "@angular/common"
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnInit,
-} from "@angular/core"
+import { Component, inject, signal } from "@angular/core"
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop"
 import { FormsModule } from "@angular/forms"
 import { ActivatedRoute, Router, RouterLink } from "@angular/router"
 import { debounce, of, Subject, timer } from "rxjs"
@@ -45,11 +41,9 @@ const searchInit = {
     PricePipe,
     CommonModule,
   ],
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-order-list.component.html",
 })
-export class AdminOrderListComponent implements OnInit {
+export class AdminOrderListComponent {
   private adminOrderService = inject(AdminOrderService)
   private route = inject(ActivatedRoute)
   private router = inject(Router)
@@ -57,9 +51,10 @@ export class AdminOrderListComponent implements OnInit {
 
   api = api
 
-  curPage = 1
-  search = structuredClone(searchInit)
-  orders?: ReturnType<AdminOrderListComponent["parseOrdersList"]>
+  search = signal(structuredClone(searchInit))
+  orders = signal<
+    ReturnType<AdminOrderListComponent["parseOrdersList"]> | undefined
+  >(undefined)
 
   search_status = [
     {
@@ -82,29 +77,32 @@ export class AdminOrderListComponent implements OnInit {
 
   #searchqueue = new Subject<"delayed" | "immediate">()
 
-  ngOnInit(): void {
-    this.route.queryParams.subscribe((params) => {
-      this.search = {
+  constructor() {
+    this.route.queryParams.pipe(takeUntilDestroyed()).subscribe((params) => {
+      this.search.set({
         ...searchInit,
         ...params,
-      }
+      })
     })
 
     this.#searchqueue
-      .pipe(debounce((value) => (value === "delayed" ? timer(3000) : of(null))))
+      .pipe(
+        debounce((value) => (value === "delayed" ? timer(3000) : of(null))),
+        takeUntilDestroyed(),
+      )
       .subscribe((type) => {
         if (type === "delayed") {
-          this.search.page = 1
+          this.search().page = 1
         }
 
         this.adminOrderService
           .query({
-            page: this.search.page,
+            page: this.search().page,
             filter: this.genFilter(),
           })
           .subscribe({
             next: (data) => {
-              this.orders = this.parseOrdersList(data)
+              this.orders.set(this.parseOrdersList(data))
             },
             error: toastErrorHandler(
               this.toastService,
@@ -173,7 +171,7 @@ export class AdminOrderListComponent implements OnInit {
     const queryParams: Record<string, string | null> = {}
 
     const r: string[] = []
-    for (const [name, val] of Object.entries(this.search)) {
+    for (const [name, val] of Object.entries(this.search())) {
       queryParams[name] =
         name == "page" && val == 1 ? null : String(val) || null
 
