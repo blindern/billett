@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core"
+import { Component, OnInit } from "@angular/core"
 import { api } from "../api"
 import { PagePropertyComponent } from "../common/page-property.component"
 
@@ -9,8 +9,6 @@ import { PagePropertyComponent } from "../common/page-property.component"
     <billett-page-property name="title" value="Logg inn" />
     <p>Går til logg inn side</p>
   `,
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [PagePropertyComponent],
 })
 export class LoginComponent implements OnInit {
