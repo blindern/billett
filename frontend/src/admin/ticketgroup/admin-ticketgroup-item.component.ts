@@ -1,26 +1,12 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  Input,
-  OnChanges,
-  SimpleChanges,
-} from "@angular/core"
+import { Component, inject, input } from "@angular/core"
+import { rxResource } from "@angular/core/rxjs-interop"
 import { FormsModule } from "@angular/forms"
 import { Router, RouterLink } from "@angular/router"
-import {
-  ApiEventAdmin,
-  ApiEventgroupAdmin,
-  ApiTicketgroupAdmin,
-} from "../../apitypes"
+import { tap } from "rxjs"
 import { toastErrorHandler } from "../../common/errors"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
-import {
-  handleResourceLoadingStates,
-  ResourceLoadingState,
-} from "../../common/resource-loading"
 import { ToastService } from "../../common/toast.service"
 import { AdminTicketgroupService } from "./admin-ticketgroup.service"
 
@@ -34,49 +20,33 @@ import { AdminTicketgroupService } from "./admin-ticketgroup.service"
     RouterLink,
     PageStatesComponent,
   ],
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-ticketgroup-item.component.html",
 })
-export class AdminTicketgroupItemComponent implements OnChanges {
+export class AdminTicketgroupItemComponent {
   private adminTicketgroupService = inject(AdminTicketgroupService)
   private router = inject(Router)
   private toastService = inject(ToastService)
 
-  @Input()
-  eventId!: string
+  eventId = input.required<string>()
+  ticketgroupId = input.required<string>()
 
-  @Input()
-  ticketgroupId!: string
-
-  ticketgroup?: ApiTicketgroupAdmin & {
-    event: ApiEventAdmin & {
-      eventgroup: ApiEventgroupAdmin
-    }
-  }
-
-  pageState = new ResourceLoadingState()
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes["ticketgroupId"] || changes["eventId"]) {
-      this.adminTicketgroupService
-        .get(this.ticketgroupId)
-        .pipe(handleResourceLoadingStates(this.pageState))
-        .subscribe((data) => {
-          if (String(data.event.id) !== this.eventId) {
+  ticketgroupResource = rxResource({
+    params: () => ({ eventId: this.eventId(), id: this.ticketgroupId() }),
+    stream: ({ params }) =>
+      this.adminTicketgroupService.get(params.id).pipe(
+        tap((data) => {
+          if (String(data.event.id) !== params.eventId) {
             void this.router.navigateByUrl("/a")
-            return
           }
-
-          this.ticketgroup = data
-        })
-    }
-  }
+        }),
+      ),
+  })
 
   updateTicketgroup() {
-    this.adminTicketgroupService.update(this.ticketgroup!).subscribe({
+    const ticketgroup = this.ticketgroupResource.value()!
+    this.adminTicketgroupService.update(ticketgroup).subscribe({
       next: () => {
-        void this.router.navigateByUrl(`/a/event/${this.ticketgroup!.event.id}`)
+        void this.router.navigateByUrl(`/a/event/${ticketgroup.event.id}`)
       },
       error: toastErrorHandler(this.toastService),
     })
@@ -84,9 +54,10 @@ export class AdminTicketgroupItemComponent implements OnChanges {
 
   deleteTicketgroup() {
     // TODO: no delete on valid/reserved tickets
-    this.adminTicketgroupService.delete(this.ticketgroup!.id).subscribe({
+    const ticketgroup = this.ticketgroupResource.value()!
+    this.adminTicketgroupService.delete(ticketgroup.id).subscribe({
       next: () => {
-        void this.router.navigateByUrl(`/a/event/${this.ticketgroup!.event.id}`)
+        void this.router.navigateByUrl(`/a/event/${ticketgroup.event.id}`)
       },
       error: toastErrorHandler(this.toastService),
     })

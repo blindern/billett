@@ -1,7 +1,8 @@
-<billett-page-states [loading]="pageState.loading" [error]="pageState.error" />
+<billett-page-states [loading]="ticketgroupResource.isLoading()" [error]="ticketgroupResource.error()" />
 <billett-page-property name="title" value="Billettgruppe" />
 
-@if (ticketgroup) {
+@if (ticketgroupResource.hasValue()) {
+  @let ticketgroup = ticketgroupResource.value();
   <billett-page-property
     name="title"
     value="{{ ticketgroup.event.title }} ({{ ticketgroup.event.time_start | formatdate: 'DD. MMM' }}): {{
