@@ -4,6 +4,7 @@ import { Component, computed, inject, signal } from "@angular/core"
 import { rxResource } from "@angular/core/rxjs-interop"
 import { FormsModule } from "@angular/forms"
 import { RouterLink } from "@angular/router"
+import { finalize } from "rxjs"
 import { ApiTicketAdmin, ApiTicketgroupAdmin } from "../../apitypes"
 import { getErrorText, toastErrorHandler } from "../../common/errors"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
@@ -121,28 +122,31 @@ export class AdminTicketgroupAddToOrderModal {
 
   submit() {
     this.sending.set(true)
-    void this.data.getOrderId().then((orderId) => {
-      this.adminOrderService
-        .createTickets(
-          orderId,
-          Object.fromEntries(
-            Object.values(this.ticketgroupsToAdd()).map((group) => [
-              group.ticketgroup.id,
-              group.num,
-            ]),
-          ),
-        )
-        .subscribe({
-          next: (tickets) => {
-            this.sending.set(false)
-            this.dialogRef.close(tickets)
-          },
-          error: toastErrorHandler(
-            this.toastService,
-            "Feil oppsto ved registrering av billetter",
-          ),
-        })
-    })
+    void this.data.getOrderId().then(
+      (orderId) => {
+        this.adminOrderService
+          .createTickets(
+            orderId,
+            Object.fromEntries(
+              Object.values(this.ticketgroupsToAdd()).map((group) => [
+                group.ticketgroup.id,
+                group.num,
+              ]),
+            ),
+          )
+          .pipe(finalize(() => this.sending.set(false)))
+          .subscribe({
+            next: (tickets) => {
+              this.dialogRef.close(tickets)
+            },
+            error: toastErrorHandler(
+              this.toastService,
+              "Feil oppsto ved registrering av billetter",
+            ),
+          })
+      },
+      () => this.sending.set(false),
+    )
   }
 
   cancel() {
