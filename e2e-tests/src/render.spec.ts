@@ -139,6 +139,20 @@ test.describe("render", { tag: "@render" }, () => {
       await expectLoaded(page)
     })
 
+    test("order edit aborts without changes and saves", async ({ page }) => {
+      await page.goto("/a/order/1")
+
+      await page.getByRole("button", { name: "Rediger" }).click()
+      await page.locator("#name").fill("Endret")
+      await page.getByRole("button", { name: "Avbryt" }).click()
+      await expect(page.getByText("Ola Render").first()).toBeVisible()
+      await expect(page.getByText("Endret")).toHaveCount(0)
+
+      await page.getByRole("button", { name: "Rediger" }).click()
+      await page.getByRole("button", { name: "Oppdater" }).click()
+      await expect(page.locator("#name")).toBeHidden()
+    })
+
     test("order payment modal selects paymentgroup", async ({ page }) => {
       await page.goto("/a/order/1")
       await page.getByRole("button", { name: "Ny transaksjon" }).click()
