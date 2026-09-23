@@ -216,6 +216,43 @@ test.describe("render", { tag: "@render" }, () => {
       await expect(heading).toBeHidden()
     })
 
+    test("order email modal sends", async ({ page }) => {
+      await page.goto("/a/order/1")
+      await page.getByRole("button", { name: "Send e-post" }).click()
+      await page.locator("input[type=submit][value='Send e-post']").click()
+
+      await expect(page.getByText("E-post ble sendt")).toBeVisible()
+    })
+
+    test("ticket revoke modal submits", async ({ page }) => {
+      await page.goto("/a/order/1")
+      await page.locator("button[title='Tilbaketrekk billett']").click()
+
+      const heading = page.getByRole("heading", { name: "Tilbaketrekk billett" })
+      await expect(heading).toBeVisible()
+      await page.locator("select[name=selectedPaymentgroupId]").selectOption({ index: 1 })
+      await page.locator("input[type=submit][value='Tilbaketrekk billett']").click()
+      await expect(heading).toBeHidden()
+    })
+
+    test("print text modal prints", async ({ page }) => {
+      await page.route("**/api/printer", (route) =>
+        route.fulfill({
+          contentType: "application/json",
+          body: JSON.stringify([
+            { name: "Skriver", ip: "10.0.0.1", port: 9100, registered: 0, last_seen: 600 },
+          ]),
+        }),
+      )
+      await page.goto("/a")
+      await page.getByRole("button", { name: "Skriv ut tekst på billettskriver" }).click()
+
+      await page.locator("select#printer").selectOption("Skriver")
+      await page.locator("textarea, input[name=text]").first().fill("Hei")
+      await page.getByRole("button", { name: "Skriv ut" }).click()
+      await expect(page.getByText("Utskrift lagt i kø")).toBeVisible()
+    })
+
     test("order print modal resolves printers", async ({ page }) => {
       await page.goto("/a/order/1")
       await page.getByRole("button", { name: "Skriv ut billetter" }).click()
