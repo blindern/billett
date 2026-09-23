@@ -1,21 +1,12 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  Input,
-  OnChanges,
-  SimpleChanges,
-} from "@angular/core"
+import { Component, inject, input } from "@angular/core"
+import { rxResource } from "@angular/core/rxjs-interop"
 import { RouterLink } from "@angular/router"
+import { map } from "rxjs"
 import { ApiSoldTicketsStats } from "../../apitypes"
 import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
 import { PricePipe } from "../../common/price.pipe"
-import {
-  handleResourceLoadingStates,
-  ResourceLoadingState,
-} from "../../common/resource-loading"
 import { AdminEventgroupService } from "./admin-eventgroup.service"
 
 class Accum {
@@ -51,29 +42,20 @@ class Accum {
     FormatdatePipe,
   ],
   templateUrl: "./admin-eventgroup-sold-tickets-stats.component.html",
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./admin-eventgroup-sold-tickets-stats.component.scss",
 })
-export class AdminEventgroupSoldTicketsStatsComponent implements OnChanges {
+export class AdminEventgroupSoldTicketsStatsComponent {
   private adminEventgroupService = inject(AdminEventgroupService)
 
-  @Input()
-  id!: string
+  id = input.required<string>()
 
-  pageState = new ResourceLoadingState()
-  stats?: ReturnType<AdminEventgroupSoldTicketsStatsComponent["deriveStats"]>
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes["id"]) {
+  statsResource = rxResource({
+    params: () => this.id(),
+    stream: ({ params }) =>
       this.adminEventgroupService
-        .getSoldTicketsStats(this.id)
-        .pipe(handleResourceLoadingStates(this.pageState))
-        .subscribe((data) => {
-          this.stats = this.deriveStats(data)
-        })
-    }
-  }
+        .getSoldTicketsStats(params)
+        .pipe(map((data) => this.deriveStats(data))),
+  })
 
   deriveStats(data: ApiSoldTicketsStats) {
     const days = Array.from(
