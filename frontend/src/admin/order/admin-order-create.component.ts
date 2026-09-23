@@ -1,23 +1,21 @@
 import { Dialog } from "@angular/cdk/dialog"
 import { NgClass } from "@angular/common"
 import {
-  ChangeDetectionStrategy,
   Component,
+  computed,
   ElementRef,
   inject,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-  ViewChild,
+  input,
+  signal,
+  viewChild,
 } from "@angular/core"
+import { rxResource } from "@angular/core/rxjs-interop"
 import { FormsModule } from "@angular/forms"
 import { Router, RouterLink } from "@angular/router"
-import { catchError, firstValueFrom, mergeMap, of, tap } from "rxjs"
+import { catchError, firstValueFrom, map, mergeMap, of, tap } from "rxjs"
 import { api } from "../../api"
 import {
   ApiEventAdmin,
-  ApiEventgroupAdmin,
   ApiOrderAdmin,
   ApiPaymentgroupAdmin,
   ApiPrinterAdmin,
@@ -29,10 +27,6 @@ import { FormatdatePipe } from "../../common/formatdate.pipe"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
 import { PricePipe } from "../../common/price.pipe"
-import {
-  handleResourceLoadingStates,
-  ResourceLoadingState,
-} from "../../common/resource-loading"
 import { ToastService } from "../../common/toast.service"
 import { AdminEventgroupService } from "../eventgroup/admin-eventgroup.service"
 import { AdminPaymentgroupSelectboxComponent } from "../paymentgroup/admin-paymentgroup-selectbox.component"
@@ -41,6 +35,14 @@ import { AdminPrinterService } from "../printer/admin-printer.service"
 import { AdminTicketService } from "../ticket/admin-ticket.service"
 import { AdminTicketgroupAddToOrderModal } from "../ticketgroup/admin-ticketgroup-add-to-order-modal.component"
 import { AdminOrderGetData, AdminOrderService } from "./admin-order.service"
+
+type OrderDraft = Partial<ApiOrderAdmin> & {
+  id?: number
+  tickets: (ApiTicketAdmin & {
+    event: ApiEventAdmin
+    ticketgroup: ApiTicketgroupAdmin
+  })[]
+}
 
 @Component({
   selector: "billett-admin-order-create",
@@ -56,11 +58,9 @@ import { AdminOrderGetData, AdminOrderService } from "./admin-order.service"
     AdminPaymentgroupSelectboxComponent,
     AdminPrinterSelectboxComponent,
   ],
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-order-create.component.html",
 })
-export class AdminOrderCreateComponent implements OnInit, OnChanges {
+export class AdminOrderCreateComponent {
   private adminEventgroupService = inject(AdminEventgroupService)
   private adminOrderService = inject(AdminOrderService)
   private adminTicketService = inject(AdminTicketService)
@@ -72,79 +72,61 @@ export class AdminOrderCreateComponent implements OnInit, OnChanges {
   api = api
   parseFloat = parseFloat
 
-  @Input()
-  eventgroupId!: string
+  eventgroupId = input.required<string>()
 
-  @ViewChild("usernameInput")
-  usernameInput!: ElementRef<HTMLInputElement>
+  usernameInput =
+    viewChild.required<ElementRef<HTMLInputElement>>("usernameInput")
 
-  pageState = new ResourceLoadingState()
-  eventgroup?: ApiEventgroupAdmin
-  order: Partial<ApiOrderAdmin> & {
-    id?: number
-    tickets: (ApiTicketAdmin & {
-      event: ApiEventAdmin
-      ticketgroup: ApiTicketgroupAdmin
-    })[]
-  } = {
-    tickets: [],
-  }
-  paymentgroup?: ApiPaymentgroupAdmin
-  printer?: ApiPrinterAdmin
+  eventgroupResource = rxResource({
+    params: () => this.eventgroupId(),
+    stream: ({ params }) =>
+      this.adminEventgroupService
+        .get(params)
+        .pipe(tap((eventgroup) => this.#restoreOrder(eventgroup.id))),
+  })
 
-  ticketgroupsWorking = new Set<number>()
+  previousOrdersResource = rxResource({
+    params: () => this.eventgroupResource.value()?.id,
+    stream: ({ params }) =>
+      this.adminOrderService
+        .query({ filter: `eventgroup_id=${params}&is_admin=1`, limit: 3 })
+        .pipe(map((data) => data.result)),
+  })
 
-  previousOrders: (ApiOrderAdmin & {
-    tickets: (ApiTicketAdmin & {
-      event: ApiEventAdmin
-      ticketgroup: ApiTicketgroupAdmin
-    })[]
-  })[] = []
+  order = signal<OrderDraft>({ tickets: [] })
+  paymentgroup = signal<ApiPaymentgroupAdmin | undefined>(undefined)
+  printer = signal<ApiPrinterAdmin | undefined>(undefined)
+
+  ticketgroupsWorking = signal<number[]>([])
 
   getTotalValid = this.adminOrderService.getTotalValid
   getTotalReserved = this.adminOrderService.getTotalReserved
 
-  ngOnInit(): void {
-    this.resetOrder()
-  }
+  #restoreOrder(eventgroupId: number) {
+    const newOrderId = localStorage.getItem("billett.neworder.id")
+    if (newOrderId) {
+      // TODO: loading state
+      this.adminOrderService.get(newOrderId).subscribe({
+        next: (order) => {
+          this.order.set(order)
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes["eventgroupId"]) {
-      this.adminEventgroupService
-        .get(this.eventgroupId)
-        .pipe(handleResourceLoadingStates(this.pageState))
-        .subscribe((data) => {
-          this.eventgroup = data
-          this.reloadHistory()
-
-          const newOrderId = localStorage.getItem("billett.neworder.id")
-          if (newOrderId) {
-            // TODO: loading state
-            this.adminOrderService.get(newOrderId).subscribe({
-              next: (order) => {
-                this.order = order
-
-                if (order.is_valid) {
-                  localStorage.removeItem("billett.neworder.id")
-                  void this.router.navigateByUrl(`/a/order/${order.id}`)
-                }
-              },
-              error: () => {
-                localStorage.removeItem("billett.neworder.id")
-                this.addTickets()
-              },
-            })
-          } else {
-            this.addTickets()
+          if (order.is_valid) {
+            localStorage.removeItem("billett.neworder.id")
+            void this.router.navigateByUrl(`/a/order/${order.id}`)
           }
-        })
+        },
+        error: () => {
+          localStorage.removeItem("billett.neworder.id")
+          this.#openAddTickets(eventgroupId)
+        },
+      })
+    } else {
+      this.#openAddTickets(eventgroupId)
     }
   }
 
   private resetOrder() {
-    this.order = {
-      tickets: [],
-    }
+    this.order.set({ tickets: [] })
   }
 
   createBlank() {
@@ -156,7 +138,11 @@ export class AdminOrderCreateComponent implements OnInit, OnChanges {
       .pipe(
         mergeMap(() =>
           this.adminOrderService
-            .validateAndConvert(this.order.id!, this.paymentgroup!, this.total)
+            .validateAndConvert(
+              this.order().id!,
+              this.paymentgroup()!,
+              this.total(),
+            )
             .pipe(
               tap((order) => {
                 this.toastService.show(
@@ -192,9 +178,9 @@ export class AdminOrderCreateComponent implements OnInit, OnChanges {
   }
 
   saveEdit() {
-    return this.adminOrderService.update(this.order as ApiOrderAdmin).pipe(
+    return this.adminOrderService.update(this.order() as ApiOrderAdmin).pipe(
       tap((order) => {
-        this.order = order
+        this.order.set(order)
       }),
       catchError((error) => {
         toastErrorHandler(
@@ -209,12 +195,12 @@ export class AdminOrderCreateComponent implements OnInit, OnChanges {
   saveOrder() {
     this.saveEdit().subscribe(() => {
       localStorage.removeItem("billett.neworder.id")
-      void this.router.navigateByUrl(`/a/order/${this.order.id}`)
+      void this.router.navigateByUrl(`/a/order/${this.order().id}`)
     })
   }
 
   abortOrder() {
-    this.adminOrderService.delete(this.order.id!).subscribe({
+    this.adminOrderService.delete(this.order().id!).subscribe({
       next: () => {
         localStorage.removeItem("billett.neworder.id")
         this.resetOrder()
@@ -224,16 +210,17 @@ export class AdminOrderCreateComponent implements OnInit, OnChanges {
   }
 
   private async getOrCreateOrder(reload?: boolean) {
+    const current = this.order()
     // if id is set, the order exists already
-    if (this.order?.id) {
+    if (current.id) {
       if (reload) {
         const order = await firstValueFrom(
-          this.adminOrderService.get(String(this.order.id)),
+          this.adminOrderService.get(String(current.id)),
         )
-        this.order = order
+        this.order.set(order)
         return order
       } else {
-        return this.order
+        return current
       }
     }
 
@@ -241,12 +228,12 @@ export class AdminOrderCreateComponent implements OnInit, OnChanges {
     try {
       order = await firstValueFrom(
         this.adminOrderService.create({
-          eventgroup_id: this.eventgroup!.id,
-          name: this.order?.name,
-          email: this.order?.email,
-          phone: this.order?.phone,
-          recruiter: this.order?.recruiter,
-          comment: this.order?.comment,
+          eventgroup_id: this.eventgroupResource.value()!.id,
+          name: current.name,
+          email: current.email,
+          phone: current.phone,
+          recruiter: current.recruiter,
+          comment: current.comment,
         }),
       )
     } catch (error: unknown) {
@@ -258,11 +245,11 @@ export class AdminOrderCreateComponent implements OnInit, OnChanges {
     }
 
     localStorage.setItem("billett.neworder.id", String(order.id))
-    this.order = order
+    this.order.set(order)
     return order
   }
 
-  get ticketgroups() {
+  ticketgroups = computed(() => {
     const ticketgroups: Record<
       number,
       {
@@ -273,7 +260,7 @@ export class AdminOrderCreateComponent implements OnInit, OnChanges {
       }
     > = {}
 
-    for (const ticket of this.order.tickets) {
+    for (const ticket of this.order().tickets) {
       let ticketgroup = ticketgroups[ticket.ticketgroup.id]
       if (!ticketgroup) {
         ticketgroup = {
@@ -292,14 +279,14 @@ export class AdminOrderCreateComponent implements OnInit, OnChanges {
     return Object.values(ticketgroups).sort(
       (a, b) => a.event.time_start - b.event.time_start,
     )
-  }
+  })
 
-  get total() {
-    return this.order.tickets.reduce(
+  total = computed(() =>
+    this.order().tickets.reduce(
       (acc, ticket) => acc + ticket.ticketgroup.price + ticket.ticketgroup.fee,
       0,
-    )
-  }
+    ),
+  )
 
   deleteTicket({
     ticketgroup,
@@ -308,30 +295,36 @@ export class AdminOrderCreateComponent implements OnInit, OnChanges {
     ticketgroup: ApiTicketgroupAdmin
     tickets: ApiTicketAdmin[]
   }) {
-    this.ticketgroupsWorking.add(ticketgroup.id)
+    const done = () =>
+      this.ticketgroupsWorking.update((ids) =>
+        ids.filter((id) => id !== ticketgroup.id),
+      )
+    this.ticketgroupsWorking.update((ids) => [...ids, ticketgroup.id])
 
     this.adminTicketService.delete(tickets[0].id).subscribe({
       next: () => {
-        void this.getOrCreateOrder(true).finally(() => {
-          this.ticketgroupsWorking.delete(ticketgroup.id)
-        })
+        void this.getOrCreateOrder(true).finally(done)
       },
       error: (error) => {
         toastErrorHandler(this.toastService, "Feilet å fjerne billett")(error)
-        this.ticketgroupsWorking.delete(ticketgroup.id)
+        done()
       },
     })
   }
 
   addTickets() {
+    this.#openAddTickets(this.eventgroupResource.value()!.id)
+  }
+
+  #openAddTickets(eventgroupId: number) {
     AdminTicketgroupAddToOrderModal.open(this.dialog, {
-      eventgroupId: this.eventgroup!.id,
+      eventgroupId,
       getOrderId: () => this.getOrCreateOrder().then((order) => order.id!),
     }).closed.subscribe((tickets) => {
       if (!tickets) return
       this.getOrCreateOrder(true).then(
         () => {
-          this.usernameInput.nativeElement.focus()
+          this.usernameInput().nativeElement.focus()
         },
         (error) => {
           toastErrorHandler(
@@ -343,29 +336,16 @@ export class AdminOrderCreateComponent implements OnInit, OnChanges {
     })
   }
 
-  private reloadHistory() {
-    this.adminOrderService
-      .query({
-        filter: `eventgroup_id=${this.eventgroup!.id}&is_admin=1`,
-        limit: 3,
-      })
-      .subscribe({
-        next: (data) => {
-          this.previousOrders = data.result
-        },
-        error: toastErrorHandler(this.toastService, "Feilet å hente historikk"),
-      })
-  }
-
   private printTickets() {
-    if (!this.printer) return
+    const printer = this.printer()
+    if (!printer) return
 
-    const list = this.order.tickets.filter(
+    const list = this.order().tickets.filter(
       (ticket) => ticket.is_valid && !ticket.is_revoked,
     )
     if (list.length == 0) return
 
-    this.adminPrinterService.printTickets(this.printer, list).subscribe({
+    this.adminPrinterService.printTickets(printer, list).subscribe({
       next: () => {
         this.toastService.show("Utskrift lagt i kø", { class: "success" })
       },

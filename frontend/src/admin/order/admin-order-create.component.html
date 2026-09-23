@@ -15,10 +15,12 @@
   }
 </style>
 
-<billett-page-states [loading]="pageState.loading" [error]="pageState.error" />
+<billett-page-states [loading]="eventgroupResource.isLoading()" [error]="eventgroupResource.error()" />
 <billett-page-property name="title" value="Ny ordre" />
 
-@if (eventgroup && order) {
+@if (eventgroupResource.hasValue()) {
+  @let eventgroup = eventgroupResource.value();
+  @let order = this.order();
   <div class="page-header">
     <h1>
       <span class="eventgroup">
@@ -118,7 +120,7 @@
         <div class="form-group">
           <label class="text-right col-sm-4">Totalt å betale</label>
           <div class="col-sm-8">
-            <b>{{ total | price: true }}</b>
+            <b>{{ total() | price: true }}</b>
           </div>
         </div>
         @if (order.tickets && order.tickets.length > 0) {
@@ -143,7 +145,7 @@
           <div class="col-sm-offset-4 col-sm-8">
             @if (order.id) {
               @if (order.tickets && order.tickets.length > 0) {
-                <input class="btn btn-success" type="submit" value="Marker som betalt" [disabled]="!paymentgroup" />
+                <input class="btn btn-success" type="submit" value="Marker som betalt" [disabled]="!paymentgroup()" />
               }
               <input class="btn btn-default" type="button" value="Lagre reservasjon" (click)="saveOrder()" />
               <input class="btn btn-danger" type="button" value="Slett" (click)="abortOrder()" />
@@ -157,7 +159,7 @@
     <div class="col-md-6">
       <h2>Reserverte billetter</h2>
 
-      @if (ticketgroups.length === 0) {
+      @if (ticketgroups().length === 0) {
         <p>Ingen billetter er reservert.</p>
       } @else {
         <table class="tickets table table-striped table-condensed">
@@ -171,7 +173,7 @@
             </tr>
           </thead>
           <tbody>
-            @for (group of ticketgroups; track group.ticketgroup.id) {
+            @for (group of ticketgroups(); track group.ticketgroup.id) {
               <tr>
                 <td>
                   <a routerLink="/a/event/{{ group.event.id }}" target="_blank"
@@ -189,12 +191,12 @@
                     type="button"
                     (click)="deleteTicket(group)"
                     title="Slett én reservasjon"
-                    [disabled]="ticketgroupsWorking.has(group.ticketgroup.id)"
+                    [disabled]="ticketgroupsWorking().includes(group.ticketgroup.id)"
                   >
-                    @if (!ticketgroupsWorking.has(group.ticketgroup.id)) {
+                    @if (!ticketgroupsWorking().includes(group.ticketgroup.id)) {
                       <i class="glyphicon glyphicon-remove"></i>
                     }
-                    @if (ticketgroupsWorking.has(group.ticketgroup.id)) {
+                    @if (ticketgroupsWorking().includes(group.ticketgroup.id)) {
                       <i class="glyphicon glyphicon-cog"></i>
                     }
                   </button>
@@ -206,7 +208,7 @@
             <tr>
               <th colspan="2">Sum</th>
               <th>{{ order.tickets.length }}</th>
-              <th>{{ total | price }}</th>
+              <th>{{ total() | price }}</th>
               <th>&nbsp;</th>
             </tr>
           </tfoot>
@@ -222,7 +224,7 @@
   <hr />
 
   <h2>Ordrehistorikk</h2>
-  @if (!previousOrders) {
+  @if (!previousOrdersResource.hasValue()) {
     <p>Laster data ...</p>
   } @else {
     <p>
@@ -240,7 +242,7 @@
         </tr>
       </thead>
       <tbody>
-        @for (order of previousOrders; track order.id) {
+        @for (order of previousOrdersResource.value(); track order.id) {
           <tr [ngClass]="{ invalid: !order.is_valid }">
             <td>
               <a routerLink="/a/order/{{ order.id }}">{{ order.order_text_id }}</a
