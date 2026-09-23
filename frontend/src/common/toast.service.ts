@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core"
+import { Injectable, signal } from "@angular/core"
 
 export interface ToastInfo {
   id: number
@@ -12,7 +12,7 @@ export interface ToastInfo {
   providedIn: "root",
 })
 export class ToastService {
-  toasts: ToastInfo[] = []
+  toasts = signal<ToastInfo[]>([])
 
   #counter = 0
 
@@ -25,23 +25,20 @@ export class ToastService {
     },
   ) {
     const id = ++this.#counter
-
     const remove = () => {
-      for (const [idx, toast] of this.toasts.entries()) {
-        if (toast.id === id) {
-          this.toasts.splice(idx, 1)
-          break
-        }
-      }
+      this.toasts.update((toasts) => toasts.filter((it) => it.id !== id))
     }
 
-    this.toasts.push({
-      id,
-      content,
-      type: options?.class ?? "success",
-      remove,
-      unsafeHtml: options?.unsafeHtml ?? false,
-    })
+    this.toasts.update((toasts) => [
+      ...toasts,
+      {
+        id,
+        content,
+        type: options?.class ?? "success",
+        remove,
+        unsafeHtml: options?.unsafeHtml ?? false,
+      },
+    ])
 
     setTimeout(remove, options?.timeout ?? 4000)
   }

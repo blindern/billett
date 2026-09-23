@@ -1,13 +1,11 @@
 import { NgClass } from "@angular/common"
-import { ChangeDetectionStrategy, Component, inject } from "@angular/core"
+import { Component, inject } from "@angular/core"
 import { ToastService } from "./toast.service"
 
 @Component({
   selector: "billett-toast-container",
   standalone: true,
   imports: [NgClass],
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <style>
       .toast-container {
@@ -33,7 +31,7 @@ import { ToastService } from "./toast.service"
     </style>
     <div class="toast-container">
       <ul>
-        @for (toast of toastService.toasts; track toast.id) {
+        @for (toast of toastService.toasts(); track toast.id) {
           <li>
             <div
               tabindex="0"
