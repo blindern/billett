@@ -1,17 +1,18 @@
 import { AsyncPipe } from "@angular/common"
 import {
-  ChangeDetectionStrategy,
   Component,
+  computed,
   CUSTOM_ELEMENTS_SCHEMA,
   inject,
-  Input,
-  OnChanges,
+  input,
+  linkedSignal,
   OnInit,
-  SimpleChanges,
+  signal,
 } from "@angular/core"
+import { rxResource } from "@angular/core/rxjs-interop"
 import { FormsModule } from "@angular/forms"
 import { Router, RouterLink } from "@angular/router"
-import { finalize, firstValueFrom } from "rxjs"
+import { catchError, firstValueFrom, of, tap } from "rxjs"
 import { api } from "../../api"
 import { ApiTicketgroup } from "../../apitypes"
 import { AuthService } from "../../auth/auth.service"
@@ -22,16 +23,12 @@ import { ObservableType } from "../../common/observable"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
 import { PricePipe } from "../../common/price.pipe"
-import {
-  handleResourceLoadingStates,
-  ResourceLoadingState,
-} from "../../common/resource-loading"
 import { ToastService } from "../../common/toast.service"
 import {
   EventReservationItem,
   EventReservationService,
 } from "./event-reservation.service"
-import { Event, EventService } from "./event.service"
+import { EventService } from "./event.service"
 
 declare global {
   interface Window {
@@ -59,125 +56,146 @@ declare global {
   ],
   templateUrl: "./event.component.html",
   styleUrl: "./event.component.scss",
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class GuestEventComponent implements OnInit, OnChanges {
+export class GuestEventComponent implements OnInit {
   private eventService = inject(EventService)
   private eventReservationService = inject(EventReservationService)
   private router = inject(Router)
   private toastService = inject(ToastService)
   public authService = inject(AuthService)
 
-  @Input()
-  id!: string
+  id = input.required<string>()
 
-  pageState = new ResourceLoadingState()
+  eventResource = rxResource({
+    params: () => this.id(),
+    stream: ({ params }) =>
+      this.eventService.get(params).pipe(
+        tap((event) => {
+          // do we have an alias not being used?
+          if (event.alias != null && params != event.alias) {
+            void this.router.navigateByUrl("/event/" + event.alias, {
+              replaceUrl: true,
+            })
+          }
+        }),
+      ),
+  })
 
-  event?: Event
+  event_status = computed(() => {
+    if (!this.eventResource.hasValue()) return undefined
+    const event = this.eventResource.value()
+    return event.selling_text &&
+      (event.web_selling_status == "unknown" ||
+        event.web_selling_status == "no_web_tickets")
+      ? "selling_text"
+      : event.web_selling_status
+  })
 
-  event_status: string | null | undefined
+  restoredReservation = rxResource({
+    params: () => this.id(),
+    stream: () =>
+      this.eventReservationService.restoreReservation().pipe(
+        catchError((error) => {
+          console.warn("Failed to restore reservation - ignoring", error)
+          return of(undefined)
+        }),
+      ),
+  })
 
-  loadingReservation = false
-  reservation: EventReservationItem | null | undefined
+  reservation = linkedSignal<EventReservationItem | null | undefined>(() =>
+    this.restoredReservation.value(),
+  )
 
-  recruiter = ""
-  ticketgroups: {
-    ticketgroup: ApiTicketgroup
-    count: number
-  }[] = []
-
-  vipps_checkout = false
+  recruiter = signal("")
+  counts = signal<Record<number, number>>({})
+  vipps_checkout = signal(false)
 
   forcePay = false
 
   api = api
 
-  get count() {
-    if (this.reservation) {
-      return this.reservation.data.tickets.length
+  count = computed(() => {
+    const reservation = this.reservation()
+    if (reservation) {
+      return reservation.data.tickets.length
     }
 
-    return this.ticketgroups.reduce((acc, { count }) => acc + count, 0)
-  }
+    return Object.values(this.counts()).reduce((acc, count) => acc + count, 0)
+  })
 
-  get totalAmount() {
-    if (this.reservation) {
-      return this.reservation.data.total_amount
+  totalAmount = computed(() => {
+    const reservation = this.reservation()
+    if (reservation) {
+      return reservation.data.total_amount
     }
 
-    return this.ticketgroups.reduce(
-      (acc, { ticketgroup, count }) =>
-        acc + count * (ticketgroup.price + ticketgroup.fee),
+    return (this.eventResource.value()?.ticketgroups ?? []).reduce(
+      (acc, ticketgroup) =>
+        acc +
+        this.getTicketgroupCount(ticketgroup) *
+          (ticketgroup.price + ticketgroup.fee),
       0,
     )
-  }
+  })
+
+  availableCount = computed(
+    () => (this.eventResource.value()?.max_each_person ?? 0) - this.count(),
+  )
 
   private reset() {
-    this.reservation = null
-    this.recruiter = ""
-    this.vipps_checkout = false
-  }
-
-  get availableCount() {
-    return this.event!.max_each_person - this.count
+    this.reservation.set(null)
+    this.recruiter.set("")
+    this.vipps_checkout.set(false)
   }
 
   getTicketgroupCount(ticketgroup: ApiTicketgroup) {
-    return (
-      this.ticketgroups.find((it) => it.ticketgroup.id === ticketgroup.id)
-        ?.count ?? 0
-    )
+    return this.counts()[ticketgroup.id] ?? 0
   }
 
   changeTicketgroupNum(ticketgroup: ApiTicketgroup, num: number) {
-    let found = this.ticketgroups.find(
-      (it) => it.ticketgroup.id === ticketgroup.id,
-    )
-    if (!found) {
-      found = {
-        ticketgroup,
-        count: 0,
-      }
-      this.ticketgroups.push(found)
-    }
-
-    found.count += num
+    this.counts.update((counts) => ({
+      ...counts,
+      [ticketgroup.id]: (counts[ticketgroup.id] ?? 0) + num,
+    }))
   }
 
   abortOrder() {
-    this.reservation!.abort().subscribe({
-      next: () => {
-        this.reset()
-      },
-      error: toastErrorHandler(
-        this.toastService,
-        "Klarte ikke å avbryte reservasjonen",
-      ),
-    })
+    this.reservation()!
+      .abort()
+      .subscribe({
+        next: () => {
+          this.reset()
+        },
+        error: toastErrorHandler(
+          this.toastService,
+          "Klarte ikke å avbryte reservasjonen",
+        ),
+      })
   }
 
   async placeOrder(force?: boolean) {
-    if (!this.reservation) {
-      if (this.count == 0) {
+    let reservation = this.reservation()
+    if (!reservation) {
+      if (this.count() == 0) {
         this.toastService.show("Du må velge noen billetter.", {
           class: "warning",
         })
         return
       }
 
-      const groups: Record<number, number> = {}
-      for (const g of this.event!.ticketgroups) {
-        const c = this.getTicketgroupCount(g)
-        if (c <= 0) continue
-        groups[g.id] = c
-      }
+      const groups = Object.fromEntries(
+        Object.entries(this.counts()).filter(([, count]) => count > 0),
+      )
 
       try {
-        this.reservation = await firstValueFrom(
-          this.eventReservationService.create(this.event!.id, groups),
+        reservation = await firstValueFrom(
+          this.eventReservationService.create(
+            this.eventResource.value()!.id,
+            groups,
+          ),
         )
+        this.reservation.set(reservation)
       } catch (error: unknown) {
         toastErrorHandler(
           this.toastService,
@@ -188,10 +206,10 @@ export class GuestEventComponent implements OnInit, OnChanges {
     }
 
     const data = {
-      recruiter: this.recruiter,
+      recruiter: this.recruiter(),
     }
     try {
-      await firstValueFrom(this.reservation.update(data))
+      await firstValueFrom(reservation.update(data))
     } catch (error: unknown) {
       toastErrorHandler(
         this.toastService,
@@ -203,7 +221,7 @@ export class GuestEventComponent implements OnInit, OnChanges {
     // send to payment
     let response: ObservableType<ReturnType<EventReservationItem["place"]>>
     try {
-      response = await firstValueFrom(this.reservation.place(force))
+      response = await firstValueFrom(reservation.place(force))
     } catch (error: unknown) {
       toastErrorHandler(
         this.toastService,
@@ -217,7 +235,7 @@ export class GuestEventComponent implements OnInit, OnChanges {
       void this.router.navigateByUrl("order/complete")
       return
     } else {
-      this.vipps_checkout = true
+      this.vipps_checkout.set(true)
 
       const checkout = () => {
         window.VippsCheckout({
@@ -248,50 +266,6 @@ export class GuestEventComponent implements OnInit, OnChanges {
       script.type = "text/javascript"
       script.src = src
       document.head.append(script)
-    }
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes["id"]) {
-      this.eventService
-        .get(this.id)
-        .pipe(handleResourceLoadingStates(this.pageState))
-        .subscribe((event) => {
-          this.event = event
-
-          this.event_status = event.web_selling_status
-          if (
-            event.selling_text &&
-            (event.web_selling_status == "unknown" ||
-              event.web_selling_status == "no_web_tickets")
-          ) {
-            this.event_status = "selling_text"
-          }
-
-          // do we have an alias not being used?
-          if (event.alias != null && this.id != event.alias) {
-            void this.router.navigateByUrl("/event/" + event.alias, {
-              replaceUrl: true,
-            })
-          }
-        })
-
-      this.loadingReservation = true
-      this.eventReservationService
-        .restoreReservation()
-        .pipe(
-          finalize(() => {
-            this.loadingReservation = false
-          }),
-        )
-        .subscribe({
-          next: (reservation) => {
-            this.reservation = reservation
-          },
-          error: (error) => {
-            console.warn("Failed to restore reservation - ignoring", error)
-          },
-        })
     }
   }
 }

@@ -1,7 +1,9 @@
-<billett-page-states [loading]="pageState.loading" [error]="pageState.error" />
+<billett-page-states [loading]="eventResource.isLoading()" [error]="eventResource.error()" />
 <billett-page-property name="title" value="Arrangement" />
 
-@if (event) {
+@if (eventResource.hasValue()) {
+  @let event = eventResource.value();
+  @let reservation = this.reservation();
   <billett-page-property
     name="title"
     value="{{ event.title }} ({{ event.time_start | formatdate: 'D. MMM \\k\\l HH:mm' }})"
@@ -31,7 +33,7 @@
   <!-- TODO: ics-link -->
 
   <div class="row">
-    <div class="col-sm-5" [class.no-buy-form]="event_status === 'no_tickets'">
+    <div class="col-sm-5" [class.no-buy-form]="event_status() === 'no_tickets'">
       <div class="event-image">
         <img [src]="api('event/' + event.id + '/image')" alt="" />
       </div>
@@ -78,8 +80,8 @@
     </div>
 
     <div class="col-sm-7 event-right-col">
-      @if (!reservation || event_status === "sale") {
-        @if (event_status === "selling_text") {
+      @if (!reservation || event_status() === "sale") {
+        @if (event_status() === "selling_text") {
           <div class="panel panel-default">
             <div class="panel-body">
               <div class="selling-text">
@@ -89,7 +91,7 @@
           </div>
         }
 
-        @if (event_status === "unknown") {
+        @if (event_status() === "unknown") {
           <div class="panel panel-default">
             <div class="panel-body">
               Informasjon om billetter for dette arrangementet er for øyeblikket ikke tilgjengelig. Sjekk tilbake
@@ -98,13 +100,13 @@
           </div>
         }
 
-        @if (event_status === "old") {
+        @if (event_status() === "old") {
           <div class="panel panel-default">
             <div class="panel-body">Billettsalg for arrangementet er avsluttet.</div>
           </div>
         }
 
-        @if (event_status === "no_web_tickets") {
+        @if (event_status() === "no_web_tickets") {
           <div class="panel panel-default">
             <div class="panel-body">
               Dette arrangementet selges ikke på nett eller har foreløpig ingen tilgjengelige billetter.
@@ -112,7 +114,7 @@
           </div>
         }
 
-        @if (event_status === "timeout") {
+        @if (event_status() === "timeout") {
           <div class="panel panel-default">
             <div class="panel-body">
               Nettsalget for dette arrangementet har avsluttet. Evt. tilgjengelige billetter selges i døra.
@@ -120,7 +122,7 @@
           </div>
         }
 
-        @if (event_status === "sold_out") {
+        @if (event_status() === "sold_out") {
           <div class="panel panel-default">
             <div class="panel-body">
               Arrangementet er dessverre utsolgt. Sjekk tilbake senere for se å om det kanskje blir gjort nye billetter
@@ -130,7 +132,7 @@
         }
       }
 
-      @if ((!reservation && event_status === "sale") || (reservation && event_status !== "no_tickets")) {
+      @if ((!reservation && event_status() === "sale") || (reservation && event_status() !== "no_tickets")) {
         @if (reservation && reservation.data.tickets[0].event.id !== event.id) {
           <div class="panel panel-warning">
             <div class="panel-heading">Kjøp billetter</div>
@@ -144,14 +146,14 @@
           </div>
         }
 
-        @if ((!reservation || reservation.data.tickets[0].event.id === event.id) && loadingReservation) {
+        @if ((!reservation || reservation.data.tickets[0].event.id === event.id) && restoredReservation.isLoading()) {
           <div class="panel panel-info buy-form">
             <div class="panel-heading">Kjøp billetter</div>
             <div class="panel-body">Ser etter eksisterende ordrereservasjon ...</div>
           </div>
         }
 
-        @if ((!reservation || reservation.data.tickets[0].event.id === event.id) && !loadingReservation) {
+        @if ((!reservation || reservation.data.tickets[0].event.id === event.id) && !restoredReservation.isLoading()) {
           <div class="panel panel-info buy-form">
             <div class="panel-heading">Kjøp billetter</div>
             <div class="panel-body">
@@ -194,7 +196,7 @@
                           type="button"
                           (click)="changeTicketgroupNum(ticketgroup, 1)"
                           class="btn btn-primary btn-sm"
-                          [disabled]="availableCount <= 0"
+                          [disabled]="availableCount() <= 0"
                         >
                           <span class="glyphicon glyphicon-plus"></span>
                         </button>
@@ -233,7 +235,7 @@
                   </div>
                 }
 
-                @if (vipps_checkout) {
+                @if (vipps_checkout()) {
                   <p class="text-center">
                     @if (reservation) {
                       <input class="btn btn-link" type="button" value="Avbryt" (click)="abortOrder()" />
@@ -241,17 +243,17 @@
                   </p>
                 }
 
-                @if (vipps_checkout) {
+                @if (vipps_checkout()) {
                   <section id="vipps-checkout-frame-container"></section>
                 }
 
-                @if ((reservation || count > 0) && !vipps_checkout) {
+                @if ((reservation || count() > 0) && !vipps_checkout()) {
                   <div class="reservation-details">
                     <hr />
                     <div class="form-group">
                       <label class="text-right col-sm-4">Totalt å betale</label>
                       <div class="col-sm-8">
-                        <b>{{ totalAmount | price: true }}</b>
+                        <b>{{ totalAmount() | price: true }}</b>
                       </div>
                     </div>
                     <div class="form-group">
@@ -299,7 +301,7 @@
                   </div>
                 }
               </form>
-              @if (!vipps_checkout) {
+              @if (!vipps_checkout()) {
                 <div class="text-center text-muted">Billettprisene inkluderer evt. mva og billettgebyr.</div>
               }
             </div>
