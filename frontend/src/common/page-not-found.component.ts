@@ -11,6 +11,7 @@ import { Meta } from "@angular/platform-browser"
   selector: "billett-page-not-found",
   standalone: true,
   imports: [],
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./page-not-found.component.html",
 })

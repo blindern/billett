@@ -30,6 +30,7 @@ import { AdminEventData, AdminEventService } from "./admin-event.service"
     AdminEventFormComponent,
     FormatdatePipe,
   ],
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-event-edit.component.html",
 })

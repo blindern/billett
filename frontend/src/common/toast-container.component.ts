@@ -6,6 +6,7 @@ import { ToastService } from "./toast.service"
   selector: "billett-toast-container",
   standalone: true,
   imports: [NgClass],
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <style>

@@ -41,6 +41,7 @@ import { AdminEventgroupService } from "./admin-eventgroup.service"
     PageStatesComponent,
   ],
   templateUrl: "./admin-eventgroup.component.html",
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./admin-eventgroup.component.scss",
 })

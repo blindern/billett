@@ -50,6 +50,7 @@ import { AdminOrderGetData, AdminOrderService } from "./admin-order.service"
     NgClass,
     MarkdownComponent,
   ],
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-order-item.component.html",
 })

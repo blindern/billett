@@ -34,6 +34,7 @@ import { GuestEventlistItemComponent } from "./eventlist-item.component"
     KeyValuePipe,
   ],
   templateUrl: "./eventgroup.component.html",
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./eventgroup.component.scss",
 })

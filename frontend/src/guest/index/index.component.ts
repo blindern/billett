@@ -32,6 +32,7 @@ type UpcomingItem = ApiEvent & {
     GuestEventlistItemComponent,
     PagePropertyComponent,
   ],
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./index.component.html",
 })

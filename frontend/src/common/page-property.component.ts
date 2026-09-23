@@ -12,6 +12,7 @@ import { PageService } from "./page.service"
   selector: "billett-page-property",
   standalone: true,
   imports: [],
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   template: "",
 })

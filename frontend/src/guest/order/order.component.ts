@@ -35,6 +35,7 @@ type Order = ApiOrder & {
   standalone: true,
   imports: [RouterLink, PagePropertyComponent, FormatdatePipe, PricePipe],
   templateUrl: "./order.component.html",
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   preserveWhitespaces: false,
 })

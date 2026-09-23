@@ -17,6 +17,7 @@ import { AdminEventCreateData, AdminEventData } from "./admin-event.service"
   selector: "billett-admin-event-form",
   standalone: true,
   imports: [FormsModule, RouterLink, FormatdatePipe],
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-event-form.component.html",
 })

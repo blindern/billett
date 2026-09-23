@@ -29,6 +29,7 @@ import { AdminEventgroupService } from "./admin-eventgroup.service"
     PagePropertyComponent,
     RouterLink,
   ],
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-eventgroup-edit.component.html",
 })

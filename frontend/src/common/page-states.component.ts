@@ -9,6 +9,7 @@ import { ResourceLoadingState } from "./resource-loading"
   selector: "billett-page-states",
   standalone: true,
   imports: [PageLoadingComponent, PageNotFoundComponent],
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./page-states.component.html",
 })

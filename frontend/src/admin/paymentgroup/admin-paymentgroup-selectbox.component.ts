@@ -24,6 +24,7 @@ import { AdminPaymentgroupService } from "./admin-paymentgroup.service"
   selector: "billett-admin-paymentgroup-selectbox",
   standalone: true,
   imports: [FormsModule, FormatdatePipe],
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-paymentgroup-selectbox.component.html",
 })

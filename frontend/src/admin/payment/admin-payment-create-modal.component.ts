@@ -31,6 +31,7 @@ export type AdminPaymentCreateModalResult = ApiPaymentAdmin
   selector: "billett-admin-payment-create-modal",
   standalone: true,
   imports: [FormsModule, AdminPaymentgroupSelectboxComponent],
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-payment-create-modal.component.html",
 })

@@ -30,6 +30,7 @@ import { AdminDaythemeService } from "./admin-daytheme.service"
     RouterLink,
     FormsModule,
   ],
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-daytheme-create.component.html",
 })

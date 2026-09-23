@@ -20,6 +20,7 @@ import { AdminPrinterService } from "./admin-printer.service"
   selector: "billett-admin-printer-selectbox",
   standalone: true,
   imports: [FormsModule],
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-printer-selectbox.component.html",
 })

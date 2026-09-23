@@ -43,6 +43,7 @@ import { AdminPaymentsourceService } from "./admin-paymentsource.service"
     MarkdownComponent,
     DialogModule,
   ],
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-paymentgroup-item.component.html",
 })

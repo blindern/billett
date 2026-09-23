@@ -23,6 +23,7 @@ export type AdminPaymentgroupCreateModalResult = ApiPaymentgroupAdmin
   selector: "billett-admin-paymentgroup-create-modal",
   standalone: true,
   imports: [PagePropertyComponent, FormsModule],
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-paymentgroup-create-modal.component.html",
 })

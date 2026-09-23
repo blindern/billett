@@ -28,6 +28,7 @@ import { ToastContainerComponent } from "./common/toast-container.component"
     AsyncPipe,
     ToastContainerComponent,
   ],
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./app.component.html",
 })
