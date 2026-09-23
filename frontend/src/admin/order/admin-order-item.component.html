@@ -41,10 +41,11 @@
   }
 </style>
 
-<billett-page-states [loading]="pageState.loading" [error]="pageState.error" />
+<billett-page-states [loading]="orderResource.isLoading()" [error]="orderResource.error()" />
 <billett-page-property name="title" value="Ordre" />
 
-@if (order) {
+@if (orderResource.hasValue()) {
+  @let order = orderResource.value();
   <billett-page-property name="title" value="Ordre: {{ order.order_text_id }}" />
 
   <div class="page-header">
@@ -66,7 +67,7 @@
     </h1>
   </div>
 
-  @if (edit) {
+  @if (edit(); as edit) {
     <form (ngSubmit)="save()" class="form-horizontal" autocomplete="off" ngNativeValidate>
       <div class="form-group">
         <label for="name" class="col-sm-2 control-label">Navn</label>
@@ -145,7 +146,7 @@
     </form>
   }
 
-  @if (!edit) {
+  @if (!edit()) {
     @if (!order.is_valid) {
       <div class="alert alert-warning">
         <p>

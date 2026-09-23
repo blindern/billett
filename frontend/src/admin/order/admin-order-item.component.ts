@@ -1,13 +1,7 @@
 import { Dialog } from "@angular/cdk/dialog"
 import { NgClass } from "@angular/common"
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  Input,
-  OnChanges,
-  SimpleChanges,
-} from "@angular/core"
+import { Component, inject, input, signal } from "@angular/core"
+import { rxResource } from "@angular/core/rxjs-interop"
 import { FormsModule } from "@angular/forms"
 import { Router, RouterLink } from "@angular/router"
 import { catchError, finalize, of, tap } from "rxjs"
@@ -19,10 +13,6 @@ import { MarkdownComponent } from "../../common/markdown.component"
 import { PagePropertyComponent } from "../../common/page-property.component"
 import { PageStatesComponent } from "../../common/page-states.component"
 import { PricePipe } from "../../common/price.pipe"
-import {
-  handleResourceLoadingStates,
-  ResourceLoadingState,
-} from "../../common/resource-loading"
 import { ToastService } from "../../common/toast.service"
 import { AdminPaymentCreateModal } from "../payment/admin-payment-create-modal.component"
 import { AdminPaymentgroupSelectModal } from "../paymentgroup/admin-paymentgroup-select-modal.component"
@@ -50,11 +40,9 @@ import { AdminOrderGetData, AdminOrderService } from "./admin-order.service"
     NgClass,
     MarkdownComponent,
   ],
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./admin-order-item.component.html",
 })
-export class AdminOrderItemComponent implements OnChanges {
+export class AdminOrderItemComponent {
   private adminOrderService = inject(AdminOrderService)
   private adminTicketService = inject(AdminTicketService)
   private adminPrinterService = inject(AdminPrinterService)
@@ -64,76 +52,70 @@ export class AdminOrderItemComponent implements OnChanges {
 
   api = api
 
-  @Input()
-  id!: string
+  id = input.required<string>()
 
-  pageState = new ResourceLoadingState()
-  order?: AdminOrderGetData
+  orderResource = rxResource({
+    params: () => this.id(),
+    stream: ({ params }) => this.adminOrderService.get(params),
+  })
 
-  #editFields = ["name", "email", "phone", "recruiter", "comment"] as const
-  edit?: AdminOrderGetData
+  edit = signal<
+    | Pick<
+        AdminOrderGetData,
+        "name" | "email" | "phone" | "recruiter" | "comment"
+      >
+    | undefined
+  >(undefined)
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes["id"]) {
-      this.adminOrderService
-        .get(this.id)
-        .pipe(handleResourceLoadingStates(this.pageState))
-        .subscribe((data) => {
-          this.order = data
-        })
-    }
+  private get order() {
+    return this.orderResource.value()!
   }
 
   refreshOrder() {
-    this.adminOrderService.get(this.id).subscribe({
-      next: (data) => {
-        this.order = data
-      },
-      error: toastErrorHandler(this.toastService, "Feil ved henting av ordre"),
-    })
+    this.orderResource.reload()
   }
 
   get balance() {
-    return Number(this.order!.balance)
+    return Number(this.order.balance)
   }
 
   get totalValid() {
-    return this.adminOrderService.getTotalValid(this.order!)
+    return this.adminOrderService.getTotalValid(this.order)
   }
 
   get totalReserved() {
-    return this.adminOrderService.getTotalReserved(this.order!)
+    return this.adminOrderService.getTotalReserved(this.order)
   }
 
   get countReserved() {
-    return this.order!.tickets.reduce(
+    return this.order.tickets.reduce(
       (acc, ticket) => acc + (!ticket.is_valid ? 1 : 0),
       0,
     )
   }
 
   get countValid() {
-    return this.order!.tickets.reduce(
+    return this.order.tickets.reduce(
       (acc, ticket) => acc + (ticket.is_valid && !ticket.is_revoked ? 1 : 0),
       0,
     )
   }
 
   get countRevoked() {
-    return this.order!.tickets.reduce(
+    return this.order.tickets.reduce(
       (acc, ticket) => acc + (ticket.is_valid && ticket.is_revoked ? 1 : 0),
       0,
     )
   }
 
   get validTickets() {
-    return this.order!.tickets.filter(
+    return this.order.tickets.filter(
       (ticket) => ticket.is_valid && !ticket.is_revoked,
     )
   }
 
   get totalPaid() {
-    return this.order!.payments.reduce(
+    return this.order.payments.reduce(
       (acc, payment) => acc + Number(payment.amount),
       0,
     )
@@ -145,21 +127,19 @@ export class AdminOrderItemComponent implements OnChanges {
   }
 
   startEdit() {
-    this.edit = this.order
+    const { name, email, phone, recruiter, comment } = this.order
+    this.edit.set({ name, email, phone, recruiter, comment })
   }
 
   abortEdit() {
-    this.edit = undefined
+    this.edit.set(undefined)
   }
 
   save() {
-    for (const field of this.#editFields) {
-      this.order![field] = this.edit![field]
-    }
-    this.adminOrderService.update(this.order!).subscribe({
+    this.adminOrderService.update({ ...this.order, ...this.edit() }).subscribe({
       next: (order) => {
-        this.order = order
-        this.edit = undefined
+        this.orderResource.set(order)
+        this.edit.set(undefined)
       },
       error: toastErrorHandler(
         this.toastService,
@@ -169,8 +149,8 @@ export class AdminOrderItemComponent implements OnChanges {
   }
 
   deleteReservation() {
-    const eventgroupId = this.order!.eventgroup.id
-    this.adminOrderService.delete(this.order!.id).subscribe({
+    const eventgroupId = this.order.eventgroup.id
+    this.adminOrderService.delete(this.order.id).subscribe({
       next: () => {
         void this.router.navigateByUrl(
           `/a/orders?eventgroup_id=${eventgroupId}`,
@@ -182,12 +162,12 @@ export class AdminOrderItemComponent implements OnChanges {
 
   completeOrder() {
     AdminPaymentgroupSelectModal.open(this.dialog, {
-      eventgroupId: this.order!.eventgroup.id,
+      eventgroupId: this.order.eventgroup.id,
       actionText: "Marker som betalt",
       amount: this.totalReserved,
       handler: (paymentgroup) =>
         this.adminOrderService
-          .validateAndConvert(this.order!.id, paymentgroup, this.totalReserved)
+          .validateAndConvert(this.order.id, paymentgroup, this.totalReserved)
           .pipe(
             finalize(() => {
               this.refreshOrder()
@@ -210,7 +190,7 @@ export class AdminOrderItemComponent implements OnChanges {
   }
 
   convertOrder() {
-    this.adminOrderService.validate(this.order!.id).subscribe({
+    this.adminOrderService.validate(this.order.id).subscribe({
       next: () => {
         this.refreshOrder()
       },
@@ -220,9 +200,9 @@ export class AdminOrderItemComponent implements OnChanges {
 
   addTickets() {
     AdminTicketgroupAddToOrderModal.open(this.dialog, {
-      eventgroupId: this.order!.eventgroup.id,
+      eventgroupId: this.order.eventgroup.id,
       // eslint-disable-next-line @typescript-eslint/require-await
-      getOrderId: async () => this.order!.id,
+      getOrderId: async () => this.order.id,
     }).closed.subscribe((tickets) => {
       if (!tickets) return
       this.refreshOrder()
@@ -231,7 +211,7 @@ export class AdminOrderItemComponent implements OnChanges {
 
   revokeTicket(ticket: AdminTicketRevokeModalInput["ticket"]) {
     AdminTicketRevokeModal.open(this.dialog, {
-      order: this.order!,
+      order: this.order,
       ticket,
     }).closed.subscribe((result) => {
       if (!result) return
@@ -245,7 +225,7 @@ export class AdminOrderItemComponent implements OnChanges {
     },
   ) {
     AdminPaymentgroupSelectModal.open(this.dialog, {
-      eventgroupId: this.order!.eventgroup.id,
+      eventgroupId: this.order.eventgroup.id,
       actionText: "Inntekstfør",
       amount: ticket.ticketgroup.price + ticket.ticketgroup.fee,
       handler: (paymentgroup) =>
@@ -277,7 +257,7 @@ export class AdminOrderItemComponent implements OnChanges {
 
   newPayment() {
     AdminPaymentCreateModal.open(this.dialog, {
-      order: this.order!,
+      order: this.order,
     }).closed.subscribe(() => {
       this.refreshOrder()
     })
@@ -285,7 +265,7 @@ export class AdminOrderItemComponent implements OnChanges {
 
   sendEmail() {
     AdminOrderEmailModal.open(this.dialog, {
-      order: this.order!,
+      order: this.order,
     }).closed.subscribe((sent) => {
       if (!sent) return
       this.toastService.show("E-post ble sendt", { class: "success" })
