@@ -18,8 +18,6 @@
           "builder": "@angular/build:application",
           "options": {
             "allowedCommonJsDependencies": [
-              "bootstrap-sass",
-              "jquery",
               "dompurify",
               "mathjs",
               "moment"
