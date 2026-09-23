@@ -294,6 +294,7 @@ const endpoints: Partial<Record<string, Handler>> = {
   "event/1/createreservation": () => reservation,
   "order/2": () => reservation,
   "order/2/force": () => ({}),
+  "order/1/create_tickets": () => [],
   "order/receipt": () => ({
     order: { ...order, tickets: [{ ...ticket, event, ticketgroup }] },
     payment,

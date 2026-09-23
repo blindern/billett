@@ -149,6 +149,19 @@ test.describe("render", { tag: "@render" }, () => {
       await expect(select.getByRole("option", { name: "Velg ..." })).toHaveCount(0)
     })
 
+    test("order add tickets modal counts and submits", async ({ page }) => {
+      await page.goto("/a/order/1")
+      await page.getByRole("button", { name: "Tilorde nye billetter" }).click()
+
+      const heading = page.getByRole("heading", { name: "Tilordne billetter til ordre" })
+      await expect(heading).toBeVisible()
+      await page.locator("tr:has-text('Ordinær') button:has(.glyphicon-plus)").click()
+      await expect(page.locator(".modal-body dd").first()).toHaveText("1")
+
+      await page.getByRole("button", { name: "Legg til billetter" }).click()
+      await expect(heading).toBeHidden()
+    })
+
     test("order print modal resolves printers", async ({ page }) => {
       await page.goto("/a/order/1")
       await page.getByRole("button", { name: "Skriv ut billetter" }).click()
