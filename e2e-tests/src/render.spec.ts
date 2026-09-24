@@ -253,6 +253,33 @@ test.describe("render", { tag: "@render" }, () => {
       await expect(page.getByText("Utskrift lagt i kø")).toBeVisible()
     })
 
+    test("add tickets modal recovers from failed submit", async ({ page }) => {
+      await page.route("**/api/order/1/create_tickets", (route) =>
+        route.fulfill({ status: 500, contentType: "application/json", body: "{}" }),
+      )
+      await page.goto("/a/order/1")
+      await page.getByRole("button", { name: "Tilorde nye billetter" }).click()
+      await page.locator("tr:has-text('Ordinær') button:has(.glyphicon-plus)").click()
+      await page.getByRole("button", { name: "Legg til billetter" }).click()
+
+      await expect(page.getByText("Feil oppsto ved registrering av billetter")).toBeVisible()
+      await expect(page.getByRole("button", { name: "Legg til billetter" })).toBeVisible()
+    })
+
+    test("add tickets modal recovers from failed order creation", async ({ page }) => {
+      await page.route("**/api/order", (route) =>
+        route.request().method() === "POST"
+          ? route.fulfill({ status: 500, contentType: "application/json", body: "{}" })
+          : route.fallback(),
+      )
+      await page.goto("/a/order/new/1")
+      await page.locator("tr:has-text('Ordinær') button:has(.glyphicon-plus)").click()
+      await page.getByRole("button", { name: "Legg til billetter" }).click()
+
+      await expect(page.getByText("Feil oppsto ved opprettelse av ordre")).toBeVisible()
+      await expect(page.getByRole("button", { name: "Legg til billetter" })).toBeVisible()
+    })
+
     test("order print modal resolves printers", async ({ page }) => {
       await page.goto("/a/order/1")
       await page.getByRole("button", { name: "Skriv ut billetter" }).click()
