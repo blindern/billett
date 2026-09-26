@@ -168,7 +168,7 @@ importers:
     dependencies:
       '@angular/cdk':
         specifier: ^22.0.0
-        version: 22.1.7(506c899cb52967ef73296071e7e2b29a)
+        version: 22.2.0(506c899cb52967ef73296071e7e2b29a)
       '@angular/common':
         specifier: ^22.0.0
         version: 22.1.7(@angular/core@22.1.7(@angular/compiler@22.1.7)(rxjs@7.8.2)(zone.js@0.16.3))(rxjs@7.8.2)
@@ -379,8 +379,8 @@ packages:
       vitest:
         optional: true
 
-  '@angular/cdk@22.1.7':
-    resolution: {integrity: sha512-TN4pPExBZ6ZbxWnfVb77M/0cL83eRY3qpHv/R9Y1KhkNXlxdocd0My7wiueWBBimYacSpBnfHrIRNmHgX7Pc4Q==}
+  '@angular/cdk@22.2.0':
+    resolution: {integrity: sha512-Vxiqo03yKxzmON+hfa0UkUSC+TrWdtRgc1MtkE5l3NJQ5euF9Os4kOqDfW1nDt3/AjCplE64HX3h0gOK5m3zjw==}
     peerDependencies:
       '@angular/common': ^22.0.0 || ^23.0.0
       '@angular/core': ^22.0.0 || ^23.0.0
@@ -3813,7 +3813,7 @@ snapshots:
       - tsx
       - yaml
 
-  '@angular/cdk@22.1.7(506c899cb52967ef73296071e7e2b29a)':
+  '@angular/cdk@22.2.0(506c899cb52967ef73296071e7e2b29a)':
     dependencies:
       '@angular/common': 22.1.7(@angular/core@22.1.7(@angular/compiler@22.1.7)(rxjs@7.8.2)(zone.js@0.16.3))(rxjs@7.8.2)
       '@angular/core': 22.1.7(@angular/compiler@22.1.7)(rxjs@7.8.2)(zone.js@0.16.3)
