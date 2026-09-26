@@ -22,9 +22,9 @@
   },
   "devDependencies": {
     "@angular-eslint/schematics": "22.5.0",
-    "@angular/build": "22.1.8",
-    "@angular/cli": "22.1.8",
-    "@angular/compiler-cli": "22.1.7",
+    "@angular/build": "22.2.0",
+    "@angular/cli": "22.2.0",
+    "@angular/compiler-cli": "22.2.0",
     "@eslint/js": "10.0.1",
     "@types/dompurify": "3.2.0",
     "angular-eslint": "22.5.0",
