@@ -1,4 +1,4 @@
-FROM php:8.5-fpm@sha256:adde18b67ea7a8cddc580f657e0d3f16e800758c6fa690b969c2925a303e8afc
+FROM php:8.5.12-fpm@sha256:8b4b4a764f7985137b13e4cb49dd59e967d9daa7946a731f9d06e31e748e39bb
 
 RUN \
     cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
@@ -21,7 +21,11 @@ RUN \
     \
     # opentelemetry extensions
     && pecl install opentelemetry \
-    && pecl install protobuf \
+    # The plain PECL protobuf archive URL returns a CDN 504; use the download endpoint.
+    && curl -fSL --retry 3 --connect-timeout 15 --max-time 120 \
+      'https://pecl.php.net/get/protobuf-5.36.2.tgz?download=1' -o /tmp/protobuf.tgz \
+    && pecl install /tmp/protobuf.tgz \
+    && rm /tmp/protobuf.tgz \
     && docker-php-ext-enable opentelemetry protobuf \
     \
     # set up composer
