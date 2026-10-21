@@ -21,7 +21,11 @@ RUN \
     \
     # opentelemetry extensions
     && pecl install opentelemetry \
-    && pecl install protobuf \
+    # The plain PECL protobuf archive URL returns a CDN 504; use the download endpoint.
+    && curl -fSL --retry 3 --connect-timeout 15 --max-time 120 \
+      'https://pecl.php.net/get/protobuf-5.36.2.tgz?download=1' -o /tmp/protobuf.tgz \
+    && pecl install /tmp/protobuf.tgz \
+    && rm /tmp/protobuf.tgz \
     && docker-php-ext-enable opentelemetry protobuf \
     \
     # set up composer
