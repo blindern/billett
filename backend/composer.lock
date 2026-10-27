@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "62b101338336d2bc806e258491b62519",
+    "content-hash": "f1e54c99c68598cd7322d71a6a6bb6a1",
     "packages": [
         {
             "name": "brick/math",
@@ -3900,16 +3900,16 @@
         },
         {
             "name": "open-telemetry/opentelemetry-auto-pdo",
-            "version": "0.5.0",
+            "version": "0.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/opentelemetry-php/contrib-auto-pdo.git",
-                "reference": "ef6f83d48f02669dbe9a812130bdb3fbd46651e6"
+                "reference": "e98f67b0fe58bda20518bf59418e9993b8a87a3f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/opentelemetry-php/contrib-auto-pdo/zipball/ef6f83d48f02669dbe9a812130bdb3fbd46651e6",
-                "reference": "ef6f83d48f02669dbe9a812130bdb3fbd46651e6",
+                "url": "https://api.github.com/repos/opentelemetry-php/contrib-auto-pdo/zipball/e98f67b0fe58bda20518bf59418e9993b8a87a3f",
+                "reference": "e98f67b0fe58bda20518bf59418e9993b8a87a3f",
                 "shasum": ""
             },
             "require": {
@@ -3922,15 +3922,16 @@
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3",
+                "open-telemetry/opentelemetry-sqlcommenter": "^0.3",
                 "open-telemetry/sdk": "^1.0",
-                "open-telemetry/test-utils": "^0.2.0",
-                "phan/phan": "^5.0",
+                "open-telemetry/test-utils": "^0.3.0",
+                "phan/phan": "^6.0",
                 "php-http/mock-client": "*",
-                "phpstan/phpstan": "^1.1",
-                "phpstan/phpstan-phpunit": "^1.0",
+                "phpstan/phpstan": "^2.0",
+                "phpstan/phpstan-phpunit": "^2.0",
                 "phpunit/phpunit": "^9.5",
                 "psalm/plugin-phpunit": "^0.19.2",
-                "vimeo/psalm": "6.4.0"
+                "vimeo/psalm": "^6.4"
             },
             "suggest": {
                 "ext-mbstring": "For better performance than symfony/polyfill-mbstring"
@@ -3959,9 +3960,9 @@
                 "tracing"
             ],
             "support": {
-                "source": "https://github.com/opentelemetry-php/contrib-auto-pdo/tree/0.5.0"
+                "source": "https://github.com/opentelemetry-php/contrib-auto-pdo/tree/0.6.0"
             },
-            "time": "2026-06-08T12:54:17+00:00"
+            "time": "2026-10-19T04:30:57+00:00"
         },
         {
             "name": "open-telemetry/sdk",
