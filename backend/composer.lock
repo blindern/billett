@@ -2751,16 +2751,16 @@
         },
         {
             "name": "milon/barcode",
-            "version": "v13.5.1",
+            "version": "v13.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/milon/barcode.git",
-                "reference": "e980a926d43ef8609c12a319c1b4c37c673f833a"
+                "reference": "aff97c2d830c826313a2c435d3485479249b8747"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/milon/barcode/zipball/e980a926d43ef8609c12a319c1b4c37c673f833a",
-                "reference": "e980a926d43ef8609c12a319c1b4c37c673f833a",
+                "url": "https://api.github.com/repos/milon/barcode/zipball/aff97c2d830c826313a2c435d3485479249b8747",
+                "reference": "aff97c2d830c826313a2c435d3485479249b8747",
                 "shasum": ""
             },
             "require": {
@@ -2813,7 +2813,7 @@
             ],
             "support": {
                 "issues": "https://github.com/milon/barcode/issues",
-                "source": "https://github.com/milon/barcode/tree/v13.5.1"
+                "source": "https://github.com/milon/barcode/tree/v13.6.0"
             },
             "funding": [
                 {
@@ -2825,7 +2825,8 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-09-25T17:21:25+00:00"
+            "time": "2026-10-29T22:06:46+00:00",
+            "published-time": "2026-10-29T22:10:09+00:00"
         },
         {
             "name": "monolog/monolog",
