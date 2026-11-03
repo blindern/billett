@@ -1,4 +1,4 @@
-FROM php:8.5.12-fpm@sha256:f49965c6e6a237eb3b27a6fc565e167839dc8abc65ee0652af0078f6ecdf4bbd
+FROM php:8.5.12-fpm@sha256:c34bcf437ed61bd5e4c1114494eaf1ffd54253bce2b95d263bfa18b350ee8432
 
 RUN \
     cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
