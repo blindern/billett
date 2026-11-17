@@ -8,7 +8,7 @@
     "test:ui": "playwright test --ui"
   },
   "devDependencies": {
-    "@playwright/test": "1.65.0",
+    "@playwright/test": "1.65.1",
     "dotenv": "18.0.10",
     "typescript": "5.9.3"
   },
