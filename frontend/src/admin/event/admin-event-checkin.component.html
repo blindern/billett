@@ -54,8 +54,10 @@
           @for (g of event.ticketgroups; track g.id) {
             <tr>
               <td>
-                #{{ g.id }} <a routerLink="/a/event/{{ event.id }}/ticketgroup/{{ g.id }}">{{ g.title }}</a
-                >&nbsp;<abbr title="Pris inkl. avgift">{{ g.price + g.fee | price }}</abbr>
+                #{{ g.id }} <a routerLink="/a/event/{{ event.id }}/ticketgroup/{{ g.id }}">{{ g.title }}</a>&nbsp;<abbr
+                  title="Pris inkl. avgift"
+                  >{{ g.price + g.fee | price }}</abbr
+                >
                 @if (!g.is_normal) {
                   (teller ikke som normal)
                 }
@@ -124,8 +126,7 @@
             @for (ticket of lastUsedTickets; track ticket.id) {
               <tr>
                 <td>
-                  <a routerLink="/a/order/{{ ticket.order.id }}">{{ ticket.order.order_text_id }}</a
-                  ><br />
+                  <a routerLink="/a/order/{{ ticket.order.id }}">{{ ticket.order.order_text_id }}</a><br />
                   {{ ticket.order.time | formatdate: "dd. DD.MM.YYYY HH:mm" }}
 
                   @if (ticket.order.name) {
@@ -256,8 +257,7 @@
               @for (order of orders.result; track order.id) {
                 <tr [ngClass]="{ invalid: !order.is_valid }">
                   <td>
-                    <a routerLink="/a/order/{{ order.id }}">{{ order.order_text_id }}</a
-                    ><br />
+                    <a routerLink="/a/order/{{ order.id }}">{{ order.order_text_id }}</a><br />
                     {{ order.time | formatdate: "dd. DD.MM.YYYY HH:mm" }}
                     @if (!order.is_valid) {
                       <br />(kun reservasjon)
@@ -350,8 +350,7 @@
               @for (order of tickets; track order.id) {
                 <tr [ngClass]="{ invalid: !order.is_valid }">
                   <td>
-                    <a routerLink="/a/order/{{ order.id }}">{{ order.order_text_id }}</a
-                    ><br />
+                    <a routerLink="/a/order/{{ order.id }}">{{ order.order_text_id }}</a><br />
                     {{ order.time | formatdate: "dd. DD.MM.YYYY HH:mm" }}
                     @if (!order.is_valid) {
                       <br />(kun reservasjon)
