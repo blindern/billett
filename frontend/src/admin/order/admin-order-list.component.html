@@ -125,8 +125,7 @@
       @for (order of orders.result; track order.id) {
         <tr [ngClass]="{ invalid: !order.is_valid }">
           <td>
-            <a routerLink="/a/order/{{ order.id }}"> {{ order.order_text_id }}</a
-            ><br />
+            <a routerLink="/a/order/{{ order.id }}"> {{ order.order_text_id }}</a><br />
             {{ order.time | formatdate: "dd. DD.MM.YYYY HH:mm" }}
             @if (!order.is_valid) {
               <span><br />(kun reservasjon)</span>
